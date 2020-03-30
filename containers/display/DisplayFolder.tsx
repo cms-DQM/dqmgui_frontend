@@ -2,6 +2,7 @@ import { FC, useState, useEffect } from 'react';
 import { useRequest } from '../../hooks/useRequest';
 import Link from 'next/link';
 import { Plot } from './plot';
+import { View_details_menu, LineProps } from '../../components/view_details_menu';
 
 interface DirectoryInterface {
   subdir: string;
@@ -27,6 +28,8 @@ const DiplayFolder: FC<FolderProps> = ({
   run_number,
   dataset_name
 }) => {
+  const [overlay_plot, set_plot_to_overlay] = useState<LineProps[] | undefined>()
+
   const { data, error, isLoading } = useRequest(
     `/data/json/archive/${run_number}${dataset_name}${folder_path}`,
     {},
@@ -41,9 +44,9 @@ const DiplayFolder: FC<FolderProps> = ({
       <div>
         folder path: {folder_path}, {run_number}, {dataset_name}
       </div>
+      <View_details_menu set_plot_to_overlay={set_plot_to_overlay} />
       <div>
         {contents.map((directory: DirectoryInterface) => {
-          console.log(directory.obj)
           const directory_name = directory?.subdir
           const plot_name = directory?.obj
 
@@ -68,6 +71,7 @@ const DiplayFolder: FC<FolderProps> = ({
                   dataset_name={dataset_name}
                   folders_path={folder_path}
                   run_number={run_number}
+                  overlay_plot={overlay_plot}
                 />
               }
             </li>

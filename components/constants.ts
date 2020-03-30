@@ -35,3 +35,9 @@ export const sizes = {
     },
   },
 }
+
+export const field_name: any = {
+  dataset_name: 'Dataset name',
+  run_number: 'Run number',
+  label: 'label'
+}
