@@ -27,7 +27,6 @@ const DiplayFolder: FC<FolderProps> = ({
   run_number,
   dataset_name
 }) => {
-
   const { data, error, isLoading } = useRequest(
     `/data/json/archive/${run_number}${dataset_name}${folder_path}`,
     {},
@@ -37,7 +36,7 @@ const DiplayFolder: FC<FolderProps> = ({
     data.contents.filter((one_item: ContentsProps) => !one_item.hasOwnProperty('streamerinfo'))
     : []
 
-    return (
+  return (
     <>
       <div>
         folder path: {folder_path}, {run_number}, {dataset_name}
@@ -69,8 +68,7 @@ const DiplayFolder: FC<FolderProps> = ({
                   dataset_name={dataset_name}
                   folders_path={folder_path}
                   run_number={run_number}
-                  width="266"
-                  height="200" />
+                />
               }
             </li>
           )
