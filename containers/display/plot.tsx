@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { root_url } from '../../config/config';
 import { sizes } from '../../components/constants'
 import { LineProps } from '../../components/view_details_menu';
+import { get_plot_url, get_plot_with_overlay, get_overlaied_plots_urls } from './apis';
 
 interface PlotProps {
   plot_name: string;
@@ -12,27 +13,35 @@ interface PlotProps {
   overlay_plot?: LineProps[];
 }
 
-const get_overlaied_plots_urls = (overlay_plot: LineProps[],
-  run_number: number,
-  folders_path: string | undefined,
-  dataset_name: string,
-  plot_name: string) =>
-  overlay_plot.map((overlay: LineProps) => {
-    const dataset_name_overlay = overlay.dataset_name ? overlay.dataset_name : dataset_name
-    const run_number_overlay = overlay.run_number
-    const label = overlay.label ? overlay.label : run_number
-    return `;obj=archive/${run_number_overlay}${dataset_name_overlay}${folders_path}/${plot_name};reflabel=${label}`
-  })
+export interface ParamsForApiProps extends PlotProps{
+  height: number,
+  width: number,
+  joined_overlaied_plots_urls?: string,
+  overlay?: string,
+}
 
 export const Plot = ({ plot_name, dataset_name, run_number, folders_path, overlay_plot = [] }: PlotProps) => {
   const [width, set_width] = useState(sizes.medium.size.w)
   const [height, set_height] = useState(sizes.medium.size.h)
+  const [overlay, set_overlay] = useState('overlay')
 
-  const overlaied_plots_urls = get_overlaied_plots_urls(overlay_plot, run_number, folders_path, dataset_name, plot_name)
+  const params_for_api: ParamsForApiProps = {
+    overlay_plot: overlay_plot,
+    run_number: run_number,
+    folders_path: folders_path,
+    dataset_name: dataset_name,
+    plot_name: plot_name,
+    width: width,
+    height: height,
+    overlay:overlay
+  }
+
+  const overlaied_plots_urls = get_overlaied_plots_urls(params_for_api)
   const joined_overlaied_plots_urls = overlaied_plots_urls.join('')
-
-  const plot_url = `plotfairy/archive/${run_number}${dataset_name}${folders_path}/${plot_name}?w=${width};h=${height}`
-  const plot_with_overlay = `plotfairy/overlay?ref=overlay;obj=archive/${run_number}${dataset_name}${folders_path}/${plot_name}${joined_overlaied_plots_urls};w=${width};h=${height}`
+  
+  params_for_api.joined_overlaied_plots_urls = joined_overlaied_plots_urls
+  const plot_url = get_plot_url(params_for_api)
+  const plot_with_overlay = get_plot_with_overlay(params_for_api)
 
   const source = overlay_plot ? `${root_url}/${plot_with_overlay}` : `${root_url}/${plot_url}`
 

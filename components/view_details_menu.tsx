@@ -20,11 +20,12 @@ export const View_details_menu = ({ set_plot_to_overlay }: ViewDetailsMenuProps)
 
 
   const change_value = (value: string, key: string, id: string | number) => {
-    const current_line: LineProps = lines.filter((line: LineProps) => line.id === id)[0]
-    const index_of_line: number = lines.indexOf(current_line)
+    const copy = [...lines]
+    const current_line: LineProps = copy.filter((line: LineProps) => line.id === id)[0]
+    const index_of_line: number = copy.indexOf(current_line)
     current_line[key] = value
-    lines[index_of_line] = current_line
-    change_lines_values(lines)
+    copy[index_of_line] = current_line
+    change_lines_values(copy)
   };
 
   const filter_valid_runs = (lines: LineProps[]) => lines.filter((line: LineProps) => {
