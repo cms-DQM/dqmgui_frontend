@@ -40,13 +40,16 @@ const DiplayFolder: FC<FolderProps> = ({
   const contents: (PlotInterface & DirectoryInterface)[] = data ?
     data.contents.filter((one_item: (PlotInterface | DirectoryInterface)) => !one_item.hasOwnProperty('streamerinfo'))
     : []
+  const isPlotExists = contents.filter((one_item: (PlotInterface | DirectoryInterface)) => one_item.hasOwnProperty('obj'))
 
   return (
     <>
       <div>
         folder path: {folder_path}, {run_number}, {dataset_name}
-      </div>
-      <ViewDetailsMenu set_plot_to_overlay={set_plot_to_overlay} />
+      </div>{
+        isPlotExists.length > 0 &&
+        <ViewDetailsMenu set_plot_to_overlay={set_plot_to_overlay} />
+      }
       <div>
         {contents.map((directory_or_plot) => {
 
