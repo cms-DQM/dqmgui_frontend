@@ -31,7 +31,6 @@ export const OverlaidPlot = ({
 
   params_for_api.joined_overlaied_plots_urls = joined_overlaid_plots_urls
   const plot_with_overlay = get_plot_with_overlay(params_for_api)
-  console.log(joined_overlaid_plots_urls)
   const source = `${root_url}/${plot_with_overlay}`
 
   return (
