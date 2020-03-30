@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import Home from '../containers/search/Home';
 import Nav from '../components/Nav';
 import SearchResults from '../containers/search/SearchResults';
-import DiplayFolders from '../containers/display/DisplayFolder';
+import DiplayFolders from '../containers/display/DisplayFolderAndPlot';
 import { FC, useState, useEffect } from 'react';
 import { useSearch } from '../hooks/useSearch';
 
