@@ -1,35 +1,51 @@
-import { Menu, Dropdown, Button, message, Tooltip } from 'antd';
-import { DownOutlined, UserOutlined } from '@ant-design/icons';
+import { FOLDERS_OR_PLOTS_REDUCER } from '../components/constants'
 
 import { sizes } from './constants'
 
 interface SizeChangerProps {
-    set_width(width: number): void;
-    set_height(height: number): void;
+  dispatch(params: any): void;
 }
-export const SizeChanger = ({ set_width, set_height }: SizeChangerProps) => {
-    return (
-      <>
+export const SizeChanger = ({ dispatch }: SizeChangerProps) => {
+  return (
+    <>
       <button onClick={() => {
-            set_height(sizes.large.size.h)
-            set_width(sizes.large.size.w)
-        }}>
-            {sizes.large.label
-            }
-        </button>
-         <button onClick={() => {
-            set_height(sizes.fill.size.h)
-            set_width(sizes.fill.size.w)
-        }}>
-            {sizes.fill.label
-            }
-        </button>
-         <button onClick={() => {
-            set_height(sizes.small.size.h)
-            set_width(sizes.small.size.w)
-        }}>
-            {sizes.small.label
-            }
-        </button></>
-    )
+        dispatch({
+          type: FOLDERS_OR_PLOTS_REDUCER.SET_HEIGHT,
+          payload: sizes.large.size.h
+        })
+        dispatch({
+          type: FOLDERS_OR_PLOTS_REDUCER.SET_WIDTH,
+          payload: sizes.large.size.w
+        })
+      }}>
+        {sizes.large.label
+        }
+      </button>
+      <button onClick={() => {
+        dispatch({
+          type: FOLDERS_OR_PLOTS_REDUCER.SET_HEIGHT,
+          payload: sizes.fill.size.h
+        })
+        dispatch({
+          type: FOLDERS_OR_PLOTS_REDUCER.SET_WIDTH,
+          payload: sizes.fill.size.w
+        })
+      }}>
+        {sizes.fill.label
+        }
+      </button>
+      <button onClick={() => {
+        dispatch({
+          type: FOLDERS_OR_PLOTS_REDUCER.SET_HEIGHT,
+          payload: sizes.small.size.h
+        })
+        dispatch({
+          type: FOLDERS_OR_PLOTS_REDUCER.SET_WIDTH,
+          payload: sizes.small.size.w
+        })
+      }}>
+        {sizes.small.label
+        }
+      </button></>
+  )
 }

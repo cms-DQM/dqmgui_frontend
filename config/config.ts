@@ -1,4 +1,4 @@
-import { ParamsForApiProps, TrinomialProps } from "../containers/display/interfaces"
+import { ParamsForApiProps, TripleProps } from "../containers/display/interfaces"
 
 const config: any = {
   development: {
@@ -17,7 +17,7 @@ export const get_plot_with_overlay = (params: ParamsForApiProps) => `plotfairy/$
 export const get_overlaied_plots_urls = (params: ParamsForApiProps) => {
   const overlay_plots = params?.overlay_plot ? params.overlay_plot : []
 
-  return (overlay_plots.map((overlay: TrinomialProps) => {
+  return (overlay_plots.map((overlay: TripleProps) => {
     const dataset_name_overlay = overlay.dataset_name ? overlay.dataset_name : params.dataset_name
     const run_number_overlay = overlay.run_number
     const label = overlay.label ? overlay.label : params.run_number

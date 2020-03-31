@@ -1,18 +1,19 @@
 import { root_url } from '../../config/config';
 import { get_plot_with_overlay, get_overlaied_plots_urls } from '../../config/config';
-import { ParamsForApiProps, PlotProps } from './interfaces';
-import { Dispatch, SetStateAction } from 'react';
+import { ParamsForApiProps } from './interfaces';
 
 interface OverlaidPlotProps {
   params_for_api: ParamsForApiProps,
   plot_name: string,
-  set_selected_plots: any
+  addPlotFromList(plot_name: string): void
+  set_selected_plots_names(plot_name: string[]): void
 }
 
 export const OverlaidPlot = ({
   plot_name,
   params_for_api,
-  set_selected_plots,
+  addPlotFromList,
+  set_selected_plots_names,
 }: OverlaidPlotProps) => {
 
   const overlaid_plots_urls = get_overlaied_plots_urls(params_for_api)
@@ -23,11 +24,14 @@ export const OverlaidPlot = ({
   const source = `${root_url}/${plot_with_overlay}`
 
   return (
-    <div style={{ height: params_for_api.height, width: params_for_api.width }}
-      onClick={() => set_selected_plots(plot_name)}
-    >
-      <p>{plot_name}</p>
-      <img alt={plot_name} src={source} />
-    </div>
+    <>
+      <button onClick={() => addPlotFromList(plot_name)}>Add to list</button>
+      <div style={{ height: params_for_api.height, width: params_for_api.width }}
+        onClick={() => set_selected_plots_names([plot_name])}
+      >
+        <p>{plot_name}</p>
+        <img alt={plot_name} src={source} />
+      </div>
+    </>
   )
 }

@@ -1,13 +1,16 @@
-import { FC, useState, useEffect } from 'react';
-import { useRequest } from '../../hooks/useRequest';
+import { FC, useReducer } from 'react';
 import Link from 'next/link';
+
+import { useRequest } from '../../hooks/useRequest';
 import { Plot } from './plot';
-import { ViewDetailsMenu } from '../../components/ViewDetailsMenu';
-import { TrinomialProps, ParamsForApiProps } from './interfaces'
-import { sizes } from '../../components/constants';
+import { Reference } from '../../components/reference';
+import { ParamsForApiProps } from './interfaces'
+import { FOLDERS_OR_PLOTS_REDUCER } from '../../components/constants';
 import { OverlaidPlot } from './overlaidPlots';
 import { SizeChanger } from '../../components/sizeChanger';
 import { ZoomedPlots } from '../../components/zoomedPlots';
+import { ViewFiler } from '../../components/viewFilter';
+import { displayFolderOrPlotComponentReducer, initialState } from '../../reducers/displayFolderOrPlot';
 
 interface DirectoryInterface {
   subdir: string;
@@ -23,23 +26,39 @@ interface FolderProps {
   dataset_name: string;
 }
 
-
 const DiplayFolder: FC<FolderProps> = ({
   folder_path,
   run_number,
   dataset_name
 }) => {
-  const [overlay_plot, set_plot_to_overlay] = useState<TrinomialProps[] | undefined>()
-  const [width, set_width] = useState(sizes.medium.size.w)
-  const [height, set_height] = useState(sizes.medium.size.h)
-  const [overlay, set_overlay] = useState('overlay')
-  const [selected_plots, set_selected_plots] = useState<string[]>([])
+  const [state, dispatch] = useReducer(displayFolderOrPlotComponentReducer, initialState);
+  const { errorBars, overlay, height, width, normalize, overlay_plot, stats, selected_plots_name } = state
+
+  const removePlotFromList = (plot_name: string) => {
+    const copy = [...selected_plots_name]
+    const filtered = copy.filter((plot: string) => plot !== plot_name)
+    dispatch({
+      type: FOLDERS_OR_PLOTS_REDUCER.SET_SELECTED_PLOTS_NAMES,
+      payload: filtered
+    })
+
+  }
+
+  const addPlotFromList = (plot_name: string) => {
+    const copy = [...selected_plots_name]
+    copy.push(plot_name)
+    dispatch({
+      type: FOLDERS_OR_PLOTS_REDUCER.SET_SELECTED_PLOTS_NAMES,
+      payload: copy
+    })
+  }
 
   const { data, error, isLoading } = useRequest(
     `/data/json/archive/${run_number}${dataset_name}${folder_path}`,
     {},
     [folder_path]
   );
+
   // what is streamerinfo? (coming from api, we don't know what it is, so we filtered it out)
   const contents: (PlotInterface & DirectoryInterface)[] = data ?
     data.contents.filter((one_item: (PlotInterface | DirectoryInterface)) => !one_item.hasOwnProperty('streamerinfo'))
@@ -54,8 +73,11 @@ const DiplayFolder: FC<FolderProps> = ({
     width: width,
     height: height,
     overlay: overlay,
+    stats: stats,
+    normalize: normalize,
+    errorBars: errorBars
   }
-  const windows_width = selected_plots ? '50%' : '100%'
+  const windows_width = selected_plots_name ? '50%' : '100%'
 
   return (
     <>
@@ -64,13 +86,18 @@ const DiplayFolder: FC<FolderProps> = ({
       </div>{
         isPlotExists.length > 0 &&
         <>
-          <ViewDetailsMenu set_plot_to_overlay={set_plot_to_overlay} />
-          <SizeChanger set_height={set_height} set_width={set_width} />
+          <Reference
+            dispatch={dispatch}
+          />
+          <ViewFiler
+            dispatch={dispatch}
+          />
+
+          <SizeChanger dispatch={dispatch} />
         </>
       }
       <div style={{ width: `${windows_width}` }}>
         {contents.map((directory_or_plot) => {
-
           const directory_name = directory_or_plot?.subdir
           const plot_name = directory_or_plot?.obj
 
@@ -93,13 +120,15 @@ const DiplayFolder: FC<FolderProps> = ({
                   <OverlaidPlot
                     plot_name={plot_name}
                     params_for_api={params_for_api}
-                    set_selected_plots={set_selected_plots}
+                    addPlotFromList={addPlotFromList}
+                    set_selected_plots_names={dispatch}
                   />
                   :
                   <Plot
                     plot_name={plot_name}
                     params_for_api={params_for_api}
-                    set_selected_plots={set_selected_plots}
+                    addPlotFromList={addPlotFromList}
+                    set_selected_plots_names={dispatch}
                   />
               }
             </li>
@@ -107,11 +136,12 @@ const DiplayFolder: FC<FolderProps> = ({
         }
         )}
       </div>
-      {selected_plots &&
+      {selected_plots_name &&
         <div style={{ width: `${windows_width}` }}>
           <ZoomedPlots
+            selected_plots_name={selected_plots_name}
             params_for_api={params_for_api}
-            selected_plots={selected_plots}
+            removePlotFromList={removePlotFromList}
           />
         </div>
       }

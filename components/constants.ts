@@ -41,3 +41,14 @@ export const field_name: any = {
   run_number: 'Run number',
   label: 'label'
 }
+
+export const FOLDERS_OR_PLOTS_REDUCER = {
+  SET_PLOT_TO_OVERLAY: 'SET_PLOT_TO_OVERLAY',
+  SET_WIDTH: 'SET_WIDTH',
+  SET_HEIGHT: 'SET_HEIGHT',
+  SET_SELECTED_PLOTS_NAMES: 'SET_SELECTED_PLOTS_NAMES',
+  SET_NORMALIZE: 'SET_NORMALIZE',
+  SET_STATS: 'SET_STATS',
+  SET_ERR_BARS: 'SET_ERR_BARS',
+  SET_OVERLAY: 'SET_OVERLAY'
+}
