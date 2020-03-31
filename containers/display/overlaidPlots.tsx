@@ -1,8 +1,5 @@
-import { useState } from 'react';
-
 import { root_url } from '../../config/config';
-import { sizes } from '../../components/constants'
-import { get_plot_with_overlay, get_overlaied_plots_urls } from './apis';
+import { get_plot_with_overlay, get_overlaied_plots_urls } from '../../config/config';
 import { ParamsForApiProps, PlotProps } from './interfaces';
 
 export const OverlaidPlot = ({

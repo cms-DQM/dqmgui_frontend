@@ -1,7 +1,5 @@
-import { useState } from 'react';
-
 import { root_url } from '../../config/config';
-import { get_plot_url } from './apis';
+import { get_plot_url } from '../../config/config';
 import { ParamsForApiProps, PlotProps } from './interfaces';
 
 

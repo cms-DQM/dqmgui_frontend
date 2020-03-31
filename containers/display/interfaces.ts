@@ -1,4 +1,6 @@
-import { TrinomialProps } from "../../components/ViewDetailsMenu";
+export interface TrinomialProps {
+  [key: string]: string | number,
+}
 
 export interface PlotProps {
   plot_name: string;
@@ -9,6 +11,9 @@ export interface PlotProps {
   width: number,
   height: number,
   overlay?: string,
+  stats?: boolean,
+  normalize?: boolean,
+  errorBars?: boolean,
 }
 
 export interface ParamsForApiProps extends PlotProps {

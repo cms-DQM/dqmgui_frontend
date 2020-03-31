@@ -2,7 +2,8 @@ import { FC, useState, useEffect } from 'react';
 import { useRequest } from '../../hooks/useRequest';
 import Link from 'next/link';
 import { Plot } from './plot';
-import { ViewDetailsMenu, TrinomialProps } from '../../components/ViewDetailsMenu';
+import { ViewDetailsMenu } from '../../components/ViewDetailsMenu';
+import {TrinomialProps} from './interfaces'
 import { sizes } from '../../components/constants';
 import { OverlaidPlot } from './overlaidPlots';
 
