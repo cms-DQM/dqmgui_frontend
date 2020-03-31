@@ -38,7 +38,6 @@ export const useSearch = (
     (prev, { items }) => [...prev, ...items],
     []
   );
-  console.log(parsed_results);
 
   const results_grouped = _.chain(parsed_results)
     .sortBy('dataset')
