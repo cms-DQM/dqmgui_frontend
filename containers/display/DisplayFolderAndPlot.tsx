@@ -3,9 +3,11 @@ import { useRequest } from '../../hooks/useRequest';
 import Link from 'next/link';
 import { Plot } from './plot';
 import { ViewDetailsMenu } from '../../components/ViewDetailsMenu';
-import {TrinomialProps} from './interfaces'
+import { TrinomialProps, ParamsForApiProps } from './interfaces'
 import { sizes } from '../../components/constants';
 import { OverlaidPlot } from './overlaidPlots';
+import { SizeChanger } from '../../components/sizeChanger';
+import { ZoomedPlots } from '../../components/zoomedPlots';
 
 interface DirectoryInterface {
   subdir: string;
@@ -31,6 +33,7 @@ const DiplayFolder: FC<FolderProps> = ({
   const [width, set_width] = useState(sizes.medium.size.w)
   const [height, set_height] = useState(sizes.medium.size.h)
   const [overlay, set_overlay] = useState('overlay')
+  const [selected_plots, set_selected_plots] = useState<string[]>([])
 
   const { data, error, isLoading } = useRequest(
     `/data/json/archive/${run_number}${dataset_name}${folder_path}`,
@@ -43,15 +46,29 @@ const DiplayFolder: FC<FolderProps> = ({
     : []
   const isPlotExists = contents.filter((one_item: (PlotInterface | DirectoryInterface)) => one_item.hasOwnProperty('obj'))
 
+  const params_for_api: ParamsForApiProps = {
+    overlay_plot: overlay_plot,
+    run_number: run_number,
+    folders_path: folder_path,
+    dataset_name: dataset_name,
+    width: width,
+    height: height,
+    overlay: overlay,
+  }
+  const windows_width = selected_plots ? '50%' : '100%'
+
   return (
     <>
-      <div>
+      <div >
         folder path: {folder_path}, {run_number}, {dataset_name}
       </div>{
         isPlotExists.length > 0 &&
-        <ViewDetailsMenu set_plot_to_overlay={set_plot_to_overlay} />
+        <>
+          <ViewDetailsMenu set_plot_to_overlay={set_plot_to_overlay} />
+          <SizeChanger set_height={set_height} set_width={set_width} />
+        </>
       }
-      <div>
+      <div style={{ width: `${windows_width}` }}>
         {contents.map((directory_or_plot) => {
 
           const directory_name = directory_or_plot?.subdir
@@ -75,22 +92,14 @@ const DiplayFolder: FC<FolderProps> = ({
                 : overlay_plot ?
                   <OverlaidPlot
                     plot_name={plot_name}
-                    dataset_name={dataset_name}
-                    folders_path={folder_path}
-                    run_number={run_number}
-                    width={width}
-                    height={height}
-                    overlay={overlay}
-                    overlay_plot={overlay_plot}
+                    params_for_api={params_for_api}
+                    set_selected_plots={set_selected_plots}
                   />
                   :
                   <Plot
                     plot_name={plot_name}
-                    dataset_name={dataset_name}
-                    folders_path={folder_path}
-                    run_number={run_number}
-                    width={width}
-                    height={height}
+                    params_for_api={params_for_api}
+                    set_selected_plots={set_selected_plots}
                   />
               }
             </li>
@@ -98,6 +107,14 @@ const DiplayFolder: FC<FolderProps> = ({
         }
         )}
       </div>
+      {selected_plots &&
+        <div style={{ width: `${windows_width}` }}>
+          <ZoomedPlots
+            params_for_api={params_for_api}
+            selected_plots={selected_plots}
+          />
+        </div>
+      }
     </>
   );
 };
