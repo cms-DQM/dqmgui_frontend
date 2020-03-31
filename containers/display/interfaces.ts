@@ -3,7 +3,7 @@ export interface TrinomialProps {
 }
 
 export interface PlotProps {
-  plot_name: string;
+  plot_name?: string;
   dataset_name: string;
   run_number: number;
   folders_path?: string;
