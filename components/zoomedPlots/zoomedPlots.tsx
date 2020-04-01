@@ -10,7 +10,7 @@ interface ZoomedPlotsProps {
 }
 
 export const ZoomedPlots = ({ selected_plots_name, removePlotFromList, params_for_api, jsroot_mode }: ZoomedPlotsProps) => {
- console.log(jsroot_mode)
+
   return (
     <div>
       {

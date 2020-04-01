@@ -81,13 +81,11 @@ export const setStats = (stats: boolean) => (dispatch: any) => (
   })
 )
 
-export const setJSROOTMode = (jsroot_mode: boolean) => (dispatch: any) => {
-  console.log(jsroot_mode)
-  return (dispatch({
+export const setJSROOTMode = (jsroot_mode: boolean) => (dispatch: any) => (
+  dispatch({
     type: FOLDERS_OR_PLOTS_REDUCER.JSROOT_MODE,
     payload: jsroot_mode
   }))
-}
 
 export function displayFolderOrPlotComponentReducer(state = initialState, action: any) {
   switch (action.type) {
