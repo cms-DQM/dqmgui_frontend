@@ -5,14 +5,14 @@ import { ParamsForApiProps } from './interfaces';
 interface OverlaidPlotProps {
   params_for_api: ParamsForApiProps,
   plot_name: string,
-  addPlotFromList(plot_name: string): void
+  addPlotToList(plot_name: string): void
   set_selected_plots_names(plot_name: string[]): void
 }
 
 export const OverlaidPlot = ({
   plot_name,
   params_for_api,
-  addPlotFromList,
+  addPlotToList,
   set_selected_plots_names,
 }: OverlaidPlotProps) => {
 
@@ -25,7 +25,7 @@ export const OverlaidPlot = ({
 
   return (
     <>
-      <button onClick={() => addPlotFromList(plot_name)}>Add to list</button>
+      <button onClick={() => addPlotToList(plot_name)}>Add to list</button>
       <div style={{ height: params_for_api.height, width: params_for_api.width }}
         onClick={() => set_selected_plots_names([plot_name])}
       >

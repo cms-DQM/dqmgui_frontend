@@ -1,8 +1,9 @@
 
 import { useState, ChangeEvent, FormEvent, Dispatch, SetStateAction } from 'react'
 import { v4 as uuidv4 } from 'uuid';
-import { field_name, FOLDERS_OR_PLOTS_REDUCER } from './constants'
+import { field_name } from './constants'
 import { TripleProps } from '../containers/display/interfaces';
+import { setPlotToOverlay } from '../reducers/displayFolderOrPlot';
 
 interface ReferenceProps {
   dispatch: any
@@ -49,10 +50,7 @@ export const Reference = ({
     <form onSubmit={(e: FormEvent<HTMLFormElement>) => {
       e.preventDefault()
       const filtered: TripleProps[] = (filter_valid_runs(triples))
-      dispatch({
-        type: FOLDERS_OR_PLOTS_REDUCER.SET_PLOT_TO_OVERLAY,
-        payload: filtered
-      })
+      setPlotToOverlay(filtered)(dispatch)
     }}>
       {
         triples.map((triple: TripleProps) =>
