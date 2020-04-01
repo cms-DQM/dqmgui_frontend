@@ -67,7 +67,7 @@ const DiplayFolder: FC<FolderProps> = ({
     errorBars: errorBars
   }
   const windows_width = selected_plots_name ? '50%' : '100%'
-  console.log(overlay_plot)
+
   return (
     <>
       <div >
