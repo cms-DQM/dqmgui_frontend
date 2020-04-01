@@ -1,5 +1,3 @@
-import { FOLDERS_OR_PLOTS_REDUCER } from '../components/constants'
-
 import { sizes } from './constants'
 import { setHeight, setWidth } from '../reducers/displayFolderOrPlot'
 

@@ -101,14 +101,14 @@ const DiplayFolder: FC<FolderProps> = ({
                     plot_name={plot_name}
                     params_for_api={params_for_api}
                     addPlotToList={addPlot}
-                    set_selected_plots_names={dispatch}
+                    dispatch={dispatch}
                   />
                   :
                   <Plot
                     plot_name={plot_name}
                     params_for_api={params_for_api}
                     addPlotToList={addPlot}
-                    set_selected_plots_names={dispatch}
+                    dispatch={dispatch}
                   />
               }
             </li>
