@@ -30,6 +30,7 @@
     "notistack": "^0.9.9",
     "ramda": "^0.27.0",
     "react": "^16.13.1",
+    "react-async-script-loader": "^0.3.0",
     "react-dom": "^16.13.1",
     "react-final-form": "^6.3.5",
     "react-redux": "^7.2.0",

@@ -7,7 +7,7 @@ import { ParamsForApiProps } from './interfaces'
 import { FOLDERS_OR_PLOTS_REDUCER } from '../../components/constants';
 import { OverlaidPlot } from './overlaidPlots';
 import { ZoomedPlots } from '../../components/zoomedPlots';
-import { displayFolderOrPlotComponentReducer, initialState } from '../../reducers/displayFolderOrPlot';
+import { displayFolderOrPlotComponentReducer, initialState, setSelectedPlotsName } from '../../reducers/displayFolderOrPlot';
 import { ViewDetailsMenu } from '../../components/viewDetailsMenu';
 
 interface DirectoryInterface {
@@ -35,20 +35,13 @@ const DiplayFolder: FC<FolderProps> = ({
   const removePlotFromList = (plot_name: string) => {
     const copy = [...selected_plots_name]
     const filtered = copy.filter((plot: string) => plot !== plot_name)
-    dispatch({
-      type: FOLDERS_OR_PLOTS_REDUCER.SET_SELECTED_PLOTS_NAMES,
-      payload: filtered
-    })
-
+    setSelectedPlotsName(filtered)(dispatch)
   }
 
-  const addPlotFromList = (plot_name: string) => {
+  const addPlotToList = (plot_name: string) => {
     const copy = [...selected_plots_name]
     copy.push(plot_name)
-    dispatch({
-      type: FOLDERS_OR_PLOTS_REDUCER.SET_SELECTED_PLOTS_NAMES,
-      payload: copy
-    })
+    setSelectedPlotsName(copy)(dispatch)
   }
 
   const { data, error, isLoading } = useRequest(
@@ -109,14 +102,14 @@ const DiplayFolder: FC<FolderProps> = ({
                   <OverlaidPlot
                     plot_name={plot_name}
                     params_for_api={params_for_api}
-                    addPlotFromList={addPlotFromList}
+                    addPlotToList={addPlotToList}
                     set_selected_plots_names={dispatch}
                   />
                   :
                   <Plot
                     plot_name={plot_name}
                     params_for_api={params_for_api}
-                    addPlotFromList={addPlotFromList}
+                    addPlotToList={addPlotToList}
                     set_selected_plots_names={dispatch}
                   />
               }

@@ -1,10 +1,7 @@
-import { Dispatch, SetStateAction, ChangeEvent } from "react"
-import { sizes, FOLDERS_OR_PLOTS_REDUCER } from '../components/constants';
+import { setErrorBars, setNormalize, setStats } from "../reducers/displayFolderOrPlot";
 
 interface ViewFilerProps {
   dispatch(obj: any): any
-  // set_stats: Dispatch<SetStateAction<boolean>>
-  // set_errBars: Dispatch<SetStateAction<boolean>>
 }
 
 export const ViewFiler = ({ dispatch }: ViewFilerProps) => {
@@ -13,25 +10,19 @@ export const ViewFiler = ({ dispatch }: ViewFilerProps) => {
       <div>
         <label htmlFor="stats">Stats:</label>
         <input type="checkbox" onClick={(e: any) => {
-          dispatch({ type: FOLDERS_OR_PLOTS_REDUCER.SET_STATS, payload: e.target.checked })
+          setStats(e.target.checked)(dispatch)
         }} />
       </div>
       <div>
         <label htmlFor="normalize">Normalize</label>
         <input type="checkbox" onClick={(e: any) =>
-          dispatch({
-            type: FOLDERS_OR_PLOTS_REDUCER.SET_NORMALIZE,
-            payload: e.target.checked
-          })
+          setNormalize(e.target.checked)(dispatch)
         } />
       </div>
       <div>
         <label htmlFor="errorBars">ErrorBars:</label>
         <input type="checkbox" onClick={(e: any) =>
-          dispatch({
-            type: FOLDERS_OR_PLOTS_REDUCER.SET_ERR_BARS,
-            payload: e.target.checked
-          })
+          setErrorBars(e.target.checked)(dispatch)
         } />
       </div>
     </div>
