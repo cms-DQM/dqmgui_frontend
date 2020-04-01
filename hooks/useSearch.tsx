@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useRequest } from './useRequest';
 import _ from 'lodash';
-import { log } from 'util';
+import { ExpandedProps } from '../containers/search/Result'
 
 interface ReturnSearch {
   results: any[];
-  results_grouped: any[];
+  results_grouped: ExpandedProps;
   searching: boolean;
   isLoading: boolean;
 }
@@ -31,7 +31,7 @@ export const useSearch = (
   );
 
   if (!searching || data === null || (data && data.samples.length === 0)) {
-    return { results: [], results_grouped: [], searching, isLoading };
+    return { results: [], results_grouped: {}, searching, isLoading };
   }
   const { samples: results }: { samples: any[] } = data;
   const parsed_results = results.reduce(
@@ -43,7 +43,10 @@ export const useSearch = (
     .sortBy('dataset')
     .groupBy('dataset')
     .map((value, key) => ({ dataset: key, value }))
+    .keyBy('dataset')
+    .mapValues('value')
     .value();
 
   return { results, results_grouped, searching, isLoading };
 };
+
