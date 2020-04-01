@@ -23,15 +23,18 @@ export const useRequest = (
     const fetchData = async () => {
       setIsLoading(true);
       try {
+        console.log('making a request to', url)
         const response: AxiosResponse = await axios.request({
           url: `${root_url}/${url}`,
           method: options.method || 'get',
           ...options
         });
         const { data, status } = response;
+        console.log(data)
         setData(data);
         setIsLoading(false);
       } catch (error) {
+        console.log(error)
         setError(error);
       }
     };

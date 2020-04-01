@@ -5,7 +5,7 @@ import { useRequest } from '../../hooks/useRequest';
 import { Plot } from './plot';
 import { ParamsForApiProps } from './interfaces'
 import { OverlaidPlot } from './overlaidPlots';
-import { ZoomedPlots } from '../../components/zoomedPlots';
+import { ZoomedPlots } from '../../components/zoomedPlots/zoomedPlots';
 import { displayFolderOrPlotComponentReducer, initialState, setSelectedPlotsName, removePlotFromList, addPlotToList } from '../../reducers/displayFolderOrPlot';
 import { ViewDetailsMenu } from '../../components/viewDetailsMenu';
 
@@ -46,6 +46,7 @@ const DiplayFolder: FC<FolderProps> = ({
     addPlotToList(plot_name)(state, dispatch)
   }
 
+
   const { data, error, isLoading } = useRequest(
     `/data/json/archive/${run_number}${dataset_name}${folder_path}`,
     {},
@@ -67,7 +68,7 @@ const DiplayFolder: FC<FolderProps> = ({
     errorBars: errorBars
   }
   const windows_width = selected_plots_name ? '50%' : '100%'
-
+console.log(state)
   return (
     <>
       <div >
@@ -76,7 +77,7 @@ const DiplayFolder: FC<FolderProps> = ({
         isPlotExists(contents).length > 0 &&
         <ViewDetailsMenu dispatch={dispatch} />
       }
-      <div style={{ width: `${windows_width}` }}>
+      <div style={{ width: `${windows_width}` }} id="aa">
         {contents.map((directory_or_plot) => {
           const directory_name = directory_or_plot?.subdir
           const plot_name = directory_or_plot?.obj
@@ -116,12 +117,13 @@ const DiplayFolder: FC<FolderProps> = ({
         }
         )}
       </div>
-      {selected_plots_name &&
+      {selected_plots_name.length > 0 &&
         <div style={{ width: `${windows_width}` }}>
           <ZoomedPlots
             selected_plots_name={selected_plots_name}
             params_for_api={params_for_api}
             removePlotFromList={removePlot}
+            jsroot_mode={state.jsroot_mode}
           />
         </div>
       }

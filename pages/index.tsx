@@ -21,11 +21,11 @@ const Index: NextPage<FolderPathQuery> = query => {
     run_number,
     dataset_name
   );
-
   return (
     <>
       <Head>
-        <script type="text/javascript" src="/jsroot-5.8.0/scripts/JSRootCore.js?2d&hist"></script>
+      //@ts-ignore
+        <script crossorigin  type="text/javascript" src="/jsroot-5.8.0/scripts/JSRootCore.js?2d&hist"></script>
       </Head>
       <Nav setRunNumber={setRunNumber} setDatasetName={setDatasetName} />
       {query.run_number && query.dataset_name ? (

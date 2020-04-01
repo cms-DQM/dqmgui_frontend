@@ -34,4 +34,5 @@ export interface DisplayFolderOrPlotComponentProps {
   stats: boolean,
   selected_plots_name: string[]
   overlay: string,
+  jsroot_mode: boolean
 }
