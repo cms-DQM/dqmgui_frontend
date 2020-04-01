@@ -24,3 +24,5 @@ export const get_overlaied_plots_urls = (params: ParamsForApiProps) => {
     return `;obj=archive/${run_number_overlay}${dataset_name_overlay}${params.folders_path}/${params.plot_name};reflabel=${label}`
   }))
 }
+
+export const get_jroot_plot = (params: ParamsForApiProps) => `jsrootfairy/archive/${params.run_number}/${params.dataset_name}${params.folders_path}/${params.plot_name}?jsroot=true`

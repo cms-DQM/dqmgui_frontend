@@ -9,7 +9,8 @@ export const initialState: DisplayFolderOrPlotComponentProps = {
   normalize: true,
   overlay_plot: [],
   stats: true,
-  selected_plots_name: []
+  selected_plots_name: [],
+  jsroot_mode: false,
 };
 
 export const setErrorBars = (errBars: boolean) => (dispatch: any) => (
@@ -67,7 +68,7 @@ export const removePlotFromList = (plot_name: string) => (state: any, dispatch: 
   setSelectedPlotsName(filtered)(dispatch)
 }
 
-export const addPlotToList = (plot_name: string) => (state: any, dispatch: any)=>{
+export const addPlotToList = (plot_name: string) => (state: any, dispatch: any) => {
   const copy = [...state.selected_plots_name]
   copy.push(plot_name)
   setSelectedPlotsName(copy)(dispatch)
@@ -79,6 +80,14 @@ export const setStats = (stats: boolean) => (dispatch: any) => (
     payload: stats
   })
 )
+
+export const setJSROOTMode = (jsroot_mode: boolean) => (dispatch: any) => {
+  console.log(jsroot_mode)
+  return (dispatch({
+    type: FOLDERS_OR_PLOTS_REDUCER.JSROOT_MODE,
+    payload: jsroot_mode
+  }))
+}
 
 export function displayFolderOrPlotComponentReducer(state = initialState, action: any) {
   switch (action.type) {
@@ -98,6 +107,8 @@ export function displayFolderOrPlotComponentReducer(state = initialState, action
       return { ...state, selected_plots_name: action.payload };
     case FOLDERS_OR_PLOTS_REDUCER.SET_STATS:
       return { ...state, stats: action.payload };
+    case FOLDERS_OR_PLOTS_REDUCER.JSROOT_MODE:
+      return { ...state, jsroot_mode: action.payload };
     default:
       throw new Error();
   }
