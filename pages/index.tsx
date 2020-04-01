@@ -1,4 +1,5 @@
 import { NextPage } from 'next';
+import Head from 'next/head'
 
 import Home from '../containers/search/Home';
 import Nav from '../components/Nav';
@@ -23,6 +24,9 @@ const Index: NextPage<FolderPathQuery> = query => {
 
   return (
     <>
+      <Head>
+        <script type="text/javascript" src="/jsroot-5.8.0/scripts/JSRootCore.js?2d&hist"></script>
+      </Head>
       <Nav setRunNumber={setRunNumber} setDatasetName={setDatasetName} />
       {query.run_number && query.dataset_name ? (
         <DiplayFolders
@@ -37,8 +41,8 @@ const Index: NextPage<FolderPathQuery> = query => {
           results_grouped={results_grouped}
         />
       ) : (
-        <Home />
-      )}
+            <Home />
+          )}
     </>
   );
 };
