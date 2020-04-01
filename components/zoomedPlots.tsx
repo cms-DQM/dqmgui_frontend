@@ -13,7 +13,6 @@ export const ZoomedPlots = ({ selected_plots_name, removePlotFromList, params_fo
     <div>
       {
         selected_plots_name.map((selected_plot: string) => {
-          console.log(params_for_api)
           params_for_api.plot_name = selected_plot
           params_for_api.height = sizes.fill.size.h
           params_for_api.width = sizes.fill.size.w
