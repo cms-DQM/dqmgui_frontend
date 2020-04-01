@@ -1,44 +1,21 @@
 
-import { useState, ChangeEvent, FormEvent, Dispatch, SetStateAction } from 'react'
+import { useState, ChangeEvent, FormEvent, useReducer } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import { field_name } from './constants'
 import { TripleProps } from '../containers/display/interfaces';
 import { setPlotToOverlay } from '../reducers/displayFolderOrPlot';
+import { referenceReducer, initialState, change_value, removeRun, addRun } from '../reducers/reference'
 
 interface ReferenceProps {
-  dispatch: any
+  dispatch_gloabl: any
 }
 
 export const Reference = ({
-  dispatch,
+  dispatch_gloabl,
 }: ReferenceProps) => {
 
-  const id = uuidv4()
-  const [triples, change_triples_values] = useState<TripleProps[]>(
-    [{ id: id, dataset_name: '', run_number: NaN, label: '' }])
-
-  const change_value = (value: string, key: string, id: string | number | boolean) => {
-    const copy = [...triples]
-    const current_line: TripleProps = copy.filter((line: TripleProps) => line.id === id)[0]
-    const index_of_line: number = copy.indexOf(current_line)
-    current_line[key] = value
-    copy[index_of_line] = current_line
-    change_triples_values(copy)
-  };
-
-  const addRun = () => {
-    const copy: TripleProps[] = [...triples]
-    const id = uuidv4()
-    const newRun = { id: id, dataset_name: '', run_number: NaN, label: '' }
-    copy.push(newRun)
-    change_triples_values(copy)
-  }
-
-  const removeRun = (id: string | number | boolean) => {
-    const copy: TripleProps[] = [...triples]
-    const removed = copy.filter((run: TripleProps) => run.id !== id)
-    change_triples_values(removed)
-  }
+  const [state, dispatch] = useReducer(referenceReducer, initialState);
+  const { triples } = state
 
   const filter_valid_runs = (triples: TripleProps[]) => triples.filter((triple: TripleProps) => {
     if (triple.run_number) {
@@ -50,7 +27,7 @@ export const Reference = ({
     <form onSubmit={(e: FormEvent<HTMLFormElement>) => {
       e.preventDefault()
       const filtered: TripleProps[] = (filter_valid_runs(triples))
-      setPlotToOverlay(filtered)(dispatch)
+      setPlotToOverlay(filtered)(dispatch_gloabl)
     }}>
       {
         triples.map((triple: TripleProps) =>
@@ -65,7 +42,7 @@ export const Reference = ({
                       type='text'
                       name={field}
                       onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                        change_value(e.target.value, field, triple.id)
+                        change_value(e.target.value, field, triple.id)(state, dispatch)
                       } />
                   </p>
                 )
@@ -74,7 +51,7 @@ export const Reference = ({
             )}
             <button onClick={() => {
               if (triples.length > 1) {
-                removeRun(triple.id)
+                removeRun(triple.id)(state, dispatch)
               }
             }}>Remove</button>
           </div>
@@ -82,7 +59,7 @@ export const Reference = ({
       }
       <button onClick={() => {
         if (triples.length < 4) {
-          addRun()
+          addRun()(state, dispatch)
         }
       }}>Add</button>
       <button type="submit">Submit</button>

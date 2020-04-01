@@ -1,4 +1,4 @@
-import { setErrorBars, setNormalize, setStats } from "../reducers/displayFolderOrPlot";
+import { setErrorBars, setNormalize, setStats } from "../../reducers/displayFolderOrPlot";
 
 interface ViewFilerProps {
   dispatch(obj: any): any

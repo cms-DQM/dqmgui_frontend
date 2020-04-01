@@ -2,6 +2,10 @@ export interface TripleProps {
   [key: string]: string | number | boolean,
 }
 
+export interface OptionProps {
+  label: string,
+  value: any,
+}
 export interface PlotProps {
   plot_name?: string;
   dataset_name: string;
