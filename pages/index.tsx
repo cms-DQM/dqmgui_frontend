@@ -20,7 +20,7 @@ const Index: NextPage<FolderPathQuery> = query => {
     run_number,
     dataset_name
   );
-  
+
   return (
     <>
       <Nav setRunNumber={setRunNumber} setDatasetName={setDatasetName} />

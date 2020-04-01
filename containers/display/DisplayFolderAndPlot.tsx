@@ -3,14 +3,12 @@ import Link from 'next/link';
 
 import { useRequest } from '../../hooks/useRequest';
 import { Plot } from './plot';
-import { Reference } from '../../components/reference';
 import { ParamsForApiProps } from './interfaces'
 import { FOLDERS_OR_PLOTS_REDUCER } from '../../components/constants';
 import { OverlaidPlot } from './overlaidPlots';
-import { SizeChanger } from '../../components/sizeChanger';
 import { ZoomedPlots } from '../../components/zoomedPlots';
-import { ViewFiler } from '../../components/viewFilter';
 import { displayFolderOrPlotComponentReducer, initialState } from '../../reducers/displayFolderOrPlot';
+import { ViewDetailsMenu } from '../../components/viewDetailsMenu';
 
 interface DirectoryInterface {
   subdir: string;
@@ -85,16 +83,7 @@ const DiplayFolder: FC<FolderProps> = ({
         folder path: {folder_path}, {run_number}, {dataset_name}
       </div>{
         isPlotExists.length > 0 &&
-        <>
-          <Reference
-            dispatch={dispatch}
-          />
-          <ViewFiler
-            dispatch={dispatch}
-          />
-
-          <SizeChanger dispatch={dispatch} />
-        </>
+        <ViewDetailsMenu dispatch={dispatch} />
       }
       <div style={{ width: `${windows_width}` }}>
         {contents.map((directory_or_plot) => {
