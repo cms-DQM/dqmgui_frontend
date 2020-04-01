@@ -61,6 +61,18 @@ export const setSelectedPlotsName = (selected_plots_name: string[]) => (dispatch
   })
 )
 
+export const removePlotFromList = (plot_name: string) => (state: any, dispatch: any) => {
+  const copy = [...state.selected_plots_name]
+  const filtered = copy.filter((plot: string) => plot !== plot_name)
+  setSelectedPlotsName(filtered)(dispatch)
+}
+
+export const addPlotToList = (plot_name: string) => (state: any, dispatch: any)=>{
+  const copy = [...state.selected_plots_name]
+  copy.push(plot_name)
+  setSelectedPlotsName(copy)(dispatch)
+}
+
 export const setStats = (stats: boolean) => (dispatch: any) => (
   dispatch({
     type: FOLDERS_OR_PLOTS_REDUCER.SET_STATS,
