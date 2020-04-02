@@ -5,7 +5,7 @@ import { useRequest } from '../../hooks/useRequest';
 import { Plot } from './plot';
 import { ParamsForApiProps } from './interfaces'
 import { OverlaidPlot } from './overlaidPlots';
-import { ZoomedPlots } from '../../components/zoomedPlots/zoomedPlots';
+import { ZoomedPlots } from '../../components/zoomedPlots/';
 import { displayFolderOrPlotComponentReducer, initialState, setSelectedPlotsName, removePlotFromList, addPlotToList } from '../../reducers/displayFolderOrPlot';
 import { ViewDetailsMenu } from '../../components/viewDetailsMenu';
 
