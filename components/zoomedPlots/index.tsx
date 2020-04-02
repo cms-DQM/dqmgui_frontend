@@ -11,7 +11,6 @@ interface ZoomedPlotsProps {
 
 
 export const ZoomedPlots = ({ jsroot_mode, removePlotFromList, params_for_api, selected_plots_name }: ZoomedPlotsProps) => {
-  console.log(params_for_api.overlay_plot)
   if (params_for_api.overlay_plot && params_for_api.overlay_plot.length > 0) {
     return (
       <ZoomedOverlaidPlots
