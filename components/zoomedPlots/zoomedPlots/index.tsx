@@ -1,4 +1,4 @@
-import { ParamsForApiProps } from '../../containers/display/interfaces'
+import { ParamsForApiProps } from '../../../containers/display/interfaces'
 import { ZoomedPlot } from './zoomedPlot'
 import { ZoomedJSROOTPlot } from './zoomedJSROOTPlot'
 

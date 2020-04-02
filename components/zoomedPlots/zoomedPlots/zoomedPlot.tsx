@@ -1,6 +1,6 @@
-import { get_plot_url, root_url, get_jroot_plot } from '../../config/config'
-import { ParamsForApiProps } from '../../containers/display/interfaces'
-import { sizes } from '../constants'
+import { get_plot_url, root_url, get_jroot_plot } from '../../../config/config'
+import { ParamsForApiProps } from '../../../containers/display/interfaces'
+import { sizes } from '../../constants'
 
 interface ZoomedPlotsProps {
   selected_plot_name: string
