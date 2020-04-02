@@ -4,6 +4,7 @@ import { get_jroot_plot } from '../../../config/config'
 import { ParamsForApiProps, TripleProps } from '../../../containers/display/interfaces'
 import { sizes } from '../../constants'
 import { useRequest } from '../../../hooks/useRequest'
+import { useEffect } from 'react'
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot_name: string
@@ -64,10 +65,12 @@ export const ZoomedOverlaidJSROOTPlot = ({ selected_plot_name, removePlotFromLis
   //make sure that no null histograms are passed to draw func.
   //on first, second reneder overlaidJSROOTPlot.fHists.arr is [null, null]
   //@ts-ignore
-  if (cleanDeep(overlaidJSROOTPlot.fHists.arr).length === overlaidJSROOTPlot.fHists.arr.length) {
+  useEffect(() => {
+    if (cleanDeep(overlaidJSROOTPlot.fHists.arr).length === overlaidJSROOTPlot.fHists.arr.length) {
       //@ts-ignore  
-    JSROOT.draw(selected_plot_name, JSROOT.parse(JSON.stringify(overlaidJSROOTPlot)), 'hist')
-  }
+      JSROOT.draw(selected_plot_name, JSROOT.parse(JSON.stringify(overlaidJSROOTPlot)), 'hist')
+    }
+  },)
 
   return (
     <div id={selected_plot_name}
