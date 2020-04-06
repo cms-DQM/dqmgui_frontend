@@ -1,4 +1,4 @@
-import { FC, ChangeEvent, Dispatch } from 'react';
+import React, { FC, ChangeEvent, Dispatch } from 'react';
 
 interface NavProps {
   setRunNumber: Dispatch<any>;

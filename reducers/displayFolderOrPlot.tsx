@@ -1,4 +1,4 @@
-import { FOLDERS_OR_PLOTS_REDUCER, sizes } from '../components/constants'
+import { FOLDERS_OR_PLOTS_REDUCER, sizes } from '../components/constants';
 import { DisplayFolderOrPlotComponentProps } from '../containers/display/interfaces';
 
 export const initialState: DisplayFolderOrPlotComponentProps = {
@@ -13,81 +13,84 @@ export const initialState: DisplayFolderOrPlotComponentProps = {
   jsroot_mode: false,
 };
 
-export const setErrorBars = (errBars: boolean) => (dispatch: any) => (
+export const setErrorBars = (errBars: boolean) => (dispatch: any) =>
   dispatch({
     type: FOLDERS_OR_PLOTS_REDUCER.SET_ERR_BARS,
-    payload: errBars
-  })
-)
+    payload: errBars,
+  });
 
-export const setHeight = (height: number) => (dispatch: any) => (
+export const setHeight = (height: number) => (dispatch: any) =>
   dispatch({
     type: FOLDERS_OR_PLOTS_REDUCER.SET_HEIGHT,
-    payload: height
-  })
-)
+    payload: height,
+  });
 
-export const setWidth = (width: number) => (dispatch: any) => (
+export const setWidth = (width: number) => (dispatch: any) =>
   dispatch({
     type: FOLDERS_OR_PLOTS_REDUCER.SET_WIDTH,
-    payload: width
-  })
-)
+    payload: width,
+  });
 
-export const setNormalize = (normalize: boolean) => (dispatch: any) => (
+export const setNormalize = (normalize: boolean) => (dispatch: any) =>
   dispatch({
     type: FOLDERS_OR_PLOTS_REDUCER.SET_NORMALIZE,
-    payload: normalize
-  })
-)
+    payload: normalize,
+  });
 
-export const setPlotToOverlay = (plot_to_overlay: any) => (dispatch: any) => (
+export const setPlotToOverlay = (plot_to_overlay: any) => (dispatch: any) =>
   dispatch({
     type: FOLDERS_OR_PLOTS_REDUCER.SET_PLOT_TO_OVERLAY,
-    payload: plot_to_overlay
-  })
-)
+    payload: plot_to_overlay,
+  });
 
-export const setOverlay = (overlay: string) => (dispatch: any) => (
+export const setOverlay = (overlay: string) => (dispatch: any) =>
   dispatch({
     type: FOLDERS_OR_PLOTS_REDUCER.SET_OVERLAY,
-    payload: overlay
-  })
-)
+    payload: overlay,
+  });
 
-export const setSelectedPlotsName = (selected_plots_name: string[]) => (dispatch: any) => (
+export const setSelectedPlotsName = (selected_plots_name: string[]) => (
+  dispatch: any
+) =>
   dispatch({
     type: FOLDERS_OR_PLOTS_REDUCER.SET_SELECTED_PLOTS_NAMES,
-    payload: selected_plots_name
-  })
-)
+    payload: selected_plots_name,
+  });
 
-export const removePlotFromList = (plot_name: string) => (state: any, dispatch: any) => {
-  const copy = [...state.selected_plots_name]
-  const filtered = copy.filter((plot: string) => plot !== plot_name)
-  setSelectedPlotsName(filtered)(dispatch)
-}
+export const removePlotFromList = (plot_name: string) => (
+  state: any,
+  dispatch: any
+) => {
+  const copy = [...state.selected_plots_name];
+  const filtered = copy.filter((plot: string) => plot !== plot_name);
+  setSelectedPlotsName(filtered)(dispatch);
+};
 
-export const addPlotToList = (plot_name: string) => (state: any, dispatch: any) => {
-  const copy = [...state.selected_plots_name]
-  copy.push(plot_name)
-  setSelectedPlotsName(copy)(dispatch)
-}
+export const addPlotToList = (plot_name: string) => (
+  state: any,
+  dispatch: any
+) => {
+  const copy = [...state.selected_plots_name];
+  copy.push(plot_name);
+  setSelectedPlotsName(copy)(dispatch);
+};
 
-export const setStats = (stats: boolean) => (dispatch: any) => (
+export const setStats = (stats: boolean) => (dispatch: any) =>
   dispatch({
     type: FOLDERS_OR_PLOTS_REDUCER.SET_STATS,
-    payload: stats
-  })
-)
+    payload: stats,
+  });
 
-export const setJSROOTMode = (jsroot_mode: boolean) => (dispatch: any) => (
+export const setJSROOTMode = (jsroot_mode: boolean) => (dispatch: any) =>
   dispatch({
     type: FOLDERS_OR_PLOTS_REDUCER.JSROOT_MODE,
-    payload: jsroot_mode
-  }))
+    payload: jsroot_mode,
+  });
 
-export function displayFolderOrPlotComponentReducer(state = initialState, action: any) {
+export function displayFolderOrPlotComponentReducer(
+  state = initialState,
+  action: any
+) {
   switch (action.type) {
     case FOLDERS_OR_PLOTS_REDUCER.SET_ERR_BARS:
       return { ...state, errorBars: action.payload };

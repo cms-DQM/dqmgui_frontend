@@ -1,11 +1,11 @@
+import React from 'react';
 import { NextPage } from 'next';
-import Head from 'next/head'
+import Head from 'next/head';
 
-import Home from '../containers/search/Home';
 import Nav from '../components/Nav';
 import SearchResults from '../containers/search/SearchResults';
 import DiplayFolders from '../containers/display/DisplayFolderAndPlot';
-import { FC, useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useSearch } from '../hooks/useSearch';
 
 interface FolderPathQuery {
@@ -14,7 +14,7 @@ interface FolderPathQuery {
   folder_path?: string;
 }
 
-const Index: NextPage<FolderPathQuery> = query => {
+const Index: NextPage<FolderPathQuery> = (query) => {
   const [run_number, setRunNumber] = useState('');
   const [dataset_name, setDatasetName] = useState('');
   const { results, results_grouped, searching, isLoading } = useSearch(
@@ -24,8 +24,11 @@ const Index: NextPage<FolderPathQuery> = query => {
   return (
     <>
       <Head>
-      //@ts-ignore
-        <script crossorigin  type="text/javascript" src="/jsroot-5.8.0/scripts/JSRootCore.js?2d&hist&more2d"></script>
+        <script
+          crossOrigin="anonymous"
+          type="text/javascript"
+          src="/jsroot-5.8.0/scripts/JSRootCore.js?2d&hist&more2d"
+        ></script>
       </Head>
       <Nav setRunNumber={setRunNumber} setDatasetName={setDatasetName} />
       {query.run_number && query.dataset_name ? (
@@ -41,8 +44,8 @@ const Index: NextPage<FolderPathQuery> = query => {
           results_grouped={results_grouped}
         />
       ) : (
-            <Home />
-          )}
+        <div>Home</div>
+      )}
     </>
   );
 };

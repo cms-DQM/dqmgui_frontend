@@ -18,7 +18,6 @@ export const useRequest = (
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -26,9 +25,9 @@ export const useRequest = (
         const response: AxiosResponse = await axios.request({
           url: `${root_url}/${url}`,
           method: options.method || 'get',
-          ...options
+          ...options,
         });
-        const { data, status } = response;
+        const { data } = response;
         setData(data);
         setIsLoading(false);
       } catch (error) {
@@ -38,6 +37,6 @@ export const useRequest = (
     if (should_we_fetch) {
       fetchData();
     }
-  }, watchers);
+  }, [...watchers, options, url, should_we_fetch]);
   return { data, error, isLoading };
 };

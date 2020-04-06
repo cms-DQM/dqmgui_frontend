@@ -5,7 +5,6 @@ merged togther with all dependend libraries.
 This uses bower, Node.js and gulp.
 Following steps are required:
 
-
 ## Correctly provide JSROOT location in bower.json file
 
 In the example 5.3.0 version of JSROOT is used.
@@ -16,18 +15,15 @@ For experimental purposes one can configure local checkout of jsroot
 
     "dependencies": { "jsroot": "file:///home/user/git/jsroot/.git#dev" }
 
-
 ## Install packages with bower
 
     [shell] bower install
-
 
 ## Install gulp
 
     [shell] npm install
 
 All used sub-packages listed in package.json file
-
 
 ## Create library with gulp
 
@@ -36,11 +32,9 @@ All used sub-packages listed in package.json file
 Source code of gulp script one can find in gulpfile.js
 Script should produce "build/js/lib.js" and "build/css/lib.css"
 
-
 ## Open example web page
 
 One can browser directly from the file system <file:///home/user/git/jsroot/demo/gulp/example.htm>
-
 
 ## Known issues
 
