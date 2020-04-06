@@ -19,4 +19,3 @@ If has following parameters:
     item - item name in root file
     drawopt - drawing option
     jsonfile - name of JSON file
-
