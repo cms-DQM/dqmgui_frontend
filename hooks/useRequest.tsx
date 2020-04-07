@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { root_url } from '../config/config';
@@ -18,6 +18,7 @@ export const useRequest = (
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -27,7 +28,7 @@ export const useRequest = (
           method: options.method || 'get',
           ...options,
         });
-        const { data } = response;
+        const { data, status } = response;
         setData(data);
         setIsLoading(false);
       } catch (error) {
@@ -37,6 +38,6 @@ export const useRequest = (
     if (should_we_fetch) {
       fetchData();
     }
-  }, [...watchers, options, url, should_we_fetch]);
+  }, watchers);
   return { data, error, isLoading };
 };

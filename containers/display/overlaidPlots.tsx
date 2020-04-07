@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
 import { root_url } from '../../config/config';
 import {
   get_plot_with_overlay,

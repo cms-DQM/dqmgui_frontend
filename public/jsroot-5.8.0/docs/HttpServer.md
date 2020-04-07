@@ -2,9 +2,9 @@
 
 The idea of THttpServer is to provide remote http access to running ROOT application and enable HTML/JavaScript user interface. Any registered object can be requested and displayed in the web browser. There are many benefits of such approach:
 
-- standard http interface to ROOT application
-- no any temporary ROOT files to access data
-- user interface running in all browsers
+   * standard http interface to ROOT application
+   * no any temporary ROOT files to access data
+   * user interface running in all browsers
 
 ## Starting the HTTP server
 
@@ -22,15 +22,15 @@ One could specify several options when creating http server. They could be add a
 
 Following parameters are supported:
 
-- thrds=N - number of threads used by the civetweb (default is 10)
-- top=name - configure top name, visible in the web browser
-- auth_file=filename - authentication file name, created with htdigets utility
-- auth_domain=domain - authentication domain
-- loopback - bind specified port to loopback 127.0.0.1 address
-- debug - enable debug mode, server always returns html page with request info
-- websocket_timeout=tm - set web sockets timeout in seconds (default 300)
-- websocket_disable - disable web sockets handling (default enabled)
-- cors=domain - define value for CORS header "Access-Control-Allow-Origin" in server response
+   - thrds=N   - number of threads used by the civetweb (default is 10)
+   - top=name  - configure top name, visible in the web browser
+   - auth_file=filename  - authentication file name, created with htdigets utility
+   - auth_domain=domain   - authentication domain
+   - loopback  - bind specified port to loopback 127.0.0.1 address
+   - debug  - enable debug mode, server always returns html page with request info
+   - websocket_timeout=tm  - set web sockets timeout in seconds (default 300)
+   - websocket_disable - disable web sockets handling (default enabled)
+   - cors=domain  - define value for CORS header "Access-Control-Allow-Origin" in server response
 
 If necessary, one could bind http server to specific IP address like:
 
@@ -38,14 +38,15 @@ If necessary, one could bind http server to specific IP address like:
 
 One also can provide extra arguments for THttpServer itself:
 
-- readonly, ro - use server in read-only mode (default)
-- readwrite, rw - use server in read-write mode
-- global - let scan global directories for canvases and files (default)
-- noglobal - disable scan of global directories
+   - readonly, ro   - use server in read-only mode (default)
+   - readwrite, rw  - use server in read-write mode
+   - global         - let scan global directories for canvases and files (default)
+   - noglobal       - disable scan of global directories
 
 Example:
 
     new THttpServer("http:8080;ro;noglobal")
+
 
 ## Registering objects
 
@@ -64,6 +65,7 @@ At any time one could unregister objects:
 THttpServer does not take ownership over registered objects - they should be deleted by user.
 
 If the objects content is changing in the application, one could enable monitoring flag in the browser - then objects view will be regularly updated.
+
 
 ## Command interface
 
@@ -96,6 +98,7 @@ string to the icon name to let browser show command as extra button. In last cas
 
 One can find example of command interface usage in [tutorials/http/httpcontrol.C](https://github.com/root-project/root/blob/master/tutorials/http/httpcontrol.C) macro.
 
+
 ## Customize user interface
 
 JSROOT is used to implement UI for the THttpServer. Defualt webpage shows list of registered objects on the left side and drawing area on the right side - [see example](https://root.cern/js/latest/httpserver.C/). JSROOT allows to configure different parameters via URL - like monitoring interval or name of displayed items [item=Files/job1.root/hpxpy&opt=colz&monitoring=1000](https://root.cern/js/latest/httpserver.C/?item=Files/job1.root/hpxpy&opt=colz&monitoring=1000).
@@ -121,6 +124,7 @@ One also can change appearance of hierarchy browser on the left side of the web 
 If necessary, one also can automatically open ROOT file when web page is opened:
 
     serv->SetItemField("/", "_loadfile", "currentdir/hsimple.root"); // name of ROOT file to load
+
 
 ## Configuring user access
 
@@ -157,6 +161,7 @@ One could provide several options for the same item, separating them with '&' si
 
 Complete list of supported options could be found in [TRootSniffer:Restrict()](https://root.cern/root/html/TRootSniffer.html#TRootSniffer:Restrict) method documentation.
 
+
 ## Using FastCGI interface
 
 [FastCGI](http://en.wikipedia.org/wiki/FastCGI) is a protocol for interfacing interactive programs with a web server like Apache, lighttpd, Microsoft ISS and many others.
@@ -179,7 +184,7 @@ All user access will be ruled by the main web server. Authorized account names c
 ### Configure fastcgi with Apache2
 
 First of all, one should compile and install [mod_fastcgi](http://www.fastcgi.com) module.
-Then _mod_fastcgi_ should be specified in httpd.conf to load it when Apache server is started.
+Then *mod_fastcgi* should be specified in httpd.conf to load it when Apache server is started.
 Finally in host configuration file one should have following lines:
 
      <IfModule mod_fastcgi.c>
@@ -202,9 +207,11 @@ There are many ways to configure user authentication in Apache. Example of diges
        Require valid-user
     </Location>
 
+
+
 ### Configure fastcgi with lighttpd
 
-An example of configuration file for _lighttpd_ server is:
+An example of configuration file for *lighttpd* server is:
 
     server.modules += ( "mod_fastcgi" )
     fastcgi.server = (
@@ -216,7 +223,7 @@ An example of configuration file for _lighttpd_ server is:
          ))
     )
 
-Be aware, that with _lighttpd_ one should specify IP address of the host, where ROOT application is running. Address of the ROOT application will be following:
+Be aware, that with *lighttpd* one should specify IP address of the host, where ROOT application is running. Address of the ROOT application will be following:
 
     http://lighttpd_host_name/root.app/
 
@@ -227,6 +234,7 @@ Example of authorization configuration for FastCGI connection:
                        "realm" => "root",
                        "require" => "valid-user"
                     ) )
+
 
 ## Integration with existing applications
 
@@ -244,6 +252,7 @@ The first method is to configure an asynchronous timer for the server, like for 
 
 Then, the timer will be activated even without any gSystem->ProcessEvents() method call. The main advantage of such method is that the application code can be used without any modifications. But there is no control when access to the application data is performed. It could happen just in-between of **`TH1::Fill()`** calls and an histogram object may be incomplete. Therefore such method is not recommended.
 
+
 ### Regular calls of THttpServer::ProcessRequests() method
 
 The second method is preferable - one just inserts in the application regular calls of the THttpServer::ProcessRequests() method, like:
@@ -253,6 +262,8 @@ The second method is preferable - one just inserts in the application regular ca
 In such case, one can fully disable the timer of the server:
 
     serv->SetTimer(0, kTRUE);
+
+
 
 ## Data access from command shell
 
@@ -280,18 +291,18 @@ Then, its representation will look like:
 
 The following requests can be performed:
 
-- `root.bin` - binary data produced by object streaming with TBufferFile
-- `root.json` - ROOT JSON representation for object and objects members
-- `root.xml` - ROOT XML representation
-- `root.png` - PNG image (if object drawing implemented)
-- `root.gif` - GIF image
-- `root.jpeg` - JPEG image
-- `exe.json` - method execution in the object
-- `exe.bin` - method execution, return result in binary form
-- `cmd.json` - command execution
-- `item.json` - item (object) properties, specified on the server
-- `multi.json` - perform several requests at once
-- `multi.bin` - perform several requests at once, return result in binary form
+  - `root.bin`   - binary data produced by object streaming with TBufferFile
+  - `root.json`  - ROOT JSON representation for object and objects members
+  - `root.xml`   - ROOT XML representation
+  - `root.png`   - PNG image (if object drawing implemented)
+  - `root.gif`   - GIF image
+  - `root.jpeg`  - JPEG image
+  - `exe.json`   - method execution in the object
+  - `exe.bin`    - method execution, return result in binary form
+  - `cmd.json`   - command execution
+  - `item.json`  - item (object) properties, specified on the server
+  - `multi.json` - perform several requests at once
+  - `multi.bin`  - perform several requests at once, return result in binary form
 
 All data will be automatically zipped if '.gz' extension is appended. Like:
 
@@ -300,6 +311,7 @@ All data will be automatically zipped if '.gz' extension is appended. Like:
 If the access to the server is restricted with htdigest, it is recommended to use the **curl** program since only curl correctly implements such authentication method. The command will look like:
 
     [shell] curl --user "accout:password" http://localhost:8080/Objects/subfolder/obj/root.json --digest -o root.json
+
 
 ### Objects data access in JSON format
 
@@ -316,7 +328,7 @@ compression support in JSROOT from version 4.8.2.
 
 Usage of `root.json` request is about as efficient as binary `root.bin` request. Comparison of different request methods with TH2 histogram from hsimple.C shown in the table:
 
-| Request                 | Size       |
+| Request                 |    Size    |
 | :---------------------- | :--------- |
 | root.bin                | 7672 bytes |
 | root.bin.gz             | 1582 bytes |
@@ -329,6 +341,7 @@ One should remember that JSON representation always includes names of the data f
 
 `root.json` used in JSROOT to request objects from THttpServer.
 
+
 ### Generating images out of objects
 
 For the ROOT classes which are implementing Draw method (like [TH1](https://root.cern/root/html/TH1.html) or [TGraph](https://root.cern/root/html/TGraph.html))
@@ -338,9 +351,10 @@ one could produce images with requests: `root.png`, `root.gif`, `root.jpeg`. For
 
 For all such requests following parameters could be specified:
 
-- `h` - image height
-- `w` - image width
-- `opt` - draw options
+   - `h` - image height
+   - `w` - image width
+   - `opt` - draw options
+
 
 ### Methods execution
 
@@ -360,10 +374,10 @@ Or one could allow access to the folder, object or specific object methods with:
 
 'exe.json' accepts following parameters:
 
-- `method` - name of method to execute
-- `prototype` - method prototype (see [TClass::GetMethodWithPrototype](https://root.cern/root/html/TClass.html#TClass:GetMethodWithPrototype) for details)
-- `compact` - compact parameter, used to compress return value
-- `_ret_object_` - name of the object which should be returned as result of method execution (used together with remote TTree::Draw call)
+   - `method` - name of method to execute
+   - `prototype` - method prototype (see [TClass::GetMethodWithPrototype](https://root.cern/root/html/TClass.html#TClass:GetMethodWithPrototype) for details)
+   - `compact` - compact parameter, used to compress return value
+   - `_ret_object_` - name of the object which should be returned as result of method execution (used together with remote TTree::Draw call)
 
 Example of retrieving object title:
 
@@ -387,6 +401,7 @@ Here is important to specify post object class, which is not stored in the binar
 
 To get debug information about command execution, one could submit `exe.txt` request with same arguments.
 
+
 ### Commands execution
 
 If command registered to the server:
@@ -406,6 +421,8 @@ If command definition include arguments:
 One could specify them in the URL string:
 
     [shell] wget http://localhost:8080/ResetCounter/cmd.json?arg1=7&arg2=12 -O result.txt
+
+
 
 ### Performing multiple requests at once
 
@@ -443,6 +460,7 @@ To use `multi.json` request from the JavaScript, one should create special 'POST
 
 Here argument "multi" identifies, that server response should be parsed with `JSROOT.parse_multi()` function, which correctly interprets JSON code, produced by `multi.json` request. When sending such request to the server, one should provide list of objects names and not forget "?number=N" parameter in the request URL string.
 
+
 ## Websockets supports
 
 Websockets support available starting from ROOT v6.12.
@@ -464,10 +482,10 @@ To work with websockets, subclass of THttpWSHandler should be created and regist
 
 Central method is `TUserHandler::ProcessWS(THttpCallArg *arg)`, where four kinds of websockets events should be handled:
 
-- WS_CONNECT - clients attempts to create websockets, return false when refusing connection
-- WS_READY - connection is ready to use, **wsid** can be obtained with `arg->GetWSId()` calls
-- WS_DATA - new portion of data received by webcosket
-- WS_CLOSE - connection closed by the client, **wsid** is no longer valid
+   * WS_CONNECT - clients attempts to create websockets, return false when refusing connection
+   * WS_READY   - connection is ready to use, **wsid** can be obtained with `arg->GetWSId()` calls
+   * WS_DATA    - new portion of data received by webcosket
+   * WS_CLOSE   - connection closed by the client, **wsid** is no longer valid
 
 These kinds are coded as method name of THttpCallArg class and can be used like:
 
@@ -505,3 +523,4 @@ Instance of **TUserHandler** should be registered to the THttpServer like:
 After that web socket connection can be established with the address `ws://host_name:8080/name1/root.websocket`
 Example client code can be found in `$ROOTSYS/tutorials/http/ws.htm` file. Actually, custom HTML page for
 websocket handler can be specified with `TUserHandler::GetDefaultPageContent()` method returning `"file:ws.htm"`.
+
