@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRequest } from './useRequest';
 import _ from 'lodash';
 
@@ -13,14 +13,7 @@ export const useSearch = (
   run_number: string,
   dataset_name: string
 ): ReturnSearch => {
-  const [touched, setTouched] = useState(false);
-  const searching = !!(run_number || dataset_name) || touched;
-
-  useEffect(() => {
-    if (searching) {
-      setTouched(true);
-    }
-  }, [searching]);
+  const searching = !!(run_number || dataset_name);
 
   const { data, isLoading } = useRequest(
     `data/json/samples?match=${dataset_name}&run=${run_number}`,

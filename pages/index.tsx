@@ -2,10 +2,11 @@ import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 
+import Home from '../containers/search/Home';
 import Nav from '../components/Nav';
 import SearchResults from '../containers/search/SearchResults';
 import DiplayFolders from '../containers/display/DisplayFolderAndPlot';
-import { useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import { useSearch } from '../hooks/useSearch';
 
 interface FolderPathQuery {
@@ -25,7 +26,8 @@ const Index: NextPage<FolderPathQuery> = (query) => {
     <>
       <Head>
         <script
-          crossOrigin="anonymous"
+          //@ts-ignore
+          crossorigin
           type="text/javascript"
           src="/jsroot-5.8.0/scripts/JSRootCore.js?2d&hist&more2d"
         ></script>
@@ -44,8 +46,8 @@ const Index: NextPage<FolderPathQuery> = (query) => {
           results_grouped={results_grouped}
         />
       ) : (
-        <div>Home</div>
-      )}
+            <Home />
+          )}
     </>
   );
 };

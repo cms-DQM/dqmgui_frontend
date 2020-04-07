@@ -1,4 +1,11 @@
-import React, { FC, ChangeEvent, Dispatch } from 'react';
+import React, { FC, ChangeEvent, Dispatch, FormEvent, useReducer } from 'react';
+
+import {
+  navReducer,
+  initialState,
+  setSearchFieldByDatasetName,
+  setSearchFieldByRunNumber,
+} from '../reducers/navReducer';
 
 interface NavProps {
   setRunNumber: Dispatch<any>;
@@ -6,13 +13,21 @@ interface NavProps {
 }
 
 const Nav: FC<NavProps> = ({ setRunNumber, setDatasetName }) => {
+  const [state, dispatch] = useReducer(navReducer, initialState);
+
   return (
-    <div>
+    <form
+      onSubmit={(e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setRunNumber(state.search_by_run_number);
+        setDatasetName(state.search_by_dataset_name);
+      }}
+    >
       <label htmlFor="run_number">Run number:</label>
       <input
         id="run_number"
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          setRunNumber(e.target.value)
+          setSearchFieldByRunNumber(e.target.value)(dispatch)
         }
         type="text"
         name="run_number"
@@ -21,11 +36,12 @@ const Nav: FC<NavProps> = ({ setRunNumber, setDatasetName }) => {
       <input
         id="dataset_name"
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          setDatasetName(e.target.value)
+          setSearchFieldByDatasetName(e.target.value)(dispatch)
         }
         type="text"
       />
-    </div>
+      <button type="submit">Search</button>
+    </form>
   );
 };
 

@@ -1,124 +1,112 @@
 JSROOT = {}; // just place holder for JSROOT.GEO functions
 
-JSROOT.BIT = function (n) {
-  return 1 << n;
-};
+JSROOT.BIT = function(n) { return 1 << (n); }
 
-importScripts('three.min.js', 'ThreeCSG.js', 'JSRootGeoBase.js');
+importScripts("three.min.js", "ThreeCSG.js", "JSRootGeoBase.js");
 
 // if (console) console.log('geoworker started ' + THREE.REVISION);
 
 var clones = null;
 
-onmessage = function (e) {
-  if (typeof e.data == 'string') {
-    console.log('Worker get message ' + e.data);
-    return;
-  }
+onmessage = function(e) {
 
-  if (typeof e.data != 'object') return;
+   if (typeof e.data == 'string') {
+      console.log('Worker get message ' + e.data);
+      return;
+   }
 
-  e.data.tm1 = new Date().getTime();
+   if (typeof e.data != 'object') return;
 
-  if (e.data.init) {
-    // console.log('start worker ' +  (e.data.tm1 -  e.data.tm0));
+   e.data.tm1 = new Date().getTime();
 
-    var nodes = e.data.clones;
-    if (nodes) {
-      // console.log('get clones ' + nodes.length);
-      clones = new JSROOT.GEO.ClonedNodes(null, nodes);
-      clones.SetVisLevel(e.data.vislevel);
-      clones.SetMaxVisNodes(e.data.maxvisnodes);
-      delete e.data.clones;
-      clones.sortmap = e.data.sortmap;
-    }
+   if (e.data.init) {
+      // console.log('start worker ' +  (e.data.tm1 -  e.data.tm0));
 
-    // used in composite shape
-    JSROOT.browser = e.data.browser;
-
-    e.data.tm2 = new Date().getTime();
-
-    return postMessage(e.data);
-  }
-
-  if (e.data.shapes) {
-    // this is task to create geometries in the worker
-
-    var shapes = e.data.shapes,
-      transferables = [];
-
-    // build all shapes up to specified limit, also limit execution time
-    for (var n = 0; n < 100; ++n) {
-      var res = clones.BuildShapes(shapes, e.data.limit, 1000);
-      if (res.done) break;
-      postMessage({
-        progress:
-          'Worker creating: ' +
-          res.shapes +
-          ' / ' +
-          shapes.length +
-          ' shapes,  ' +
-          res.faces +
-          ' faces',
-      });
-    }
-
-    for (var n = 0; n < shapes.length; ++n) {
-      var item = shapes[n];
-
-      if (item.geom) {
-        var bufgeom;
-        if (item.geom instanceof THREE.BufferGeometry) {
-          bufgeom = item.geom;
-        } else {
-          var bufgeom = new THREE.BufferGeometry();
-          bufgeom.fromGeometry(item.geom);
-        }
-
-        item.buf_pos = bufgeom.attributes.position.array;
-        item.buf_norm = bufgeom.attributes.normal.array;
-
-        // use nice feature of HTML workers with transferable
-        // we allow to take ownership of buffer from local array
-        // therefore buffer content not need to be copied
-        transferables.push(item.buf_pos.buffer, item.buf_norm.buffer);
-
-        delete item.geom;
+      var nodes = e.data.clones;
+      if (nodes) {
+         // console.log('get clones ' + nodes.length);
+         clones = new JSROOT.GEO.ClonedNodes(null, nodes);
+         clones.SetVisLevel(e.data.vislevel);
+         clones.SetMaxVisNodes(e.data.maxvisnodes);
+         delete e.data.clones;
+         clones.sortmap = e.data.sortmap;
       }
 
-      delete item.shape; // no need to send back shape
-    }
+      // used in composite shape
+      JSROOT.browser = e.data.browser;
 
-    e.data.tm2 = new Date().getTime();
+      e.data.tm2 = new Date().getTime();
 
-    return postMessage(e.data, transferables);
-  }
+      return postMessage(e.data);
+   }
 
-  if (e.data.collect !== undefined) {
-    // this is task to collect visible nodes using camera position
+   if (e.data.shapes) {
+      // this is task to create geometries in the worker
 
-    // first mark all visible flags
-    clones.SetVisibleFlags(e.data.flags);
-    delete e.data.falgs;
+      var shapes = e.data.shapes, transferables = [];
 
-    clones.ProduceIdShits();
+      // build all shapes up to specified limit, also limit execution time
+      for (var n=0;n<100;++n) {
+         var res = clones.BuildShapes(shapes, e.data.limit, 1000);
+         if (res.done) break;
+         postMessage({ progress: "Worker creating: " + res.shapes + " / " + shapes.length + " shapes,  "  + res.faces + " faces" });
+      }
 
-    var matrix = null;
-    if (e.data.matrix) matrix = new THREE.Matrix4().fromArray(e.data.matrix);
-    delete e.data.matrix;
+      for (var n=0;n<shapes.length;++n) {
+         var item = shapes[n];
 
-    var res = clones.CollectVisibles(
-      e.data.collect,
-      JSROOT.GEO.CreateFrustum(matrix)
-    );
+         if (item.geom) {
+            var bufgeom;
+            if (item.geom instanceof THREE.BufferGeometry) {
+               bufgeom = item.geom;
+            } else {
+               var bufgeom = new THREE.BufferGeometry();
+               bufgeom.fromGeometry(item.geom);
+            }
 
-    e.data.new_nodes = res.lst;
-    e.data.complete = res.complete; // inform if all nodes are selected
+            item.buf_pos = bufgeom.attributes.position.array;
+            item.buf_norm = bufgeom.attributes.normal.array;
 
-    e.data.tm2 = new Date().getTime();
+            // use nice feature of HTML workers with transferable
+            // we allow to take ownership of buffer from local array
+            // therefore buffer content not need to be copied
+            transferables.push(item.buf_pos.buffer, item.buf_norm.buffer);
 
-    // console.log('Collect visibles in worker ' + e.data.new_nodes.length + ' takes ' + (e.data.tm2-e.data.tm1));
+            delete item.geom;
+         }
 
-    return postMessage(e.data);
-  }
-};
+         delete item.shape; // no need to send back shape
+      }
+
+      e.data.tm2 = new Date().getTime();
+
+      return postMessage(e.data, transferables);
+   }
+
+   if (e.data.collect !== undefined) {
+      // this is task to collect visible nodes using camera position
+
+      // first mark all visible flags
+      clones.SetVisibleFlags(e.data.flags);
+      delete e.data.falgs;
+
+      clones.ProduceIdShits();
+
+      var matrix = null;
+      if (e.data.matrix)
+         matrix = new THREE.Matrix4().fromArray(e.data.matrix);
+      delete e.data.matrix;
+
+      var res = clones.CollectVisibles(e.data.collect, JSROOT.GEO.CreateFrustum(matrix));
+
+      e.data.new_nodes = res.lst;
+      e.data.complete = res.complete; // inform if all nodes are selected
+
+      e.data.tm2 = new Date().getTime();
+
+      // console.log('Collect visibles in worker ' + e.data.new_nodes.length + ' takes ' + (e.data.tm2-e.data.tm1));
+
+      return postMessage(e.data);
+   }
+
+}
