@@ -7,6 +7,7 @@ import SearchResults from '../containers/search/SearchResults';
 import DiplayFolders from '../containers/display/DisplayFolderAndPlot';
 import { useState } from 'react';
 import { useSearch } from '../hooks/useSearch';
+import "./styles.scss";
 
 interface FolderPathQuery {
   run_number?: number;
@@ -22,7 +23,7 @@ const Index: NextPage<FolderPathQuery> = (query) => {
     dataset_name
   );
   return (
-    <>
+    <div className="Header">
       <Head>
         <script
           crossOrigin="anonymous"
@@ -44,9 +45,9 @@ const Index: NextPage<FolderPathQuery> = (query) => {
           results_grouped={results_grouped}
         />
       ) : (
-        <div>Home</div>
-      )}
-    </>
+            <div>Home</div>
+          )}
+    </div>
   );
 };
 
