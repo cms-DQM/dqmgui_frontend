@@ -1,3571 +1,4143 @@
-/** @file JSRootGeoBase.js */
-/// Basic functions for work with TGeo classes
+/** JavaScript ROOT 3D geometry painter
+ * @file JSRootGeoPainter.js */
 
 (function( factory ) {
    if ( typeof define === "function" && define.amd ) {
-      define( [ 'JSRootCore', 'threejs', 'ThreeCSG' ], factory );
+      define( [ 'JSRootPainter', 'd3', 'threejs', 'JSRoot3DPainter', 'JSRootGeoBase', 'dat.gui' ], factory );
    } else if (typeof exports === 'object' && typeof module !== 'undefined') {
-      factory(require("./JSRootCore.js"), require("three"), require("./ThreeCSG.js"));
+      var jsroot = require("./JSRootCore.js");
+      factory(jsroot, require("d3"), require("three"), require("./JSRoot3DPainter.js"), require("./JSRootGeoBase.js"),
+              undefined, jsroot.nodejs || (typeof document=='undefined') ? jsroot.nodejs_document : document);
    } else {
       if (typeof JSROOT == 'undefined')
-         throw new Error('JSROOT is not defined', 'JSRootGeoBase.js');
+         throw new Error('JSROOT is not defined', 'JSRootGeoPainter.js');
+      if (typeof JSROOT.Painter != 'object')
+         throw new Error('JSROOT.Painter is not defined', 'JSRootGeoPainter.js');
+      if (typeof d3 == 'undefined')
+         throw new Error('d3 is not defined', 'JSRootGeoPainter.js');
       if (typeof THREE == 'undefined')
-         throw new Error('THREE is not defined', 'JSRootGeoBase.js');
-      if (typeof ThreeBSP == 'undefined')
-         throw new Error('ThreeBSP is not defined', 'JSRootGeoBase.js');
-      factory(JSROOT, THREE, ThreeBSP);
+         throw new Error('THREE is not defined', 'JSRootGeoPainter.js');
+      factory( JSROOT, d3, THREE );
    }
-} (function( JSROOT, THREE, ThreeBSP ) {
+} (function( JSROOT, d3, THREE, _3d, _geo, _dat, document ) {
 
    "use strict";
 
-   /** @namespace JSROOT.GEO */
-   /// Holder of all TGeo-related functions and classes
-   JSROOT.GEO = {
-         GradPerSegm: 6,     // grad per segment in cylinder/spherical symmetry shapes
-         CompressComp: true,  // use faces compression in composite shapes
-         CompLimit: 20        // maximal number of components in composite shape
-    };
+   JSROOT.sources.push("geom");
 
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.BITS = {
-         kVisOverride     : JSROOT.BIT(0),           // volume's vis. attributes are overwritten
-         kVisNone         : JSROOT.BIT(1),           // the volume/node is invisible, as well as daughters
-         kVisThis         : JSROOT.BIT(2),           // this volume/node is visible
-         kVisDaughters    : JSROOT.BIT(3),           // all leaves are visible
-         kVisOneLevel     : JSROOT.BIT(4),           // first level daughters are visible (not used)
-         kVisStreamed     : JSROOT.BIT(5),           // true if attributes have been streamed
-         kVisTouched      : JSROOT.BIT(6),           // true if attributes are changed after closing geom
-         kVisOnScreen     : JSROOT.BIT(7),           // true if volume is visible on screen
-         kVisContainers   : JSROOT.BIT(12),          // all containers visible
-         kVisOnly         : JSROOT.BIT(13),          // just this visible
-         kVisBranch       : JSROOT.BIT(14),          // only a given branch visible
-         kVisRaytrace     : JSROOT.BIT(15)           // raytracing flag
+   if ((typeof document=='undefined') && (typeof window=='object')) document = window.document;
+
+   if ((typeof define === "function") && define.amd)
+      JSROOT.loadScript('$$$style/JSRootGeoPainter.css');
+
+   if (typeof JSROOT.GEO !== 'object')
+      console.error('JSROOT.GEO namespace is not defined')
+
+   // ============================================================================================
+
+   function Toolbar(container, buttons, bright) {
+      this.bright = bright;
+      if ((container !== undefined) && (typeof container.append == 'function'))  {
+         this.element = container.append("div").attr('class','jsroot');
+         this.addButtons(buttons);
+      }
+   }
+
+   Toolbar.prototype.addButtons = function(buttons) {
+      var pthis = this;
+
+      this.buttonsNames = [];
+      buttons.forEach(function(buttonGroup) {
+         var group = pthis.element.append('div').attr('class', 'toolbar-group');
+
+         buttonGroup.forEach(function(buttonConfig) {
+            var buttonName = buttonConfig.name;
+            if (!buttonName) {
+               throw new Error('must provide button \'name\' in button config');
+            }
+            if (pthis.buttonsNames.indexOf(buttonName) !== -1) {
+               throw new Error('button name \'' + buttonName + '\' is taken');
+            }
+            pthis.buttonsNames.push(buttonName);
+
+            pthis.createButton(group, buttonConfig);
+         });
+      });
+   };
+
+   Toolbar.prototype.createButton = function(group, config) {
+
+      var title = config.title;
+      if (title === undefined) title = config.name;
+
+      if (typeof config.click !== 'function')
+         throw new Error('must provide button \'click\' function in button config');
+
+      var button = group.append('a')
+                        .attr('class', this.bright ? 'toolbar-btn-bright' : 'toolbar-btn')
+                        .attr('rel', 'tooltip')
+                        .attr('data-title', title)
+                        .on('click', config.click);
+
+      this.createIcon(button, config.icon || JSROOT.ToolbarIcons.question);
+   }
+
+
+   Toolbar.prototype.changeBrightness = function(bright) {
+      this.bright = bright;
+      if (!this.element) return;
+
+      this.element.selectAll(bright ? '.toolbar-btn' : ".toolbar-btn-bright")
+                  .attr("class", !bright ? 'toolbar-btn' : "toolbar-btn-bright");
+   }
+
+
+   Toolbar.prototype.createIcon = function(button, thisIcon) {
+      var dimensions = thisIcon.size ? thisIcon.size.split(' ') : [512, 512],
+          width = dimensions[0],
+          height = dimensions[1] || dimensions[0],
+          scale = thisIcon.scale || 1,
+          svg = button.append("svg:svg")
+                      .attr('height', '1em')
+                      .attr('width', '1em')
+                      .attr('viewBox', [0, 0, width, height].join(' '));
+
+      if ('recs' in thisIcon) {
+          var rec = {};
+          for (var n=0;n<thisIcon.recs.length;++n) {
+             JSROOT.extend(rec, thisIcon.recs[n]);
+             svg.append('rect').attr("x", rec.x).attr("y", rec.y)
+                               .attr("width", rec.w).attr("height", rec.h)
+                               .attr("fill", rec.f);
+          }
+       } else {
+          var elem = svg.append('svg:path').attr('d',thisIcon.path);
+          if (scale !== 1)
+             elem.attr('transform', 'scale(' + scale + ' ' + scale +')');
+       }
+   };
+
+   Toolbar.prototype.Cleanup = function() {
+      if (this.element) {
+         this.element.remove();
+         delete this.element;
+      }
+   };
+
+   /**
+    * @class TGeoPainter
+    * @desc Holder of different functions and classes for drawing geometries
+    * @memberof JSROOT
+    */
+
+   function TGeoPainter(obj) {
+
+      if (obj && (obj._typename === "TGeoManager")) {
+         this.geo_manager = obj;
+         obj = obj.fMasterVolume;
+      }
+
+      if (obj && (obj._typename.indexOf('TGeoVolume') === 0))
+         obj = { _typename:"TGeoNode", fVolume: obj, fName: obj.fName, $geoh: obj.$geoh, _proxy: true };
+
+      JSROOT.TObjectPainter.call(this, obj);
+
+      this.no_default_title = true; // do not set title to main DIV
+      this.mode3d = true; // indication of 3D mode
+      this.drawing_stage = 0; //
+      this.ctrl = {
+         clipIntersect: true,
+         clip: [{ name:"x", enabled: false, value: 0, min: -100, max: 100}, { name:"y", enabled: false, value: 0, min: -100, max: 100}, { name:"z", enabled: false, value: 0, min: -100, max: 100}],
+         ssao: { enabled: false, output: THREE.SSAOPass.OUTPUT.Default, kernelRadius: 0, minDistance: 0.001, maxDistance: 0.1 },
+         info: { num_meshes: 0, num_faces: 0, num_shapes: 0 },
+         highlight: false,
+         highlight_scene: false,
+         depthTest: true,
+         depthMethod: "dflt",
+         select_in_view: false,
+         update_browser: true,
+         light: { top: false, bottom: false, left: false, right: false, front: false, specular: true },
+         trans_radial: 0, trans_z: 0
       };
 
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.TestBit = function(volume, f) {
-      var att = volume.fGeoAtt;
-      return att === undefined ? false : ((att & f) !== 0);
+      this.ctrl.depthMethodItems = [
+         {name: 'Default', value: "dflt"},
+         {name: 'Raytraicing', value: "ray"},
+         {name: 'Boundary box', value: "box"},
+         {name: 'Mesh size', value: "size"},
+         {name: 'Central point', value: "pnt" }
+       ];
+
+      this.ctrl.ssao.outputItems = [
+         {name: 'Default', value: THREE.SSAOPass.OUTPUT.Default},
+         {name: 'SSAO Only', value: THREE.SSAOPass.OUTPUT.SSAO},
+         {name: 'SSAO Only + Blur', value: THREE.SSAOPass.OUTPUT.Blur},
+         {name: 'Beauty', value: THREE.SSAOPass.OUTPUT.Beauty},
+         {name: 'Depth', value: THREE.SSAOPass.OUTPUT.Depth},
+         {name: 'Normal', value: THREE.SSAOPass.OUTPUT.Normal}
+      ];
+
+      this.Cleanup(true);
    }
 
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.SetBit = function(volume, f, value) {
-      if (volume.fGeoAtt === undefined) return;
-      volume.fGeoAtt = value ? (volume.fGeoAtt | f) : (volume.fGeoAtt & ~f);
-   }
+   TGeoPainter.prototype = Object.create( JSROOT.TObjectPainter.prototype );
 
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.ToggleBit = function(volume, f) {
-      if (volume.fGeoAtt !== undefined)
-         volume.fGeoAtt = volume.fGeoAtt ^ (f & 0xffffff);
-   }
+   TGeoPainter.prototype.CreateToolbar = function(args) {
+      if (this._toolbar || this._usesvg || this._usesvgimg || this.ctrl.notoolbar) return;
+      var painter = this;
+      var buttonList = [{
+         name: 'toImage',
+         title: 'Save as PNG',
+         icon: JSROOT.ToolbarIcons.camera,
+         click: function() { painter.createSnapshot(); }
+      }, {
+         name: 'control',
+         title: 'Toggle control UI',
+         icon: JSROOT.ToolbarIcons.rect,
+         click: function() { painter.showControlOptions('toggle'); }
+      }, {
+         name: 'enlarge',
+         title: 'Enlarge geometry drawing',
+         icon: JSROOT.ToolbarIcons.circle,
+         click: function() { painter.toggleEnlarge(); }
+      }];
 
-   /** @memberOf JSROOT.GEO
-    * implementation of TGeoVolume::InvisibleAll */
-   JSROOT.GEO.InvisibleAll = function(flag) {
-      if (flag===undefined) flag = true;
+      // Only show VR icon if WebVR API available.
+      if (navigator.getVRDisplays) {
+         buttonList.push({
+            name: 'entervr',
+            title: 'Enter VR (It requires a VR Headset connected)',
+            icon: JSROOT.ToolbarIcons.vrgoggles,
+            click: function() { painter.toggleVRMode(); }
+         });
+         this.InitVRMode();
+      }
 
-      JSROOT.GEO.SetBit(this, JSROOT.GEO.BITS.kVisThis, !flag);
-      // JSROOT.GEO.SetBit(this, JSROOT.GEO.BITS.kVisDaughters, !flag);
+      if (JSROOT.gStyle.ContextMenu)
+      buttonList.push({
+         name: 'menu',
+         title: 'Show context menu',
+         icon: JSROOT.ToolbarIcons.question,
+         click: function() {
 
-      if (this.fNodes)
-         for (var n=0;n<this.fNodes.arr.length;++n) {
-            var sub = this.fNodes.arr[n].fVolume;
-            JSROOT.GEO.SetBit(sub, JSROOT.GEO.BITS.kVisThis, !flag);
-            // JSROOT.GEO.SetBit(sub, JSROOT.GEO.BITS.kVisDaughters, !flag);
+            d3.event.preventDefault();
+            d3.event.stopPropagation();
+
+            var evnt = d3.event;
+
+            if (!JSROOT.Painter.closeMenu())
+               JSROOT.Painter.createMenu(painter, function(menu) {
+                  menu.painter.FillContextMenu(menu);
+                  menu.show(evnt);
+               });
          }
+      });
+
+      var bkgr = new THREE.Color(this.ctrl.background);
+
+      this._toolbar = new Toolbar( this.select_main(), [buttonList], (bkgr.r + bkgr.g + bkgr.b) < 1);
    }
 
-   /** method used to avoid duplication of warnings
-    * @memberOf JSROOT.GEO */
-   JSROOT.GEO.warn = function(msg) {
-      if (JSROOT.GEO._warn_msgs === undefined) JSROOT.GEO._warn_msgs = {};
-      if (JSROOT.GEO._warn_msgs[msg] !== undefined) return;
-      JSROOT.GEO._warn_msgs[msg] = true;
-      console.warn(msg);
-   }
+   TGeoPainter.prototype.InitVRMode = function() {
+      var pthis = this;
+      // Dolly contains camera and controllers in VR Mode
+      // Allows moving the user in the scene
+      this._dolly = new THREE.Group();
+      this._scene.add(this._dolly);
+      this._standingMatrix = new THREE.Matrix4();
 
-   /** @brief Returns kind of the geo node
-    *  @desc  0 - TGeoNode
-    *         1 - TEveGeoNode
-    *        -1 - unsupported
-    * @memberOf JSROOT.GEO */
-   JSROOT.GEO.NodeKind = function(obj) {
-      if ((obj === undefined) || (obj === null) || (typeof obj !== 'object')) return -1;
-      return ('fShape' in obj) && ('fTrans' in obj) ? 1 : 0;
-   }
+      // Raycaster temp variables to avoid one per frame allocation.
+      this._raycasterEnd = new THREE.Vector3();
+      this._raycasterOrigin = new THREE.Vector3();
 
-   /** @brief Returns number of shapes
-    *  @desc Used to count total shapes number in composites
-    * @memberOf JSROOT.GEO */
-   JSROOT.GEO.CountNumShapes = function(shape) {
-      if (!shape) return 0;
-      // if (shape._typename=="TGeoHalfSpace") JSROOT.GEO.HalfSpace = true;
-      if (shape._typename!=='TGeoCompositeShape') return 1;
-      return JSROOT.GEO.CountNumShapes(shape.fNode.fLeft) + JSROOT.GEO.CountNumShapes(shape.fNode.fRight);
-   }
-
-   // ==========================================================================
-
-   JSROOT.GEO.GeometryCreator = function(numfaces) {
-      this.nfaces = numfaces;
-      this.indx = 0;
-      this.pos = new Float32Array(numfaces*9);
-      this.norm = new Float32Array(numfaces*9);
-
-      return this;
-   }
-
-   JSROOT.GEO.GeometryCreator.prototype.AddFace3 = function(x1,y1,z1,
-                                                            x2,y2,z2,
-                                                            x3,y3,z3) {
-      var indx = this.indx, pos = this.pos;
-      pos[indx] = x1;
-      pos[indx+1] = y1;
-      pos[indx+2] = z1;
-      pos[indx+3] = x2;
-      pos[indx+4] = y2;
-      pos[indx+5] = z2;
-      pos[indx+6] = x3;
-      pos[indx+7] = y3;
-      pos[indx+8] = z3;
-      this.last4 = false;
-      this.indx = indx + 9;
-   }
-
-   JSROOT.GEO.GeometryCreator.prototype.StartPolygon = function() {}
-   JSROOT.GEO.GeometryCreator.prototype.StopPolygon = function() {}
-
-   JSROOT.GEO.GeometryCreator.prototype.AddFace4 = function(x1,y1,z1,
-                                                            x2,y2,z2,
-                                                            x3,y3,z3,
-                                                            x4,y4,z4,
-                                                            reduce) {
-      // from four vertices one normally creates two faces (1,2,3) and (1,3,4)
-      // if (reduce==1), first face is reduced
-      // if (reduce==2), second face is reduced
-
-      var indx = this.indx, pos = this.pos;
-
-      if (reduce!==1) {
-         pos[indx] = x1;
-         pos[indx+1] = y1;
-         pos[indx+2] = z1;
-         pos[indx+3] = x2;
-         pos[indx+4] = y2;
-         pos[indx+5] = z2;
-         pos[indx+6] = x3;
-         pos[indx+7] = y3;
-         pos[indx+8] = z3;
-         indx+=9;
-      }
-
-      if (reduce!==2) {
-         pos[indx] = x1;
-         pos[indx+1] = y1;
-         pos[indx+2] = z1;
-         pos[indx+3] = x3;
-         pos[indx+4] = y3;
-         pos[indx+5] = z3;
-         pos[indx+6] = x4;
-         pos[indx+7] = y4;
-         pos[indx+8] = z4;
-         indx+=9;
-      }
-
-      this.last4 = (indx !== this.indx + 9);
-      this.indx = indx;
-   }
-
-   JSROOT.GEO.GeometryCreator.prototype.SetNormal4 = function(nx1,ny1,nz1,
-                                                              nx2,ny2,nz2,
-                                                              nx3,ny3,nz3,
-                                                              nx4,ny4,nz4,
-                                                              reduce) {
-     // same as AddFace4, assign normals for each individual vertex
-     // reduce has same meaning and should be the same
-
-      if (this.last4 && reduce)
-         return console.error('missmatch between AddFace4 and SetNormal4 calls');
-
-      var indx = this.indx - (this.last4 ? 18 : 9), norm = this.norm;
-
-      if (reduce!==1) {
-         norm[indx] = nx1;
-         norm[indx+1] = ny1;
-         norm[indx+2] = nz1;
-         norm[indx+3] = nx2;
-         norm[indx+4] = ny2;
-         norm[indx+5] = nz2;
-         norm[indx+6] = nx3;
-         norm[indx+7] = ny3;
-         norm[indx+8] = nz3;
-         indx+=9;
-      }
-
-      if (reduce!==2) {
-         norm[indx] = nx1;
-         norm[indx+1] = ny1;
-         norm[indx+2] = nz1;
-         norm[indx+3] = nx3;
-         norm[indx+4] = ny3;
-         norm[indx+5] = nz3;
-         norm[indx+6] = nx4;
-         norm[indx+7] = ny4;
-         norm[indx+8] = nz4;
-      }
-   }
-
-   JSROOT.GEO.GeometryCreator.prototype.RecalcZ = function(func) {
-      var pos = this.pos,
-          last = this.indx,
-          indx = last - (this.last4 ? 18 : 9);
-
-      while (indx < last) {
-         pos[indx+2] = func(pos[indx], pos[indx+1], pos[indx+2]);
-         indx+=3;
-      }
-   }
-
-   JSROOT.GEO.GetNormal = function(x1,y1,z1,x2,y2,z2,x3,y3,z3) {
-
-      var pA = new THREE.Vector3(x1,y1,z1),
-          pB = new THREE.Vector3(x2,y2,z2),
-          pC = new THREE.Vector3(x3,y3,z3),
-          cb = new THREE.Vector3(),
-          ab = new THREE.Vector3();
-
-      cb.subVectors( pC, pB );
-      ab.subVectors( pA, pB );
-      cb.cross(ab );
-
-      return cb;
-   }
-
-   JSROOT.GEO.GeometryCreator.prototype.CalcNormal = function() {
-      var indx = this.indx, norm = this.norm;
-
-      if (!this.cb) {
-         this.pA = new THREE.Vector3();
-         this.pB = new THREE.Vector3();
-         this.pC = new THREE.Vector3();
-         this.cb = new THREE.Vector3();
-         this.ab = new THREE.Vector3();
-      }
-
-      this.pA.fromArray( this.pos, this.indx - 9 );
-      this.pB.fromArray( this.pos, this.indx - 6 );
-      this.pC.fromArray( this.pos, this.indx - 3 );
-
-      this.cb.subVectors( this.pC, this.pB );
-      this.ab.subVectors( this.pA, this.pB );
-      this.cb.cross( this.ab );
-
-      this.SetNormal(this.cb.x, this.cb.y, this.cb.z);
-   }
-
-   JSROOT.GEO.GeometryCreator.prototype.SetNormal = function(nx,ny,nz) {
-      var indx = this.indx - 9, norm = this.norm;
-
-      norm[indx]   = norm[indx+3] = norm[indx+6] = nx;
-      norm[indx+1] = norm[indx+4] = norm[indx+7] = ny;
-      norm[indx+2] = norm[indx+5] = norm[indx+8] = nz;
-
-      if (this.last4) {
-         indx -= 9;
-         norm[indx]   = norm[indx+3] = norm[indx+6] = nx;
-         norm[indx+1] = norm[indx+4] = norm[indx+7] = ny;
-         norm[indx+2] = norm[indx+5] = norm[indx+8] = nz;
-      }
-   }
-
-   JSROOT.GEO.GeometryCreator.prototype.SetNormal_12_34 = function(nx12,ny12,nz12,nx34,ny34,nz34,reduce) {
-      // special shortcut, when same normals can be applied for 1-2 point and 3-4 point
-      if (reduce===undefined) reduce = 0;
-
-      var indx = this.indx - ((reduce>0) ? 9 : 18), norm = this.norm;
-
-      if (reduce!==1) {
-         norm[indx]   = nx12;
-         norm[indx+1] = ny12;
-         norm[indx+2] = nz12;
-         norm[indx+3] = nx12;
-         norm[indx+4] = ny12;
-         norm[indx+5] = nz12;
-         norm[indx+6] = nx34;
-         norm[indx+7] = ny34;
-         norm[indx+8] = nz34;
-         indx+=9;
-      }
-
-      if (reduce!==2) {
-         norm[indx]   = nx12;
-         norm[indx+1] = ny12;
-         norm[indx+2] = nz12;
-         norm[indx+3] = nx34;
-         norm[indx+4] = ny34;
-         norm[indx+5] = nz34;
-         norm[indx+6] = nx34;
-         norm[indx+7] = ny34;
-         norm[indx+8] = nz34;
-         indx+=9;
-      }
-   }
-
-   JSROOT.GEO.GeometryCreator.prototype.Create = function() {
-      if (this.nfaces !== this.indx/9)
-         console.error('Mismatch with created ' + this.nfaces + ' and filled ' + this.indx/9 + ' number of faces');
-
-      var geometry = new THREE.BufferGeometry();
-      geometry.addAttribute( 'position', new THREE.BufferAttribute( this.pos, 3 ) );
-      geometry.addAttribute( 'normal', new THREE.BufferAttribute( this.norm, 3 ) );
-      return geometry;
-   }
-
-   // ================================================================================
-
-   // same methods as GeometryCreator, but with different implementation
-
-   JSROOT.GEO.PolygonsCreator = function() {
-      this.polygons = [];
-   }
-
-   JSROOT.GEO.PolygonsCreator.prototype.StartPolygon = function(normal) {
-      this.multi = 1;
-      this.mnormal = normal;
-   }
-
-   JSROOT.GEO.PolygonsCreator.prototype.StopPolygon = function() {
-      if (!this.multi) return;
-      this.multi = 0;
-      console.error('Polygon should be already closed at this moment');
-   }
-
-   JSROOT.GEO.PolygonsCreator.prototype.AddFace3 = function(x1,y1,z1,
-                                                            x2,y2,z2,
-                                                            x3,y3,z3) {
-      this.AddFace4(x1,y1,z1,x2,y2,z2,x3,y3,z3,x3,y3,z3,2);
-   }
-
-
-   JSROOT.GEO.PolygonsCreator.prototype.AddFace4 = function(x1,y1,z1,
-                                                            x2,y2,z2,
-                                                            x3,y3,z3,
-                                                            x4,y4,z4,
-                                                            reduce) {
-      // from four vertices one normally creates two faces (1,2,3) and (1,3,4)
-      // if (reduce==1), first face is reduced
-      //  if (reduce==2), second face is reduced
-
-      if (reduce === undefined) reduce = 0;
-
-      this.v1 = new ThreeBSP.Vertex( x1, y1, z1, 0, 0, 0 );
-      this.v2 = (reduce===1) ? null : new ThreeBSP.Vertex( x2, y2, z2, 0, 0, 0 );
-      this.v3 = new ThreeBSP.Vertex( x3, y3, z3, 0, 0, 0 );
-      this.v4 = (reduce===2) ? null : new ThreeBSP.Vertex( x4, y4, z4, 0, 0, 0 );
-
-      this.reduce = reduce;
-
-      if (this.multi) {
-
-         if (reduce!==2) console.error('polygon not supported for not-reduced faces');
-
-         var polygon;
-
-         if (this.multi++ === 1) {
-            polygon = new ThreeBSP.Polygon;
-
-            polygon.vertices.push(this.mnormal ? this.v2 : this.v3);
-            this.polygons.push(polygon);
-         } else {
-            polygon = this.polygons[this.polygons.length-1];
-            // check that last vertice equals to v2
-            var last = this.mnormal ? polygon.vertices[polygon.vertices.length-1] : polygon.vertices[0],
-                comp = this.mnormal ? this.v2 : this.v3;
-
-            if (comp.diff(last) > 1e-12)
-               console.error('vertex missmatch when building polygon');
+      navigator.getVRDisplays().then(function (displays) {
+         var vrDisplay = displays[0];
+         if (!vrDisplay) return;
+         pthis._renderer.vr.setDevice(vrDisplay);
+         pthis._vrDisplay = vrDisplay;
+         if (vrDisplay.stageParameters) {
+            pthis._standingMatrix.fromArray(vrDisplay.stageParameters.sittingToStandingTransform);
          }
+         pthis.InitVRControllersGeometry();
+      });
+   }
 
-         var first = this.mnormal ? polygon.vertices[0] : polygon.vertices[polygon.vertices.length-1],
-             next = this.mnormal ? this.v3 : this.v2;
+   TGeoPainter.prototype.InitVRControllersGeometry = function() {
 
-         if (next.diff(first) < 1e-12) {
-            //console.log('polygon closed!!!', polygon.vertices.length);
-            this.multi = 0;
-         } else
-         if (this.mnormal) {
-            polygon.vertices.push(this.v3);
-         } else {
-            polygon.vertices.unshift(this.v2);
-         }
+      var geometry = new THREE.SphereGeometry(0.025, 18, 36);
+      var material = new THREE.MeshBasicMaterial({color: 'grey'});
+      var rayMaterial = new THREE.MeshBasicMaterial({color: 'fuchsia'});
+      var rayGeometry = new THREE.BoxBufferGeometry(0.001, 0.001, 2);
+      var ray1Mesh = new THREE.Mesh(rayGeometry, rayMaterial);
+      var ray2Mesh = new THREE.Mesh(rayGeometry, rayMaterial);
+      var sphere1 = new THREE.Mesh(geometry, material);
+      var sphere2 = new THREE.Mesh(geometry, material);
 
+      this._controllersMeshes = [];
+      this._controllersMeshes.push(sphere1);
+      this._controllersMeshes.push(sphere2);
+      ray1Mesh.position.z -= 1;
+      ray2Mesh.position.z -= 1;
+      sphere1.add(ray1Mesh);
+      sphere2.add(ray2Mesh);
+      this._dolly.add(sphere1);
+      this._dolly.add(sphere2);
+      // Controller mesh hidden by default
+      sphere1.visible = false;
+      sphere2.visible = false;
+   }
+
+   TGeoPainter.prototype.UpdateVRControllersList = function() {
+      var gamepads = navigator.getGamepads && navigator.getGamepads();
+      // Has controller list changed?
+      if (this.vrControllers && (gamepads.length === this.vrControllers.length)) { return; }
+      // Hide meshes.
+      this._controllersMeshes.forEach(function (mesh) { mesh.visible = false; });
+      this._vrControllers = [];
+      for (var i = 0; i < gamepads.length; ++i) {
+         if (!gamepads[i] || !gamepads[i].pose) { continue; }
+         this._vrControllers.push({
+            gamepad: gamepads[i],
+            mesh: this._controllersMeshes[i]
+         });
+         this._controllersMeshes[i].visible = true;
+      }
+   }
+
+   TGeoPainter.prototype.ProcessVRControllerIntersections = function() {
+      var intersects = []
+      for (var i = 0; i < this._vrControllers.length; ++i) {
+         var controller = this._vrControllers[i].mesh;
+         var end = controller.localToWorld(this._raycasterEnd.set(0, 0, -1));
+         var origin = controller.localToWorld(this._raycasterOrigin.set(0, 0, 0));
+         end.sub(origin).normalize();
+         intersects = intersects.concat(this._controls.GetOriginDirectionIntersects(origin, end));
+      }
+      // Remove duplicates.
+      intersects = intersects.filter(function (item, pos) {return intersects.indexOf(item) === pos});
+      this._controls.ProcessMouseMove(intersects);
+   }
+
+   TGeoPainter.prototype.UpdateVRControllers = function() {
+      this.UpdateVRControllersList();
+      // Update pose.
+      for (var i = 0; i < this._vrControllers.length; ++i) {
+         var controller = this._vrControllers[i];
+         var orientation = controller.gamepad.pose.orientation;
+         var position = controller.gamepad.pose.position;
+         var controllerMesh = controller.mesh;
+         if (orientation) { controllerMesh.quaternion.fromArray(orientation); }
+         if (position) { controllerMesh.position.fromArray(position); }
+         controllerMesh.updateMatrix();
+         controllerMesh.applyMatrix(this._standingMatrix);
+         controllerMesh.matrixWorldNeedsUpdate = true;
+      }
+      this.ProcessVRControllerIntersections();
+   }
+
+   TGeoPainter.prototype.toggleVRMode = function() {
+      if (!this._vrDisplay) return;
+      // Toggle VR mode off
+      if (this._vrDisplay.isPresenting) {
+         this.ExitVRMode();
          return;
-
       }
+      var pthis = this;
+      this._previousCameraPosition = this._camera.position.clone();
+      this._previousCameraRotation = this._camera.rotation.clone();
+      this._vrDisplay.requestPresent([{ source: this._renderer.domElement }]).then(function() {
+         pthis._previousCameraNear = pthis._camera.near;
+         pthis._dolly.position.set(pthis._camera.position.x/4, - pthis._camera.position.y/8, - pthis._camera.position.z/4);
+         pthis._camera.position.set(0,0,0);
+         pthis._dolly.add(pthis._camera);
+         pthis._camera.near = 0.1;
+         pthis._camera.updateProjectionMatrix();
+         pthis._renderer.vr.enabled = true;
+         pthis._renderer.setAnimationLoop(function () {
+            pthis.UpdateVRControllers();
+            pthis.Render3D(0);
+         });
+      });
+      this._renderer.vr.enabled = true;
 
-      var polygon = new ThreeBSP.Polygon;
-
-      switch (reduce) {
-         case 0: polygon.vertices.push(this.v1, this.v2, this.v3, this.v4); break;
-         case 1: polygon.vertices.push(this.v1, this.v3, this.v4); break;
-         case 2: polygon.vertices.push(this.v1, this.v2, this.v3); break;
-      }
-
-      this.polygons.push(polygon);
+      window.addEventListener( 'keydown', function ( event ) {
+         // Esc Key turns VR mode off
+         if (event.keyCode === 27) pthis.ExitVRMode();
+      });
    }
 
-   JSROOT.GEO.PolygonsCreator.prototype.SetNormal4 = function(nx1,ny1,nz1,
-                                                              nx2,ny2,nz2,
-                                                              nx3,ny3,nz3,
-                                                              nx4,ny4,nz4,
-                                                              reduce) {
-      this.v1.setnormal(nx1,ny1,nz1);
-      if (this.v2) this.v2.setnormal(nx2,ny2,nz2);
-      this.v3.setnormal(nx3,ny3,nz3);
-      if (this.v4) this.v4.setnormal(nx4,ny4,nz4);
+   TGeoPainter.prototype.ExitVRMode = function() {
+      var pthis = this;
+      if (!this._vrDisplay.isPresenting) return;
+      this._renderer.vr.enabled = false;
+      this._dolly.remove(this._camera);
+      this._scene.add(this._camera);
+      // Restore Camera pose
+      this._camera.position.copy(this._previousCameraPosition);
+      this._previousCameraPosition = undefined;
+      this._camera.rotation.copy(this._previousCameraRotation);
+      this._previousCameraRotation = undefined;
+      this._camera.near = this._previousCameraNear;
+      this._camera.updateProjectionMatrix();
+      this._vrDisplay.exitPresent();
    }
 
-   JSROOT.GEO.PolygonsCreator.prototype.SetNormal_12_34 = function(nx12,ny12,nz12,nx34,ny34,nz34,reduce) {
-      // special shortcut, when same normals can be applied for 1-2 point and 3-4 point
-      this.v1.setnormal(nx12,ny12,nz12);
-      if (this.v2) this.v2.setnormal(nx12,ny12,nz12);
-      this.v3.setnormal(nx34,ny34,nz34);
-      if (this.v4) this.v4.setnormal(nx34,ny34,nz34);
+   TGeoPainter.prototype.GetGeometry = function() {
+      return this.GetObject();
    }
 
-   JSROOT.GEO.PolygonsCreator.prototype.CalcNormal = function() {
+   TGeoPainter.prototype.ModifyVisisbility = function(name, sign) {
+      if (JSROOT.GEO.NodeKind(this.GetGeometry()) !== 0) return;
 
-      if (!this.cb) {
-         this.pA = new THREE.Vector3();
-         this.pB = new THREE.Vector3();
-         this.pC = new THREE.Vector3();
-         this.cb = new THREE.Vector3();
-         this.ab = new THREE.Vector3();
-      }
+      if (name == "")
+         return JSROOT.GEO.SetBit(this.GetGeometry().fVolume, JSROOT.GEO.BITS.kVisThis, (sign === "+"));
 
-      this.pA.set( this.v1.x, this.v1.y, this.v1.z);
+      var regexp, exact = false;
 
-      if (this.reduce!==1) {
-         this.pB.set( this.v2.x, this.v2.y, this.v2.z);
-         this.pC.set( this.v3.x, this.v3.y, this.v3.z);
+      //arg.node.fVolume
+      if (name.indexOf("*") < 0) {
+         regexp = new RegExp("^"+name+"$");
+         exact = true;
       } else {
-         this.pB.set( this.v3.x, this.v3.y, this.v3.z);
-         this.pC.set( this.v4.x, this.v4.y, this.v4.z);
+         regexp = new RegExp("^" + name.split("*").join(".*") + "$");
+         exact = false;
       }
 
-      this.cb.subVectors( this.pC, this.pB );
-      this.ab.subVectors( this.pA, this.pB );
-      this.cb.cross( this.ab );
-
-      this.SetNormal(this.cb.x, this.cb.y, this.cb.z);
+      this.FindNodeWithVolume(regexp, function(arg) {
+         JSROOT.GEO.InvisibleAll.call(arg.node.fVolume, (sign !== "+"));
+         return exact ? arg : null; // continue search if not exact expression provided
+      });
    }
 
+   TGeoPainter.prototype.decodeOptions = function(opt) {
+      if (typeof opt != "string") opt = "";
 
-   JSROOT.GEO.PolygonsCreator.prototype.SetNormal = function(nx,ny,nz) {
-      this.v1.setnormal(nx,ny,nz);
-      if (this.v2) this.v2.setnormal(nx,ny,nz);
-      this.v3.setnormal(nx,ny,nz);
-      if (this.v4) this.v4.setnormal(nx,ny,nz);
-   }
+      var res = { _grid: false, _bound: false, _debug: false,
+                  _full: false, _axis: 0,
+                  _count: false, wireframe: false,
+                   scale: new THREE.Vector3(1,1,1), zoom: 1.0, rotatey: 0, rotatez: 0,
+                   more: 1, maxlimit: 100000,
+                   vislevel: undefined, maxnodes: undefined, dflt_colors: false,
+                   use_worker: false, show_controls: false,
+                   highlight: false, highlight_scene: false, no_screen: false,
+                   project: '', is_main: false, tracks: false, showtop: false, can_rotate: true, ortho_camera: false,
+                   clipx: false, clipy: false, clipz: false, usessao: false, outline: false,
+                   script_name: "", transparency: 0, rotate: false, background: '#FFFFFF',
+                   depthMethod: "dflt", mouse_tmout: 50, trans_radial: 0, trans_z: 0 };
 
-   JSROOT.GEO.PolygonsCreator.prototype.RecalcZ = function(func) {
-      this.v1.z = func(this.v1.x, this.v1.y, this.v1.z);
-      if (this.v2) this.v2.z = func(this.v2.x, this.v2.y, this.v2.z);
-      this.v3.z = func(this.v3.x, this.v3.y, this.v3.z);
-      if (this.v4) this.v4.z = func(this.v4.x, this.v4.y, this.v4.z);
-   }
+      var _opt = JSROOT.GetUrlOption('_grid');
+      if (_opt !== null && _opt == "true") res._grid = true;
+      var _opt = JSROOT.GetUrlOption('_debug');
+      if (_opt !== null && _opt == "true") { res._debug = true; res._grid = true; }
+      if (_opt !== null && _opt == "bound") { res._debug = true; res._grid = true; res._bound = true; }
+      if (_opt !== null && _opt == "full") { res._debug = true; res._grid = true; res._full = true; res._bound = true; }
 
-   JSROOT.GEO.PolygonsCreator.prototype.Create = function() {
-      return { polygons: this.polygons };
-   }
-
-   // ================= all functions to create geometry ===================================
-
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.createCubeBuffer = function(shape, faces_limit) {
-
-      if (faces_limit < 0) return 12;
-
-      var dx = shape.fDX, dy = shape.fDY, dz = shape.fDZ;
-
-      var creator = faces_limit ? new JSROOT.GEO.PolygonsCreator : new JSROOT.GEO.GeometryCreator(12);
-
-      creator.AddFace4(dx,dy,dz, dx,-dy,dz, dx,-dy,-dz, dx,dy,-dz); creator.SetNormal(1,0,0);
-
-      creator.AddFace4(-dx,dy,-dz, -dx,-dy,-dz, -dx,-dy,dz, -dx,dy,dz); creator.SetNormal(-1,0,0);
-
-      creator.AddFace4(-dx,dy,-dz, -dx,dy,dz, dx,dy,dz, dx,dy,-dz); creator.SetNormal(0,1,0);
-
-      creator.AddFace4(-dx,-dy,dz, -dx,-dy,-dz, dx,-dy,-dz, dx,-dy,dz); creator.SetNormal(0,-1,0);
-
-      creator.AddFace4(-dx,dy,dz, -dx,-dy,dz, dx,-dy,dz, dx,dy,dz); creator.SetNormal(0,0,1);
-
-      creator.AddFace4(dx,dy,-dz, dx,-dy,-dz, -dx,-dy,-dz, -dx,dy,-dz); creator.SetNormal(0,0,-1);
-
-      return creator.Create();
-   }
-
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.create8edgesBuffer = function( v, faces_limit ) {
-
-      var indicies = [ 4,7,6,5,  0,3,7,4,  4,5,1,0,  6,2,1,5,  7,3,2,6,  1,2,3,0 ];
-
-      var creator = (faces_limit > 0) ? new JSROOT.GEO.PolygonsCreator : new JSROOT.GEO.GeometryCreator(12);
-
-      for (var n=0;n<indicies.length;n+=4) {
-         var i1 = indicies[n]*3,
-             i2 = indicies[n+1]*3,
-             i3 = indicies[n+2]*3,
-             i4 = indicies[n+3]*3;
-         creator.AddFace4(v[i1], v[i1+1], v[i1+2], v[i2], v[i2+1], v[i2+2],
-                          v[i3], v[i3+1], v[i3+2], v[i4], v[i4+1], v[i4+2]);
-         if (n===0) creator.SetNormal(0,0,1); else
-         if (n===20) creator.SetNormal(0,0,-1); else creator.CalcNormal();
+      var macro = opt.indexOf("macro:");
+      if (macro>=0) {
+         var separ = opt.indexOf(";", macro+6);
+         if (separ<0) separ = opt.length;
+         res.script_name = opt.substr(macro+6,separ-macro-6);
+         opt = opt.substr(0, macro) + opt.substr(separ+1);
+         console.log('script', res.script_name, 'rest', opt);
       }
 
-      return creator.Create();
+      while (true) {
+         var pp = opt.indexOf("+"), pm = opt.indexOf("-");
+         if ((pp<0) && (pm<0)) break;
+         var p1 = pp, sign = "+";
+         if ((p1<0) || ((pm>=0) && (pm<pp))) { p1 = pm; sign = "-"; }
+
+         var p2 = p1+1, regexp = new RegExp('[,; .]');
+         while ((p2<opt.length) && !regexp.test(opt[p2]) && (opt[p2]!='+') && (opt[p2]!='-')) p2++;
+
+         var name = opt.substring(p1+1, p2);
+         opt = opt.substr(0,p1) + opt.substr(p2);
+         // console.log("Modify visibility", sign,':',name);
+
+         this.ModifyVisisbility(name, sign);
+      }
+
+      var d = new JSROOT.DrawOptions(opt);
+
+      if (d.check("MAIN")) res.is_main = true;
+
+      if (d.check("TRACKS")) res.tracks = true; // only for TGeoManager
+      if (d.check("SHOWTOP")) res.showtop = true; // only for TGeoManager
+      if (d.check("NO_SCREEN")) res.no_screen = true; // use kVisOnScreen bits as visibility
+
+      if (d.check("ORTHO_CAMERA_ROTATE")) { res.ortho_camera = true; res.can_rotate = true; }
+      if (d.check("ORTHO_CAMERA")) { res.ortho_camera = true; res.can_rotate = false; }
+
+      if (d.check("DEPTHRAY") || d.check("DRAY")) res.depthMethod = "ray";
+      if (d.check("DEPTHBOX") || d.check("DBOX")) res.depthMethod = "box";
+      if (d.check("DEPTHPNT") || d.check("DPNT")) res.depthMethod = "pnt";
+      if (d.check("DEPTHSIZE") || d.check("DSIZE")) res.depthMethod = "size";
+      if (d.check("DEPTHDFLT") || d.check("DDFLT")) res.depthMethod = "dflt";
+
+      if (d.check("ZOOM", true)) res.zoom = d.partAsFloat(0, 100) / 100;
+      if (d.check("ROTY", true)) res.rotatey = d.partAsFloat();
+      if (d.check("ROTZ", true)) res.rotatez = d.partAsFloat();
+      if (d.check("VISLVL", true)) res.vislevel = d.partAsInt();
+
+      if (d.check('BLACK')) res.background = "#000000";
+      if (d.check('WHITE')) res.background = "#FFFFFF";
+
+      if (d.check('BKGR_', true)) {
+         var bckgr = null;
+         if (d.partAsInt(1)>0) bckgr = JSROOT.Painter.root_colors[d.partAsInt()]; else
+         for (var col=0;col<8;++col)
+            if (JSROOT.Painter.root_colors[col].toUpperCase() === d.part) bckgr = JSROOT.Painter.root_colors[col];
+         if (bckgr) res.background = "#" + new THREE.Color(bckgr).getHexString();
+      }
+
+      if (d.check("MORE3")) res.more = 3;
+      if (d.check("MORE")) res.more = 2;
+      if (d.check("ALL")) { res.more = 10; res.vislevel = 9; }
+
+      if (d.check("CONTROLS") || d.check("CTRL")) res.show_controls = true;
+
+      if (d.check("CLIPXYZ")) res.clipx = res.clipy = res.clipz = true;
+      if (d.check("CLIPX")) res.clipx = true;
+      if (d.check("CLIPY")) res.clipy = true;
+      if (d.check("CLIPZ")) res.clipz = true;
+      if (d.check("CLIP")) res.clipx = res.clipy = res.clipz = true;
+
+      if (d.check("PROJX", true)) { res.project = 'x'; if (d.partAsInt(1)>0) res.projectPos = d.partAsInt(); res.can_rotate = false; }
+      if (d.check("PROJY", true)) { res.project = 'y'; if (d.partAsInt(1)>0) res.projectPos = d.partAsInt(); res.can_rotate = false; }
+      if (d.check("PROJZ", true)) { res.project = 'z'; if (d.partAsInt(1)>0) res.projectPos = d.partAsInt(); res.can_rotate = false; }
+
+      if (d.check("DFLT_COLORS") || d.check("DFLT")) res.dflt_colors = true;
+      if (d.check("SSAO")) res.usessao = true;
+      if (d.check("OUTLINE")) res.outline = true;
+
+      if (d.check("NOWORKER")) res.use_worker = -1;
+      if (d.check("WORKER")) res.use_worker = 1;
+
+      if (d.check("NOHIGHLIGHT") || d.check("NOHIGH")) res.highlight_scene = res.highlight = 0;
+      if (d.check("HIGHLIGHT")) res.highlight_scene = res.highlight = true;
+      if (d.check("HSCENEONLY")) { res.highlight_scene = true; res.highlight = 0; }
+      if (d.check("NOHSCENE")) res.highlight_scene = 0;
+      if (d.check("HSCENE")) res.highlight_scene = true;
+
+      if (d.check("WIREFRAME") || d.check("WIRE")) res.wireframe = true;
+      if (d.check("ROTATE")) res.rotate = true;
+
+      if (d.check("INVX") || d.check("INVERTX")) res.scale.x = -1;
+      if (d.check("INVY") || d.check("INVERTY")) res.scale.y = -1;
+      if (d.check("INVZ") || d.check("INVERTZ")) res.scale.z = -1;
+
+      if (d.check("COUNT")) res._count = true;
+
+      if (d.check('TRANSP',true))
+         res.transparency = d.partAsInt(0,100)/100;
+
+      if (d.check('OPACITY',true))
+         res.transparency = 1 - d.partAsInt(0,100)/100;
+
+      if (d.check("AXISCENTER") || d.check("AC")) res._axis = 2;
+
+      if (d.check('TRR',true)) res.trans_radial = d.partAsInt()/100;
+      if (d.check('TRZ',true)) res.trans_z = d.partAsInt()/100;
+
+      if (d.check("AXIS") || d.check("A")) res._axis = true;
+
+      if (d.check("D")) res._debug = true;
+      if (d.check("G")) res._grid = true;
+      if (d.check("B")) res._bound = true;
+      if (d.check("W")) res.wireframe = true;
+      if (d.check("F")) res._full = true;
+      if (d.check("Y")) res._yup = true;
+      if (d.check("Z")) res._yup = false;
+
+      // when drawing geometry without TCanvas, yup = true by default
+      if (res._yup === undefined)
+         res._yup = this.svg_canvas().empty();
+
+      return res;
    }
 
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.createParaBuffer = function( shape, faces_limit ) {
+   TGeoPainter.prototype.ActivateInBrowser = function(names, force) {
+      // if (this.GetItemName() === null) return;
 
-      if (faces_limit < 0) return 12;
+      if (typeof names == 'string') names = [ names ];
 
-      var txy = shape.fTxy, txz = shape.fTxz, tyz = shape.fTyz;
+      if (this._hpainter) {
+         // show browser if it not visible
+         this._hpainter.activate(names, force);
 
-      var v = [
-          -shape.fZ*txz-txy*shape.fY-shape.fX, -shape.fY-shape.fZ*tyz,  -shape.fZ,
-          -shape.fZ*txz+txy*shape.fY-shape.fX,  shape.fY-shape.fZ*tyz,  -shape.fZ,
-          -shape.fZ*txz+txy*shape.fY+shape.fX,  shape.fY-shape.fZ*tyz,  -shape.fZ,
-          -shape.fZ*txz-txy*shape.fY+shape.fX, -shape.fY-shape.fZ*tyz,  -shape.fZ,
-           shape.fZ*txz-txy*shape.fY-shape.fX, -shape.fY+shape.fZ*tyz,   shape.fZ,
-           shape.fZ*txz+txy*shape.fY-shape.fX,  shape.fY+shape.fZ*tyz,   shape.fZ,
-           shape.fZ*txz+txy*shape.fY+shape.fX,  shape.fY+shape.fZ*tyz,   shape.fZ,
-           shape.fZ*txz-txy*shape.fY+shape.fX, -shape.fY+shape.fZ*tyz,   shape.fZ ];
-
-      return JSROOT.GEO.create8edgesBuffer(v, faces_limit );
+         // if highlight in the browser disabled, suppress in few seconds
+         if (!this.ctrl.update_browser)
+            setTimeout(this._hpainter.activate.bind(this._hpainter, []), 2000);
+      }
    }
 
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.createTrapezoidBuffer = function( shape, faces_limit ) {
+   TGeoPainter.prototype.TestMatrixes = function() {
+      // method can be used to check matrix calculations with current three.js model
 
-      if (faces_limit < 0) return 12;
+      var painter = this, errcnt = 0, totalcnt = 0, totalmax = 0;
 
-      var y1, y2;
-      if (shape._typename == "TGeoTrd1") {
-         y1 = y2 = shape.fDY;
+      var arg = {
+            domatrix: true,
+            func: function(node) {
+
+               var m2 = this.getmatrix();
+
+               var entry = this.CopyStack();
+
+               var mesh = painter._clones.CreateObject3D(entry.stack, painter._toplevel, 'mesh');
+
+               if (!mesh) return true;
+
+               totalcnt++;
+
+               var m1 = mesh.matrixWorld, flip, origm2;
+
+               if (m1.equals(m2)) return true
+               if ((m1.determinant()>0) && (m2.determinant()<-0.9)) {
+                  flip = THREE.Vector3(1,1,-1);
+                  origm2 = m2;
+                  m2 = m2.clone().scale(flip);
+                  if (m1.equals(m2)) return true;
+               }
+
+               var max = 0;
+               for (var k=0;k<16;++k)
+                  max = Math.max(max, Math.abs(m1.elements[k] - m2.elements[k]));
+
+               totalmax = Math.max(max, totalmax);
+
+               if (max < 1e-4) return true;
+
+               console.log(painter._clones.ResolveStack(entry.stack).name, 'maxdiff', max, 'determ', m1.determinant(), m2.determinant());
+
+               errcnt++;
+
+               return false;
+            }
+         };
+
+
+      tm1 = new Date().getTime();
+
+      var cnt = this._clones.ScanVisible(arg);
+
+      tm2 = new Date().getTime();
+
+      console.log('Compare matrixes total',totalcnt,'errors',errcnt, 'takes', tm2-tm1, 'maxdiff', totalmax);
+   }
+
+
+   TGeoPainter.prototype.FillContextMenu = function(menu) {
+      menu.add("header: Draw options");
+
+      menu.addchk(this.ctrl.update_browser, "Browser update", function() {
+         this.ctrl.update_browser = !this.ctrl.update_browser;
+         if (!this.ctrl.update_browser) this.ActivateInBrowser([]);
+      });
+      menu.addchk(this.ctrl.show_controls, "Show Controls", function() {
+         this.showControlOptions('toggle');
+      });
+      menu.addchk(this.ctrl._axis, "Show axes", function() {
+         this.setAxesDraw('toggle');
+      });
+      if (this.geo_manager)
+         menu.addchk(this.ctrl.showtop, "Show top volume", function() {
+            this.setShowTop(!this.ctrl.showtop);
+         });
+
+      menu.addchk(this.ctrl.wireframe, "Wire frame", function() {
+         this.toggleWireFrame();
+      });
+      menu.addchk(this.ctrl.highlight, "Highlight volumes", function() {
+         this.ctrl.highlight = !this.ctrl.highlight;
+      });
+      menu.addchk(this.ctrl.highlight_scene, "Highlight scene", function() {
+         this.ctrl.highlight_scene = !this.ctrl.highlight_scene;
+      });
+      menu.add("Reset camera position", function() {
+         this.focusCamera();
+      });
+      menu.add("Get camera position", function() {
+         alert("Position (as url): &opt=" + this.produceCameraUrl());
+      });
+      if (!this.ctrl.project)
+         menu.addchk(this.ctrl.rotate, "Autorotate", function() {
+            this.setAutoRotate(!this.ctrl.rotate);
+         });
+      menu.addchk(this.ctrl.select_in_view, "Select in view", function() {
+         this.ctrl.select_in_view = !this.ctrl.select_in_view;
+         if (this.ctrl.select_in_view) this.startDrawGeometry();
+      });
+   }
+
+   /** Method used to set transparency for all geometrical shapes
+    * As transperency value one could provide function */
+   TGeoPainter.prototype.changedGlobalTransparency = function(transparency, skip_render) {
+      var func = (typeof transparency == 'function') ? transparency : null;
+      if (func || (transparency === undefined)) transparency = this.ctrl.transparency;
+      this._toplevel.traverse( function (node) {
+         if (node && node.material && (node.material.inherentOpacity !== undefined)) {
+            var t = func ? func(node) : undefined;
+            if (t !== undefined)
+               node.material.opacity = 1 - t;
+            else
+               node.material.opacity = Math.min(1 - (transparency || 0), node.material.inherentOpacity);
+            node.material.transparent = node.material.opacity < 1;
+         }
+      });
+      if (!skip_render) this.Render3D(-1);
+   }
+
+   /** Reset transformation @private */
+   TGeoPainter.prototype.resetTransformation = function() {
+      this.changedTransformation("reset");
+   }
+
+   /** Method should be called when transformation parameters were changed @private */
+   TGeoPainter.prototype.changedTransformation = function(arg) {
+      if (!this._toplevel) return;
+
+      var ctrl = this.ctrl,
+          translation = new THREE.Matrix4(),
+          vect2 = new THREE.Vector3();
+
+      if (arg == "reset")
+         ctrl.trans_z = ctrl.trans_radial = 0;
+
+      this._toplevel.traverse(function(mesh) {
+         if (mesh.stack === undefined) return;
+
+         var node = mesh.parent;
+
+         if (arg == "reset") {
+            if (node.matrix0) {
+               node.matrix.copy(node.matrix0);
+               node.matrix.decompose( node.position, node.quaternion, node.scale );
+               node.matrixWorldNeedsUpdate = true;
+            }
+            delete node.matrix0;
+            delete node.vect0;
+            delete node.vect1;
+            delete node.minvert;
+            return;
+         }
+
+         if (node.vect0 === undefined) {
+            node.matrix0 = node.matrix.clone();
+            node.minvert = new THREE.Matrix4().getInverse( node.matrixWorld );
+
+            var box3 = JSROOT.GEO.getBoundingBox(mesh, null, true),
+                signz = mesh._flippedMesh ? -1 : 1;
+
+            // real center of mesh in local coordinates
+            node.vect0 = new THREE.Vector3((box3.max.x  + box3.min.x) / 2, (box3.max.y  + box3.min.y) / 2, signz * (box3.max.z  + box3.min.z) / 2).applyMatrix4(node.matrixWorld);
+            node.vect1 = new THREE.Vector3(0,0,0).applyMatrix4(node.minvert);
+         }
+
+         vect2.set(ctrl.trans_radial * node.vect0.x, ctrl.trans_radial * node.vect0.y, ctrl.trans_z * node.vect0.z).applyMatrix4(node.minvert).sub(node.vect1);
+
+         node.matrix.multiplyMatrices(node.matrix0, translation.makeTranslation(vect2.x, vect2.y, vect2.z));
+         node.matrix.decompose( node.position, node.quaternion, node.scale );
+         node.matrixWorldNeedsUpdate = true;
+      });
+
+      this._toplevel.updateMatrixWorld();
+
+      // axes drawing always triggers rendering
+      if (arg != "norender")
+         this.drawSimpleAxis();
+   }
+
+   /** @brief Should be called when autorotate property changed @private */
+   TGeoPainter.prototype.changedAutoRotate = function() {
+      this.autorotate(2.5);
+   }
+
+   /** Method should be called when changing axes drawing @private */
+   TGeoPainter.prototype.changedAxes = function() {
+      if (typeof this.ctrl._axis == 'string')
+         this.ctrl._axis = parseInt(this.ctrl._axis);
+
+      this.drawSimpleAxis();
+   }
+
+   /** Method should be called to change background color @private */
+   TGeoPainter.prototype.changedBackground = function(val) {
+      if (val !== undefined) this.ctrl.background = val;
+      this._renderer.setClearColor(this.ctrl.background, 1);
+      this.Render3D(0);
+
+      if (this._toolbar) {
+         var bkgr = new THREE.Color(this.ctrl.background);
+         this._toolbar.changeBrightness((bkgr.r + bkgr.g + bkgr.b) < 1);
+      }
+   }
+
+   /** Method should be called when SSAO configuration changed @private */
+   TGeoPainter.prototype.changedSSAO = function() {
+      if (!this.ctrl.ssao.enabled) {
+         this.removeSSAO();
       } else {
-         y1 = shape.fDy1; y2 = shape.fDy2;
+         this.createSSAO();
+
+         this._ssaoPass.output = parseInt(this.ctrl.ssao.output);
+         this._ssaoPass.kernelRadius = this.ctrl.ssao.kernelRadius;
+         this._ssaoPass.minDistance = this.ctrl.ssao.minDistance;
+         this._ssaoPass.maxDistance = this.ctrl.ssao.maxDistance;
       }
 
-      var v = [
-            -shape.fDx1,  y1, -shape.fDZ,
-             shape.fDx1,  y1, -shape.fDZ,
-             shape.fDx1, -y1, -shape.fDZ,
-            -shape.fDx1, -y1, -shape.fDZ,
-            -shape.fDx2,  y2,  shape.fDZ,
-             shape.fDx2,  y2,  shape.fDZ,
-             shape.fDx2, -y2,  shape.fDZ,
-            -shape.fDx2, -y2,  shape.fDZ
-         ];
-
-      return JSROOT.GEO.create8edgesBuffer(v, faces_limit );
+      this.updateClipping();
    }
 
+   /** Display control GUI */
+   TGeoPainter.prototype.showControlOptions = function(on) {
+      var usedat = _dat;
+      if (!usedat && (typeof dat == 'object'))
+         usedat = dat;
 
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.createArb8Buffer = function( shape, faces_limit ) {
+      if (on === 'load') {
+         if (typeof usedat == 'undefined')
+            throw new Error('dat.gui is not defined', 'JSRootGeoPainter.js');
+         on = true;
+      } else if (on === 'toggle') {
+         on = !this._datgui;
+      } else if (on === undefined) {
+         on = this.ctrl.show_controls;
+      }
 
-      if (faces_limit < 0) return 12;
+      this.ctrl.show_controls = on;
 
-      var vertices = [
-            shape.fXY[0][0], shape.fXY[0][1], -shape.fDZ,
-            shape.fXY[1][0], shape.fXY[1][1], -shape.fDZ,
-            shape.fXY[2][0], shape.fXY[2][1], -shape.fDZ,
-            shape.fXY[3][0], shape.fXY[3][1], -shape.fDZ,
-            shape.fXY[4][0], shape.fXY[4][1],  shape.fDZ,
-            shape.fXY[5][0], shape.fXY[5][1],  shape.fDZ,
-            shape.fXY[6][0], shape.fXY[6][1],  shape.fDZ,
-            shape.fXY[7][0], shape.fXY[7][1],  shape.fDZ
-         ],
-         indicies = [
-            4,7,6,   6,5,4,   3,7,4,   4,0,3,
-            5,1,0,   0,4,5,   6,2,1,   1,5,6,
-            7,3,2,   2,6,7,   1,2,3,   3,0,1 ];
+      if (this._datgui) {
+         if (!on) {
+            d3.select(this._datgui.domElement).remove();
+            this._datgui.destroy();
+            delete this._datgui;
+         }
+         return;
+      }
 
-      // detect same vertices on both Z-layers
-      for (var side=0;side<vertices.length;side += vertices.length/2)
-         for (var n1 = side; n1 < side + vertices.length/2 - 3 ; n1+=3)
-            for (var n2 = n1+3; n2 < side + vertices.length/2 ; n2+=3)
-               if ((vertices[n1] === vertices[n2]) &&
-                   (vertices[n1+1] === vertices[n2+1]) &&
-                   (vertices[n1+2] === vertices[n2+2])) {
-                      for (var k=0;k<indicies.length;++k)
-                        if (indicies[k] === n2/3) indicies[k] = n1/3;
-                  }
+      if (!on) return;
 
+      if (typeof usedat == 'undefined')
+         return JSROOT.AssertPrerequisites("datgui", this.showControlOptions.bind(this,"load"));
 
-      var map = [], // list of existing faces (with all rotations)
-          numfaces = 0;
+      var painter = this;
 
-      for (var k=0;k<indicies.length;k+=3) {
-         var id1 = indicies[k]*100   + indicies[k+1]*10 + indicies[k+2],
-             id2 = indicies[k+1]*100 + indicies[k+2]*10 + indicies[k],
-             id3 = indicies[k+2]*100 + indicies[k]*10   + indicies[k+1];
+      this._datgui = new usedat.GUI({ autoPlace: false, width: Math.min(650, painter._renderer.domElement.width / 2) });
 
-         if ((indicies[k] == indicies[k+1]) || (indicies[k] == indicies[k+2]) || (indicies[k+1] == indicies[k+2]) ||
-             (map.indexOf(id1)>=0) || (map.indexOf(id2)>=0) || (map.indexOf(id3)>=0)) {
-            indicies[k] = indicies[k+1] = indicies[k+2] = -1;
+      var main = this.select_main();
+      if (main.style('position')=='static') main.style('position','relative');
+
+      d3.select(this._datgui.domElement)
+               .style('position','absolute')
+               .style('top',0).style('right',0);
+
+      main.node().appendChild(this._datgui.domElement);
+
+      this._datgui.painter = this;
+
+      if (this.ctrl.project) {
+
+         var bound = this.getGeomBoundingBox(this.getProjectionSource(), 0.01);
+
+         var axis = this.ctrl.project;
+
+         if (this.ctrl.projectPos === undefined)
+            this.ctrl.projectPos = (bound.min[axis] + bound.max[axis])/2;
+
+         this._datgui.add(this.ctrl, 'projectPos', bound.min[axis], bound.max[axis])
+             .name(axis.toUpperCase() + ' projection')
+             .onChange(function (value) {
+               painter.startDrawGeometry();
+           });
+
+      } else {
+         // Clipping Options
+
+         var clipFolder = this._datgui.addFolder('Clipping'),
+             clip_handler = this.changedClipping.bind(this, -1);
+
+         for (var naxis=0;naxis<3;++naxis) {
+            var cc = this.ctrl.clip[naxis],
+                axisC = cc.name.toUpperCase();
+
+            clipFolder.add(cc, 'enabled')
+                .name('Enable ' + axisC)
+                .listen() // react if option changed outside
+                .onChange(clip_handler);
+
+            clipFolder.add(cc, "value", cc.min, cc.max)
+                .name(axisC + ' position')
+                .onChange(this.changedClipping.bind(this, naxis));
+         }
+
+         clipFolder.add(this.ctrl, 'clipIntersect').name("Clip intersection")
+                   .listen().onChange(clip_handler);
+
+      }
+
+      // Appearance Options
+
+      var appearance = this._datgui.addFolder('Appearance');
+
+      appearance.add(this.ctrl, 'highlight').name('Highlight Selection')
+                .listen().onChange(this.changedHighlight.bind(this));
+
+      appearance.add(this.ctrl, 'transparency', 0.0, 1.0, 0.001)
+                     .listen().onChange(this.changedGlobalTransparency.bind(this));
+
+      appearance.addColor(this.ctrl, 'background').name('Background')
+                .onChange(this.changedBackground.bind(this));
+
+      appearance.add(this.ctrl, 'wireframe').name('Wireframe')
+                     .listen().onChange(this.changedWireFrame.bind(this));
+
+      this.ctrl._axis_cfg = 0;
+      appearance.add(this.ctrl, '_axis', { "none" : 0, "show": 1, "center": 2}).name('Axes')
+                    .onChange(this.changedAxes.bind(this));
+
+      if (!this.ctrl.project)
+         appearance.add(this.ctrl, 'rotate').name("Autorotate")
+                      .listen().onChange(this.changedAutoRotate.bind(this));
+
+      appearance.add(this, 'focusCamera').name('Reset camera position');
+
+      // Advanced Options
+
+      if (this._webgl) {
+         var advanced = this._datgui.addFolder('Advanced'), depthcfg = {};
+         this.ctrl.depthMethodItems.forEach(function(i) { depthcfg[i.name] = i.value; });
+
+         advanced.add(this.ctrl, 'depthTest').name("Depth test")
+            .listen().onChange(this.changedDepthTest.bind(this));
+
+         advanced.add( this.ctrl, 'depthMethod', depthcfg)
+             .name("Rendering order")
+             .onChange(this.changedDepthMethod.bind(this));
+
+        advanced.add(this, 'resetAdvanced').name('Reset');
+      }
+
+      // Transformation Options
+      if (!this.ctrl.project) {
+         var transform = this._datgui.addFolder('Transform');
+         transform.add(this.ctrl, 'trans_z', 0., 3., 0.01)
+                     .name('Z axis')
+                     .listen().onChange(this.changedTransformation.bind(this));
+         transform.add(this.ctrl, 'trans_radial', 0., 3., 0.01)
+                  .name('Radial')
+                  .listen().onChange(this.changedTransformation.bind(this));
+
+         transform.add(this, 'resetTransformation').name('Reset');
+
+         if (this.ctrl.trans_z || this.ctrl.trans_radial) transform.open();
+      }
+
+      // no SSAO folder if outline is enabled
+      if (this.ctrl.outline) return;
+
+      var ssaofolder = this._datgui.addFolder('Smooth Lighting (SSAO)'),
+          ssao_handler = this.changedSSAO.bind(this), ssaocfg = {};
+
+      this.ctrl.ssao.outputItems.forEach(function(i) { ssaocfg[i.name] = i.value; });
+
+      ssaofolder.add(this.ctrl.ssao, 'enabled').name('Enable SSAO')
+                .listen().onChange(ssao_handler);
+
+      ssaofolder.add( this.ctrl.ssao, 'output', ssaocfg)
+                .listen().onChange(ssao_handler);
+
+      ssaofolder.add( this.ctrl.ssao, 'kernelRadius', 0, 32)
+                .listen().onChange(ssao_handler);
+
+      ssaofolder.add( this.ctrl.ssao, 'minDistance', 0.001, 0.02)
+                .listen().onChange(ssao_handler);
+
+      ssaofolder.add( this.ctrl.ssao, 'maxDistance', 0.01, 0.3)
+                .listen().onChange(ssao_handler);
+   }
+
+   TGeoPainter.prototype.removeSSAO = function() {
+      // we cannot remove pass from composer - just disable it
+      delete this._ssaoPass;
+      delete this._effectComposer;
+   }
+
+   TGeoPainter.prototype.createSSAO = function() {
+      if (!this._webgl) return;
+
+      // this._depthRenderTarget = new THREE.WebGLRenderTarget( this._scene_width, this._scene_height, { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter } );
+      // Setup SSAO pass
+      if (!this._ssaoPass) {
+         if (!this._effectComposer) {
+            this._effectComposer = new THREE.EffectComposer( this._renderer );
+            this._effectComposer.addPass( new THREE.RenderPass( this._scene, this._camera ) );
+         }
+
+         this._ssaoPass = new THREE.SSAOPass( this._scene, this._camera, this._scene_width, this._scene_height );
+         this._ssaoPass.kernelRadius = 16;
+         this._ssaoPass.renderToScreen = true;
+
+         // Add pass to effect composer
+         this._effectComposer.addPass( this._ssaoPass );
+      }
+   }
+
+   TGeoPainter.prototype.OrbitContext = function(evnt, intersects) {
+
+      JSROOT.Painter.createMenu(this, function(menu) {
+         var numitems = 0, numnodes = 0, cnt = 0;
+         if (intersects)
+            for (var n=0;n<intersects.length;++n) {
+               if (intersects[n].object.stack) numnodes++;
+               if (intersects[n].object.geo_name) numitems++;
+            }
+
+         if (numnodes + numitems === 0) {
+            menu.painter.FillContextMenu(menu);
          } else {
-            map.push(id1,id2,id3);
-            numfaces++;
-         }
-      }
-
-      var creator = faces_limit ? new JSROOT.GEO.PolygonsCreator : new JSROOT.GEO.GeometryCreator(numfaces);
-
-      // var creator = new JSROOT.GEO.GeometryCreator(numfaces);
-
-      for (var n=0; n < indicies.length; n+=6) {
-         var i1 = indicies[n]   * 3,
-             i2 = indicies[n+1] * 3,
-             i3 = indicies[n+2] * 3,
-             i4 = indicies[n+3] * 3,
-             i5 = indicies[n+4] * 3,
-             i6 = indicies[n+5] * 3,
-             norm = null;
-
-         if ((i1>=0) && (i4>=0) && faces_limit) {
-            // try to identify two faces with same normal - very useful if one can create face4
-            if (n===0) norm = new THREE.Vector3(0,0,1); else
-            if (n===30) norm = new THREE.Vector3(0,0,-1); else {
-               var norm1 = JSROOT.GEO.GetNormal(vertices[i1], vertices[i1+1], vertices[i1+2],
-                                                vertices[i2], vertices[i2+1], vertices[i2+2],
-                                                vertices[i3], vertices[i3+1], vertices[i3+2]);
-
-               norm1.normalize();
-
-               var norm2 = JSROOT.GEO.GetNormal(vertices[i4], vertices[i4+1], vertices[i4+2],
-                                                vertices[i5], vertices[i5+1], vertices[i5+2],
-                                                vertices[i6], vertices[i6+1], vertices[i6+2]);
-
-               norm2.normalize();
-
-               if (norm1.distanceToSquared(norm2) < 1e-12) norm = norm1;
-            }
-         }
-
-         if (norm !== null) {
-            creator.AddFace4(vertices[i1], vertices[i1+1], vertices[i1+2],
-                             vertices[i2], vertices[i2+1], vertices[i2+2],
-                             vertices[i3], vertices[i3+1], vertices[i3+2],
-                             vertices[i5], vertices[i5+1], vertices[i5+2]);
-            creator.SetNormal(norm.x, norm.y, norm.z);
-         }  else {
-            if (i1>=0) {
-               creator.AddFace3(vertices[i1], vertices[i1+1], vertices[i1+2],
-                                vertices[i2], vertices[i2+1], vertices[i2+2],
-                                vertices[i3], vertices[i3+1], vertices[i3+2]);
-               creator.CalcNormal();
-            }
-            if (i4>=0) {
-               creator.AddFace3(vertices[i4], vertices[i4+1], vertices[i4+2],
-                                vertices[i5], vertices[i5+1], vertices[i5+2],
-                                vertices[i6], vertices[i6+1], vertices[i6+2]);
-               creator.CalcNormal();
-            }
-         }
-      }
-
-      return creator.Create();
-   }
-
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.createSphereBuffer = function( shape, faces_limit ) {
-      var radius = [shape.fRmax, shape.fRmin],
-          phiStart = shape.fPhi1,
-          phiLength = shape.fPhi2 - shape.fPhi1,
-          thetaStart = shape.fTheta1,
-          thetaLength = shape.fTheta2 - shape.fTheta1,
-          widthSegments = shape.fNseg,
-          heightSegments = shape.fNz,
-          noInside = (radius[1] <= 0);
-
-      // widthSegments = 20; heightSegments = 10;
-      // phiStart = 0; phiLength = 360; thetaStart = 0;  thetaLength = 180;
-
-      if (faces_limit > 0) {
-         var fact = (noInside ? 2 : 4) * widthSegments * heightSegments / faces_limit;
-
-         if (fact > 1.) {
-            widthSegments = Math.max(4, Math.floor(widthSegments/Math.sqrt(fact)));
-            heightSegments = Math.max(4, Math.floor(heightSegments/Math.sqrt(fact)));
-         }
-      }
-
-      var numoutside = widthSegments * heightSegments * 2,
-          numtop = widthSegments * 2,
-          numbottom = widthSegments * 2,
-          numcut = phiLength === 360 ? 0 : heightSegments * (noInside ? 2 : 4),
-          epsilon = 1e-10;
-
-      if (noInside) numbottom = numtop = widthSegments;
-
-      if (faces_limit < 0) return numoutside * (noInside ? 1 : 2) + numtop + numbottom + numcut;
-
-      var _sinp = new Float32Array(widthSegments+1),
-          _cosp = new Float32Array(widthSegments+1),
-          _sint = new Float32Array(heightSegments+1),
-          _cost = new Float32Array(heightSegments+1);
-
-      for (var n=0;n<=heightSegments;++n) {
-         var theta = (thetaStart + thetaLength/heightSegments*n)*Math.PI/180;
-         _sint[n] = Math.sin(theta);
-         _cost[n] = Math.cos(theta);
-      }
-
-      for (var n=0;n<=widthSegments;++n) {
-         var phi = (phiStart + phiLength/widthSegments*n)*Math.PI/180;
-         _sinp[n] = Math.sin(phi);
-         _cosp[n] = Math.cos(phi);
-      }
-
-      if (Math.abs(_sint[0]) <= epsilon) { numoutside -= widthSegments; numtop = 0; }
-      if (Math.abs(_sint[heightSegments]) <= epsilon) { numoutside -= widthSegments; numbottom = 0; }
-
-      var numfaces = numoutside * (noInside ? 1 : 2) + numtop + numbottom + numcut;
-
-      var creator = faces_limit ? new JSROOT.GEO.PolygonsCreator : new JSROOT.GEO.GeometryCreator(numfaces);
-
-      // var creator = new JSROOT.GEO.GeometryCreator(numfaces);
-
-      for (var side=0;side<2;++side) {
-         if ((side===1) && noInside) break;
-
-         var r = radius[side],
-             s = (side===0) ? 1 : -1,
-             d1 = 1 - side, d2 = 1 - d1;
-
-         // use direct algorithm for the sphere - here normals and position can be calculated directly
-         for (var k=0;k<heightSegments;++k) {
-
-            var k1 = k + d1, k2 = k + d2;
-
-            var skip = 0;
-            if (Math.abs(_sint[k1]) <= epsilon) skip = 1; else
-            if (Math.abs(_sint[k2]) <= epsilon) skip = 2;
-
-            for (var n=0;n<widthSegments;++n) {
-               creator.AddFace4(
-                     r*_sint[k1]*_cosp[n],   r*_sint[k1] *_sinp[n],   r*_cost[k1],
-                     r*_sint[k1]*_cosp[n+1], r*_sint[k1] *_sinp[n+1], r*_cost[k1],
-                     r*_sint[k2]*_cosp[n+1], r*_sint[k2] *_sinp[n+1], r*_cost[k2],
-                     r*_sint[k2]*_cosp[n],   r*_sint[k2] *_sinp[n],   r*_cost[k2],
-                     skip);
-               creator.SetNormal4(
-                     s*_sint[k1]*_cosp[n],   s*_sint[k1] *_sinp[n],   s*_cost[k1],
-                     s*_sint[k1]*_cosp[n+1], s*_sint[k1] *_sinp[n+1], s*_cost[k1],
-                     s*_sint[k2]*_cosp[n+1], s*_sint[k2] *_sinp[n+1], s*_cost[k2],
-                     s*_sint[k2]*_cosp[n],   s*_sint[k2] *_sinp[n],   s*_cost[k2],
-                     skip);
-            }
-         }
-      }
-
-      // top/bottom
-      for (var side=0; side<=heightSegments; side+=heightSegments)
-         if (Math.abs(_sint[side]) >= epsilon) {
-            var ss = _sint[side], cc = _cost[side],
-                d1 = (side===0) ? 0 : 1, d2 = 1 - d1;
-            for (var n=0;n<widthSegments;++n) {
-               creator.AddFace4(
-                     radius[1] * ss * _cosp[n+d1], radius[1] * ss * _sinp[n+d1], radius[1] * cc,
-                     radius[0] * ss * _cosp[n+d1], radius[0] * ss * _sinp[n+d1], radius[0] * cc,
-                     radius[0] * ss * _cosp[n+d2], radius[0] * ss * _sinp[n+d2], radius[0] * cc,
-                     radius[1] * ss * _cosp[n+d2], radius[1] * ss * _sinp[n+d2], radius[1] * cc,
-                     noInside ? 2 : 0);
-               creator.CalcNormal();
-            }
-         }
-
-      // cut left/right sides
-      if (phiLength < 360) {
-         for (var side=0;side<=widthSegments;side+=widthSegments) {
-            var ss = _sinp[side], cc = _cosp[side],
-                d1 = (side === 0) ? 1 : 0, d2 = 1 - d1;
-
-            for (var k=0;k<heightSegments;++k) {
-               creator.AddFace4(
-                     radius[1] * _sint[k+d1] * cc, radius[1] * _sint[k+d1] * ss, radius[1] * _cost[k+d1],
-                     radius[0] * _sint[k+d1] * cc, radius[0] * _sint[k+d1] * ss, radius[0] * _cost[k+d1],
-                     radius[0] * _sint[k+d2] * cc, radius[0] * _sint[k+d2] * ss, radius[0] * _cost[k+d2],
-                     radius[1] * _sint[k+d2] * cc, radius[1] * _sint[k+d2] * ss, radius[1] * _cost[k+d2],
-                     noInside ? 2 : 0);
-               creator.CalcNormal();
-            }
-         }
-      }
-
-      return creator.Create();
-   }
-
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.createTubeBuffer = function( shape, faces_limit) {
-      var outerR, innerR; // inner/outer tube radius
-      if ((shape._typename == "TGeoCone") || (shape._typename == "TGeoConeSeg")) {
-         outerR = [ shape.fRmax2, shape.fRmax1 ];
-         innerR = [ shape.fRmin2, shape.fRmin1 ];
-      } else {
-         outerR = [ shape.fRmax, shape.fRmax ];
-         innerR = [ shape.fRmin, shape.fRmin ];
-      }
-
-      var hasrmin = (innerR[0] > 0) || (innerR[1] > 0),
-          thetaStart = 0, thetaLength = 360;
-
-      if ((shape._typename == "TGeoConeSeg") || (shape._typename == "TGeoTubeSeg") || (shape._typename == "TGeoCtub")) {
-         thetaStart = shape.fPhi1;
-         thetaLength = shape.fPhi2 - shape.fPhi1;
-      }
-
-      var radiusSegments = Math.max(4, Math.round(thetaLength/JSROOT.GEO.GradPerSegm));
-
-      // external surface
-      var numfaces = radiusSegments * (((outerR[0] <= 0) || (outerR[1] <= 0)) ? 1 : 2);
-
-      // internal surface
-      if (hasrmin)
-         numfaces += radiusSegments * (((innerR[0] <= 0) || (innerR[1] <= 0)) ? 1 : 2);
-
-      // upper cap
-      if (outerR[0] > 0) numfaces += radiusSegments * ((innerR[0]>0) ? 2 : 1);
-      // bottom cup
-      if (outerR[1] > 0) numfaces += radiusSegments * ((innerR[1]>0) ? 2 : 1);
-
-      if (thetaLength < 360)
-         numfaces += ((outerR[0] > innerR[0]) ? 2 : 0) + ((outerR[1] > innerR[1]) ? 2 : 0);
-
-      if (faces_limit < 0) return numfaces;
-
-      var phi0 = thetaStart*Math.PI/180,
-          dphi = thetaLength/radiusSegments*Math.PI/180,
-          _sin = new Float32Array(radiusSegments+1),
-          _cos = new Float32Array(radiusSegments+1);
-
-      for (var seg=0; seg<=radiusSegments; ++seg) {
-         _cos[seg] = Math.cos(phi0+seg*dphi);
-         _sin[seg] = Math.sin(phi0+seg*dphi);
-      }
-
-      var creator = faces_limit ? new JSROOT.GEO.PolygonsCreator : new JSROOT.GEO.GeometryCreator(numfaces);
-
-      // var creator = new JSROOT.GEO.GeometryCreator(numfaces);
-
-      var calcZ;
-
-      if (shape._typename == "TGeoCtub")
-         calcZ = function(x,y,z) {
-            var arr = (z<0) ? shape.fNlow : shape.fNhigh;
-            return ((z<0) ? -shape.fDz : shape.fDz) - (x*arr[0] + y*arr[1]) / arr[2];
-         }
-
-      // create outer/inner tube
-      for (var side = 0; side<2; ++side) {
-         if ((side === 1) && !hasrmin) break;
-
-         var R = (side === 0) ? outerR : innerR,
-             d1 = side, d2 = 1 - side, nxy = 1., nz = 0;
-
-         if (R[0] !== R[1]) {
-            var angle = Math.atan2((R[1]-R[0]), 2*shape.fDZ);
-            nxy = Math.cos(angle);
-            nz = Math.sin(angle);
-         }
-
-         if (side === 1) { nxy *= -1; nz *= -1; };
-
-         var reduce = 0;
-         if (R[0] <= 0) reduce = 2; else
-         if (R[1] <= 0) reduce = 1;
-
-         for (var seg=0;seg<radiusSegments;++seg) {
-            creator.AddFace4(
-                  R[0] * _cos[seg+d1], R[0] * _sin[seg+d1],  shape.fDZ,
-                  R[1] * _cos[seg+d1], R[1] * _sin[seg+d1], -shape.fDZ,
-                  R[1] * _cos[seg+d2], R[1] * _sin[seg+d2], -shape.fDZ,
-                  R[0] * _cos[seg+d2], R[0] * _sin[seg+d2],  shape.fDZ,
-                  reduce );
-
-            if (calcZ) creator.RecalcZ(calcZ);
-
-            creator.SetNormal_12_34(nxy*_cos[seg+d1], nxy*_sin[seg+d1], nz,
-                                    nxy*_cos[seg+d2], nxy*_sin[seg+d2], nz,
-                                    reduce);
-         }
-      }
-
-      // create upper/bottom part
-      for (var side = 0; side<2; ++side) {
-         if (outerR[side] <= 0) continue;
-
-         var d1 = side, d2 = 1- side,
-             sign = (side == 0) ? 1 : -1,
-             reduce = (innerR[side] <= 0) ? 2 : 0;
-         if ((reduce==2) && (thetaLength === 360) && !calcZ ) creator.StartPolygon(side===0);
-         for (var seg=0;seg<radiusSegments;++seg) {
-            creator.AddFace4(
-                  innerR[side] * _cos[seg+d1], innerR[side] * _sin[seg+d1], sign*shape.fDZ,
-                  outerR[side] * _cos[seg+d1], outerR[side] * _sin[seg+d1], sign*shape.fDZ,
-                  outerR[side] * _cos[seg+d2], outerR[side] * _sin[seg+d2], sign*shape.fDZ,
-                  innerR[side] * _cos[seg+d2], innerR[side] * _sin[seg+d2], sign*shape.fDZ,
-                  reduce);
-            if (calcZ) {
-               creator.RecalcZ(calcZ);
-               creator.CalcNormal();
-            } else {
-               creator.SetNormal(0,0,sign);
-            }
-         }
-
-         creator.StopPolygon();
-      }
-
-      // create cut surfaces
-      if (thetaLength < 360) {
-         creator.AddFace4(innerR[1] * _cos[0], innerR[1] * _sin[0], -shape.fDZ,
-                          outerR[1] * _cos[0], outerR[1] * _sin[0], -shape.fDZ,
-                          outerR[0] * _cos[0], outerR[0] * _sin[0],  shape.fDZ,
-                          innerR[0] * _cos[0], innerR[0] * _sin[0],  shape.fDZ,
-                          (outerR[0] === innerR[0]) ? 2 : ((innerR[1]===outerR[1]) ? 1 : 0) );
-         if (calcZ) creator.RecalcZ(calcZ);
-         creator.CalcNormal();
-
-         creator.AddFace4(innerR[0] * _cos[radiusSegments], innerR[0] * _sin[radiusSegments],  shape.fDZ,
-                          outerR[0] * _cos[radiusSegments], outerR[0] * _sin[radiusSegments],  shape.fDZ,
-                          outerR[1] * _cos[radiusSegments], outerR[1] * _sin[radiusSegments], -shape.fDZ,
-                          innerR[1] * _cos[radiusSegments], innerR[1] * _sin[radiusSegments], -shape.fDZ,
-                          (outerR[0] === innerR[0]) ? 1 : ((innerR[1]===outerR[1]) ? 2 : 0));
-
-         if (calcZ) creator.RecalcZ(calcZ);
-         creator.CalcNormal();
-      }
-
-      return creator.Create();
-   }
-
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.createEltuBuffer = function( shape , faces_limit ) {
-      var radiusSegments = Math.max(4, Math.round(360/JSROOT.GEO.GradPerSegm));
-
-      if (faces_limit < 0) return radiusSegments*4;
-
-      // calculate all sin/cos tables in advance
-      var x = new Float32Array(radiusSegments+1),
-          y = new Float32Array(radiusSegments+1);
-      for (var seg=0; seg<=radiusSegments; ++seg) {
-          var phi = seg/radiusSegments*2*Math.PI;
-          x[seg] = shape.fRmin*Math.cos(phi);
-          y[seg] = shape.fRmax*Math.sin(phi);
-      }
-
-      var creator = faces_limit ? new JSROOT.GEO.PolygonsCreator : new JSROOT.GEO.GeometryCreator(radiusSegments*4),
-          nx1 = 1, ny1 = 0, nx2 = 1, ny2 = 0;
-
-      // create tube faces
-      for (var seg=0; seg<radiusSegments; ++seg) {
-         creator.AddFace4(x[seg],   y[seg],   +shape.fDZ,
-                          x[seg],   y[seg],   -shape.fDZ,
-                          x[seg+1], y[seg+1], -shape.fDZ,
-                          x[seg+1], y[seg+1],  shape.fDZ);
-
-         // calculate normals ourself
-         nx1 = nx2; ny1 = ny2;
-         nx2 = x[seg+1] * shape.fRmax / shape.fRmin;
-         ny2 = y[seg+1] * shape.fRmin / shape.fRmax;
-         var dist = Math.sqrt(nx2*nx2 + ny2*ny2);
-         nx2 = nx2 / dist; ny2 = ny2/dist;
-
-         creator.SetNormal_12_34(nx1,ny1,0,nx2,ny2,0);
-      }
-
-      // create top/bottom sides
-      for (var side=0;side<2;++side) {
-         var sign = (side===0) ? 1 : -1, d1 = side, d2 = 1 - side;
-         for (var seg=0; seg<radiusSegments; ++seg) {
-            creator.AddFace3(0,          0,          sign*shape.fDZ,
-                             x[seg+d1],  y[seg+d1],  sign*shape.fDZ,
-                             x[seg+d2],  y[seg+d2],  sign*shape.fDZ);
-            creator.SetNormal(0, 0, sign);
-         }
-      }
-
-      return creator.Create();
-   }
-
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.createTorusBuffer = function( shape, faces_limit ) {
-      var radius = shape.fR,
-          radialSegments = Math.max(6, Math.round(360/JSROOT.GEO.GradPerSegm)),
-          tubularSegments = Math.max(8, Math.round(shape.fDphi/JSROOT.GEO.GradPerSegm));
-
-      var numfaces = (shape.fRmin > 0 ? 4 : 2) * radialSegments * (tubularSegments + (shape.fDphi !== 360 ? 1 : 0));
-
-      if (faces_limit < 0) return numfaces;
-
-      if ((faces_limit > 0) && (numfaces > faces_limit)) {
-         radialSegments = Math.floor(radialSegments/Math.sqrt(numfaces / faces_limit));
-         tubularSegments = Math.floor(tubularSegments/Math.sqrt(numfaces / faces_limit));
-         numfaces = (shape.fRmin > 0 ? 4 : 2) * radialSegments * (tubularSegments + (shape.fDphi !== 360 ? 1 : 0));
-      }
-
-      var _sinr = new Float32Array(radialSegments+1),
-          _cosr = new Float32Array(radialSegments+1),
-          _sint = new Float32Array(tubularSegments+1),
-          _cost = new Float32Array(tubularSegments+1);
-
-      for (var n=0;n<=radialSegments;++n) {
-         _sinr[n] = Math.sin(n/radialSegments*2*Math.PI);
-         _cosr[n] = Math.cos(n/radialSegments*2*Math.PI);
-      }
-
-      for (var t=0;t<=tubularSegments;++t) {
-         var angle = (shape.fPhi1 + shape.fDphi*t/tubularSegments)/180*Math.PI;
-         _sint[t] = Math.sin(angle);
-         _cost[t] = Math.cos(angle);
-      }
-
-      var creator = faces_limit ? new JSROOT.GEO.PolygonsCreator : new JSROOT.GEO.GeometryCreator(numfaces);
-
-      // use vectors for normals calculation
-      var p1 = new THREE.Vector3(), p2 = new THREE.Vector3(), p3 = new THREE.Vector3(), p4 = new THREE.Vector3(),
-          n1 = new THREE.Vector3(), n2 = new THREE.Vector3(), n3 = new THREE.Vector3(), n4 = new THREE.Vector3(),
-          center1 = new THREE.Vector3(), center2 = new THREE.Vector3();
-
-      for (var side=0;side<2;++side) {
-         if ((side > 0) && (shape.fRmin <= 0)) break;
-         var tube = (side > 0) ? shape.fRmin : shape.fRmax,
-             d1 = 1 - side, d2 = 1 - d1, ns = side>0 ? -1 : 1;
-
-         for (var t=0;t<tubularSegments;++t) {
-            var t1 = t + d1, t2 = t + d2;
-            center1.x = radius * _cost[t1]; center1.y = radius * _sint[t1];
-            center2.x = radius * _cost[t2]; center2.y = radius * _sint[t2];
-
-            for (var n=0;n<radialSegments;++n) {
-               p1.x = (radius + tube * _cosr[n])   * _cost[t1]; p1.y = (radius + tube * _cosr[n])   * _sint[t1]; p1.z = tube*_sinr[n];
-               p2.x = (radius + tube * _cosr[n+1]) * _cost[t1]; p2.y = (radius + tube * _cosr[n+1]) * _sint[t1]; p2.z = tube*_sinr[n+1];
-               p3.x = (radius + tube * _cosr[n+1]) * _cost[t2]; p3.y = (radius + tube * _cosr[n+1]) * _sint[t2]; p3.z = tube*_sinr[n+1];
-               p4.x = (radius + tube * _cosr[n])   * _cost[t2]; p4.y = (radius + tube * _cosr[n])   * _sint[t2]; p4.z = tube*_sinr[n];
-
-               creator.AddFace4(p1.x, p1.y, p1.z,
-                                p2.x, p2.y, p2.z,
-                                p3.x, p3.y, p3.z,
-                                p4.x, p4.y, p4.z);
-
-               n1.subVectors( p1, center1 ).normalize();
-               n2.subVectors( p2, center1 ).normalize();
-               n3.subVectors( p3, center2 ).normalize();
-               n4.subVectors( p4, center2 ).normalize();
-
-               creator.SetNormal4(ns*n1.x, ns*n1.y, ns*n1.z,
-                                  ns*n2.x, ns*n2.y, ns*n2.z,
-                                  ns*n3.x, ns*n3.y, ns*n3.z,
-                                  ns*n4.x, ns*n4.y, ns*n4.z);
-            }
-         }
-      }
-
-      if (shape.fDphi !== 360)
-         for (var t=0;t<=tubularSegments;t+=tubularSegments) {
-            var tube1 = shape.fRmax, tube2 = shape.fRmin,
-                d1 = (t>0) ? 0 : 1, d2 = 1 - d1,
-                skip = (shape.fRmin) > 0 ?  0 : 1,
-                nsign = t>0 ? 1 : -1;
-            for (var n=0;n<radialSegments;++n) {
-               creator.AddFace4((radius + tube1 * _cosr[n+d1]) * _cost[t], (radius + tube1 * _cosr[n+d1]) * _sint[t], tube1*_sinr[n+d1],
-                                (radius + tube2 * _cosr[n+d1]) * _cost[t], (radius + tube2 * _cosr[n+d1]) * _sint[t], tube2*_sinr[n+d1],
-                                (radius + tube2 * _cosr[n+d2]) * _cost[t], (radius + tube2 * _cosr[n+d2]) * _sint[t], tube2*_sinr[n+d2],
-                                (radius + tube1 * _cosr[n+d2]) * _cost[t], (radius + tube1 * _cosr[n+d2]) * _sint[t], tube1*_sinr[n+d2], skip);
-               creator.SetNormal(-nsign* _sint[t], nsign * _cost[t], 0);
-            }
-         }
-
-      return creator.Create();
-   }
-
-
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.createPolygonBuffer = function( shape, faces_limit ) {
-      var thetaStart = shape.fPhi1,
-          thetaLength = shape.fDphi,
-          radiusSegments = 60, factor = 1;
-
-      if (shape._typename == "TGeoPgon") {
-         radiusSegments = shape.fNedges;
-         factor = 1. / Math.cos(Math.PI/180 * thetaLength / radiusSegments / 2);
-      } else {
-         radiusSegments = Math.max(5, Math.round(thetaLength/JSROOT.GEO.GradPerSegm));
-      }
-
-      var usage = new Int16Array(2*shape.fNz), numusedlayers = 0, hasrmin = false;
-
-      for (var layer=0; layer < shape.fNz; ++layer)
-         if (shape.fRmin[layer] > 0) hasrmin = true;
-
-      // return very rough estimation, number of faces may be much less
-      if (faces_limit < 0) return (hasrmin ? 4 : 2) * radiusSegments * (shape.fNz-1);
-
-      // coordinate of point on cut edge (x,z)
-      var pnts = (thetaLength === 360) ? null : [];
-
-      // first analyse levels - if we need to create all of them
-      for (var side = 0; side < 2; ++side) {
-         var rside = (side === 0) ? 'fRmax' : 'fRmin';
-
-         for (var layer=0; layer < shape.fNz; ++layer) {
-
-            // first create points for the layer
-            var layerz = shape.fZ[layer], rad = shape[rside][layer];
-
-            usage[layer*2+side] = 0;
-
-            if ((layer > 0) && (layer < shape.fNz-1))
-               if (((shape.fZ[layer-1] === layerz) && (shape[rside][layer-1] === rad)) ||
-                   ((shape[rside][layer+1] === rad) && (shape[rside][layer-1] === rad))) {
-
-                  // same Z and R as before - ignore
-                  // or same R before and after
+            var many = (numnodes + numitems) > 1;
+
+            if (many) menu.add("header:" + ((numitems > 0) ? "Items" : "Nodes"));
+
+            for (var n=0;n<intersects.length;++n) {
+               var obj = intersects[n].object,
+                   name, itemname, hdr;
+
+               if (obj.geo_name) {
+                  itemname = obj.geo_name;
+                  if (itemname.indexOf("<prnt>") == 0)
+                     itemname = (menu.painter.GetItemName() || "top") + itemname.substr(6);
+                  name = itemname.substr(itemname.lastIndexOf("/")+1);
+                  if (!name) name = itemname;
+                  hdr = name;
+               } else if (obj.stack) {
+                  name = menu.painter._clones.ResolveStack(obj.stack).name;
+                  itemname = menu.painter.GetStackFullName(obj.stack);
+                  hdr = menu.painter.GetItemName();
+                  if (name.indexOf("Nodes/") === 0) hdr = name.substr(6); else
+                  if (name.length > 0) hdr = name; else
+                  if (!hdr) hdr = "header";
+
+               } else
+                  continue;
+
+               menu.add((many ? "sub:" : "header:") + hdr, itemname, function(arg) { this.ActivateInBrowser([arg], true); });
+
+               menu.add("Browse", itemname, function(arg) { this.ActivateInBrowser([arg], true); });
+
+               if (menu.painter._hpainter)
+                  menu.add("Inspect", itemname, function(arg) { this._hpainter.display(itemname, "inspect"); });
+
+               if (obj.geo_name) {
+                  menu.add("Hide", n, function(indx) {
+                     var mesh = intersects[indx].object;
+                     mesh.visible = false; // just disable mesh
+                     if (mesh.geo_object) mesh.geo_object.$hidden_via_menu = true; // and hide object for further redraw
+                     menu.painter.Render3D();
+                  });
+
+                  if (many) menu.add("endsub:");
 
                   continue;
                }
 
-            if ((layer>0) && ((side === 0) || hasrmin)) {
-               usage[layer*2+side] = 1;
-               numusedlayers++;
-            }
+               var wireframe = menu.painter.accessObjectWireFrame(obj);
 
-            if (pnts !== null) {
-               if (side === 0) {
-                  pnts.push(new THREE.Vector2(factor*rad, layerz));
-               } else if (rad < shape.fRmax[layer]) {
-                  pnts.unshift(new THREE.Vector2(factor*rad, layerz));
+               if (wireframe!==undefined)
+                  menu.addchk(wireframe, "Wireframe", n, function(indx) {
+                     var m = intersects[indx].object.material;
+                     m.wireframe = !m.wireframe;
+                     this.Render3D();
+                  });
+
+               if (++cnt>1)
+                  menu.add("Manifest", n, function(indx) {
+
+                     if (this._last_manifest)
+                        this._last_manifest.wireframe = !this._last_manifest.wireframe;
+
+                     if (this._last_hidden)
+                        this._last_hidden.forEach(function(obj) { obj.visible = true; });
+
+                     this._last_hidden = [];
+
+                     for (var i=0;i<indx;++i)
+                        this._last_hidden.push(intersects[i].object);
+
+                     this._last_hidden.forEach(function(obj) { obj.visible = false; });
+
+                     this._last_manifest = intersects[indx].object.material;
+
+                     this._last_manifest.wireframe = !this._last_manifest.wireframe;
+
+                     this.Render3D();
+                  });
+
+
+               menu.add("Focus", n, function(indx) {
+                  this.focusCamera(intersects[indx].object);
+               });
+
+               if (!menu.painter._geom_viewer)
+               menu.add("Hide", n, function(indx) {
+                  var resolve = menu.painter._clones.ResolveStack(intersects[indx].object.stack);
+
+                  if (resolve.obj && (resolve.node.kind === 0) && resolve.obj.fVolume) {
+                     JSROOT.GEO.SetBit(resolve.obj.fVolume, JSROOT.GEO.BITS.kVisThis, false);
+                     JSROOT.GEO.updateBrowserIcons(resolve.obj.fVolume, this._hpainter);
+                  } else
+                  if (resolve.obj && (resolve.node.kind === 1)) {
+                     resolve.obj.fRnrSelf = false;
+                     JSROOT.GEO.updateBrowserIcons(resolve.obj, this._hpainter);
+                  }
+                  // intersects[arg].object.visible = false;
+                  // this.Render3D();
+
+                  this.testGeomChanges();// while many volumes may disappear, recheck all of them
+               });
+
+               if (many) menu.add("endsub:");
+            }
+         }
+         menu.show(evnt);
+      });
+   }
+
+   TGeoPainter.prototype.FilterIntersects = function(intersects) {
+
+      if (!intersects.length) return intersects;
+
+      // check redirections
+      for (var n=0;n<intersects.length;++n)
+         if (intersects[n].object.geo_highlight)
+            intersects[n].object = intersects[n].object.geo_highlight;
+
+      // remove all elements without stack - indicator that this is geometry object
+      // also remove all objects which are mostly transparent
+      for (var n=intersects.length-1; n>=0; --n) {
+
+         var obj = intersects[n].object;
+
+         var unique = (obj.stack !== undefined) || (obj.geo_name !== undefined);
+
+         if (unique && obj.material && (obj.material.opacity !== undefined))
+            unique = (obj.material.opacity >= 0.1);
+
+         if (obj.jsroot_special) unique = false;
+
+         for (var k=0;(k<n) && unique;++k)
+            if (intersects[k].object === obj) unique = false;
+
+         if (!unique) intersects.splice(n,1);
+      }
+
+      var clip = this.ctrl.clip;
+
+      if (clip[0].enabled || clip[1].enabled || clip[2].enabled) {
+         var clippedIntersects = [];
+
+         function myXor(a,b) { return ( a && !b ) || (!a && b); }
+
+         for (var i = 0; i < intersects.length; ++i) {
+            var point = intersects[i].point, special = (intersects[i].object.type == "Points"), clipped = true;
+
+            if (clip[0].enabled && myXor(this._clipPlanes[0].normal.dot(point) > this._clipPlanes[0].constant, special)) clipped = false;
+            if (clip[1].enabled && myXor(this._clipPlanes[1].normal.dot(point) > this._clipPlanes[1].constant, special)) clipped = false;
+            if (clip[2].enabled && (this._clipPlanes[2].normal.dot(point) > this._clipPlanes[2].constant)) clipped = false;
+
+            if (!clipped) clippedIntersects.push(intersects[i]);
+         }
+
+         intersects = clippedIntersects;
+      }
+
+      return intersects;
+   }
+
+   TGeoPainter.prototype.testCameraPositionChange = function() {
+      // function analyzes camera position and start redraw of geometry if
+      // objects in view may be changed
+
+      if (!this.ctrl.select_in_view || this._draw_all_nodes) return;
+
+      var matrix = JSROOT.GEO.CreateProjectionMatrix(this._camera);
+
+      var frustum = JSROOT.GEO.CreateFrustum(matrix);
+
+      // check if overall bounding box seen
+      if (!frustum.CheckBox(this.getGeomBoundingBox(this._toplevel)))
+         this.startDrawGeometry();
+   }
+
+   TGeoPainter.prototype.ResolveStack = function(stack) {
+      return this._clones && stack ? this._clones.ResolveStack(stack) : null;
+   }
+
+   TGeoPainter.prototype.GetStackFullName = function(stack) {
+      var mainitemname = this.GetItemName(),
+          sub = this.ResolveStack(stack);
+      if (!sub || !sub.name) return mainitemname;
+      return mainitemname ? (mainitemname + "/" + sub.name) : sub.name;
+   }
+
+   /** Add handler which will be called when element is highlighted in geometry drawing
+    * Handler should have HighlightMesh function with same arguments as TGeoPainter  */
+   TGeoPainter.prototype.AddHighlightHandler = function(handler) {
+      if (!handler || typeof handler.HighlightMesh != 'function') return;
+      if (!this._highlight_handlers) this._highlight_handlers = [];
+      this._highlight_handlers.push(handler);
+   }
+
+   //////////////////////
+
+   function GeoDrawingControl(mesh) {
+      JSROOT.Painter.InteractiveControl.call(this);
+      this.mesh = (mesh && mesh.material) ? mesh : null;
+   }
+
+   GeoDrawingControl.prototype = Object.create(JSROOT.Painter.InteractiveControl.prototype);
+
+   GeoDrawingControl.prototype.setHighlight = function(col, indx) {
+      return this.drawSpecial(col, indx);
+   }
+
+   GeoDrawingControl.prototype.drawSpecial = function(col, indx) {
+      var c = this.mesh;
+      if (!c || !c.material) return;
+
+      if (col) {
+         if (!c.origin)
+            c.origin = {
+              color: c.material.color,
+              opacity: c.material.opacity,
+              width: c.material.linewidth,
+              size: c.material.size
+           };
+         c.material.color = new THREE.Color( col );
+         c.material.opacity = 1.;
+         if (c.hightlightWidthScale && !JSROOT.browser.isWin)
+            c.material.linewidth = c.origin.width * c.hightlightWidthScale;
+         if (c.highlightScale)
+            c.material.size = c.origin.size * c.highlightScale;
+         return true;
+      } else if (c.origin) {
+         c.material.color = c.origin.color;
+         c.material.opacity = c.origin.opacity;
+         if (c.hightlightWidthScale)
+            c.material.linewidth = c.origin.width;
+         if (c.highlightScale)
+            c.material.size = c.origin.size;
+         return true;
+      }
+   }
+
+   ////////////////////////
+
+   TGeoPainter.prototype.HighlightMesh = function(active_mesh, color, geo_object, geo_index, geo_stack, no_recursive) {
+
+      if (geo_object) {
+         active_mesh = active_mesh ? [ active_mesh ] : [];
+         var extras = this.getExtrasContainer();
+         if (extras)
+            extras.traverse(function(obj3d) {
+               if ((obj3d.geo_object === geo_object) && (active_mesh.indexOf(obj3d)<0)) active_mesh.push(obj3d);
+            });
+      } else if (geo_stack && this._toplevel) {
+         active_mesh = [];
+         this._toplevel.traverse(function(mesh) {
+            if ((mesh instanceof THREE.Mesh) && JSROOT.GEO.IsSameStack(mesh.stack, geo_stack)) active_mesh.push(mesh);
+         });
+      } else {
+         active_mesh = active_mesh ? [ active_mesh ] : [];
+      }
+
+      if (!active_mesh.length) active_mesh = null;
+
+      if (active_mesh) {
+         // check if highlight is disabled for correspondent objects kinds
+         if (active_mesh[0].geo_object) {
+            if (!this.ctrl.highlight_scene) active_mesh = null;
+         } else {
+            if (!this.ctrl.highlight) active_mesh = null;
+         }
+      }
+
+      if (!no_recursive) {
+         // check all other painters
+
+         if (active_mesh) {
+            if (!geo_object) geo_object = active_mesh[0].geo_object;
+            if (!geo_stack) geo_stack = active_mesh[0].stack;
+         }
+
+         var lst = this._highlight_handlers || (!this._main_painter ? this._slave_painters : this._main_painter._slave_painters.concat([this._main_painter]));
+
+         for (var k=0;k<lst.length;++k)
+            if (lst[k]!==this) lst[k].HighlightMesh(null, color, geo_object, geo_index, geo_stack, true);
+      }
+
+      var curr_mesh = this._selected_mesh;
+
+      function get_ctrl(mesh) {
+         return mesh.get_ctrl ? mesh.get_ctrl() : new GeoDrawingControl(mesh);
+      }
+
+      // check if selections are the same
+      if (!curr_mesh && !active_mesh) return false;
+      var same = false;
+      if (curr_mesh && active_mesh && (curr_mesh.length == active_mesh.length)) {
+         same = true;
+         for (var k=0;(k<curr_mesh.length) && same;++k) {
+            if ((curr_mesh[k] !== active_mesh[k]) || get_ctrl(curr_mesh[k]).checkHighlightIndex(geo_index)) same = false;
+         }
+      }
+      if (same) return !!curr_mesh;
+
+      if (curr_mesh)
+         for (var k=0;k<curr_mesh.length;++k)
+            get_ctrl(curr_mesh[k]).setHighlight();
+
+      this._selected_mesh = active_mesh;
+
+      if (active_mesh)
+         for (var k=0;k<active_mesh.length;++k)
+            get_ctrl(active_mesh[k]).setHighlight(color || 0xffaa33, geo_index);
+
+      this.Render3D(0);
+
+      return !!active_mesh;
+   }
+
+   TGeoPainter.prototype.ProcessMouseClick = function(pnt, intersects, evnt) {
+      if (!intersects.length) return;
+
+      var mesh = intersects[0].object;
+      if (!mesh.get_ctrl) return;
+
+      var ctrl = mesh.get_ctrl();
+
+      var click_indx = ctrl.extractIndex(intersects[0]);
+
+      ctrl.evnt = evnt;
+
+      if (ctrl.setSelected("blue", click_indx))
+         this.Render3D();
+
+      ctrl.evnt = null;
+   }
+
+   /** Configure mouse delay, required for complex geometries */
+   TGeoPainter.prototype.setMouseTmout = function(val) {
+      if (this.ctrl)
+         this.ctrl.mouse_tmout = val;
+
+      if (this._controls)
+         this._controls.mouse_tmout = val;
+   }
+
+   /** Configure depth method, used for render order production.
+    * Allowed values: "ray", "box","pnt", "size","dflt" */
+   TGeoPainter.prototype.setDepthMethod = function(val) {
+      if (this.ctrl)
+         this.ctrl.depthMethod = val;
+   }
+
+   /** Add orbit control @private */
+   TGeoPainter.prototype.addOrbitControls = function() {
+
+      if (this._controls || this._usesvg || JSROOT.BatchMode) return;
+
+      var painter = this;
+
+      this.SetTooltipAllowed(JSROOT.gStyle.Tooltip > 0);
+
+      this._controls = JSROOT.Painter.CreateOrbitControl(this, this._camera, this._scene, this._renderer, this._lookat);
+
+      this._controls.mouse_tmout = this.ctrl.mouse_tmout; // set larger timeout for geometry processing
+
+      if (!this.ctrl.can_rotate) this._controls.enableRotate = false;
+
+      this._controls.ContextMenu = this.OrbitContext.bind(this);
+
+      this._controls.ProcessMouseMove = function(intersects) {
+
+         var active_mesh = null, tooltip = null, resolve = null, names = [], geo_object, geo_index;
+
+         // try to find mesh from intersections
+         for (var k=0;k<intersects.length;++k) {
+            var obj = intersects[k].object, info = null;
+            if (!obj) continue;
+            if (obj.geo_object) info = obj.geo_name; else
+            if (obj.stack) info = painter.GetStackFullName(obj.stack);
+            if (!info) continue;
+
+            if (info.indexOf("<prnt>")==0)
+               info = painter.GetItemName() + info.substr(6);
+
+            names.push(info);
+
+            if (!active_mesh) {
+               active_mesh = obj;
+               tooltip = info;
+               geo_object = obj.geo_object;
+               if (obj.get_ctrl) {
+                  geo_index = obj.get_ctrl().extractIndex(intersects[k]);
+                  if ((geo_index !== undefined) && (typeof tooltip == "string")) tooltip += " indx:" + JSON.stringify(geo_index);
                }
+               if (active_mesh.stack) resolve = painter.ResolveStack(active_mesh.stack);
             }
          }
+
+         painter.HighlightMesh(active_mesh, undefined, geo_object, geo_index);
+
+         if (painter.ctrl.update_browser) {
+            if (painter.ctrl.highlight && tooltip) names = [ tooltip ];
+            painter.ActivateInBrowser(names);
+         }
+
+         if (!resolve || !resolve.obj) return tooltip;
+
+         var lines = JSROOT.GEO.provideInfo(resolve.obj);
+         lines.unshift(tooltip);
+
+         return { name: resolve.obj.fName, title: resolve.obj.fTitle || resolve.obj._typename, lines: lines };
       }
 
-      var numfaces = numusedlayers*radiusSegments*2;
-      if (shape.fRmin[0] !== shape.fRmax[0]) numfaces += radiusSegments * (hasrmin ? 2 : 1);
-      if (shape.fRmin[shape.fNz-1] !== shape.fRmax[shape.fNz-1]) numfaces += radiusSegments * (hasrmin ? 2 : 1);
+      this._controls.ProcessMouseLeave = function() {
+         this.ProcessMouseMove([]); // to disable highlight and reset browser
+      }
 
-      var cut_faces = null;
-
-      if (pnts!==null) {
-         if (pnts.length === shape.fNz * 2) {
-            // special case - all layers are there, create faces ourself
-            cut_faces = [];
-            for (var layer = shape.fNz-1; layer>0; --layer) {
-               if (shape.fZ[layer] === shape.fZ[layer-1]) continue;
-               var right = 2*shape.fNz - 1 - layer;
-               cut_faces.push([right, layer - 1, layer]);
-               cut_faces.push([right, right + 1, layer-1]);
-            }
-
+      this._controls.ProcessDblClick = function() {
+         if (painter._last_manifest) {
+            painter._last_manifest.wireframe = !painter._last_manifest.wireframe;
+            if (painter._last_hidden)
+               painter._last_hidden.forEach(function(obj) { obj.visible = true; });
+            delete painter._last_hidden;
+            delete painter._last_manifest;
+            painter.Render3D();
          } else {
-            // let three.js calculate our faces
-            // console.log('triangulate polygon ' + shape.fShapeId);
-            cut_faces = THREE.ShapeUtils.triangulateShape(pnts, []);
-         }
-         numfaces += cut_faces.length*2;
-      }
-
-      var phi0 = thetaStart*Math.PI/180, dphi = thetaLength/radiusSegments*Math.PI/180;
-
-      // calculate all sin/cos tables in advance
-      var _sin = new Float32Array(radiusSegments+1),
-          _cos = new Float32Array(radiusSegments+1);
-      for (var seg=0;seg<=radiusSegments;++seg) {
-         _cos[seg] = Math.cos(phi0+seg*dphi);
-         _sin[seg] = Math.sin(phi0+seg*dphi);
-      }
-
-      var creator = faces_limit ? new JSROOT.GEO.PolygonsCreator : new JSROOT.GEO.GeometryCreator(numfaces);
-
-      // add sides
-      for (var side = 0; side < 2; ++side) {
-         var rside = (side === 0) ? 'fRmax' : 'fRmin',
-             z1 = shape.fZ[0], r1 = factor*shape[rside][0],
-             d1 = 1 - side, d2 = side;
-
-         for (var layer=0; layer < shape.fNz; ++layer) {
-
-            if (usage[layer*2+side] === 0) continue;
-
-            var z2 = shape.fZ[layer], r2 = factor*shape[rside][layer],
-                nxy = 1, nz = 0;
-
-            if ((r2 !== r1)) {
-               var angle = Math.atan2((r2-r1), (z2-z1));
-               nxy = Math.cos(angle);
-               nz = Math.sin(angle);
-            }
-
-            if (side>0) { nxy*=-1; nz*=-1; }
-
-            for (var seg=0;seg < radiusSegments;++seg) {
-               creator.AddFace4(r1 * _cos[seg+d1], r1 * _sin[seg+d1], z1,
-                                r2 * _cos[seg+d1], r2 * _sin[seg+d1], z2,
-                                r2 * _cos[seg+d2], r2 * _sin[seg+d2], z2,
-                                r1 * _cos[seg+d2], r1 * _sin[seg+d2], z1);
-               creator.SetNormal_12_34(nxy*_cos[seg+d1], nxy*_sin[seg+d1], nz, nxy*_cos[seg+d2], nxy*_sin[seg+d2], nz);
-            }
-
-            z1 = z2; r1 = r2;
+            painter.adjustCameraPosition();
          }
       }
-
-      // add top/bottom
-      for (var layer=0; layer < shape.fNz; layer += (shape.fNz-1)) {
-
-         var rmin = factor*shape.fRmin[layer], rmax = factor*shape.fRmax[layer];
-
-         if (rmin === rmax) continue;
-
-         var layerz = shape.fZ[layer],
-             d1 = (layer===0) ? 1 : 0, d2 = 1 - d1,
-             normalz = (layer===0) ? -1: 1;
-
-         if (!hasrmin && !cut_faces) creator.StartPolygon(layer>0);
-
-         for (var seg=0;seg < radiusSegments;++seg) {
-            creator.AddFace4(rmin * _cos[seg+d1], rmin * _sin[seg+d1], layerz,
-                             rmax * _cos[seg+d1], rmax * _sin[seg+d1], layerz,
-                             rmax * _cos[seg+d2], rmax * _sin[seg+d2], layerz,
-                             rmin * _cos[seg+d2], rmin * _sin[seg+d2], layerz,
-                             hasrmin ? 0 : 2);
-            creator.SetNormal(0, 0, normalz);
-         }
-
-         creator.StopPolygon();
-      }
-
-      if (cut_faces)
-         for (var seg = 0; seg <= radiusSegments; seg += radiusSegments) {
-            var d1 = (seg === 0) ? 1 : 2, d2 = 3 - d1;
-            for (var n=0;n<cut_faces.length;++n) {
-               var a = pnts[cut_faces[n][0]],
-                   b = pnts[cut_faces[n][d1]],
-                   c = pnts[cut_faces[n][d2]];
-
-               creator.AddFace3(a.x * _cos[seg], a.x * _sin[seg], a.y,
-                                b.x * _cos[seg], b.x * _sin[seg], b.y,
-                                c.x * _cos[seg], c.x * _sin[seg], c.y);
-
-               creator.CalcNormal();
-            }
-         }
-
-      return creator.Create();
    }
 
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.createXtruBuffer = function( shape, faces_limit ) {
-      var nfaces = (shape.fNz-1) * shape.fNvert * 2;
+   TGeoPainter.prototype.addTransformControl = function() {
+      if (this._tcontrols) return;
 
-      if (faces_limit < 0) return nfaces + shape.fNvert*3;
+      if ( !this.ctrl._debug && !this.ctrl._grid ) return;
 
-      // create points
-      var pnts = [];
-      for (var vert = 0; vert < shape.fNvert; ++vert)
-         pnts.push(new THREE.Vector2(shape.fX[vert], shape.fY[vert]));
+      // FIXME: at the moment THREE.TransformControls is bogus in three.js, should be fixed and check again
+      //return;
 
-      // console.log('triangulate Xtru ' + shape.fShapeId);
-      var faces = THREE.ShapeUtils.triangulateShape(pnts , []);
-      if (faces.length < pnts.length-2) {
-         JSROOT.GEO.warn('Problem with XTRU shape ' +shape.fName + ' with ' + pnts.length + ' vertices');
-         faces = [];
-      } else {
-         nfaces += faces.length * 2;
-      }
+      this._tcontrols = new THREE.TransformControls( this._camera, this._renderer.domElement );
+      this._scene.add( this._tcontrols );
+      this._tcontrols.attach( this._toplevel );
+      //this._tcontrols.setSize( 1.1 );
+      var painter = this;
 
-      var creator = faces_limit ? new JSROOT.GEO.PolygonsCreator : new JSROOT.GEO.GeometryCreator(nfaces);
-
-      for (var layer = 0; layer < shape.fNz-1; ++layer) {
-         var z1 = shape.fZ[layer], scale1 = shape.fScale[layer],
-             z2 = shape.fZ[layer+1], scale2 = shape.fScale[layer+1],
-             x01 = shape.fX0[layer], x02 = shape.fX0[layer+1],
-             y01 = shape.fY0[layer], y02 = shape.fY0[layer+1];
-
-         for (var vert1 = 0; vert1 < shape.fNvert; ++vert1) {
-            var vert2 = (vert1+1) % shape.fNvert;
-            creator.AddFace4(scale1 * shape.fX[vert1] + x01, scale1 * shape.fY[vert1] + y01, z1,
-                             scale2 * shape.fX[vert1] + x02, scale2 * shape.fY[vert1] + y02, z2,
-                             scale2 * shape.fX[vert2] + x02, scale2 * shape.fY[vert2] + y02, z2,
-                             scale1 * shape.fX[vert2] + x01, scale1 * shape.fY[vert2] + y01, z1);
-            creator.CalcNormal();
+      window.addEventListener( 'keydown', function ( event ) {
+         switch ( event.keyCode ) {
+         case 81: // Q
+            painter._tcontrols.setSpace( painter._tcontrols.space === "local" ? "world" : "local" );
+            break;
+         case 17: // Ctrl
+            painter._tcontrols.setTranslationSnap( Math.ceil( painter._overall_size ) / 50 );
+            painter._tcontrols.setRotationSnap( THREE.Math.degToRad( 15 ) );
+            break;
+         case 84: // T (Translate)
+            painter._tcontrols.setMode( "translate" );
+            break;
+         case 82: // R (Rotate)
+            painter._tcontrols.setMode( "rotate" );
+            break;
+         case 83: // S (Scale)
+            painter._tcontrols.setMode( "scale" );
+            break;
+         case 187:
+         case 107: // +, =, num+
+            painter._tcontrols.setSize( painter._tcontrols.size + 0.1 );
+            break;
+         case 189:
+         case 109: // -, _, num-
+            painter._tcontrols.setSize( Math.max( painter._tcontrols.size - 0.1, 0.1 ) );
+            break;
          }
-      }
-
-      for (layer = 0; layer <= shape.fNz-1; layer+=(shape.fNz-1)) {
-         var z = shape.fZ[layer], scale = shape.fScale[layer],
-             x0 = shape.fX0[layer], y0 = shape.fY0[layer];
-
-         for (var n=0;n<faces.length;++n) {
-            var face = faces[n],
-                pnt1 = pnts[face[0]],
-                pnt2 = pnts[face[(layer===0) ? 2 : 1]],
-                pnt3 = pnts[face[(layer===0) ? 1 : 2]];
-
-            creator.AddFace3(scale * pnt1.x + x0, scale * pnt1.y + y0, z,
-                             scale * pnt2.x + x0, scale * pnt2.y + y0, z,
-                             scale * pnt3.x + x0, scale * pnt3.y + y0, z);
-            creator.SetNormal(0,0,layer===0 ? -1 : 1);
+      });
+      window.addEventListener( 'keyup', function ( event ) {
+         switch ( event.keyCode ) {
+         case 17: // Ctrl
+            painter._tcontrols.setTranslationSnap( null );
+            painter._tcontrols.setRotationSnap( null );
+            break;
          }
-      }
+      });
 
-      return creator.Create();
+      this._tcontrols.addEventListener( 'change', function() { painter.Render3D(0); });
    }
 
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.createParaboloidBuffer = function( shape, faces_limit ) {
+   /** Main function in geometry creation loop
+    * Return false when nothing todo
+    * return true if one could perform next action immediately
+    * return 1 when call after short timeout required
+    * return 2 when call must be done from processWorkerReply
+    * @private */
+   TGeoPainter.prototype.nextDrawAction = function() {
 
-      var radiusSegments = Math.max(4, Math.round(360/JSROOT.GEO.GradPerSegm)),
-          heightSegments = 30;
+      if (!this._clones || (this.drawing_stage == 0)) return false;
 
-      if (faces_limit > 0) {
-         var fact = 2*radiusSegments*(heightSegments+1) / faces_limit;
-         if (fact > 1.) {
-            radiusSegments = Math.max(5, Math.floor(radiusSegments/Math.sqrt(fact)));
-            heightSegments = Math.max(5, Math.floor(heightSegments/Math.sqrt(fact)));
+      if (this.drawing_stage == 1) {
+
+         if (this._geom_viewer) {
+            this._draw_all_nodes = false;
+            this.drawing_stage = 3;
+            return true;
          }
-      }
 
-      var zmin = -shape.fDZ, zmax = shape.fDZ, rmin = shape.fRlo, rmax = shape.fRhi;
+         // wait until worker is really started
+         if (this.ctrl.use_worker > 0) {
+            if (!this._worker) { this.startWorker(); return 1; }
+            if (!this._worker_ready) return 1;
+         }
 
-      // if no radius at -z, find intersection
-      if (shape.fA >= 0) {
-         if (shape.fB > zmin) zmin = shape.fB;
-      } else {
-         if (shape.fB < zmax) zmax = shape.fB;
-      }
+         // first copy visibility flags and check how many unique visible nodes exists
+         var numvis = this._clones.CountVisibles() || this._clones.MarkVisibles(),
+             matrix = null, frustum = null;
 
-      var ttmin = Math.atan2(zmin, rmin), ttmax = Math.atan2(zmax, rmax);
+         if (this.ctrl.select_in_view && !this._first_drawing) {
+            // extract camera projection matrix for selection
 
-      var numfaces = (heightSegments+1)*radiusSegments*2;
-      if (rmin===0) numfaces -= radiusSegments*2; // complete layer
-      if (rmax===0) numfaces -= radiusSegments*2; // complete layer
+            matrix = JSROOT.GEO.CreateProjectionMatrix(this._camera);
 
-      if (faces_limit < 0) return numfaces;
+            frustum = JSROOT.GEO.CreateFrustum(matrix);
 
-      // calculate all sin/cos tables in advance
-      var _sin = new Float32Array(radiusSegments+1),
-          _cos = new Float32Array(radiusSegments+1);
-      for (var seg=0;seg<=radiusSegments;++seg) {
-         _cos[seg] = Math.cos(seg/radiusSegments*2*Math.PI);
-         _sin[seg] = Math.sin(seg/radiusSegments*2*Math.PI);
-      }
-
-      var creator = faces_limit ? new JSROOT.GEO.PolygonsCreator : new JSROOT.GEO.GeometryCreator(numfaces);
-
-      var lastz = zmin, lastr = 0, lastnxy = 0, lastnz = -1;
-
-      for (var layer = 0; layer <= heightSegments + 1; ++layer) {
-
-         var layerz = 0, radius = 0, nxy = 0, nz = -1;
-
-         if ((layer === 0) && (rmin===0)) continue;
-
-         if ((layer === heightSegments + 1) && (lastr === 0)) break;
-
-         switch (layer) {
-            case 0: layerz = zmin; radius = rmin; break;
-            case heightSegments: layerz = zmax; radius = rmax; break;
-            case heightSegments + 1: layerz = zmax; radius = 0; break;
-            default: {
-               var tt = Math.tan(ttmin + (ttmax-ttmin) * layer / heightSegments);
-               var delta = tt*tt - 4*shape.fA*shape.fB; // should be always positive (a*b<0)
-               radius = 0.5*(tt+Math.sqrt(delta))/shape.fA;
-               if (radius < 1e-6) radius = 0;
-               layerz = radius*tt;
+            // check if overall bounding box seen
+            if (frustum.CheckBox(this.getGeomBoundingBox(this._toplevel))) {
+               matrix = null; // not use camera for the moment
+               frustum = null;
             }
          }
 
-         nxy = shape.fA * radius;
-         nz = (shape.fA > 0) ? -1 : 1;
+         this._current_face_limit = this.ctrl.maxlimit;
+         if (matrix) this._current_face_limit*=1.25;
 
-         var skip = 0;
-         if (lastr === 0) skip = 1; else
-         if (radius === 0) skip = 2;
+         // here we decide if we need worker for the drawings
+         // main reason - too large geometry and large time to scan all camera positions
+         var need_worker = !JSROOT.BatchMode && ((numvis > 10000) || (matrix && (this._clones.ScanVisible() > 1e5)));
 
-         for (var seg=0; seg<radiusSegments; ++seg) {
-            creator.AddFace4(radius*_cos[seg],   radius*_sin[seg], layerz,
-                             lastr*_cos[seg],    lastr*_sin[seg], lastz,
-                             lastr*_cos[seg+1],  lastr*_sin[seg+1], lastz,
-                             radius*_cos[seg+1], radius*_sin[seg+1], layerz, skip);
+         // worker does not work when starting from file system
+         if (need_worker && JSROOT.source_dir.indexOf("file://")==0) {
+            console.log('disable worker for jsroot from file system');
+            need_worker = false;
+         }
 
-            // use analytic normal values when open/closing paraboloid around 0
-            // cut faces (top or bottom) set with simple normal
-            if ((skip===0) || ((layer===1) && (rmin===0)) || ((layer===heightSegments+1) && (rmax===0)))
-               creator.SetNormal4(nxy*_cos[seg],       nxy*_sin[seg],       nz,
-                                  lastnxy*_cos[seg],   lastnxy*_sin[seg],   lastnz,
-                                  lastnxy*_cos[seg+1], lastnxy*_sin[seg+1], lastnz,
-                                  nxy*_cos[seg+1],     nxy*_sin[seg+1],     nz, skip);
+         if (need_worker && !this._worker && (this.ctrl.use_worker >= 0))
+            this.startWorker(); // we starting worker, but it may not be ready so fast
+
+         if (!need_worker || !this._worker_ready) {
+            // var tm1 = new Date().getTime();
+            var res = this._clones.CollectVisibles(this._current_face_limit, frustum);
+            this._new_draw_nodes = res.lst;
+            this._draw_all_nodes = res.complete;
+            // var tm2 = new Date().getTime();
+            // console.log('Collect visibles', this._new_draw_nodes.length, 'takes', tm2-tm1);
+            this.drawing_stage = 3;
+            return true;
+         }
+
+         var job = {
+            collect: this._current_face_limit,   // indicator for the command
+            flags: this._clones.GetVisibleFlags(),
+            matrix: matrix ? matrix.elements : null
+         };
+
+         this.submitToWorker(job);
+
+         this.drawing_stage = 2;
+
+         this.drawing_log = "Worker select visibles";
+
+         return 2; // we now waiting for the worker reply
+      }
+
+      if (this.drawing_stage == 2) {
+         // do nothing, we are waiting for worker reply
+
+         this.drawing_log = "Worker select visibles";
+
+         return 2;
+      }
+
+      if (this.drawing_stage == 3) {
+         // here we merge new and old list of nodes for drawing,
+         // normally operation is fast and can be implemented with one call
+
+         this.drawing_log = "Analyse visibles";
+
+         if (this._new_append_nodes) {
+
+            this._new_draw_nodes = this._draw_nodes.concat(this._new_append_nodes);
+
+            delete this._new_append_nodes;
+
+         } else if (this._draw_nodes) {
+
+            var del;
+            if (this._geom_viewer)
+               del = this._draw_nodes;
             else
-               creator.SetNormal(0, 0, (layer < heightSegments) ? -1 : 1);
+               del = this._clones.MergeVisibles(this._new_draw_nodes, this._draw_nodes);
+
+            // remove should be fast, do it here
+            for (var n=0;n<del.length;++n)
+               this._clones.CreateObject3D(del[n].stack, this._toplevel, 'delete_mesh');
+
+            if (del.length > 0)
+               this.drawing_log = "Delete " + del.length + " nodes";
          }
 
-         lastz = layerz; lastr = radius;
-         lastnxy = nxy; lastnz = nz;
+         this._draw_nodes = this._new_draw_nodes;
+         delete this._new_draw_nodes;
+         this.drawing_stage = 4;
+         return true;
       }
 
-      return creator.Create();
-   }
+      if (this.drawing_stage === 4) {
 
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.createHypeBuffer = function( shape, faces_limit ) {
+         this.drawing_log = "Collect shapes";
 
-      if ((shape.fTin===0) && (shape.fTout===0))
-         return JSROOT.GEO.createTubeBuffer(shape, faces_limit);
+         // collect shapes
+         var shapes = this._clones.CollectShapes(this._draw_nodes);
 
-      var radiusSegments = Math.max(4, Math.round(360/JSROOT.GEO.GradPerSegm)),
-          heightSegments = 30;
+         // merge old and new list with produced shapes
+         this._build_shapes = this._clones.MergeShapesLists(this._build_shapes, shapes);
 
-      var numfaces = radiusSegments * (heightSegments + 1) * ((shape.fRmin > 0) ? 4 : 2);
-
-      if (faces_limit < 0) return numfaces;
-
-      if ((faces_limit > 0) && (faces_limit > numfaces)) {
-         radiusSegments = Math.max(4, Math.floor(radiusSegments/Math.sqrt(numfaces/faces_limit)));
-         heightSegments = Math.max(4, Math.floor(heightSegments/Math.sqrt(numfaces/faces_limit)));
-         numfaces = radiusSegments * (heightSegments + 1) * ((shape.fRmin > 0) ? 4 : 2);
+         this.drawing_stage = 5;
+         return true;
       }
 
-      // calculate all sin/cos tables in advance
-      var _sin = new Float32Array(radiusSegments+1), _cos = new Float32Array(radiusSegments+1);
-      for (var seg=0;seg<=radiusSegments;++seg) {
-         _cos[seg] = Math.cos(seg/radiusSegments*2*Math.PI);
-         _sin[seg] = Math.sin(seg/radiusSegments*2*Math.PI);
-      }
 
-      var creator = faces_limit ? new JSROOT.GEO.PolygonsCreator : new JSROOT.GEO.GeometryCreator(numfaces);
+      if (this.drawing_stage === 5) {
+         // this is building of geometries,
+         // one can ask worker to build them or do it ourself
 
-      // in-out side
-      for (var side=0;side<2;++side) {
-         if ((side > 0) && (shape.fRmin <= 0)) break;
+         if (this.canSubmitToWorker()) {
+            var job = { limit: this._current_face_limit, shapes: [] }, cnt = 0;
+            for (var n=0;n<this._build_shapes.length;++n) {
+               var clone = null, item = this._build_shapes[n];
+               // only submit not-done items
+               if (item.ready || item.geom) {
+                  // this is place holder for existing geometry
+                  clone = { id: item.id, ready: true, nfaces: JSROOT.GEO.numGeometryFaces(item.geom), refcnt: item.refcnt };
+               } else {
+                  clone = JSROOT.clone(item, null, true);
+                  cnt++;
+               }
 
-         var r0 = (side > 0) ? shape.fRmin : shape.fRmax,
-             tsq = (side > 0) ? shape.fTinsq : shape.fToutsq,
-             d1 = 1- side, d2 = 1 - d1;
+               job.shapes.push(clone);
+            }
 
-         // vertical layers
-         for (var layer=0;layer<heightSegments;++layer) {
-            var z1 = -shape.fDz + layer/heightSegments*2*shape.fDz,
-                z2 = -shape.fDz + (layer+1)/heightSegments*2*shape.fDz,
-                r1 = Math.sqrt(r0*r0+tsq*z1*z1),
-                r2 = Math.sqrt(r0*r0+tsq*z2*z2);
-
-            for (var seg=0; seg<radiusSegments; ++seg) {
-               creator.AddFace4(r1 * _cos[seg+d1], r1 * _sin[seg+d1], z1,
-                                r2 * _cos[seg+d1], r2 * _sin[seg+d1], z2,
-                                r2 * _cos[seg+d2], r2 * _sin[seg+d2], z2,
-                                r1 * _cos[seg+d2], r1 * _sin[seg+d2], z1);
-               creator.CalcNormal();
+            if (cnt > 0) {
+               /// only if some geom missing, submit job to the worker
+               this.submitToWorker(job);
+               this.drawing_log = "Worker build shapes";
+               this.drawing_stage = 6;
+               return 2;
             }
          }
+
+         this.drawing_stage = 7;
       }
 
-      // add caps
-      for(var layer=0; layer<2; ++layer) {
-         var z = (layer === 0) ? shape.fDz : -shape.fDz,
-             r1 = Math.sqrt(shape.fRmax*shape.fRmax + shape.fToutsq*z*z),
-             r2 = (shape.fRmin > 0) ? Math.sqrt(shape.fRmin*shape.fRmin + shape.fTinsq*z*z) : 0,
-             skip = (shape.fRmin > 0) ? 0 : 1,
-             d1 = 1 - layer, d2 = 1 - d1;
-          for (var seg=0; seg<radiusSegments; ++seg) {
-             creator.AddFace4(r1 * _cos[seg+d1], r1 * _sin[seg+d1], z,
-                              r2 * _cos[seg+d1], r2 * _sin[seg+d1], z,
-                              r2 * _cos[seg+d2], r2 * _sin[seg+d2], z,
-                              r1 * _cos[seg+d2], r1 * _sin[seg+d2], z, skip);
-             creator.SetNormal(0,0, (layer===0) ? 1 : -1)
-          }
-
+      if (this.drawing_stage === 6) {
+         // waiting shapes from the worker, worker should activate our code
+         return 2;
       }
 
-      return creator.Create();
-   }
+      if ((this.drawing_stage === 7) || (this.drawing_stage === 8)) {
 
-
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.createMatrix = function(matrix) {
-
-      if (!matrix) return null;
-
-      var translation = null, rotation = null, scale = null;
-
-      switch (matrix._typename) {
-         case 'TGeoTranslation': translation = matrix.fTranslation; break;
-         case 'TGeoRotation': rotation = matrix.fRotationMatrix; break;
-         case 'TGeoScale': scale = matrix.fScale; break;
-         case 'TGeoGenTrans':
-            scale = matrix.fScale; // no break, translation and rotation follows
-         case 'TGeoCombiTrans':
-            translation = matrix.fTranslation;
-            if (matrix.fRotation) rotation = matrix.fRotation.fRotationMatrix;
-            break;
-         case 'TGeoHMatrix':
-            translation = matrix.fTranslation;
-            rotation = matrix.fRotationMatrix;
-            scale = matrix.fScale;
-            break;
-         case 'TGeoIdentity':
-            break;
-         default:
-            console.warn('unsupported matrix ' + matrix._typename);
-      }
-
-      if (!translation && !rotation && !scale) return null;
-
-      var res = new THREE.Matrix4();
-
-      if (rotation)
-         res.set(rotation[0], rotation[1], rotation[2],  0,
-                 rotation[3], rotation[4], rotation[5],  0,
-                 rotation[6], rotation[7], rotation[8],  0,
-                           0,           0,           0,  1);
-
-      if (translation)
-         res.setPosition(new THREE.Vector3(translation[0], translation[1], translation[2]));
-
-      if (scale)
-         res.scale(new THREE.Vector3(scale[0], scale[1], scale[2]));
-
-      return res;
-   }
-
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.getNodeMatrix = function(kind, node) {
-      // returns transformation matrix for the node
-      // created after node visibility flag is checked and volume cut is performed
-
-      var matrix = null;
-
-      if (kind === 1) {
-         // special handling for EVE nodes
-
-         matrix = new THREE.Matrix4();
-
-         if (node.fTrans) {
-            matrix.set(node.fTrans[0],  node.fTrans[4],  node.fTrans[8],  0,
-                       node.fTrans[1],  node.fTrans[5],  node.fTrans[9],  0,
-                       node.fTrans[2],  node.fTrans[6],  node.fTrans[10], 0,
-                                    0,               0,               0,  1);
-            // second - set position with proper sign
-            matrix.setPosition({ x: node.fTrans[12], y: node.fTrans[13], z: node.fTrans[14] });
-         }
-      } else if (node.fMatrix) {
-         matrix = JSROOT.GEO.createMatrix(node.fMatrix);
-      } else if ((node._typename == "TGeoNodeOffset") && node.fFinder) {
-         var kPatternReflected = JSROOT.BIT(14);
-         if ((node.fFinder.fBits & kPatternReflected) !== 0)
-            JSROOT.GEO.warn('Unsupported reflected pattern ' + node.fFinder._typename);
-
-         // if (node.fFinder._typename === 'TGeoPatternCylR') { }
-         // if (node.fFinder._typename === 'TGeoPatternSphR') { }
-         // if (node.fFinder._typename === 'TGeoPatternSphTheta') { }
-         // if (node.fFinder._typename === 'TGeoPatternSphPhi') { }
-         // if (node.fFinder._typename === 'TGeoPatternHoneycomb') { }
-         switch(node.fFinder._typename) {
-           case 'TGeoPatternX':
-           case 'TGeoPatternY':
-           case 'TGeoPatternZ':
-           case 'TGeoPatternParaX':
-           case 'TGeoPatternParaY':
-           case 'TGeoPatternParaZ':
-              var _shift = node.fFinder.fStart + (node.fIndex + 0.5) * node.fFinder.fStep;
-
-              matrix = new THREE.Matrix4();
-
-              switch (node.fFinder._typename[node.fFinder._typename.length-1]) {
-                 case 'X': matrix.setPosition(new THREE.Vector3(_shift, 0, 0)); break;
-                 case 'Y': matrix.setPosition(new THREE.Vector3(0, _shift, 0)); break;
-                 case 'Z': matrix.setPosition(new THREE.Vector3(0, 0, _shift)); break;
-              }
-              break;
-
-           case 'TGeoPatternCylPhi':
-              var phi = (Math.PI/180)*(node.fFinder.fStart+(node.fIndex+0.5)*node.fFinder.fStep),
-                  _cos = Math.cos(phi), _sin = Math.sin(phi);
-
-              matrix = new THREE.Matrix4();
-
-              matrix.set(_cos, -_sin,  0,  0,
-                         _sin,  _cos,  0,  0,
-                            0,     0,  1,  0,
-                            0,     0,  0,  1);
-              break;
-
-           case 'TGeoPatternCylR':
-               // seems to be, require no transformation
-               matrix = new THREE.Matrix4();
-               break;
-
-           case 'TGeoPatternTrapZ':
-              var dz = node.fFinder.fStart + (node.fIndex+0.5)*node.fFinder.fStep;
-              matrix = new THREE.Matrix4();
-              matrix.setPosition(new THREE.Vector3(node.fFinder.fTxz*dz, node.fFinder.fTyz*dz, dz));
-              break;
-
-           default:
-              JSROOT.GEO.warn('Unsupported pattern type ' + node.fFinder._typename);
-              break;
-         }
-      }
-
-      return matrix;
-   }
-
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.createComposite = function ( shape, faces_limit ) {
-      /*
-      if ((faces_limit === -1) || (faces_limit === 0))  {
-         var cnt = JSROOT.GEO.CountNumShapes(shape);
-
-         if (cnt > JSROOT.GEO.CompLimit) {
-            JSROOT.GEO.warn("composite shape " + shape.fShapeId + " has " + cnt + " components, replace by most left");
-            var matrix = new THREE.Matrix4();
-            while (shape.fNode && shape.fNode.fLeft) {
-               var m1 = JSROOT.GEO.createMatrix(shape.fNode.fLeftMat);
-               if (m1) matrix.multiply(m1);
-               shape = shape.fNode.fLeft;
+         if (this.drawing_stage === 7) {
+            // building shapes
+            var res = this._clones.BuildShapes(this._build_shapes, this._current_face_limit, 500);
+            if (res.done) {
+               this.ctrl.info.num_shapes = this._build_shapes.length;
+               this.drawing_stage = 8;
+            } else {
+               this.ctrl.info.num_shapes = res.shapes;
+               this.drawing_log = "Creating: " + res.shapes + " / " + this._build_shapes.length + " shapes,  "  + res.faces + " faces";
+               if (res.notusedshapes < 30) return true;
             }
-            var res = JSROOT.GEO.createGeometry(shape, faces_limit);
-            if (res && (faces_limit===0)) res.applyMatrix(matrix);
-            return res;
-         }
-      }
-      */
-
-      if (faces_limit < 0)
-         return JSROOT.GEO.createGeometry(shape.fNode.fLeft, -10) +
-                JSROOT.GEO.createGeometry(shape.fNode.fRight, -10);
-
-      var geom1, geom2, bsp1, bsp2, return_bsp = false,
-          matrix1 = JSROOT.GEO.createMatrix(shape.fNode.fLeftMat),
-          matrix2 = JSROOT.GEO.createMatrix(shape.fNode.fRightMat);
-
-      // seems to be, IE has smaller stack for functions calls and ThreeCSG fails with larger shapes
-      if (faces_limit === 0) faces_limit = (JSROOT.browser && JSROOT.browser.isIE) ? 2000 : 4000;
-                        else return_bsp = true;
-
-      if (matrix1 && (matrix1.determinant() < -0.9))
-         JSROOT.GEO.warn('Axis reflection in left composite shape - not supported');
-
-      if (matrix2 && (matrix2.determinant() < -0.9))
-         JSROOT.GEO.warn('Axis reflections in right composite shape - not supported');
-
-      if (shape.fNode.fLeft._typename == "TGeoHalfSpace") {
-         geom1 = JSROOT.GEO.createHalfSpace(shape.fNode.fLeft);
-      } else {
-         geom1 = JSROOT.GEO.createGeometry(shape.fNode.fLeft, faces_limit);
-      }
-
-      if (!geom1) return null;
-
-      var n1 = JSROOT.GEO.numGeometryFaces(geom1), n2 = 0;
-      if (geom1._exceed_limit) n1 += faces_limit;
-
-      if (n1 < faces_limit) {
-
-         if (shape.fNode.fRight._typename == "TGeoHalfSpace") {
-            geom2 = JSROOT.GEO.createHalfSpace(shape.fNode.fRight, geom1);
-         } else {
-            geom2 = JSROOT.GEO.createGeometry(shape.fNode.fRight, faces_limit);
          }
 
-         n2 = JSROOT.GEO.numGeometryFaces(geom2);
-      }
+         // final stage, create all meshes
 
-      if ((n1 + n2 >= faces_limit) || !geom2) {
-         if (geom1.polygons) {
-            geom1 = ThreeBSP.CreateBufferGeometry(geom1.polygons);
-            n1 = JSROOT.GEO.numGeometryFaces(geom1);
-         }
-         if (matrix1) geom1.applyMatrix(matrix1);
-         // if (!geom1._exceed_limit) console.log('reach faces limit', faces_limit, 'got', n1, n2);
-         geom1._exceed_limit = true;
-         return geom1;
-      }
+         var tm0 = new Date().getTime(), ready = true,
+             toplevel = this.ctrl.project ? this._full_geom : this._toplevel;
 
-      bsp1 = new ThreeBSP.Geometry(geom1, matrix1, JSROOT.GEO.CompressComp ? 0 : undefined);
+         for (var n = 0; n < this._draw_nodes.length; ++n) {
+            var entry = this._draw_nodes[n];
+            if (entry.done) continue;
 
-      bsp2 = new ThreeBSP.Geometry(geom2, matrix2, bsp1.maxid);
-
-      // take over maxid from both geometries
-      bsp1.maxid = bsp2.maxid;
-
-      switch(shape.fNode._typename) {
-         case 'TGeoIntersection': bsp1.direct_intersect(bsp2);  break; // "*"
-         case 'TGeoUnion': bsp1.direct_union(bsp2); break;   // "+"
-         case 'TGeoSubtraction': bsp1.direct_subtract(bsp2); break; // "/"
-         default:
-            JSROOT.GEO.warn('unsupported bool operation ' + shape.fNode._typename + ', use first geom');
-      }
-
-      if (JSROOT.GEO.numGeometryFaces(bsp1) === 0) {
-         JSROOT.GEO.warn('Zero faces in comp shape'
-               + ' left: ' + shape.fNode.fLeft._typename +  ' ' + JSROOT.GEO.numGeometryFaces(geom1) + ' faces'
-               + ' right: ' + shape.fNode.fRight._typename + ' ' + JSROOT.GEO.numGeometryFaces(geom2) + ' faces'
-               + '  use first');
-         bsp1 = new ThreeBSP.Geometry(geom1, matrix1);
-      }
-
-      return return_bsp ? { polygons: bsp1.toPolygons() } : bsp1.toBufferGeometry();
-   }
-
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.projectGeometry = function(geom, matrix, projection, position, flippedMesh) {
-
-      if (!geom.boundingBox) geom.computeBoundingBox();
-
-      var box = geom.boundingBox.clone();
-
-      box.applyMatrix4(matrix);
-
-      if (!position) position = 0;
-
-      if (((box.min[projection]>=position) && (box.max[projection]>=position)) ||
-          ((box.min[projection]<=position) && (box.max[projection]<=position))) {
-         return null; // not interesting
-      }
-
-      var bsp1 = new ThreeBSP.Geometry(geom, matrix, 0, flippedMesh),
-          sizex = 2*Math.max(Math.abs(box.min.x), Math.abs(box.max.x)),
-          sizey = 2*Math.max(Math.abs(box.min.y), Math.abs(box.max.y)),
-          sizez = 2*Math.max(Math.abs(box.min.z), Math.abs(box.max.z)),
-          size = 10000;
-
-      switch (projection) {
-         case "x": size = Math.max(sizey,sizez); break;
-         case "y": size = Math.max(sizex,sizez); break;
-         case "z": size = Math.max(sizex,sizey); break;
-      }
-
-      var bsp2 = ThreeBSP.CreateNormal(projection, position, size);
-
-      bsp1.cut_from_plane(bsp2);
-
-      return bsp2.toBufferGeometry();
-   }
-
-   /** Creates geometry model for the provided shape
-    * @memberOf JSROOT.GEO
-    *
-    * If @par limit === 0 (or undefined) returns THREE.BufferGeometry
-    * If @par limit < 0 just returns estimated number of faces
-    * If @par limit > 0 return list of ThreeBSP polygons (used only for composite shapes)
-    * */
-   JSROOT.GEO.createGeometry = function( shape, limit ) {
-      if (limit === undefined) limit = 0;
-
-      try {
-         switch (shape._typename) {
-            case "TGeoBBox": return JSROOT.GEO.createCubeBuffer( shape, limit );
-            case "TGeoPara": return JSROOT.GEO.createParaBuffer( shape, limit );
-            case "TGeoTrd1":
-            case "TGeoTrd2": return JSROOT.GEO.createTrapezoidBuffer( shape, limit );
-            case "TGeoArb8":
-            case "TGeoTrap":
-            case "TGeoGtra": return JSROOT.GEO.createArb8Buffer( shape, limit );
-            case "TGeoSphere": return JSROOT.GEO.createSphereBuffer( shape , limit );
-            case "TGeoCone":
-            case "TGeoConeSeg":
-            case "TGeoTube":
-            case "TGeoTubeSeg":
-            case "TGeoCtub": return JSROOT.GEO.createTubeBuffer( shape, limit );
-            case "TGeoEltu": return JSROOT.GEO.createEltuBuffer( shape, limit );
-            case "TGeoTorus": return JSROOT.GEO.createTorusBuffer( shape, limit );
-            case "TGeoPcon":
-            case "TGeoPgon": return JSROOT.GEO.createPolygonBuffer( shape, limit );
-            case "TGeoXtru": return JSROOT.GEO.createXtruBuffer( shape, limit );
-            case "TGeoParaboloid": return JSROOT.GEO.createParaboloidBuffer( shape, limit );
-            case "TGeoHype": return JSROOT.GEO.createHypeBuffer( shape, limit );
-            case "TGeoCompositeShape": return JSROOT.GEO.createComposite( shape, limit );
-            case "TGeoShapeAssembly": break;
-            case "TGeoScaledShape": {
-               var res = JSROOT.GEO.createGeometry(shape.fShape, limit);
-               if (shape.fScale && (limit>=0) && (typeof res === 'object') && (typeof res.scale === 'function'))
-                  res.scale(shape.fScale.fScale[0],shape.fScale.fScale[1],shape.fScale.fScale[2]);
-               return res;
+            /// shape can be provided with entry itself
+            var shape = entry.server_shape || this._build_shapes[entry.shapeid];
+            if (!shape.ready) {
+               if (this.drawing_stage === 8) console.warn('shape marked as not ready when should');
+               ready = false;
+               continue;
             }
-            case "TGeoHalfSpace":
-               if (limit < 0) return 1; // half space if just plane used in composite
-               // no break here - warning should appear
-            default: JSROOT.GEO.warn('unsupported shape type ' + shape._typename);
+
+            entry.done = true;
+            shape.used = true; // indicate that shape was used in building
+
+            if (this.createEntryMesh(entry, shape, toplevel)) {
+               this.ctrl.info.num_meshes++;
+               this.ctrl.info.num_faces += shape.nfaces;
+            }
+
+            var tm1 = new Date().getTime();
+            if (tm1 - tm0 > 500) { ready = false; break; }
          }
-      } catch(e) {
-         var place = "";
-         if (e.stack !== undefined) {
-            place = e.stack.split("\n")[0];
-            if (place.indexOf(e.message) >= 0) place = e.stack.split("\n")[1];
-                                          else place = " at: " + place;
+
+         if (ready) {
+            if (this.ctrl.project) {
+               this.drawing_log = "Build projection";
+               this.drawing_stage = 10;
+               return true;
+            }
+
+            this.drawing_log = "Building done";
+            this.drawing_stage = 0;
+            return false;
          }
-         JSROOT.GEO.warn(shape._typename + " err: " + e.message + place);
+
+         if (this.drawing_stage > 7)
+            this.drawing_log = "Building meshes " + this.ctrl.info.num_meshes + " / " + this.ctrl.info.num_faces;
+         return true;
       }
 
-      return limit < 0 ? 0 : null;
-   }
+      if (this.drawing_stage === 9) {
+         // wait for main painter to be ready
 
-   /** Creates half-space geometry for given shape
-    * Just big-enough triangle to make BSP calculations
-    * @memberOf JSROOT.GEO */
+         if (!this._main_painter) {
+            console.warn('MAIN PAINTER DISAPPER');
+            this.drawing_stage = 0;
+            return false;
+         }
+         if (!this._main_painter._drawing_ready) return 1;
 
-   JSROOT.GEO.createHalfSpace = function(shape, geom) {
-      if (!shape || !shape.fN || !shape.fP) return null;
-
-      // shape.fP = [0,0,15]; shape.fN = [0,1,1];
-
-      var vertex = new THREE.Vector3(shape.fP[0], shape.fP[1], shape.fP[2]);
-
-      var normal = new THREE.Vector3(shape.fN[0], shape.fN[1], shape.fN[2]);
-      normal.normalize();
-
-      var sz = 1e10;
-      if (geom) {
-         // using real size of other geometry, we probably improve precision
-         var box = JSROOT.GEO.geomBoundingBox(geom);
-         if (box) sz = box.getSize(new THREE.Vector3()).length() * 1000;
+         this.drawing_stage = 10; // just do projection
       }
 
-      // console.log('normal', normal, 'vertex', vertex, 'size', sz);
-
-      var v1 = new THREE.Vector3(-sz, -sz/2, 0),
-          v2 = new THREE.Vector3(0, sz, 0),
-          v3 = new THREE.Vector3(sz, -sz/2, 0),
-          v4 = new THREE.Vector3(0, 0, -sz);
-
-      var geometry = new THREE.Geometry();
-
-      geometry.vertices.push(v1, v2, v3, v4);
-
-      geometry.faces.push( new THREE.Face3( 0, 2, 1 ) );
-      geometry.faces.push( new THREE.Face3( 0, 1, 3 ) );
-      geometry.faces.push( new THREE.Face3( 1, 2, 3 ) );
-      geometry.faces.push( new THREE.Face3( 2, 0, 3 ) );
-
-      geometry.lookAt(normal);
-      geometry.computeFaceNormals();
-
-      v1.add(vertex);
-      v2.add(vertex);
-      v3.add(vertex);
-      v4.add(vertex);
-
-      /*
-      // it suppose to be top corner of tetrahedron
-      var v0 = vertex.clone().addScaledVector(normal, sz);
-
-      // plane to verify our calculations
-      var plane = new THREE.Plane(normal);
-
-      // translate all vertices and plane
-      plane.translate(vertex);
-
-      console.log('Distance plane to fP', plane.distanceToPoint(vertex), "expect 0");
-      console.log('Distance plane to v0', plane.distanceToPoint(v0), "expect", sz);
-      console.log('Distance plane to v1', plane.distanceToPoint(v1), "expect 0");
-      console.log('Distance plane to v2', plane.distanceToPoint(v2), "expect 0");
-      console.log('Distance plane to v3', plane.distanceToPoint(v3), "expect 0");
-      console.log('Distance plane to v4', plane.distanceToPoint(v4), "expect", sz);
-      console.log('Distoance v0 to v4', v0.distanceTo(v4), "expect 0");
-      */
-
-      // return null;
-      return geometry;
-   }
-
-   /** Provides info about geo object, used for tooltip info */
-   JSROOT.GEO.provideInfo = function(obj) {
-      var info = [], shape = null;
-
-      if (obj.fVolume !== undefined) shape = obj.fVolume.fShape; else
-      if (obj.fShape !== undefined) shape = obj.fShape; else
-      if ((obj.fShapeBits !== undefined) && (obj.fShapeId !== undefined)) shape = obj;
-
-      if (!shape) {
-         info.push(obj._typename);
-         return info;
+      if (this.drawing_stage === 10) {
+         this.doProjection();
+         this.drawing_log = "Building done";
+         this.drawing_stage = 0;
+         return false;
       }
 
-      var sz = Math.max(shape.fDX, shape.fDY, shape.fDZ);
-      var useexp = (sz>1e7) || (sz<1e-7);
-
-      function conv(v) {
-         if (v===undefined) return "???";
-         if ((v==Math.round(v) && v<1e7)) return Math.round(v);
-         return useexp ? v.toExponential(4) : v.toPrecision(7);
-      }
-
-      info.push(shape._typename);
-
-      info.push("DX="+conv(shape.fDX) + " DY="+conv(shape.fDY) + " DZ="+conv(shape.fDZ));
-
-      switch (shape._typename) {
-         case "TGeoBBox": break;
-         case "TGeoPara": info.push("Alpha=" + shape.fAlpha + " Phi=" + shape.fPhi + " Theta=" + shape.fTheta); break;
-         case "TGeoTrd2": info.push("Dy1=" + conv(shape.fDy1) + " Dy2=" + conv(shape.fDy1));
-         case "TGeoTrd1": info.push("Dx1=" + conv(shape.fDx1) + " Dx2=" + conv(shape.fDx1)); break;
-         case "TGeoArb8": break;
-         case "TGeoTrap": break;
-         case "TGeoGtra": break;
-         case "TGeoSphere":
-            info.push("Rmin=" + conv(shape.fRmin) + " Rmax=" + conv(shape.fRmax));
-            info.push("Phi1=" + shape.fPhi1 + " Phi2=" + shape.fPhi2);
-            info.push("Theta1=" + shape.fTheta1 + " Theta2=" + shape.fTheta2);
-            break;
-         case "TGeoConeSeg":
-            info.push("Phi1=" + shape.fPhi1 + " Phi2=" + shape.fPhi2);
-         case "TGeoCone":
-            info.push("Rmin1=" + conv(shape.fRmin1) + " Rmax1=" + conv(shape.fRmax1));
-            info.push("Rmin2=" + conv(shape.fRmin2) + " Rmax2=" + conv(shape.fRmax2));
-            break;
-         case "TGeoCtub":
-         case "TGeoTubeSeg":
-            info.push("Phi1=" + shape.fPhi1 + " Phi2=" + shape.fPhi2);
-         case "TGeoEltu":
-         case "TGeoTube":
-            info.push("Rmin=" + conv(shape.fRmin) + " Rmax=" + conv(shape.fRmax));
-            break;
-         case "TGeoTorus":
-            info.push("Rmin=" + conv(shape.fRmin) + " Rmax=" + conv(shape.fRmax));
-            info.push("Phi1=" + shape.fPhi1 + " Dphi=" + shape.fDphi);
-            break;
-         case "TGeoPcon":
-         case "TGeoPgon": break;
-         case "TGeoXtru": break;
-         case "TGeoParaboloid":
-            info.push("Rlo=" + conv(shape.fRlo) + " Rhi=" + conv(shape.fRhi));
-            info.push("A=" + conv(shape.fA) + " B=" + conv(shape.fB));
-            break;
-         case "TGeoHype":
-            info.push("Rmin=" + conv(shape.fRmin) + " Rmax=" + conv(shape.fRmax));
-            info.push("StIn=" + conv(shape.fStIn) + " StOut=" + conv(shape.fStOut));
-            break;
-         case "TGeoCompositeShape": break;
-         case "TGeoShapeAssembly": break;
-         case "TGeoScaledShape":
-            info = JSROOT.GEO.provideInfo(shape.fShape);
-            if (shape.fScale)
-               info.unshift('Scale X=' + shape.fScale.fScale[0] + " Y=" + shape.fScale.fScale[1] + " Z=" + shape.fScale.fScale[2]);
-            break;
-      }
-
-      return info;
-   }
-
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.CreateProjectionMatrix = function(camera) {
-      var cameraProjectionMatrix = new THREE.Matrix4();
-
-      camera.updateMatrixWorld();
-      camera.matrixWorldInverse.getInverse( camera.matrixWorld );
-      cameraProjectionMatrix.multiplyMatrices( camera.projectionMatrix, camera.matrixWorldInverse);
-
-      return cameraProjectionMatrix;
-   }
-
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.CreateFrustum = function(source) {
-      if (!source) return null;
-
-      if (source instanceof THREE.PerspectiveCamera)
-         source = JSROOT.GEO.CreateProjectionMatrix(source);
-
-      var frustum = new THREE.Frustum();
-      frustum.setFromMatrix(source);
-
-      frustum.corners = new Float32Array([
-          1,  1,  1,
-          1,  1, -1,
-          1, -1,  1,
-          1, -1, -1,
-         -1,  1,  1,
-         -1,  1, -1,
-         -1, -1,  1,
-         -1, -1, -1,
-          0,  0,  0 // also check center of the shape
-      ]);
-
-      frustum.test = new THREE.Vector3(0,0,0);
-
-      frustum.CheckShape = function(matrix, shape) {
-         var pnt = this.test, len = this.corners.length, corners = this.corners, i;
-
-         for (i = 0; i < len; i+=3) {
-            pnt.x = corners[i] * shape.fDX;
-            pnt.y = corners[i+1] * shape.fDY;
-            pnt.z = corners[i+2] * shape.fDZ;
-            if (this.containsPoint(pnt.applyMatrix4(matrix))) return true;
-        }
-
-        return false;
-      }
-
-      frustum.CheckBox = function(box) {
-         var pnt = this.test, cnt = 0;
-         pnt.set(box.min.x, box.min.y, box.min.z);
-         if (this.containsPoint(pnt)) cnt++;
-         pnt.set(box.min.x, box.min.y, box.max.z);
-         if (this.containsPoint(pnt)) cnt++;
-         pnt.set(box.min.x, box.max.y, box.min.z);
-         if (this.containsPoint(pnt)) cnt++;
-         pnt.set(box.min.x, box.max.y, box.max.z);
-         if (this.containsPoint(pnt)) cnt++;
-         pnt.set(box.max.x, box.max.y, box.max.z);
-         if (this.containsPoint(pnt)) cnt++;
-         pnt.set(box.max.x, box.min.y, box.max.z);
-         if (this.containsPoint(pnt)) cnt++;
-         pnt.set(box.max.x, box.max.y, box.min.z);
-         if (this.containsPoint(pnt)) cnt++;
-         pnt.set(box.max.x, box.max.y, box.max.z);
-         if (this.containsPoint(pnt)) cnt++;
-         return cnt>5; // only if 6 edges and more are seen, we think that box is fully visible
-      }
-
-      return frustum;
-   }
-
-   /** @memberOf JSROOT.GEO */
-   JSROOT.GEO.VisibleByCamera = function(camera, matrix, shape) {
-      var frustum = new THREE.Frustum();
-      var cameraProjectionMatrix = new THREE.Matrix4();
-
-      camera.updateMatrixWorld();
-      camera.matrixWorldInverse.getInverse( camera.matrixWorld );
-      cameraProjectionMatrix.multiplyMatrices( camera.projectionMatrix, camera.matrixWorldInverse);
-      frustum.setFromMatrix( cameraProjectionMatrix );
-
-      var corners = [
-         new THREE.Vector3(  shape.fDX/2.0,  shape.fDY/2.0,   shape.fDZ/2.0 ),
-         new THREE.Vector3(  shape.fDX/2.0,  shape.fDY/2.0,  -shape.fDZ/2.0 ),
-         new THREE.Vector3(  shape.fDX/2.0, -shape.fDY/2.0,   shape.fDZ/2.0 ),
-         new THREE.Vector3(  shape.fDX/2.0, -shape.fDY/2.0,  -shape.fDZ/2.0 ),
-         new THREE.Vector3( -shape.fDX/2.0,  shape.fDY/2.0,   shape.fDZ/2.0 ),
-         new THREE.Vector3( -shape.fDX/2.0,  shape.fDY/2.0,  -shape.fDZ/2.0 ),
-         new THREE.Vector3( -shape.fDX/2.0, -shape.fDY/2.0,   shape.fDZ/2.0 ),
-         new THREE.Vector3( -shape.fDX/2.0, -shape.fDY/2.0,  -shape.fDZ/2.0 )
-               ];
-      for (var i = 0; i < corners.length; i++) {
-         if (frustum.containsPoint(corners[i].applyMatrix4(matrix))) return true;
-      }
+      console.error('never come here stage = ' + this.drawing_stage);
 
       return false;
    }
 
-   /** Returns number of faces for provided geometry
-    * @param geom  - can be THREE.Geometry, THREE.BufferGeometry, ThreeBSP.Geometry or interim array of polygons
-    * @memberOf JSROOT.GEO */
-   JSROOT.GEO.numGeometryFaces = function(geom) {
-      if (!geom) return 0;
+   /** Insert appropriate mesh for given entry
+    * @private*/
+   TGeoPainter.prototype.createEntryMesh = function(entry, shape, toplevel) {
 
-      if (geom instanceof ThreeBSP.Geometry)
-         return geom.tree.numPolygons();
-
-      if (geom.type == 'BufferGeometry') {
-         var attr = geom.getAttribute('position');
-         return attr && attr.count ? Math.round(attr.count / 3) : 0;
+      if (!shape.geom || (shape.nfaces === 0)) {
+         // node is visible, but shape does not created
+         this._clones.CreateObject3D(entry.stack, toplevel, 'delete_mesh');
+         return false;
       }
 
-      // special array of polygons
-      if (geom.polygons)
-         return geom.polygons.length;
-
-      return geom.faces.length;
-   }
-
-   /** Returns number of faces for provided geometry
-    * @param geom  - can be THREE.Geometry, THREE.BufferGeometry, ThreeBSP.Geometry or interim array of polygons
-    * @memberOf JSROOT.GEO */
-   JSROOT.GEO.numGeometryVertices = function(geom) {
-      if (!geom) return 0;
-
-      if (geom instanceof ThreeBSP.Geometry)
-         return geom.tree.numPolygons() * 3;
-
-      if (geom.type == 'BufferGeometry') {
-         var attr = geom.getAttribute('position');
-         return attr ? attr.count : 0;
+      // workaround for the TGeoOverlap, where two branches should get predefined color
+      if (this._splitColors && entry.stack) {
+         if (entry.stack[0]===0) entry.custom_color = "green"; else
+         if (entry.stack[0]===1) entry.custom_color = "blue";
       }
 
-      if (geom.polygons)
-         return geom.polygons.length * 4;
+      var prop = this._clones.getDrawEntryProperties(entry);
 
-      return geom.vertices.length;
-   }
+      var obj3d = this._clones.CreateObject3D(entry.stack, toplevel, this.ctrl);
 
-   /** Returns bounding box
-    * @memberOf JSROOT.GEO */
-   JSROOT.GEO.geomBoundingBox = function(geom) {
-      if (!geom) return null;
+      prop.material.wireframe = this.ctrl.wireframe;
 
-      var polygons = null;
+      prop.material.side = this.ctrl.bothSides ? THREE.DoubleSide : THREE.FrontSide;
 
-      if (geom instanceof ThreeBSP.Geometry)
-         polygons = geom.tree.collectPolygons([]);
-      else if (geom.polygons)
-         polygons = geom.polygons;
+      var mesh;
 
-      if (polygons!==null) {
-         var box = new THREE.Box3();
-         for (var n=0;n<polygons.length;++n) {
-            var polygon = polygons[n], nvert = polygon.vertices.length;
-            for (var k=0;k<nvert;++k)
-               box.expandByPoint(polygon.vertices[k]);
-         }
-         return box;
+      if (obj3d.matrixWorld.determinant() > -0.9) {
+         mesh = new THREE.Mesh( shape.geom, prop.material );
+      } else {
+         mesh = JSROOT.GEO.createFlippedMesh(obj3d, shape, prop.material);
       }
 
-      if (!geom.boundingBox) geom.computeBoundingBox();
+      obj3d.add(mesh);
 
-      return geom.boundingBox.clone();
-   }
+      // keep full stack of nodes
+      mesh.stack = entry.stack;
+      mesh.renderOrder = this._clones.maxdepth - entry.stack.length; // order of transparency handling
 
-   /** Compares two stacks. Returns length where stacks are the same
-    * @memberOf JSROOT.GEO
-    * @private */
-   JSROOT.GEO.CompareStacks = function(stack1, stack2) {
-      if (!stack1 || !stack2) return 0;
-      if (stack1 === stack2) return stack1.length;
-      var len = Math.min(stack1.length, stack2.length);
-      for (var k=0;k<len;++k)
-         if (stack1[k] !== stack2[k]) return k;
-      return len;
-   }
+      // keep hierarchy level
+      mesh.$jsroot_order = obj3d.$jsroot_depth;
 
-   /** Checks if two stack arrays are identical
-    * @memberOf JSROOT.GEO
-    * @private */
-   JSROOT.GEO.IsSameStack = function(stack1, stack2) {
-      if (!stack1 || !stack2) return false;
-      if (stack1 === stack2) return true;
-      if (stack1.length !== stack2.length) return false;
-      for (var k=0;k<stack1.length;++k)
-         if (stack1[k] !== stack2[k]) return false;
+      // set initial render order, when camera moves, one must refine it
+      //mesh.$jsroot_order = mesh.renderOrder =
+      //   this._clones.maxdepth - ((obj3d.$jsroot_depth !== undefined) ? obj3d.$jsroot_depth : entry.stack.length);
+
+      if (this.ctrl._debug || this.ctrl._full) {
+         var wfg = new THREE.WireframeGeometry( mesh.geometry ),
+             wfm = new THREE.LineBasicMaterial( { color: prop.fillcolor, linewidth: prop.linewidth || 1 } ),
+             helper = new THREE.LineSegments(wfg, wfm);
+         obj3d.add(helper);
+      }
+
+      if (this.ctrl._bound || this.ctrl._full) {
+         var boxHelper = new THREE.BoxHelper( mesh );
+         obj3d.add( boxHelper );
+      }
+
       return true;
    }
 
-
-   // ====================================================================
-
-   // class for working with cloned nodes
-
-   JSROOT.GEO.ClonedNodes = function(obj, clones) {
-      this.toplevel = true; // indicate if object creates top-level structure with Nodes and Volumes folder
-      this.name_prefix = ""; // name prefix used for nodes names
-      this.maxdepth = 1;  // maximal hierarchy depth, required for transparency
-      this.vislevel = 4;  // maximal depth of nodes visibility aka gGeoManager->SetVisLevel, same default
-      this.maxnodes = 10000; // maximal number of visisble nodes aka gGeoManager->fMaxVisNodes
-
-      if (obj) {
-         if (obj.$geoh) this.toplevel = false;
-         this.CreateClones(obj);
-      } else if (clones) {
-         this.nodes = clones;
-      }
-   }
-
-   /** Set maximal depth for nodes visibility */
-   JSROOT.GEO.ClonedNodes.prototype.SetVisLevel = function(lvl) {
-      this.vislevel = lvl && !isNaN(lvl) ? lvl : 4;
-   }
-
-   /** Returns maximal depth for nodes visibility */
-   JSROOT.GEO.ClonedNodes.prototype.GetVisLevel = function() {
-      return this.vislevel;
-   }
-
-   /** Set maximal depth for nodes visibility */
-   JSROOT.GEO.ClonedNodes.prototype.SetMaxVisNodes = function(v) {
-      this.maxnodes = !isNaN(v) ? v : 10000;
-   }
-
-   JSROOT.GEO.ClonedNodes.prototype.GetMaxVisNodes = function() {
-      return this.maxnodes;
-   }
-
-   /** Insert node into existing array */
-   JSROOT.GEO.ClonedNodes.prototype.updateNode = function(node) {
-      if (node && !isNaN(node.id) && (node.id < this.nodes.length))
-         this.nodes[node.id] = node;
-   }
-
-   /** Returns TGeoShape for element with given indx */
-   JSROOT.GEO.ClonedNodes.prototype.GetNodeShape = function(indx) {
-      if (!this.origin || !this.nodes) return null;
-      var obj = this.origin[indx], clone = this.nodes[indx];
-      if (!obj || !clone) return null;
-      if (clone.kind === 0) {
-         if (obj.fVolume) return obj.fVolume.fShape;
-      } else {
-         return obj.fShape;
-      }
-      return null;
-   }
-
-   JSROOT.GEO.ClonedNodes.prototype.Cleanup = function(drawnodes, drawshapes) {
-      // function to cleanup as much as possible structures
-      // drawnodes and drawshapes are arrays created during building of geometry
-
-      if (drawnodes) {
-         for (var n=0;n<drawnodes.length;++n) {
-            delete drawnodes[n].stack;
-            drawnodes[n] = undefined;
-         }
-      }
-
-      if (drawshapes) {
-         for (var n=0;n<drawshapes.length;++n) {
-            delete drawshapes[n].geom;
-            drawshapes[n] = undefined;
-         }
-      }
-
-      if (this.nodes) {
-         for (var n=0;n<this.nodes.length;++n) {
-            if (this.nodes[n])
-               delete this.nodes[n].chlds;
-         }
-      }
-
-      delete this.nodes;
-      delete this.origin;
-
-      delete this.sortmap;
-
-   }
-
-   /** Create complete description for provided Geo object */
-   JSROOT.GEO.ClonedNodes.prototype.CreateClones = function(obj, sublevel, kind) {
-       if (!sublevel) {
-
-          if (obj && obj._typename == "$$Shape$$")
-             return this.CreateClonesForShape(obj);
-
-          this.origin = [];
-          sublevel = 1;
-          kind = JSROOT.GEO.NodeKind(obj);
-       }
-
-       if ((kind < 0) || !obj || ('_refid' in obj)) return;
-
-       obj._refid = this.origin.length;
-       this.origin.push(obj);
-       if (sublevel>this.maxdepth) this.maxdepth = sublevel;
-
-       var chlds = null;
-       if (kind===0)
-          chlds = (obj.fVolume && obj.fVolume.fNodes) ? obj.fVolume.fNodes.arr : null;
-       else
-          chlds = obj.fElements ? obj.fElements.arr : null;
-
-       if (chlds !== null) {
-          JSROOT.GEO.CheckDuplicates(obj, chlds);
-          for (var i = 0; i < chlds.length; ++i)
-             this.CreateClones(chlds[i], sublevel+1, kind);
-       }
-
-       if (sublevel > 1) return;
-
-       this.nodes = [];
-
-       var sortarr = [];
-
-       // first create nodes objects
-       for (var n=0; n<this.origin.length; ++n) {
-          var obj = this.origin[n];
-          var node = { id: n, kind: kind, vol: 0, nfaces: 0 };
-          this.nodes.push(node);
-          sortarr.push(node); // array use to produce sortmap
-       }
-
-       // than fill children lists
-       for (var n=0;n<this.origin.length;++n) {
-          var obj = this.origin[n], clone = this.nodes[n];
-
-          var chlds = null, shape = null;
-
-          if (kind===1) {
-             shape = obj.fShape;
-             if (obj.fElements) chlds = obj.fElements.arr;
-          } else if (obj.fVolume) {
-             shape = obj.fVolume.fShape;
-             if (obj.fVolume.fNodes) chlds = obj.fVolume.fNodes.arr;
-          }
-
-          var matrix = JSROOT.GEO.getNodeMatrix(kind, obj);
-          if (matrix) {
-             clone.matrix = matrix.elements; // take only matrix elements, matrix will be constructed in worker
-             if (clone.matrix[0] === 1) {
-                var issimple = true;
-                for (var k=1;(k<clone.matrix.length) && issimple;++k)
-                   issimple = (clone.matrix[k] === ((k===5) || (k===10) || (k===15) ? 1 : 0));
-                if (issimple) delete clone.matrix;
-             }
-          }
-          if (shape) {
-             clone.fDX = shape.fDX;
-             clone.fDY = shape.fDY;
-             clone.fDZ = shape.fDZ;
-             clone.vol = shape.fDX*shape.fDY*shape.fDZ;
-             if (shape.$nfaces === undefined)
-                shape.$nfaces = JSROOT.GEO.createGeometry(shape, -1);
-             clone.nfaces = shape.$nfaces;
-             if (clone.nfaces <= 0) clone.vol = 0;
-          }
-
-          if (!chlds) continue;
-
-          // in cloned object children is only list of ids
-          clone.chlds = new Array(chlds.length);
-          for (var k=0;k<chlds.length;++k)
-             clone.chlds[k] = chlds[k]._refid;
-       }
-
-       // remove _refid identifiers from original objects
-       for (var n=0;n<this.origin.length;++n)
-          delete this.origin[n]._refid;
-
-       // do sorting once
-       sortarr.sort(function(a,b) { return b.vol - a.vol; });
-
-       // remember sort map and also sortid
-       this.sortmap = new Array(this.nodes.length);
-       for (var n=0;n<this.nodes.length;++n) {
-          this.sortmap[n] = sortarr[n].id;
-          sortarr[n].sortid = n;
-       }
-   }
-
-   /** Create elementary item with single already existing shape,
-    * used by details view of geometry shape */
-   JSROOT.GEO.ClonedNodes.prototype.CreateClonesForShape = function(obj) {
-      this.origin = [];
-
-      // indicate that just plain shape is used
-      this.plain_shape = obj;
-
-      var node = {
-            id: 0, sortid: 0, kind: 2,
-            name: "Shape",
-            nfaces: obj.nfaces,
-            fDX: 1, fDY: 1, fDZ: 1, vol: 1,
-            vis: true
-         };
-
-      this.nodes = [ node ];
-   }
-
-   /** Count all visisble nodes */
-   JSROOT.GEO.ClonedNodes.prototype.CountVisibles = function() {
-      var cnt = 0;
-      if (this.nodes)
-         for (var k=0;k<this.nodes.length;++k)
-            if (this.nodes[k].vis)
-               cnt++;
-      return cnt;
-   }
-
-   /** Mark visisble nodes. Set only basic flags, actual visibility depends from hierarchy  */
-   JSROOT.GEO.ClonedNodes.prototype.MarkVisibles = function(on_screen, copy_bits, hide_top_volume) {
-      if (this.plain_shape) return 1;
-      if (!this.origin || !this.nodes) return 0;
-
-      var res = 0;
-
-      for (var n=0;n<this.nodes.length;++n) {
-         var clone = this.nodes[n],
-             obj = this.origin[n];
-
-         clone.vis = 0; // 1 - only with last level
-         delete clone.nochlds;
-
-         if (clone.kind === 0) {
-            if (obj.fVolume) {
-               if (on_screen) {
-                  // on screen bits used always, childs always checked
-                  clone.vis = JSROOT.GEO.TestBit(obj.fVolume, JSROOT.GEO.BITS.kVisOnScreen) ? 99 : 0;
-
-                  if ((n==0) && clone.vis && hide_top_volume) clone.vis = 0;
-
-                  if (copy_bits) {
-                     JSROOT.GEO.SetBit(obj.fVolume, JSROOT.GEO.BITS.kVisNone, false);
-                     JSROOT.GEO.SetBit(obj.fVolume, JSROOT.GEO.BITS.kVisThis, (clone.vis > 0));
-                     JSROOT.GEO.SetBit(obj.fVolume, JSROOT.GEO.BITS.kVisDaughters, true);
-                  }
-               } else {
-                  clone.vis = !JSROOT.GEO.TestBit(obj.fVolume, JSROOT.GEO.BITS.kVisNone) &&
-                               JSROOT.GEO.TestBit(obj.fVolume, JSROOT.GEO.BITS.kVisThis) ? 99 : 0;
-
-                  if (!JSROOT.GEO.TestBit(obj, JSROOT.GEO.BITS.kVisDaughters) ||
-                      !JSROOT.GEO.TestBit(obj.fVolume, JSROOT.GEO.BITS.kVisDaughters)) clone.nochlds = true;
-
-                  // node with childs only shown in case if it is last level in hierarchy
-                  if ((clone.vis > 0) && clone.chlds && !clone.nochlds) clone.vis = 1;
-
-                  // special handling for top node
-                  if (n==0) {
-                     if (hide_top_volume) clone.vis = 0;
-                     delete clone.nochlds;
-                  }
-               }
-            }
-         } else {
-            clone.vis = obj.fRnrSelf ? 99 : 0;
-
-            // when the only node is selected, draw it
-            if ((n===0) && (this.nodes.length===1)) clone.vis = 99;
-
-            this.vislevel = 9999; // automatically take all volumes
-         }
-
-         // shape with zero volume or without faces will not be observed
-         if ((clone.vol <= 0) || (clone.nfaces <= 0)) clone.vis = 0;
-
-         if (clone.vis) res++;
-      }
-
-      return res;
-   }
-
-   /** After visibility flags is set, produce idshift for all nodes as it would be maximum level @private */
-   JSROOT.GEO.ClonedNodes.prototype.ProduceIdShits = function() {
-      for (var k=0;k<this.nodes.length;++k)
-         this.nodes[k].idshift = -1;
-
-      function scan_func(nodes, node) {
-         if (node.idshift < 0) {
-            node.idshift = 0;
-            if (node.chlds)
-               for(var k = 0; k<node.chlds.length; ++k)
-                  node.idshift += scan_func(nodes, nodes[node.chlds[k]]);
-         }
-
-         return node.idshift + 1;
-      }
-
-      scan_func(this.nodes, this.nodes[0]);
-   }
-
-   /** Extract only visibility flags, used to transfer them to the worker @private */
-   JSROOT.GEO.ClonedNodes.prototype.GetVisibleFlags = function() {
-      var res = new Array(this.nodes.length);
-      for (var n=0;n<this.nodes.length;++n)
-         res[n] = { vis: this.nodes[n].vis, nochlds: this.nodes[n].nochlds };
-      return res;
-   }
-
-   /** Assign only visibility flags, extracted with GetVisibleFlags @private */
-   JSROOT.GEO.ClonedNodes.prototype.SetVisibleFlags = function(flags) {
-      if (!this.nodes || !flags || !flags.length != this.nodes.length)
-         return 0;
-
-      var res = 0;
-      for (var n=0;n<this.nodes.length;++n) {
-         var clone = this.nodes[n];
-
-         clone.vis = flags[n].vis;
-         clone.nochlds = flags[n].nochlds;
-         if (clone.vis) res++;
-      }
-
-      return res;
-   }
-
-   /** Scan visible nodes in hierarchy, starting from nodeid
-     * Each entry in hierarchy get its unique id, which is not changed with visibility flags
-     * @private */
-   JSROOT.GEO.ClonedNodes.prototype.ScanVisible = function(arg, vislvl) {
-
-      if (!this.nodes) return 0;
-
-      if (vislvl === undefined) {
-         if (!arg) arg = {};
-
-         vislvl = arg.vislvl || this.vislevel || 4; // default 3 in ROOT
-         if (vislvl > 88) vislvl = 88;
-
-         arg.stack = new Array(100); // current stack
-         arg.nodeid = 0;
-         arg.counter = 0; // sequence ID of the node, used to identify it later
-         arg.last = 0;
-         arg.CopyStack = function(factor) {
-            var entry = { nodeid: this.nodeid, seqid: this.counter, stack: new Array(this.last) };
-            if (factor) entry.factor = factor; // factor used to indicate importance of entry, will be build as first
-            for (var n=0;n<this.last;++n) entry.stack[n] = this.stack[n+1]; // copy stack
-            return entry;
-         }
-
-         if (arg.domatrix) {
-            arg.matrices = [];
-            arg.mpool = [ new THREE.Matrix4() ]; // pool of Matrix objects to avoid permanent creation
-            arg.getmatrix = function() { return this.matrices[this.last]; }
-         }
-      }
-
-      var res = 0, node = this.nodes[arg.nodeid];
-
-      if (arg.domatrix) {
-         if (!arg.mpool[arg.last+1])
-            arg.mpool[arg.last+1] = new THREE.Matrix4();
-
-         var prnt = (arg.last > 0) ? arg.matrices[arg.last-1] : new THREE.Matrix4();
-         if (node.matrix) {
-            arg.matrices[arg.last] = arg.mpool[arg.last].fromArray(prnt.elements);
-            arg.matrices[arg.last].multiply(arg.mpool[arg.last+1].fromArray(node.matrix));
-         } else {
-            arg.matrices[arg.last] = prnt;
-         }
-      }
-
-      if (node.nochlds) vislvl = 0;
-
-      if (node.vis > vislvl) {
-         if (!arg.func || arg.func(node)) res++;
-      }
-
-      arg.counter++;
-
-      if ((vislvl > 0) && node.chlds) {
-         arg.last++;
-         for (var i = 0; i < node.chlds.length; ++i) {
-            arg.nodeid = node.chlds[i];
-            arg.stack[arg.last] = i; // in the stack one store index of child, it is path in the hierarchy
-            res += this.ScanVisible(arg, vislvl-1);
-         }
-         arg.last--;
-      } else {
-         arg.counter += (node.idshift || 0);
-      }
-
-      if (arg.last === 0) {
-         delete arg.last;
-         delete arg.stack;
-         delete arg.CopyStack;
-         delete arg.counter;
-         delete arg.matrices;
-         delete arg.mpool;
-         delete arg.getmatrix;
-      }
-
-      return res;
-   }
-
-   /** @brief Return node name with given id.
-    * @desc Either original object or description is used
+   /** function used by geometry viewer to show more nodes
+    * These nodes excluded from selection logic and always inserted into the model
+    * Shape already should be created and assigned to the node
     * @private */
-   JSROOT.GEO.ClonedNodes.prototype.GetNodeName = function(nodeid) {
-      if (this.origin) {
-         var obj = this.origin[nodeid];
-         return obj ? JSROOT.GEO.ObjectName(obj) : "";
-      }
-      var node = this.nodes[nodeid];
-      return node ? node.name : "";
-   }
-
-   /** @brief Returns description for provide stack
-    * @private */
-   JSROOT.GEO.ClonedNodes.prototype.ResolveStack = function(stack, withmatrix) {
-
-      var res = { id: 0, obj: null, node: this.nodes[0], name: this.name_prefix };
-
-      // if (!this.toplevel || (this.nodes.length === 1) || (res.node.kind === 1)) res.name = "";
-
-      if (withmatrix) {
-         res.matrix = new THREE.Matrix4();
-         if (res.node.matrix) res.matrix.fromArray(res.node.matrix);
+   TGeoPainter.prototype.appendMoreNodes = function(nodes, from_drawing) {
+      if (this.drawing_stage && !from_drawing) {
+         this._provided_more_nodes = nodes;
+         return;
       }
 
-      if (this.origin)
-         res.obj = this.origin[0];
-
-      //if (!res.name)
-      //   res.name = this.GetNodeName(0);
-
-      if (stack)
-         for(var lvl=0;lvl<stack.length;++lvl) {
-            res.id = res.node.chlds[stack[lvl]];
-            res.node = this.nodes[res.id];
-
-            if (this.origin)
-               res.obj = this.origin[res.id];
-
-            var subname = this.GetNodeName(res.id);
-            if (subname) {
-               if (res.name) res.name+="/";
-               res.name += subname;
-            }
-
-            if (withmatrix && res.node.matrix)
-               res.matrix.multiply(new THREE.Matrix4().fromArray(res.node.matrix));
+      // delete old nodes
+      if (this._more_nodes)
+         for (var n=0;n<this._more_nodes.length;++n) {
+            var entry = this._more_nodes[n];
+            var obj3d = this._clones.CreateObject3D(entry.stack, this._toplevel, 'delete_mesh');
+            JSROOT.Painter.DisposeThreejsObject(obj3d);
+            JSROOT.GEO.cleanupShape(entry.server_shape);
+            delete entry.server_shape;
          }
 
-      return res;
+      delete this._more_nodes;
+
+      if (!nodes) return;
+
+      var real_nodes = [];
+
+      for (var k=0;k<nodes.length;++k) {
+         var entry = nodes[k];
+         var shape = entry.server_shape;
+         if (!shape || !shape.ready) continue;
+
+         entry.done = true;
+         shape.used = true; // indicate that shape was used in building
+
+         if (this.createEntryMesh(entry, shape, this._toplevel))
+            real_nodes.push(entry);
+      }
+
+      // remember additional nodes only if they include shape - otherwise one can ignore them
+      if (real_nodes) this._more_nodes = real_nodes;
+
+      if (!from_drawing) this.Render3D();
    }
 
-   /** Create stack array based on nodes ids array.
-    * Ids list should correspond to existing nodes hierarchy */
-   JSROOT.GEO.ClonedNodes.prototype.MakeStackByIds = function(ids) {
-      if (!ids) return null;
+   /** Returns hierarchy of 3D objects used to produce projection.
+    * Typically external master painter is used, but also internal data can be used
+    * @private */
 
-      if (ids[0] !== 0) {
-         console.error('wrong ids - first should be 0');
+   TGeoPainter.prototype.getProjectionSource = function() {
+      if (this._clones_owner)
+         return this._full_geom;
+      if (!this._main_painter) {
+         console.warn('MAIN PAINTER DISAPPER');
          return null;
       }
-
-      var node = this.nodes[0], stack = [];
-
-      for (var k=1;k<ids.length;++k) {
-         var nodeid = ids[k];
-         if (!node) return null;
-         var chindx = node.chlds.indexOf(nodeid);
-         if (chindx < 0) {
-            console.error('wrong nodes ids ' + ids[k] + ' is not child of ' + ids[k-1]);
-            return null;
-         }
-
-         stack.push(chindx);
-         node = this.nodes[nodeid];
-      }
-
-      return stack;
-   }
-
-   /** Retuns ids array which correspond to the stack */
-   JSROOT.GEO.ClonedNodes.prototype.MakeIdsByStack = function(stack) {
-      if (!stack) return null;
-      var node = this.nodes[0], ids = [0];
-      for (var k=0;k<stack.length;++k) {
-         var id = node.chlds[stack[k]];
-         ids.push(id);
-         node = this.nodes[id];
-      }
-      return ids;
-   }
-
-   /** Returns true if stack includes at any place provided nodeid */
-   JSROOT.GEO.ClonedNodes.prototype.IsNodeInStack = function(nodeid, stack) {
-
-      if (!nodeid) return true;
-
-      var node = this.nodes[0], id = 0;
-
-      for(var lvl = 0; lvl < stack.length; ++lvl) {
-         id = node.chlds[stack[lvl]];
-         if (id == nodeid) return true;
-         node = this.nodes[id];
-      }
-
-      return false;
-   }
-
-   /** find stack by name which include names of all parents */
-   JSROOT.GEO.ClonedNodes.prototype.FindStackByName = function(fullname) {
-
-      var names = fullname.split('/'), currid = 0, stack = [];
-
-      if (this.GetNodeName(currid) !== names[0]) return null;
-
-      for (var n=1;n<names.length;++n) {
-         var node = this.nodes[currid];
-         if (!node.chlds) return null;
-
-         for (var k=0;k<node.chlds.length;++k) {
-            var chldid = node.chlds[k];
-            if (this.GetNodeName(chldid) === names[n]) { stack.push(k); currid = chldid; break; }
-         }
-
-         // no new entry - not found stack
-         if (stack.length === n - 1) return null;
-      }
-
-      return stack;
-   }
-
-   /** @brief Set usage of default ROOT colors */
-   JSROOT.GEO.ClonedNodes.prototype.SetDefaultColors = function(on) {
-      this.use_dflt_colors = on;
-      if (this.use_dflt_colors && !this.dflt_table) {
-
-         var dflt = { kWhite:0,  kBlack:1, kGray:920,
-               kRed:632, kGreen:416, kBlue:600, kYellow:400, kMagenta:616, kCyan:432,
-               kOrange:800, kSpring:820, kTeal:840, kAzure:860, kViolet:880, kPink:900 };
-
-         var nmax = 110, col = [];
-         for (var i=0;i<nmax;i++) col.push(dflt.kGray);
-
-         //  here we should create a new TColor with the same rgb as in the default
-         //  ROOT colors used below
-         col[ 3] = dflt.kYellow-10;
-         col[ 4] = col[ 5] = dflt.kGreen-10;
-         col[ 6] = col[ 7] = dflt.kBlue-7;
-         col[ 8] = col[ 9] = dflt.kMagenta-3;
-         col[10] = col[11] = dflt.kRed-10;
-         col[12] = dflt.kGray+1;
-         col[13] = dflt.kBlue-10;
-         col[14] = dflt.kOrange+7;
-         col[16] = dflt.kYellow+1;
-         col[20] = dflt.kYellow-10;
-         col[24] = col[25] = col[26] = dflt.kBlue-8;
-         col[29] = dflt.kOrange+9;
-         col[79] = dflt.kOrange-2;
-
-         this.dflt_table = col;
-      }
-   }
-
-   /** @brief Provide different properties of draw entry nodeid
-    * @desc Only if node visible, material will be created*/
-   JSROOT.GEO.ClonedNodes.prototype.getDrawEntryProperties = function(entry) {
-
-      var clone = this.nodes[entry.nodeid];
-      var visible = true;
-
-      if (clone.kind === 2) {
-         var prop = { name: clone.name, nname: clone.name, shape: null, material: null, chlds: null };
-         var _opacity = entry.opacity || 1;
-         prop.fillcolor = new THREE.Color( entry.color ? "rgb(" + entry.color + ")" : "blue" );
-         prop.material = new THREE.MeshLambertMaterial( { transparent: _opacity < 1,
-                          opacity: _opacity, wireframe: false, color: prop.fillcolor,
-                          side: THREE.FrontSide /* THREE.DoubleSide*/, vertexColors: THREE.NoColors /*THREE.VertexColors */,
-                          depthWrite: _opacity == 1 } );
-         prop.material.inherentOpacity = _opacity;
-
-         return prop;
-      }
-
-      if (!this.origin) {
-         console.error('origin not there - kind', clone.kind, entry.nodeid, clone);
+      if (!this._main_painter._drawing_ready) {
+         console.warn('MAIN PAINTER NOT READY WHEN DO PROJECTION');
          return null;
       }
-
-      var node = this.origin[entry.nodeid];
-
-      if (clone.kind === 1) {
-         // special handling for EVE nodes
-
-         var prop = { name: JSROOT.GEO.ObjectName(node), nname: JSROOT.GEO.ObjectName(node), shape: node.fShape, material: null, chlds: null };
-
-         if (node.fElements !== null) prop.chlds = node.fElements.arr;
-
-         if (visible) {
-            var _opacity = Math.min(1, node.fRGBA[3]);
-            prop.fillcolor = new THREE.Color( node.fRGBA[0], node.fRGBA[1], node.fRGBA[2] );
-            prop.material = new THREE.MeshLambertMaterial( { transparent: _opacity < 1,
-                             opacity: _opacity, wireframe: false, color: prop.fillcolor,
-                             side: THREE.FrontSide /* THREE.DoubleSide*/, vertexColors: THREE.NoColors /*THREE.VertexColors */,
-                             depthWrite: _opacity == 1 } );
-            prop.material.inherentOpacity = _opacity;
-         }
-
-         return prop;
-      }
-
-      var volume = node.fVolume;
-
-      var prop = { name: JSROOT.GEO.ObjectName(volume), nname: JSROOT.GEO.ObjectName(node), volume: node.fVolume, shape: volume.fShape, material: null, chlds: null };
-
-      if (node.fVolume.fNodes !== null) prop.chlds = node.fVolume.fNodes.arr;
-
-      if (volume) prop.linewidth = volume.fLineWidth;
-
-      if (visible) {
-
-         var _opacity = 1.0;
-         if (entry.custom_color)
-            prop.fillcolor = entry.custom_color;
-         else if ((volume.fFillColor > 1) && (volume.fLineColor == 1))
-            prop.fillcolor = JSROOT.Painter.root_colors[volume.fFillColor];
-         else if (volume.fLineColor >= 0)
-            prop.fillcolor = JSROOT.Painter.root_colors[volume.fLineColor];
-
-         if (volume.fMedium && volume.fMedium.fMaterial) {
-            var mat = volume.fMedium.fMaterial,
-                fillstyle = mat.fFillStyle,
-                transparency = (fillstyle < 3000 || fillstyle > 3100) ? 0 : fillstyle - 3000;
-
-            if (this.use_dflt_colors) {
-               var matZ = Math.round(mat.fZ),
-                   icol = this.dflt_table[matZ];
-               prop.fillcolor = JSROOT.Painter.root_colors[icol];
-               if (mat.fDensity < 0.1) transparency = 60;
-            }
-
-            if (transparency > 0)
-               _opacity = (100.0 - transparency) / 100.0;
-            if (prop.fillcolor === undefined)
-               prop.fillcolor = JSROOT.Painter.root_colors[mat.fFillColor];
-         }
-         if (prop.fillcolor === undefined)
-            prop.fillcolor = "lightgrey";
-
-         prop.material = new THREE.MeshLambertMaterial( { transparent: _opacity < 1,
-                              opacity: _opacity, wireframe: false, color: prop.fillcolor,
-                              side: THREE.FrontSide /* THREE.DoubleSide */, vertexColors: THREE.NoColors /*THREE.VertexColors*/,
-                              depthWrite: _opacity == 1 } );
-         prop.material.inherentOpacity = _opacity;
-
-      }
-
-      return prop;
+      return this._main_painter._toplevel;
    }
 
-   /** Creates hierarchy of Object3D for given stack entry
-     * such hierarchy repeats hierarchy of TGeoNodes and set matrix for the objects drawing
-     * also set renderOrder, required to handle transparency
-     * @private */
-   JSROOT.GEO.ClonedNodes.prototype.CreateObject3D = function(stack, toplevel, options) {
+   TGeoPainter.prototype.getGeomBoundingBox = function(topitem, scalar) {
+      var box3 = new THREE.Box3(), check_any = !this._clones;
 
-      var node = this.nodes[0], three_prnt = toplevel, draw_depth = 0,
-          force = (typeof options == 'object') || (options==='force');
-
-      for(var lvl=0; lvl<=stack.length; ++lvl) {
-         var nchld = (lvl > 0) ? stack[lvl-1] : 0;
-         // extract current node
-         if (lvl>0)  node = this.nodes[node.chlds[nchld]];
-
-         var obj3d = undefined;
-
-         if (three_prnt.children)
-            for (var i=0;i<three_prnt.children.length;++i) {
-               if (three_prnt.children[i].nchld === nchld) {
-                  obj3d = three_prnt.children[i];
-                  break;
-               }
-            }
-
-         if (obj3d) {
-            three_prnt = obj3d;
-            if (obj3d.$jsroot_drawable) draw_depth++;
-            continue;
-         }
-
-         if (!force) return null;
-
-         obj3d = new THREE.Object3D();
-
-         if (node.matrix) {
-            // console.log(stack.toString(), lvl, 'matrix ', node.matrix.toString());
-            obj3d.matrix.fromArray(node.matrix);
-            obj3d.matrix.decompose( obj3d.position, obj3d.quaternion, obj3d.scale );
-         }
-
-         // this.accountNodes(obj3d);
-         obj3d.nchld = nchld; // mark index to find it again later
-
-         // add the mesh to the scene
-         three_prnt.add(obj3d);
-
-         // this is only for debugging - test inversion of whole geometry
-         if ((lvl==0) && (typeof options == 'object') && options.scale) {
-            if ((options.scale.x<0) || (options.scale.y<0) || (options.scale.z<0)) {
-               obj3d.scale.copy(options.scale);
-               obj3d.updateMatrix();
-            }
-         }
-
-         obj3d.updateMatrixWorld();
-
-         three_prnt = obj3d;
+      if (!topitem) {
+         box3.min.x = box3.min.y = box3.min.z = -1;
+         box3.max.x = box3.max.y = box3.max.z = 1;
+         return box3;
       }
 
-      if ((options === 'mesh') || (options === 'delete_mesh')) {
-         var mesh = null;
-         if (three_prnt)
-            for (var n=0; (n<three_prnt.children.length) && !mesh;++n) {
-               var chld = three_prnt.children[n];
-               if ((chld.type === 'Mesh') && (chld.nchld === undefined)) mesh = chld;
-            }
+      box3.makeEmpty();
 
-         if ((options === 'mesh') || !mesh) return mesh;
+      topitem.traverse(function(mesh) {
+         if (check_any || (mesh.stack && (mesh instanceof THREE.Mesh)) ||
+             (mesh.main_track && (mesh instanceof THREE.LineSegments)))
+            JSROOT.GEO.getBoundingBox(mesh, box3);
+      });
 
-         var res = three_prnt;
-         while (mesh && (mesh !== toplevel)) {
-            three_prnt = mesh.parent;
-            three_prnt.remove(mesh);
-            mesh = (three_prnt.children.length == 0) ? three_prnt : null;
-         }
+      if (scalar !== undefined) box3.expandByVector(box3.getSize(new THREE.Vector3()).multiplyScalar(scalar));
 
-         return res;
-      }
-
-      if (three_prnt) {
-         three_prnt.$jsroot_drawable = true;
-         three_prnt.$jsroot_depth = draw_depth;
-      }
-
-      return three_prnt;
+      return box3;
    }
 
-   JSROOT.GEO.ClonedNodes.prototype.GetVolumeBoundary = function(viscnt, facelimit, nodeslimit) {
 
-      var result = { min: 0, max: 1, sortidcut: 0 };
+   TGeoPainter.prototype.doProjection = function() {
+      var toplevel = this.getProjectionSource(), pthis = this;
 
-      if (!this.sortmap) {
-         console.error('sorting map do not exist');
-         return result;
+      if (!toplevel) return false;
+
+      JSROOT.Painter.DisposeThreejsObject(this._toplevel, true);
+
+      var axis = this.ctrl.project;
+
+      if (this.ctrl.projectPos === undefined) {
+
+         var bound = this.getGeomBoundingBox(toplevel),
+             min = bound.min[this.ctrl.project], max = bound.max[this.ctrl.project],
+             mean = (min+max)/2;
+
+         if ((min<0) && (max>0) && (Math.abs(mean) < 0.2*Math.max(-min,max))) mean = 0; // if middle is around 0, use 0
+
+         this.ctrl.projectPos = mean;
       }
 
-      var maxNode, currNode, cnt=0, facecnt=0;
+      toplevel.traverse(function(mesh) {
+         if (!(mesh instanceof THREE.Mesh) || !mesh.stack) return;
 
-      for (var n = 0; (n < this.sortmap.length) && (cnt < nodeslimit) && (facecnt < facelimit); ++n) {
-         var id = this.sortmap[n];
-         if (viscnt[id] === 0) continue;
-         currNode = this.nodes[id];
-         if (!maxNode) maxNode = currNode;
-         cnt += viscnt[id];
-         facecnt += viscnt[id] * currNode.nfaces;
-      }
+         var geom2 = JSROOT.GEO.projectGeometry(mesh.geometry, mesh.parent.matrixWorld, pthis.ctrl.project, pthis.ctrl.projectPos, mesh._flippedMesh);
 
-      if (!currNode) {
-         console.error('no volumes selected');
-         return result;
-      }
+         if (!geom2) return;
 
-      // console.log('Volume boundary ' + currNode.vol + '  cnt ' + cnt + '  faces ' + facecnt);
-      result.max = maxNode.vol;
-      result.min = currNode.vol;
-      result.sortidcut = currNode.sortid; // latest node is not included
-      return result;
+         var mesh2 = new THREE.Mesh( geom2, mesh.material.clone() );
+
+         pthis._toplevel.add(mesh2);
+
+         mesh2.stack = mesh.stack;
+      });
+
+      return true;
    }
 
-   /** @brief Collects visible nodes, using maxlimit
-     * @desc One can use map to define cut based on the volume or serious of cuts */
-   JSROOT.GEO.ClonedNodes.prototype.CollectVisibles = function(maxnumfaces, frustum) {
+   TGeoPainter.prototype.SameMaterial = function(node1, node2) {
 
-      // in simple case shape as it is
-      if (this.plain_shape)
-         return { lst: [ { nodeid: 0, seqid: 0, stack: [], factor: 1, shapeid: 0, server_shape: this.plain_shape } ], complete: true };
+      if ((node1===null) || (node2===null)) return node1 === node2;
+
+      if (node1.fVolume.fLineColor >= 0)
+         return (node1.fVolume.fLineColor === node2.fVolume.fLineColor);
+
+       var m1 = (node1.fVolume.fMedium !== null) ? node1.fVolume.fMedium.fMaterial : null;
+       var m2 = (node2.fVolume.fMedium !== null) ? node2.fVolume.fMedium.fMaterial : null;
+
+       if (m1 === m2) return true;
+
+       if ((m1 === null) || (m2 === null)) return false;
+
+       return (m1.fFillStyle === m2.fFillStyle) && (m1.fFillColor === m2.fFillColor);
+   }
+
+   TGeoPainter.prototype.changedLight = function(box) {
+      if (!this._camera) return;
+
+      var need_render = !box;
+
+     if (!box) box = this.getGeomBoundingBox(this._toplevel);
+
+      var sizex = box.max.x - box.min.x,
+          sizey = box.max.y - box.min.y,
+          sizez = box.max.z - box.min.z,
+          lights = [];
+
+      for (var k=0;k<this._camera.children.length;++k) {
+         var light = this._camera.children[k], enabled = false;
+         if (!light.isPointLight) continue;
+         switch (k) {
+            case 0: light.position.set(sizex/5, sizey/5, sizez/5); enabled = this.ctrl.light.specular; break;
+            case 1: light.position.set(0, 0, sizez/2); enabled = this.ctrl.light.front; break;
+            case 2: light.position.set(0, 2*sizey, 0); enabled = this.ctrl.light.top; break;
+            case 3: light.position.set(0, -2*sizey, 0); enabled = this.ctrl.light.bottom; break;
+            case 4: light.position.set(-2*sizex, 0, 0); enabled = this.ctrl.light.left; break;
+            case 5: light.position.set(2*sizex, 0, 0); enabled = this.ctrl.light.right; break;
+         }
+         light.power = enabled ? Math.PI*4 : 0;
+         if (enabled) lights.push(light);
+      }
+
+      // keep light power of all soources constant
+      lights.forEach(function(light) { light.power = 4*Math.PI/lights.length; })
+
+      if (need_render) this.Render3D();
+   }
+
+   TGeoPainter.prototype.createScene = function(w, h) {
+      // three.js 3D drawing
+      this._scene = new THREE.Scene();
+      this._scene.fog = new THREE.Fog(0xffffff, 1, 10000);
+      this._scene.overrideMaterial = new THREE.MeshLambertMaterial( { color: 0x7000ff, transparent: true, opacity: 0.2, depthTest: false } );
+
+      this._scene_width = w;
+      this._scene_height = h;
+
+      if (this.ctrl.ortho_camera) {
+         this._camera =  new THREE.OrthographicCamera(-600, 600, -600, 600, 1, 10000);
+      } else {
+         this._camera = new THREE.PerspectiveCamera(25, w / h, 1, 10000);
+         this._camera.up = this.ctrl._yup ? new THREE.Vector3(0,1,0) : new THREE.Vector3(0,0,1);
+      }
+
+      this._scene.add( this._camera );
+
+      this._selected_mesh = null;
+
+      this._overall_size = 10;
+
+      this._toplevel = new THREE.Object3D();
+
+      this._scene.add(this._toplevel);
+
+      var rrr = JSROOT.Painter.Create3DRenderer(w, h, this._usesvg, this._usesvgimg, this._webgl,
+            { antialias: true, logarithmicDepthBuffer: false, preserveDrawingBuffer: true });
+
+      this._webgl = rrr.usewebgl;
+      this._renderer = rrr.renderer;
+
+      if (this._renderer.setPixelRatio && !JSROOT.nodejs)
+         this._renderer.setPixelRatio(window.devicePixelRatio);
+      this._renderer.setSize(w, h, !this._fit_main_area);
+      this._renderer.localClippingEnabled = true;
+
+      this._renderer.setClearColor(this.ctrl.background, 1);
+
+/*      if (usesvg) {
+         // this._renderer = new THREE.SVGRenderer( { precision: 0, astext: true } );
+         this._renderer = THREE.CreateSVGRenderer(false, 0, document);
+         if (this._renderer.makeOuterHTML !== undefined) {
+            // this is indication of new three.js functionality
+            if (!JSROOT.svg_workaround) JSROOT.svg_workaround = [];
+            this._renderer.workaround_id = JSROOT.svg_workaround.length;
+            JSROOT.svg_workaround[this._renderer.workaround_id] = "<svg></svg>"; // dummy, need to be replaced
+
+            this._renderer.domElement = document.createElementNS( 'http://www.w3.org/2000/svg', 'path');
+            this._renderer.domElement.setAttribute('jsroot_svg_workaround', this._renderer.workaround_id);
+         }
+      } else {
+         this._renderer = webgl ?
+                           new THREE.WebGLRenderer({ antialias: true, logarithmicDepthBuffer: false,
+                                                     preserveDrawingBuffer: true }) :
+                           new THREE.SoftwareRenderer({ antialias: true });
+         this._renderer.setPixelRatio(window.devicePixelRatio);
+      }
+      this._renderer.setSize(w, h, !this._fit_main_area);
+      this._renderer.localClippingEnabled = true;
+
+      */
+
+      if (this._fit_main_area && !this._usesvg) {
+         this._renderer.domElement.style.width = "100%";
+         this._renderer.domElement.style.height = "100%";
+         var main = this.select_main();
+         if (main.style('position')=='static') main.style('position','relative');
+      }
+
+      this._animating = false;
+
+      // Clipping Planes
+
+      this.ctrl.bothSides = false; // which material kind should be used
+      this._clipPlanes = [ new THREE.Plane(new THREE.Vector3(1, 0, 0), 0),
+                           new THREE.Plane(new THREE.Vector3(0, this.ctrl._yup ? -1 : 1, 0), 0),
+                           new THREE.Plane(new THREE.Vector3(0, 0, this.ctrl._yup ? 1 : -1), 0) ];
+
+
+      // Lights - add 6 sources, place them once dimension of geometry is known
+      for (var n=0;n<6;++n) {
+         var light = new THREE.PointLight(0xefefef, n==0 ? 1 : 0);
+         if (n==0) light.position.set(10, 10, 10);
+         this._camera.add( light );
+      }
+
+      // Smooth Lighting Shader (Screen Space Ambient Occlusion)
+      // http://threejs.org/examples/webgl_postprocessing_ssao.html
+
+      if (this._webgl && (this.ctrl.ssao.enabled || this.ctrl.outline)) {
+
+         if (this.ctrl.outline && (typeof this.createOutline == "function")) {
+            this._effectComposer = new THREE.EffectComposer( this._renderer );
+            this._effectComposer.addPass( new THREE.RenderPass( this._scene, this._camera ) );
+            this.createOutline(w, h);
+         } else if (this.ctrl.ssao.enabled) {
+            this.createSSAO();
+         }
+      }
+
+      if (this._fit_main_area && (this._usesvg || this._usesvgimg)) {
+         // create top-most SVG for geomtery drawings
+         var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+         svg.appendChild(rrr.dom);
+         return svg;
+      }
+
+      return rrr.dom;
+   }
+
+
+   TGeoPainter.prototype.startDrawGeometry = function(force) {
+
+      if (!force && (this.drawing_stage!==0)) {
+         this._draw_nodes_again = true;
+         return;
+      }
+
+      if (this._clones_owner && this._clones)
+         this._clones.SetDefaultColors(this.ctrl.dflt_colors);
+
+      this._startm = new Date().getTime();
+      this._last_render_tm = this._startm;
+      this._last_render_meshes = 0;
+      this.drawing_stage = 1;
+      this._drawing_ready = false;
+      this.drawing_log = "collect visible";
+      this.ctrl.info.num_meshes = 0;
+      this.ctrl.info.num_faces = 0;
+      this.ctrl.info.num_shapes = 0;
+      this._selected_mesh = null;
+
+      if (this.ctrl.project) {
+         if (this._clones_owner) {
+            if (this._full_geom) {
+               this.drawing_stage = 10;
+               this.drawing_log = "build projection";
+            } else {
+               this._full_geom = new THREE.Object3D();
+            }
+
+         } else {
+            this.drawing_stage = 9;
+            this.drawing_log = "wait for main painter";
+         }
+      }
+
+      delete this._last_manifest;
+      delete this._last_hidden; // clear list of hidden objects
+
+      delete this._draw_nodes_again; // forget about such flag
+
+      this.continueDraw();
+   }
+
+   TGeoPainter.prototype.resetAdvanced = function() {
+      this.ctrl.ssao.kernelRadius = 16;
+      this.ctrl.ssao.output = THREE.SSAOPass.OUTPUT.Default;
+
+      this.ctrl.depthTest = true;
+      this.ctrl.clipIntersect = true;
+      this.ctrl.depthMethod = "ray";
+
+      this.changedDepthMethod("norender");
+      this.changedDepthTest();
+   }
+
+   TGeoPainter.prototype.getGeomBox = function() {
+      var extras = this.getExtrasContainer('collect');
+
+      var box = this.getGeomBoundingBox(this._toplevel);
+
+      if (extras)
+         for (var k=0;k<extras.length;++k) this._toplevel.add(extras[k]);
+
+      return box;
+   }
+
+   TGeoPainter.prototype.getOverallSize = function(force) {
+      if (!this._overall_size || force) {
+         var box = this.getGeomBoundingBox(this._toplevel);
+
+         // if detect of coordinates fails - ignore
+         if (isNaN(box.min.x)) return 1000;
+
+         var sizex = box.max.x - box.min.x,
+             sizey = box.max.y - box.min.y,
+             sizez = box.max.z - box.min.z;
+
+         this._overall_size = 2 * Math.max(sizex, sizey, sizez);
+      }
+
+      return this._overall_size;
+   }
+
+   /** @brief Create png image with drawing snapshot. */
+   TGeoPainter.prototype.createSnapshot = function(filename) {
+      if (!this._renderer) return;
+      this.Render3D(0);
+      var dataUrl = this._renderer.domElement.toDataURL("image/png");
+      if (filename==="asis") return dataUrl;
+      dataUrl.replace("image/png", "image/octet-stream");
+      var link = document.createElement('a');
+      if (typeof link.download === 'string') {
+         document.body.appendChild(link); //Firefox requires the link to be in the body
+         link.download = filename || "geometry.png";
+         link.href = dataUrl;
+         link.click();
+         document.body.removeChild(link); //remove the link when done
+      }
+   }
+
+   /** @brief Returns url parameters defining camera position.
+    * @desc It is zoom, roty, rotz parameters
+    * These parameters applied from default position which is shift along X axis */
+   TGeoPainter.prototype.produceCameraUrl = function(prec) {
+
+      if (!this._lookat || !this._camera0pos || !this._camera || !this.ctrl) return;
+
+      var pos1 = new THREE.Vector3().add(this._camera0pos).sub(this._lookat),
+          pos2 = new THREE.Vector3().add(this._camera.position).sub(this._lookat),
+          len1 = pos1.length(), len2 = pos2.length(),
+          zoom = this.ctrl.zoom * len2 / len1 * 100;
+
+      if (zoom < 1) zoom = 1; else if (zoom>10000) zoom = 10000;
+
+      pos1.normalize();
+      pos2.normalize();
+
+      var quat = new THREE.Quaternion();
+      quat.setFromUnitVectors(pos1, pos2);
+
+      var euler = new THREE.Euler();
+      euler.setFromQuaternion(quat, "YZX");
+
+      var roty = euler.y / Math.PI * 180,
+          rotz = euler.z / Math.PI * 180;
+
+      if (roty<0) roty += 360;
+      if (rotz<0) rotz += 360;
+
+      return "roty" + roty.toFixed(prec || 0) + ",rotz" + rotz.toFixed(prec || 0) + ",zoom" + zoom.toFixed(prec || 0);
+   }
+
+   /** Calculates current zoom factor */
+   TGeoPainter.prototype.calculateZoom = function() {
+      if (this._camera0pos && this._camera && this._lookat) {
+         var pos1 = new THREE.Vector3().add(this._camera0pos).sub(this._lookat),
+             pos2 = new THREE.Vector3().add(this._camera.position).sub(this._lookat);
+         return pos2.length() / pos1.length();
+      }
+
+      return 0;
+   }
+
+
+   /** Place camera to default position */
+   TGeoPainter.prototype.adjustCameraPosition = function(first_time, keep_zoom) {
+      if (!this._toplevel) return;
+
+      var box = this.getGeomBoundingBox(this._toplevel);
+
+      // if detect of coordinates fails - ignore
+      if (isNaN(box.min.x)) return;
+
+      var sizex = box.max.x - box.min.x,
+          sizey = box.max.y - box.min.y,
+          sizez = box.max.z - box.min.z,
+          midx = (box.max.x + box.min.x)/2,
+          midy = (box.max.y + box.min.y)/2,
+          midz = (box.max.z + box.min.z)/2;
+
+      this._overall_size = 2 * Math.max(sizex, sizey, sizez);
+
+      this._camera.near = this._overall_size / 350;
+      this._camera.far = this._overall_size * 12;
+      this._scene.fog.near = this._overall_size * 2;
+      this._scene.fog.far = this._overall_size * 12;
+
+      if (first_time)
+         for (var naxis=0;naxis<3;++naxis) {
+            var cc = this.ctrl.clip[naxis];
+            cc.min = box.min[cc.name];
+            cc.max = box.max[cc.name];
+            var sz = cc.max - cc.min;
+            cc.max += sz*0.01;
+            cc.min -= sz*0.01;
+            if (!cc.value)
+               cc.value = (cc.min + cc.max) / 2;
+            else if (cc.value < cc.min)
+               cc.value = cc.min;
+            else if (cc.value > cc.max)
+               cc.value = cc.max;
+         }
+
+      if (this.ctrl.ortho_camera) {
+         this._camera.left = box.min.x;
+         this._camera.right = box.max.x;
+         this._camera.top = box.max.y;
+         this._camera.bottom = box.min.y;
+      }
+
+      // this._camera.far = 100000000000;
+
+      this._camera.updateProjectionMatrix();
+
+      var k = 2*this.ctrl.zoom,
+          max_all = Math.max(sizex,sizey,sizez);
+
+      if ((this.ctrl.rotatey || this.ctrl.rotatez) && this.ctrl.can_rotate) {
+
+         var prev_zoom = this.calculateZoom();
+         if (keep_zoom && prev_zoom) k = 2*prev_zoom;
+
+         var euler = new THREE.Euler( 0, this.ctrl.rotatey/180.*Math.PI, this.ctrl.rotatez/180.*Math.PI, 'YZX' );
+
+         this._camera.position.set(-k*max_all, 0, 0);
+         this._camera.position.applyEuler(euler);
+         this._camera.position.add(new THREE.Vector3(midx,midy,midz));
+
+         if (keep_zoom && prev_zoom) {
+            var actual_zoom = this.calculateZoom();
+            k *= prev_zoom/actual_zoom;
+
+            this._camera.position.set(-k*max_all, 0, 0);
+            this._camera.position.applyEuler(euler);
+            this._camera.position.add(new THREE.Vector3(midx,midy,midz));
+         }
+
+      } else if (this.ctrl.ortho_camera) {
+         this._camera.position.set(midx, midy, Math.max(sizex,sizey));
+      } else if (this.ctrl.project) {
+         switch (this.ctrl.project) {
+            case 'x': this._camera.position.set(k*1.5*Math.max(sizey,sizez), 0, 0); break;
+            case 'y': this._camera.position.set(0, k*1.5*Math.max(sizex,sizez), 0); break;
+            case 'z': this._camera.position.set(0, 0, k*1.5*Math.max(sizex,sizey)); break;
+         }
+      } else if (this.ctrl._yup) {
+         this._camera.position.set(midx-k*Math.max(sizex,sizez), midy+k*sizey, midz-k*Math.max(sizex,sizez));
+      } else {
+         this._camera.position.set(midx-k*Math.max(sizex,sizey), midy-k*Math.max(sizex,sizey), midz+k*sizez);
+      }
+
+      this._lookat = new THREE.Vector3(midx, midy, midz);
+      this._camera0pos = new THREE.Vector3(-2*max_all, 0, 0); // virtual 0 position, where rotation starts
+      this._camera.lookAt(this._lookat);
+
+      this.changedLight(box);
+
+      if (this._controls) {
+         this._controls.target.copy(this._lookat);
+         this._controls.update();
+      }
+
+      // recheck which elements to draw
+      if (this.ctrl.select_in_view)
+         this.startDrawGeometry();
+   }
+
+   TGeoPainter.prototype.setCameraPosition = function(rotatey, rotatez, zoom) {
+      if (!this.ctrl) return;
+      this.ctrl.rotatey = rotatey || 0;
+      this.ctrl.rotatez = rotatez || 0;
+      var preserve_zoom = false;
+      if (zoom && !isNaN(zoom)) {
+         this.ctrl.zoom = zoom;
+      } else {
+         preserve_zoom = true;
+      }
+      this.adjustCameraPosition(false, preserve_zoom);
+   }
+
+   TGeoPainter.prototype.focusOnItem = function(itemname) {
+
+      if (!itemname || !this._clones) return;
+
+      var stack = this._clones.FindStackByName(itemname);
+
+      if (!stack) return;
+
+      var info = this._clones.ResolveStack(stack, true);
+
+      this.focusCamera( info, false );
+   }
+
+   TGeoPainter.prototype.focusCamera = function( focus, autoClip ) {
+
+      if (this.ctrl.project)
+         return this.adjustCameraPosition();
+
+      var box = new THREE.Box3();
+      if (focus === undefined) {
+         box = this.getGeomBoundingBox(this._toplevel);
+      } else if (focus instanceof THREE.Mesh) {
+         box.setFromObject(focus);
+      } else {
+         var center = new THREE.Vector3().setFromMatrixPosition(focus.matrix),
+             node = focus.node,
+             halfDelta = new THREE.Vector3( node.fDX, node.fDY, node.fDZ ).multiplyScalar(0.5);
+         box.min = center.clone().sub(halfDelta);
+         box.max = center.clone().add(halfDelta);
+      }
+
+      var sizex = box.max.x - box.min.x,
+          sizey = box.max.y - box.min.y,
+          sizez = box.max.z - box.min.z,
+          midx = (box.max.x + box.min.x)/2,
+          midy = (box.max.y + box.min.y)/2,
+          midz = (box.max.z + box.min.z)/2;
+
+      var position;
+      if (this.ctrl._yup)
+         position = new THREE.Vector3(midx-2*Math.max(sizex,sizez), midy+2*sizey, midz-2*Math.max(sizex,sizez));
+      else
+         position = new THREE.Vector3(midx-2*Math.max(sizex,sizey), midy-2*Math.max(sizex,sizey), midz+2*sizez);
+
+      var target = new THREE.Vector3(midx, midy, midz);
+
+      // Find to points to animate "lookAt" between
+      var dist = this._camera.position.distanceTo(target);
+      var oldTarget = this._controls.target;
+
+      // probably, reduce number of frames
+      var frames = 50, step = 0;
+
+      // Amount to change camera position at each step
+      var posIncrement = position.sub(this._camera.position).divideScalar(frames);
+      // Amount to change "lookAt" so it will end pointed at target
+      var targetIncrement = target.sub(oldTarget).divideScalar(frames);
+      // console.log( targetIncrement );
+
+      autoClip = autoClip && this._webgl;
+
+      // Automatic Clipping
+      if (autoClip) {
+         for (var axis = 0; axis<3; ++axis) {
+            var cc = this.ctrl.clip[axis];
+            if (!cc.enabled) { cc.value = cc.min; cc.enabled = true; }
+            cc.inc = ((cc.min + cc.max) / 2 - cc.value) / frames;
+         }
+         this.updateClipping();
+      }
+
+      var painter = this;
+      this._animating = true;
+
+      // Interpolate //
+
+      function animate() {
+         if (painter._animating === undefined) return;
+
+         if (painter._animating) {
+            requestAnimationFrame( animate );
+         } else {
+            if (!painter._geom_viewer)
+               painter.startDrawGeometry();
+         }
+         var smoothFactor = -Math.cos( ( 2.0 * Math.PI * step ) / frames ) + 1.0;
+         painter._camera.position.add( posIncrement.clone().multiplyScalar( smoothFactor ) );
+         oldTarget.add( targetIncrement.clone().multiplyScalar( smoothFactor ) );
+         painter._lookat = oldTarget;
+         painter._camera.lookAt( painter._lookat );
+         painter._camera.updateProjectionMatrix();
+
+         var tm1 = new Date().getTime();
+         if (autoClip) {
+            for (var axis = 0; axis<3; ++axis)
+               painter.ctrl.clip[axis].value += painter.ctrl.clip[axis].inc * smoothFactor;
+            painter.updateClipping();
+         } else {
+            painter.Render3D(0);
+         }
+         var tm2 = new Date().getTime();
+         if ((step==0) && (tm2-tm1 > 200)) frames = 20;
+         step++;
+         painter._animating = step < frames;
+      }
+
+      animate();
+
+   //   this._controls.update();
+   }
+
+   TGeoPainter.prototype.autorotate = function(speed) {
+
+      var rotSpeed = (speed === undefined) ? 2.0 : speed,
+          painter = this, last = new Date();
+
+      function animate() {
+         if (!painter._renderer || !painter.ctrl) return;
+
+         var current = new Date();
+
+         if ( painter.ctrl.rotate ) requestAnimationFrame( animate );
+
+         if (painter._controls) {
+            painter._controls.autoRotate = painter.ctrl.rotate;
+            painter._controls.autoRotateSpeed = rotSpeed * ( current.getTime() - last.getTime() ) / 16.6666;
+            painter._controls.update();
+         }
+         last = new Date();
+         painter.Render3D(0);
+      }
+
+      if (this._webgl) animate();
+   }
+
+   TGeoPainter.prototype.completeScene = function() {
+
+      if ( this.ctrl._debug || this.ctrl._grid ) {
+         if ( this.ctrl._full ) {
+            var boxHelper = new THREE.BoxHelper(this._toplevel);
+            this._scene.add( boxHelper );
+         }
+         this._scene.add( new THREE.AxesHelper( 2 * this._overall_size ) );
+         this._scene.add( new THREE.GridHelper( Math.ceil( this._overall_size), Math.ceil( this._overall_size ) / 50 ) );
+         this.helpText("<font face='verdana' size='1' color='red'><center>Transform Controls<br>" +
+               "'T' translate | 'R' rotate | 'S' scale<br>" +
+               "'+' increase size | '-' decrease size<br>" +
+               "'W' toggle wireframe/solid display<br>"+
+         "keep 'Ctrl' down to snap to grid</center></font>");
+      }
+   }
+
+   /** @brief Drawing with "count" option
+    * @desc Scans hieararchy and check for unique nodes */
+   TGeoPainter.prototype.drawCount = function(unqievis, clonetm) {
+
+      var res = 'Unique nodes: ' + this._clones.nodes.length + '<br/>' +
+                'Unique visible: ' + unqievis + '<br/>' +
+                'Time to clone: ' + clonetm + 'ms <br/>';
+
+      // need to fill cached value line numvischld
+      this._clones.ScanVisible();
+
+      var painter = this, nshapes = 0;
 
       var arg = {
-         facecnt: 0,
-         viscnt: new Array(this.nodes.length), // counter for each node
-         vislvl: this.GetVisLevel(),
-         reset: function() {
-            this.total = 0;
-            this.facecnt = 0;
-            for (var n=0;n<this.viscnt.length;++n) this.viscnt[n] = 0;
-         },
-         // nodes: this.nodes,
+         cnt: [],
          func: function(node) {
-            this.total++;
-            this.facecnt += node.nfaces;
-            this.viscnt[node.id]++;
+            if (this.cnt[this.last]===undefined)
+               this.cnt[this.last] = 1;
+            else
+               this.cnt[this.last]++;
+
+            nshapes += JSROOT.GEO.CountNumShapes(painter._clones.GetNodeShape(node.id));
+
+            // for debugginf - search if there some TGeoHalfSpace
+            //if (JSROOT.GEO.HalfSpace) {
+            //    var entry = this.CopyStack();
+            //    var res = painter._clones.ResolveStack(entry.stack);
+            //    console.log('SAW HALF SPACE', res.name);
+            //    JSROOT.GEO.HalfSpace = false;
+            //}
             return true;
          }
       };
 
-      arg.reset();
+      var tm1 = new Date().getTime();
+      var numvis = this._clones.ScanVisible(arg);
+      var tm2 = new Date().getTime();
 
-      var total = this.ScanVisible(arg),
-          maxnumnodes = this.GetMaxVisNodes();
+      res += 'Total visible nodes: ' + numvis + '<br/>';
+      res += 'Total shapes: ' + nshapes + '<br/>';
 
-      if (maxnumnodes > 0) {
-         while ((total > maxnumnodes) && (arg.vislvl > 1)) {
-            arg.vislvl--;
-            arg.reset();
-            total = this.ScanVisible(arg);
-         }
+      for (var lvl=0;lvl<arg.cnt.length;++lvl) {
+         if (arg.cnt[lvl] !== undefined)
+            res += ('  lvl' + lvl + ': ' + arg.cnt[lvl] + '<br/>');
       }
 
-      this.actual_level = arg.vislvl; // not used, can be shown somewhere in the gui
+      res += "Time to scan: " + (tm2-tm1) + "ms <br/>";
 
-      var minVol = 0, maxVol = 0, camVol = -1, camFact = 10, sortidcut = this.nodes.length + 1;
+      res += "<br/><br/>Check timing for matrix calculations ...<br/>";
 
-      console.log('Total visible nodes ' + total + ' numfaces ' + arg.facecnt);
+      var elem = this.select_main().style('overflow', 'auto').html(res);
 
-      if (arg.facecnt > maxnumfaces) {
+      setTimeout(function() {
+         arg.domatrix = true;
+         tm1 = new Date().getTime();
+         numvis = painter._clones.ScanVisible(arg);
+         tm2 = new Date().getTime();
+         elem.append("p").text("Time to scan with matrix: " + (tm2-tm1) + "ms");
+         painter.DrawingReady();
+      }, 100);
 
-         var bignumfaces = maxnumfaces * (frustum ? 0.8 : 1.0),
-             bignumnodes = maxnumnodes * (frustum ? 0.8 : 1.0);
-
-         // define minimal volume, which always to shown
-         var boundary = this.GetVolumeBoundary(arg.viscnt, bignumfaces, bignumnodes);
-
-         minVol = boundary.min;
-         maxVol = boundary.max;
-         sortidcut = boundary.sortidcut;
-
-         if (frustum) {
-             arg.domatrix = true;
-             arg.frustum = frustum;
-             arg.totalcam = 0;
-             arg.func = function(node) {
-                if (node.vol <= minVol) // only small volumes are interesting
-                   if (this.frustum.CheckShape(this.getmatrix(), node)) {
-                      this.viscnt[node.id]++;
-                      this.totalcam += node.nfaces;
-                   }
-
-                return true;
-             }
-
-             for (var n=0;n<arg.viscnt.length;++n) arg.viscnt[n] = 0;
-
-             this.ScanVisible(arg);
-
-             if (arg.totalcam > maxnumfaces*0.2)
-                camVol = this.GetVolumeBoundary(arg.viscnt, maxnumfaces*0.2, maxnumnodes*0.2).min;
-             else
-                camVol = 0;
-
-             camFact = maxVol / ((camVol>0) ? (camVol>0) : minVol);
-
-             // console.log('Limit for camera ' + camVol + '  faces in camera view ' + arg.totalcam);
-         }
-      }
-
-      arg.items = [];
-
-      arg.func = function(node) {
-         if (node.sortid < sortidcut) {
-            this.items.push(this.CopyStack());
-         } else if ((camVol >= 0) && (node.vol > camVol)) {
-            if (this.frustum.CheckShape(this.getmatrix(), node))
-               this.items.push(this.CopyStack(camFact));
-         }
-         return true;
-      }
-
-      this.ScanVisible(arg);
-
-      return { lst: arg.items, complete: minVol === 0 };
+      return this;
    }
 
-   /** @brief merge list of drawn objects
-     * @desc in current list we should mark if object already exists
-     * from previous list we should collect objects which are not there */
-   JSROOT.GEO.ClonedNodes.prototype.MergeVisibles = function(current, prev) {
 
-      var indx2 = 0, del = [];
-      for (var indx1=0; (indx1<current.length) && (indx2<prev.length); ++indx1) {
+   TGeoPainter.prototype.PerformDrop = function(obj, itemname, hitem, opt, call_back) {
 
-         while ((indx2 < prev.length) && (prev[indx2].seqid < current[indx1].seqid)) {
-            del.push(prev[indx2++]); // this entry should be removed
+      if (obj && (obj.$kind==='TTree')) {
+         // drop tree means function call which must extract tracks from provided tree
+
+         var funcname = "extract_geo_tracks";
+
+         if (opt && opt.indexOf("$")>0) {
+            funcname = opt.substr(0, opt.indexOf("$"));
+            opt = opt.substr(opt.indexOf("$")+1);
          }
 
-         if ((indx2 < prev.length) && (prev[indx2].seqid === current[indx1].seqid)) {
-            if (prev[indx2].done) current[indx1].done = true; // copy ready flag
-            indx2++;
-         }
-      }
+         var func = JSROOT.findFunction(funcname);
 
-      // remove rest
-      while (indx2<prev.length)
-         del.push(prev[indx2++]);
+         if (!func) return JSROOT.CallBack(call_back);
 
-      return del; //
-   }
+         var geo_painter = this;
 
-   /** @brief Collect all uniques shapes which should be build
-    *  @desc Check if same shape used many time for drawing */
-   JSROOT.GEO.ClonedNodes.prototype.CollectShapes = function(lst) {
-
-      // nothing else - just that single shape
-      if (this.plain_shape)
-         return [ this.plain_shape ];
-
-      var shapes = [];
-
-      for (var i=0;i<lst.length;++i) {
-         var entry = lst[i];
-         var shape = this.GetNodeShape(entry.nodeid);
-
-         if (!shape) continue; // strange, but avoid misleading
-
-         if (shape._id === undefined) {
-            shape._id = shapes.length;
-
-            shapes.push({ id: shape._id, shape: shape, vol: this.nodes[entry.nodeid].vol, refcnt: 1, factor: 1, ready: false });
-
-            // shapes.push( { obj: shape, vol: this.nodes[entry.nodeid].vol });
-         } else {
-            shapes[shape._id].refcnt++;
-         }
-
-         entry.shape = shapes[shape._id]; // remember shape used
-
-         // use maximal importance factor to push element to the front
-         if (entry.factor && (entry.factor>entry.shape.factor))
-            entry.shape.factor = entry.factor;
-      }
-
-      // now sort shapes in volume decrease order
-      shapes.sort(function(a,b) { return b.vol*b.factor - a.vol*a.factor; })
-
-      // now set new shape ids according to the sorted order and delete temporary field
-      for (var n=0;n<shapes.length;++n) {
-         var item = shapes[n];
-         item.id = n; // set new ID
-         delete item.shape._id; // remove temporary field
-      }
-
-      // as last action set current shape id to each entry
-      for (var i=0;i<lst.length;++i) {
-         var entry = lst[i];
-         if (entry.shape) {
-            entry.shapeid = entry.shape.id; // keep only id for the entry
-            delete entry.shape; // remove direct references
-         }
-      }
-
-      return shapes;
-   }
-
-   JSROOT.GEO.ClonedNodes.prototype.MergeShapesLists = function(oldlst, newlst) {
-
-      if (!oldlst) return newlst;
-
-      // set geometry to shape object itself
-      for (var n=0;n<oldlst.length;++n) {
-         var item = oldlst[n];
-
-         item.shape._geom = item.geom;
-         delete item.geom;
-
-         if (item.geomZ!==undefined) {
-            item.shape._geomZ = item.geomZ;
-            delete item.geomZ;
-         }
-      }
-
-      // take from shape (if match)
-      for (var n=0;n<newlst.length;++n) {
-         var item = newlst[n];
-
-         if (item.shape._geom !== undefined) {
-            item.geom = item.shape._geom;
-            delete item.shape._geom;
-         }
-
-         if (item.shape._geomZ !== undefined) {
-            item.geomZ = item.shape._geomZ;
-            delete item.shape._geomZ;
-         }
-      }
-
-      // now delete all unused geometries
-      for (var n=0;n<oldlst.length;++n) {
-         var item = oldlst[n];
-         delete item.shape._geom;
-         delete item.shape._geomZ;
-      }
-
-      return newlst;
-   }
-
-   JSROOT.GEO.ClonedNodes.prototype.BuildShapes = function(lst, limit, timelimit) {
-
-      var created = 0,
-          tm1 = new Date().getTime(),
-          res = { done: false, shapes: 0, faces: 0, notusedshapes: 0 };
-
-      for (var n=0;n<lst.length;++n) {
-         var item = lst[n];
-
-         // if enough faces are produced, nothing else is required
-         if (res.done) { item.ready = true; continue; }
-
-         if (!item.ready) {
-            item._typename = "$$Shape$$"; // let reuse item for direct drawing
-            item.ready = true;
-            if (item.geom === undefined) {
-               item.geom = JSROOT.GEO.createGeometry(item.shape);
-               if (item.geom) created++; // indicate that at least one shape was created
+         return func(obj, opt, function(tracks) {
+            if (tracks) {
+               geo_painter.drawExtras(tracks, "", false); // FIXME: probably tracks should be remembered??
+               this.updateClipping(true);
+               geo_painter.Render3D(100);
             }
-            item.nfaces = JSROOT.GEO.numGeometryFaces(item.geom);
-         }
-
-         res.shapes++;
-         if (!item.used) res.notusedshapes++;
-         res.faces += item.nfaces*item.refcnt;
-
-         if (res.faces >= limit) {
-            res.done = true;
-         } else if ((created > 0.01*lst.length) && (timelimit!==undefined)) {
-            var tm2 = new Date().getTime();
-            if (tm2-tm1 > timelimit) return res;
-         }
+            JSROOT.CallBack(call_back); // finally callback
+         });
       }
 
-      res.done = true;
+      if (this.drawExtras(obj, itemname)) {
+         if (hitem) hitem._painter = this; // set for the browser item back pointer
+      }
+
+      JSROOT.CallBack(call_back);
+   }
+
+   TGeoPainter.prototype.MouseOverHierarchy = function(on, itemname, hitem) {
+      // function called when mouse is going over the item in the browser
+
+      if (!this.ctrl) return; // protection for cleaned-up painter
+
+      var obj = hitem._obj;
+      if (this.ctrl._debug)
+         console.log('Mouse over', on, itemname, (obj ? obj._typename : "---"));
+
+      // let's highlight tracks and hits only for the time being
+      if (!obj || (obj._typename !== "TEveTrack" && obj._typename !== "TEvePointSet" && obj._typename !== "TPolyMarker3D")) return;
+
+      this.HighlightMesh(null, 0x00ff00, on ? obj : null);
+   }
+
+   TGeoPainter.prototype.clearExtras = function() {
+      this.getExtrasContainer("delete");
+      delete this._extraObjects; // workaround, later will be normal function
+      this.Render3D();
+   }
+
+   /** Register extra objects like tracks or hits
+    * @desc Rendered after main geometry volumes are created
+    * Check if object already exists to prevent duplication */
+   TGeoPainter.prototype.addExtra = function(obj, itemname) {
+      if (this._extraObjects === undefined)
+         this._extraObjects = JSROOT.Create("TList");
+
+      if (this._extraObjects.arr.indexOf(obj)>=0) return false;
+
+      this._extraObjects.Add(obj, itemname);
+
+      delete obj.$hidden_via_menu; // remove previous hidden property
+
+      return true;
+   }
+
+   TGeoPainter.prototype.ExtraObjectVisible = function(hpainter, hitem, toggle) {
+      if (!this._extraObjects) return;
+
+      var itemname = hpainter.itemFullName(hitem),
+          indx = this._extraObjects.opt.indexOf(itemname);
+
+      if ((indx<0) && hitem._obj) {
+         indx = this._extraObjects.arr.indexOf(hitem._obj);
+         // workaround - if object found, replace its name
+         if (indx>=0) this._extraObjects.opt[indx] = itemname;
+      }
+
+      if (indx < 0) return;
+
+      var obj = this._extraObjects.arr[indx],
+          res = obj.$hidden_via_menu ? false : true;
+
+      if (toggle) {
+         obj.$hidden_via_menu = res; res = !res;
+
+         var mesh = null;
+         // either found painted object or just draw once again
+         this._toplevel.traverse(function(node) { if (node.geo_object === obj) mesh = node; });
+
+         if (mesh) mesh.visible = res; else
+         if (res) {
+            this.drawExtras(obj, "", false);
+            this.updateClipping(true);
+         }
+
+         if (mesh || res) this.Render3D();
+      }
 
       return res;
    }
 
-   /// =====================================================================
+   TGeoPainter.prototype.drawExtras = function(obj, itemname, add_objects) {
+      if (!obj || !obj._typename) return false;
 
-   JSROOT.GEO.ObjectName = function(obj) {
-      if (!obj || !obj.fName) return "";
-      return obj.fName + (obj.$geo_suffix ? obj.$geo_suffix : "");
-   }
+      // if object was hidden via menu, do not redraw it with next draw call
+      if (!add_objects && obj.$hidden_via_menu) return false;
 
-   JSROOT.GEO.CheckDuplicates = function(parent, chlds) {
-      if (parent) {
-         if (parent.$geo_checked) return;
-         parent.$geo_checked = true;
+      var isany = false, do_render = false;
+      if (add_objects === undefined) {
+         add_objects = true;
+         do_render = true;
       }
 
-      var names = [], cnts = [], obj = null;
-      for (var k=0;k<chlds.length;++k) {
-         var chld = chlds[k];
-         if (!chld || !chld.fName) continue;
-         if (!chld.$geo_suffix) {
-            var indx = names.indexOf(chld.fName);
-            if (indx>=0) {
-               var cnt = cnts[indx] || 1;
-               while(names.indexOf(chld.fName+"#"+cnt)>=0) ++cnt;
-               chld.$geo_suffix = "#" + cnt;
-               cnts[indx] = cnt+1;
-            }
+      if ((obj._typename === "TList") || (obj._typename === "TObjArray")) {
+         if (!obj.arr) return false;
+         for (var n=0;n<obj.arr.length;++n) {
+            var sobj = obj.arr[n], sname = obj.opt ? obj.opt[n] : "";
+            if (!sname) sname = (itemname || "<prnt>") + "/[" + n + "]";
+            if (this.drawExtras(sobj, sname, add_objects)) isany = true;
          }
-         names.push(JSROOT.GEO.ObjectName(chld));
-      }
-   }
-
-   /** When transformation matrix includes one or several inversion of axis,
-     * one should inverse geometry object, otherwise THREE.js cannot correctly draw it, @private */
-   JSROOT.GEO.createFlippedMesh = function(parent, shape, material) {
-
-      var flip =  new THREE.Vector3(1,1,-1);
-
-      if (shape.geomZ === undefined) {
-
-         if (shape.geom.type == 'BufferGeometry') {
-
-            var pos = shape.geom.getAttribute('position').array,
-                norm = shape.geom.getAttribute('normal').array,
-                index = shape.geom.getIndex();
-
-            if (index) {
-               // we need to unfold all points to
-               var arr = index.array,
-                   i0 = shape.geom.drawRange.start,
-                   ilen = shape.geom.drawRange.count;
-               if (i0 + ilen > arr.length) ilen = arr.length - i0;
-
-               var dpos = new Float32Array(ilen*3), dnorm = new Float32Array(ilen*3);
-               for (var ii = 0; ii < ilen; ++ii) {
-                  var k = arr[i0 + ii];
-                  if ((k<0) || (k*3>=pos.length)) console.log('strange index', k*3, pos.length);
-                  dpos[ii*3] = pos[k*3];
-                  dpos[ii*3+1] = pos[k*3+1];
-                  dpos[ii*3+2] = pos[k*3+2];
-                  dnorm[ii*3] = norm[k*3];
-                  dnorm[ii*3+1] = norm[k*3+1];
-                  dnorm[ii*3+2] = norm[k*3+2];
-               }
-
-               pos = dpos; norm = dnorm;
-            }
-
-            var len = pos.length, n, shift = 0,
-                newpos = new Float32Array(len),
-                newnorm = new Float32Array(len);
-
-            // we should swap second and third point in each face
-            for (n=0; n<len; n+=3) {
-               newpos[n]   = pos[n+shift];
-               newpos[n+1] = pos[n+1+shift];
-               newpos[n+2] = -pos[n+2+shift];
-
-               newnorm[n]   = norm[n+shift];
-               newnorm[n+1] = norm[n+1+shift];
-               newnorm[n+2] = -norm[n+2+shift];
-
-               shift+=3; if (shift===6) shift=-3; // values 0,3,-3
-            }
-
-            shape.geomZ = new THREE.BufferGeometry();
-            shape.geomZ.addAttribute( 'position', new THREE.BufferAttribute( newpos, 3 ) );
-            shape.geomZ.addAttribute( 'normal', new THREE.BufferAttribute( newnorm, 3 ) );
-            // normals are calculated with normal geometry and correctly scaled
-            // geom.computeVertexNormals();
-
-         } else {
-
-            shape.geomZ = shape.geom.clone();
-
-            shape.geomZ.scale(flip.x, flip.y, flip.z);
-
-            var face, d, n = 0;
-            while(n < shape.geomZ.faces.length) {
-               face = geom.faces[n++];
-               d = face.b; face.b = face.c; face.c = d;
-            }
-
-            // normals are calculated with normal geometry and correctly scaled
-            // geom.computeFaceNormals();
-         }
+      } else if (obj._typename === 'THREE.Mesh') {
+         // adding mesh as is
+         this.getExtrasContainer().add(obj);
+         isany = true;
+      } else if (obj._typename === 'TGeoTrack') {
+         if (add_objects && !this.addExtra(obj, itemname)) return false;
+         isany = this.drawGeoTrack(obj, itemname);
+      } else if ((obj._typename === 'TEveTrack') || (obj._typename === 'ROOT::Experimental::TEveTrack')) {
+         if (add_objects && !this.addExtra(obj, itemname)) return false;
+         isany = this.drawEveTrack(obj, itemname);
+      } else if ((obj._typename === 'TEvePointSet') || (obj._typename === "ROOT::Experimental::TEvePointSet") || (obj._typename === "TPolyMarker3D")) {
+         if (add_objects && !this.addExtra(obj, itemname)) return false;
+         isany = this.drawHit(obj, itemname);
+      } else if ((obj._typename === "TEveGeoShapeExtract") || (obj._typename === "ROOT::Experimental::TEveGeoShapeExtract")) {
+         if (add_objects && !this.addExtra(obj, itemname)) return false;
+         isany = this.drawExtraShape(obj, itemname);
       }
 
-      var mesh = new THREE.Mesh( shape.geomZ, material );
-      mesh.scale.copy(flip);
-      mesh.updateMatrix();
+      if (isany && do_render) {
+         this.updateClipping(true);
+         this.Render3D(100);
+      }
 
-      mesh._flippedMesh = true;
-
-      return mesh;
+      return isany;
    }
 
-   /** Cleanup shape entity
+   TGeoPainter.prototype.getExtrasContainer = function(action, name) {
+      if (!this._toplevel) return null;
+
+      if (!name) name = "tracks";
+
+      var extras = null, lst = [];
+      for (var n=0;n<this._toplevel.children.length;++n) {
+         var chld = this._toplevel.children[n];
+         if (!chld._extras) continue;
+         if (action==='collect') { lst.push(chld); continue; }
+         if (chld._extras === name) { extras = chld; break; }
+      }
+
+      if (action==='collect') {
+         for (var k=0;k<lst.length;++k) this._toplevel.remove(lst[k]);
+         return lst;
+      }
+
+      if (action==="delete") {
+         if (extras) this._toplevel.remove(extras);
+         JSROOT.Painter.DisposeThreejsObject(extras);
+         return null;
+      }
+
+      if ((action!=="get") && !extras) {
+         extras = new THREE.Object3D();
+         extras._extras = name;
+         this._toplevel.add(extras);
+      }
+
+      return extras;
+   }
+
+   TGeoPainter.prototype.drawGeoTrack = function(track, itemname) {
+      if (!track || !track.fNpoints) return false;
+
+      var track_width = track.fLineWidth || 1,
+          track_color = JSROOT.Painter.root_colors[track.fLineColor] || "rgb(255,0,255)";
+
+      if (JSROOT.browser.isWin) track_width = 1; // not supported on windows
+
+      var npoints = Math.round(track.fNpoints/4),
+          buf = new Float32Array((npoints-1)*6),
+          pos = 0, projv = this.ctrl.projectPos,
+          projx = (this.ctrl.project === "x"),
+          projy = (this.ctrl.project === "y"),
+          projz = (this.ctrl.project === "z");
+
+      for (var k=0;k<npoints-1;++k) {
+         buf[pos]   = projx ? projv : track.fPoints[k*4];
+         buf[pos+1] = projy ? projv : track.fPoints[k*4+1];
+         buf[pos+2] = projz ? projv : track.fPoints[k*4+2];
+         buf[pos+3] = projx ? projv : track.fPoints[k*4+4];
+         buf[pos+4] = projy ? projv : track.fPoints[k*4+5];
+         buf[pos+5] = projz ? projv : track.fPoints[k*4+6];
+         pos+=6;
+      }
+
+      var lineMaterial = new THREE.LineBasicMaterial({ color: track_color, linewidth: track_width }),
+          line = JSROOT.Painter.createLineSegments(buf, lineMaterial);
+
+      line.renderOrder = 1000000; // to bring line to the front
+      line.geo_name = itemname;
+      line.geo_object = track;
+      line.hightlightWidthScale = 2;
+
+      if (itemname && itemname.indexOf("<prnt>/Tracks")==0)
+         line.main_track = true;
+
+      this.getExtrasContainer().add(line);
+
+      return true;
+   }
+
+   TGeoPainter.prototype.drawEveTrack = function(track, itemname) {
+      if (!track || (track.fN <= 0)) return false;
+
+      var track_width = track.fLineWidth || 1,
+          track_color = JSROOT.Painter.root_colors[track.fLineColor] || "rgb(255,0,255)";
+
+      if (JSROOT.browser.isWin) track_width = 1; // not supported on windows
+
+      var buf = new Float32Array((track.fN-1)*6), pos = 0,
+          projv = this.ctrl.projectPos,
+          projx = (this.ctrl.project === "x"),
+          projy = (this.ctrl.project === "y"),
+          projz = (this.ctrl.project === "z");
+
+      for (var k=0;k<track.fN-1;++k) {
+         buf[pos]   = projx ? projv : track.fP[k*3];
+         buf[pos+1] = projy ? projv : track.fP[k*3+1];
+         buf[pos+2] = projz ? projv : track.fP[k*3+2];
+         buf[pos+3] = projx ? projv : track.fP[k*3+3];
+         buf[pos+4] = projy ? projv : track.fP[k*3+4];
+         buf[pos+5] = projz ? projv : track.fP[k*3+5];
+         pos+=6;
+      }
+
+      var lineMaterial = new THREE.LineBasicMaterial({ color: track_color, linewidth: track_width }),
+          line = JSROOT.Painter.createLineSegments(buf, lineMaterial);
+
+      line.renderOrder = 1000000; // to bring line to the front
+      line.geo_name = itemname;
+      line.geo_object = track;
+      line.hightlightWidthScale = 2;
+
+      this.getExtrasContainer().add(line);
+
+      return true;
+   }
+
+   /** Drawing different hits types like TPolyMarker3d
     * @private */
-   JSROOT.GEO.cleanupShape = function(shape) {
-      if (!shape) return;
+   TGeoPainter.prototype.drawHit = function(hit, itemname) {
+      if (!hit || !hit.fN || (hit.fN < 0)) return false;
 
-      if (shape.geom && (typeof shape.geom.dispose == 'funciton'))
-         shape.geom.dispose();
+      // make hit size scaling factor of overall geometry size
+      // otherwise it is not possible to correctly see hits at all
+      var hit_size = hit.fMarkerSize * this.getOverallSize() * 0.005;
+      if (hit_size <= 0) hit_size = 1;
 
-      if (shape.geomZ && (typeof shape.geomZ.dispose == 'funciton'))
-         shape.geomZ.dispose();
+      var size = hit.fN,
+          projv = this.ctrl.projectPos,
+          projx = (this.ctrl.project === "x"),
+          projy = (this.ctrl.project === "y"),
+          projz = (this.ctrl.project === "z"),
+          pnts = new JSROOT.Painter.PointsCreator(size, this._webgl, hit_size);
 
-      delete shape.geom;
-      delete shape.geomZ;
+      for (var i=0;i<size;i++)
+         pnts.AddPoint(projx ? projv : hit.fP[i*3],
+                       projy ? projv : hit.fP[i*3+1],
+                       projz ? projv : hit.fP[i*3+2]);
+
+      var mesh = pnts.CreatePoints({ color: JSROOT.Painter.root_colors[hit.fMarkerColor] || "rgb(0,0,255)",
+                                     style: hit.fMarkerStyle,
+                                     callback: function(delayed) { if (delayed) this.Render3D(100); }.bind(this) });
+
+      mesh.renderOrder = 1000000; // to bring points to the front
+      mesh.highlightScale = 2;
+
+      mesh.geo_name = itemname;
+      mesh.geo_object = hit;
+
+      this.getExtrasContainer().add(mesh);
+
+      return true;
    }
 
-   /** @brief Set rendering order for created hierarchy
-    * @desc depending from provided method sort differently objects
-    * @param toplevel - top element
-    * @param origin - camera position used to provide sorting
-    * @param method - name of sorting method like "pnt", "ray", "size", "dflt"  */
-   JSROOT.GEO.produceRenderOrder = function(toplevel, origin, method, clones) {
+   TGeoPainter.prototype.drawExtraShape = function(obj, itemname) {
+      var toplevel = JSROOT.GEO.build(obj);
+      if (!toplevel) return false;
 
-      var raycast = new THREE.Raycaster();
+      toplevel.geo_name = itemname;
+      toplevel.geo_object = obj;
 
-      function setdefaults(top) {
-         if (!top) return;
-         top.traverse(function(obj) {
-            obj.renderOrder = 0;
-            if (obj.material) obj.material.depthWrite = true; // by default depthWriting enabled
-         });
+      this.getExtrasContainer().add(toplevel);
+      return true;
+   }
+
+   TGeoPainter.prototype.FindNodeWithVolume = function(name, action, prnt, itemname, volumes) {
+
+      var first_level = false, res = null;
+
+      if (!prnt) {
+         prnt = this.GetGeometry();
+         if (!prnt && (JSROOT.GEO.NodeKind(prnt)!==0)) return null;
+         itemname = this.geo_manager ? prnt.fName : "";
+         first_level = true;
+         volumes = [];
+      } else {
+         if (itemname.length>0) itemname += "/";
+         itemname += prnt.fName;
       }
 
-      function traverse(obj, lvl, arr) {
-         // traverse hierarchy and extract all children of given level
-         // if (obj.$jsroot_depth===undefined) return;
+      if (!prnt.fVolume || prnt.fVolume._searched) return null;
 
-         if (!obj.children) return;
+      if (name.test(prnt.fVolume.fName)) {
+         res = action({ node: prnt, item: itemname });
+         if (res) return res;
+      }
 
-         for (var k=0;k<obj.children.length;++k) {
-            var chld = obj.children[k];
-            if (chld.$jsroot_order === lvl) {
-               if (chld.material) {
-                  if (chld.material.transparent) {
-                     chld.material.depthWrite = false; // disable depth writing for transparent
-                     arr.push(chld);
+      prnt.fVolume._searched = true;
+      volumes.push(prnt.fVolume);
+
+      if (prnt.fVolume.fNodes)
+         for (var n=0;n<prnt.fVolume.fNodes.arr.length;++n) {
+            res = this.FindNodeWithVolume(name, action, prnt.fVolume.fNodes.arr[n], itemname, volumes);
+            if (res) break;
+         }
+
+      if (first_level)
+         for (var n=0, len=volumes.length; n<len; ++n)
+            delete volumes[n]._searched;
+
+      return res;
+   }
+
+   /** Process script option - load and execute some gGeomManager-related calls */
+   TGeoPainter.prototype.checkScript = function(script_name, call_back) {
+
+      var painter = this, draw_obj = this.GetGeometry(), name_prefix = "";
+
+      if (this.geo_manager) name_prefix = draw_obj.fName;
+
+      if (!script_name || (script_name.length<3) || (JSROOT.GEO.NodeKind(draw_obj)!==0))
+         return JSROOT.CallBack(call_back, draw_obj, name_prefix);
+
+      var mgr = {
+            GetVolume: function (name) {
+               var regexp = new RegExp("^"+name+"$");
+               var currnode = painter.FindNodeWithVolume(regexp, function(arg) { return arg; } );
+
+               if (!currnode) console.log('Did not found '+name + ' volume');
+
+               // return proxy object with several methods, typically used in ROOT geom scripts
+               return {
+                   found: currnode,
+                   fVolume: currnode ? currnode.node.fVolume : null,
+                   InvisibleAll: function(flag) {
+                      JSROOT.GEO.InvisibleAll.call(this.fVolume, flag);
+                   },
+                   Draw: function() {
+                      if (!this.found || !this.fVolume) return;
+                      draw_obj = this.found.node;
+                      name_prefix = this.found.item;
+                      console.log('Select volume for drawing', this.fVolume.fName, name_prefix);
+                   },
+                   SetTransparency: function(lvl) {
+                     if (this.fVolume && this.fVolume.fMedium && this.fVolume.fMedium.fMaterial)
+                        this.fVolume.fMedium.fMaterial.fFillStyle = 3000+lvl;
+                   },
+                   SetLineColor: function(col) {
+                      if (this.fVolume) this.fVolume.fLineColor = col;
+                   }
+                };
+            },
+
+            DefaultColors: function() {
+               painter.ctrl.dflt_colors = true;
+            },
+
+            SetMaxVisNodes: function(limit) {
+               if (!painter.ctrl.maxnodes)
+                  painter.ctrl.maxnodes = pasrseInt(limit) || 0;
+            },
+
+            SetVisLevel: function(limit) {
+               if (!painter.ctrl.vislevel)
+                  painter.ctrl.vislevel = parseInt(limit) || 0;
+            }
+          };
+
+      JSROOT.progress('Loading macro ' + script_name);
+
+      JSROOT.NewHttpRequest(script_name, "text", function(res) {
+         if (!res || (res.length==0))
+            return JSROOT.CallBack(call_back, draw_obj, name_prefix);
+
+         var lines = res.split('\n');
+
+         ProcessNextLine(0);
+
+         function ProcessNextLine(indx) {
+
+            var first_tm = new Date().getTime();
+            while (indx < lines.length) {
+               var line = lines[indx++].trim();
+
+               if (line.indexOf('//')==0) continue;
+
+               if (line.indexOf('gGeoManager')<0) continue;
+               line = line.replace('->GetVolume','.GetVolume');
+               line = line.replace('->InvisibleAll','.InvisibleAll');
+               line = line.replace('->SetMaxVisNodes','.SetMaxVisNodes');
+               line = line.replace('->DefaultColors','.DefaultColors');
+               line = line.replace('->Draw','.Draw');
+               line = line.replace('->SetTransparency','.SetTransparency');
+               line = line.replace('->SetLineColor','.SetLineColor');
+               line = line.replace('->SetVisLevel','.SetVisLevel');
+               if (line.indexOf('->')>=0) continue;
+
+               // console.log(line);
+
+               try {
+                  var func = new Function('gGeoManager',line);
+                  func(mgr);
+               } catch(err) {
+                  console.error('Problem by processing ' + line);
+               }
+
+               var now = new Date().getTime();
+               if (now - first_tm > 300) {
+                  JSROOT.progress('exec ' + line);
+                  return setTimeout(ProcessNextLine.bind(this,indx),1);
+               }
+            }
+
+            JSROOT.CallBack(call_back, draw_obj, name_prefix);
+         }
+
+      }).send();
+   }
+
+   /** Assign clones, created outside.
+    * Used by geometry painter, where clones are handled by the server */
+   TGeoPainter.prototype.assignClones = function(clones) {
+      this._clones_owner = true;
+      this._clones = clones;
+   }
+
+   /** @brief Prepare drawings
+    * @private */
+   TGeoPainter.prototype.prepareObjectDraw = function(draw_obj, name_prefix) {
+
+      // if did cleanup - ignore all kind of activity
+      if (this.did_cleanup)
+         return;
+
+      if (name_prefix == "__geom_viewer_append__") {
+         this._new_append_nodes = draw_obj;
+         this.ctrl.use_worker = 0;
+         this._geom_viewer = true; // indicate that working with geom viewer
+      } else if ((name_prefix == "__geom_viewer_selection__") && this._clones) {
+         // these are selection done from geom viewer
+         this._new_draw_nodes = draw_obj;
+         this.ctrl.use_worker = 0;
+         this._geom_viewer = true; // indicate that working with geom viewer
+      } else if (this._main_painter) {
+
+         this._clones_owner = false;
+
+         this._clones = this._main_painter._clones;
+
+         console.log('Reuse clones', this._clones.nodes.length, 'from main painter');
+
+      } else if (!draw_obj) {
+
+         this._clones_owner = false;
+
+         this._clones = null;
+
+      } else {
+
+         this._start_drawing_time = new Date().getTime();
+
+         this._clones_owner = true;
+
+         this._clones = new JSROOT.GEO.ClonedNodes(draw_obj);
+
+         var lvl = this.ctrl.vislevel, maxnodes = this.ctrl.maxnodes;
+         if (this.geo_manager) {
+            if (!lvl && this.geo_manager.fVisLevel)
+               lvl = this.geo_manager.fVisLevel;
+            if (!maxnodes)
+               maxnodes = this.geo_manager.fMaxVisNodes;
+         }
+
+         this._clones.SetVisLevel(lvl);
+         this._clones.SetMaxVisNodes(maxnodes);
+
+         this._clones.name_prefix = name_prefix;
+
+         var hide_top_volume = !!this.geo_manager && !this.ctrl.showtop;
+
+         var uniquevis = this.ctrl.no_screen ? 0 : this._clones.MarkVisibles(true, false, hide_top_volume);
+
+         if (uniquevis <= 0)
+            uniquevis = this._clones.MarkVisibles(false, false, hide_top_volume);
+         else
+            uniquevis = this._clones.MarkVisibles(true, true, hide_top_volume); // copy bits once and use normal visibility bits
+
+         this._clones.ProduceIdShits();
+
+         var spent = new Date().getTime() - this._start_drawing_time;
+
+         if (!this._scene)
+            console.log('Creating clones', this._clones.nodes.length, 'takes', spent, 'uniquevis', uniquevis);
+
+         if (this.options._count)
+            return this.drawCount(uniquevis, spent);
+      }
+
+      if (!this._scene) {
+
+         // this is limit for the visible faces, number of volumes does not matter
+         this.ctrl.maxlimit = (this._webgl ? 200000 : 100000) * this.ctrl.more;
+
+         this._first_drawing = true;
+
+         // activate worker
+         if (this.ctrl.use_worker > 0) this.startWorker();
+
+         var size = this.size_for_3d(this._usesvg ? 3 : undefined);
+
+         this._fit_main_area = (size.can3d === -1);
+
+         var dom = this.createScene(size.width, size.height);
+
+         this.add_3d_canvas(size, dom);
+
+         // set top painter only when first child exists
+         this.AccessTopPainter(true);
+      }
+
+      this.CreateToolbar();
+
+      if (this._clones) {
+         this.showDrawInfo("Drawing geometry");
+         this.startDrawGeometry(true);
+      } else {
+         this.completeDraw();
+      }
+   }
+
+   TGeoPainter.prototype.showDrawInfo = function(msg) {
+      // methods show info when first geometry drawing is performed
+
+      if (!this._first_drawing || !this._start_drawing_time) return;
+
+      var main = this._renderer.domElement.parentNode,
+          info = d3.select(main).select(".geo_info");
+
+      if (!msg) {
+         info.remove();
+      } else {
+         var spent = (new Date().getTime() - this._start_drawing_time)*1e-3;
+         if (info.empty()) info = d3.select(main).append("p").attr("class","geo_info");
+         info.html(msg + ", " + spent.toFixed(1) + "s");
+      }
+
+   }
+
+   TGeoPainter.prototype.continueDraw = function() {
+
+      // nothing to do - exit
+      if (this.drawing_stage === 0) return;
+
+      var tm0 = new Date().getTime(),
+          interval = this._first_drawing ? 1000 : 200,
+          now = tm0;
+
+      while(true) {
+
+         var res = this.nextDrawAction();
+
+         if (!res) break;
+
+         now = new Date().getTime();
+
+         // stop creation after 100 sec, render as is
+         if (now - this._startm > 1e5) {
+            this.drawing_stage = 0;
+            break;
+         }
+
+         // if we are that fast, do next action
+         if ((res === true) && (now - tm0 < interval)) continue;
+
+         if ((now - tm0 > interval) || (res === 1) || (res === 2)) {
+
+            JSROOT.progress(this.drawing_log);
+
+            this.showDrawInfo(this.drawing_log);
+
+            if (this._first_drawing && this._webgl && (this._num_meshes - this._last_render_meshes > 100) && (now - this._last_render_tm > 2.5*interval)) {
+               this.adjustCameraPosition();
+               this.Render3D(-1);
+               this._last_render_meshes = this.ctrl.info.num_meshes;
+            }
+            if (res !== 2) setTimeout(this.continueDraw.bind(this), (res === 1) ? 100 : 1);
+
+            return;
+         }
+      }
+
+      var take_time = now - this._startm;
+
+      if (this._first_drawing)
+         JSROOT.console('Create tm = ' + take_time + ' meshes ' + this.ctrl.info.num_meshes + ' faces ' + this.ctrl.info.num_faces);
+
+      if (take_time > 300) {
+         JSROOT.progress('Rendering geometry');
+         this.showDrawInfo("Rendering");
+         return setTimeout(this.completeDraw.bind(this, true), 10);
+      }
+
+      this.completeDraw(true);
+   }
+
+   /** @brief Checks camera position and recalculate rendering order if needed
+    * @param force - if specified, forces calculations of render order
+    * @private
+    */
+   TGeoPainter.prototype.TestCameraPosition = function(force) {
+      this._camera.updateMatrixWorld();
+      var origin = this._camera.position.clone();
+
+      if (!force && this._last_camera_position) {
+         // if camera position does not changed a lot, ignore such change
+         var dist = this._last_camera_position.distanceTo(origin);
+         if (dist < (this._overall_size || 1000)*1e-4) return;
+      }
+
+      this._last_camera_position = origin; // remember current camera position
+
+      if (!this.ctrl.project && this._webgl)
+         JSROOT.GEO.produceRenderOrder(this._toplevel, origin, this.ctrl.depthMethod, this._clones);
+   }
+
+   /** @brief Call 3D rendering of the geometry
+     * @param tmout - specifies delay, after which actual rendering will be invoked
+     * Timeout used to avoid multiple rendering of the picture when several 3D drawings
+     * superimposed with each other. If tmeout<=0, rendering performed immediately
+     * Several special values are used:
+     *   -2222 - rendering performed only if there were previous calls, which causes timeout activation
+     *   -1    - force recheck of rendering order based on camera position */
+
+   TGeoPainter.prototype.Render3D = function(tmout, measure) {
+
+      if (!this._renderer) {
+         console.warn('renderer object not exists - check code');
+         return;
+      }
+
+      if (tmout === undefined) tmout = 5; // by default, rendering happens with timeout
+
+      if ((tmout <= 0) || this._usesvg) {
+         if ('render_tmout' in this) {
+            clearTimeout(this.render_tmout);
+         } else {
+            if (tmout === -2222) return; // special case to check if rendering timeout was active
+         }
+
+         var tm1 = new Date();
+
+         this.TestCameraPosition(tmout === -1);
+
+         // its needed for outlinePass - do rendering, most consuming time
+         if (this._webgl && this._effectComposer && (this._effectComposer.passes.length > 0)) {
+            this._effectComposer.render();
+         } else {
+       //     this._renderer.logarithmicDepthBuffer = true;
+            this._renderer.render(this._scene, this._camera);
+         }
+
+         var tm2 = new Date();
+
+         this.last_render_tm = tm2.getTime();
+
+         delete this.render_tmout;
+
+         if ((this.first_render_tm === 0) && measure) {
+            this.first_render_tm = tm2.getTime() - tm1.getTime();
+            JSROOT.console('First render tm = ' + this.first_render_tm);
+         }
+
+         return JSROOT.Painter.AfterRender3D(this._renderer);
+      }
+
+      // do not shoot timeout many times
+      if (!this.render_tmout)
+         this.render_tmout = setTimeout(this.Render3D.bind(this,0,measure), tmout);
+   }
+
+
+   TGeoPainter.prototype.startWorker = function() {
+
+      if (this._worker) return;
+
+      this._worker_ready = false;
+      this._worker_jobs = 0; // counter how many requests send to worker
+
+      var pthis = this;
+
+      this._worker = new Worker(JSROOT.source_dir + "scripts/JSRootGeoWorker.js");
+
+      this._worker.onmessage = function(e) {
+
+         if (typeof e.data !== 'object') return;
+
+         if ('log' in e.data)
+            return JSROOT.console('geo: ' + e.data.log);
+
+         if ('progress' in e.data)
+            return JSROOT.progress(e.data.progress);
+
+         e.data.tm3 = new Date().getTime();
+
+         if ('init' in e.data) {
+            pthis._worker_ready = true;
+            return JSROOT.console('Worker ready: ' + (e.data.tm3 - e.data.tm0));
+         }
+
+         pthis.processWorkerReply(e.data);
+      };
+
+      // send initialization message with clones
+      this._worker.postMessage( {
+         init: true,   // indicate init command for worker
+         browser: JSROOT.browser,
+         tm0: new Date().getTime(),
+         vislevel: this._clones.GetVisLevel(),
+         maxvisnodes: this._clones.GetMaxVisNodes(),
+         clones: this._clones.nodes,
+         sortmap: this._clones.sortmap  } );
+   }
+
+   TGeoPainter.prototype.canSubmitToWorker = function(force) {
+      if (!this._worker) return false;
+
+      return this._worker_ready && ((this._worker_jobs == 0) || force);
+   }
+
+   TGeoPainter.prototype.submitToWorker = function(job) {
+      if (!this._worker) return false;
+
+      this._worker_jobs++;
+
+      job.tm0 = new Date().getTime();
+
+      this._worker.postMessage(job);
+   }
+
+   TGeoPainter.prototype.processWorkerReply = function(job) {
+      this._worker_jobs--;
+
+      if ('collect' in job) {
+         this._new_draw_nodes = job.new_nodes;
+         this._draw_all_nodes = job.complete;
+         this.drawing_stage = 3;
+         // invoke methods immediately
+         return this.continueDraw();
+      }
+
+      if ('shapes' in job) {
+
+         for (var n=0;n<job.shapes.length;++n) {
+            var item = job.shapes[n],
+                origin = this._build_shapes[n];
+
+            // var shape = this._clones.GetNodeShape(item.nodeid);
+
+            if (item.buf_pos && item.buf_norm) {
+               if (item.buf_pos.length === 0) {
+                  origin.geom = null;
+               } else if (item.buf_pos.length !== item.buf_norm.length) {
+                  console.error('item.buf_pos',item.buf_pos.length, 'item.buf_norm', item.buf_norm.length);
+                  origin.geom = null;
+               } else {
+                  origin.geom = new THREE.BufferGeometry();
+
+                  origin.geom.addAttribute( 'position', new THREE.BufferAttribute( item.buf_pos, 3 ) );
+                  origin.geom.addAttribute( 'normal', new THREE.BufferAttribute( item.buf_norm, 3 ) );
+               }
+
+               origin.ready = true;
+               origin.nfaces = item.nfaces;
+            }
+         }
+
+         job.tm4 = new Date().getTime();
+
+         // console.log('Get reply from worker', job.tm3-job.tm2, ' decode json in ', job.tm4-job.tm3);
+
+         this.drawing_stage = 7; // first check which shapes are used, than build meshes
+
+         // invoke methods immediately
+         return this.continueDraw();
+      }
+   }
+
+   TGeoPainter.prototype.testGeomChanges = function() {
+      if (this._main_painter) {
+         console.warn('Get testGeomChanges call for slave painter');
+         return this._main_painter.testGeomChanges();
+      }
+      this.startDrawGeometry();
+      for (var k=0;k<this._slave_painters.length;++k)
+         this._slave_painters[k].startDrawGeometry();
+   }
+
+   /** Draw axes if configured, otherwise just remove completely */
+   TGeoPainter.prototype.drawSimpleAxis = function(norender) {
+      this.getExtrasContainer('delete', 'axis');
+
+      if (!this.ctrl._axis)
+         return norender ? null : this.Render3D();
+
+      var box = this.getGeomBoundingBox(this._toplevel);
+
+      var container = this.getExtrasContainer('create', 'axis');
+
+      var text_size = 0.02 * Math.max( (box.max.x - box.min.x), (box.max.y - box.min.y), (box.max.z - box.min.z)),
+          center = [0,0,0],
+          names = ['x','y','z'],
+          labels = ['X','Y','Z'],
+          colors = ["red","green","blue"],
+          ortho = this.ctrl.ortho_camera,
+          yup = [this.ctrl._yup, this.ctrl._yup, this.ctrl._yup],
+          numaxis = 3;
+
+      if (this.ctrl._axis == 2)
+         for (var naxis=0;naxis<3;++naxis) {
+            var name = names[naxis];
+            if ((box.min[name]<=0) && (box.max[name]>=0)) continue;
+            center[naxis] = (box.min[name] + box.max[name])/2;
+         }
+
+      // only two dimensions are seen by ortho camera, X draws Z, can be configured better later
+      if (this.ctrl.ortho_camera) {
+         numaxis = 2;
+         labels[0] = labels[2];
+         colors[0] = colors[2];
+         yup[0] = yup[2];
+         ortho = true;
+      }
+
+      for (var naxis=0;naxis<numaxis;++naxis) {
+
+         var buf = new Float32Array(6), axiscol = colors[naxis], name = names[naxis];
+
+         function Convert(value) {
+            var range = box.max[name] - box.min[name];
+            if (range<2) return value.toFixed(3);
+            if (Math.abs(value)>1e5) return value.toExponential(3);
+            return Math.round(value).toString();
+         }
+
+         var lbl = Convert(box.max[name]);
+
+         buf[0] = box.min.x;
+         buf[1] = box.min.y;
+         buf[2] = box.min.z;
+
+         buf[3] = box.min.x;
+         buf[4] = box.min.y;
+         buf[5] = box.min.z;
+
+         switch (naxis) {
+           case 0: buf[3] = box.max.x; if (yup[0] && !ortho) lbl = labels[0] + " " + lbl; else lbl += " " + labels[0]; break;
+           case 1: buf[4] = box.max.y; if (yup[1]) lbl += " " + labels[1]; else lbl = labels[1] + " " + lbl; break;
+           case 2: buf[5] = box.max.z; lbl += " " + labels[2]; break;
+         }
+
+         if (this.ctrl._axis == 2)
+            for (var k=0;k<6;++k)
+               if ((k % 3) !== naxis) buf[k] = center[k%3];
+
+         var lineMaterial = new THREE.LineBasicMaterial({ color: axiscol }),
+             mesh = JSROOT.Painter.createLineSegments(buf, lineMaterial);
+
+         container.add(mesh);
+
+         var textMaterial = new THREE.MeshBasicMaterial({ color: axiscol });
+
+         if ((center[naxis]===0) && (center[naxis]>=box.min[name]) && (center[naxis]<=box.max[name]))
+           if ((this.ctrl._axis != 2) || (naxis===0)) {
+               var geom = ortho ? new THREE.CircleBufferGeometry(text_size*0.25) :
+                                  new THREE.SphereBufferGeometry(text_size*0.25);
+               mesh = new THREE.Mesh(geom, textMaterial);
+               mesh.translateX((naxis===0) ? center[0] : buf[0]);
+               mesh.translateY((naxis===1) ? center[1] : buf[1]);
+               mesh.translateZ((naxis===2) ? center[2] : buf[2]);
+               container.add(mesh);
+           }
+
+         var text3d = new THREE.TextGeometry(lbl, { font: JSROOT.threejs_font_helvetiker_regular, size: text_size, height: 0, curveSegments: 5 });
+         mesh = new THREE.Mesh(text3d, textMaterial);
+         var textbox = new THREE.Box3().setFromObject(mesh);
+
+         mesh.translateX(buf[3]);
+         mesh.translateY(buf[4]);
+         mesh.translateZ(buf[5]);
+
+         if (yup[naxis]) {
+            switch (naxis) {
+               case 0:
+                  if (!ortho) {
+                     mesh.rotateY(Math.PI);
+                     mesh.translateX(-textbox.max.x-text_size*0.5);
                   } else {
-                     setdefaults(chld);
+                     mesh.translateX(text_size*0.5);
                   }
-               }
-            } else if ((obj.$jsroot_depth===undefined) || (obj.$jsroot_depth < lvl)) {
-               traverse(chld, lvl, arr);
+                  mesh.translateY(-textbox.max.y/2);
+                  break;
+               case 1:
+                  if (!ortho) {
+                     mesh.rotateX(-Math.PI/2);
+                     mesh.rotateY(-Math.PI/2);
+                  } else {
+                     mesh.rotateZ(Math.PI/2);
+                  }
+                  mesh.translateX(text_size*0.5);
+                  mesh.translateY(-textbox.max.y/2);
+                  break;
+               case 2: mesh.rotateY(-Math.PI/2); mesh.translateX(text_size*0.5); mesh.translateY(-textbox.max.y/2); break;
+           }
+         } else {
+            switch (naxis) {
+               case 0: mesh.rotateX(Math.PI/2); mesh.translateY(-textbox.max.y/2); mesh.translateX(text_size*0.5); break;
+               case 1: mesh.rotateX(Math.PI/2); mesh.rotateY(-Math.PI/2); mesh.translateX(-textbox.max.x-text_size*0.5); mesh.translateY(-textbox.max.y/2); break;
+               case 2: mesh.rotateX(Math.PI/2); mesh.rotateZ(Math.PI/2); mesh.translateX(text_size*0.5); mesh.translateY(-textbox.max.y/2); break;
             }
+         }
+
+         container.add(mesh);
+
+         text3d = new THREE.TextGeometry(Convert(box.min[name]), { font: JSROOT.threejs_font_helvetiker_regular, size: text_size, height: 0, curveSegments: 5 });
+
+         mesh = new THREE.Mesh(text3d, textMaterial);
+         textbox = new THREE.Box3().setFromObject(mesh);
+
+         mesh.translateX(buf[0]);
+         mesh.translateY(buf[1]);
+         mesh.translateZ(buf[2]);
+
+         if (yup[naxis]) {
+            switch (naxis) {
+               case 0:
+                  if (!ortho) {
+                     mesh.rotateY(Math.PI);
+                     mesh.translateX(text_size*0.5);
+                  } else {
+                     mesh.translateX(-textbox.max.x-text_size*0.5);
+                  }
+                  mesh.translateY(-textbox.max.y/2);
+                  break;
+               case 1:
+                  if (!ortho) {
+                     mesh.rotateX(-Math.PI/2);
+                     mesh.rotateY(-Math.PI/2);
+                  } else {
+                     mesh.rotateZ(Math.PI/2);
+                  }
+                  mesh.translateY(-textbox.max.y/2);
+                  mesh.translateX(-textbox.max.x-text_size*0.5);
+                  break;
+               case 2: mesh.rotateY(-Math.PI/2);  mesh.translateX(-textbox.max.x-text_size*0.5); mesh.translateY(-textbox.max.y/2); break;
+            }
+         } else {
+            switch (naxis) {
+               case 0: mesh.rotateX(Math.PI/2); mesh.translateX(-textbox.max.x-text_size*0.5); mesh.translateY(-textbox.max.y/2); break;
+               case 1: mesh.rotateX(Math.PI/2); mesh.rotateY(-Math.PI/2); mesh.translateY(-textbox.max.y/2); mesh.translateX(text_size*0.5); break;
+               case 2: mesh.rotateX(Math.PI/2); mesh.rotateZ(Math.PI/2);  mesh.translateX(-textbox.max.x-text_size*0.5); mesh.translateY(-textbox.max.y/2); break;
+            }
+         }
+
+         container.add(mesh);
+      }
+
+      // after creating axes trigger rendering and recalculation of depth
+      this.changedDepthMethod(norender ? "norender" : undefined);
+   }
+
+   /** @brief  Toggle axes visibility */
+   TGeoPainter.prototype.toggleAxesDraw = function() {
+      this.setAxesDraw("toggle");
+   }
+
+   /** @brief Set axes visibility 0 - off, 1 - on, 2 - centered */
+   TGeoPainter.prototype.setAxesDraw = function(on) {
+      if (on === "toggle")
+         this.ctrl._axis = this.ctrl._axis ? 0 : 1;
+      else
+         this.ctrl._axis = (typeof on == 'number') ? on : (on ? 1 : 0);
+      this.drawSimpleAxis();
+   }
+
+   /** @brief Set auto rotate mode */
+   TGeoPainter.prototype.setAutoRotate = function(on) {
+      if (this.ctrl.project) return;
+      if (on !== undefined) this.ctrl.rotate = on;
+      this.autorotate(2.5);
+   }
+
+   /** Toggle wireframe mode */
+   TGeoPainter.prototype.toggleWireFrame = function() {
+      this.ctrl.wireframe = !this.ctrl.wireframe;
+      this.changedWireFrame();
+   }
+
+   /** Specify wireframe mode */
+   TGeoPainter.prototype.setWireFrame = function(on) {
+      this.ctrl.wireframe = on ? true : false;
+      this.changedWireFrame();
+   }
+
+   /** Specify showtop draw options, relevant only for TGeoManager */
+   TGeoPainter.prototype.setShowTop = function(on) {
+      this.ctrl.showtop = on ? true : false;
+      this.RedrawObject('same');
+   }
+
+   /** Should be called when configuration of particular axis is changed @private */
+   TGeoPainter.prototype.changedClipping = function(naxis) {
+      var clip = this.ctrl.clip;
+
+      if ((naxis !== undefined) && (naxis >= 0)) {
+         if (!clip[naxis].enabled) return;
+      }
+
+      if (clip[0].enabled || clip[1].enabled || clip[2].enabled) {
+         this.ctrl.ssao.enabled = false;
+         this.removeSSAO();
+      }
+
+      this.updateClipping(false, true);
+   }
+
+   /** Should be called when depth test flag is changed @private */
+   TGeoPainter.prototype.changedDepthTest = function() {
+      if (!this._toplevel) return;
+      var flag = this.ctrl.depthTest;
+      this._toplevel.traverse( function (node) {
+         if (node instanceof THREE.Mesh) {
+            node.material.depthTest = flag;
+         }
+      });
+
+      this.Render3D(0);
+   }
+
+   /** Should be called when depth method is changed @private */
+   TGeoPainter.prototype.changedDepthMethod = function(arg) {
+      // force recalculatiion of render order
+      delete this._last_camera_position;
+      if (arg !== "norender") this.Render3D();
+   }
+
+   /** Should be called when configuration of highlight is changed @private */
+   TGeoPainter.prototype.changedHighlight = function() {
+      if (!this.ctrl.highlight)
+         this.HighlightMesh(null);
+   }
+
+   /** Assign clipping attributes to the meshes - supported only for webgl @private */
+   TGeoPainter.prototype.updateClipping = function(without_render, force_traverse) {
+      if (!this._webgl) return;
+
+      var clip = this.ctrl.clip, panels = [], changed = false,
+          constants = [ clip[0].value, -1 * clip[1].value, (this.ctrl._yup ? -1 : 1) * clip[2].value ],
+          clip_cfg = this.ctrl.clipIntersect ? 16 : 0;
+
+      for (var k=0;k<3;++k) {
+         if (clip[k].enabled) clip_cfg += 2 << k;
+         if (this._clipPlanes[k].constant != constants[k]) {
+            changed = true;
+            this._clipPlanes[k].constant = constants[k];
          }
       }
 
-      function sort(arr, minorder, maxorder) {
-         // resort meshes using ray caster and camera position
-         // idea to identify meshes which are in front or behind
+      if (!this.ctrl.ssao.enabled) {
+         if (clip[0].enabled) panels.push(this._clipPlanes[0]);
+         if (clip[1].enabled) panels.push(this._clipPlanes[1]);
+         if (clip[2].enabled) panels.push(this._clipPlanes[2]);
+         clip_cfg += panels.length*1000;
+      }
+      if (panels.length == 0) panels = null;
 
-         if (arr.length > 300) {
-            // too many of them, just set basic level and exit
-            for (var i=0;i<arr.length;++i) arr[i].renderOrder = (minorder + maxorder)/2;
-            return false;
-         }
+      if (this._clipCfg !== clip_cfg) changed = true;
 
-         var tmp_vect = new THREE.Vector3();
+      this._clipCfg = clip_cfg;
 
-         // first calculate distance to the camera
-         // it gives preliminary order of volumes
+      var any_clipping = !!panels, ci = this.ctrl.clipIntersect,
+          material_side = any_clipping ? THREE.DoubleSide : THREE.FrontSide;
 
-         for (var i=0;i<arr.length;++i) {
-            var mesh = arr[i],
-                box3 = mesh.$jsroot_box3;
+      if (force_traverse || changed)
+      this._scene.traverse( function (node) {
+         if (node.hasOwnProperty("material") && node.material && (node.material.clippingPlanes !== undefined)) {
 
-            if (!box3)
-               mesh.$jsroot_box3 = box3 = JSROOT.GEO.getBoundingBox(mesh);
-
-            if (method === 'size') {
-               mesh.$jsroot_distance = box3.getSize(new THREE.Vector3());
-               continue;
+            if (node.material.clippingPlanes !== panels) {
+               node.material.clipIntersection = ci;
+               node.material.clippingPlanes = panels;
+               node.material.needsUpdate = true;
             }
 
-            if (method === "pnt") {
-               mesh.$jsroot_distance = origin.distanceTo(box3.getCenter(tmp_vect));
-               continue;
-            }
-
-            var dist = Math.min(dist, origin.distanceTo(box3.min), origin.distanceTo(box3.max));
-
-            var pnt = new THREE.Vector3(box3.min.x, box3.min.y, box3.max.z);
-            dist = Math.min(dist, origin.distanceTo(pnt));
-            pnt.set(box3.min.x, box3.max.y, box3.min.z)
-            dist = Math.min(dist, origin.distanceTo(pnt));
-            pnt.set(box3.max.x, box3.min.y, box3.min.z)
-            dist = Math.min(dist, origin.distanceTo(pnt));
-
-            pnt.set(box3.max.x, box3.max.y, box3.min.z)
-            dist = Math.min(dist, origin.distanceTo(pnt));
-
-            pnt.set(box3.max.x, box3.min.y, box3.max.z)
-            dist = Math.min(dist, origin.distanceTo(pnt));
-
-            pnt.set(box3.min.x, box3.max.y, box3.max.z)
-            dist = Math.min(dist, origin.distanceTo(pnt));
-
-            mesh.$jsroot_distance = dist;
-         }
-
-         arr.sort(function(a,b) { return a.$jsroot_distance - b.$jsroot_distance; });
-
-         var resort = new Array(arr.length);
-
-         for (var i=0;i<arr.length;++i) {
-            arr[i].$jsroot_index = i;
-            resort[i] = arr[i];
-         }
-
-         if (method==="ray")
-         for (var i=arr.length-1;i>=0;--i) {
-            var mesh = arr[i],
-                box3 = mesh.$jsroot_box3,
-                direction = box3.getCenter(tmp_vect);
-
-            for(var ntry=0; ntry<2;++ntry) {
-
-               direction.sub(origin).normalize();
-
-               raycast.set( origin, direction );
-
-               var intersects = raycast.intersectObjects(arr, false); // only plain array
-
-               var unique = [];
-
-               for (var k1=0;k1<intersects.length;++k1) {
-                  if (unique.indexOf(intersects[k1].object)<0) unique.push(intersects[k1].object);
-                  // if (intersects[k1].object === mesh) break; // trace until object itself
+            if (node.material.emissive !== undefined) {
+               if (node.material.side != material_side) {
+                  node.material.side = material_side;
+                  node.material.needsUpdate = true;
                }
-
-               intersects = unique;
-
-               if ((intersects.indexOf(mesh)<0) && (ntry>0))
-                  console.log('MISS', clones ? clones.ResolveStack(mesh.stack).name : "???");
-
-               if ((intersects.indexOf(mesh)>=0) || (ntry>0)) break;
-
-               var pos = mesh.geometry.attributes.position.array;
-
-               direction = new THREE.Vector3((pos[0]+pos[3]+pos[6])/3, (pos[1]+pos[4]+pos[7])/3, (pos[2]+pos[5]+pos[8])/3);
-
-               direction.applyMatrix4(mesh.matrixWorld);
             }
+         }
+      });
 
-            // now push first object in intersects to the front
-            for (var k1=0;k1<intersects.length-1;++k1) {
-               var mesh1 = intersects[k1], mesh2 = intersects[k1+1],
-                   i1 = mesh1.$jsroot_index, i2 = mesh2.$jsroot_index;
-               if (i1<i2) continue;
-               for (var ii=i2;ii<i1;++ii) {
-                  resort[ii] = resort[ii+1];
-                  resort[ii].$jsroot_index = ii;
-               }
-               resort[i1] = mesh2;
-               mesh2.$jsroot_index = i1;
-            }
+      this.ctrl.bothSides = any_clipping;
 
+      if (!without_render) this.Render3D(0);
+
+      return changed;
+   }
+
+   TGeoPainter.prototype.setCompleteHandler = function(callback) {
+      this._complete_handler = callback;
+   }
+
+   /** @brief complete drawing procedure @private */
+   TGeoPainter.prototype.completeDraw = function(close_progress) {
+
+      var first_time = false, full_redraw = false, check_extras = true;
+
+      if (!this.ctrl) {
+         console.warn('ctrl object does not exist in completeDraw - something went wrong');
+         return;
+      }
+
+      if (!this._clones) {
+         check_extras = false;
+         // if extra object where append, redraw them at the end
+         this.getExtrasContainer("delete"); // delete old container
+         var extras = (this._main_painter ? this._main_painter._extraObjects : null) || this._extraObjects;
+         this.drawExtras(extras, "", false);
+      } else if (this._first_drawing || this._full_redrawing) {
+         if (this.ctrl.tracks && this.geo_manager)
+            this.drawExtras(this.geo_manager.fTracks, "<prnt>/Tracks");
+      }
+
+      if (this._full_redrawing) {
+         this._full_redrawing = false;
+         full_redraw = true;
+         this.changedDepthMethod("norender");
+      }
+
+      if (this._first_drawing) {
+         this.adjustCameraPosition(true);
+         this.showDrawInfo();
+         this._first_drawing = false;
+         first_time = true;
+         full_redraw = true;
+      }
+
+      if (this.ctrl.transparency!==0)
+         this.changedGlobalTransparency(this.ctrl.transparency, true);
+
+      if (first_time)
+         this.completeScene();
+
+      if (full_redraw && (this.ctrl.trans_radial || this.ctrl.trans_z))
+         this.changedTransformation("norender");
+
+      if (full_redraw && this.ctrl._axis)
+         this.drawSimpleAxis(true);
+
+      this._scene.overrideMaterial = null;
+
+      if (this._provided_more_nodes !== undefined) {
+         this.appendMoreNodes(this._provided_more_nodes, true);
+         delete this._provided_more_nodes;
+      }
+
+      if (check_extras) {
+         // if extra object where append, redraw them at the end
+         this.getExtrasContainer("delete"); // delete old container
+         var extras = (this._main_painter ? this._main_painter._extraObjects : null) || this._extraObjects;
+         this.drawExtras(extras, "", false);
+      }
+
+      this.updateClipping(true); // do not render
+
+      this.Render3D(0, true);
+
+      if (close_progress) JSROOT.progress();
+
+      this.addOrbitControls();
+
+      this.addTransformControl();
+
+      if (first_time) {
+
+         // after first draw check if highlight can be enabled
+         if (this.ctrl.highlight === false)
+            this.ctrl.highlight = (this.first_render_tm < 1000);
+
+         // also highlight of scene object can be assigned at the first draw
+         if (this.ctrl.highlight_scene === false)
+            this.ctrl.highlight_scene = this.ctrl.highlight;
+
+         // if rotation was enabled, do it
+         if (this._webgl && this.ctrl.rotate && !this.ctrl.project) this.autorotate(2.5);
+         if (!this._usesvg && this.ctrl.show_controls && !JSROOT.BatchMode) this.showControlOptions(true);
+      }
+
+      // call it every time, in reality invoked only first time
+      this.DrawingReady();
+
+      if (typeof this._complete_handler == 'function')
+         this._complete_handler(this);
+
+      if (this._draw_nodes_again)
+         return this.startDrawGeometry(); // relaunch drawing
+
+      this._drawing_ready = true; // indicate that drawing is completed
+   }
+
+   /** Returns true if geometry drawing is completed */
+   TGeoPainter.prototype.isDrawingReady = function() {
+      return this._drawing_ready || false;
+   }
+
+   /** Remove already drawn node. Used by geom viewer */
+   TGeoPainter.prototype.RemoveDrawnNode = function(nodeid) {
+      if (!this._draw_nodes) return;
+
+      var new_nodes = [];
+
+      for (var n = 0; n < this._draw_nodes.length; ++n) {
+         var entry = this._draw_nodes[n];
+         if ((entry.nodeid === nodeid) || this._clones.IsNodeInStack(nodeid, entry.stack)) {
+            this._clones.CreateObject3D(entry.stack, this._toplevel, 'delete_mesh');
+         } else {
+            new_nodes.push(entry);
+         }
+      }
+
+      if (new_nodes.length < this._draw_nodes.length) {
+         this._draw_nodes = new_nodes;
+         this.Render3D();
+      }
+   }
+
+   TGeoPainter.prototype.Cleanup = function(first_time) {
+
+      if (!first_time) {
+
+         this.removeSSAO();
+
+         this.AccessTopPainter(false); // remove as pointer
+
+         var can3d = this.clear_3d_canvas(); // remove 3d canvas from main HTML element
+
+         if (this._toolbar) this._toolbar.Cleanup(); // remove toolbar
+
+         this.helpText();
+
+         JSROOT.Painter.DisposeThreejsObject(this._scene);
+
+         JSROOT.Painter.DisposeThreejsObject(this._full_geom);
+
+         if (this._tcontrols)
+            this._tcontrols.dispose();
+
+         if (this._controls)
+            this._controls.Cleanup();
+
+         if (this._context_menu)
+            this._renderer.domElement.removeEventListener( 'contextmenu', this._context_menu, false );
+
+         if (this._datgui)
+            this._datgui.destroy();
+
+         if (this._worker) this._worker.terminate();
+
+         delete this._animating;
+
+         var obj = this.GetGeometry();
+         if (obj && this.ctrl.is_main) {
+            if (obj.$geo_painter===this) delete obj.$geo_painter; else
+            if (obj.fVolume && obj.fVolume.$geo_painter===this) delete obj.fVolume.$geo_painter;
          }
 
-         for (var i=0;i<resort.length;++i) {
-            resort[i].renderOrder = maxorder - (i+1) / (resort.length+1) * (maxorder-minorder);
-            delete resort[i].$jsroot_index;
-            delete resort[i].$jsroot_distance;
+         if (this._main_painter) {
+            var pos = this._main_painter._slave_painters.indexOf(this);
+            if (pos>=0) this._main_painter._slave_painters.splice(pos,1);
          }
 
+         for (var k=0;k<this._slave_painters.length;++k) {
+            var slave = this._slave_painters[k];
+            if (slave && (slave._main_painter===this)) slave._main_painter = null;
+         }
+
+         delete this.geo_manager;
+         delete this._highlight_handlers;
+
+         JSROOT.TObjectPainter.prototype.Cleanup.call(this);
+
+         delete this.ctrl;
+         delete this.options;
+
+         this.did_cleanup = true;
+
+         if (can3d < 0) this.select_main().html("");
+      }
+
+      if (this._slave_painters)
+         for (var k in this._slave_painters) {
+            var slave = this._slave_painters[k];
+            slave._main_painter = null;
+            if (slave._clones === this._clones) slave._clones = null;
+         }
+
+      this._main_painter = null;
+      this._slave_painters = [];
+
+      if (this._renderer) {
+         if (this._renderer.dispose) this._renderer.dispose();
+         if (this._renderer.context) delete this._renderer.context;
+      }
+
+      delete this._scene;
+      this._scene_width = 0;
+      this._scene_height = 0;
+      this._renderer = null;
+      this._toplevel = null;
+      delete this._full_geom;
+      delete this._camera;
+      delete this._camera0pos;
+      delete this._lookat;
+      delete this._selected_mesh;
+
+      if (this._clones && this._clones_owner)
+         this._clones.Cleanup(this._draw_nodes, this._build_shapes);
+      delete this._clones;
+      delete this._clones_owner;
+      delete this._draw_nodes;
+      delete this._drawing_ready;
+      delete this._build_shapes;
+      delete this._new_draw_nodes;
+      delete this._new_append_nodes;
+      delete this._last_camera_position;
+
+      this.first_render_tm = 0; // time needed for first rendering
+      this.last_render_tm = 0;
+
+      this.drawing_stage = 0;
+      delete this.drawing_log;
+
+      delete this._datgui;
+      delete this._controls;
+      delete this._context_menu;
+      delete this._tcontrols;
+      delete this._toolbar;
+
+      delete this._worker;
+   }
+
+   TGeoPainter.prototype.helpText = function(msg) {
+      JSROOT.progress(msg);
+   }
+
+   TGeoPainter.prototype.CheckResize = function(arg) {
+      var pad_painter = this.canv_painter();
+
+      // firefox is the only browser which correctly supports resize of embedded canvas,
+      // for others we should force canvas redrawing at every step
+      if (pad_painter)
+         if (!pad_painter.CheckCanvasResize(arg)) return false;
+
+      var sz = this.size_for_3d();
+
+      if ((this._scene_width === sz.width) && (this._scene_height === sz.height)) return false;
+      if ((sz.width<10) || (sz.height<10)) return false;
+
+      this._scene_width = sz.width;
+      this._scene_height = sz.height;
+
+      if (this._camera && this._renderer) {
+         if (this._camera.type == "PerspectiveCamera")
+            this._camera.aspect = this._scene_width / this._scene_height;
+         this._camera.updateProjectionMatrix();
+         this._renderer.setSize( this._scene_width, this._scene_height, !this._fit_main_area );
+         if (this._effectComposer)
+            this._effectComposer.setSize( this._scene_width, this._scene_height );
+
+         if (!this.drawing_stage) this.Render3D();
+      }
+
+      return true;
+   }
+
+   TGeoPainter.prototype.toggleEnlarge = function() {
+
+      if (d3.event) {
+         d3.event.preventDefault();
+         d3.event.stopPropagation();
+      }
+
+      if (this.enlarge_main('toggle'))
+        this.CheckResize();
+   }
+
+
+   TGeoPainter.prototype.ownedByTransformControls = function(child) {
+      var obj = child.parent;
+      while (obj && !(obj instanceof THREE.TransformControls) ) {
+         obj = obj.parent;
+      }
+      return (obj && (obj instanceof THREE.TransformControls));
+   }
+
+   TGeoPainter.prototype.accessObjectWireFrame = function(obj, on) {
+      // either change mesh wireframe or return current value
+      // return undefined when wireframe cannot be accessed
+
+      if (!obj.hasOwnProperty("material") || (obj instanceof THREE.GridHelper)) return;
+
+      if (this.ownedByTransformControls(obj)) return;
+
+      if ((on !== undefined) && obj.stack)
+         obj.material.wireframe = on;
+
+      return obj.material.wireframe;
+   }
+
+   TGeoPainter.prototype.changedWireFrame = function() {
+      if (!this._scene) return;
+
+      var painter = this, on = this.ctrl.wireframe;
+
+      this._scene.traverse(function(obj) { painter.accessObjectWireFrame(obj, on); });
+
+      this.Render3D();
+   }
+
+   TGeoPainter.prototype.UpdateObject = function(obj) {
+      if (obj === "same") return true;
+      if (!obj || !obj._typename) return false;
+      if (obj === this.GetObject()) return true;
+
+      if (this.geo_manager && (obj._typename == "TGeoManager")) {
+         this.geo_manager = obj;
+         this.AssignObject({ _typename:"TGeoNode", fVolume: obj.fMasterVolume, fName: obj.fMasterVolume.fName, $geoh: obj.fMasterVolume.$geoh, _proxy: true });
          return true;
       }
 
-      function process(obj, lvl, minorder, maxorder) {
-         var arr = [], did_sort = false;
+      if (!this.MatchObjectType(obj._typename)) return false;
 
-         traverse(obj, lvl, arr);
-
-         if (!arr.length) return;
-
-         if (minorder === maxorder) {
-            for (var k=0;k<arr.length;++k)
-               arr[k].renderOrder = minorder;
-         } else {
-           did_sort = sort(arr, minorder, maxorder);
-           if (!did_sort) minorder = maxorder = (minorder + maxorder) / 2;
-         }
-
-         for (var k=0;k<arr.length;++k) {
-            var next = arr[k].parent, min = minorder, max = maxorder;
-
-            if (did_sort) {
-               max = arr[k].renderOrder;
-               min = max - (maxorder - minorder) / (arr.length + 2);
-            }
-
-            process(next, lvl+1, min, max);
-         }
-      }
-
-      if (!method || (method==="dflt"))
-         setdefaults(toplevel);
-      else
-         process(toplevel, 0, 1, 1000000);
+      this.AssignObject(obj);
+      return true;
    }
 
-   /** @brief Build three.js model for given geometry object.
-    * @desc Following options can be provided:
-    * opt.vislevel - visibility level like TGeoManager::
-    * opt.numnodes - maximal number of visible nodes
-    * opt.numfaces - approx maximal number of created triangles
-    * opt.dflt_colors - use default ROOT colors
-    */
-   JSROOT.GEO.build = function(obj, opt, call_back) {
-      // function can be used to build three.js model for TGeo object
+   TGeoPainter.prototype.ClearDrawings = function() {
+      if (this._clones && this._clones_owner)
+         this._clones.Cleanup(this._draw_nodes, this._build_shapes);
+      delete this._clones;
+      delete this._clones_owner;
+      delete this._draw_nodes;
+      delete this._drawing_ready;
+      delete this._build_shapes;
 
-      if (!obj) return;
+      delete this._extraObjects;
+      delete this._clipCfg;
 
-      if (!opt) opt = {};
-      if (!opt.numfaces) opt.numfaces = 100000;
-      if (!opt.numnodes) opt.numnodes = 1000;
-      if (!opt.frustum) opt.frustum = null;
+      JSROOT.Painter.DisposeThreejsObject(this._toplevel, true);
 
-      opt.res_mesh = opt.res_faces = 0;
+      this._full_redrawing = true;
+   }
 
-      var shape = null, hide_top = false;
+   TGeoPainter.prototype.RedrawObject = function(obj) {
+      if (!this.UpdateObject(obj))
+         return false;
+
+      this.ClearDrawings();
+
+      var draw_obj = this.GetGeometry(), name_prefix = "";
+      if (this.geo_manager) name_prefix = draw_obj.fName;
+
+      this.prepareObjectDraw(draw_obj, name_prefix);
+
+      return true;
+   }
+
+   JSROOT.Painter.CreateGeoPainter = function(divid, obj, opt) {
+      JSROOT.GEO.GradPerSegm = JSROOT.gStyle.GeoGradPerSegm;
+      JSROOT.GEO.CompressComp = JSROOT.gStyle.GeoCompressComp;
+
+      var painter = new TGeoPainter(obj);
+
+      // one could use TGeoManager setting, but for some example JSROOT does not build composites
+      // if (obj && obj._typename=='TGeoManager' && (obj.fNsegments > 3))
+      //   JSROOT.GEO.GradPerSegm = 360/obj.fNsegments;
+
+      painter.SetDivId(divid, 5);
+
+      painter._usesvg = JSROOT.Painter.UseSVGFor3D();
+
+      painter._usesvgimg = !painter._usesvg && JSROOT.BatchMode;
+
+      painter._webgl = !painter._usesvg && JSROOT.Painter.TestWebGL();
+
+      painter.options = painter.decodeOptions(opt); // indicator of initialization
+
+      // copy all attributes from options to control
+      JSROOT.extend(painter.ctrl, painter.options);
+
+      painter.ctrl.ssao.enabled = painter.options.usessao;
+
+      // special handling for array of clips
+      painter.ctrl.clip[0].enabled = painter.options.clipx;
+      painter.ctrl.clip[1].enabled = painter.options.clipy;
+      painter.ctrl.clip[2].enabled = painter.options.clipz;
+
+      return painter;
+   }
+
+   JSROOT.Painter.drawGeoObject = function(divid, obj, opt) {
+      if (!obj) return null;
+
+      var shape = null, extras = null, extras_path = "", is_eve = false;
 
       if (('fShapeBits' in obj) && ('fShapeId' in obj)) {
          shape = obj; obj = null;
       } else if ((obj._typename === 'TGeoVolumeAssembly') || (obj._typename === 'TGeoVolume')) {
          shape = obj.fShape;
-      } else if ((obj._typename === "TEveGeoShapeExtract") || (obj._typename === "ROOT::Experimental::TEveGeoShapeExtract")  ) {
-         shape = obj.fShape;
+      } else if ((obj._typename === "TEveGeoShapeExtract") || (obj._typename === "ROOT::Experimental::TEveGeoShapeExtract")) {
+         shape = obj.fShape; is_eve = true;
       } else if (obj._typename === 'TGeoManager') {
-         obj = obj.fMasterVolume;
-         hide_top = !opt.showtop;
-         shape = obj.fShape;
-      } else if (obj.fVolume) {
-         shape = obj.fVolume.fShape;
+         shape = obj.fMasterVolume.fShape;
+      } else if (obj._typename === 'TGeoOverlap') {
+         extras = obj.fMarker; extras_path = "<prnt>/Marker";
+         obj = JSROOT.GEO.buildOverlapVolume(obj);
+         if (!opt) opt = "wire";
+      } else if ('fVolume' in obj) {
+         if (obj.fVolume) shape = obj.fVolume.fShape;
       } else {
          obj = null;
       }
 
-      if (opt.composite && shape && (shape._typename == 'TGeoCompositeShape') && shape.fNode)
-         obj = JSROOT.GEO.buildCompositeVolume(shape);
+      if ((typeof opt == "string") && opt.indexOf("comp")==0 && shape && (shape._typename == 'TGeoCompositeShape') && shape.fNode) {
+         var maxlvl = 1;
+         opt = opt.substr(4);
+         if (opt[0] == "x") {  maxlvl = 999; opt = opt.substr(1) + "_vislvl999"; }
+         obj = JSROOT.GEO.buildCompositeVolume(shape, maxlvl);
+      }
 
       if (!obj && shape)
          obj = JSROOT.extend(JSROOT.Create("TEveGeoShapeExtract"),
@@ -3573,123 +4145,528 @@
 
       if (!obj) return null;
 
-      if (obj._typename.indexOf('TGeoVolume') === 0)
-         obj = { _typename:"TGeoNode", fVolume: obj, fName: obj.fName, $geoh: obj.$geoh, _proxy: true };
+      var painter = JSROOT.Painter.CreateGeoPainter(divid, obj, opt);
 
-      var clones = new JSROOT.GEO.ClonedNodes(obj);
-      clones.SetVisLevel(opt.vislevel);
-      clones.SetMaxVisNodes(opt.numnodes);
+      if (painter.ctrl.is_main && !obj.$geo_painter)
+         obj.$geo_painter = painter;
 
-      if (opt.dflt_colors)
-         clones.SetDefaultColors(true);
-
-      var uniquevis = opt.no_screen ? 0 : clones.MarkVisibles(true);
-      if (uniquevis <= 0)
-         uniquevis = clones.MarkVisibles(false, false, hide_top);
-      else
-         uniquevis = clones.MarkVisibles(true, true, hide_top); // copy bits once and use normal visibility bits
-
-      clones.ProduceIdShits();
-
-      // collect visible nodes
-      var res = clones.CollectVisibles(opt.numfaces, opt.frustum);
-
-      var draw_nodes = res.lst;
-
-      // collect shapes
-      var shapes = clones.CollectShapes(draw_nodes);
-
-      clones.BuildShapes(shapes, opt.numfaces);
-
-      var toplevel = new THREE.Object3D();
-
-      for (var n=0; n < draw_nodes.length;++n) {
-         var entry = draw_nodes[n];
-         if (entry.done) continue;
-
-         var shape = shapes[entry.shapeid];
-         if (!shape.ready) {
-            console.warn('shape marked as not ready when should');
-            break;
-         }
-         entry.done = true;
-         shape.used = true; // indicate that shape was used in building
-
-         if (!shape.geom || (shape.nfaces === 0)) {
-            // node is visible, but shape does not created
-            clones.CreateObject3D(entry.stack, toplevel, 'delete_mesh');
-            continue;
-         }
-
-         var prop = clones.getDrawEntryProperties(entry);
-
-         opt.res_mesh++;
-         opt.res_faces += shape.nfaces;
-
-         var obj3d = clones.CreateObject3D(entry.stack, toplevel, opt);
-
-         prop.material.wireframe = opt.wireframe;
-
-         prop.material.side = opt.doubleside ? THREE.DoubleSide : THREE.FrontSide;
-
-         var mesh = null;
-
-         if (obj3d.matrixWorld.determinant() > -0.9) {
-            mesh = new THREE.Mesh( shape.geom, prop.material );
-         } else {
-            mesh = JSROOT.GEO.createFlippedMesh(obj3d, shape, prop.material);
-         }
-
-         obj3d.add(mesh);
-         // specify rendering order, required for transparency handling
-         //if (obj3d.$jsroot_depth !== undefined)
-         //   mesh.renderOrder = clones.maxdepth - obj3d.$jsroot_depth;
-         //else
-         //   mesh.renderOrder = clones.maxdepth - entry.stack.length;
+      if (!painter.ctrl.is_main && painter.ctrl.project && obj.$geo_painter) {
+         painter._main_painter = obj.$geo_painter;
+         painter._main_painter._slave_painters.push(painter);
       }
 
-      JSROOT.CallBack(call_back, toplevel);
+      if (is_eve && !painter.ctrl.vislevel || (painter.ctrl.vislevel < 9))
+         painter.ctrl.vislevel = 9;
 
-      return toplevel;
+      if (extras) {
+         painter._splitColors = true;
+         painter.addExtra(extras, extras_path);
+      }
+
+      // this.ctrl.script_name = 'https://root.cern/js/files/geom/geomAlice.C'
+
+      painter.checkScript(painter.ctrl.script_name, painter.prepareObjectDraw.bind(painter));
+
+      return painter;
    }
 
-   /**  extract code of Box3.expandByObject
-     * Major difference - do not traverse hierarchy */
+   /// keep for backwards compatibility
+   JSROOT.Painter.drawGeometry = JSROOT.Painter.drawGeoObject;
 
-   JSROOT.GEO.getBoundingBox = function(node, box3, local_coordinates) {
-      if (!node || !node.geometry) return box3;
+   // ===============================================================================
 
-      if (!box3) { box3 = new THREE.Box3(); box3.makeEmpty(); }
+   /** Function used to build hierarchy of elements of composite shapes
+    * @private */
+   JSROOT.GEO.buildCompositeVolume = function(comp, maxlvl, side) {
 
-      if (!local_coordinates) node.updateMatrixWorld();
+      if (maxlvl === undefined) maxlvl = 1;
+      if (!side) {
+         this.$comp_col_cnt = 0;
+         side = "";
+      }
 
-      var v1 = new THREE.Vector3(),
-          geometry = node.geometry;
+      var vol = JSROOT.Create("TGeoVolume");
+      JSROOT.GEO.SetBit(vol, JSROOT.GEO.BITS.kVisThis, true);
+      JSROOT.GEO.SetBit(vol, JSROOT.GEO.BITS.kVisDaughters, true);
 
-      if ( geometry.isGeometry ) {
-         var vertices = geometry.vertices;
-         for (var i = 0, l = vertices.length; i < l; i ++ ) {
-            v1.copy( vertices[ i ] );
-            if (!local_coordinates) v1.applyMatrix4( node.matrixWorld );
-            box3.expandByPoint( v1 );
-         }
-      } else if ( geometry.isBufferGeometry ) {
-         var attribute = geometry.attributes.position;
-         if ( attribute !== undefined ) {
-            for (var i = 0, l = attribute.count; i < l; i ++ ) {
-               // v1.fromAttribute( attribute, i ).applyMatrix4( node.matrixWorld );
-               v1.fromBufferAttribute( attribute, i );
-               if (!local_coordinates) v1.applyMatrix4( node.matrixWorld );
-               box3.expandByPoint( v1 );
+      if ((side && (comp._typename!=='TGeoCompositeShape')) || (maxlvl<=0)) {
+         vol.fName = side;
+         vol.fLineColor = (this.$comp_col_cnt++ % 8) + 2;
+         vol.fShape = comp;
+         return vol;
+      }
+
+      if (side) side += "/";
+      vol.$geoh = true; // workaround, let know browser that we are in volumes hierarchy
+      vol.fName = "";
+
+      var node1 = JSROOT.Create("TGeoNodeMatrix");
+      JSROOT.GEO.SetBit(node1, JSROOT.GEO.BITS.kVisThis, true);
+      JSROOT.GEO.SetBit(node1, JSROOT.GEO.BITS.kVisDaughters, true);
+      node1.fName = "Left";
+      node1.fMatrix = comp.fNode.fLeftMat;
+      node1.fVolume = JSROOT.GEO.buildCompositeVolume(comp.fNode.fLeft, maxlvl-1, side + "Left");
+
+      var node2 = JSROOT.Create("TGeoNodeMatrix");
+      JSROOT.GEO.SetBit(node2, JSROOT.GEO.BITS.kVisThis, true);
+      JSROOT.GEO.SetBit(node2, JSROOT.GEO.BITS.kVisDaughters, true);
+      node2.fName = "Right";
+      node2.fMatrix = comp.fNode.fRightMat;
+      node2.fVolume = JSROOT.GEO.buildCompositeVolume(comp.fNode.fRight, maxlvl-1, side + "Right");
+
+      vol.fNodes = JSROOT.Create("TList");
+      vol.fNodes.Add(node1);
+      vol.fNodes.Add(node2);
+
+      if (!side) delete this.$comp_col_cnt;
+
+      return vol;
+   }
+
+   /** Function used to build hierarchy of elements of overlap object
+    * @private */
+   JSROOT.GEO.buildOverlapVolume = function(overlap) {
+
+      var vol = JSROOT.Create("TGeoVolume");
+
+      JSROOT.GEO.SetBit(vol, JSROOT.GEO.BITS.kVisDaughters, true);
+      vol.$geoh = true; // workaround, let know browser that we are in volumes hierarchy
+      vol.fName = "";
+
+      var node1 = JSROOT.Create("TGeoNodeMatrix");
+      node1.fName = overlap.fVolume1.fName || "Overlap1";
+      node1.fMatrix = overlap.fMatrix1;
+      node1.fVolume = overlap.fVolume1;
+      // node1.fVolume.fLineColor = 2; // color assigned with _splitColors
+
+      var node2 = JSROOT.Create("TGeoNodeMatrix");
+      node2.fName = overlap.fVolume2.fName || "Overlap2";
+      node2.fMatrix = overlap.fMatrix2;
+      node2.fVolume = overlap.fVolume2;
+      // node2.fVolume.fLineColor = 3;  // color assigned with _splitColors
+
+      vol.fNodes = JSROOT.Create("TList");
+      vol.fNodes.Add(node1);
+      vol.fNodes.Add(node2);
+
+      return vol;
+   }
+
+   JSROOT.GEO.provideVisStyle = function(obj) {
+      if ((obj._typename === 'TEveGeoShapeExtract') || (obj._typename === 'ROOT::Experimental::TEveGeoShapeExtract'))
+         return obj.fRnrSelf ? " geovis_this" : "";
+
+      var vis = !JSROOT.GEO.TestBit(obj, JSROOT.GEO.BITS.kVisNone) &&
+                JSROOT.GEO.TestBit(obj, JSROOT.GEO.BITS.kVisThis),
+          chld = JSROOT.GEO.TestBit(obj, JSROOT.GEO.BITS.kVisDaughters);
+
+      if (chld && (!obj.fNodes || (obj.fNodes.arr.length === 0))) chld = false;
+
+      if (vis && chld) return " geovis_all";
+      if (vis) return " geovis_this";
+      if (chld) return " geovis_daughters";
+      return "";
+   }
+
+
+   JSROOT.GEO.getBrowserItem = function(item, itemname, callback) {
+      // mark object as belong to the hierarchy, require to
+      if (item._geoobj) item._geoobj.$geoh = true;
+
+      JSROOT.CallBack(callback, item, item._geoobj);
+   }
+
+
+   JSROOT.GEO.createItem = function(node, obj, name) {
+      var sub = {
+         _kind: "ROOT." + obj._typename,
+         _name: name ? name : JSROOT.GEO.ObjectName(obj),
+         _title: obj.fTitle,
+         _parent: node,
+         _geoobj: obj,
+         _get: JSROOT.GEO.getBrowserItem
+      };
+
+      var volume, shape, subnodes, iseve = false;
+
+      if (obj._typename == "TGeoMaterial") sub._icon = "img_geomaterial"; else
+      if (obj._typename == "TGeoMedium") sub._icon = "img_geomedium"; else
+      if (obj._typename == "TGeoMixture") sub._icon = "img_geomixture"; else
+      if ((obj._typename.indexOf("TGeoNode")===0) && obj.fVolume) {
+         sub._title = "node:"  + obj._typename;
+         if (obj.fTitle.length > 0) sub._title += " " + obj.fTitle;
+         volume = obj.fVolume;
+      } else
+      if (obj._typename.indexOf("TGeoVolume")===0) {
+         volume = obj;
+      } else
+      if ((obj._typename == "TEveGeoShapeExtract") || (obj._typename == "ROOT::Experimental::TEveGeoShapeExtract") ) {
+         iseve = true;
+         shape = obj.fShape;
+         subnodes = obj.fElements ? obj.fElements.arr : null;
+      } else
+      if ((obj.fShapeBits !== undefined) && (obj.fShapeId !== undefined)) {
+         shape = obj;
+      }
+
+      if (volume) {
+         shape = volume.fShape;
+         subnodes = volume.fNodes ? volume.fNodes.arr : null;
+      }
+
+      if (volume || shape || subnodes) {
+         if (volume) sub._volume = volume;
+
+         if (subnodes) {
+            sub._more = true;
+            sub._expand = JSROOT.GEO.expandObject;
+         } else
+         if (shape && (shape._typename === "TGeoCompositeShape") && shape.fNode) {
+            sub._more = true;
+            sub._shape = shape;
+            sub._expand = function(node, obj) {
+               JSROOT.GEO.createItem(node, node._shape.fNode.fLeft, 'Left');
+               JSROOT.GEO.createItem(node, node._shape.fNode.fRight, 'Right');
+               return true;
             }
          }
+
+         if (!sub._title && (obj._typename != "TGeoVolume")) sub._title = obj._typename;
+
+         if (shape) {
+            if (sub._title == "")
+               sub._title = shape._typename;
+
+            sub._icon = JSROOT.GEO.getShapeIcon(shape);
+         } else {
+            sub._icon = sub._more ? "img_geocombi" : "img_geobbox";
+         }
+
+         if (volume)
+            sub._icon += JSROOT.GEO.provideVisStyle(volume);
+         else if (iseve)
+            sub._icon += JSROOT.GEO.provideVisStyle(obj);
+
+         sub._menu = JSROOT.GEO.provideMenu;
+         sub._icon_click  = JSROOT.GEO.browserIconClick;
       }
 
-      return box3;
+      if (!node._childs) node._childs = [];
+
+      if (!sub._name)
+         if (typeof node._name === 'string') {
+            sub._name = node._name;
+            if (sub._name.lastIndexOf("s")===sub._name.length-1)
+               sub._name = sub._name.substr(0, sub._name.length-1);
+            sub._name += "_" + node._childs.length;
+         } else {
+            sub._name = "item_" + node._childs.length;
+         }
+
+      node._childs.push(sub);
+
+      return sub;
    }
 
+   JSROOT.GEO.createList = function(parent, lst, name, title) {
 
-   return JSROOT;
+      if (!lst || !('arr' in lst) || (lst.arr.length==0)) return;
+
+      var item = {
+          _name: name,
+          _kind: "ROOT.TList",
+          _title: title,
+          _more: true,
+          _geoobj: lst,
+          _parent: parent,
+      }
+
+      item._get = function(item, itemname, callback) {
+         if ('_geoobj' in item)
+            return JSROOT.CallBack(callback, item, item._geoobj);
+
+         JSROOT.CallBack(callback, item, null);
+      }
+
+      item._expand = function(node, lst) {
+         // only childs
+
+         if ('fVolume' in lst)
+            lst = lst.fVolume.fNodes;
+
+         if (!('arr' in lst)) return false;
+
+         node._childs = [];
+
+         JSROOT.GEO.CheckDuplicates(null, lst.arr);
+
+         for (var n in lst.arr)
+            JSROOT.GEO.createItem(node, lst.arr[n]);
+
+         return true;
+      }
+
+      if (!parent._childs) parent._childs = [];
+      parent._childs.push(item);
+
+   };
+
+   JSROOT.GEO.provideMenu = function(menu, item, hpainter) {
+
+      if (!item._geoobj) return false;
+
+      var obj = item._geoobj, vol = item._volume,
+          iseve = ((obj._typename === 'TEveGeoShapeExtract') || (obj._typename === 'ROOT::Experimental::TEveGeoShapeExtract'));
+
+      if (!vol && !iseve) return false;
+
+      menu.add("separator");
+
+      function ScanEveVisible(obj, arg, skip_this) {
+         if (!arg) arg = { visible: 0, hidden: 0 };
+
+         if (!skip_this) {
+            if (arg.assign!==undefined) obj.fRnrSelf = arg.assign; else
+            if (obj.fRnrSelf) arg.vis++; else arg.hidden++;
+         }
+
+         if (obj.fElements)
+            for (var n=0;n<obj.fElements.arr.length;++n)
+               ScanEveVisible(obj.fElements.arr[n], arg, false);
+
+         return arg;
+      }
+
+      function ToggleEveVisibility(arg) {
+         if (arg === 'self') {
+            obj.fRnrSelf = !obj.fRnrSelf;
+            item._icon = item._icon.split(" ")[0] + JSROOT.GEO.provideVisStyle(obj);
+            hpainter.UpdateTreeNode(item);
+         } else {
+            ScanEveVisible(obj, { assign: (arg === "true") }, true);
+            hpainter.ForEach(function(m) {
+               // update all child items
+               if (m._geoobj && m._icon) {
+                  m._icon = item._icon.split(" ")[0] + JSROOT.GEO.provideVisStyle(m._geoobj);
+                  hpainter.UpdateTreeNode(m);
+               }
+            }, item);
+         }
+
+         JSROOT.GEO.findItemWithPainter(item, 'testGeomChanges');
+      }
+
+      function ToggleMenuBit(arg) {
+         JSROOT.GEO.ToggleBit(vol, arg);
+         var newname = item._icon.split(" ")[0] + JSROOT.GEO.provideVisStyle(vol);
+         hpainter.ForEach(function(m) {
+            // update all items with that volume
+            if (item._volume === m._volume) {
+               m._icon = newname;
+               hpainter.UpdateTreeNode(m);
+            }
+         });
+
+         hpainter.UpdateTreeNode(item);
+         JSROOT.GEO.findItemWithPainter(item, 'testGeomChanges');
+      }
+
+      if ((item._geoobj._typename.indexOf("TGeoNode")===0) && JSROOT.GEO.findItemWithPainter(item))
+         menu.add("Focus", function() {
+
+           var drawitem = JSROOT.GEO.findItemWithPainter(item);
+
+           if (!drawitem) return;
+
+           var fullname = hpainter.itemFullName(item, drawitem);
+
+           if (drawitem._painter && typeof drawitem._painter.focusOnItem == 'function')
+              drawitem._painter.focusOnItem(fullname);
+         });
+
+      if (iseve) {
+         menu.addchk(obj.fRnrSelf, "Visible", "self", ToggleEveVisibility);
+         var res = ScanEveVisible(obj, undefined, true);
+
+         if (res.hidden + res.visible > 0)
+            menu.addchk((res.hidden==0), "Daughters", (res.hidden!=0) ? "true" : "false", ToggleEveVisibility);
+
+      } else {
+         menu.addchk(JSROOT.GEO.TestBit(vol, JSROOT.GEO.BITS.kVisNone), "Invisible",
+               JSROOT.GEO.BITS.kVisNone, ToggleMenuBit);
+         menu.addchk(JSROOT.GEO.TestBit(vol, JSROOT.GEO.BITS.kVisThis), "Visible",
+               JSROOT.GEO.BITS.kVisThis, ToggleMenuBit);
+         menu.addchk(JSROOT.GEO.TestBit(vol, JSROOT.GEO.BITS.kVisDaughters), "Daughters",
+               JSROOT.GEO.BITS.kVisDaughters, ToggleMenuBit);
+      }
+
+      return true;
+   }
+
+   JSROOT.GEO.findItemWithPainter = function(hitem, funcname) {
+      while (hitem) {
+         if (hitem._painter && hitem._painter._camera) {
+            if (funcname && typeof hitem._painter[funcname] == 'function')
+               hitem._painter[funcname]();
+            return hitem;
+         }
+         hitem = hitem._parent;
+      }
+      return null;
+   }
+
+   JSROOT.GEO.updateBrowserIcons = function(obj, hpainter) {
+      if (!obj || !hpainter) return;
+
+      hpainter.ForEach(function(m) {
+         // update all items with that volume
+         if ((obj === m._volume) || (obj === m._geoobj)) {
+            m._icon = m._icon.split(" ")[0] + JSROOT.GEO.provideVisStyle(obj);
+            hpainter.UpdateTreeNode(m);
+         }
+      });
+   }
+
+   JSROOT.GEO.browserIconClick = function(hitem, hpainter) {
+      if (hitem._volume) {
+         if (hitem._more && hitem._volume.fNodes && (hitem._volume.fNodes.arr.length>0))
+            JSROOT.GEO.ToggleBit(hitem._volume, JSROOT.GEO.BITS.kVisDaughters);
+         else
+            JSROOT.GEO.ToggleBit(hitem._volume, JSROOT.GEO.BITS.kVisThis);
+
+         JSROOT.GEO.updateBrowserIcons(hitem._volume, hpainter);
+
+         JSROOT.GEO.findItemWithPainter(hitem, 'testGeomChanges');
+         return false; // no need to update icon - we did it ourself
+      }
+
+      if (hitem._geoobj && (( hitem._geoobj._typename == "TEveGeoShapeExtract") || ( hitem._geoobj._typename == "ROOT::Experimental::TEveGeoShapeExtract"))) {
+         hitem._geoobj.fRnrSelf = !hitem._geoobj.fRnrSelf;
+
+         JSROOT.GEO.updateBrowserIcons(hitem._geoobj, hpainter);
+         JSROOT.GEO.findItemWithPainter(hitem, 'testGeomChanges');
+         return false; // no need to update icon - we did it ourself
+      }
+
+
+      // first check that geo painter assigned with the item
+      var drawitem = JSROOT.GEO.findItemWithPainter(hitem);
+      if (!drawitem) return false;
+
+      var newstate = drawitem._painter.ExtraObjectVisible(hpainter, hitem, true);
+
+      // return true means browser should update icon for the item
+      return (newstate!==undefined) ? true : false;
+   }
+
+   JSROOT.GEO.getShapeIcon = function(shape) {
+      switch (shape._typename) {
+         case "TGeoArb8" : return "img_geoarb8"; break;
+         case "TGeoCone" : return "img_geocone"; break;
+         case "TGeoConeSeg" : return "img_geoconeseg"; break;
+         case "TGeoCompositeShape" : return "img_geocomposite"; break;
+         case "TGeoTube" : return "img_geotube"; break;
+         case "TGeoTubeSeg" : return "img_geotubeseg"; break;
+         case "TGeoPara" : return "img_geopara"; break;
+         case "TGeoParaboloid" : return "img_geoparab"; break;
+         case "TGeoPcon" : return "img_geopcon"; break;
+         case "TGeoPgon" : return "img_geopgon"; break;
+         case "TGeoShapeAssembly" : return "img_geoassembly"; break;
+         case "TGeoSphere" : return "img_geosphere"; break;
+         case "TGeoTorus" : return "img_geotorus"; break;
+         case "TGeoTrd1" : return "img_geotrd1"; break;
+         case "TGeoTrd2" : return "img_geotrd2"; break;
+         case "TGeoXtru" : return "img_geoxtru"; break;
+         case "TGeoTrap" : return "img_geotrap"; break;
+         case "TGeoGtra" : return "img_geogtra"; break;
+         case "TGeoEltu" : return "img_geoeltu"; break;
+         case "TGeoHype" : return "img_geohype"; break;
+         case "TGeoCtub" : return "img_geoctub"; break;
+      }
+      return "img_geotube";
+   }
+
+   JSROOT.GEO.getBrowserIcon = function(hitem, hpainter) {
+      var icon = "";
+      if (hitem._kind == 'ROOT.TEveTrack') icon = 'img_evetrack'; else
+      if (hitem._kind == 'ROOT.TEvePointSet') icon = 'img_evepoints'; else
+      if (hitem._kind == 'ROOT.TPolyMarker3D') icon = 'img_evepoints';
+      if (icon.length>0) {
+         var drawitem = JSROOT.GEO.findItemWithPainter(hitem);
+         if (drawitem)
+            if (drawitem._painter.ExtraObjectVisible(hpainter, hitem))
+               icon += " geovis_this";
+      }
+      return icon;
+   }
+
+   JSROOT.GEO.expandObject = function(parent, obj) {
+      if (!parent || !obj) return false;
+
+      var isnode = (obj._typename.indexOf('TGeoNode') === 0),
+          isvolume = (obj._typename.indexOf('TGeoVolume') === 0),
+          ismanager = (obj._typename === 'TGeoManager'),
+          iseve = ((obj._typename === 'TEveGeoShapeExtract') || (obj._typename === 'ROOT::Experimental::TEveGeoShapeExtract')),
+          isoverlap = (obj._typename === 'TGeoOverlap');
+
+      if (!isnode && !isvolume && !ismanager && !iseve && !isoverlap) return false;
+
+      if (parent._childs) return true;
+
+      if (ismanager) {
+         JSROOT.GEO.createList(parent, obj.fMaterials, "Materials", "list of materials");
+         JSROOT.GEO.createList(parent, obj.fMedia, "Media", "list of media");
+         JSROOT.GEO.createList(parent, obj.fTracks, "Tracks", "list of tracks");
+         JSROOT.GEO.createList(parent, obj.fOverlaps, "Overlaps", "list of detected overlaps");
+         JSROOT.GEO.createItem(parent, obj.fMasterVolume);
+         return true;
+      }
+
+      if (isoverlap) {
+         JSROOT.GEO.createItem(parent, obj.fVolume1);
+         JSROOT.GEO.createItem(parent, obj.fVolume2);
+         JSROOT.GEO.createItem(parent, obj.fMarker, 'Marker');
+         return true;
+      }
+
+      var volume, subnodes, shape;
+
+      if (iseve) {
+         subnodes = obj.fElements ? obj.fElements.arr : null;
+         shape = obj.fShape;
+      } else {
+         volume = (isnode ? obj.fVolume : obj);
+         subnodes = volume && volume.fNodes ? volume.fNodes.arr : null;
+         shape = volume ? volume.fShape : null;
+      }
+
+      if (!subnodes && shape && (shape._typename === "TGeoCompositeShape") && shape.fNode) {
+         if (!parent._childs) {
+            JSROOT.GEO.createItem(parent, shape.fNode.fLeft, 'Left');
+            JSROOT.GEO.createItem(parent, shape.fNode.fRight, 'Right');
+         }
+
+         return true;
+      }
+
+      if (!subnodes) return false;
+
+      JSROOT.GEO.CheckDuplicates(obj, subnodes);
+
+      for (var i=0;i<subnodes.length;++i)
+         JSROOT.GEO.createItem(parent, subnodes[i]);
+
+      return true;
+   }
+
+   JSROOT.addDrawFunc({ name: "TGeoVolumeAssembly", icon: 'img_geoassembly', func: JSROOT.Painter.drawGeoObject, expand: JSROOT.GEO.expandObject, opt: ";more;all;count" });
+   JSROOT.addDrawFunc({ name: "TEvePointSet", icon_get: JSROOT.GEO.getBrowserIcon, icon_click: JSROOT.GEO.browserIconClick });
+   JSROOT.addDrawFunc({ name: "TEveTrack", icon_get: JSROOT.GEO.getBrowserIcon, icon_click: JSROOT.GEO.browserIconClick });
+
+   JSROOT.TGeoPainter = TGeoPainter;
+
+   JSROOT.Painter.GeoDrawingControl = GeoDrawingControl;
+
+   return JSROOT.Painter;
 
 }));
-

@@ -15,6 +15,7 @@ JSROOT implements user interface for THttpServer class.
 <br/>
 <br/>
 
+
 ## Links
 
 Project web pages:
@@ -22,6 +23,7 @@ Project web pages:
 [https://root.cern/js/](https://root.cern/js/)
 
 [http://jsroot.gsi.de](http://jsroot.gsi.de/)
+
 
 # Documentation
 
@@ -31,8 +33,10 @@ THttpServer [tutorial](docs/HttpServer.md)
 
 JavaScript ROOT [changelog](changes.md)
 
+
 ## Examples
 
 [JSROOT examples](https://root.cern/js/latest/examples.htm)
 
 [JSROOT API examples](https://root.cern/js/latest/api.htm)
+
