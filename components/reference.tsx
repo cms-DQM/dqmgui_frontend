@@ -1,5 +1,5 @@
 
-import { useState, ChangeEvent, FormEvent, useReducer } from 'react'
+import React, { useState, ChangeEvent, FormEvent, useReducer } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import { field_name } from './constants'
 import { TripleProps } from '../containers/display/interfaces';

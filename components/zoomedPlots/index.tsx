@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { ParamsForApiProps } from '../../containers/display/interfaces'
 
 import { ZoomedPlots as ZoomedOverlaidPlots } from './zoomedOverlayPlots/'

@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { setErrorBars, setNormalize, setStats } from "../../reducers/displayFolderOrPlot";
 
 interface ViewFilerProps {

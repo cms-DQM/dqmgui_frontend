@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { get_plot_with_overlay, root_url, get_overlaied_plots_urls } from '../../../config/config'
 import { ParamsForApiProps } from '../../../containers/display/interfaces'
 import { sizes } from '../../constants'

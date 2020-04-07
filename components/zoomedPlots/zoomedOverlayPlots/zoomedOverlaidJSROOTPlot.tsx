@@ -1,3 +1,4 @@
+import React from 'react';
 import cleanDeep from 'clean-deep'
 
 import { get_jroot_plot } from '../../../config/config'

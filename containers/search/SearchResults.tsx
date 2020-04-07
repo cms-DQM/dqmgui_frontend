@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import React, { FC } from 'react';
 // import Link from 'next/link';
 // import { FixedSizeList as List } from 'react-window';
 // import AutoSizer from 'react-virtualized-auto-sizer';

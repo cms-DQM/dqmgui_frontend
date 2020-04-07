@@ -1,4 +1,4 @@
-import { FC, ChangeEvent, Dispatch, FormEvent, useReducer } from 'react';
+import React, { FC, ChangeEvent, Dispatch, FormEvent, useReducer } from 'react';
 
 import { navReducer, initialState, setSearchFieldByDatasetName, setSearchFieldByRunNumber } from '../reducers/navReducer'
 

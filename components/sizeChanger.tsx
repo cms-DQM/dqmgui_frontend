@@ -1,3 +1,4 @@
+import React from 'react';
 import { sizes } from './constants'
 import { setHeight, setWidth } from '../reducers/displayFolderOrPlot'
 

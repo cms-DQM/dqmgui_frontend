@@ -1,8 +1,9 @@
+import React, { useEffect } from 'react'
+
 import { get_jroot_plot } from '../../../config/config'
 import { ParamsForApiProps } from '../../../containers/display/interfaces'
 import { sizes } from '../../constants'
 import { useRequest } from '../../../hooks/useRequest'
-import { useEffect } from 'react'
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot_name: string
