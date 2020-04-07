@@ -34,13 +34,13 @@ export const sizes = {
       h: 541,
     },
   },
-}
+};
 
 export const field_name: any = {
   dataset_name: 'Dataset name',
   run_number: 'Run number',
-  label: 'label'
-}
+  label: 'label',
+};
 
 export const FOLDERS_OR_PLOTS_REDUCER = {
   SET_PLOT_TO_OVERLAY: 'SET_PLOT_TO_OVERLAY',
@@ -52,14 +52,14 @@ export const FOLDERS_OR_PLOTS_REDUCER = {
   SET_ERR_BARS: 'SET_ERR_BARS',
   SET_OVERLAY: 'SET_OVERLAY',
   SHOW: 'SHOW',
-  JSROOT_MODE: 'JSROOT_MODE'
-}
+  JSROOT_MODE: 'JSROOT_MODE',
+};
 
 export const NAV_REDUCER = {
   SET_SEARCH_BY_DATASET_NAME: 'SET_SEARCH_BY_DATASET_NAME',
-  SET_SEARCH_BY_RUN_NUMBER: 'SET_SEARCH_BY_RUN_NUMBER'
-}
+  SET_SEARCH_BY_RUN_NUMBER: 'SET_SEARCH_BY_RUN_NUMBER',
+};
 
 export const REFERENCE_REDCER = {
-  CHANGE_TRIPLES_VALUES: 'CHANGE_TRIPLES_VALUES'
-}
+  CHANGE_TRIPLES_VALUES: 'CHANGE_TRIPLES_VALUES',
+};
