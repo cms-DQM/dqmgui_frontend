@@ -25,8 +25,8 @@ const Index: NextPage<FolderPathQuery> = (query) => {
   return (
     <>
       <Head>
-        //@ts-ignore
         <script
+          //@ts-ignore
           crossorigin
           type="text/javascript"
           src="/jsroot-5.8.0/scripts/JSRootCore.js?2d&hist&more2d"
@@ -46,8 +46,8 @@ const Index: NextPage<FolderPathQuery> = (query) => {
           results_grouped={results_grouped}
         />
       ) : (
-        <Home />
-      )}
+            <Home />
+          )}
     </>
   );
 };
