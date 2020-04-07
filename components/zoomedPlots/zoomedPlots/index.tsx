@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { ParamsForApiProps } from '../../../containers/display/interfaces'
 import { ZoomedPlot } from './zoomedPlot'
 import { ZoomedJSROOTPlot } from './zoomedJSROOTPlot'

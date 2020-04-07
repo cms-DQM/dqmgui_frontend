@@ -1,4 +1,6 @@
-import { get_plot_url, root_url, get_jroot_plot } from '../../../config/config'
+import React, { useEffect } from 'react'
+
+import { get_plot_url, root_url } from '../../../config/config'
 import { ParamsForApiProps } from '../../../containers/display/interfaces'
 import { sizes } from '../../constants'
 

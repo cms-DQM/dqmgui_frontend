@@ -1,4 +1,4 @@
-import { FC, useReducer } from 'react';
+import React, { FC, useReducer } from 'react';
 import Link from 'next/link';
 
 import { useRequest } from '../../hooks/useRequest';

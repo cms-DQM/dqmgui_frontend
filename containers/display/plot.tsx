@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { root_url } from '../../config/config';
 import { get_plot_url } from '../../config/config';
 import { ParamsForApiProps } from './interfaces';
