@@ -2,7 +2,6 @@
 /// JavaScript ROOT v7 graphics for histogram classes
 
 (function( factory ) {
-   console.log('jsroopatiner v seven hist')
    if ( typeof define === "function" && define.amd ) {
       define( ['JSRootPainter', 'd3'], factory );
    } else if (typeof exports === 'object' && typeof module !== 'undefined') {
