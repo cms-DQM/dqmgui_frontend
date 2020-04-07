@@ -39,4 +39,3 @@ export const useSearch = (
 
   return { results, results_grouped, searching, isLoading };
 };
-

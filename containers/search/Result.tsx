@@ -10,7 +10,7 @@ const Result: FC<SearchResultsInterface> = ({ dataset, value }) => {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <li onClick={e => setExpanded(!expanded)}>
+    <li onClick={(e) => setExpanded(!expanded)}>
       {dataset}
       {expanded && (
         <ul>
@@ -21,8 +21,8 @@ const Result: FC<SearchResultsInterface> = ({ dataset, value }) => {
                   pathname: '/',
                   query: {
                     run_number: run,
-                    dataset_name: dataset
-                  }
+                    dataset_name: dataset,
+                  },
                 }}
               >
                 <a>{run}</a>
@@ -32,6 +32,6 @@ const Result: FC<SearchResultsInterface> = ({ dataset, value }) => {
         </ul>
       )}
     </li>
-  )
-}
+  );
+};
 export default Result;

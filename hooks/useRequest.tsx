@@ -26,7 +26,7 @@ export const useRequest = (
         const response: AxiosResponse = await axios.request({
           url: `${root_url}/${url}`,
           method: options.method || 'get',
-          ...options
+          ...options,
         });
         const { data, status } = response;
         setData(data);

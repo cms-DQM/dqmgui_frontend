@@ -14,25 +14,25 @@ interface SearchResultsInterface {
 const SearchResults: FC<SearchResultsInterface> = ({
   results,
   results_grouped,
-  isLoading
+  isLoading,
 }) => {
   return (
     <div>
       {isLoading ? (
         <h3>Loading...</h3>
       ) : (
-          <div>
-            {results_grouped.length === 0 && !isLoading && (
-              <h3>No results found</h3>
-            )}
-            <ul>
-              {results_grouped.map(({ dataset, value }) => (
-                <Result key={dataset} dataset={dataset} value={value} />
-              ))}
+        <div>
+          {results_grouped.length === 0 && !isLoading && (
+            <h3>No results found</h3>
+          )}
+          <ul>
+            {results_grouped.map(({ dataset, value }) => (
+              <Result key={dataset} dataset={dataset} value={value} />
+            ))}
 
-              {/* <AutoSizer>
+            {/* <AutoSizer>
             {({ height, width }) => ( */}
-              {/* <List
+            {/* <List
                 className="List"
                 height={1000}
                 itemCount={results_grouped.length}
@@ -47,9 +47,9 @@ const SearchResults: FC<SearchResultsInterface> = ({
                   />
                 )}
               </List> */}
-            </ul>
-          </div>
-        )}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
