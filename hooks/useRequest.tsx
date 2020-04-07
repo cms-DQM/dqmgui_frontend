@@ -37,6 +37,6 @@ export const useRequest = (
     if (should_we_fetch) {
       fetchData();
     }
-  }, [...watchers, options, url, should_we_fetch]);
+  }, watchers);
   return { data, error, isLoading };
 };
