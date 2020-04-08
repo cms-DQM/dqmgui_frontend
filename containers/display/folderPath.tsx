@@ -11,14 +11,26 @@ interface FolderPathProps {
 
 export const FolderPath = ({ folder_path }: FolderPathProps) => {
   const folders = folder_path ? folder_path.split("/") : []
+  const filteredFolders = folders.filter((folder: string) => folder !== '')
   const router = useRouter()
   const query = router.query
 
-  console.log(decodeURIComponent(router.asPath))
   return (
     <Breadcrumb separator=">">
-      {folders.map((folder: string) => {
-        const formatedFolder = folder === '' ? '\\' : folder
+      <Breadcrumb.Item>
+        <Link
+          href={{
+            pathname: '/',
+            query: {
+              run_number: query.run_number,
+              dataset_name: query.dataset_name,
+            },
+          }}
+        >
+          Home
+        </Link>
+      </Breadcrumb.Item>
+      {filteredFolders.map((folder: string) => {
         return (
           <Breadcrumb.Item>
             <Link
@@ -27,11 +39,11 @@ export const FolderPath = ({ folder_path }: FolderPathProps) => {
                 query: {
                   run_number: query.run_number,
                   dataset_name: query.dataset_name,
-                  folder_path: getFolderPath(folders, formatedFolder),
+                  folder_path: getFolderPath(folders, folder),
                 },
               }}
             >
-              {formatedFolder}
+              {folder}
             </Link>
           </Breadcrumb.Item>
         )
