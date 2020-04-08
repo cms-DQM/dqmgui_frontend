@@ -1,4 +1,6 @@
 import React from 'react';
+import { Row, Col } from 'antd'
+
 import { root_url } from '../../config/config';
 import {
   get_plot_with_overlay,
@@ -28,7 +30,7 @@ export const OverlaidPlot = ({
   const source = `${root_url}/${plot_with_overlay}`;
 
   return (
-    <>
+    <Col>
       <button onClick={() => addPlotToList(plot_name)}>Add to list</button>
       <div
         style={{ height: params_for_api.height, width: params_for_api.width }}
@@ -37,6 +39,6 @@ export const OverlaidPlot = ({
         <p>{plot_name}</p>
         <img alt={plot_name} src={source} />
       </div>
-    </>
+    </Col>
   );
 };

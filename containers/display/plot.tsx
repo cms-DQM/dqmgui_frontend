@@ -1,4 +1,6 @@
 import React from 'react';
+import {Col} from 'antd'
+
 import { root_url } from '../../config/config';
 import { get_plot_url } from '../../config/config';
 import { ParamsForApiProps } from './interfaces';
@@ -21,7 +23,7 @@ export const Plot = ({
   const source = `${root_url}/${plot_url}`;
 
   return (
-    <>
+    <Col>
       <button onClick={() => addPlotToList(plot_name)}>Add to list</button>
       <div
         style={{ height: params_for_api.height, width: params_for_api.width }}
@@ -30,6 +32,6 @@ export const Plot = ({
         <p>{plot_name}</p>
         <img alt={plot_name} src={source} />
       </div>
-    </>
+    </Col>
   );
 };
