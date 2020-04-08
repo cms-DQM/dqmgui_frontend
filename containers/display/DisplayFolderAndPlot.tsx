@@ -118,23 +118,25 @@ const DiplayFolder: FC<FolderProps> = ({
           const plot_name = directory_or_plot?.obj;
 
           return (
-            <Col span={4} key={directory_name || plot_name}>
+            <>
               {directory_name ? (
-                <DirecotryWrapper>
-                  <Icon />
-                  <Link
-                    href={{
-                      pathname: '/',
-                      query: {
-                        run_number: run_number,
-                        dataset_name: dataset_name,
-                        folder_path: `${folder_path}/${directory_name}`,
-                      },
-                    }}
-                  >
-                    <StyledA>{directory_name}</StyledA>
-                  </Link>
-                </DirecotryWrapper>
+                <Col span={4} key={directory_name || plot_name}>
+                  <DirecotryWrapper>
+                    <Icon />
+                    <Link
+                      href={{
+                        pathname: '/',
+                        query: {
+                          run_number: run_number,
+                          dataset_name: dataset_name,
+                          folder_path: `${folder_path}/${directory_name}`,
+                        },
+                      }}
+                    >
+                      <StyledA>{directory_name}</StyledA>
+                    </Link>
+                  </DirecotryWrapper>
+                </Col>
               ) : overlay_plot.length > 0 ? (
                 <OverlaidPlot
                   plot_name={plot_name}
@@ -150,7 +152,7 @@ const DiplayFolder: FC<FolderProps> = ({
                       dispatch={dispatch}
                     />
                   )}
-            </Col>
+            </>
           );
         })}
       </Row>
