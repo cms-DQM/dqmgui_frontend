@@ -1,6 +1,7 @@
 import React, { FC, useReducer } from 'react';
 import Link from 'next/link';
 import { Row, Col } from 'antd'
+import { useRouter } from 'next/router'
 
 import { useRequest } from '../../hooks/useRequest';
 import { Plot } from './plot';
@@ -16,6 +17,7 @@ import {
 } from '../../reducers/displayFolderOrPlot';
 import { ViewDetailsMenu } from '../../components/viewDetailsMenu';
 import { Icon, DirecotryWrapper, StyledA } from './styledComponents'
+import { FolderPath } from './folderPath';
 
 interface DirectoryInterface {
   subdir: string;
@@ -102,7 +104,10 @@ const DiplayFolder: FC<FolderProps> = ({
   return (
     <>
       <div>
-        folder path: {folder_path}, {run_number}, {dataset_name}
+        <FolderPath
+          folder_path={folder_path}
+        />
+        {/* folder path: {folder_path}, {run_number}, {dataset_name} */}
       </div>
       {doesPlotExists(contents).length > 0 && (
         <ViewDetailsMenu dispatch={dispatch} />
