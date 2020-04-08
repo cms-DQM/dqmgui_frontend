@@ -1,9 +1,16 @@
 import React, { FC } from 'react';
-// import Link from 'next/link';
-// import { FixedSizeList as List } from 'react-window';
-// import AutoSizer from 'react-virtualized-auto-sizer';
 
 import Result from './Result';
+import {
+  StyledWrapper,
+  Spinner,
+  SpinnerWrapper,
+  StyledTableHead,
+  StyledTableRunColumn,
+  StyledTableDatasetColumn,
+  StyledTableRow,
+  StyledTable
+} from './styledComponents';
 
 interface SearchResultsInterface {
   results: any[];
@@ -16,41 +23,44 @@ const SearchResults: FC<SearchResultsInterface> = ({
   results_grouped,
   isLoading,
 }) => {
-  return (
-    <div>
-      {isLoading ? (
-        <h3>Loading...</h3>
-      ) : (
-        <div>
-          {results_grouped.length === 0 && !isLoading && (
-            <h3>No results found</h3>
-          )}
-          <ul>
-            {results_grouped.map(({ dataset, value }) => (
-              <Result key={dataset} dataset={dataset} value={value} />
-            ))}
 
-            {/* <AutoSizer>
-            {({ height, width }) => ( */}
-            {/* <List
-                className="List"
-                height={1000}
-                itemCount={results_grouped.length}
-                itemSize={35}
-                width={1000}
-              >
-                {({ index, style }) => (
-                  <Result
-                    style={style}
-                    dataset={results_grouped[index].dataset}
-                    value={results_grouped[index].value}
-                  />
-                )}
-              </List> */}
-          </ul>
-        </div>
-      )}
-    </div>
+  return (
+    <StyledWrapper>
+      {isLoading ? (
+        <SpinnerWrapper>
+          <Spinner />
+        </SpinnerWrapper>
+      ) : (
+          <StyledTable>
+            {results_grouped.length === 0 && !isLoading && (
+              <h3>No results found</h3>
+            )}
+            <StyledTableHead>
+              <StyledTableRow noHover>
+                <StyledTableDatasetColumn>
+                  Dataset
+              </StyledTableDatasetColumn>
+                <StyledTableRunColumn>
+                  Runs
+              </StyledTableRunColumn>
+              </StyledTableRow>
+            </StyledTableHead>
+            <tbody>
+              {results_grouped.map(({ dataset, value }, index) => (
+                <StyledTableRow index={index} key={index}>
+                  <StyledTableDatasetColumn>
+                    <Result key={dataset} dataset={dataset} value={value} />
+                  </StyledTableDatasetColumn>
+                  <StyledTableRunColumn>
+                    {value.length}
+                  </StyledTableRunColumn>
+                </StyledTableRow>
+              ))}
+            </tbody>
+          </StyledTable>
+        )
+      }
+    </StyledWrapper >
   );
 };
 export default SearchResults;

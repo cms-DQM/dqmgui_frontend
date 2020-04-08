@@ -1,5 +1,6 @@
 import React, { FC, useReducer } from 'react';
 import Link from 'next/link';
+import { Row, Col } from 'antd'
 
 import { useRequest } from '../../hooks/useRequest';
 import { Plot } from './plot';
@@ -14,6 +15,7 @@ import {
   addPlotToList,
 } from '../../reducers/displayFolderOrPlot';
 import { ViewDetailsMenu } from '../../components/viewDetailsMenu';
+import { Icon, DirecotryWrapper, StyledA } from './styledComponents'
 
 interface DirectoryInterface {
   subdir: string;
@@ -38,9 +40,9 @@ const doesPlotExists = (contents: (PlotInterface & DirectoryInterface)[]) =>
 const getContents = (data: any) =>
   data
     ? data.contents.filter(
-        (one_item: PlotInterface | DirectoryInterface) =>
-          !one_item.hasOwnProperty('streamerinfo')
-      )
+      (one_item: PlotInterface | DirectoryInterface) =>
+        !one_item.hasOwnProperty('streamerinfo')
+    )
     : [];
 
 const DiplayFolder: FC<FolderProps> = ({
@@ -105,26 +107,29 @@ const DiplayFolder: FC<FolderProps> = ({
       {doesPlotExists(contents).length > 0 && (
         <ViewDetailsMenu dispatch={dispatch} />
       )}
-      <div style={{ width: `${windows_width}` }} id="aa">
+      <Row >
         {contents.map((directory_or_plot) => {
           const directory_name = directory_or_plot?.subdir;
           const plot_name = directory_or_plot?.obj;
 
           return (
-            <li key={directory_name || plot_name}>
+            <Col span={4} key={directory_name || plot_name}>
               {directory_name ? (
-                <Link
-                  href={{
-                    pathname: '/',
-                    query: {
-                      run_number: run_number,
-                      dataset_name: dataset_name,
-                      folder_path: `${folder_path}/${directory_name}`,
-                    },
-                  }}
-                >
-                  <a>{directory_name}</a>
-                </Link>
+                <DirecotryWrapper>
+                  <Icon />
+                  <Link
+                    href={{
+                      pathname: '/',
+                      query: {
+                        run_number: run_number,
+                        dataset_name: dataset_name,
+                        folder_path: `${folder_path}/${directory_name}`,
+                      },
+                    }}
+                  >
+                    <StyledA>{directory_name}</StyledA>
+                  </Link>
+                </DirecotryWrapper>
               ) : overlay_plot.length > 0 ? (
                 <OverlaidPlot
                   plot_name={plot_name}
@@ -133,17 +138,17 @@ const DiplayFolder: FC<FolderProps> = ({
                   dispatch={dispatch}
                 />
               ) : (
-                <Plot
-                  plot_name={plot_name}
-                  params_for_api={params_for_api}
-                  addPlotToList={addPlot}
-                  dispatch={dispatch}
-                />
-              )}
-            </li>
+                    <Plot
+                      plot_name={plot_name}
+                      params_for_api={params_for_api}
+                      addPlotToList={addPlot}
+                      dispatch={dispatch}
+                    />
+                  )}
+            </Col>
           );
         })}
-      </div>
+      </Row>
       {selected_plots_name.length > 0 && (
         <div style={{ width: `${windows_width}` }}>
           <ZoomedPlots
