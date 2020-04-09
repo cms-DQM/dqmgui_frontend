@@ -1,7 +1,6 @@
 import React, { FC, useReducer } from 'react';
 import Link from 'next/link';
 import { Col } from 'antd';
-import { useRouter } from 'next/router';
 
 import { useRequest } from '../../hooks/useRequest';
 import { Plot } from './plot';
@@ -11,7 +10,6 @@ import { ZoomedPlots } from '../../components/zoomedPlots/';
 import {
   displayFolderOrPlotComponentReducer,
   initialState,
-  setSelectedPlotsName,
   removePlotFromList,
   addPlotToList,
 } from '../../reducers/displayFolderOrPlot';
@@ -78,8 +76,6 @@ const DiplayFolder: FC<FolderProps> = ({
 
   const {
     data,
-    error,
-    isLoading,
   } = useRequest(
     `/data/json/archive/${run_number}${dataset_name}${folder_path}`,
     {},
@@ -87,6 +83,7 @@ const DiplayFolder: FC<FolderProps> = ({
   );
 
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
+  console.log(overlay_plot)
 
   const params_for_api: ParamsForApiProps = {
     overlay_plot: overlay_plot,
@@ -101,7 +98,6 @@ const DiplayFolder: FC<FolderProps> = ({
     errorBars: errorBars,
   };
   const windows_width = selected_plots_name ? '50%' : '100%';
-
   return (
     <>
       <div>

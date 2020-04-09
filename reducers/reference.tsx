@@ -38,7 +38,7 @@ export const change_value = (
 export const addRun = () => (state: StateInterface, dispatch: any) => {
   const copy: TripleProps[] = [...state.triples];
   const id = uuidv4();
-  const newRun = { id: id, dataset_name: '', run_number: NaN, label: '' };
+  const newRun = { id: id, run_number: NaN, dataset_name: '', label: '' };
   copy.push(newRun);
   change_triples_values(copy)(dispatch);
 };
