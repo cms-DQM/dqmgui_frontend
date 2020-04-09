@@ -1,40 +1,46 @@
 import React from 'react';
+import { Checkbox } from 'antd';
+
 import {
   setErrorBars,
   setNormalize,
   setStats,
 } from '../../reducers/displayFolderOrPlot';
-
+import { CheckboxesWrapper } from './styledComponents';
 interface ViewFilerProps {
   dispatch(obj: any): any;
+  state: any;
 }
 
-export const ViewFiler = ({ dispatch }: ViewFilerProps) => {
+export const ViewFiler = ({ dispatch, state }: ViewFilerProps) => {
   return (
-    <div style={{ display: 'flex' }}>
-      <div>
-        <label htmlFor="stats">Stats:</label>
-        <input
-          type="checkbox"
+    <div style={{ display: 'flex', width: '50%' }}>
+      <CheckboxesWrapper>
+        <Checkbox
           onClick={(e: any) => {
             setStats(e.target.checked)(dispatch);
           }}
-        />
-      </div>
-      <div>
-        <label htmlFor="normalize">Normalize</label>
-        <input
-          type="checkbox"
+          checked={state.stats}
+        >
+          Stats
+        </Checkbox>
+      </CheckboxesWrapper>
+      <CheckboxesWrapper>
+        <Checkbox
           onClick={(e: any) => setNormalize(e.target.checked)(dispatch)}
-        />
-      </div>
-      <div>
-        <label htmlFor="errorBars">ErrorBars:</label>
-        <input
-          type="checkbox"
+          checked={state.normalize}
+        >
+          Normalize
+        </Checkbox>
+      </CheckboxesWrapper>
+      <CheckboxesWrapper>
+        <Checkbox
           onClick={(e: any) => setErrorBars(e.target.checked)(dispatch)}
-        />
-      </div>
+          checked={state.errorBars}
+        >
+          ErrorBars
+        </Checkbox>
+      </CheckboxesWrapper>
     </div>
   );
 };

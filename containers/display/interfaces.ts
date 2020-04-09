@@ -5,6 +5,7 @@ export interface TripleProps {
 export interface OptionProps {
   label: string;
   value: any;
+  action?(): void;
 }
 export interface PlotProps {
   plot_name?: string;

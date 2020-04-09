@@ -9,7 +9,7 @@ interface StateInterface {
   triples: TripleProps[];
 }
 export const initialState: StateInterface = {
-  triples: [{ id: id, dataset_name: '', run_number: NaN, label: '' }],
+  triples: [{ id: id, run_number: NaN, dataset_name: '', label: '' }],
 };
 
 export const change_triples_values = (triple: TripleProps[]) => (

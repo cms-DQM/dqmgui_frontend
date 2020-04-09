@@ -1,19 +1,19 @@
-import React from 'react'
+import React from 'react';
 import { Breadcrumb } from 'antd';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 
-import { getFolderPath } from './utils'
+import { getFolderPath } from './utils';
 
 interface FolderPathProps {
-  folder_path: string | undefined
+  folder_path: string | undefined;
 }
 
 export const FolderPath = ({ folder_path }: FolderPathProps) => {
-  const folders = folder_path ? folder_path.split("/") : []
-  const filteredFolders = folders.filter((folder: string) => folder !== '')
-  const router = useRouter()
-  const query = router.query
+  const folders = folder_path ? folder_path.split('/') : [];
+  const filteredFolders = folders.filter((folder: string) => folder !== '');
+  const router = useRouter();
+  const query = router.query;
 
   return (
     <Breadcrumb separator=">">
@@ -46,9 +46,8 @@ export const FolderPath = ({ folder_path }: FolderPathProps) => {
               {folder}
             </Link>
           </Breadcrumb.Item>
-        )
-      }
-      )}
+        );
+      })}
     </Breadcrumb>
-  )
-}
+  );
+};

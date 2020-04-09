@@ -1,7 +1,7 @@
 import React, { FC, useReducer } from 'react';
 import Link from 'next/link';
-import { Row, Col } from 'antd'
-import { useRouter } from 'next/router'
+import { Col } from 'antd';
+import { useRouter } from 'next/router';
 
 import { useRequest } from '../../hooks/useRequest';
 import { Plot } from './plot';
@@ -16,8 +16,9 @@ import {
   addPlotToList,
 } from '../../reducers/displayFolderOrPlot';
 import { ViewDetailsMenu } from '../../components/viewDetailsMenu';
-import { Icon, DirecotryWrapper, StyledA } from './styledComponents'
+import { Icon, DirecotryWrapper, StyledA } from './styledComponents';
 import { FolderPath } from './folderPath';
+import { StyledRow } from './styledComponents';
 
 interface DirectoryInterface {
   subdir: string;
@@ -42,9 +43,9 @@ const doesPlotExists = (contents: (PlotInterface & DirectoryInterface)[]) =>
 const getContents = (data: any) =>
   data
     ? data.contents.filter(
-      (one_item: PlotInterface | DirectoryInterface) =>
-        !one_item.hasOwnProperty('streamerinfo')
-    )
+        (one_item: PlotInterface | DirectoryInterface) =>
+          !one_item.hasOwnProperty('streamerinfo')
+      )
     : [];
 
 const DiplayFolder: FC<FolderProps> = ({
@@ -104,15 +105,13 @@ const DiplayFolder: FC<FolderProps> = ({
   return (
     <>
       <div>
-        <FolderPath
-          folder_path={folder_path}
-        />
+        <FolderPath folder_path={folder_path} />
         {/* folder path: {folder_path}, {run_number}, {dataset_name} */}
       </div>
       {doesPlotExists(contents).length > 0 && (
-        <ViewDetailsMenu dispatch={dispatch} />
+        <ViewDetailsMenu dispatch={dispatch} state={state} />
       )}
-      <Row >
+      <StyledRow>
         {contents.map((directory_or_plot) => {
           const directory_name = directory_or_plot?.subdir;
           const plot_name = directory_or_plot?.obj;
@@ -145,17 +144,17 @@ const DiplayFolder: FC<FolderProps> = ({
                   dispatch={dispatch}
                 />
               ) : (
-                    <Plot
-                      plot_name={plot_name}
-                      params_for_api={params_for_api}
-                      addPlotToList={addPlot}
-                      dispatch={dispatch}
-                    />
-                  )}
+                <Plot
+                  plot_name={plot_name}
+                  params_for_api={params_for_api}
+                  addPlotToList={addPlot}
+                  dispatch={dispatch}
+                />
+              )}
             </>
           );
         })}
-      </Row>
+      </StyledRow>
       {selected_plots_name.length > 0 && (
         <div style={{ width: `${windows_width}` }}>
           <ZoomedPlots
