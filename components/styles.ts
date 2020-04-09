@@ -5,15 +5,15 @@ import { QuestionOutlined } from '@ant-design/icons';
 import { theme } from '../styles/theme';
 
 export const StyledButton = styled(Button)`
-  background-color: ${theme.colors.secondary.main};
+  background-color: ${theme.colors.secondary.main} !important;
   border-style: none;
   border-radius: 5px;
   text-transform: uppercase;
-  color: ${theme.colors.common.white};
   &:hover {
-    background-color: ${theme.colors.secondary.light};
-    color: ${theme.colors.common.black};
-  }
+    background-color: ${theme.colors.secondary.light} !important;
+    color: ${theme.colors.common.black} !important;
+  };
+  color: ${theme.colors.common.white} !important;
 `;
 export const StyledSecondaryButton = styled(Button)`
   background-color: ${theme.colors.primary.main};

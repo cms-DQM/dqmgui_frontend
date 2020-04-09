@@ -18,7 +18,7 @@ export const ViewDetailsMenu = ({ dispatch, state }: ViewDetailsMenuProps) => {
     <>
       <Collapse defaultActiveKey={['1']}>
         <Panel header="Overlay Options" key="1">
-          <Reference dispatch_gloabl={dispatch} />
+          <Reference state_global={state} dispatch_gloabl={dispatch} />
         </Panel>
         <Panel header="Dispay Options" key="2">
           <div>
