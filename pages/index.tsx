@@ -3,13 +3,13 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import { useState } from 'react';
 import { Layout } from 'antd';
-import "antd/dist/antd.css";
+import 'antd/dist/antd.css';
 
 import Nav from '../components/Nav';
 import SearchResults from '../containers/search/SearchResults';
 import DiplayFolders from '../containers/display/DisplayFolderAndPlot';
 import { useSearch } from '../hooks/useSearch';
-import { StyledHeader, StyledLayout, StyledContent } from './styles'
+import { StyledHeader, StyledLayout, StyledContent } from './styles';
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -27,7 +27,7 @@ const Index: NextPage<FolderPathQuery> = (query) => {
     dataset_name
   );
   return (
-    <div >
+    <div>
       <Head>
         <script
           crossOrigin="anonymous"
@@ -37,10 +37,7 @@ const Index: NextPage<FolderPathQuery> = (query) => {
       </Head>
       <StyledLayout>
         <StyledHeader>
-          <Nav
-            setRunNumber={setRunNumber}
-            setDatasetName={setDatasetName}
-          />
+          <Nav setRunNumber={setRunNumber} setDatasetName={setDatasetName} />
         </StyledHeader>
         <StyledContent>
           {query.run_number && query.dataset_name ? (
@@ -56,8 +53,8 @@ const Index: NextPage<FolderPathQuery> = (query) => {
               results_grouped={results_grouped}
             />
           ) : (
-                <div>Home</div>
-              )}
+            <div>Home</div>
+          )}
         </StyledContent>
         <Footer>Footer</Footer>
       </StyledLayout>

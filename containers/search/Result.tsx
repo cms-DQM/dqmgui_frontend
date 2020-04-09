@@ -1,9 +1,9 @@
 import React, { FC, useState } from 'react';
 import Link from 'next/link';
-import { Col } from 'antd'
-import { useRouter } from 'next/router'
+import { Col } from 'antd';
+import { useRouter } from 'next/router';
 
-import { RunsRows, ExpandedRow } from './styledComponents'
+import { RunsRows, ExpandedRow } from './styledComponents';
 
 interface SearchResultsInterface {
   dataset: string;
@@ -12,16 +12,14 @@ interface SearchResultsInterface {
 
 const Result: FC<SearchResultsInterface> = ({ dataset, value }) => {
   const [expanded, setExpanded] = useState(false);
-  const router = useRouter()
-console.log(router.asPath)
+  const router = useRouter();
+
   return (
     <ExpandedRow expanded={expanded} onClick={() => setExpanded(!expanded)}>
       {dataset}
       {expanded && (
         <RunsRows>
-          <Col span={2}>
-            Runs:
-          </Col>
+          <Col span={2}>Runs:</Col>
           {value.map(({ run }: any) => (
             <Col span={2} key={run}>
               <Link

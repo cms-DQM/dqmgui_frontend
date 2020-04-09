@@ -63,3 +63,10 @@ export const NAV_REDUCER = {
 export const REFERENCE_REDCER = {
   CHANGE_TRIPLES_VALUES: 'CHANGE_TRIPLES_VALUES',
 };
+
+export const overlayOptions = [
+  { label: 'Overlay', value: 'overlay' },
+  { label: 'On side', value: 'onSide' },
+  { label: 'Overlay+ratio', value: 'ratiooverlay' },
+  { label: 'Stacked', value: 'stacked' },
+];

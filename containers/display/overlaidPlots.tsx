@@ -1,5 +1,4 @@
 import React from 'react';
-import { Row, Col } from 'antd'
 
 import { root_url } from '../../config/config';
 import {
@@ -8,6 +7,13 @@ import {
 } from '../../config/config';
 import { ParamsForApiProps } from './interfaces';
 import { setSelectedPlotsName } from '../../reducers/displayFolderOrPlot';
+import {
+  StyledCol,
+  PlotNameCol,
+  StyledPlotRow,
+  MenuCol,
+} from './styledComponents';
+import { DropdownMenu } from '../../components/menu';
 
 interface OverlaidPlotProps {
   params_for_api: ParamsForApiProps;
@@ -29,16 +35,28 @@ export const OverlaidPlot = ({
   const plot_with_overlay = get_plot_with_overlay(params_for_api);
   const source = `${root_url}/${plot_with_overlay}`;
 
+  const dropdownParams: any[] = [
+    {
+      value: plot_name,
+      label: 'Add to list',
+      action: () => addPlotToList(plot_name),
+    },
+  ];
+
   return (
-    <Col>
-      <button onClick={() => addPlotToList(plot_name)}>Add to list</button>
-      <div
-        style={{ height: params_for_api.height, width: params_for_api.width }}
-        onClick={() => setSelectedPlotsName([plot_name])(dispatch)}
+    <StyledCol>
+      <StyledPlotRow
+        minHeight={params_for_api.height}
+        width={params_for_api.width}
       >
-        <p>{plot_name}</p>
-        <img alt={plot_name} src={source} />
-      </div>
-    </Col>
+        <PlotNameCol>{plot_name}</PlotNameCol>
+        <MenuCol>
+          <DropdownMenu options={dropdownParams} />
+        </MenuCol>
+        <div onClick={() => setSelectedPlotsName([plot_name])(dispatch)}>
+          <img alt={plot_name} src={source} />
+        </div>
+      </StyledPlotRow>
+    </StyledCol>
   );
 };

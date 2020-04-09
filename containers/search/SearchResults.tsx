@@ -9,7 +9,7 @@ import {
   StyledTableRunColumn,
   StyledTableDatasetColumn,
   StyledTableRow,
-  StyledTable
+  StyledTable,
 } from './styledComponents';
 
 interface SearchResultsInterface {
@@ -23,7 +23,6 @@ const SearchResults: FC<SearchResultsInterface> = ({
   results_grouped,
   isLoading,
 }) => {
-
   return (
     <StyledWrapper>
       {isLoading ? (
@@ -31,36 +30,29 @@ const SearchResults: FC<SearchResultsInterface> = ({
           <Spinner />
         </SpinnerWrapper>
       ) : (
-          <StyledTable>
-            {results_grouped.length === 0 && !isLoading && (
-              <h3>No results found</h3>
-            )}
-            <StyledTableHead>
-              <StyledTableRow noHover>
+        <StyledTable>
+          {results_grouped.length === 0 && !isLoading && (
+            <h3>No results found</h3>
+          )}
+          <StyledTableHead>
+            <StyledTableRow noHover>
+              <StyledTableDatasetColumn>Dataset</StyledTableDatasetColumn>
+              <StyledTableRunColumn>Runs</StyledTableRunColumn>
+            </StyledTableRow>
+          </StyledTableHead>
+          <tbody>
+            {results_grouped.map(({ dataset, value }, index) => (
+              <StyledTableRow index={index} key={index}>
                 <StyledTableDatasetColumn>
-                  Dataset
-              </StyledTableDatasetColumn>
-                <StyledTableRunColumn>
-                  Runs
-              </StyledTableRunColumn>
+                  <Result key={dataset} dataset={dataset} value={value} />
+                </StyledTableDatasetColumn>
+                <StyledTableRunColumn>{value.length}</StyledTableRunColumn>
               </StyledTableRow>
-            </StyledTableHead>
-            <tbody>
-              {results_grouped.map(({ dataset, value }, index) => (
-                <StyledTableRow index={index} key={index}>
-                  <StyledTableDatasetColumn>
-                    <Result key={dataset} dataset={dataset} value={value} />
-                  </StyledTableDatasetColumn>
-                  <StyledTableRunColumn>
-                    {value.length}
-                  </StyledTableRunColumn>
-                </StyledTableRow>
-              ))}
-            </tbody>
-          </StyledTable>
-        )
-      }
-    </StyledWrapper >
+            ))}
+          </tbody>
+        </StyledTable>
+      )}
+    </StyledWrapper>
   );
 };
 export default SearchResults;
