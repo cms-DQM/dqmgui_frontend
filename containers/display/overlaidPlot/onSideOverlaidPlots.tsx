@@ -10,12 +10,14 @@ import {
   MenuCol,
 } from '../styledComponents';
 import { DropdownMenu } from '../../../components/menu';
+import { useCleanPlots } from '../../../hooks/useCleanPlots';
 
 interface OnSideOverlaidPlotsProps {
   params_for_api: ParamsForApiProps;
   plot_name: string;
   dropdownParams: OptionProps[];
   dispatch: any;
+  selected_plots_name: string[]
 }
 
 export const OnSideOverlaidPlots = ({
@@ -23,6 +25,7 @@ export const OnSideOverlaidPlots = ({
   params_for_api,
   dropdownParams,
   dispatch,
+  selected_plots_name,
 }: OnSideOverlaidPlotsProps) => {
 
   params_for_api.plot_name = plot_name;
@@ -34,7 +37,9 @@ export const OnSideOverlaidPlots = ({
     copy.run_number = plot.run_number as number
     onsidePlotsURLs.push(get_plot_url(copy))
   })
-console.log(copy.dataset_name)
+
+  useCleanPlots(plot_name, selected_plots_name, setSelectedPlotsName, dispatch)
+
   return (
     <>
       {

@@ -9,6 +9,7 @@ interface OverlaidPlotProps {
   plot_name: string;
   addPlotToList(plot_name: string): void;
   dispatch: any;
+  selected_plots_name: string[];
 }
 
 export const OverlaidPlot = ({
@@ -16,6 +17,7 @@ export const OverlaidPlot = ({
   params_for_api,
   addPlotToList,
   dispatch,
+  selected_plots_name
 }: OverlaidPlotProps) => {
 
   const dropdownParams: any[] = [
@@ -34,6 +36,7 @@ export const OverlaidPlot = ({
           plot_name={plot_name}
           dropdownParams={dropdownParams}
           dispatch={dispatch}
+          selected_plots_name={selected_plots_name}
         />
         :
         <OverlaidPlotImage
@@ -41,6 +44,7 @@ export const OverlaidPlot = ({
           params_for_api={params_for_api}
           dropdownParams={dropdownParams}
           dispatch={dispatch}
+          selected_plots_name={selected_plots_name}
         />
       }
 

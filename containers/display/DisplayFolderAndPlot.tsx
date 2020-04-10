@@ -83,7 +83,6 @@ const DiplayFolder: FC<FolderProps> = ({
   );
 
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
-  console.log(overlay_plot)
 
   const params_for_api: ParamsForApiProps = {
     overlay_plot: overlay_plot,
@@ -105,7 +104,7 @@ const DiplayFolder: FC<FolderProps> = ({
         {/* folder path: {folder_path}, {run_number}, {dataset_name} */}
       </div>
       {doesPlotExists(contents).length > 0 && (
-        <ViewDetailsMenu dispatch={dispatch} state={state} />
+        <ViewDetailsMenu dispatch={dispatch} state={state} overlay_plot={overlay_plot} />
       )}
       <StyledRow>
         {contents.map((directory_or_plot) => {
@@ -138,6 +137,7 @@ const DiplayFolder: FC<FolderProps> = ({
                   params_for_api={params_for_api}
                   addPlotToList={addPlot}
                   dispatch={dispatch}
+                  selected_plots_name={selected_plots_name}
                 />
               ) : (
                 <Plot
@@ -145,6 +145,7 @@ const DiplayFolder: FC<FolderProps> = ({
                   params_for_api={params_for_api}
                   addPlotToList={addPlot}
                   dispatch={dispatch}
+                  selected_plots_name={selected_plots_name}
                 />
               )}
             </>
