@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { root_url } from '../../config/config';
 import { get_plot_url } from '../../config/config';
@@ -11,12 +11,14 @@ import {
   MenuCol,
 } from './styledComponents';
 import { DropdownMenu } from '../../components/menu';
+import { useCleanPlots } from '../../hooks/useCleanPlots';
 
 interface PlotProps {
   plot_name: string;
   params_for_api: ParamsForApiProps;
   addPlotToList(plot_name: string): void;
   dispatch: any;
+  selected_plots_name: string[]
 }
 
 export const Plot = ({
@@ -24,10 +26,14 @@ export const Plot = ({
   plot_name,
   params_for_api,
   dispatch,
+  selected_plots_name,
 }: PlotProps) => {
+
   params_for_api.plot_name = plot_name;
   const plot_url = get_plot_url(params_for_api);
   const source = `${root_url}/${plot_url}`;
+
+  useCleanPlots(plot_name, selected_plots_name, setSelectedPlotsName, dispatch)
 
   const dropdownParams: any[] = [
     {

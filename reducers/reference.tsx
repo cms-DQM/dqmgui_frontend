@@ -25,6 +25,7 @@ export const change_value = (
   key: string,
   id: string | number | boolean
 ) => (state: StateInterface, dispatch: any) => {
+
   const copy = [...state.triples];
   const current_line: TripleProps = copy.filter(
     (line: TripleProps) => line.id === id

@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useEffect } from 'react';
 
 import { change_value } from '../../../reducers/reference';
 import { StyledDiv } from '../styledComponents';
@@ -16,6 +16,16 @@ interface FieldProps {
 }
 
 export const Field = ({ state, dispatch, id, field_name, value }: FieldProps) => {
+
+  useEffect(() => {
+    const cleanField = () => change_value(
+      '',
+      field_name,
+      id
+    )(state, dispatch)
+    return cleanField
+  }, [])
+
   return (
     <StyledDiv>
       <StyledFormItem

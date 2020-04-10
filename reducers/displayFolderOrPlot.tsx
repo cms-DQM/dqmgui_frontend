@@ -51,11 +51,13 @@ export const setOverlay = (overlay: string) => (dispatch: any) =>
 
 export const setSelectedPlotsName = (selected_plots_name: string[]) => (
   dispatch: any
-) =>
-  dispatch({
+) =>{
+  console.log(selected_plots_name)
+  return(dispatch({
     type: FOLDERS_OR_PLOTS_REDUCER.SET_SELECTED_PLOTS_NAMES,
     payload: selected_plots_name,
-  });
+  }))
+}
 
 export const removePlotFromList = (plot_name: string) => (
   state: any,

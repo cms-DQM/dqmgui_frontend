@@ -1,19 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Collapse, Switch } from 'antd';
 
 import { Reference } from './reference/reference';
 import { ViewFiler } from './viewFilter';
 import { SizeChanger } from '../sizeChanger';
 import { setJSROOTMode } from '../../reducers/displayFolderOrPlot';
+import { setPlotToOverlay } from '../../reducers/displayFolderOrPlot'
 
 const { Panel } = Collapse;
 
 interface ViewDetailsMenuProps {
   dispatch: any;
   state: any;
+  overlay_plot: any[];
 }
 
 export const ViewDetailsMenu = ({ dispatch, state }: ViewDetailsMenuProps) => {
+
+  useEffect(() => {
+    const clearOverlays = () => setPlotToOverlay([])(dispatch)
+    return clearOverlays
+  }, [])
+
   return (
     <>
       <Collapse defaultActiveKey={['1']}>
