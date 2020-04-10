@@ -5,7 +5,7 @@ import { Col } from 'antd';
 import { useRequest } from '../../hooks/useRequest';
 import { Plot } from './plot';
 import { ParamsForApiProps } from './interfaces';
-import { OverlaidPlot } from './overlaidPlots';
+import { OverlaidPlot } from './overlaidPlot';
 import { ZoomedPlots } from '../../components/zoomedPlots/';
 import {
   displayFolderOrPlotComponentReducer,
