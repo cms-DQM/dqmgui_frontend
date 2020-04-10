@@ -1,7 +1,7 @@
 import React from 'react';
 import { Collapse, Switch } from 'antd';
 
-import { Reference } from './reference';
+import { Reference } from './reference/reference';
 import { ViewFiler } from './viewFilter';
 import { SizeChanger } from '../sizeChanger';
 import { setJSROOTMode } from '../../reducers/displayFolderOrPlot';

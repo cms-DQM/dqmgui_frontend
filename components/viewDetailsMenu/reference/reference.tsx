@@ -1,29 +1,27 @@
-import React, { useState, ChangeEvent, FormEvent, useReducer } from 'react';
+import React, { useReducer } from 'react';
 import { Form, Col } from 'antd';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 
-import { field_name } from '../constants';
-import { TripleProps } from '../../containers/display/interfaces';
-import { setPlotToOverlay, setOverlay } from '../../reducers/displayFolderOrPlot';
+import { TripleProps } from '../../../containers/display/interfaces';
+import { setPlotToOverlay, setOverlay } from '../../../reducers/displayFolderOrPlot';
 import {
   referenceReducer,
   initialState,
-  change_value,
   removeRun,
   addRun,
-} from '../../reducers/reference';
-import { StyledDiv } from '../styledComponents';
+} from '../../../reducers/reference';
+import { StyledDiv } from '../../styledComponents';
 import {
-  StyledInput,
-  StyledFormItem,
   StyledForm,
   StyledActionButtonRow,
   StyledSecondaryButton,
   StyledButton,
   FormItem,
-} from '../styles';
-import { overlayOptions } from '../constants';
-import { RadioButtonsGroup } from '../radioButtonsGroup';
+} from '../../styles';
+import { overlayOptions } from '../../constants';
+import { RadioButtonsGroup } from '../../radioButtonsGroup';
+import { filter_plots, filter_valid_runs } from '../utils';
+import { Field } from './field';
 
 interface ReferenceProps {
   dispatch_gloabl: any;
@@ -34,20 +32,6 @@ export const Reference = ({ dispatch_gloabl, state_global }: ReferenceProps) => 
   const [state, dispatch] = useReducer(referenceReducer, initialState);
   const { triples } = state;
 
-  const filter_valid_runs = (triples: TripleProps[]) =>
-    triples.filter((triple: TripleProps) => {
-      if (triple.run_number) {
-        return triple;
-      }
-    });
-
-  const filter_plots = (triples: TripleProps[], id: any, ) => {
-    return triples.filter((triple: TripleProps) => {
-      if (triple.id !== id && triple.run_number) {
-        return triple;
-      }
-    })
-  }
   const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
@@ -70,33 +54,24 @@ export const Reference = ({ dispatch_gloabl, state_global }: ReferenceProps) => 
       >
         {triples.map((triple: TripleProps) => (
           <div style={{ display: 'flex' }} id={triple.id.toString()}>
-            {Object.keys(triple).map((field: string) => {
-              if (field !== 'id') {
-                return (
-                  <StyledDiv>
-                    <StyledFormItem
-                      key={field}
-                      name={`${triple.id}_${field}`}
-                    >
-                      <StyledInput
-                        id={field}
-                        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                          change_value(
-                            e.target.value,
-                            field,
-                            triple.id
-                          )(state, dispatch)
-                        }
-                        value={triple[field]}
-                        placeholder={`Enter ${field_name[field]}`}
-                        type="text"
-                        name={field}
-                      />
-                    </StyledFormItem>
-                  </StyledDiv>
-                );
-              }
-            })}
+            <Field
+              state={state}
+              dispatch={dispatch}
+              id={triple.id}
+              field_name="run_number"
+              value={triple.run_number} />
+            <Field
+              state={state}
+              dispatch={dispatch}
+              id={triple.id}
+              field_name="dataset_name"
+              value={triple.dataset_name} />
+            <Field
+              state={state}
+              dispatch={dispatch}
+              id={triple.id}
+              field_name="label"
+              value={triple.label} />
             <FormItem>
               <StyledSecondaryButton
                 onClick={() => {
