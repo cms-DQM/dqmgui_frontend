@@ -10,7 +10,7 @@ import {
   PlotNameCol,
   MenuCol,
 } from './styledComponents';
-import { DropdownMenu, MenuProps } from '../../components/menu';
+import { DropdownMenu } from '../../components/menu';
 
 interface PlotProps {
   plot_name: string;
