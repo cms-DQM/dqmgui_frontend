@@ -1,7 +1,11 @@
 import { FC } from 'react';
 
+import {ChartIcon} from './styledComponents'
+
 const Home: FC = () => {
-  return <div>home</div>;
+  return <div>
+    <ChartIcon />
+    home</div>;
 };
 
 export default Home;

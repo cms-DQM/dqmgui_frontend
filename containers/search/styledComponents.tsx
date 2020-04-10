@@ -1,4 +1,6 @@
 import React from 'react';
+import { SearchOutlined, BarChartOutlined  } from '@ant-design/icons';
+
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 import { Spin, Row } from 'antd';
@@ -63,3 +65,27 @@ export const ExpandedRow = styled.div`
   font-weight: ${(props) =>
     props?.expanded && props.expanded === true ? 'bold' : ''};
 `;
+export const NotFoundDiv = styled.div`
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    border: 2px solid ${theme.colors.secondary.main};
+    height: fit-content;
+    font-size: 2rem;
+    padding: calc(${theme.space.spaceBetween}*12)
+`
+
+export const Icon = styled(SearchOutlined )`
+    font-size: 14rem;
+    color: ${theme.colors.primary.main}
+`
+export const NotFoundDivWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
+export const ChartIcon = styled(BarChartOutlined)`
+  font-size: 14rem;
+  color: ${theme.colors.primary.main}
+`

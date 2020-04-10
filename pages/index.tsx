@@ -10,6 +10,7 @@ import SearchResults from '../containers/search/SearchResults';
 import DiplayFolders from '../containers/display/DisplayFolderAndPlot';
 import { useSearch } from '../hooks/useSearch';
 import { StyledHeader, StyledLayout, StyledContent } from './styles';
+import { NotFoundDiv, NotFoundDivWrapper, ChartIcon } from '../containers/search/styledComponents'
 
 const { Header, Footer, Sider, Content } = Layout;
 
@@ -53,10 +54,15 @@ const Index: NextPage<FolderPathQuery> = (query) => {
               results_grouped={results_grouped}
             />
           ) : (
-            <div>Home</div>
-          )}
+                <NotFoundDivWrapper>
+                  <NotFoundDiv style={{border: 'hidden'}}>
+                    <ChartIcon />
+                  Welcome to DQM GUI
+                  </NotFoundDiv>
+                </NotFoundDivWrapper>
+              )}
         </StyledContent>
-        <Footer>Footer</Footer>
+        {/* <Footer>Footer</Footer> */}
       </StyledLayout>
     </div>
   );

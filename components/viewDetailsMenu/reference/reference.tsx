@@ -54,24 +54,30 @@ export const Reference = ({ dispatch_gloabl, state_global }: ReferenceProps) => 
       >
         {triples.map((triple: TripleProps) => (
           <div style={{ display: 'flex' }} id={triple.id.toString()}>
-            <Field
-              state={state}
-              dispatch={dispatch}
-              id={triple.id}
-              field_name="run_number"
-              value={triple.run_number} />
-            <Field
-              state={state}
-              dispatch={dispatch}
-              id={triple.id}
-              field_name="dataset_name"
-              value={triple.dataset_name} />
-            <Field
-              state={state}
-              dispatch={dispatch}
-              id={triple.id}
-              field_name="label"
-              value={triple.label} />
+            <StyledDiv>
+              <Field
+                state={state}
+                dispatch={dispatch}
+                id={triple.id}
+                field_name="run_number"
+                value={triple.run_number} />
+            </StyledDiv>
+            <StyledDiv>
+              <Field
+                state={state}
+                dispatch={dispatch}
+                id={triple.id}
+                field_name="dataset_name"
+                value={triple.dataset_name} />
+            </StyledDiv>
+            <StyledDiv>
+              <Field
+                state={state}
+                dispatch={dispatch}
+                id={triple.id}
+                field_name="label"
+                value={triple.label} />
+            </StyledDiv>
             <FormItem>
               <StyledSecondaryButton
                 onClick={() => {
