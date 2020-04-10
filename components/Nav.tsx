@@ -1,4 +1,4 @@
-import React, { FC, ChangeEvent, Dispatch, FormEvent, useReducer } from 'react';
+import React, { FC, ChangeEvent, Dispatch, useReducer } from 'react';
 import { Form } from 'antd';
 
 import {
@@ -7,7 +7,7 @@ import {
   setSearchFieldByDatasetName,
   setSearchFieldByRunNumber,
 } from '../reducers/navReducer';
-import { StyledButton, StyledFormItem, StyledInput } from './styles';
+import { StyledFormItem, StyledInput } from './styles';
 import { SearchButton } from './searchButton';
 import { QuestionButton } from './helpButton';
 
