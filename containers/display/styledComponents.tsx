@@ -41,3 +41,7 @@ export const MenuCol = styled(Col)`
   padding: ${theme.space.spaceBetween} calc(${theme.space.spaceBetween}*2)
     ${theme.space.spaceBetween} ${theme.space.spaceBetween};
 `;
+export const Wrapper = styled.div`
+  width: ${(props) => props?.zoomed ? '50%' : '100%'};
+  align-items: center
+`

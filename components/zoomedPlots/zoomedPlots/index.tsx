@@ -2,6 +2,7 @@ import React from 'react';
 import { ParamsForApiProps } from '../../../containers/display/interfaces';
 import { ZoomedPlot } from './zoomedPlot';
 import { ZoomedJSROOTPlot } from './zoomedJSROOTPlot';
+import {ZoomedPlotWrapper} from '../../styledComponents'
 
 interface ZoomedPlotsProps {
   selected_plots_name: string[];
@@ -17,7 +18,7 @@ export const ZoomedPlots = ({
   jsroot_mode,
 }: ZoomedPlotsProps) => {
   return (
-    <div>
+    <ZoomedPlotWrapper>
       {selected_plots_name.map((selected_plot: string) => {
         if (jsroot_mode) {
           return (
@@ -36,6 +37,6 @@ export const ZoomedPlots = ({
           />
         );
       })}
-    </div>
+    </ZoomedPlotWrapper>
   );
 };

@@ -14,7 +14,7 @@ import {
   addPlotToList,
 } from '../../reducers/displayFolderOrPlot';
 import { ViewDetailsMenu } from '../../components/viewDetailsMenu';
-import { Icon, DirecotryWrapper, StyledA } from './styledComponents';
+import { Icon, DirecotryWrapper, StyledA, Wrapper } from './styledComponents';
 import { FolderPath } from './folderPath';
 import { StyledRow } from './styledComponents';
 
@@ -41,9 +41,9 @@ const doesPlotExists = (contents: (PlotInterface & DirectoryInterface)[]) =>
 const getContents = (data: any) =>
   data
     ? data.contents.filter(
-        (one_item: PlotInterface | DirectoryInterface) =>
-          !one_item.hasOwnProperty('streamerinfo')
-      )
+      (one_item: PlotInterface | DirectoryInterface) =>
+        !one_item.hasOwnProperty('streamerinfo')
+    )
     : [];
 
 const DiplayFolder: FC<FolderProps> = ({
@@ -96,7 +96,6 @@ const DiplayFolder: FC<FolderProps> = ({
     normalize: normalize,
     errorBars: errorBars,
   };
-  const windows_width = selected_plots_name ? '50%' : '100%';
   return (
     <>
       <div>
@@ -106,62 +105,68 @@ const DiplayFolder: FC<FolderProps> = ({
       {doesPlotExists(contents).length > 0 && (
         <ViewDetailsMenu dispatch={dispatch} state={state} overlay_plot={overlay_plot} />
       )}
-      <StyledRow>
-        {contents.map((directory_or_plot) => {
-          const directory_name = directory_or_plot?.subdir;
-          const plot_name = directory_or_plot?.obj;
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <Wrapper zoomed={selected_plots_name.length}>
+          <StyledRow>
+            {contents.map((directory_or_plot) => {
+              const directory_name = directory_or_plot?.subdir;
+              const plot_name = directory_or_plot?.obj;
 
-          return (
-            <>
-              {directory_name ? (
-                <Col span={4} key={directory_name || plot_name}>
-                  <DirecotryWrapper>
-                    <Icon />
-                    <Link
-                      href={{
-                        pathname: '/',
-                        query: {
-                          run_number: run_number,
-                          dataset_name: dataset_name,
-                          folder_path: `${folder_path}/${directory_name}`,
-                        },
-                      }}
-                    >
-                      <StyledA>{directory_name}</StyledA>
-                    </Link>
-                  </DirecotryWrapper>
-                </Col>
-              ) : overlay_plot.length > 0 ? (
-                <OverlaidPlot
-                  plot_name={plot_name}
-                  params_for_api={params_for_api}
-                  addPlotToList={addPlot}
-                  dispatch={dispatch}
-                  selected_plots_name={selected_plots_name}
-                />
-              ) : (
-                <Plot
-                  plot_name={plot_name}
-                  params_for_api={params_for_api}
-                  addPlotToList={addPlot}
-                  dispatch={dispatch}
-                  selected_plots_name={selected_plots_name}
-                />
-              )}
-            </>
-          );
-        })}
-      </StyledRow>
-      {selected_plots_name.length > 0 && (
-        <div style={{ width: `${windows_width}` }}>
-          <ZoomedPlots
-            selected_plots_name={selected_plots_name}
-            params_for_api={params_for_api}
-            removePlotFromList={removePlot}
-            jsroot_mode={state.jsroot_mode}
-          />
-        </div>
-      )}
+              return (
+                <>
+                  {directory_name ? (
+                    <Col span={4} key={directory_name || plot_name}>
+                      <DirecotryWrapper>
+                        <Icon />
+                        <Link
+                          href={{
+                            pathname: '/',
+                            query: {
+                              run_number: run_number,
+                              dataset_name: dataset_name,
+                              folder_path: `${folder_path}/${directory_name}`,
+                            },
+                          }}
+                        >
+                          <StyledA>{directory_name}</StyledA>
+                        </Link>
+                      </DirecotryWrapper>
+                    </Col>
+                  ) : overlay_plot.length > 0 ? (
+                    <OverlaidPlot
+                      plot_name={plot_name}
+                      params_for_api={params_for_api}
+                      addPlotToList={addPlot}
+                      dispatch={dispatch}
+                      selected_plots_name={selected_plots_name}
+                    />
+                  ) : (
+                        <Plot
+                          plot_name={plot_name}
+                          params_for_api={params_for_api}
+                          addPlotToList={addPlot}
+                          dispatch={dispatch}
+                          selected_plots_name={selected_plots_name}
+                        />
+                      )}
+                </>
+              );
+            })}
+          </StyledRow>
+        </Wrapper>
+        {selected_plots_name.length > 0 && (
+          <Wrapper style={{ borderLeft: '1px solid' }} zoomed={selected_plots_name.length}>
+            {/* <div > */}
+              <ZoomedPlots
+                selected_plots_name={selected_plots_name}
+                params_for_api={params_for_api}
+                removePlotFromList={removePlot}
+                jsroot_mode={state.jsroot_mode}
+              />
+            {/* </div> */}
+          </Wrapper>
+        )}
+      </div>
     </>
   );
 };

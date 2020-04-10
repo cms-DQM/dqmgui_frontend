@@ -50,6 +50,7 @@ export const removeRun = (id: string | number | boolean) => (
 ) => {
   const copy: TripleProps[] = [...state.triples];
   const removed = copy.filter((run: TripleProps) => run.id !== id);
+  console.log(removed)
   change_triples_values(removed)(dispatch);
 };
 

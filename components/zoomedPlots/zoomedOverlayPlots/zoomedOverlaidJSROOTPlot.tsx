@@ -87,7 +87,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
 
   //make sure that no null histograms are passed to draw func.
   //on first, second reneder overlaidJSROOTPlot.fHists.arr is [null, null]
-  //@ts-ignore
+  //@ts-ignore 
   useEffect(() => {
     if (
       cleanDeep(overlaidJSROOTPlot.fHists.arr).length ===
