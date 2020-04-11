@@ -37,7 +37,6 @@ export const Reference = ({ dispatch_gloabl, state_global }: ReferenceProps) => 
     wrapperCol: { span: 16 },
   };
   
-console.log(triples)
   return (
     <StyledDiv>
       <RadioButtonsGroup current_value={state_global.overlay} action={(value: string) => setOverlay(value)(dispatch_gloabl)} options={overlayOptions} />
