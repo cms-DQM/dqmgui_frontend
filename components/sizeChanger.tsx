@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { sizes } from './constants';
 import { RadioButtonsGroup } from './radioButtonsGroup';
 import { SizeProps } from '../containers/display/interfaces';
 
 interface SizeChangerProps {
   dispatch(params: any): void;
-  setSize(value: SizeProps):any;
+  setSize(value: SizeProps): any;
   currentValue: SizeProps;
 }
 
@@ -17,14 +17,17 @@ const formatOptions = () => {
   })
   return options
 }
-export const SizeChanger = ({ dispatch, setSize, currentValue}: SizeChangerProps) => {
+export const SizeChanger = ({ dispatch, setSize, currentValue }: SizeChangerProps) => {
+  useEffect(() => {
+    return () => setSize(currentValue)(dispatch)
+  }, [])
 
   return (
-      <RadioButtonsGroup
-        current_value={currentValue}
-        action={(value: SizeProps) => {
-          setSize(value)(dispatch)
-        }}
-        options={formatOptions()} />
+    <RadioButtonsGroup
+      current_value={currentValue}
+      action={(value: SizeProps) => {
+        setSize(value)(dispatch)
+      }}
+      options={formatOptions()} />
   );
 };
