@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect } from 'react';
 
-import { change_value } from '../../../reducers/reference';
+import { change_value, removeRun } from '../../../reducers/reference';
 import { StyledDiv } from '../styledComponents';
 import {
   StyledInput,
@@ -18,11 +18,9 @@ interface FieldProps {
 export const Field = ({ state, dispatch, id, field_name, value }: FieldProps) => {
 
   useEffect(() => {
-    const cleanField = () => change_value(
-      '',
-      field_name,
-      id
-    )(state, dispatch)
+    const cleanField = () => {
+      removeRun(id)(state, dispatch);
+    }
     return cleanField
   }, [])
 
