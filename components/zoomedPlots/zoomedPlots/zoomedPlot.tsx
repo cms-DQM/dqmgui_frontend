@@ -1,35 +1,49 @@
 import React from 'react';
-import { get_plot_url, root_url, get_jroot_plot } from '../../../config/config';
-import { ParamsForApiProps } from '../../../containers/display/interfaces';
-import { sizes } from '../../constants';
+
+import { get_plot_url, root_url } from '../../../config/config';
+import { ParamsForApiProps, SizeProps } from '../../../containers/display/interfaces';
+import { StyledCol, PlotNameCol, StyledPlotRow, Column, MinusIcon } from '../../../containers/display/styledComponents';
 
 interface ZoomedPlotsProps {
   selected_plot_name: string;
   removePlotFromList(plot_name: string | undefined): void;
   params_for_api: ParamsForApiProps;
+  size: SizeProps;
 }
 
 export const ZoomedPlot = ({
   selected_plot_name,
   removePlotFromList,
   params_for_api,
+  size,
 }: ZoomedPlotsProps) => {
   params_for_api.plot_name = selected_plot_name;
-  params_for_api.height = sizes.fill.size.h;
-  params_for_api.width = sizes.fill.size.w;
+  params_for_api.height = size.h;
+  params_for_api.width = size.w;
   const plot_url = get_plot_url(params_for_api);
   const source = `${root_url}/${plot_url}`;
 
   return (
-    <div
-      id={selected_plot_name}
-      style={{ width: sizes.fill.size.w, height: sizes.fill.size.h }}
-      onClick={() => removePlotFromList(selected_plot_name)}
-    >
-      <img
-        src={source}
-        style={{ width: sizes.fill.size.w, height: sizes.fill.size.h }}
-      />
-    </div>
+    <StyledCol>
+      <StyledPlotRow
+        minHeight={params_for_api.height}
+        width={params_for_api.width}>
+        <PlotNameCol>{selected_plot_name}</PlotNameCol>
+        <Column>
+          <MinusIcon
+            onClick={() => removePlotFromList(selected_plot_name)}
+          />
+        </Column>
+        <div
+          id={selected_plot_name}
+          style={{ width: size.w, height: size.h }}
+        >
+          <img
+            src={source}
+            style={{ width: size.w, height: size.h }}
+          />
+        </div>
+      </StyledPlotRow>
+    </StyledCol>
   );
 };

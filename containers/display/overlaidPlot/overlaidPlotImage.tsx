@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { root_url } from '../../../config/config';
 import {
@@ -6,15 +6,14 @@ import {
   get_overlaied_plots_urls,
 } from '../../../config/config';
 import { ParamsForApiProps, OptionProps } from '../interfaces';
-import { setSelectedPlotsName } from '../../../reducers/displayFolderOrPlot';
+import { setSelectedPlotsName, addPlotToList } from '../../../reducers/displayFolderOrPlot';
 import {
   StyledCol,
   PlotNameCol,
   StyledPlotRow,
-  MenuCol,
+  Column,
+  PlusIcon,
 } from '../styledComponents';
-import { DropdownMenu } from '../../../components/menu';
-import { useCleanPlots } from '../../../hooks/useCleanPlots';
 
 interface OverlaidPlotImageProps {
   params_for_api: ParamsForApiProps;
@@ -40,8 +39,6 @@ export const OverlaidPlotImage = ({
   const plot_with_overlay = get_plot_with_overlay(params_for_api);
   const source = `${root_url}/${plot_with_overlay}`;
 
-  useCleanPlots(plot_name, selected_plots_name, setSelectedPlotsName, dispatch)
-
   return (
     <StyledCol>
       <StyledPlotRow
@@ -49,9 +46,9 @@ export const OverlaidPlotImage = ({
         width={params_for_api.width}
       >
         <PlotNameCol>{plot_name}</PlotNameCol>
-        <MenuCol>
-          <DropdownMenu options={dropdownParams} />
-        </MenuCol>
+        <Column>
+          <PlusIcon onClick={() => addPlotToList(plot_name)} />
+        </Column>
         <div onClick={() => setSelectedPlotsName([plot_name])(dispatch)}>
           <img alt={plot_name} src={source} />
         </div>

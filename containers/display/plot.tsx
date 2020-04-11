@@ -8,10 +8,9 @@ import {
   StyledCol,
   StyledPlotRow,
   PlotNameCol,
-  MenuCol,
+  Column,
+  PlusIcon,
 } from './styledComponents';
-import { DropdownMenu } from '../../components/menu';
-import { useCleanPlots } from '../../hooks/useCleanPlots';
 
 interface PlotProps {
   plot_name: string;
@@ -33,16 +32,6 @@ export const Plot = ({
   const plot_url = get_plot_url(params_for_api);
   const source = `${root_url}/${plot_url}`;
 
-  useCleanPlots(plot_name, selected_plots_name, setSelectedPlotsName, dispatch)
-
-  const dropdownParams: any[] = [
-    {
-      value: plot_name,
-      label: 'Add to list',
-      action: () => addPlotToList(plot_name),
-    },
-  ];
-
   return (
     <StyledCol>
       <StyledPlotRow
@@ -50,9 +39,9 @@ export const Plot = ({
         width={params_for_api.width}
       >
         <PlotNameCol>{plot_name}</PlotNameCol>
-        <MenuCol>
-          <DropdownMenu options={dropdownParams} />
-        </MenuCol>
+        <Column>
+          <PlusIcon onClick={() => addPlotToList(plot_name)} />
+        </Column>
         <div onClick={() => setSelectedPlotsName([plot_name])(dispatch)}>
           <img alt={plot_name} src={source} />
         </div>

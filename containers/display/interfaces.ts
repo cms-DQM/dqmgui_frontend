@@ -7,6 +7,12 @@ export interface OptionProps {
   value: any;
   action?(): void;
 }
+
+export interface SizeProps{
+  w: number;
+  h: number;
+}
+
 export interface PlotProps {
   plot_name?: string;
   dataset_name: string;
@@ -36,6 +42,7 @@ export interface DisplayFolderOrPlotComponentProps {
   selected_plots_name: string[];
   overlay: string;
   jsroot_mode: boolean;
+  zoomedPlotSize: SizeProps;
 }
 
 export interface NavigationSearchFieldsProps {

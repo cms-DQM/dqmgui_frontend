@@ -71,7 +71,9 @@ const DiplayFolder: FC<FolderProps> = ({
   };
 
   const addPlot = (plot_name: string) => {
-    addPlotToList(plot_name)(state, dispatch);
+    if (selected_plots_name.indexOf(plot_name) < 0) {
+      addPlotToList(plot_name)(state, dispatch);
+    }
   };
 
   const {
@@ -156,14 +158,14 @@ const DiplayFolder: FC<FolderProps> = ({
         </Wrapper>
         {selected_plots_name.length > 0 && (
           <Wrapper style={{ borderLeft: '1px solid' }} zoomed={selected_plots_name.length}>
-            {/* <div > */}
-              <ZoomedPlots
-                selected_plots_name={selected_plots_name}
-                params_for_api={params_for_api}
-                removePlotFromList={removePlot}
-                jsroot_mode={state.jsroot_mode}
-              />
-            {/* </div> */}
+            <ZoomedPlots
+              selected_plots_name={selected_plots_name}
+              params_for_api={params_for_api}
+              removePlotFromList={removePlot}
+              jsroot_mode={state.jsroot_mode}
+              dispatch={dispatch}
+              size={state.zoomedPlotSize}
+            />
           </Wrapper>
         )}
       </div>
