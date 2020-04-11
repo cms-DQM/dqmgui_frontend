@@ -2,15 +2,15 @@ import React from 'react';
 
 import { root_url, get_plot_url } from '../../../config/config';
 import { ParamsForApiProps, OptionProps, TripleProps } from '../interfaces';
-import { setSelectedPlotsName } from '../../../reducers/displayFolderOrPlot';
+import { setSelectedPlotsName, addPlotToList } from '../../../reducers/displayFolderOrPlot';
 import {
   StyledCol,
   PlotNameCol,
   StyledPlotRow,
-  MenuCol,
+  Column,
+  PlusIcon,
 } from '../styledComponents';
 import { DropdownMenu } from '../../../components/menu';
-import { useCleanPlots } from '../../../hooks/useCleanPlots';
 
 interface OnSideOverlaidPlotsProps {
   params_for_api: ParamsForApiProps;
@@ -38,8 +38,6 @@ export const OnSideOverlaidPlots = ({
     onsidePlotsURLs.push(get_plot_url(copy))
   })
 
-  useCleanPlots(plot_name, selected_plots_name, setSelectedPlotsName, dispatch)
-
   return (
     <>
       {
@@ -52,9 +50,9 @@ export const OnSideOverlaidPlots = ({
                 width={params_for_api.width}
               >
                 <PlotNameCol>{plot_name}</PlotNameCol>
-                <MenuCol>
-                  <DropdownMenu options={dropdownParams} />
-                </MenuCol>
+                <Column>
+                  <PlusIcon onClick={() => addPlotToList(plot_name)} />
+                </Column>
                 <div onClick={() => setSelectedPlotsName([plot_name])(dispatch)}>
                   <img alt={plot_name} src={sourceForOnePlot} />
                 </div>

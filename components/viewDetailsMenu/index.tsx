@@ -4,8 +4,9 @@ import { Collapse, Switch } from 'antd';
 import { Reference } from './reference/reference';
 import { ViewFiler } from './viewFilter';
 import { SizeChanger } from '../sizeChanger';
-import { setJSROOTMode } from '../../reducers/displayFolderOrPlot';
-import { setPlotToOverlay } from '../../reducers/displayFolderOrPlot'
+import { setJSROOTMode, setSize } from '../../reducers/displayFolderOrPlot';
+import { setPlotToOverlay, setSelectedPlotsName } from '../../reducers/displayFolderOrPlot'
+import { sizes } from '../constants';
 
 const { Panel } = Collapse;
 
@@ -18,8 +19,10 @@ interface ViewDetailsMenuProps {
 export const ViewDetailsMenu = ({ dispatch, state }: ViewDetailsMenuProps) => {
 
   useEffect(() => {
-    const clearOverlays = () => setPlotToOverlay([])(dispatch)
-    return clearOverlays
+    return () => {
+      setPlotToOverlay([])(dispatch)
+      setSelectedPlotsName([])(dispatch)
+    }
   }, [])
 
   return (
@@ -39,7 +42,7 @@ export const ViewDetailsMenu = ({ dispatch, state }: ViewDetailsMenuProps) => {
             />
           </div>
           <ViewFiler state={state} dispatch={dispatch} />
-          <SizeChanger dispatch={dispatch} />
+          <SizeChanger dispatch={dispatch} setSize={setSize} currentValue={sizes.medium.size}/>
         </Panel>
       </Collapse>
     </>

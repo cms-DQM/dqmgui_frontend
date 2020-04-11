@@ -5,24 +5,28 @@ import { get_jroot_plot } from '../../../config/config';
 import {
   ParamsForApiProps,
   TripleProps,
+  SizeProps,
 } from '../../../containers/display/interfaces';
 import { sizes } from '../../constants';
 import { useRequest } from '../../../hooks/useRequest';
 import { useEffect } from 'react';
+import {StyledDiv} from '../../styledComponents';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot_name: string;
   removePlotFromList(plot_name: string | undefined): void;
   params_for_api: ParamsForApiProps;
+  size: SizeProps
 }
 
 export const ZoomedOverlaidJSROOTPlot = ({
   selected_plot_name,
   removePlotFromList,
   params_for_api,
+  size,
 }: ZoomedJSROOTPlotsProps) => {
-  params_for_api.height = sizes.fill.size.h;
-  params_for_api.width = sizes.fill.size.w;
+  params_for_api.height = size.h;
+  params_for_api.width = size.w;
   params_for_api.plot_name = selected_plot_name;
 
   const { data } = useRequest(get_jroot_plot(params_for_api), {}, [
@@ -104,10 +108,10 @@ export const ZoomedOverlaidJSROOTPlot = ({
   });
 
   return (
-    <div
+    <StyledDiv
       id={selected_plot_name}
-      style={{ width: sizes.fill.size.w, height: sizes.fill.size.h }}
+      style={{ width: size.w, height: size.h }}
       onClick={() => removePlotFromList(selected_plot_name)}
-    ></div>
+    ></StyledDiv>
   );
 };

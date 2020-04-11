@@ -36,10 +36,13 @@ export const Reference = ({ dispatch_gloabl, state_global }: ReferenceProps) => 
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
   };
-  
+
   return (
     <StyledDiv>
-      <RadioButtonsGroup current_value={state_global.overlay} action={(value: string) => setOverlay(value)(dispatch_gloabl)} options={overlayOptions} />
+      <RadioButtonsGroup
+        current_value={state_global.overlay}
+        action={(value: string) => setOverlay(value)(dispatch_gloabl)} 
+        options={overlayOptions} />
       <StyledForm
         layout={'inline'}
         {...layout}
