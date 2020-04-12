@@ -5,7 +5,7 @@ import {
   get_plot_with_overlay,
   get_overlaied_plots_urls,
 } from '../../../config/config';
-import { ParamsForApiProps, OptionProps } from '../interfaces';
+import { ParamsForApiProps } from '../interfaces';
 import { setSelectedPlotsName, addPlotToList } from '../../../reducers/displayFolderOrPlot';
 import {
   StyledCol,
@@ -18,17 +18,17 @@ import {
 interface OverlaidPlotImageProps {
   params_for_api: ParamsForApiProps;
   plot_name: string;
-  dropdownParams: OptionProps[];
   dispatch: any;
-  selected_plots_name: string[]
+  isPlotSelected: boolean;
+  addPlotToList(plot_name: string): void;
 }
 
 export const OverlaidPlotImage = ({
   plot_name,
   params_for_api,
-  dropdownParams,
   dispatch,
-  selected_plots_name,
+  isPlotSelected,
+  addPlotToList,
 }: OverlaidPlotImageProps) => {
 
   params_for_api.plot_name = plot_name;
@@ -44,6 +44,7 @@ export const OverlaidPlotImage = ({
       <StyledPlotRow
         minHeight={params_for_api.height}
         width={params_for_api.width}
+        isPlotSelected={isPlotSelected}
       >
         <PlotNameCol>{plot_name}</PlotNameCol>
         <Column>

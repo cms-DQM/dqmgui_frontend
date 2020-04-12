@@ -34,7 +34,8 @@ export const ZoomedJSROOTPlot = ({
       <StyledPlotRow
         minHeight={size.h}
         width={size.w}
-        >
+        isPlotSelected={true}
+      >
         <PlotNameCol>{selected_plot_name}</PlotNameCol>
         <Column>
           <MinusIcon

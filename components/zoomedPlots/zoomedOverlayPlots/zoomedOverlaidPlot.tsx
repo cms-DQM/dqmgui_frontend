@@ -4,7 +4,8 @@ import { get_overlaied_plots_urls } from '../../../config/config';
 import { ParamsForApiProps, SizeProps } from '../../../containers/display/interfaces';
 import { sizes } from '../../constants';
 import { get_plot_source } from './utils'
-import {StyledDiv} from '../../styledComponents';
+import { StyledDiv } from '../../styledComponents';
+import { StyledPlotRow, PlotNameCol, Column, PlusIcon, MinusIcon, StyledCol } from '../../../containers/display/styledComponents';
 
 interface ZoomedPlotsProps {
   selected_plot_name: string;
@@ -28,17 +29,29 @@ export const ZoomedOverlaidPlot = ({
   params_for_api.joined_overlaied_plots_urls = joined_overlaid_plots_urls;
 
   const source = get_plot_source(params_for_api)
-  
+
   return (
-    <StyledDiv
-      id={selected_plot_name}
-      style={{ width: size.w, height: size.h }}
-      onClick={() => removePlotFromList(selected_plot_name)}
-    >
-      <img
-        src={source}
-        style={{ width: size.w, height: size.h }}
-      />
-    </StyledDiv>
+    <StyledCol>
+      <StyledPlotRow
+        minHeight={params_for_api.height}
+        width={params_for_api.width}
+        isPlotSelected={true}>
+        < PlotNameCol>{selected_plot_name}</PlotNameCol>
+        <Column>
+          <MinusIcon
+            onClick={() => removePlotFromList(selected_plot_name)}
+          />
+        </Column>
+        <div
+          id={selected_plot_name}
+          style={{ width: size.w, height: size.h }}
+        >
+          <img
+            src={source}
+            style={{ width: size.w, height: size.h }}
+          />
+        </div>
+      </StyledPlotRow>
+    </StyledCol>
   );
 };

@@ -17,7 +17,7 @@ interface PlotProps {
   params_for_api: ParamsForApiProps;
   addPlotToList(plot_name: string): void;
   dispatch: any;
-  selected_plots_name: string[]
+  isPlotSelected: boolean;
 }
 
 export const Plot = ({
@@ -25,7 +25,7 @@ export const Plot = ({
   plot_name,
   params_for_api,
   dispatch,
-  selected_plots_name,
+  isPlotSelected,
 }: PlotProps) => {
 
   params_for_api.plot_name = plot_name;
@@ -37,6 +37,7 @@ export const Plot = ({
       <StyledPlotRow
         minHeight={params_for_api.height}
         width={params_for_api.width}
+        isPlotSelected={isPlotSelected}
       >
         <PlotNameCol>{plot_name}</PlotNameCol>
         <Column>

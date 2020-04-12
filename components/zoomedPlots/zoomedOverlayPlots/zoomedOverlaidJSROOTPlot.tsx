@@ -7,10 +7,9 @@ import {
   TripleProps,
   SizeProps,
 } from '../../../containers/display/interfaces';
-import { sizes } from '../../constants';
 import { useRequest } from '../../../hooks/useRequest';
 import { useEffect } from 'react';
-import {StyledDiv} from '../../styledComponents';
+import { StyledCol, Column, StyledPlotRow, PlotNameCol, MinusIcon } from '../../../containers/display/styledComponents';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot_name: string;
@@ -35,17 +34,17 @@ export const ZoomedOverlaidJSROOTPlot = ({
 
   const overlaid_plots_runs_and_datasets: any[] = params_for_api?.overlay_plot
     ? params_for_api.overlay_plot.map((plot: TripleProps) => {
-        const copy: any = { ...params_for_api };
+      const copy: any = { ...params_for_api };
 
-        if (plot.dataset_name) {
-          copy.dataset_name = plot.dataset_name;
-        }
-        copy.run_number = plot.run_number;
-        const { data } = useRequest(get_jroot_plot(copy), {}, [
-          selected_plot_name,
-        ]);
-        return data;
-      })
+      if (plot.dataset_name) {
+        copy.dataset_name = plot.dataset_name;
+      }
+      copy.run_number = plot.run_number;
+      const { data } = useRequest(get_jroot_plot(copy), {}, [
+        selected_plot_name,
+      ]);
+      return data;
+    })
     : [];
 
   overlaid_plots_runs_and_datasets.push(data);
@@ -108,10 +107,22 @@ export const ZoomedOverlaidJSROOTPlot = ({
   });
 
   return (
-    <StyledDiv
-      id={selected_plot_name}
-      style={{ width: size.w, height: size.h }}
-      onClick={() => removePlotFromList(selected_plot_name)}
-    ></StyledDiv>
+    <StyledCol>
+      <StyledPlotRow
+        minHeight={params_for_api.height}
+        width={params_for_api.width}
+        isPlotSelected={true}>
+        <PlotNameCol>{selected_plot_name}</PlotNameCol>
+        <Column>
+          <MinusIcon
+            onClick={() => removePlotFromList(selected_plot_name)}
+          />
+        </Column>
+        <div
+          id={selected_plot_name}
+          style={{ width: size.w, height: size.h }}
+        />
+      </StyledPlotRow>
+    </StyledCol>
   );
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { root_url, get_plot_url } from '../../../config/config';
-import { ParamsForApiProps, OptionProps, TripleProps } from '../interfaces';
+import { ParamsForApiProps, TripleProps } from '../interfaces';
 import { setSelectedPlotsName, addPlotToList } from '../../../reducers/displayFolderOrPlot';
 import {
   StyledCol,
@@ -10,22 +10,21 @@ import {
   Column,
   PlusIcon,
 } from '../styledComponents';
-import { DropdownMenu } from '../../../components/menu';
 
 interface OnSideOverlaidPlotsProps {
   params_for_api: ParamsForApiProps;
   plot_name: string;
-  dropdownParams: OptionProps[];
   dispatch: any;
-  selected_plots_name: string[]
+  isPlotSelected: boolean
+  addPlotToList(plot_name: string):void
 }
 
 export const OnSideOverlaidPlots = ({
   plot_name,
   params_for_api,
-  dropdownParams,
   dispatch,
-  selected_plots_name,
+  isPlotSelected,
+  addPlotToList,
 }: OnSideOverlaidPlotsProps) => {
 
   params_for_api.plot_name = plot_name;
@@ -48,6 +47,7 @@ export const OnSideOverlaidPlots = ({
               <StyledPlotRow
                 minHeight={params_for_api.height}
                 width={params_for_api.width}
+                isPlotSelected={isPlotSelected}
               >
                 <PlotNameCol>{plot_name}</PlotNameCol>
                 <Column>

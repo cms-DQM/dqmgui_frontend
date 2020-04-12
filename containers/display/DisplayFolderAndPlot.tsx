@@ -17,6 +17,7 @@ import { ViewDetailsMenu } from '../../components/viewDetailsMenu';
 import { Icon, DirecotryWrapper, StyledA, Wrapper } from './styledComponents';
 import { FolderPath } from './folderPath';
 import { StyledRow } from './styledComponents';
+import { isPlotSelected } from './utils'
 
 interface DirectoryInterface {
   subdir: string;
@@ -140,7 +141,7 @@ const DiplayFolder: FC<FolderProps> = ({
                       params_for_api={params_for_api}
                       addPlotToList={addPlot}
                       dispatch={dispatch}
-                      selected_plots_name={selected_plots_name}
+                      isPlotSelected={isPlotSelected(selected_plots_name, plot_name)}
                     />
                   ) : (
                         <Plot
@@ -148,7 +149,7 @@ const DiplayFolder: FC<FolderProps> = ({
                           params_for_api={params_for_api}
                           addPlotToList={addPlot}
                           dispatch={dispatch}
-                          selected_plots_name={selected_plots_name}
+                          isPlotSelected={isPlotSelected(selected_plots_name, plot_name)}
                         />
                       )}
                 </>
