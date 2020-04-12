@@ -27,7 +27,8 @@ export const ZoomedPlot = ({
     <StyledCol>
       <StyledPlotRow
         minHeight={params_for_api.height}
-        width={params_for_api.width}>
+        width={params_for_api.width}
+        isPlotSelected={true}>
         <PlotNameCol>{selected_plot_name}</PlotNameCol>
         <Column>
           <MinusIcon

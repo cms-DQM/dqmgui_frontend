@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
-import { FolderFilled, MinusCircleFilled, PlusCircleFilled   } from '@ant-design/icons';
+import { FolderFilled, MinusCircleFilled, PlusCircleFilled } from '@ant-design/icons';
 import { Col, Row } from 'antd';
 
 export const Icon = styled(FolderFilled)`
@@ -29,8 +29,9 @@ export const StyledPlotRow = styled(Row)`
   justify-content: space-between;
   width: ${(props) => props?.width && props.width}px;
   min-height: ${(props) => props?.minHeight && props.minHeight}px;
-  background-color: ${theme.colors.primary.light};
+  background-color: ${(props) => props?.isPlotSelected ? `${theme.colors.secondary.light}` : `${theme.colors.primary.light}`};
   ${theme.colors.primary.main};
+  cursor: pointer;
 `;
 export const PlotNameCol = styled(Col)`
   width: 70%;
