@@ -44,6 +44,7 @@ export const StyledFormItem = styled(Form.Item)`
   .ant-form-item-label > label {
     color: ${theme.colors.common.white};
     padding-right: ${theme.space.spaceBetween};
+    width: fit-content;
   }
 `;
 

@@ -3,7 +3,7 @@ import { SearchOutlined, BarChartOutlined  } from '@ant-design/icons';
 
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
-import { Spin, Row } from 'antd';
+import { Spin, Row, Col } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 
 export const StyledWrapper = styled.div`
@@ -88,4 +88,8 @@ export const NotFoundDivWrapper = styled.div`
 export const ChartIcon = styled(BarChartOutlined)`
   font-size: 14rem;
   color: ${theme.colors.primary.main}
+`
+
+export const StyledCol = styled(Col)`
+    padding: ${theme.space.spaceBetween}
 `

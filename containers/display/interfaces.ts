@@ -2,6 +2,12 @@ export interface TripleProps {
   [key: string]: string | number | boolean;
 }
 
+export interface FolderPathQuery {
+  run_number?: number;
+  dataset_name?: string;
+  folder_path?: string;
+}
+
 export interface OptionProps {
   label: string;
   value: any;

@@ -13,9 +13,12 @@ interface FieldProps {
   id: any;
   field_name: string;
   value: any
+  placeholder?: string | number;
+  disabled?: boolean;
+  defaultValue?: string | number
 }
 
-export const Field = ({ state, dispatch, id, field_name, value }: FieldProps) => {
+export const Field = ({ state, dispatch, id, field_name, value, placeholder, disabled, defaultValue }: FieldProps) => {
 
   useEffect(() => {
     const cleanField = () => {
@@ -25,22 +28,24 @@ export const Field = ({ state, dispatch, id, field_name, value }: FieldProps) =>
   }, [])
 
   return (
-    <StyledDiv>
-      <StyledFormItem
-        name={`${id}_${field_name}`} >
-        <StyledInput
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            change_value(
-              e.target.value,
-              field_name,
-              id
-            )(state, dispatch)
-          }
-          value={value}
-          placeholder={`Enter ${field_name}`}
-          type="text"
-        />
-      </StyledFormItem>
-    </StyledDiv>
+    // <StyledDiv>
+    <StyledFormItem
+      name={`${id}_${field_name}`} >
+      <StyledInput
+        disabled={disabled}
+        defaultValue={defaultValue}
+        onChange={(e: ChangeEvent<HTMLInputElement>) =>
+          change_value(
+            e.target.value,
+            field_name,
+            id
+          )(state, dispatch)
+        }
+        value={value}
+        placeholder={placeholder}
+        type="text"
+      />
+    </StyledFormItem>
+    // </StyledDiv>
   );
 };

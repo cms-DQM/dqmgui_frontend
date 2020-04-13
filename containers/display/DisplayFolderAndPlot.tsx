@@ -104,7 +104,6 @@ const DiplayFolder: FC<FolderProps> = ({
   };
   const directories = cleanDeep(contents.map((content: PlotInterface & DirectoryInterface) => content.subdir))
   const plots = cleanDeep(contents.map((content: PlotInterface & DirectoryInterface) => content.obj))
-
   return (
     <>
       <div>
