@@ -15,11 +15,10 @@ import {
   addPlotToList,
 } from '../../reducers/displayFolderOrPlot';
 import { ViewDetailsMenu } from '../../components/viewDetailsMenu';
-import { Icon, DirecotryWrapper, StyledA, Wrapper } from './styledComponents';
+import { Icon, DirecotryWrapper, StyledA, Wrapper, StyledRowImages } from './styledComponents';
 import { FolderPath } from './folderPath';
 import { StyledRow } from './styledComponents';
 import { isPlotSelected } from './utils'
-import { useRouter } from 'next/router';
 import cleanDeep from 'clean-deep';
 
 interface DirectoryInterface {
@@ -139,9 +138,9 @@ const DiplayFolder: FC<FolderProps> = ({
               </Col>
             )}
           </StyledRow>
-          <StyledRow>
+          <StyledRowImages>
           {plots.map((plot_name: any) =>
-            <Col span={4} key={plot_name}>
+            <Col key={plot_name}>
               {overlay_plot.length > 0 ? (
                 <OverlaidPlot
                   plot_name={plot_name}
@@ -161,7 +160,7 @@ const DiplayFolder: FC<FolderProps> = ({
                 )}
             </Col>
           )}
-          </StyledRow>
+          </StyledRowImages>
         </Wrapper>
       {selected_plots_name.length > 0 && (
         <Wrapper style={{ borderLeft: '1px solid' }} zoomed={selected_plots_name.length}>
