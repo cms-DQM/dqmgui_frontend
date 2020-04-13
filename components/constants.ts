@@ -63,6 +63,7 @@ export const NAV_REDUCER = {
 
 export const REFERENCE_REDCER = {
   CHANGE_TRIPLES_VALUES: 'CHANGE_TRIPLES_VALUES',
+  OPEN_MODAL: 'OPEN_MODAL',
 };
 
 export const overlayOptions = [

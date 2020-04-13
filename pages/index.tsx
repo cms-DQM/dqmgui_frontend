@@ -3,6 +3,7 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import { useState } from 'react';
 import 'antd/dist/antd.css';
+import Router from 'next/router';
 
 import Nav from '../components/Nav';
 import SearchResults from '../containers/search/SearchResults';
@@ -10,13 +11,7 @@ import DiplayFolders from '../containers/display/DisplayFolderAndPlot';
 import { useSearch } from '../hooks/useSearch';
 import { StyledHeader, StyledLayout, StyledContent } from './styles';
 import { NotFoundDiv, NotFoundDivWrapper, ChartIcon } from '../containers/search/styledComponents'
-
-
-interface FolderPathQuery {
-  run_number?: number;
-  dataset_name?: string;
-  folder_path?: string;
-}
+import { FolderPathQuery } from '../containers/display/interfaces';
 
 const Index: NextPage<FolderPathQuery> = (query: any) => {
   const [run_number, setRunNumber] = useState('');
@@ -25,7 +20,29 @@ const Index: NextPage<FolderPathQuery> = (query: any) => {
     query.search_run_number,
     query.search_dataset_name,
   );
-  console.log(query, run_number)
+
+  const navigationHandler = (
+    search_by_run_number: number,
+    search_by_dataset_name: string) => {
+    Router.replace({
+      pathname: '/',
+      query: {
+        search_run_number: search_by_run_number,
+        search_dataset_name: search_by_dataset_name,
+      },
+    })
+  }
+
+  const serchResultsHandler = (run: number, dataset: string) => {
+    Router.replace({
+      pathname: '/',
+      query: {
+        run_number: run,
+        dataset_name: dataset,
+      },
+    })
+  }
+
   return (
     <div>
       <Head>
@@ -37,7 +54,7 @@ const Index: NextPage<FolderPathQuery> = (query: any) => {
       </Head>
       <StyledLayout>
         <StyledHeader>
-          <Nav setRunNumber={setRunNumber} setDatasetName={setDatasetName} />
+          <Nav handler={navigationHandler} setRunNumber={setRunNumber} setDatasetName={setDatasetName} />
         </StyledHeader>
         <StyledContent>
           {query.run_number && query.dataset_name ? (
@@ -51,10 +68,11 @@ const Index: NextPage<FolderPathQuery> = (query: any) => {
               isLoading={isLoading}
               results={results}
               results_grouped={results_grouped}
+              handler={serchResultsHandler}
             />
           ) : (
                 <NotFoundDivWrapper>
-                  <NotFoundDiv style={{border: 'hidden'}}>
+                  <NotFoundDiv style={{ border: 'hidden' }}>
                     <ChartIcon />
                   Welcome to DQM GUI
                   </NotFoundDiv>

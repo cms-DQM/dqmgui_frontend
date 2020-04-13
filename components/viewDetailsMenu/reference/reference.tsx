@@ -2,13 +2,14 @@ import React, { useReducer } from 'react';
 import { Form, Col } from 'antd';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 
-import { TripleProps } from '../../../containers/display/interfaces';
+import { TripleProps, FolderPathQuery } from '../../../containers/display/interfaces';
 import { setPlotToOverlay, setOverlay } from '../../../reducers/displayFolderOrPlot';
 import {
   referenceReducer,
   initialState,
   removeRun,
   addRun,
+  openModal,
 } from '../../../reducers/reference';
 import { StyledDiv } from '../../styledComponents';
 import {
@@ -22,6 +23,9 @@ import { overlayOptions } from '../../constants';
 import { RadioButtonsGroup } from '../../radioButtonsGroup';
 import { filter_plots, filter_valid_runs } from '../utils';
 import { Field } from './field';
+import { useRouter } from 'next/router';
+import { CustomModal } from '../search';
+import { Container } from './containers';
 
 interface ReferenceProps {
   dispatch_gloabl: any;
@@ -36,12 +40,14 @@ export const Reference = ({ dispatch_gloabl, state_global }: ReferenceProps) => 
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
   };
+  const router = useRouter()
+  const query: FolderPathQuery = router.query;
 
   return (
     <StyledDiv>
       <RadioButtonsGroup
         current_value={state_global.overlay}
-        action={(value: string) => setOverlay(value)(dispatch_gloabl)} 
+        action={(value: string) => setOverlay(value)(dispatch_gloabl)}
         options={overlayOptions} />
       <StyledForm
         layout={'inline'}
@@ -56,29 +62,44 @@ export const Reference = ({ dispatch_gloabl, state_global }: ReferenceProps) => 
       // onFinishFailed={onFinishFailed}
       >
         {triples.map((triple: TripleProps) => (
-          <div style={{ display: 'flex' }} id={triple.id.toString()}>
+          <div style={{ display: 'flex', alignItems: 'center' }} id={triple.id.toString()}>
             <StyledDiv>
-              <Field
+              <Container
                 state={state}
                 dispatch={dispatch}
                 id={triple.id}
+                defaultValue={query.run_number}
                 field_name="run_number"
-                value={triple.run_number} />
+                value={triple.run_number}
+              />
             </StyledDiv>
             <StyledDiv>
-              <Field
+              <Container
                 state={state}
+                defaultValue={query.dataset_name}
                 dispatch={dispatch}
                 id={triple.id}
                 field_name="dataset_name"
-                value={triple.dataset_name} />
+                value={triple.dataset_name}
+              />
             </StyledDiv>
+            <FormItem>
+              <StyledSecondaryButton
+                onClick={() => openModal(!state.open)(dispatch)}>Change</StyledSecondaryButton>
+              <CustomModal
+                dispatch={dispatch}
+                visible={state.open}
+                id={triple.id}
+                state={state}
+              />
+            </FormItem>
             <StyledDiv>
               <Field
                 state={state}
                 dispatch={dispatch}
                 id={triple.id}
                 field_name="label"
+                placeholder="label"
                 value={triple.label} />
             </StyledDiv>
             <FormItem>

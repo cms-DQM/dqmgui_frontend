@@ -1,15 +1,15 @@
 import React, { FC, useState } from 'react';
-import Link from 'next/link';
 import { Col } from 'antd';
 
-import { RunsRows, ExpandedRow } from './styledComponents';
+import { RunsRows, ExpandedRow, StyledCol } from './styledComponents';
 
 interface SearchResultsInterface {
   dataset: string;
   value: any[];
+  handler(run: number, dataset: string): any;
 }
 
-const Result: FC<SearchResultsInterface> = ({ dataset, value }) => {
+const Result: FC<SearchResultsInterface> = ({ dataset, value, handler }) => {
   const [expanded, setExpanded] = useState(false);
 
   return (
@@ -17,22 +17,11 @@ const Result: FC<SearchResultsInterface> = ({ dataset, value }) => {
       {dataset}
       {expanded && (
         <RunsRows>
-          <Col span={2}>Runs:</Col>
+          <StyledCol >Runs:</StyledCol>
           {value.map(({ run }: any) => (
-            <Col span={2} key={run}>
-              <Link
-                href={{
-                  pathname: '/',
-                  query: {
-                    run_number: run,
-                    dataset_name: dataset,
-                    folder_path: '/'
-                  },
-                }}
-              >
-                <a>{run}</a>
-              </Link>
-            </Col>
+            <StyledCol key={run}>
+              <a onClick={() => handler(run, dataset)}>{run}</a>
+            </StyledCol>
           ))}
         </RunsRows>
       )}

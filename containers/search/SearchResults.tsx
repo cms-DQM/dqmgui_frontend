@@ -19,10 +19,11 @@ interface SearchResultsInterface {
   results: any[];
   results_grouped: any[];
   isLoading: boolean;
+  handler(run:number, dataset: string): any;
 }
 
 const SearchResults: FC<SearchResultsInterface> = ({
-  results,
+  handler,
   results_grouped,
   isLoading,
 }) => {
@@ -56,7 +57,7 @@ const SearchResults: FC<SearchResultsInterface> = ({
                   {results_grouped.map(({ dataset, value }, index) => (
                     <StyledTableRow index={index} key={index}>
                       <StyledTableDatasetColumn>
-                        <Result key={dataset} dataset={dataset} value={value} />
+                        <Result handler={handler} key={dataset} dataset={dataset} value={value} />
                       </StyledTableDatasetColumn>
                       <StyledTableRunColumn>{value.length}</StyledTableRunColumn>
                     </StyledTableRow>

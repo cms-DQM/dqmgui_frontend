@@ -3,6 +3,7 @@ import React from 'react';
 import { ParamsForApiProps } from '../interfaces';
 import { OnSideOverlaidPlots } from './onSideOverlaidPlots';
 import { OverlaidPlotImage } from './overlaidPlotImage';
+import { changeConfirmLocale } from 'antd/lib/modal/locale';
 
 interface OverlaidPlotProps {
   params_for_api: ParamsForApiProps;
