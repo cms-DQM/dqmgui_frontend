@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 import { FolderFilled, MinusCircleFilled, PlusCircleFilled } from '@ant-design/icons';
-import { Col, Row } from 'antd';
+import { Col, Row , Breadcrumb} from 'antd';
 
 export const Icon = styled(FolderFilled)`
   font-size: 2rem;
@@ -54,4 +54,14 @@ export const MinusIcon = styled(MinusCircleFilled)`
 export const PlusIcon = styled(PlusCircleFilled)`
   font-size: 1.5rem;
   color: ${theme.colors.common.white};
+`
+export const StyledDiv = styled.div`
+  padding: ${theme.space.spaceBetween};
+  color: ${theme.colors.primary.main}
+`
+export const WrapperDiv = styled.div`
+  display: flex
+`
+export const StyledAForPath = styled.a`
+  padding: 0 calc(${theme.space.spaceBetween}*2) 0 calc(${theme.space.spaceBetween}*2)
 `

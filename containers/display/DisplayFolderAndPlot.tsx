@@ -18,6 +18,7 @@ import { Icon, DirecotryWrapper, StyledA, Wrapper } from './styledComponents';
 import { FolderPath } from './folderPath';
 import { StyledRow } from './styledComponents';
 import { isPlotSelected } from './utils'
+import { useRouter } from 'next/router';
 
 interface DirectoryInterface {
   subdir: string;
@@ -99,11 +100,16 @@ const DiplayFolder: FC<FolderProps> = ({
     normalize: normalize,
     errorBars: errorBars,
   };
+  const router = useRouter()
+
   return (
     <>
       <div>
-        <FolderPath folder_path={folder_path} />
-        {/* folder path: {folder_path}, {run_number}, {dataset_name} */}
+        <FolderPath
+          folder_path={folder_path}
+          run_number={run_number}
+          dataset_name={dataset_name}
+        />
       </div>
       {doesPlotExists(contents).length > 0 && (
         <ViewDetailsMenu dispatch={dispatch} state={state} overlay_plot={overlay_plot} />

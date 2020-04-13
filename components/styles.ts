@@ -1,4 +1,4 @@
-import { Form, Button, Input, Tag, Row } from 'antd';
+import { Form, Button, Input, Tag, Row, AutoComplete } from 'antd';
 import styled from 'styled-components';
 import { QuestionOutlined } from '@ant-design/icons';
 
@@ -51,6 +51,14 @@ export const StyledInput = styled(Input)`
   border-radius: 12px;
   width: fit-content;
 `;
+
+export const StyledAutocomplete = styled(AutoComplete)`
+.ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+  border-radius: 12px;
+  width: fit-content;
+}  
+`
+
 export const StyledForm = styled(Form)`
   flex-direction: column;
   width: fit-content;

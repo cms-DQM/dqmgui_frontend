@@ -10,6 +10,7 @@ import {
 import { StyledFormItem, StyledInput } from './styles';
 import { SearchButton } from './searchButton';
 import { QuestionButton } from './helpButton';
+import Router from 'next/router'
 
 interface NavProps {
   setRunNumber: Dispatch<any>;
@@ -26,6 +27,17 @@ const Nav: FC<NavProps> = ({ setRunNumber, setDatasetName }) => {
   const tailLayout = {
     wrapperCol: { offset: 0, span: 4 },
   };
+
+  const handler = () => {
+    Router.replace({
+      pathname: '/',
+      query: {
+        search_run_number: state.search_by_run_number,
+        search_dataset_name: state.search_by_dataset_name,
+      },
+    })
+  }
+
   return (
     <div>
       <Form
@@ -38,13 +50,12 @@ const Nav: FC<NavProps> = ({ setRunNumber, setDatasetName }) => {
           setRunNumber(state.search_by_run_number);
           setDatasetName(state.search_by_dataset_name);
         }}
-        // onFinishFailed={onFinishFailed}
+      // onFinishFailed={onFinishFailed}
       >
         <Form.Item {...tailLayout}>
           <QuestionButton />
         </Form.Item>
         <StyledFormItem
-          // label="Run number:"
           name="run_number"
         >
           <StyledInput
@@ -58,7 +69,6 @@ const Nav: FC<NavProps> = ({ setRunNumber, setDatasetName }) => {
           />
         </StyledFormItem>
         <StyledFormItem
-          // label="Dataset name:"
           name="dataset_name"
         >
           <StyledInput
@@ -71,7 +81,7 @@ const Nav: FC<NavProps> = ({ setRunNumber, setDatasetName }) => {
           />
         </StyledFormItem>
         <Form.Item {...tailLayout}>
-          <SearchButton />
+          <SearchButton onClick={handler} />
         </Form.Item>
       </Form>
     </div>
