@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useState } from 'react';
 import { Form, Col } from 'antd';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 
@@ -34,6 +34,8 @@ interface ReferenceProps {
 
 export const Reference = ({ dispatch_gloabl, state_global }: ReferenceProps) => {
   const [state, dispatch] = useReducer(referenceReducer, initialState);
+  const [selectedTriple, setTriple] = useState<TripleProps>({})
+
   const { triples } = state;
 
   const layout = {
@@ -61,6 +63,12 @@ export const Reference = ({ dispatch_gloabl, state_global }: ReferenceProps) => 
         }}
       // onFinishFailed={onFinishFailed}
       >
+        <CustomModal
+          dispatch={dispatch}
+          visible={state.open}
+          id={selectedTriple.id}
+          state={state}
+        />
         {triples.map((triple: TripleProps) => (
           <div style={{ display: 'flex', alignItems: 'center' }} id={triple.id.toString()}>
             <StyledDiv>
@@ -85,13 +93,10 @@ export const Reference = ({ dispatch_gloabl, state_global }: ReferenceProps) => 
             </StyledDiv>
             <FormItem>
               <StyledSecondaryButton
-                onClick={() => openModal(!state.open)(dispatch)}>Change</StyledSecondaryButton>
-              <CustomModal
-                dispatch={dispatch}
-                visible={state.open}
-                id={triple.id}
-                state={state}
-              />
+                onClick={() => {
+                  openModal(!state.open)(dispatch)
+                  setTriple(triple)
+                }}>Change</StyledSecondaryButton>
             </FormItem>
             <StyledDiv>
               <Field
