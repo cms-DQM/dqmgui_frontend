@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 import { FolderFilled, MinusCircleFilled, PlusCircleFilled } from '@ant-design/icons';
-import { Col, Row , Breadcrumb} from 'antd';
+import { Col, Row, Breadcrumb } from 'antd';
 
 export const Icon = styled(FolderFilled)`
   font-size: 2rem;
@@ -21,9 +21,16 @@ export const StyledCol = styled(Col)`
   padding: calc(${theme.space.spaceBetween} * 2);
 `;
 export const StyledRow = styled(Row)`
+  padding-top: calc(${theme.space.spaceBetween}*2);
+  display: flex;
+  justify-content: end;
+`;
+
+export const StyledRowImages = styled(Row)`
   display: flex;
   justify-content: center;
 `;
+
 export const StyledPlotRow = styled(Row)`
   display: flex;
   justify-content: space-between;
