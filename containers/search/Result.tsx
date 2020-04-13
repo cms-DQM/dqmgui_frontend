@@ -26,6 +26,7 @@ const Result: FC<SearchResultsInterface> = ({ dataset, value }) => {
                   query: {
                     run_number: run,
                     dataset_name: dataset,
+                    folder_path: '/'
                   },
                 }}
               >

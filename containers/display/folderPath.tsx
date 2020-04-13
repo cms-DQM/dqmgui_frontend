@@ -62,6 +62,7 @@ export const FolderPath = ({ folder_path, run_number, dataset_name }: FolderPath
               query: {
                 run_number: query.run_number,
                 dataset_name: query.dataset_name,
+                folder_path: '/'
               },
             }}
           >
