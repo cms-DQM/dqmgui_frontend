@@ -45,36 +45,45 @@ export const CustomModal = ({ visible, dispatch, id, state }: CustomModalProps) 
 
     openModal(false)(dispatch)
   }
-  
-console.log(state)
+
+  console.log(state)
   const { results, results_grouped, searching, isLoading } = useSearch(
     search_run_number,
     search_dataset_name,
   );
 
+  useEffect(() => {
+    const clear = () => {
+      setRunNumber(NaN)
+      setDatasetName('')
+      setSearchRunNumber(NaN)
+      setSearchDatasetName('')
+    }
+    return () => clear()
+  }, [])
   return (
     <Modal
       title="Overlay Plots data search"
       visible={visible}
       onCancel={() => openModal(false)(dispatch)}
       footer={[
-        <Button key="Close"  onClick={() => openModal(false)(dispatch)}>
+        <Button key="Close" onClick={() => openModal(false)(dispatch)}>
           Close
         </Button>,
       ]}
     >
-      <div style={{width: '25vw'}}>
+      <div style={{ width: '25vw' }}>
         <Nav handler={navigationHandler} setRunNumber={setSearchRunNumber} setDatasetName={setSearchDatasetName} />
       </div>
       {
         searching ? (
-          <div style={{overflow: 'scroll', overflowX:'hidden',  height: '60vh', width:'fit-content', paddingTop: 8}}>
-          <SearchResults
-            handler={searchHandler}
-            isLoading={isLoading}
-            results={results}
-            results_grouped={results_grouped}
-          />
+          <div style={{ overflow: 'scroll', overflowX: 'hidden', height: '60vh', width: 'fit-content', paddingTop: 8 }}>
+            <SearchResults
+              handler={searchHandler}
+              isLoading={isLoading}
+              results={results}
+              results_grouped={results_grouped}
+            />
           </div>
         ) : (
             <NotFoundDivWrapper>
