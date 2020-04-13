@@ -1,6 +1,7 @@
 import React, { FC, useReducer } from 'react';
 import Link from 'next/link';
 import { Col } from 'antd';
+import _ from 'lodash';
 
 import { useRequest } from '../../hooks/useRequest';
 import { Plot } from './plot';
@@ -42,10 +43,10 @@ const doesPlotExists = (contents: (PlotInterface & DirectoryInterface)[]) =>
 // what is streamerinfo? (coming from api, we don't know what it is, so we filtered it out)
 const getContents = (data: any) =>
   data
-    ? data.contents.filter(
+    ? _.sortBy(data.contents.filter(
       (one_item: PlotInterface | DirectoryInterface) =>
         !one_item.hasOwnProperty('streamerinfo')
-    )
+    ), ['subdir'])
     : [];
 
 const DiplayFolder: FC<FolderProps> = ({
@@ -101,6 +102,7 @@ const DiplayFolder: FC<FolderProps> = ({
     errorBars: errorBars,
   };
   const router = useRouter()
+  console.log(contents)
 
   return (
     <>
