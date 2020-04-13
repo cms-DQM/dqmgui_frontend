@@ -2,7 +2,6 @@ import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { useState } from 'react';
-import { Layout } from 'antd';
 import 'antd/dist/antd.css';
 
 import Nav from '../components/Nav';
@@ -12,7 +11,6 @@ import { useSearch } from '../hooks/useSearch';
 import { StyledHeader, StyledLayout, StyledContent } from './styles';
 import { NotFoundDiv, NotFoundDivWrapper, ChartIcon } from '../containers/search/styledComponents'
 
-const { Header, Footer, Sider, Content } = Layout;
 
 interface FolderPathQuery {
   run_number?: number;
@@ -20,13 +18,14 @@ interface FolderPathQuery {
   folder_path?: string;
 }
 
-const Index: NextPage<FolderPathQuery> = (query) => {
+const Index: NextPage<FolderPathQuery> = (query: any) => {
   const [run_number, setRunNumber] = useState('');
   const [dataset_name, setDatasetName] = useState('');
   const { results, results_grouped, searching, isLoading } = useSearch(
-    run_number,
-    dataset_name
+    query.search_run_number,
+    query.search_dataset_name,
   );
+  console.log(query, run_number)
   return (
     <div>
       <Head>

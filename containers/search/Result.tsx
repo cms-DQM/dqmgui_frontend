@@ -1,7 +1,6 @@
 import React, { FC, useState } from 'react';
 import Link from 'next/link';
 import { Col } from 'antd';
-import { useRouter } from 'next/router';
 
 import { RunsRows, ExpandedRow } from './styledComponents';
 
@@ -12,7 +11,6 @@ interface SearchResultsInterface {
 
 const Result: FC<SearchResultsInterface> = ({ dataset, value }) => {
   const [expanded, setExpanded] = useState(false);
-  const router = useRouter();
 
   return (
     <ExpandedRow expanded={expanded} onClick={() => setExpanded(!expanded)}>

@@ -4,10 +4,15 @@ import { SearchOutlined } from '@ant-design/icons';
 
 import { StyledButton } from './styles';
 
-export const SearchButton = () => (
+interface SearchButtonProps {
+  onClick(): void;
+}
+
+export const SearchButton = ({ onClick }: SearchButtonProps) => (
   <Tooltip title="search">
     <StyledButton
       htmlType="submit"
+      onClick={() => onClick()}
       shape="circle"
       icon={<SearchOutlined />}
     />
