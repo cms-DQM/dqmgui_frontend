@@ -31,15 +31,6 @@ export const ViewDetailsMenu = ({ dispatch, state }: ViewDetailsMenuProps) => {
           <Reference state_global={state} dispatch_gloabl={dispatch} />
         </Panel>
         <Panel header="Dispay Options" key="2">
-          <div>
-            <Switch
-              checkedChildren="JSROOT enabled"
-              unCheckedChildren="JSROOT disabled"
-              onChange={(e) => {
-                setJSROOTMode(e)(dispatch);
-              }}
-            />
-          </div>
           <ViewFiler state={state} dispatch={dispatch} />
           <SizeChanger dispatch={dispatch} setSize={setSize} currentValue={sizes.medium.size}/>
         </Panel>

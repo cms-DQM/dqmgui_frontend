@@ -59,7 +59,7 @@ export const OnSideOverlaidPlots = ({
                     :
                     <PlusIcon onClick={() => addPlotToList(plot_name)} />
                   }                </Column>
-                <div onClick={() => setSelectedPlotsName([plot_name])(dispatch)}>
+                <div>
                   <img alt={plot_name} src={sourceForOnePlot} />
                 </div>
               </StyledPlotRow>
