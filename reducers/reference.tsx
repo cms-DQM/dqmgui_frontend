@@ -22,7 +22,7 @@ export const change_triples_values = (triple: TripleProps[]) => (
     payload: triple,
   });
 
-export const change_value = (
+export const change_value_in_reference_table = (
   value: string | number,
   key: string,
   id: string | number | boolean
@@ -56,7 +56,7 @@ export const removeRun = (id: string | number | boolean) => (
   change_triples_values(removed)(dispatch);
 };
 
-export const openModal = (open: boolean) => (dispatch: any) =>
+export const toggleModal = (open: boolean) => (dispatch: any) =>
   dispatch({
     type: REFERENCE_REDCER.OPEN_MODAL,
     payload: open,

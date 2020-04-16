@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchOutlined, BarChartOutlined  } from '@ant-design/icons';
+import { SearchOutlined, BarChartOutlined } from '@ant-design/icons';
 
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
@@ -9,6 +9,7 @@ import { LoadingOutlined } from '@ant-design/icons';
 export const StyledWrapper = styled.div`
   height: 100%;
   display: flex;
+  // width: 100%;
   justify-content: center;
 `;
 const antIcon = () => <LoadingOutlined spin />;
@@ -30,6 +31,7 @@ export const StyledTableHead = styled.thead`
   background-color: ${theme.colors.thirdy.dark};
   color: ${theme.colors.common.white};
   text-transform: uppercase;
+  // display: inline-table;
 `;
 export const StyledTableRow = styled.tr`
   width: 100%;
@@ -40,7 +42,7 @@ export const StyledTableRow = styled.tr`
   cursor: pointer;
   &:hover {
     background-color: ${(props) =>
-      props?.noHover ? '' : `${theme.colors.secondary.light}`};
+    props?.noHover ? '' : `${theme.colors.secondary.light}`};
   }
 `;
 export const StyledTableDatasetColumn = styled.td`
@@ -55,7 +57,11 @@ export const StyledTableRunColumn = styled.td`
 `;
 export const StyledTable = styled.table`
   border: 1px solid ${theme.colors.primary.main};
-  width: 71%;
+  width: 70%;
+  // display: flex;
+  // flex-flow: column;
+  // height: 100%;
+  // overflow-x: hidden;
 `;
 export const RunsRows = styled(Row)`
   padding-left: 32px;
@@ -69,13 +75,13 @@ export const NotFoundDiv = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
-    border: 2px solid ${theme.colors.secondary.main};
+    border: ${props => props.reference ? 'hidden': `2px solid ${theme.colors.secondary.main}` };
     height: fit-content;
     font-size: 2rem;
-    padding: calc(${theme.space.spaceBetween}*12)
+    padding: calc(${theme.space.spaceBetween}*12);
 `
 
-export const Icon = styled(SearchOutlined )`
+export const Icon = styled(SearchOutlined)`
     font-size: 14rem;
     color: ${theme.colors.primary.main}
 `
@@ -92,4 +98,9 @@ export const ChartIcon = styled(BarChartOutlined)`
 
 export const StyledCol = styled(Col)`
     padding: ${theme.space.spaceBetween}
+`
+export const TableBody = styled.tbody`
+    height: 100%;
+    overflow: scroll;
+    overflow-x: hidden;
 `

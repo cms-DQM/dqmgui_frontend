@@ -9,6 +9,7 @@ import {
   StyledPlotRow,
   Column,
   PlusIcon,
+  MinusIcon,
 } from '../styledComponents';
 
 interface OnSideOverlaidPlotsProps {
@@ -16,7 +17,8 @@ interface OnSideOverlaidPlotsProps {
   plot_name: string;
   dispatch: any;
   isPlotSelected: boolean
-  addPlotToList(plot_name: string):void
+  addPlotToList(plot_name: string): void;
+  removePlotFromList(plot_name: string | undefined): void;
 }
 
 export const OnSideOverlaidPlots = ({
@@ -25,6 +27,7 @@ export const OnSideOverlaidPlots = ({
   dispatch,
   isPlotSelected,
   addPlotToList,
+  removePlotFromList,
 }: OnSideOverlaidPlotsProps) => {
 
   params_for_api.plot_name = plot_name;
@@ -51,8 +54,11 @@ export const OnSideOverlaidPlots = ({
               >
                 <PlotNameCol>{plot_name}</PlotNameCol>
                 <Column>
-                  <PlusIcon onClick={() => addPlotToList(plot_name)} />
-                </Column>
+                  {isPlotSelected ?
+                    <MinusIcon onClick={() => removePlotFromList(plot_name)} />
+                    :
+                    <PlusIcon onClick={() => addPlotToList(plot_name)} />
+                  }                </Column>
                 <div onClick={() => setSelectedPlotsName([plot_name])(dispatch)}>
                   <img alt={plot_name} src={sourceForOnePlot} />
                 </div>

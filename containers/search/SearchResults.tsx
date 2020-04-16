@@ -13,13 +13,14 @@ import {
   NotFoundDiv,
   Icon,
   NotFoundDivWrapper,
+  TableBody,
 } from './styledComponents';
 
 interface SearchResultsInterface {
   results: any[];
   results_grouped: any[];
   isLoading: boolean;
-  handler(run:number, dataset: string): any;
+  handler(run: number, dataset: string): any;
 }
 
 const SearchResults: FC<SearchResultsInterface> = ({
@@ -27,6 +28,7 @@ const SearchResults: FC<SearchResultsInterface> = ({
   results_grouped,
   isLoading,
 }) => {
+
   return (
     <StyledWrapper>
       {isLoading ? (
@@ -53,7 +55,7 @@ const SearchResults: FC<SearchResultsInterface> = ({
                     <StyledTableRunColumn>Runs</StyledTableRunColumn>
                   </StyledTableRow>
                 </StyledTableHead>
-                <tbody>
+                <TableBody>
                   {results_grouped.map(({ dataset, value }, index) => (
                     <StyledTableRow index={index} key={index}>
                       <StyledTableDatasetColumn>
@@ -62,7 +64,7 @@ const SearchResults: FC<SearchResultsInterface> = ({
                       <StyledTableRunColumn>{value.length}</StyledTableRunColumn>
                     </StyledTableRow>
                   ))}
-                </tbody>
+                </TableBody>
               </StyledTable>
             }
           </>

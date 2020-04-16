@@ -79,7 +79,6 @@ const Index: NextPage<FolderPathQuery> = (query: any) => {
                 </NotFoundDivWrapper>
               )}
         </StyledContent>
-        {/* <Footer>Footer</Footer> */}
       </StyledLayout>
     </div>
   );

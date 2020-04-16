@@ -52,7 +52,7 @@ export const Column = styled(Col)`
 `;
 export const Wrapper = styled.div`
   width: ${(props) => props?.zoomed ? '50%' : '100%'};
-  align-items: center
+  align-items: center;
 `
 export const MinusIcon = styled(MinusCircleFilled)`
   font-size: 1.5rem;
