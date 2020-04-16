@@ -49,7 +49,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
 
   overlaid_plots_runs_and_datasets.push(data);
 
-  let overlaidJSROOTPlot: any;
+  let overlaidJSROOTPlot: any = {};
 
   //checking how many histograms are overlaid, because just separated objects
   // (i.e separate variables ) to JSROOT.CreateTHStack() func
@@ -88,6 +88,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
     );
   }
 
+  console.log(overlaidJSROOTPlot)
   //make sure that no null histograms are passed to draw func.
   //on first, second reneder overlaidJSROOTPlot.fHists.arr is [null, null]
   //@ts-ignore 
@@ -104,7 +105,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
         'hist'
       );
     }
-  });
+  },);
 
   return (
     <StyledCol>

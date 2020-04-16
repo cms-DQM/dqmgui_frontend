@@ -38,7 +38,6 @@ export const StyledPlotRow = styled(Row)`
   min-height: ${(props) => props?.minHeight && props.minHeight}px;
   background-color: ${(props) => props?.isPlotSelected ? `${theme.colors.secondary.light}` : `${theme.colors.primary.light}`};
   ${theme.colors.primary.main};
-  cursor: pointer;
 `;
 export const PlotNameCol = styled(Col)`
   width: 70%;

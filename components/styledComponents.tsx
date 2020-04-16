@@ -11,3 +11,8 @@ export const ZoomedPlotsWrapper = styled.div`
   justify-content: center;
   padding: calc(${theme.space.spaceBetween}*2);
 `
+
+export const DisplayOptionsWrapper = styled.div`
+  background: ${theme.colors.common.white};
+  padding: calc(${theme.space.padding}*2)
+`
