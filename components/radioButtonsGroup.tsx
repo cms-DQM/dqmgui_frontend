@@ -21,7 +21,6 @@ export const RadioButtonsGroup = ({ options, action, current_value }: RadioButto
       }}
         value={value}>
         {options.map((option: OptionProps) => {
-          console.log(option.value)
           return (
             <Radio key={option.label}
               value={option.value}>

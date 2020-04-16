@@ -3,7 +3,6 @@ import React from 'react';
 import { ParamsForApiProps } from '../interfaces';
 import { OnSideOverlaidPlots } from './onSideOverlaidPlots';
 import { OverlaidPlotImage } from './overlaidPlotImage';
-import { changeConfirmLocale } from 'antd/lib/modal/locale';
 
 interface OverlaidPlotProps {
   params_for_api: ParamsForApiProps;
@@ -11,6 +10,7 @@ interface OverlaidPlotProps {
   addPlotToList(plot_name: string): void;
   dispatch: any;
   isPlotSelected: boolean;
+  removePlotFromList(plot_name: string | undefined): void;
 }
 
 export const OverlaidPlot = ({
@@ -18,7 +18,8 @@ export const OverlaidPlot = ({
   params_for_api,
   addPlotToList,
   dispatch,
-  isPlotSelected
+  isPlotSelected,
+  removePlotFromList
 }: OverlaidPlotProps) => {
 
   return (
@@ -30,6 +31,7 @@ export const OverlaidPlot = ({
           dispatch={dispatch}
           isPlotSelected={isPlotSelected}
           addPlotToList={addPlotToList}
+          removePlotFromList={removePlotFromList}
         />
         :
         <OverlaidPlotImage
@@ -38,6 +40,7 @@ export const OverlaidPlot = ({
           dispatch={dispatch}
           isPlotSelected={isPlotSelected}
           addPlotToList={addPlotToList}
+          removePlotFromList={removePlotFromList}
         />
       }
 

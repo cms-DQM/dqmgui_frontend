@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect } from 'react';
 
-import { change_value, removeRun } from '../../../reducers/reference';
+import { change_value_in_reference_table, removeRun } from '../../../reducers/reference';
 import { StyledDiv } from '../styledComponents';
 import {
   StyledInput,
@@ -35,7 +35,7 @@ export const Field = ({ state, dispatch, id, field_name, value, placeholder, dis
         disabled={disabled}
         defaultValue={defaultValue}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          change_value(
+          change_value_in_reference_table(
             e.target.value,
             field_name,
             id

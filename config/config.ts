@@ -23,7 +23,7 @@ export const get_plot_url = (params: ParamsForApiProps) =>
     params.height
   }`;
 export const get_plot_with_overlay = (params: ParamsForApiProps) =>{
-  console.log(params.folders_path)
+
   return(
   `plotfairy/overlay?ref=${params.overlay};obj=archive/${params.run_number}${
     params.dataset_name
@@ -44,7 +44,7 @@ export const get_overlaied_plots_urls = (params: ParamsForApiProps) => {
       ? overlay.dataset_name
       : params.dataset_name;
     const run_number_overlay = overlay.run_number;
-    const label = overlay.label ? overlay.label : params.run_number;
+    const label = overlay.label ? overlay.label : overlay.run_number;
     return `;obj=archive/${run_number_overlay}${dataset_name_overlay}${params.folders_path}/${params.plot_name};reflabel=${label}`;
   });
 };

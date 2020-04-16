@@ -1,4 +1,4 @@
-import React, { FC, ChangeEvent, Dispatch, useReducer } from 'react';
+import React, { FC, ChangeEvent, Dispatch, useReducer, useEffect } from 'react';
 import { Form } from 'antd';
 
 import {
@@ -10,7 +10,6 @@ import {
 import { StyledFormItem, StyledInput } from './styles';
 import { SearchButton } from './searchButton';
 import { QuestionButton } from './helpButton';
-import Router from 'next/router'
 
 interface NavProps {
   setRunNumber: Dispatch<any>;
@@ -42,7 +41,6 @@ const Nav: FC<NavProps> = ({ setRunNumber, setDatasetName, handler }) => {
           setRunNumber(state.search_by_run_number);
           setDatasetName(state.search_by_dataset_name);
         }}
-      // onFinishFailed={onFinishFailed}
       >
         <Form.Item {...tailLayout}>
           <QuestionButton />

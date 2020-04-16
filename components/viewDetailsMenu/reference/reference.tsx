@@ -1,4 +1,4 @@
-import React, { useReducer, useState } from 'react';
+import React, { useReducer, useState, useEffect } from 'react';
 import { Form, Col } from 'antd';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 
@@ -9,8 +9,7 @@ import {
   initialState,
   removeRun,
   addRun,
-  openModal,
-} from '../../../reducers/reference';
+  toggleModal} from '../../../reducers/reference';
 import { StyledDiv } from '../../styledComponents';
 import {
   StyledForm,
@@ -61,7 +60,6 @@ export const Reference = ({ dispatch_gloabl, state_global }: ReferenceProps) => 
           const filtered: TripleProps[] = filter_valid_runs(triples);
           setPlotToOverlay(filtered)(dispatch_gloabl);
         }}
-      // onFinishFailed={onFinishFailed}
       >
         <CustomModal
           dispatch={dispatch}
@@ -94,7 +92,7 @@ export const Reference = ({ dispatch_gloabl, state_global }: ReferenceProps) => 
             <FormItem>
               <StyledSecondaryButton
                 onClick={() => {
-                  openModal(!state.open)(dispatch)
+                  toggleModal(!state.open)(dispatch)
                   setTriple(triple)
                 }}>Change</StyledSecondaryButton>
             </FormItem>

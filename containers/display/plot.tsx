@@ -10,6 +10,7 @@ import {
   PlotNameCol,
   Column,
   PlusIcon,
+  MinusIcon,
 } from './styledComponents';
 
 interface PlotProps {
@@ -18,6 +19,7 @@ interface PlotProps {
   addPlotToList(plot_name: string): void;
   dispatch: any;
   isPlotSelected: boolean;
+  removePlotFromList(plot_name: string | undefined): void;
 }
 
 export const Plot = ({
@@ -26,6 +28,7 @@ export const Plot = ({
   params_for_api,
   dispatch,
   isPlotSelected,
+  removePlotFromList,
 }: PlotProps) => {
 
   params_for_api.plot_name = plot_name;
@@ -41,7 +44,11 @@ export const Plot = ({
       >
         <PlotNameCol>{plot_name}</PlotNameCol>
         <Column>
-          <PlusIcon onClick={() => addPlotToList(plot_name)} />
+          {isPlotSelected ?
+            <MinusIcon onClick={() => removePlotFromList(plot_name)} />
+            :
+            <PlusIcon onClick={() => addPlotToList(plot_name)} />
+          }
         </Column>
         <div onClick={() => setSelectedPlotsName([plot_name])(dispatch)}>
           <img alt={plot_name} src={source} />

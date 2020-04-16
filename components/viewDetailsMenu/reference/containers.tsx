@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { removeRun } from '../../../reducers/reference';
+import { removeRun, change_value_in_reference_table } from '../../../reducers/reference';
 import { Typography } from 'antd';
 
 const { Text } = Typography;
@@ -16,13 +16,20 @@ interface FieldProps {
 
 export const Container = ({ state, dispatch, id, field_name, value, defaultValue }: FieldProps) => {
 
+  const inputValue = value ? value : defaultValue
+
   useEffect(() => {
+    change_value_in_reference_table
+      (defaultValue ? defaultValue : '',
+        field_name,
+        id,
+      )(state, dispatch)
     const cleanField = () => {
       removeRun(id)(state, dispatch);
     }
     return cleanField
   }, [])
-  const inputValue = value ? value : defaultValue
+
 
   return (
     <div>
