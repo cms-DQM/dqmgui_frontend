@@ -46,8 +46,8 @@ const Index: NextPage<FolderPathQuery> = (query) => {
           results_grouped={results_grouped}
         />
       ) : (
-            <Home />
-          )}
+        <Home />
+      )}
     </>
   );
 };
