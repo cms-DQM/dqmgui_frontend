@@ -4,7 +4,7 @@ import { get_jroot_plot } from '../../../config/config';
 import { ParamsForApiProps, SizeProps } from '../../../containers/display/interfaces';
 import { useRequest } from '../../../hooks/useRequest';
 import { StyledDiv } from '../../styledComponents';
-import { StyledCol, StyledPlotRow, PlotNameCol, MinusIcon, Column } from '../../../containers/display/styledComponents';
+import { StyledCol, StyledPlotRow, PlotNameCol, MinusIcon, Column, ImageDiv } from '../../../containers/display/styledComponents';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot_name: string;
@@ -42,9 +42,10 @@ export const ZoomedJSROOTPlot = ({
             onClick={() => removePlotFromList(selected_plot_name)}
           />
         </Column>
-        <div
+        <ImageDiv
           id={selected_plot_name}
-          style={{ width: size.w, height: size.h }}
+          width={size.w}
+          height={size.h}
         />
       </StyledPlotRow>
     </StyledCol>

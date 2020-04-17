@@ -9,7 +9,7 @@ import {
 } from '../../../containers/display/interfaces';
 import { useRequest } from '../../../hooks/useRequest';
 import { useEffect } from 'react';
-import { StyledCol, Column, StyledPlotRow, PlotNameCol, MinusIcon } from '../../../containers/display/styledComponents';
+import { StyledCol, Column, StyledPlotRow, PlotNameCol, MinusIcon, ImageDiv } from '../../../containers/display/styledComponents';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot_name: string;
@@ -105,7 +105,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
         'hist'
       );
     }
-  },);
+  });
 
   return (
     <StyledCol>
@@ -119,9 +119,10 @@ export const ZoomedOverlaidJSROOTPlot = ({
             onClick={() => removePlotFromList(selected_plot_name)}
           />
         </Column>
-        <div
+        <ImageDiv
           id={selected_plot_name}
-          style={{ width: size.w, height: size.h }}
+          width={size.w}
+          height={size.h}
         />
       </StyledPlotRow>
     </StyledCol>

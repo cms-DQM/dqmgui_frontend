@@ -1,7 +1,7 @@
 import React, { FC, useState } from 'react';
 import { Col } from 'antd';
 
-import { RunsRows, ExpandedRow, StyledCol } from './styledComponents';
+import { RunsRows, ExpandedRow, StyledCol, RunWrapper } from './styledComponents';
 
 interface SearchResultsInterface {
   dataset: string;
@@ -20,7 +20,10 @@ const Result: FC<SearchResultsInterface> = ({ dataset, value, handler }) => {
           <StyledCol >Runs:</StyledCol>
           {value.map(({ run }: any) => (
             <StyledCol key={run}>
-              <a onClick={() => handler(run, dataset)}>{run}</a>
+              <RunWrapper>
+                <a onClick={() => handler(run, dataset)}>{run}</a>
+              </RunWrapper>
+
             </StyledCol>
           ))}
         </RunsRows>

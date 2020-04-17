@@ -9,7 +9,8 @@ import {
   initialState,
   removeRun,
   addRun,
-  toggleModal} from '../../../reducers/reference';
+  toggleModal
+} from '../../../reducers/reference';
 import { StyledDiv } from '../../styledComponents';
 import {
   StyledForm,
@@ -17,6 +18,7 @@ import {
   StyledSecondaryButton,
   StyledButton,
   FormItem,
+  FieldsWrapper,
 } from '../../styles';
 import { overlayOptions } from '../../constants';
 import { RadioButtonsGroup } from '../../radioButtonsGroup';
@@ -68,7 +70,7 @@ export const Reference = ({ dispatch_gloabl, state_global }: ReferenceProps) => 
           state={state}
         />
         {triples.map((triple: TripleProps) => (
-          <div style={{ display: 'flex', alignItems: 'center' }} id={triple.id.toString()}>
+          <FieldsWrapper>
             <StyledDiv>
               <Container
                 state={state}
@@ -117,7 +119,7 @@ export const Reference = ({ dispatch_gloabl, state_global }: ReferenceProps) => 
                 icon={<MinusOutlined />}
               ></StyledSecondaryButton>
             </FormItem>
-          </div>
+          </FieldsWrapper>
         ))}
         <StyledActionButtonRow>
           <Col>

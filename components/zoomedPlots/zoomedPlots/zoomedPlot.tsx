@@ -2,7 +2,7 @@ import React from 'react';
 
 import { get_plot_url, root_url } from '../../../config/config';
 import { ParamsForApiProps, SizeProps } from '../../../containers/display/interfaces';
-import { StyledCol, PlotNameCol, StyledPlotRow, Column, MinusIcon } from '../../../containers/display/styledComponents';
+import { StyledCol, PlotNameCol, StyledPlotRow, Column, MinusIcon, ImageDiv } from '../../../containers/display/styledComponents';
 
 interface ZoomedPlotsProps {
   selected_plot_name: string;
@@ -35,15 +35,16 @@ export const ZoomedPlot = ({
             onClick={() => removePlotFromList(selected_plot_name)}
           />
         </Column>
-        <div
+        <ImageDiv
           id={selected_plot_name}
-          style={{ width: size.w, height: size.h }}
-        >
-          <img
+          width={size.w}
+          height={size.h}        >
+          <ImageDiv
             src={source}
-            style={{ width: size.w, height: size.h }}
+            width={size.w}
+            height={size.h}
           />
-        </div>
+        </ImageDiv>
       </StyledPlotRow>
     </StyledCol>
   );

@@ -26,5 +26,9 @@ export const NavWrapper = styled.div`
 export const StyledModal = styled(Modal)`
 .ant-modal-content{
   width: fit-content;
-}
+}`
+
+export const FirstSectionWrapper = styled.div`
+  display: flex;
+  width: '50%';  
 `

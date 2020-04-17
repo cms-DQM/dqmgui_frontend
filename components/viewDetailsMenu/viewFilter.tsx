@@ -6,7 +6,7 @@ import {
   setNormalize,
   setStats,
 } from '../../reducers/displayFolderOrPlot';
-import { CheckboxesWrapper } from './styledComponents';
+import { CheckboxesWrapper, FirstSectionWrapper } from './styledComponents';
 interface ViewFilerProps {
   dispatch(obj: any): any;
   state: any;
@@ -14,7 +14,7 @@ interface ViewFilerProps {
 
 export const ViewFiler = ({ dispatch, state }: ViewFilerProps) => {
   return (
-    <div style={{ display: 'flex', width: '50%' }}>
+    <FirstSectionWrapper>
       <CheckboxesWrapper>
         <Checkbox
           onClick={(e: any) => {
@@ -41,6 +41,6 @@ export const ViewFiler = ({ dispatch, state }: ViewFilerProps) => {
           ErrorBars
         </Checkbox>
       </CheckboxesWrapper>
-    </div>
+    </FirstSectionWrapper>
   );
 };

@@ -2,10 +2,8 @@ import React from 'react';
 
 import { get_overlaied_plots_urls } from '../../../config/config';
 import { ParamsForApiProps, SizeProps } from '../../../containers/display/interfaces';
-import { sizes } from '../../constants';
 import { get_plot_source } from './utils'
-import { StyledDiv } from '../../styledComponents';
-import { StyledPlotRow, PlotNameCol, Column, PlusIcon, MinusIcon, StyledCol } from '../../../containers/display/styledComponents';
+import { StyledPlotRow, PlotNameCol, Column, MinusIcon, StyledCol, ImageDiv } from '../../../containers/display/styledComponents';
 
 interface ZoomedPlotsProps {
   selected_plot_name: string;
@@ -42,15 +40,17 @@ export const ZoomedOverlaidPlot = ({
             onClick={() => removePlotFromList(selected_plot_name)}
           />
         </Column>
-        <div
+        <ImageDiv
           id={selected_plot_name}
-          style={{ width: size.w, height: size.h }}
+          width={size.w}
+          height={size.h}
         >
-          <img
+          <ImageDiv
             src={source}
-            style={{ width: size.w, height: size.h }}
+            width={size.w}
+            height={size.h}
           />
-        </div>
+        </ImageDiv>
       </StyledPlotRow>
     </StyledCol>
   );
