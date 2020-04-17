@@ -7,7 +7,7 @@ import {
   setSearchFieldByDatasetName,
   setSearchFieldByRunNumber,
 } from '../reducers/navReducer';
-import { StyledFormItem, StyledInput } from './styles';
+import { StyledFormItem, StyledInput } from './styledComponents';
 import { SearchButton } from './searchButton';
 import { QuestionButton } from './helpButton';
 

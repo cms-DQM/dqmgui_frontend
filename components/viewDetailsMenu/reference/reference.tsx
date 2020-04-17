@@ -19,7 +19,7 @@ import {
   StyledButton,
   FormItem,
   FieldsWrapper,
-} from '../../styles';
+} from '../../styledComponents';
 import { overlayOptions } from '../../constants';
 import { RadioButtonsGroup } from '../../radioButtonsGroup';
 import { filter_plots, filter_valid_runs } from '../utils';

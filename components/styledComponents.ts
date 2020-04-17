@@ -81,6 +81,20 @@ export const FormItem = styled(Form.Item)`
 
 export const FieldsWrapper= styled.div`
   display: flex,
-  alignItems: center
+  align-items: center
+`
+export const StyledDiv = styled.div`
+  margin: calc(${theme.space.spaceBetween}*2);
+`;
+
+export const ZoomedPlotsWrapper = styled.div`
+  display: grid;
+  flex-direction: column;
+  justify-content: center;
+  padding: calc(${theme.space.spaceBetween}*2);
 `
 
+export const DisplayOptionsWrapper = styled.div`
+  background: ${theme.colors.common.white};
+  padding: calc(${theme.space.padding}*2)
+`

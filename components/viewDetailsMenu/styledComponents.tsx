@@ -30,5 +30,5 @@ export const StyledModal = styled(Modal)`
 
 export const FirstSectionWrapper = styled.div`
   display: flex;
-  width: '50%';  
+  width: 50%;  
 `
