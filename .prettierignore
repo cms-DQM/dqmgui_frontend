@@ -4,3 +4,4 @@ node_modules
 **/dist/**
 public/**
 build/**
+public/jsroot-5.8.0/**
