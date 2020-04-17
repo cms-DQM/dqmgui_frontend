@@ -9,7 +9,7 @@ import Nav from '../components/Nav';
 import SearchResults from '../containers/search/SearchResults';
 import DiplayFolders from '../containers/display/DisplayFolderAndPlot';
 import { useSearch } from '../hooks/useSearch';
-import { StyledHeader, StyledLayout, StyledContent } from './styledComponents';
+import { StyledHeader, StyledLayout, StyledContent } from '../styles/styledComponents';
 import {
   NotFoundDiv,
   NotFoundDivWrapper,
