@@ -72,3 +72,15 @@ export const overlayOptions = [
   { label: 'Overlay+ratio', value: 'ratiooverlay' },
   { label: 'Stacked', value: 'stacked' },
 ];
+
+export const xyzTypes = [
+  { label: 'Linear', value: 'lin' },
+  { label: 'Log', value: 'log' },
+  { label: 'Default', value: '' }
+]
+
+export const withReference = [
+  { label: 'Yes', value: 'yes' },
+  { label: 'No', value: 'no' },
+  { label: 'Default', value: '' }
+]

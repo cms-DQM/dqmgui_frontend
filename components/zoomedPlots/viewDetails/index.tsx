@@ -1,0 +1,25 @@
+import React, { useEffect } from 'react';
+import { Collapse } from 'antd';
+
+import { DisplayOptions } from './displayOptions';
+
+const { Panel } = Collapse;
+
+interface ViewDetailsMenuProps {
+  dispatch: any;
+  jsroot_mode: boolean;
+}
+
+export const ViewDetailsMenu = ({ dispatch, jsroot_mode }: ViewDetailsMenuProps) => {
+
+  return (
+    <Collapse defaultActiveKey={['1']}>
+      <Panel header="Display Options" key="1">
+        <DisplayOptions dispatch={dispatch} jsroot_mode={jsroot_mode} />
+      </Panel>
+      {/* <Panel header="Customize" key="2">
+        <CostumizeTable />
+      </Panel> */}
+    </Collapse>
+  );
+};
