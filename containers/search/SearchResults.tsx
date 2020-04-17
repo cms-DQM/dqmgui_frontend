@@ -57,12 +57,12 @@ const SearchResults: FC<SearchResultsInterface> = ({
                 </StyledTableHead>
                 <TableBody>
                   {results_grouped.map(({ dataset, value }, index) => (
-                    <StyledTableRow index={index} key={index}>
-                      <StyledTableDatasetColumn>
-                        <Result handler={handler} key={dataset} dataset={dataset} value={value} />
-                      </StyledTableDatasetColumn>
-                      <StyledTableRunColumn>{value.length}</StyledTableRunColumn>
-                    </StyledTableRow>
+                    <Result
+                      key={dataset}
+                      index={index}
+                      handler={handler}
+                      dataset={dataset}
+                      value={value} />
                   ))}
                 </TableBody>
               </StyledTable>
