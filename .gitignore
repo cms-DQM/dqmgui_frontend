@@ -1,3 +1,5 @@
 /node_modules
 /.next
 package-lock.json
+/build
+public/jsroot-5.8.0
