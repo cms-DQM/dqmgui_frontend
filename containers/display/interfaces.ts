@@ -11,7 +11,7 @@ export interface FolderPathQuery {
 export interface OptionProps {
   label: string;
   value: any;
-  action?(): void;
+  action?(option?: any): void;
 }
 
 export interface SizeProps {
