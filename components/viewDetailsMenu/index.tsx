@@ -7,6 +7,7 @@ import { SizeChanger } from '../sizeChanger';
 import { setJSROOTMode, setSize } from '../../reducers/displayFolderOrPlot';
 import { setPlotToOverlay, setSelectedPlotsName } from '../../reducers/displayFolderOrPlot'
 import { sizes } from '../constants';
+import {CostumizeTable} from './customize'
 
 const { Panel } = Collapse;
 
@@ -34,6 +35,9 @@ export const ViewDetailsMenu = ({ dispatch, state }: ViewDetailsMenuProps) => {
           <ViewFiler state={state} dispatch={dispatch} />
           <SizeChanger dispatch={dispatch} setSize={setSize} currentValue={sizes.medium.size}/>
         </Panel>
+        {/* <Panel header="Customize" key="3">
+          <CostumizeTable/>
+        </Panel> */}
       </Collapse>
   );
 };
