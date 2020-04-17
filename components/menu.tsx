@@ -1,31 +1,39 @@
-import React from 'react';
-import { Menu, Dropdown } from 'antd';
+import React, { useState, MouseEvent } from 'react';
+import { Menu, Dropdown, Row, Col } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
+
 import { OptionProps } from '../containers/display/interfaces';
+import { StyledSecondaryButton } from './styledComponents';
 
 export interface MenuProps {
   options: OptionProps[];
+  title: string
 }
 
-const plotMenu = (options: OptionProps[]) => (
-  <Menu>
-    {options.map((option: OptionProps) => (
-      <Menu.Item
-        key={option.value}
-        onClick={() => option?.action && option.action()}
-      >
-        <p>{option.label}</p>
-      </Menu.Item>
-    ))}
-  </Menu>
-);
+export const DropdownMenu = ({ options, title }: MenuProps) => {
 
-export const DropdownMenu = ({ options }: MenuProps) => {
+  const plotMenu = (options: OptionProps[], title: string) => (
+    <Menu>
+      {options.map((option: OptionProps) => (
+        <Menu.Item
+          key={option.value}
+          onClick={() => option?.action && option.action(option)}
+        >
+          <p>{option.label}</p>
+        </Menu.Item>
+      ))}
+    </Menu>
+  );
+
   return (
-    <Dropdown overlay={plotMenu(options)} trigger={['click']}>
-      <a className="ant-dropdown-link" onClick={(e) => e.preventDefault()}>
-        Menu <DownOutlined />
-      </a>
-    </Dropdown>
+    <Row>
+      <Col>
+        <Dropdown overlay={plotMenu(options, title)} trigger={['click']}>
+          <StyledSecondaryButton className="ant-dropdown-link">
+            {title}
+          </StyledSecondaryButton>
+        </Dropdown>
+      </Col>
+    </Row>
   );
 };
