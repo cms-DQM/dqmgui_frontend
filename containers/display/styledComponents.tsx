@@ -77,6 +77,6 @@ export const StyledAForPath = styled.a`
   padding: 0 calc(${theme.space.spaceBetween}*2) 0 calc(${theme.space.spaceBetween}*2)
 `
 export const ImageDiv = styled.div`
-  width: ${props => props.width ? props.width  : ''};
-  height: ${props => props.height ? props.height  : ''};
+  width: ${props => props.width ? props.width  : ''}px;
+  height: ${props => props.height ? props.height  : ''}px;
 `

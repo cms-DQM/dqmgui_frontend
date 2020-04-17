@@ -80,8 +80,8 @@ export const FormItem = styled(Form.Item)`
 `;
 
 export const FieldsWrapper= styled.div`
-  display: flex,
-  align-items: center
+  display: flex;
+  align-items: center;
 `
 export const StyledDiv = styled.div`
   margin: calc(${theme.space.spaceBetween}*2);

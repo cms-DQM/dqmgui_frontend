@@ -31,7 +31,6 @@ export const StyledTableHead = styled.thead`
   background-color: ${theme.colors.thirdy.dark};
   color: ${theme.colors.common.white};
   text-transform: uppercase;
-  // display: inline-table;
 `;
 export const StyledTableRow = styled.tr`
   width: 100%;
@@ -43,7 +42,9 @@ export const StyledTableRow = styled.tr`
   &:hover {
     background-color: ${(props) =>
     props?.noHover ? '' : `${theme.colors.secondary.light}`};
-  }
+  };
+  font-weight: ${(props) =>
+    props?.expanded && props.expanded === true ? 'bold' : ''};
 `;
 export const StyledTableDatasetColumn = styled.td`
   width: 80%;
@@ -58,10 +59,6 @@ export const StyledTableRunColumn = styled.td`
 export const StyledTable = styled.table`
   border: 1px solid ${theme.colors.primary.main};
   width: 70%;
-  // display: flex;
-  // flex-flow: column;
-  // height: 100%;
-  // overflow-x: hidden;
 `;
 export const RunsRows = styled(Row)`
   padding-left: 32px;
@@ -104,9 +101,11 @@ export const TableBody = styled.tbody`
     overflow: scroll;
     overflow-x: hidden;
 `
-
 export const RunWrapper = styled.div`
-  background: ${theme.colors.primary.light};
+  background: ${theme.colors.secondary.main};
   border-radius: 5px;
   padding: ${theme.space.padding};
+`
+export const StyledA = styled.a`
+    color: ${theme.colors.common.white} !important
 `
