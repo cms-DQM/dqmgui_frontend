@@ -89,6 +89,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
   }
 
   console.log(overlaidJSROOTPlot)
+  const histogramParam = params_for_api.normalize ? 'hist' : 'nostack'
   //make sure that no null histograms are passed to draw func.
   //on first, second reneder overlaidJSROOTPlot.fHists.arr is [null, null]
   //@ts-ignore 
@@ -98,14 +99,15 @@ export const ZoomedOverlaidJSROOTPlot = ({
       overlaidJSROOTPlot.fHists.arr.length
     ) {
       //@ts-ignore
-      JSROOT.draw(
-        selected_plot_name,
+      JSROOT.redraw(
+        `${histogramParam}_${selected_plot_name}`,
         //@ts-ignore
         JSROOT.parse(JSON.stringify(overlaidJSROOTPlot)),
-        'hist'
+        `${histogramParam}`
       );
     }
-  });
+  },
+  );
 
   return (
     <StyledCol>
@@ -119,11 +121,18 @@ export const ZoomedOverlaidJSROOTPlot = ({
             onClick={() => removePlotFromList(selected_plot_name)}
           />
         </Column>
-        <ImageDiv
-          id={selected_plot_name}
-          width={size.w}
-          height={size.h}
-        />
+          <ImageDiv
+            style={{ display: params_for_api.normalize ? '' : 'none' }}
+            id={`hist_${selected_plot_name}`}
+            width={size.w}
+            height={size.h}
+          />
+          <ImageDiv
+            style={{ display: params_for_api.normalize ? 'none' : '' }}
+            id={`nostack_${selected_plot_name}`}
+            width={size.w}
+            height={size.h}
+          />
       </StyledPlotRow>
     </StyledCol>
   );
