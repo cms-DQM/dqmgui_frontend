@@ -1,6 +1,10 @@
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
-import { FolderFilled, MinusCircleFilled, PlusCircleFilled } from '@ant-design/icons';
+import {
+  FolderFilled,
+  MinusCircleFilled,
+  PlusCircleFilled,
+} from '@ant-design/icons';
 import { Col, Row, Breadcrumb } from 'antd';
 
 export const Icon = styled(FolderFilled)`
@@ -36,7 +40,10 @@ export const StyledPlotRow = styled(Row)`
   justify-content: space-between;
   width: ${(props) => props?.width && props.width}px;
   min-height: ${(props) => props?.minHeight && props.minHeight}px;
-  background-color: ${(props) => props?.isPlotSelected ? `${theme.colors.secondary.light}` : `${theme.colors.primary.light}`};
+  background-color: ${(props) =>
+    props?.isPlotSelected
+      ? `${theme.colors.secondary.light}`
+      : `${theme.colors.primary.light}`};
   ${theme.colors.primary.main};
   cursor: pointer;
 `;
@@ -51,39 +58,40 @@ export const Column = styled(Col)`
     ${theme.space.spaceBetween} ${theme.space.spaceBetween};
 `;
 export const Wrapper = styled.div`
-  width: ${(props) => props?.zoomed ? '50%' : '100%'};
-  border-left:  ${(props) => props?.zoomed ? '1px solid' : ''};
+  width: ${(props) => (props?.zoomed ? '50%' : '100%')};
+  border-left: ${(props) => (props?.zoomed ? '1px solid' : '')};
   align-items: center;
-`
+`;
 export const DivWrapper = styled.div`
   display: flex;
   flex-direction: row;
-`
+`;
 export const MinusIcon = styled(MinusCircleFilled)`
   font-size: 1.5rem;
   color: ${theme.colors.common.white};
   &:hover {
-    color: ${theme.colors.common.black}
+    color: ${theme.colors.common.black};
   }
-`
+`;
 export const PlusIcon = styled(PlusCircleFilled)`
   font-size: 1.5rem;
   color: ${theme.colors.common.white};
   &:hover {
-    color: ${theme.colors.common.black}
+    color: ${theme.colors.common.black};
   }
-`
+`;
 export const StyledDiv = styled.div`
   padding: ${theme.space.spaceBetween};
-  color: ${theme.colors.primary.main}
-`
+  color: ${theme.colors.primary.main};
+`;
 export const WrapperDiv = styled.div`
-  display: flex
-`
+  display: flex;
+`;
 export const StyledAForPath = styled.a`
-  padding: 0 calc(${theme.space.spaceBetween}*2) 0 calc(${theme.space.spaceBetween}*2)
-`
+  padding: 0 calc(${theme.space.spaceBetween}*2) 0
+    calc(${theme.space.spaceBetween}*2);
+`;
 export const ImageDiv = styled.div`
-  width: ${props => props.width ? props.width  : ''}px;
-  height: ${props => props.height ? props.height  : ''}px;
-`
+  width: ${(props) => (props.width ? props.width : '')}px;
+  height: ${(props) => (props.height ? props.height : '')}px;
+`;

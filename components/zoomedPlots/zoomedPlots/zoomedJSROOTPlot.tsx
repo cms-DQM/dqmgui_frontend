@@ -1,15 +1,25 @@
 import React, { useEffect } from 'react';
 
 import { get_jroot_plot } from '../../../config/config';
-import { ParamsForApiProps, SizeProps } from '../../../containers/display/interfaces';
+import {
+  ParamsForApiProps,
+  SizeProps,
+} from '../../../containers/display/interfaces';
 import { useRequest } from '../../../hooks/useRequest';
-import { StyledCol, StyledPlotRow, PlotNameCol, MinusIcon, Column, ImageDiv } from '../../../containers/display/styledComponents';
+import {
+  StyledCol,
+  StyledPlotRow,
+  PlotNameCol,
+  MinusIcon,
+  Column,
+  ImageDiv,
+} from '../../../containers/display/styledComponents';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot_name: string;
   removePlotFromList(plot_name: string | undefined): void;
   params_for_api: ParamsForApiProps;
-  size: SizeProps
+  size: SizeProps;
 }
 
 export const ZoomedJSROOTPlot = ({
@@ -30,22 +40,12 @@ export const ZoomedJSROOTPlot = ({
 
   return (
     <StyledCol>
-      <StyledPlotRow
-        minHeight={size.h}
-        width={size.w}
-        isPlotSelected={true}
-      >
+      <StyledPlotRow minHeight={size.h} width={size.w} isPlotSelected={true}>
         <PlotNameCol>{selected_plot_name}</PlotNameCol>
         <Column>
-          <MinusIcon
-            onClick={() => removePlotFromList(selected_plot_name)}
-          />
+          <MinusIcon onClick={() => removePlotFromList(selected_plot_name)} />
         </Column>
-        <ImageDiv
-          id={selected_plot_name}
-          width={size.w}
-          height={size.h}
-        />
+        <ImageDiv id={selected_plot_name} width={size.w} height={size.h} />
       </StyledPlotRow>
     </StyledCol>
   );

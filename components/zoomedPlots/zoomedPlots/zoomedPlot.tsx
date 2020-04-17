@@ -1,8 +1,18 @@
 import React from 'react';
 
 import { get_plot_url, root_url } from '../../../config/config';
-import { ParamsForApiProps, SizeProps } from '../../../containers/display/interfaces';
-import { StyledCol, PlotNameCol, StyledPlotRow, Column, MinusIcon, ImageDiv } from '../../../containers/display/styledComponents';
+import {
+  ParamsForApiProps,
+  SizeProps,
+} from '../../../containers/display/interfaces';
+import {
+  StyledCol,
+  PlotNameCol,
+  StyledPlotRow,
+  Column,
+  MinusIcon,
+  ImageDiv,
+} from '../../../containers/display/styledComponents';
 
 interface ZoomedPlotsProps {
   selected_plot_name: string;
@@ -28,20 +38,16 @@ export const ZoomedPlot = ({
       <StyledPlotRow
         minHeight={params_for_api.height}
         width={params_for_api.width}
-        isPlotSelected={true}>
+        isPlotSelected={true}
+      >
         <PlotNameCol>{selected_plot_name}</PlotNameCol>
         <Column>
-          <MinusIcon
-            onClick={() => removePlotFromList(selected_plot_name)}
-          />
+          <MinusIcon onClick={() => removePlotFromList(selected_plot_name)} />
         </Column>
-        <ImageDiv
-          id={selected_plot_name}
-          width={size.w}
-          height={size.h}        >
+        <ImageDiv id={selected_plot_name} width={size.w} height={size.h}>
           <img
             src={source}
-            style={{ width: `${size.w}`, height: `${size.h}`}}
+            style={{ width: `${size.w}`, height: `${size.h}` }}
           />
         </ImageDiv>
       </StyledPlotRow>

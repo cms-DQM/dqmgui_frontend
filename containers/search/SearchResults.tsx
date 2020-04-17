@@ -28,7 +28,6 @@ const SearchResults: FC<SearchResultsInterface> = ({
   results_grouped,
   isLoading,
 }) => {
-
   return (
     <StyledWrapper>
       {isLoading ? (
@@ -36,39 +35,37 @@ const SearchResults: FC<SearchResultsInterface> = ({
           <Spinner />
         </SpinnerWrapper>
       ) : (
-          <>
-            {results_grouped.length === 0 && !isLoading ? (
-              <NotFoundDivWrapper >
-                <NotFoundDiv>
-                  <Icon />
-                  <div>
-                    No Results Found
-                </div>
-                </NotFoundDiv>
-              </NotFoundDivWrapper>
-
-            ) :
-              <StyledTable>
-                <StyledTableHead>
-                  <StyledTableRow noHover>
-                    <StyledTableDatasetColumn>Dataset</StyledTableDatasetColumn>
-                    <StyledTableRunColumn>Runs</StyledTableRunColumn>
-                  </StyledTableRow>
-                </StyledTableHead>
-                <TableBody>
-                  {results_grouped.map(({ dataset, value }, index) => (
-                    <Result
-                      key={dataset}
-                      index={index}
-                      handler={handler}
-                      dataset={dataset}
-                      value={value} />
-                  ))}
-                </TableBody>
-              </StyledTable>
-            }
-          </>
-        )}
+        <>
+          {results_grouped.length === 0 && !isLoading ? (
+            <NotFoundDivWrapper>
+              <NotFoundDiv>
+                <Icon />
+                <div>No Results Found</div>
+              </NotFoundDiv>
+            </NotFoundDivWrapper>
+          ) : (
+            <StyledTable>
+              <StyledTableHead>
+                <StyledTableRow noHover>
+                  <StyledTableDatasetColumn>Dataset</StyledTableDatasetColumn>
+                  <StyledTableRunColumn>Runs</StyledTableRunColumn>
+                </StyledTableRow>
+              </StyledTableHead>
+              <TableBody>
+                {results_grouped.map(({ dataset, value }, index) => (
+                  <Result
+                    key={dataset}
+                    index={index}
+                    handler={handler}
+                    dataset={dataset}
+                    value={value}
+                  />
+                ))}
+              </TableBody>
+            </StyledTable>
+          )}
+        </>
+      )}
     </StyledWrapper>
   );
 };

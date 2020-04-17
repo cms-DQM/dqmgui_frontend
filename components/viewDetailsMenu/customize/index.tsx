@@ -1,1 +1,1 @@
-export {CostumizeTable} from './table'
+export { CostumizeTable } from './table';

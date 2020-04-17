@@ -76,11 +76,11 @@ export const overlayOptions = [
 export const xyzTypes = [
   { label: 'Linear', value: 'lin' },
   { label: 'Log', value: 'log' },
-  { label: 'Default', value: '' }
-]
+  { label: 'Default', value: '' },
+];
 
 export const withReference = [
   { label: 'Yes', value: 'yes' },
   { label: 'No', value: 'no' },
-  { label: 'Default', value: '' }
-]
+  { label: 'Default', value: '' },
+];

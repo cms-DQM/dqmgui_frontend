@@ -41,8 +41,8 @@ export const StyledTableRow = styled.tr`
   cursor: pointer;
   &:hover {
     background-color: ${(props) =>
-    props?.noHover ? '' : `${theme.colors.secondary.light}`};
-  };
+      props?.noHover ? '' : `${theme.colors.secondary.light}`};
+  }
   font-weight: ${(props) =>
     props?.expanded && props.expanded === true ? 'bold' : ''};
 `;
@@ -69,43 +69,44 @@ export const ExpandedRow = styled.div`
     props?.expanded && props.expanded === true ? 'bold' : ''};
 `;
 export const NotFoundDiv = styled.div`
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    border: ${props => props.noBorder ? 'hidden': `2px solid ${theme.colors.secondary.main}` };
-    height: fit-content;
-    font-size: 2rem;
-    padding: calc(${theme.space.spaceBetween}*12);
-`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  border: ${(props) =>
+    props.noBorder ? 'hidden' : `2px solid ${theme.colors.secondary.main}`};
+  height: fit-content;
+  font-size: 2rem;
+  padding: calc(${theme.space.spaceBetween}*12);
+`;
 
 export const Icon = styled(SearchOutlined)`
-    font-size: 14rem;
-    color: ${theme.colors.primary.main}
-`
+  font-size: 14rem;
+  color: ${theme.colors.primary.main};
+`;
 export const NotFoundDivWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`
+`;
 
 export const ChartIcon = styled(BarChartOutlined)`
   font-size: 14rem;
-  color: ${theme.colors.primary.main}
-`
+  color: ${theme.colors.primary.main};
+`;
 
 export const StyledCol = styled(Col)`
-    padding: ${theme.space.spaceBetween}
-`
+  padding: ${theme.space.spaceBetween};
+`;
 export const TableBody = styled.tbody`
-    height: 100%;
-    overflow: scroll;
-    overflow-x: hidden;
-`
+  height: 100%;
+  overflow: scroll;
+  overflow-x: hidden;
+`;
 export const RunWrapper = styled.div`
   background: ${theme.colors.secondary.main};
   border-radius: 5px;
   padding: ${theme.space.padding};
-`
+`;
 export const StyledA = styled.a`
-    color: ${theme.colors.common.white} !important
-`
+  color: ${theme.colors.common.white} !important;
+`;

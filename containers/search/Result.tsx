@@ -1,7 +1,15 @@
 import React, { FC, useState } from 'react';
 import { Col } from 'antd';
 
-import { RunsRows, StyledTableDatasetColumn, StyledTableRow, StyledTableRunColumn, StyledCol, RunWrapper, StyledA } from './styledComponents';
+import {
+  RunsRows,
+  StyledTableDatasetColumn,
+  StyledTableRow,
+  StyledTableRunColumn,
+  StyledCol,
+  RunWrapper,
+  StyledA,
+} from './styledComponents';
 
 interface SearchResultsInterface {
   dataset: string;
@@ -10,14 +18,20 @@ interface SearchResultsInterface {
   index: number;
 }
 
-const Result: FC<SearchResultsInterface> = ({ index, dataset, value, handler }) => {
+const Result: FC<SearchResultsInterface> = ({
+  index,
+  dataset,
+  value,
+  handler,
+}) => {
   const [expanded, setExpanded] = useState(false);
 
   return (
     <StyledTableRow
       expanded={expanded}
       onClick={() => setExpanded(!expanded)}
-      index={index}>
+      index={index}
+    >
       <StyledTableDatasetColumn>
         <div>
           {dataset}
@@ -26,9 +40,10 @@ const Result: FC<SearchResultsInterface> = ({ index, dataset, value, handler }) 
               {value.map(({ run }: any) => (
                 <StyledCol key={run}>
                   <RunWrapper>
-                    <StyledA onClick={() => handler(run, dataset)}>{run}</StyledA>
+                    <StyledA onClick={() => handler(run, dataset)}>
+                      {run}
+                    </StyledA>
                   </RunWrapper>
-
                 </StyledCol>
               ))}
             </RunsRows>

@@ -14,7 +14,7 @@ export interface OptionProps {
   action?(): void;
 }
 
-export interface SizeProps{
+export interface SizeProps {
   w: number;
   h: number;
 }

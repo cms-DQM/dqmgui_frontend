@@ -10,7 +10,11 @@ import SearchResults from '../containers/search/SearchResults';
 import DiplayFolders from '../containers/display/DisplayFolderAndPlot';
 import { useSearch } from '../hooks/useSearch';
 import { StyledHeader, StyledLayout, StyledContent } from './styledComponents';
-import { NotFoundDiv, NotFoundDivWrapper, ChartIcon } from '../containers/search/styledComponents'
+import {
+  NotFoundDiv,
+  NotFoundDivWrapper,
+  ChartIcon,
+} from '../containers/search/styledComponents';
 import { FolderPathQuery } from '../containers/display/interfaces';
 
 const Index: NextPage<FolderPathQuery> = (query: any) => {
@@ -18,20 +22,21 @@ const Index: NextPage<FolderPathQuery> = (query: any) => {
   const [dataset_name, setDatasetName] = useState('');
   const { results, results_grouped, searching, isLoading } = useSearch(
     query.search_run_number,
-    query.search_dataset_name,
+    query.search_dataset_name
   );
 
   const navigationHandler = (
     search_by_run_number: number,
-    search_by_dataset_name: string) => {
+    search_by_dataset_name: string
+  ) => {
     Router.replace({
       pathname: '/',
       query: {
         search_run_number: search_by_run_number,
         search_dataset_name: search_by_dataset_name,
       },
-    })
-  }
+    });
+  };
 
   const serchResultsHandler = (run: number, dataset: string) => {
     Router.replace({
@@ -40,8 +45,8 @@ const Index: NextPage<FolderPathQuery> = (query: any) => {
         run_number: run,
         dataset_name: dataset,
       },
-    })
-  }
+    });
+  };
 
   return (
     <div>
@@ -54,7 +59,11 @@ const Index: NextPage<FolderPathQuery> = (query: any) => {
       </Head>
       <StyledLayout>
         <StyledHeader>
-          <Nav handler={navigationHandler} setRunNumber={setRunNumber} setDatasetName={setDatasetName} />
+          <Nav
+            handler={navigationHandler}
+            setRunNumber={setRunNumber}
+            setDatasetName={setDatasetName}
+          />
         </StyledHeader>
         <StyledContent>
           {query.run_number && query.dataset_name ? (
@@ -71,13 +80,13 @@ const Index: NextPage<FolderPathQuery> = (query: any) => {
               handler={serchResultsHandler}
             />
           ) : (
-                <NotFoundDivWrapper>
-                  <NotFoundDiv noBorder>
-                    <ChartIcon />
-                  Welcome to DQM GUI
-                  </NotFoundDiv>
-                </NotFoundDivWrapper>
-              )}
+            <NotFoundDivWrapper>
+              <NotFoundDiv noBorder>
+                <ChartIcon />
+                Welcome to DQM GUI
+              </NotFoundDiv>
+            </NotFoundDivWrapper>
+          )}
         </StyledContent>
       </StyledLayout>
     </div>

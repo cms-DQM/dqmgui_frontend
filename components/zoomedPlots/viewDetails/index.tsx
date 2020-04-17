@@ -10,8 +10,10 @@ interface ViewDetailsMenuProps {
   jsroot_mode: boolean;
 }
 
-export const ViewDetailsMenu = ({ dispatch, jsroot_mode }: ViewDetailsMenuProps) => {
-
+export const ViewDetailsMenu = ({
+  dispatch,
+  jsroot_mode,
+}: ViewDetailsMenuProps) => {
   return (
     <Collapse defaultActiveKey={['1']}>
       <Panel header="Display Options" key="1">
