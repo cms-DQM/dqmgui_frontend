@@ -39,10 +39,9 @@ export const ZoomedPlot = ({
           id={selected_plot_name}
           width={size.w}
           height={size.h}        >
-          <ImageDiv
+          <img
             src={source}
-            width={size.w}
-            height={size.h}
+            style={{ width: `${size.w}`, height: `${size.h}`}}
           />
         </ImageDiv>
       </StyledPlotRow>

@@ -3,7 +3,6 @@ import React, { useEffect } from 'react';
 import { get_jroot_plot } from '../../../config/config';
 import { ParamsForApiProps, SizeProps } from '../../../containers/display/interfaces';
 import { useRequest } from '../../../hooks/useRequest';
-import { StyledDiv } from '../../styledComponents';
 import { StyledCol, StyledPlotRow, PlotNameCol, MinusIcon, Column, ImageDiv } from '../../../containers/display/styledComponents';
 
 interface ZoomedJSROOTPlotsProps {

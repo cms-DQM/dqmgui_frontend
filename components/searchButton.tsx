@@ -2,7 +2,7 @@ import React from 'react';
 import { Tooltip } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 
-import { StyledButton } from './styles';
+import { StyledButton } from './styledComponents';
 
 interface SearchButtonProps {
   onClick(): void;

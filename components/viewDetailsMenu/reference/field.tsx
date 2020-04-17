@@ -5,7 +5,7 @@ import { StyledDiv } from '../styledComponents';
 import {
   StyledInput,
   StyledFormItem,
-} from '../../styles';
+} from '../../styledComponents';
 
 interface FieldProps {
   dispatch: any;
