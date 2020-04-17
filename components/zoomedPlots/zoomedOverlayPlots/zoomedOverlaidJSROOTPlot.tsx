@@ -9,13 +9,20 @@ import {
 } from '../../../containers/display/interfaces';
 import { useRequest } from '../../../hooks/useRequest';
 import { useEffect } from 'react';
-import { StyledCol, Column, StyledPlotRow, PlotNameCol, MinusIcon, ImageDiv } from '../../../containers/display/styledComponents';
+import {
+  StyledCol,
+  Column,
+  StyledPlotRow,
+  PlotNameCol,
+  MinusIcon,
+  ImageDiv,
+} from '../../../containers/display/styledComponents';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot_name: string;
   removePlotFromList(plot_name: string | undefined): void;
   params_for_api: ParamsForApiProps;
-  size: SizeProps
+  size: SizeProps;
 }
 
 export const ZoomedOverlaidJSROOTPlot = ({
@@ -34,17 +41,17 @@ export const ZoomedOverlaidJSROOTPlot = ({
 
   const overlaid_plots_runs_and_datasets: any[] = params_for_api?.overlay_plot
     ? params_for_api.overlay_plot.map((plot: TripleProps) => {
-      const copy: any = { ...params_for_api };
+        const copy: any = { ...params_for_api };
 
-      if (plot.dataset_name) {
-        copy.dataset_name = plot.dataset_name;
-      }
-      copy.run_number = plot.run_number;
-      const { data } = useRequest(get_jroot_plot(copy), {}, [
-        selected_plot_name,
-      ]);
-      return data;
-    })
+        if (plot.dataset_name) {
+          copy.dataset_name = plot.dataset_name;
+        }
+        copy.run_number = plot.run_number;
+        const { data } = useRequest(get_jroot_plot(copy), {}, [
+          selected_plot_name,
+        ]);
+        return data;
+      })
     : [];
 
   overlaid_plots_runs_and_datasets.push(data);
@@ -88,11 +95,11 @@ export const ZoomedOverlaidJSROOTPlot = ({
     );
   }
 
-  console.log(overlaidJSROOTPlot)
-  const histogramParam = params_for_api.normalize ? 'hist' : 'nostack'
+  console.log(overlaidJSROOTPlot);
+  const histogramParam = params_for_api.normalize ? 'hist' : 'nostack';
   //make sure that no null histograms are passed to draw func.
   //on first, second reneder overlaidJSROOTPlot.fHists.arr is [null, null]
-  //@ts-ignore 
+  //@ts-ignore
   useEffect(() => {
     if (
       cleanDeep(overlaidJSROOTPlot.fHists.arr).length ===
@@ -106,33 +113,31 @@ export const ZoomedOverlaidJSROOTPlot = ({
         `${histogramParam}`
       );
     }
-  },
-  );
+  });
 
   return (
     <StyledCol>
       <StyledPlotRow
         minHeight={params_for_api.height}
         width={params_for_api.width}
-        isPlotSelected={true}>
+        isPlotSelected={true}
+      >
         <PlotNameCol>{selected_plot_name}</PlotNameCol>
         <Column>
-          <MinusIcon
-            onClick={() => removePlotFromList(selected_plot_name)}
-          />
+          <MinusIcon onClick={() => removePlotFromList(selected_plot_name)} />
         </Column>
-          <ImageDiv
-            style={{ display: params_for_api.normalize ? '' : 'none' }}
-            id={`hist_${selected_plot_name}`}
-            width={size.w}
-            height={size.h}
-          />
-          <ImageDiv
-            style={{ display: params_for_api.normalize ? 'none' : '' }}
-            id={`nostack_${selected_plot_name}`}
-            width={size.w}
-            height={size.h}
-          />
+        <ImageDiv
+          style={{ display: params_for_api.normalize ? '' : 'none' }}
+          id={`hist_${selected_plot_name}`}
+          width={size.w}
+          height={size.h}
+        />
+        <ImageDiv
+          style={{ display: params_for_api.normalize ? 'none' : '' }}
+          id={`nostack_${selected_plot_name}`}
+          width={size.w}
+          height={size.h}
+        />
       </StyledPlotRow>
     </StyledCol>
   );

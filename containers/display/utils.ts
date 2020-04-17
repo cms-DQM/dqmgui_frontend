@@ -6,5 +6,5 @@ export const getFolderPath = (folders: string[], clickedFolder: string) => {
 };
 
 export const isPlotSelected = (selected_plots: string[], plot: string) => {
-  return selected_plots.includes(plot)
-}
+  return selected_plots.includes(plot);
+};

@@ -12,7 +12,7 @@ export const StyledButton = styled(Button)`
   &:hover {
     background-color: ${theme.colors.secondary.light} !important;
     color: ${theme.colors.common.black} !important;
-  };
+  }
   color: ${theme.colors.common.white} !important;
 `;
 
@@ -58,11 +58,11 @@ export const StyledInput = styled(Input)`
 `;
 
 export const StyledAutocomplete = styled(AutoComplete)`
-.ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
-  border-radius: 12px;
-  width: fit-content;
-}  
-`
+  .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+    border-radius: 12px;
+    width: fit-content;
+  }
+`;
 
 export const StyledForm = styled(Form)`
   flex-direction: column;
@@ -79,10 +79,10 @@ export const FormItem = styled(Form.Item)`
   margin: 0 !important;
 `;
 
-export const FieldsWrapper= styled.div`
+export const FieldsWrapper = styled.div`
   display: flex;
   align-items: center;
-`
+`;
 export const StyledDiv = styled.div`
   margin: calc(${theme.space.spaceBetween}*2);
 `;
@@ -92,9 +92,9 @@ export const ZoomedPlotsWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   padding: calc(${theme.space.spaceBetween}*2);
-`
+`;
 
 export const DisplayOptionsWrapper = styled.div`
   background: ${theme.colors.common.white};
-  padding: calc(${theme.space.padding}*2)
-`
+  padding: calc(${theme.space.padding}*2);
+`;

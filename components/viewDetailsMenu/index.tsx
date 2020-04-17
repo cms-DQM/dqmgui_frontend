@@ -5,9 +5,12 @@ import { Reference } from './reference/reference';
 import { ViewFiler } from './viewFilter';
 import { SizeChanger } from '../sizeChanger';
 import { setJSROOTMode, setSize } from '../../reducers/displayFolderOrPlot';
-import { setPlotToOverlay, setSelectedPlotsName } from '../../reducers/displayFolderOrPlot'
+import {
+  setPlotToOverlay,
+  setSelectedPlotsName,
+} from '../../reducers/displayFolderOrPlot';
 import { sizes } from '../constants';
-import {CostumizeTable} from './customize'
+import { CostumizeTable } from './customize';
 
 const { Panel } = Collapse;
 
@@ -18,26 +21,29 @@ interface ViewDetailsMenuProps {
 }
 
 export const ViewDetailsMenu = ({ dispatch, state }: ViewDetailsMenuProps) => {
-
   useEffect(() => {
     return () => {
-      setPlotToOverlay([])(dispatch)
-      setSelectedPlotsName([])(dispatch)
-    }
-  }, [])
+      setPlotToOverlay([])(dispatch);
+      setSelectedPlotsName([])(dispatch);
+    };
+  }, []);
 
   return (
-      <Collapse defaultActiveKey={['1']}>
-        <Panel header="Overlay Options" key="1">
-          <Reference state_global={state} dispatch_gloabl={dispatch} />
-        </Panel>
-        <Panel header="Dispay Options" key="2">
-          <ViewFiler state={state} dispatch={dispatch} />
-          <SizeChanger dispatch={dispatch} setSize={setSize} currentValue={sizes.medium.size}/>
-        </Panel>
-        {/* <Panel header="Customize" key="3">
+    <Collapse defaultActiveKey={['1']}>
+      <Panel header="Overlay Options" key="1">
+        <Reference state_global={state} dispatch_gloabl={dispatch} />
+      </Panel>
+      <Panel header="Dispay Options" key="2">
+        <ViewFiler state={state} dispatch={dispatch} />
+        <SizeChanger
+          dispatch={dispatch}
+          setSize={setSize}
+          currentValue={sizes.medium.size}
+        />
+      </Panel>
+      {/* <Panel header="Customize" key="3">
           <CostumizeTable/>
         </Panel> */}
-      </Collapse>
+    </Collapse>
   );
 };

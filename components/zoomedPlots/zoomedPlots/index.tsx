@@ -1,8 +1,11 @@
 import React from 'react';
-import { ParamsForApiProps, SizeProps } from '../../../containers/display/interfaces';
+import {
+  ParamsForApiProps,
+  SizeProps,
+} from '../../../containers/display/interfaces';
 import { ZoomedPlot } from './zoomedPlot';
 import { ZoomedJSROOTPlot } from './zoomedJSROOTPlot';
-import {ZoomedPlotsWrapper} from '../../styledComponents'
+import { ZoomedPlotsWrapper } from '../../styledComponents';
 
 interface ZoomedPlotsProps {
   selected_plots_name: string[];

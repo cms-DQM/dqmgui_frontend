@@ -2,14 +2,20 @@ import React, { useReducer, useState, useEffect } from 'react';
 import { Form, Col } from 'antd';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 
-import { TripleProps, FolderPathQuery } from '../../../containers/display/interfaces';
-import { setPlotToOverlay, setOverlay } from '../../../reducers/displayFolderOrPlot';
+import {
+  TripleProps,
+  FolderPathQuery,
+} from '../../../containers/display/interfaces';
+import {
+  setPlotToOverlay,
+  setOverlay,
+} from '../../../reducers/displayFolderOrPlot';
 import {
   referenceReducer,
   initialState,
   removeRun,
   addRun,
-  toggleModal
+  toggleModal,
 } from '../../../reducers/reference';
 import { StyledDiv } from '../../styledComponents';
 import {
@@ -33,9 +39,12 @@ interface ReferenceProps {
   state_global: any;
 }
 
-export const Reference = ({ dispatch_gloabl, state_global }: ReferenceProps) => {
+export const Reference = ({
+  dispatch_gloabl,
+  state_global,
+}: ReferenceProps) => {
   const [state, dispatch] = useReducer(referenceReducer, initialState);
-  const [selectedTriple, setTriple] = useState<TripleProps>({})
+  const [selectedTriple, setTriple] = useState<TripleProps>({});
 
   const { triples } = state;
 
@@ -43,7 +52,7 @@ export const Reference = ({ dispatch_gloabl, state_global }: ReferenceProps) => 
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
   };
-  const router = useRouter()
+  const router = useRouter();
   const query: FolderPathQuery = router.query;
 
   return (
@@ -51,7 +60,8 @@ export const Reference = ({ dispatch_gloabl, state_global }: ReferenceProps) => 
       <RadioButtonsGroup
         current_value={state_global.overlay}
         action={(value: string) => setOverlay(value)(dispatch_gloabl)}
-        options={overlayOptions} />
+        options={overlayOptions}
+      />
       <StyledForm
         layout={'inline'}
         {...layout}
@@ -94,9 +104,12 @@ export const Reference = ({ dispatch_gloabl, state_global }: ReferenceProps) => 
             <FormItem>
               <StyledSecondaryButton
                 onClick={() => {
-                  toggleModal(!state.open)(dispatch)
-                  setTriple(triple)
-                }}>Change</StyledSecondaryButton>
+                  toggleModal(!state.open)(dispatch);
+                  setTriple(triple);
+                }}
+              >
+                Change
+              </StyledSecondaryButton>
             </FormItem>
             <StyledDiv>
               <Field
@@ -105,7 +118,8 @@ export const Reference = ({ dispatch_gloabl, state_global }: ReferenceProps) => 
                 id={triple.id}
                 field_name="label"
                 placeholder="label"
-                value={triple.label} />
+                value={triple.label}
+              />
             </StyledDiv>
             <FormItem>
               <StyledSecondaryButton
@@ -125,9 +139,7 @@ export const Reference = ({ dispatch_gloabl, state_global }: ReferenceProps) => 
           <Col>
             <Form.Item>
               <Form.Item>
-                <StyledButton
-                  htmlType="submit">
-                  Submit</StyledButton>
+                <StyledButton htmlType="submit">Submit</StyledButton>
               </Form.Item>
             </Form.Item>
           </Col>

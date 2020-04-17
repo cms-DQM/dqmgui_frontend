@@ -30,7 +30,6 @@ export const Plot = ({
   isPlotSelected,
   removePlotFromList,
 }: PlotProps) => {
-
   params_for_api.plot_name = plot_name;
   const plot_url = get_plot_url(params_for_api);
   const source = `${root_url}/${plot_url}`;
@@ -44,15 +43,19 @@ export const Plot = ({
       >
         <PlotNameCol>{plot_name}</PlotNameCol>
         <Column>
-          {isPlotSelected ?
+          {isPlotSelected ? (
             <MinusIcon onClick={() => removePlotFromList(plot_name)} />
-            :
+          ) : (
             <PlusIcon onClick={() => addPlotToList(plot_name)} />
-          }
+          )}
         </Column>
-        <div onClick={() => {
-          isPlotSelected ? removePlotFromList(plot_name) : setSelectedPlotsName([plot_name])(dispatch)
-        }}>
+        <div
+          onClick={() => {
+            isPlotSelected
+              ? removePlotFromList(plot_name)
+              : setSelectedPlotsName([plot_name])(dispatch);
+          }}
+        >
           <img alt={plot_name} src={source} />
         </div>
       </StyledPlotRow>

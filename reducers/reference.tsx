@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { TripleProps, FolderPathQuery } from '../containers/display/interfaces';
 import { REFERENCE_REDCER } from '../components/constants';
 
-const id = uuidv4();;
+const id = uuidv4();
 
 interface StateInterface {
   triples: TripleProps[];
@@ -27,7 +27,6 @@ export const change_value_in_reference_table = (
   key: string,
   id: string | number | boolean
 ) => (state: StateInterface, dispatch: any) => {
-
   const copy = [...state.triples];
   const current_line: TripleProps = copy.filter(
     (line: TripleProps) => line.id === id
@@ -52,7 +51,7 @@ export const removeRun = (id: string | number | boolean) => (
 ) => {
   const copy: TripleProps[] = [...state.triples];
   const removed = copy.filter((run: TripleProps) => run.id !== id);
-  console.log(removed)
+  console.log(removed);
   change_triples_values(removed)(dispatch);
 };
 
@@ -61,7 +60,6 @@ export const toggleModal = (open: boolean) => (dispatch: any) =>
     type: REFERENCE_REDCER.OPEN_MODAL,
     payload: open,
   });
-
 
 export function referenceReducer(state = initialState, action: any) {
   switch (action.type) {

@@ -6,7 +6,10 @@ import {
   get_overlaied_plots_urls,
 } from '../../../config/config';
 import { ParamsForApiProps } from '../interfaces';
-import { setSelectedPlotsName, addPlotToList } from '../../../reducers/displayFolderOrPlot';
+import {
+  setSelectedPlotsName,
+  addPlotToList,
+} from '../../../reducers/displayFolderOrPlot';
 import {
   StyledCol,
   PlotNameCol,
@@ -31,9 +34,8 @@ export const OverlaidPlotImage = ({
   dispatch,
   isPlotSelected,
   addPlotToList,
-  removePlotFromList
+  removePlotFromList,
 }: OverlaidPlotImageProps) => {
-
   params_for_api.plot_name = plot_name;
   const overlaid_plots_urls = get_overlaied_plots_urls(params_for_api);
   const joined_overlaid_plots_urls = overlaid_plots_urls.join('');
@@ -51,15 +53,19 @@ export const OverlaidPlotImage = ({
       >
         <PlotNameCol>{plot_name}</PlotNameCol>
         <Column>
-          {isPlotSelected ?
+          {isPlotSelected ? (
             <MinusIcon onClick={() => removePlotFromList(plot_name)} />
-            :
+          ) : (
             <PlusIcon onClick={() => addPlotToList(plot_name)} />
-          }
+          )}
         </Column>
-        <div onClick={() => {
-          isPlotSelected ? removePlotFromList(plot_name) : setSelectedPlotsName([plot_name])(dispatch)
-        }}>
+        <div
+          onClick={() => {
+            isPlotSelected
+              ? removePlotFromList(plot_name)
+              : setSelectedPlotsName([plot_name])(dispatch);
+          }}
+        >
           <img alt={plot_name} src={source} />
         </div>
       </StyledPlotRow>

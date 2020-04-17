@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 import { getFolderPath } from './utils';
-import { StyledDiv, WrapperDiv, StyledAForPath } from './styledComponents'
+import { StyledDiv, WrapperDiv, StyledAForPath } from './styledComponents';
 
 interface FolderPathProps {
   folder_path: string | undefined;
@@ -12,7 +12,11 @@ interface FolderPathProps {
   run_number: number;
 }
 
-export const FolderPath = ({ folder_path, run_number, dataset_name }: FolderPathProps) => {
+export const FolderPath = ({
+  folder_path,
+  run_number,
+  dataset_name,
+}: FolderPathProps) => {
   const folders = folder_path ? folder_path.split('/') : [];
   const filteredFolders = folders.filter((folder: string) => folder !== '');
   const router = useRouter();
@@ -67,7 +71,7 @@ export const FolderPath = ({ folder_path, run_number, dataset_name }: FolderPath
             }}
           >
             Home
-        </Link>
+          </Link>
         </Breadcrumb.Item>
         {filteredFolders.map((folder: string) => {
           return (

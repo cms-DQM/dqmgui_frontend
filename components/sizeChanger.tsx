@@ -10,24 +10,29 @@ interface SizeChangerProps {
 }
 
 const formatOptions = () => {
-  const sizesKeys = Object.keys(sizes)
+  const sizesKeys = Object.keys(sizes);
   const options = sizesKeys.map((sizeKey: string) => {
     //@ts-ignore
-    return { label: sizes[sizeKey].label, value: sizes[sizeKey].size }
-  })
-  return options
-}
-export const SizeChanger = ({ dispatch, setSize, currentValue }: SizeChangerProps) => {
+    return { label: sizes[sizeKey].label, value: sizes[sizeKey].size };
+  });
+  return options;
+};
+export const SizeChanger = ({
+  dispatch,
+  setSize,
+  currentValue,
+}: SizeChangerProps) => {
   useEffect(() => {
-    return () => setSize(currentValue)(dispatch)
-  }, [])
+    return () => setSize(currentValue)(dispatch);
+  }, []);
 
   return (
     <RadioButtonsGroup
       current_value={currentValue}
       action={(value: SizeProps) => {
-        setSize(value)(dispatch)
+        setSize(value)(dispatch);
       }}
-      options={formatOptions()} />
+      options={formatOptions()}
+    />
   );
 };

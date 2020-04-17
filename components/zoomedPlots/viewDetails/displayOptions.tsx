@@ -1,8 +1,11 @@
-import React from 'react'
+import React from 'react';
 import { Switch } from 'antd';
 
 import { SizeChanger } from '../../sizeChanger';
-import { setJSROOTMode, setZoomedPlotSize } from '../../../reducers/displayFolderOrPlot';
+import {
+  setJSROOTMode,
+  setZoomedPlotSize,
+} from '../../../reducers/displayFolderOrPlot';
 import { sizes } from '../../constants';
 
 interface DisplayOptionsProps {
@@ -10,11 +13,14 @@ interface DisplayOptionsProps {
   dispatch: any;
 }
 
-
-export const DisplayOptions = ({dispatch}: DisplayOptionsProps) => {
+export const DisplayOptions = ({ dispatch }: DisplayOptionsProps) => {
   return (
     <div>
-      <SizeChanger dispatch={dispatch} setSize={setZoomedPlotSize} currentValue={sizes.fill.size} />
+      <SizeChanger
+        dispatch={dispatch}
+        setSize={setZoomedPlotSize}
+        currentValue={sizes.fill.size}
+      />
       <div>
         <Switch
           checkedChildren="JSROOT enabled"
@@ -25,5 +31,5 @@ export const DisplayOptions = ({dispatch}: DisplayOptionsProps) => {
         />
       </div>
     </div>
-  )
-}
+  );
+};

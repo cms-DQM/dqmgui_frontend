@@ -14,8 +14,7 @@ import { QuestionButton } from './helpButton';
 interface NavProps {
   setRunNumber: Dispatch<any>;
   setDatasetName: Dispatch<any>;
-  handler(search_by_run_number: number,
-    search_by_dataset_name: string): void
+  handler(search_by_run_number: number, search_by_dataset_name: string): void;
 }
 
 const Nav: FC<NavProps> = ({ setRunNumber, setDatasetName, handler }) => {
@@ -45,8 +44,7 @@ const Nav: FC<NavProps> = ({ setRunNumber, setDatasetName, handler }) => {
         <Form.Item {...tailLayout}>
           <QuestionButton />
         </Form.Item>
-        <StyledFormItem
-          name="run_number" >
+        <StyledFormItem name="run_number">
           <StyledInput
             id="run_number"
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -57,8 +55,7 @@ const Nav: FC<NavProps> = ({ setRunNumber, setDatasetName, handler }) => {
             name="run_number"
           />
         </StyledFormItem>
-        <StyledFormItem
-          name="dataset_name">
+        <StyledFormItem name="dataset_name">
           <StyledInput
             id="dataset_name"
             placeholder="Enter dataset name"
@@ -69,7 +66,11 @@ const Nav: FC<NavProps> = ({ setRunNumber, setDatasetName, handler }) => {
           />
         </StyledFormItem>
         <Form.Item {...tailLayout}>
-          <SearchButton onClick={() => handler(state.search_by_run_number, state.search_by_dataset_name)} />
+          <SearchButton
+            onClick={() =>
+              handler(state.search_by_run_number, state.search_by_dataset_name)
+            }
+          />
         </Form.Item>
       </Form>
     </div>
