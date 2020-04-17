@@ -1,5 +1,8 @@
 import { FOLDERS_OR_PLOTS_REDUCER, sizes } from '../components/constants';
-import { DisplayFolderOrPlotComponentProps } from '../containers/display/interfaces';
+import {
+  DisplayFolderOrPlotComponentProps,
+  SizeProps,
+} from '../containers/display/interfaces';
 
 export const initialState: DisplayFolderOrPlotComponentProps = {
   errorBars: false,
@@ -11,6 +14,7 @@ export const initialState: DisplayFolderOrPlotComponentProps = {
   stats: true,
   selected_plots_name: [],
   jsroot_mode: false,
+  zoomedPlotSize: { h: sizes.fill.size.h, w: sizes.fill.size.w },
 };
 
 export const setErrorBars = (errBars: boolean) => (dispatch: any) =>
@@ -31,6 +35,10 @@ export const setWidth = (width: number) => (dispatch: any) =>
     payload: width,
   });
 
+export const setSize = (options: any) => (dispatch: any) => {
+  setWidth(options.w)(dispatch);
+  setHeight(options.h)(dispatch);
+};
 export const setNormalize = (normalize: boolean) => (dispatch: any) =>
   dispatch({
     type: FOLDERS_OR_PLOTS_REDUCER.SET_NORMALIZE,
@@ -51,11 +59,13 @@ export const setOverlay = (overlay: string) => (dispatch: any) =>
 
 export const setSelectedPlotsName = (selected_plots_name: string[]) => (
   dispatch: any
-) =>
-  dispatch({
+) => {
+  console.log(selected_plots_name);
+  return dispatch({
     type: FOLDERS_OR_PLOTS_REDUCER.SET_SELECTED_PLOTS_NAMES,
     payload: selected_plots_name,
   });
+};
 
 export const removePlotFromList = (plot_name: string) => (
   state: any,
@@ -71,6 +81,7 @@ export const addPlotToList = (plot_name: string) => (
   dispatch: any
 ) => {
   const copy = [...state.selected_plots_name];
+  console.log(copy);
   copy.push(plot_name);
   setSelectedPlotsName(copy)(dispatch);
 };
@@ -85,6 +96,12 @@ export const setJSROOTMode = (jsroot_mode: boolean) => (dispatch: any) =>
   dispatch({
     type: FOLDERS_OR_PLOTS_REDUCER.JSROOT_MODE,
     payload: jsroot_mode,
+  });
+
+export const setZoomedPlotSize = (size: SizeProps) => (dispatch: any) =>
+  dispatch({
+    type: FOLDERS_OR_PLOTS_REDUCER.SET_ZOOMED_PLOT_SIZE,
+    payload: size,
   });
 
 export function displayFolderOrPlotComponentReducer(
@@ -110,6 +127,8 @@ export function displayFolderOrPlotComponentReducer(
       return { ...state, stats: action.payload };
     case FOLDERS_OR_PLOTS_REDUCER.JSROOT_MODE:
       return { ...state, jsroot_mode: action.payload };
+    case FOLDERS_OR_PLOTS_REDUCER.SET_ZOOMED_PLOT_SIZE:
+      return { ...state, zoomedPlotSize: action.payload };
     default:
       throw new Error();
   }

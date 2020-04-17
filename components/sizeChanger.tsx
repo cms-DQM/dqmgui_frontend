@@ -1,45 +1,38 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { sizes } from './constants';
-import { setHeight, setWidth } from '../reducers/displayFolderOrPlot';
+import { RadioButtonsGroup } from './radioButtonsGroup';
+import { SizeProps } from '../containers/display/interfaces';
 
 interface SizeChangerProps {
   dispatch(params: any): void;
+  setSize(value: SizeProps): any;
+  currentValue: SizeProps;
 }
-export const SizeChanger = ({ dispatch }: SizeChangerProps) => {
+
+const formatOptions = () => {
+  const sizesKeys = Object.keys(sizes);
+  const options = sizesKeys.map((sizeKey: string) => {
+    //@ts-ignore
+    return { label: sizes[sizeKey].label, value: sizes[sizeKey].size };
+  });
+  return options;
+};
+export const SizeChanger = ({
+  dispatch,
+  setSize,
+  currentValue,
+}: SizeChangerProps) => {
+  useEffect(() => {
+    return () => setSize(currentValue)(dispatch);
+  }, []);
+
   return (
-    <>
-      <button
-        onClick={() => {
-          setHeight(sizes.small.size.h)(dispatch);
-          setWidth(sizes.small.size.w)(dispatch);
-        }}
-      >
-        {sizes.small.label}
-      </button>
-      <button
-        onClick={() => {
-          setHeight(sizes.medium.size.h)(dispatch);
-          setWidth(sizes.medium.size.w)(dispatch);
-        }}
-      >
-        {sizes.medium.label}
-      </button>
-      <button
-        onClick={() => {
-          setHeight(sizes.large.size.h)(dispatch);
-          setWidth(sizes.large.size.w)(dispatch);
-        }}
-      >
-        {sizes.large.label}
-      </button>
-      <button
-        onClick={() => {
-          setHeight(sizes.fill.size.h)(dispatch);
-          setWidth(sizes.fill.size.w)(dispatch);
-        }}
-      >
-        {sizes.fill.label}
-      </button>
-    </>
+    <RadioButtonsGroup
+      current_value={currentValue}
+      action={(value: SizeProps) => {
+        setSize(value)(dispatch);
+      }}
+      options={formatOptions()}
+    />
   );
 };

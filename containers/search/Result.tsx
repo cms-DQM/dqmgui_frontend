@@ -1,37 +1,57 @@
 import React, { FC, useState } from 'react';
-import Link from 'next/link';
+import { Col } from 'antd';
+
+import {
+  RunsRows,
+  StyledTableDatasetColumn,
+  StyledTableRow,
+  StyledTableRunColumn,
+  StyledCol,
+  RunWrapper,
+  StyledA,
+} from './styledComponents';
 
 interface SearchResultsInterface {
   dataset: string;
   value: any[];
+  handler(run: number, dataset: string): any;
+  index: number;
 }
 
-const Result: FC<SearchResultsInterface> = ({ dataset, value }) => {
+const Result: FC<SearchResultsInterface> = ({
+  index,
+  dataset,
+  value,
+  handler,
+}) => {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <li onClick={(e) => setExpanded(!expanded)}>
-      {dataset}
-      {expanded && (
-        <ul>
-          {value.map(({ run }: any) => (
-            <li key={run}>
-              <Link
-                href={{
-                  pathname: '/',
-                  query: {
-                    run_number: run,
-                    dataset_name: dataset,
-                  },
-                }}
-              >
-                <a>{run}</a>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
-    </li>
+    <StyledTableRow
+      expanded={expanded}
+      onClick={() => setExpanded(!expanded)}
+      index={index}
+    >
+      <StyledTableDatasetColumn>
+        <div>
+          {dataset}
+          {expanded && (
+            <RunsRows>
+              {value.map(({ run }: any) => (
+                <StyledCol key={run}>
+                  <RunWrapper>
+                    <StyledA onClick={() => handler(run, dataset)}>
+                      {run}
+                    </StyledA>
+                  </RunWrapper>
+                </StyledCol>
+              ))}
+            </RunsRows>
+          )}
+        </div>
+      </StyledTableDatasetColumn>
+      <StyledTableRunColumn>{value.length}</StyledTableRunColumn>
+    </StyledTableRow>
   );
 };
 export default Result;

@@ -1,29 +1,49 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { Collapse, Switch } from 'antd';
 
-import { Reference } from '../reference';
+import { Reference } from './reference/reference';
 import { ViewFiler } from './viewFilter';
 import { SizeChanger } from '../sizeChanger';
-import { setJSROOTMode } from '../../reducers/displayFolderOrPlot';
+import { setJSROOTMode, setSize } from '../../reducers/displayFolderOrPlot';
+import {
+  setPlotToOverlay,
+  setSelectedPlotsName,
+} from '../../reducers/displayFolderOrPlot';
+import { sizes } from '../constants';
+import { CostumizeTable } from './customize';
+
+const { Panel } = Collapse;
 
 interface ViewDetailsMenuProps {
   dispatch: any;
+  state: any;
+  overlay_plot: any[];
 }
 
-export const ViewDetailsMenu = ({ dispatch }: ViewDetailsMenuProps) => {
+export const ViewDetailsMenu = ({ dispatch, state }: ViewDetailsMenuProps) => {
+  useEffect(() => {
+    return () => {
+      setPlotToOverlay([])(dispatch);
+      setSelectedPlotsName([])(dispatch);
+    };
+  }, []);
+
   return (
-    <div>
-      <Reference dispatch_gloabl={dispatch} />
-      <div>
-        <label>Enable JSROOT</label>
-        <input
-          type="checkbox"
-          onChange={(e) => {
-            setJSROOTMode(e.target.checked)(dispatch);
-          }}
+    <Collapse defaultActiveKey={['1']}>
+      <Panel header="Overlay Options" key="1">
+        <Reference state_global={state} dispatch_gloabl={dispatch} />
+      </Panel>
+      <Panel header="Dispay Options" key="2">
+        <ViewFiler state={state} dispatch={dispatch} />
+        <SizeChanger
+          dispatch={dispatch}
+          setSize={setSize}
+          currentValue={sizes.medium.size}
         />
-      </div>
-      <ViewFiler dispatch={dispatch} />
-      <SizeChanger dispatch={dispatch} />
-    </div>
+      </Panel>
+      {/* <Panel header="Customize" key="3">
+          <CostumizeTable/>
+        </Panel> */}
+    </Collapse>
   );
 };
