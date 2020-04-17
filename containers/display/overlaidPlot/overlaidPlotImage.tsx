@@ -57,7 +57,9 @@ export const OverlaidPlotImage = ({
             <PlusIcon onClick={() => addPlotToList(plot_name)} />
           }
         </Column>
-        <div>
+        <div onClick={() => {
+          isPlotSelected ? removePlotFromList(plot_name) : setSelectedPlotsName([plot_name])(dispatch)
+        }}>
           <img alt={plot_name} src={source} />
         </div>
       </StyledPlotRow>

@@ -38,6 +38,7 @@ export const StyledPlotRow = styled(Row)`
   min-height: ${(props) => props?.minHeight && props.minHeight}px;
   background-color: ${(props) => props?.isPlotSelected ? `${theme.colors.secondary.light}` : `${theme.colors.primary.light}`};
   ${theme.colors.primary.main};
+  cursor: pointer;
 `;
 export const PlotNameCol = styled(Col)`
   width: 70%;
@@ -61,10 +62,16 @@ export const DivWrapper = styled.div`
 export const MinusIcon = styled(MinusCircleFilled)`
   font-size: 1.5rem;
   color: ${theme.colors.common.white};
+  &:hover {
+    color: ${theme.colors.common.black}
+  }
 `
 export const PlusIcon = styled(PlusCircleFilled)`
   font-size: 1.5rem;
   color: ${theme.colors.common.white};
+  &:hover {
+    color: ${theme.colors.common.black}
+  }
 `
 export const StyledDiv = styled.div`
   padding: ${theme.space.spaceBetween};
