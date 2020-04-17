@@ -2,109 +2,129 @@
 /// Bootstraping of OpenUI5 functionality in JSROOT
 /// Openui5 loaded directly in the script
 
-(function( factory ) {
-   if ( typeof define === "function" && define.amd ) {
-      define( ['jquery', 'jquery-ui', 'JSRootCore' ], factory );
-   } else {
+(function (factory) {
+  if (typeof define === 'function' && define.amd) {
+    define(['jquery', 'jquery-ui', 'JSRootCore'], factory);
+  } else {
+    if (typeof jQuery == 'undefined')
+      throw new Error('jQuery not defined', 'JSRoot.openui5.js');
 
-      if (typeof jQuery == 'undefined')
-         throw new Error('jQuery not defined', 'JSRoot.openui5.js');
+    if (typeof jQuery.ui == 'undefined')
+      throw new Error('jQuery-ui not defined', 'JSRoot.openui5.js');
 
-      if (typeof jQuery.ui == 'undefined')
-         throw new Error('jQuery-ui not defined','JSRoot.openui5.js');
+    if (typeof JSROOT == 'undefined')
+      throw new Error('JSROOT is not defined', 'JSRoot.openui5.js');
 
-      if (typeof JSROOT == 'undefined')
-         throw new Error('JSROOT is not defined', 'JSRoot.openui5.js');
+    factory(jQuery, jQuery.ui, JSROOT);
+  }
+})(function ($, myui, JSROOT) {
+  'use strict';
 
-      factory(jQuery, jQuery.ui, JSROOT);
-   }
-} (function($, myui, JSROOT) {
+  JSROOT.sources.push('openui5');
 
-   "use strict";
+  var load_callback = JSROOT.complete_script_load;
+  delete JSROOT.complete_script_load; // normal callback is intercepted - we need to instantiate openui5
 
-   JSROOT.sources.push("openui5");
+  JSROOT.completeUI5Loading = function () {
+    // when running with THttpServer, automatically set "rootui5" folder
+    var rootui5sys = undefined;
+    if (JSROOT.source_dir.indexOf('jsrootsys') >= 0)
+      rootui5sys = JSROOT.source_dir.replace(/jsrootsys/g, 'rootui5sys');
 
-   var load_callback = JSROOT.complete_script_load;
-   delete JSROOT.complete_script_load; // normal callback is intercepted - we need to instantiate openui5
+    sap.ui.loader.config({
+      paths: {
+        jsroot: JSROOT.source_dir,
+        rootui5: rootui5sys,
+      },
+    });
 
-   JSROOT.completeUI5Loading = function() {
-      // when running with THttpServer, automatically set "rootui5" folder
-      var rootui5sys = undefined;
-      if (JSROOT.source_dir.indexOf("jsrootsys") >= 0)
-         rootui5sys = JSROOT.source_dir.replace(/jsrootsys/g, "rootui5sys");
+    JSROOT.CallBack(load_callback);
+    load_callback = null;
+  };
 
-      sap.ui.loader.config({
-         paths: {
-            jsroot: JSROOT.source_dir,
-            rootui5: rootui5sys
-         }
-      });
+  function TryOpenOpenUI(sources) {
+    // where to take openui5 sources
+    var src = sources.shift();
 
-      JSROOT.CallBack(load_callback);
-      load_callback = null;
-   }
+    if (src.indexOf('roothandler') == 0 && src.indexOf('://') < 0)
+      src = src.replace(/\:\//g, '://');
 
-   function TryOpenOpenUI(sources) {
+    var element = document.createElement('script');
+    element.setAttribute('type', 'text/javascript');
+    element.setAttribute('id', 'sap-ui-bootstrap');
+    // use nojQuery while we are already load jquery and jquery-ui, later one can use directly sap-ui-core.js
 
-      // where to take openui5 sources
-      var src = sources.shift();
+    // this is location of openui5 scripts when working with THttpServer or when scripts are installed inside JSROOT
+    element.setAttribute('src', src + 'resources/sap-ui-core-nojQuery.js'); // latest openui5 version
 
-      if ((src.indexOf("roothandler")==0) && (src.indexOf("://")<0)) src = src.replace(/\:\//g,"://");
+    element.setAttribute(
+      'data-sap-ui-libs',
+      JSROOT.openui5libs ||
+        'sap.m, sap.ui.layout, sap.ui.unified, sap.ui.commons'
+    );
 
-      var element = document.createElement("script");
-      element.setAttribute('type', "text/javascript");
-      element.setAttribute('id', "sap-ui-bootstrap");
-      // use nojQuery while we are already load jquery and jquery-ui, later one can use directly sap-ui-core.js
+    element.setAttribute('data-sap-ui-theme', 'sap_belize');
+    element.setAttribute('data-sap-ui-compatVersion', 'edge');
+    // element.setAttribute('data-sap-ui-bindingSyntax', 'complex');
 
-      // this is location of openui5 scripts when working with THttpServer or when scripts are installed inside JSROOT
-      element.setAttribute('src', src + "resources/sap-ui-core-nojQuery.js"); // latest openui5 version
+    element.setAttribute('data-sap-ui-preload', 'async'); // '' to disable Component-preload.js
 
-      element.setAttribute('data-sap-ui-libs', JSROOT.openui5libs || "sap.m, sap.ui.layout, sap.ui.unified, sap.ui.commons");
+    element.setAttribute(
+      'data-sap-ui-evt-oninit',
+      'JSROOT.completeUI5Loading()'
+    );
 
-      element.setAttribute('data-sap-ui-theme', 'sap_belize');
-      element.setAttribute('data-sap-ui-compatVersion', 'edge');
-      // element.setAttribute('data-sap-ui-bindingSyntax', 'complex');
+    element.onerror = function () {
+      // remove failed element
+      element.parentNode.removeChild(element);
+      // and try next
+      TryOpenOpenUI(sources);
+    };
 
-      element.setAttribute('data-sap-ui-preload', 'async'); // '' to disable Component-preload.js
+    element.onload = function () {
+      console.log('Load openui5 from ' + src);
+    };
 
-      element.setAttribute('data-sap-ui-evt-oninit', "JSROOT.completeUI5Loading()");
+    document.getElementsByTagName('head')[0].appendChild(element);
+  }
 
-      element.onerror = function() {
-         // remove failed element
-         element.parentNode.removeChild(element);
-         // and try next
-         TryOpenOpenUI(sources);
-      }
+  var openui5_sources = [],
+    openui5_dflt = 'https://openui5.hana.ondemand.com/1.70.0/',
+    openui5_root = JSROOT.source_dir.replace(
+      /jsrootsys/g,
+      'rootui5sys/distribution'
+    );
 
-      element.onload = function() {
-         console.log('Load openui5 from ' + src);
-      }
+  if (openui5_root == JSROOT.source_dir) openui5_root = '';
 
-      document.getElementsByTagName("head")[0].appendChild(element);
-   }
+  if (typeof JSROOT.openui5src == 'string') {
+    switch (JSROOT.openui5src) {
+      case 'nodefault':
+        openui5_dflt = '';
+        break;
+      case 'default':
+        openui5_sources.push(openui5_dflt);
+        openui5_dflt = '';
+        break;
+      case 'nojsroot':
+        openui5_root = '';
+        break;
+      case 'jsroot':
+        openui5_sources.push(openui5_root);
+        openui5_root = '';
+        break;
+      default:
+        openui5_sources.push(JSROOT.openui5src);
+        break;
+    }
+  }
 
-   var openui5_sources = [],
-       openui5_dflt = "https://openui5.hana.ondemand.com/1.70.0/",
-       openui5_root = JSROOT.source_dir.replace(/jsrootsys/g, "rootui5sys/distribution");
+  if (openui5_root && openui5_sources.indexOf(openui5_root) < 0)
+    openui5_sources.push(openui5_root);
+  if (openui5_dflt && openui5_sources.indexOf(openui5_dflt) < 0)
+    openui5_sources.push(openui5_dflt);
 
-   if (openui5_root == JSROOT.source_dir) openui5_root = "";
+  TryOpenOpenUI(openui5_sources);
 
-   if (typeof JSROOT.openui5src == 'string') {
-      switch (JSROOT.openui5src) {
-         case "nodefault": openui5_dflt = ""; break;
-         case "default": openui5_sources.push(openui5_dflt); openui5_dflt = ""; break;
-         case "nojsroot": openui5_root = ""; break;
-         case "jsroot": openui5_sources.push(openui5_root); openui5_root = ""; break;
-         default: openui5_sources.push(JSROOT.openui5src); break;
-      }
-   }
-
-   if (openui5_root && (openui5_sources.indexOf(openui5_root)<0)) openui5_sources.push(openui5_root);
-   if (openui5_dflt && (openui5_sources.indexOf(openui5_dflt)<0)) openui5_sources.push(openui5_dflt);
-
-   TryOpenOpenUI(openui5_sources);
-
-   return JSROOT;
-
-}));
-
+  return JSROOT;
+});

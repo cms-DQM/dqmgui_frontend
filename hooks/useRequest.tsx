@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { root_url } from '../config/config';
@@ -18,7 +18,6 @@ export const useRequest = (
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -28,7 +27,7 @@ export const useRequest = (
           method: options.method || 'get',
           ...options,
         });
-        const { data, status } = response;
+        const { data } = response;
         setData(data);
         setIsLoading(false);
       } catch (error) {

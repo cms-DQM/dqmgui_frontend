@@ -46,6 +46,7 @@ export const FOLDERS_OR_PLOTS_REDUCER = {
   SET_PLOT_TO_OVERLAY: 'SET_PLOT_TO_OVERLAY',
   SET_WIDTH: 'SET_WIDTH',
   SET_HEIGHT: 'SET_HEIGHT',
+  SET_ZOOMED_PLOT_SIZE: 'SET_ZOOMED_PLOT_SIZE',
   SET_SELECTED_PLOTS_NAMES: 'SET_SELECTED_PLOTS_NAMES',
   SET_NORMALIZE: 'SET_NORMALIZE',
   SET_STATS: 'SET_STATS',
@@ -62,4 +63,24 @@ export const NAV_REDUCER = {
 
 export const REFERENCE_REDCER = {
   CHANGE_TRIPLES_VALUES: 'CHANGE_TRIPLES_VALUES',
+  OPEN_MODAL: 'OPEN_MODAL',
 };
+
+export const overlayOptions = [
+  { label: 'Overlay', value: 'overlay' },
+  { label: 'On side', value: 'onSide' },
+  { label: 'Overlay+ratio', value: 'ratiooverlay' },
+  { label: 'Stacked', value: 'stacked' },
+];
+
+export const xyzTypes = [
+  { label: 'Linear', value: 'lin' },
+  { label: 'Log', value: 'log' },
+  { label: 'Default', value: '' },
+];
+
+export const withReference = [
+  { label: 'Yes', value: 'yes' },
+  { label: 'No', value: 'no' },
+  { label: 'Default', value: '' },
+];

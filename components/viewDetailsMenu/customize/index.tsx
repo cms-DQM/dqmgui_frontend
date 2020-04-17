@@ -1,0 +1,1 @@
+export { CostumizeTable } from './table';

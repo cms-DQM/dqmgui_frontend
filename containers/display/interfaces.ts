@@ -2,10 +2,23 @@ export interface TripleProps {
   [key: string]: string | number | boolean;
 }
 
+export interface FolderPathQuery {
+  run_number?: number;
+  dataset_name?: string;
+  folder_path?: string;
+}
+
 export interface OptionProps {
   label: string;
   value: any;
+  action?(): void;
 }
+
+export interface SizeProps {
+  w: number;
+  h: number;
+}
+
 export interface PlotProps {
   plot_name?: string;
   dataset_name: string;
@@ -23,6 +36,17 @@ export interface PlotProps {
 export interface ParamsForApiProps extends PlotProps {
   joined_overlaied_plots_urls?: string;
   overlay?: string;
+  xtype?: string;
+  xmin?: number;
+  xmax?: number;
+  ytype?: string;
+  ymin?: number;
+  ymax?: number;
+  ztype?: string;
+  zmin?: number;
+  zmax?: number;
+  drawopts?: string;
+  withref?: string;
 }
 
 export interface DisplayFolderOrPlotComponentProps {
@@ -35,6 +59,7 @@ export interface DisplayFolderOrPlotComponentProps {
   selected_plots_name: string[];
   overlay: string;
   jsroot_mode: boolean;
+  zoomedPlotSize: SizeProps;
 }
 
 export interface NavigationSearchFieldsProps {

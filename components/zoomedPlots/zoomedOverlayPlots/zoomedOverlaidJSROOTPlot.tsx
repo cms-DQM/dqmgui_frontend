@@ -5,24 +5,34 @@ import { get_jroot_plot } from '../../../config/config';
 import {
   ParamsForApiProps,
   TripleProps,
+  SizeProps,
 } from '../../../containers/display/interfaces';
-import { sizes } from '../../constants';
 import { useRequest } from '../../../hooks/useRequest';
 import { useEffect } from 'react';
+import {
+  StyledCol,
+  Column,
+  StyledPlotRow,
+  PlotNameCol,
+  MinusIcon,
+  ImageDiv,
+} from '../../../containers/display/styledComponents';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot_name: string;
   removePlotFromList(plot_name: string | undefined): void;
   params_for_api: ParamsForApiProps;
+  size: SizeProps;
 }
 
 export const ZoomedOverlaidJSROOTPlot = ({
   selected_plot_name,
   removePlotFromList,
   params_for_api,
+  size,
 }: ZoomedJSROOTPlotsProps) => {
-  params_for_api.height = sizes.fill.size.h;
-  params_for_api.width = sizes.fill.size.w;
+  params_for_api.height = size.h;
+  params_for_api.width = size.w;
   params_for_api.plot_name = selected_plot_name;
 
   const { data } = useRequest(get_jroot_plot(params_for_api), {}, [
@@ -46,7 +56,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
 
   overlaid_plots_runs_and_datasets.push(data);
 
-  let overlaidJSROOTPlot: any;
+  let overlaidJSROOTPlot: any = {};
 
   //checking how many histograms are overlaid, because just separated objects
   // (i.e separate variables ) to JSROOT.CreateTHStack() func
@@ -85,6 +95,8 @@ export const ZoomedOverlaidJSROOTPlot = ({
     );
   }
 
+  console.log(overlaidJSROOTPlot);
+  const histogramParam = params_for_api.normalize ? 'hist' : 'nostack';
   //make sure that no null histograms are passed to draw func.
   //on first, second reneder overlaidJSROOTPlot.fHists.arr is [null, null]
   //@ts-ignore
@@ -94,20 +106,39 @@ export const ZoomedOverlaidJSROOTPlot = ({
       overlaidJSROOTPlot.fHists.arr.length
     ) {
       //@ts-ignore
-      JSROOT.draw(
-        selected_plot_name,
+      JSROOT.redraw(
+        `${histogramParam}_${selected_plot_name}`,
         //@ts-ignore
         JSROOT.parse(JSON.stringify(overlaidJSROOTPlot)),
-        'hist'
+        `${histogramParam}`
       );
     }
   });
 
   return (
-    <div
-      id={selected_plot_name}
-      style={{ width: sizes.fill.size.w, height: sizes.fill.size.h }}
-      onClick={() => removePlotFromList(selected_plot_name)}
-    ></div>
+    <StyledCol>
+      <StyledPlotRow
+        minHeight={params_for_api.height}
+        width={params_for_api.width}
+        isPlotSelected={true}
+      >
+        <PlotNameCol>{selected_plot_name}</PlotNameCol>
+        <Column>
+          <MinusIcon onClick={() => removePlotFromList(selected_plot_name)} />
+        </Column>
+        <ImageDiv
+          style={{ display: params_for_api.normalize ? '' : 'none' }}
+          id={`hist_${selected_plot_name}`}
+          width={size.w}
+          height={size.h}
+        />
+        <ImageDiv
+          style={{ display: params_for_api.normalize ? 'none' : '' }}
+          id={`nostack_${selected_plot_name}`}
+          width={size.w}
+          height={size.h}
+        />
+      </StyledPlotRow>
+    </StyledCol>
   );
 };
