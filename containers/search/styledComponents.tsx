@@ -75,7 +75,7 @@ export const NotFoundDiv = styled.div`
     display: flex;
     align-items: center;
     flex-direction: column;
-    border: ${props => props.reference ? 'hidden': `2px solid ${theme.colors.secondary.main}` };
+    border: ${props => props.noBorder ? 'hidden': `2px solid ${theme.colors.secondary.main}` };
     height: fit-content;
     font-size: 2rem;
     padding: calc(${theme.space.spaceBetween}*12);
@@ -103,4 +103,10 @@ export const TableBody = styled.tbody`
     height: 100%;
     overflow: scroll;
     overflow-x: hidden;
+`
+
+export const RunWrapper = styled.div`
+  background: ${theme.colors.primary.light};
+  border-radius: 5px;
+  padding: ${theme.space.padding};
 `

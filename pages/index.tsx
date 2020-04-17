@@ -72,7 +72,7 @@ const Index: NextPage<FolderPathQuery> = (query: any) => {
             />
           ) : (
                 <NotFoundDivWrapper>
-                  <NotFoundDiv style={{ border: 'hidden' }}>
+                  <NotFoundDiv noBorder>
                     <ChartIcon />
                   Welcome to DQM GUI
                   </NotFoundDiv>

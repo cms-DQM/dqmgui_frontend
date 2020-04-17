@@ -15,6 +15,7 @@ export const StyledButton = styled(Button)`
   };
   color: ${theme.colors.common.white} !important;
 `;
+
 export const StyledSecondaryButton = styled(Button)`
   background-color: ${theme.colors.primary.main};
   border-style: none;
@@ -24,9 +25,11 @@ export const StyledSecondaryButton = styled(Button)`
     background-color: ${theme.colors.primary.light};
   }
 `;
+
 export const Icon = styled(QuestionOutlined)`
   color: ${theme.colors.common.white};
 `;
+
 export const StyledQuestionTag = styled(Tag)`
   background-color: ${theme.colors.primary.main};
   height: 25px;
@@ -40,6 +43,7 @@ export const StyledQuestionTag = styled(Tag)`
   }
   border-radius: 100px;
 `;
+
 export const StyledFormItem = styled(Form.Item)`
   .ant-form-item-label > label {
     color: ${theme.colors.common.white};
@@ -74,3 +78,9 @@ export const StyledActionButtonRow = styled(Row)`
 export const FormItem = styled(Form.Item)`
   margin: 0 !important;
 `;
+
+export const FieldsWrapper= styled.div`
+  display: flex,
+  alignItems: center
+`
+
