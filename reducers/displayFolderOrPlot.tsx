@@ -27,8 +27,8 @@ export const initialState: DisplayFolderOrPlotComponentProps = {
     zmin: NaN,
     zmax: NaN,
     drawopts: '',
-    withref: ''
-  }
+    withref: '',
+  },
 };
 
 export const setErrorBars = (errBars: boolean) => (dispatch: any) =>
@@ -97,14 +97,15 @@ export const setWithRefs = (value: string | undefined) => (dispatch: any) =>
     payload: value,
   });
 
-export const setParamsForCustomize = (params: CustomizeProps) => (dispatch: any) => {
-  console.log(params)
-  return (
-    dispatch({
-      type: FOLDERS_OR_PLOTS_REDUCER.SET_PARAMS_FOR_CUSTOMIZE,
-      payload: params,
-    })
- )}
+export const setParamsForCustomize = (params: CustomizeProps) => (
+  dispatch: any
+) => {
+  console.log(params);
+  return dispatch({
+    type: FOLDERS_OR_PLOTS_REDUCER.SET_PARAMS_FOR_CUSTOMIZE,
+    payload: params,
+  });
+};
 
 export const setHeight = (height: number) => (dispatch: any) =>
   dispatch({

@@ -47,8 +47,8 @@ export const Plot = ({
           {isPlotSelected ? (
             <MinusIcon onClick={() => removePlotFromList(plot_name)} />
           ) : (
-              <PlusIcon onClick={() => addPlotToList(plot_name)} />
-            )}
+            <PlusIcon onClick={() => addPlotToList(plot_name)} />
+          )}
         </Column>
         <div
           onClick={() => {

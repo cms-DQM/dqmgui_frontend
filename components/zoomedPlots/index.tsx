@@ -35,8 +35,8 @@ export const ZoomedPlots = ({
     return disableJSROOT;
   }, []);
 
-  params_for_api.customizeProps = customizeProps
-  console.log(params_for_api)
+  params_for_api.customizeProps = customizeProps;
+  console.log(params_for_api);
   return (
     <>
       <ViewDetailsMenu dispatch={dispatch} jsroot_mode={jsroot_mode} />
@@ -49,14 +49,14 @@ export const ZoomedPlots = ({
           size={size}
         />
       ) : (
-          <ZoomedPlotsWithoutOverlay
-            jsroot_mode={jsroot_mode}
-            selected_plots_name={selected_plots_name}
-            removePlotFromList={removePlotFromList}
-            params_for_api={params_for_api}
-            size={size}
-          />
-        )}
+        <ZoomedPlotsWithoutOverlay
+          jsroot_mode={jsroot_mode}
+          selected_plots_name={selected_plots_name}
+          removePlotFromList={removePlotFromList}
+          params_for_api={params_for_api}
+          size={size}
+        />
+      )}
     </>
   );
 };

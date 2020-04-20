@@ -70,7 +70,7 @@ const DiplayFolder: FC<FolderProps> = ({
     initialState
   );
 
-  console.log(state)
+  console.log(state);
   const {
     errorBars,
     overlay,

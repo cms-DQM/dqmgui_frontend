@@ -36,10 +36,10 @@ export interface PlotProps {
 export interface ParamsForApiProps extends PlotProps {
   joined_overlaied_plots_urls?: string;
   overlay?: string;
-  customizeProps?: CustomizeProps
+  customizeProps?: CustomizeProps;
 }
 
-export interface DisplayFolderOrPlotComponentProps{
+export interface DisplayFolderOrPlotComponentProps {
   errorBars: boolean;
   height: number;
   width: number;
@@ -50,21 +50,21 @@ export interface DisplayFolderOrPlotComponentProps{
   overlay: string;
   jsroot_mode: boolean;
   zoomedPlotSize: SizeProps;
-  customizeProps?: CustomizeProps ,
+  customizeProps?: CustomizeProps;
 }
 
 export interface CustomizeProps {
-  xtype: string,
-  xmin: number,
-  xmax: number,
-  ytype: string,
-  ymin: number,
-  ymax: number,
-  ztype: string,
-  zmin: number,
-  zmax: number,
-  drawopts: string,
-  withref: string,
+  xtype: string;
+  xmin: number;
+  xmax: number;
+  ytype: string;
+  ymin: number;
+  ymax: number;
+  ztype: string;
+  zmin: number;
+  zmax: number;
+  drawopts: string;
+  withref: string;
 }
 
 export interface NavigationSearchFieldsProps {
