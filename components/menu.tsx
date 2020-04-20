@@ -7,11 +7,10 @@ import { StyledSecondaryButton } from './styledComponents';
 
 export interface MenuProps {
   options: OptionProps[];
-  title: string
+  title: string;
 }
 
 export const DropdownMenu = ({ options, title }: MenuProps) => {
-
   const plotMenu = (options: OptionProps[], title: string) => (
     <Menu>
       {options.map((option: OptionProps) => (
