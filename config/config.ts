@@ -18,7 +18,7 @@ export const root_url = config[process.env.NODE_ENV || 'development'].root_url;
 export const get_plot_url = (params: ParamsForApiProps) =>
   `plotfairy/archive/${params.run_number}${params.dataset_name}${
     params.folders_path
-  }/${params.plot_name}?${get_customize_params(params)}${
+  }/${params.plot_name}?${get_customize_params(params.customizeProps)}${
     params.stats ? '' : 'showstats=0;'
   }${params.errorBars ? 'showerrbars=1;' : ''}${
     params.normalize ? '' : 'norm=False;'
@@ -26,7 +26,7 @@ export const get_plot_url = (params: ParamsForApiProps) =>
 
 export const get_plot_with_overlay = (params: ParamsForApiProps) => {
   return `plotfairy/overlay?
-  ${get_customize_params(params)}ref=${params.overlay};obj=archive/${
+  ${get_customize_params(params.customizeProps)}ref=${params.overlay};obj=archive/${
     params.run_number
   }${params.dataset_name}${params.folders_path}/${params.plot_name}${
     params.joined_overlaied_plots_urls

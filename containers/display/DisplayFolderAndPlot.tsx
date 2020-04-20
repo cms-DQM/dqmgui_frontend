@@ -113,9 +113,11 @@ const DiplayFolder: FC<FolderProps> = ({
     normalize: normalize,
     errorBars: errorBars,
   };
+
   const directories = cleanDeep(
     contents.map((content: DirectoryInterface) => content.subdir)
   );
+
   const plots = cleanDeep(
     contents.map((content: PlotInterface) => content.obj)
   );
@@ -187,6 +189,7 @@ const DiplayFolder: FC<FolderProps> = ({
                         addPlotToList={addPlot}
                         dispatch={dispatch}
                         removePlotFromList={removePlot}
+                        jsroot_mode={state.jsroot_mode}
                         isPlotSelected={isPlotSelected(
                           selected_plots_name,
                           plot_name

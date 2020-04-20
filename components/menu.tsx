@@ -19,7 +19,7 @@ export const DropdownMenu = ({ options, title }: MenuProps) => {
           key={option.value}
           onClick={() => option?.action && option.action(option)}
         >
-          <p>{option.label}</p>
+          <p>{option.label} </p>
         </Menu.Item>
       ))}
     </Menu>
@@ -30,7 +30,7 @@ export const DropdownMenu = ({ options, title }: MenuProps) => {
       <Col>
         <Dropdown overlay={plotMenu(options, title)} trigger={['click']}>
           <StyledSecondaryButton className="ant-dropdown-link">
-            {title}
+            {title} <DownOutlined />
           </StyledSecondaryButton>
         </Dropdown>
       </Col>

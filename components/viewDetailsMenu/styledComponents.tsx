@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { theme } from '../../styles/theme';
-import { Modal } from 'antd';
+import { Modal, Row } from 'antd';
 
 export const CheckboxesWrapper = styled.div`
   padding: calc(${theme.space.spaceBetween}*2);
@@ -32,3 +32,7 @@ export const FirstSectionWrapper = styled.div`
   display: flex;
   width: 50%;
 `;
+
+export const FullWidthRow = styled(Row)`
+  width: 100%;
+`

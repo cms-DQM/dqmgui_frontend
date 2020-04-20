@@ -4,13 +4,12 @@ import { Collapse, Switch } from 'antd';
 import { Reference } from './reference/reference';
 import { ViewFiler } from './viewFilter';
 import { SizeChanger } from '../sizeChanger';
-import { setJSROOTMode, setSize } from '../../reducers/displayFolderOrPlot';
+import { setSize } from '../../reducers/displayFolderOrPlot';
 import {
   setPlotToOverlay,
   setSelectedPlotsName,
 } from '../../reducers/displayFolderOrPlot';
 import { sizes } from '../constants';
-import { CostumizeTable } from './customize';
 
 const { Panel } = Collapse;
 

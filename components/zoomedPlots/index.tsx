@@ -34,9 +34,7 @@ export const ZoomedPlots = ({
 
   return (
     <>
-      {/* <DisplayOptionsWrapper> */}
       <ViewDetailsMenu dispatch={dispatch} jsroot_mode={jsroot_mode} />
-      {/* </DisplayOptionsWrapper> */}
       {params_for_api.overlay_plot && params_for_api.overlay_plot.length > 0 ? (
         <ZoomedOverlaidPlots
           selected_plots_name={selected_plots_name}
