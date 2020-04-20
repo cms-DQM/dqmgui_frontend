@@ -140,7 +140,7 @@ const DiplayFolder: FC<FolderProps> = ({
         />
       )}
       <DivWrapper>
-        <Wrapper zoomed={selected_plots_name.length}>
+        <Wrapper zoomed={selected_plots_name.length} noBorder>
           {isLoading ? (
             <SpinnerWrapper>
               <Spinner />
