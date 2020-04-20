@@ -5,3 +5,4 @@ node_modules
 public/**
 build/**
 public/jsroot-5.8.0/**
+out/**
