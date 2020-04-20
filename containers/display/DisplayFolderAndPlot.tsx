@@ -69,6 +69,8 @@ const DiplayFolder: FC<FolderProps> = ({
     displayFolderOrPlotComponentReducer,
     initialState
   );
+
+  console.log(state);
   const {
     errorBars,
     overlay,
@@ -100,7 +102,6 @@ const DiplayFolder: FC<FolderProps> = ({
   );
 
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
-
   const params_for_api: ParamsForApiProps = {
     overlay_plot: overlay_plot,
     run_number: run_number,
@@ -113,9 +114,11 @@ const DiplayFolder: FC<FolderProps> = ({
     normalize: normalize,
     errorBars: errorBars,
   };
+
   const directories = cleanDeep(
     contents.map((content: DirectoryInterface) => content.subdir)
   );
+
   const plots = cleanDeep(
     contents.map((content: PlotInterface) => content.obj)
   );
@@ -137,7 +140,7 @@ const DiplayFolder: FC<FolderProps> = ({
         />
       )}
       <DivWrapper>
-        <Wrapper zoomed={selected_plots_name.length}>
+        <Wrapper zoomed={selected_plots_name.length} noBorder>
           {isLoading ? (
             <SpinnerWrapper>
               <Spinner />
@@ -187,6 +190,7 @@ const DiplayFolder: FC<FolderProps> = ({
                         addPlotToList={addPlot}
                         dispatch={dispatch}
                         removePlotFromList={removePlot}
+                        jsroot_mode={state.jsroot_mode}
                         isPlotSelected={isPlotSelected(
                           selected_plots_name,
                           plot_name
@@ -208,6 +212,7 @@ const DiplayFolder: FC<FolderProps> = ({
               jsroot_mode={state.jsroot_mode}
               dispatch={dispatch}
               size={state.zoomedPlotSize}
+              customizeProps={state.customizeProps}
             />
           </Wrapper>
         )}

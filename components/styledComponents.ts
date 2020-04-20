@@ -17,12 +17,12 @@ export const StyledButton = styled(Button)`
 `;
 
 export const StyledSecondaryButton = styled(Button)`
-  background-color: ${theme.colors.primary.main};
-  border-style: none;
-  color: ${theme.colors.common.white};
+  background-color: ${theme.colors.primary.main} !important;
+  border-style: none !important;
+  color: ${theme.colors.common.white} !important;
   border-radius: 50px;
   &:hover {
-    background-color: ${theme.colors.primary.light};
+    background-color: ${theme.colors.primary.light} !important;
   }
 `;
 
@@ -46,9 +46,10 @@ export const StyledQuestionTag = styled(Tag)`
 
 export const StyledFormItem = styled(Form.Item)`
   .ant-form-item-label > label {
-    color: ${theme.colors.common.white};
+    color: ${theme.colors.common.black};
     padding-right: ${theme.space.spaceBetween};
     width: fit-content;
+    padding: ${theme.space.spaceBetween};
   }
 `;
 

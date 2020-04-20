@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 
 import { theme } from '../../styles/theme';
-import { Modal } from 'antd';
-
+import { Modal, Row, Select } from 'antd';
+const { Option } = Select;
 export const CheckboxesWrapper = styled.div`
   padding: calc(${theme.space.spaceBetween}*2);
 `;
@@ -31,4 +31,14 @@ export const StyledModal = styled(Modal)`
 export const FirstSectionWrapper = styled.div`
   display: flex;
   width: 50%;
+`;
+
+export const FullWidthRow = styled(Row)`
+  width: 100%;
+  padding: ${theme.space.spaceBetween};
+`;
+export const StyledSelect = styled(Select)`
+  .ant-select-selector {
+    border-radius: 12px !important;
+  }
 `;

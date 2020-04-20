@@ -54,6 +54,18 @@ export const FOLDERS_OR_PLOTS_REDUCER = {
   SET_OVERLAY: 'SET_OVERLAY',
   SHOW: 'SHOW',
   JSROOT_MODE: 'JSROOT_MODE',
+  SET_X_TYPE: 'SET_X_TYPE',
+  SET_X_MIN: 'SET_X_MIN',
+  SET_X_MAX: 'SET_X_MAX',
+  SET_Y_TYPE: 'SET_Y_TYPE',
+  SET_Y_MIN: 'SET_Y_MIN',
+  SET_Y_MAX: 'SET_Y_MAX',
+  SET_Z_TYPE: 'SET_Z_TYPE',
+  SET_Z_MIN: 'SET_Z_MIN',
+  SET_Z_MAX: 'SET_Z_MAX',
+  SET_DRAW_OPTS: 'SET_DRAW_OPTS',
+  SET_WITH_REFERENCE: 'SET_WITH_REFERENCE',
+  SET_PARAMS_FOR_CUSTOMIZE: 'SET_PARAMS_FOR_CUSTOMIZE',
 };
 
 export const NAV_REDUCER = {
@@ -74,13 +86,13 @@ export const overlayOptions = [
 ];
 
 export const xyzTypes = [
+  { label: 'Default', value: '' },
   { label: 'Linear', value: 'lin' },
   { label: 'Log', value: 'log' },
-  { label: 'Default', value: '' },
 ];
 
 export const withReference = [
+  { label: 'Default', value: '' },
   { label: 'Yes', value: 'yes' },
   { label: 'No', value: 'no' },
-  { label: 'Default', value: '' },
 ];

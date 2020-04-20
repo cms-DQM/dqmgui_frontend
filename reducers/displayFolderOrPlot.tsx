@@ -2,6 +2,7 @@ import { FOLDERS_OR_PLOTS_REDUCER, sizes } from '../components/constants';
 import {
   DisplayFolderOrPlotComponentProps,
   SizeProps,
+  CustomizeProps,
 } from '../containers/display/interfaces';
 
 export const initialState: DisplayFolderOrPlotComponentProps = {
@@ -15,6 +16,19 @@ export const initialState: DisplayFolderOrPlotComponentProps = {
   selected_plots_name: [],
   jsroot_mode: false,
   zoomedPlotSize: { h: sizes.fill.size.h, w: sizes.fill.size.w },
+  customizeProps: {
+    xtype: '',
+    xmin: NaN,
+    xmax: NaN,
+    ytype: '',
+    ymin: NaN,
+    ymax: NaN,
+    ztype: '',
+    zmin: NaN,
+    zmax: NaN,
+    drawopts: '',
+    withref: '',
+  },
 };
 
 export const setErrorBars = (errBars: boolean) => (dispatch: any) =>
@@ -22,6 +36,76 @@ export const setErrorBars = (errBars: boolean) => (dispatch: any) =>
     type: FOLDERS_OR_PLOTS_REDUCER.SET_ERR_BARS,
     payload: errBars,
   });
+
+export const setXType = (type: string | undefined) => (dispatch: any) =>
+  dispatch({
+    type: FOLDERS_OR_PLOTS_REDUCER.SET_X_TYPE,
+    payload: type,
+  });
+export const setXMin = (value: number | undefined) => (dispatch: any) =>
+  dispatch({
+    type: FOLDERS_OR_PLOTS_REDUCER.SET_X_MIN,
+    payload: value,
+  });
+export const setXMax = (value: number | undefined) => (dispatch: any) =>
+  dispatch({
+    type: FOLDERS_OR_PLOTS_REDUCER.SET_X_MAX,
+    payload: value,
+  });
+
+export const setYType = (type: string | undefined) => (dispatch: any) =>
+  dispatch({
+    type: FOLDERS_OR_PLOTS_REDUCER.SET_Y_TYPE,
+    payload: type,
+  });
+export const setYMin = (value: number | undefined) => (dispatch: any) =>
+  dispatch({
+    type: FOLDERS_OR_PLOTS_REDUCER.SET_Y_MIN,
+    payload: value,
+  });
+export const setYMax = (value: number | undefined) => (dispatch: any) =>
+  dispatch({
+    type: FOLDERS_OR_PLOTS_REDUCER.SET_Y_MAX,
+    payload: value,
+  });
+
+export const setZType = (type: string | undefined) => (dispatch: any) =>
+  dispatch({
+    type: FOLDERS_OR_PLOTS_REDUCER.SET_Z_TYPE,
+    payload: type,
+  });
+export const setZMin = (value: number | undefined) => (dispatch: any) =>
+  dispatch({
+    type: FOLDERS_OR_PLOTS_REDUCER.SET_Z_MIN,
+    payload: value,
+  });
+export const setZMax = (value: number | undefined) => (dispatch: any) =>
+  dispatch({
+    type: FOLDERS_OR_PLOTS_REDUCER.SET_Z_MAX,
+    payload: value,
+  });
+
+export const setDrawOpts = (value: string | undefined) => (dispatch: any) =>
+  dispatch({
+    type: FOLDERS_OR_PLOTS_REDUCER.SET_DRAW_OPTS,
+    payload: value,
+  });
+
+export const setWithRefs = (value: string | undefined) => (dispatch: any) =>
+  dispatch({
+    type: FOLDERS_OR_PLOTS_REDUCER.SET_WITH_REFERENCE,
+    payload: value,
+  });
+
+export const setParamsForCustomize = (params: CustomizeProps) => (
+  dispatch: any
+) => {
+  console.log(params);
+  return dispatch({
+    type: FOLDERS_OR_PLOTS_REDUCER.SET_PARAMS_FOR_CUSTOMIZE,
+    payload: params,
+  });
+};
 
 export const setHeight = (height: number) => (dispatch: any) =>
   dispatch({
@@ -81,7 +165,6 @@ export const addPlotToList = (plot_name: string) => (
   dispatch: any
 ) => {
   const copy = [...state.selected_plots_name];
-  console.log(copy);
   copy.push(plot_name);
   setSelectedPlotsName(copy)(dispatch);
 };
@@ -129,6 +212,24 @@ export function displayFolderOrPlotComponentReducer(
       return { ...state, jsroot_mode: action.payload };
     case FOLDERS_OR_PLOTS_REDUCER.SET_ZOOMED_PLOT_SIZE:
       return { ...state, zoomedPlotSize: action.payload };
+    case FOLDERS_OR_PLOTS_REDUCER.SET_X_TYPE:
+      return { ...state, xtype: action.payload };
+    case FOLDERS_OR_PLOTS_REDUCER.SET_X_MIN:
+      return { ...state, xmin: action.payload };
+    case FOLDERS_OR_PLOTS_REDUCER.SET_X_MAX:
+      return { ...state, xmax: action.payload };
+    case FOLDERS_OR_PLOTS_REDUCER.SET_Y_TYPE:
+      return { ...state, ytype: action.payload };
+    case FOLDERS_OR_PLOTS_REDUCER.SET_Y_MIN:
+      return { ...state, ymin: action.payload };
+    case FOLDERS_OR_PLOTS_REDUCER.SET_Y_MAX:
+      return { ...state, ymax: action.payload };
+    case FOLDERS_OR_PLOTS_REDUCER.SET_DRAW_OPTS:
+      return { ...state, drawopts: action.payload };
+    case FOLDERS_OR_PLOTS_REDUCER.SET_WITH_REFERENCE:
+      return { ...state, withref: action.payload };
+    case FOLDERS_OR_PLOTS_REDUCER.SET_PARAMS_FOR_CUSTOMIZE:
+      return { ...state, customizeProps: action.payload };
     default:
       throw new Error();
   }

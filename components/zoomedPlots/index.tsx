@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import {
   ParamsForApiProps,
   SizeProps,
+  CustomizeProps,
 } from '../../containers/display/interfaces';
 
 import { ZoomedPlots as ZoomedOverlaidPlots } from './zoomedOverlayPlots/';
@@ -17,6 +18,7 @@ interface ZoomedPlotsProps {
   jsroot_mode: boolean;
   dispatch: any;
   size: SizeProps;
+  customizeProps: CustomizeProps;
 }
 
 export const ZoomedPlots = ({
@@ -26,17 +28,18 @@ export const ZoomedPlots = ({
   selected_plots_name,
   dispatch,
   size,
+  customizeProps,
 }: ZoomedPlotsProps) => {
   useEffect(() => {
     const disableJSROOT = setJSROOTMode(false)(dispatch);
     return disableJSROOT;
   }, []);
 
+  params_for_api.customizeProps = customizeProps;
+  console.log(params_for_api);
   return (
     <>
-      {/* <DisplayOptionsWrapper> */}
       <ViewDetailsMenu dispatch={dispatch} jsroot_mode={jsroot_mode} />
-      {/* </DisplayOptionsWrapper> */}
       {params_for_api.overlay_plot && params_for_api.overlay_plot.length > 0 ? (
         <ZoomedOverlaidPlots
           selected_plots_name={selected_plots_name}
