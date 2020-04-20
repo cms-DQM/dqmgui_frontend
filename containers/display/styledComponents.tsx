@@ -59,7 +59,7 @@ export const Column = styled(Col)`
 `;
 export const Wrapper = styled.div`
   width: ${(props) => (props?.zoomed ? '50%' : '100%')};
-  border-left: ${(props) => (props?.zoomed ? '1px solid' : '')};
+  border-left: ${(props) => (props?.noBorder ? '' : '1px solid')};
   align-items: center;
 `;
 export const DivWrapper = styled.div`
