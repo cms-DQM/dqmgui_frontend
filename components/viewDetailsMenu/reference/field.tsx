@@ -13,7 +13,7 @@ interface FieldProps {
   id: any;
   field_name: string;
   value: any;
-  placeholder?: string | number;
+  placeholder?: string;
   disabled?: boolean;
   defaultValue?: string | number;
 }
@@ -50,7 +50,6 @@ export const Field = ({
         }
         value={value}
         placeholder={placeholder}
-        type="text"
       />
     </StyledFormItem>
     // </StyledDiv>
