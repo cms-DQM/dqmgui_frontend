@@ -32,6 +32,7 @@ export const ZoomedPlot = ({
   params_for_api.width = size.w;
   const plot_url = get_plot_url(params_for_api);
   const source = `${root_url}/${plot_url}`;
+  console.log(params_for_api)
 
   return (
     <StyledCol>

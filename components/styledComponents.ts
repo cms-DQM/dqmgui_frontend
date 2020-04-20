@@ -49,6 +49,7 @@ export const StyledFormItem = styled(Form.Item)`
     color: ${theme.colors.common.black};
     padding-right: ${theme.space.spaceBetween};
     width: fit-content;
+    padding: ${theme.space.spaceBetween};
   }
 `;
 

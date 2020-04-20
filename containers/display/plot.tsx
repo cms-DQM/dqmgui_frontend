@@ -35,7 +35,6 @@ export const Plot = ({
   params_for_api.plot_name = plot_name;
   const plot_url = get_plot_url(params_for_api);
   const source = `${root_url}/${plot_url}`;
-
   return (
     <StyledCol>
       <StyledPlotRow
