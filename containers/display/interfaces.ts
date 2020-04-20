@@ -11,7 +11,7 @@ export interface FolderPathQuery {
 export interface OptionProps {
   label: string;
   value: any;
-  action?(): void;
+  action?(option?: any): void;
 }
 
 export interface SizeProps {
@@ -36,17 +36,7 @@ export interface PlotProps {
 export interface ParamsForApiProps extends PlotProps {
   joined_overlaied_plots_urls?: string;
   overlay?: string;
-  xtype?: string;
-  xmin?: number;
-  xmax?: number;
-  ytype?: string;
-  ymin?: number;
-  ymax?: number;
-  ztype?: string;
-  zmin?: number;
-  zmax?: number;
-  drawopts?: string;
-  withref?: string;
+  customizeProps?: CustomizeProps;
 }
 
 export interface DisplayFolderOrPlotComponentProps {
@@ -60,6 +50,21 @@ export interface DisplayFolderOrPlotComponentProps {
   overlay: string;
   jsroot_mode: boolean;
   zoomedPlotSize: SizeProps;
+  customizeProps?: CustomizeProps;
+}
+
+export interface CustomizeProps {
+  xtype: string;
+  xmin: number;
+  xmax: number;
+  ytype: string;
+  ymin: number;
+  ymax: number;
+  ztype: string;
+  zmin: number;
+  zmax: number;
+  drawopts: string;
+  withref: string;
 }
 
 export interface NavigationSearchFieldsProps {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { root_url } from '../../config/config';
 import { get_plot_url } from '../../config/config';
@@ -20,6 +20,7 @@ interface PlotProps {
   dispatch: any;
   isPlotSelected: boolean;
   removePlotFromList(plot_name: string | undefined): void;
+  jsroot_mode: boolean;
 }
 
 export const Plot = ({
@@ -29,11 +30,11 @@ export const Plot = ({
   dispatch,
   isPlotSelected,
   removePlotFromList,
+  jsroot_mode,
 }: PlotProps) => {
   params_for_api.plot_name = plot_name;
   const plot_url = get_plot_url(params_for_api);
   const source = `${root_url}/${plot_url}`;
-
   return (
     <StyledCol>
       <StyledPlotRow

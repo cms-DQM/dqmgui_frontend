@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Collapse } from 'antd';
 
 import { DisplayOptions } from './displayOptions';
+import { CostumizeTable } from '../../viewDetailsMenu/customize';
 
 const { Panel } = Collapse;
 
@@ -19,9 +20,9 @@ export const ViewDetailsMenu = ({
       <Panel header="Display Options" key="1">
         <DisplayOptions dispatch={dispatch} jsroot_mode={jsroot_mode} />
       </Panel>
-      {/* <Panel header="Customize" key="2">
-        <CostumizeTable />
-      </Panel> */}
+      <Panel header="Customize" key="2" disabled={jsroot_mode}>
+        {!jsroot_mode && <CostumizeTable dispatch={dispatch} />}
+      </Panel>
     </Collapse>
   );
 };
