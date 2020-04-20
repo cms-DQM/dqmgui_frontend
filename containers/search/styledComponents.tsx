@@ -12,12 +12,8 @@ export const StyledWrapper = styled.div`
   // width: 100%;
   justify-content: center;
 `;
-const antIcon = () => <LoadingOutlined spin />;
 
-const SpinnerIcon = styled(antIcon)`
-  font-size: 45;
-`;
-export const Spinner = () => <Spin tip="Loading..." indicator={SpinnerIcon} />;
+export const Spinner = () => <Spin tip="Loading..." />;
 
 export const SpinnerWrapper = styled.div`
   height: 100%;
@@ -32,7 +28,7 @@ export const StyledTableHead = styled.thead`
   color: ${theme.colors.common.white};
   text-transform: uppercase;
 `;
-export const StyledTableRow = styled.tr`
+export const StyledTableRow = styled.tr<{ index?: number, noHover?: boolean, expanded?: boolean }>`
   width: 100%;
   background: ${(props) =>
     (props?.index && props.index % 2 === 0) || props.index === 0
@@ -41,7 +37,7 @@ export const StyledTableRow = styled.tr`
   cursor: pointer;
   &:hover {
     background-color: ${(props) =>
-      props?.noHover ? '' : `${theme.colors.secondary.light}`};
+    props?.noHover ? '' : `${theme.colors.secondary.light}`};
   }
   font-weight: ${(props) =>
     props?.expanded && props.expanded === true ? 'bold' : ''};
@@ -64,11 +60,11 @@ export const RunsRows = styled(Row)`
   padding-left: 32px;
   font-weight: normal !important;
 `;
-export const ExpandedRow = styled.div`
+export const ExpandedRow = styled.div<{ expanded: boolean, }>`
   font-weight: ${(props) =>
     props?.expanded && props.expanded === true ? 'bold' : ''};
 `;
-export const NotFoundDiv = styled.div`
+export const NotFoundDiv = styled.div<{ noBorder?: boolean }>`
   display: flex;
   align-items: center;
   flex-direction: column;

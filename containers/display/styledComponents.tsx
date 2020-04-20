@@ -5,7 +5,7 @@ import {
   MinusCircleFilled,
   PlusCircleFilled,
 } from '@ant-design/icons';
-import { Col, Row, Breadcrumb } from 'antd';
+import { Col, Row } from 'antd';
 
 export const Icon = styled(FolderFilled)`
   font-size: 2rem;
@@ -35,7 +35,7 @@ export const StyledRowImages = styled(Row)`
   justify-content: center;
 `;
 
-export const StyledPlotRow = styled(Row)`
+export const StyledPlotRow = styled(Row)<{width: number, minHeight: number, isPlotSelected: boolean}>`
   display: flex;
   justify-content: space-between;
   width: ${(props) => props?.width && props.width}px;
@@ -57,7 +57,7 @@ export const Column = styled(Col)`
   padding: ${theme.space.spaceBetween} calc(${theme.space.spaceBetween}*2)
     ${theme.space.spaceBetween} ${theme.space.spaceBetween};
 `;
-export const Wrapper = styled.div`
+export const Wrapper = styled.div<{zoomed?: any, noBorder?: boolean}>`
   width: ${(props) => (props?.zoomed ? '50%' : '100%')};
   border-left: ${(props) => (props?.noBorder ? '' : '1px solid')};
   align-items: center;
@@ -91,7 +91,7 @@ export const StyledAForPath = styled.a`
   padding: 0 calc(${theme.space.spaceBetween}*2) 0
     calc(${theme.space.spaceBetween}*2);
 `;
-export const ImageDiv = styled.div`
+export const ImageDiv = styled.div<{width: number, height: number}>`
   width: ${(props) => (props.width ? props.width : '')}px;
   height: ${(props) => (props.height ? props.height : '')}px;
 `;
