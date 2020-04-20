@@ -21,7 +21,7 @@ export const ViewDetailsMenu = ({
         <DisplayOptions dispatch={dispatch} jsroot_mode={jsroot_mode} />
       </Panel>
       <Panel header="Customize" key="2">
-        <CostumizeTable />
+        <CostumizeTable dispatch={dispatch}/>
       </Panel>
     </Collapse>
   );

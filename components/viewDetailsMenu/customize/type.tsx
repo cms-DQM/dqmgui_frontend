@@ -20,10 +20,10 @@ export const Type = ({ type }: TypesProps) => {
 
   return (
     <tr>
-      <td>
+      <td >
         <DropdownMenu title={`${type} type`} options={withAction} />
       </td>
-      <td>
+      <td style={{ paddingRight: '16px' }}>
         {selectedOption?.label}
       </td>
       <td>
