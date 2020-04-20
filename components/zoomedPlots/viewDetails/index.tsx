@@ -20,7 +20,7 @@ export const ViewDetailsMenu = ({
       <Panel header="Display Options" key="1">
         <DisplayOptions dispatch={dispatch} jsroot_mode={jsroot_mode} />
       </Panel>
-      <Panel header="Customize" key="2">
+      <Panel header="Customize" key="2" disabled={jsroot_mode}>
         <CostumizeTable dispatch={dispatch}/>
       </Panel>
     </Collapse>
