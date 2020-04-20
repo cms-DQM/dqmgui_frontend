@@ -16,13 +16,14 @@ const config: any = {
 export const root_url = config[process.env.NODE_ENV || 'development'].root_url;
 
 export const get_plot_url = (params: ParamsForApiProps) =>
-  `plotfairy/archive/${params.run_number}${params.dataset_name}${
+ { console.log(get_customize_params(params.customizeProps))
+   return( `plotfairy/archive/${params.run_number}${params.dataset_name}${
     params.folders_path
   }/${params.plot_name}?${get_customize_params(params.customizeProps)}${
     params.stats ? '' : 'showstats=0;'
   }${params.errorBars ? 'showerrbars=1;' : ''}${
     params.normalize ? '' : 'norm=False;'
-  }w=${params.width};h=${params.height}`;
+  }w=${params.width};h=${params.height}`)};
 
 export const get_plot_with_overlay = (params: ParamsForApiProps) => {
   return `plotfairy/overlay?

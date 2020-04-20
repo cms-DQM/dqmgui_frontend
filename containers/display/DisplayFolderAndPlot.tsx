@@ -69,6 +69,8 @@ const DiplayFolder: FC<FolderProps> = ({
     displayFolderOrPlotComponentReducer,
     initialState
   );
+
+  console.log(state)
   const {
     errorBars,
     overlay,
@@ -100,7 +102,6 @@ const DiplayFolder: FC<FolderProps> = ({
   );
 
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
-
   const params_for_api: ParamsForApiProps = {
     overlay_plot: overlay_plot,
     run_number: run_number,
@@ -211,6 +212,7 @@ const DiplayFolder: FC<FolderProps> = ({
               jsroot_mode={state.jsroot_mode}
               dispatch={dispatch}
               size={state.zoomedPlotSize}
+              customizeProps={state.customizeProps}
             />
           </Wrapper>
         )}

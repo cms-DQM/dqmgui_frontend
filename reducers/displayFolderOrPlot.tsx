@@ -97,19 +97,15 @@ export const setWithRefs = (value: string | undefined) => (dispatch: any) =>
     payload: value,
   });
 
-export const setParamsForCustomize = (params: CustomizeProps) => (disptach: any) => {
-  setXType(params?.xtype)(disptach)
-  setXMin(params?.xmin)(disptach)
-  setXMax(params?.xmax)(disptach)
-  setYType(params?.ytype)(disptach)
-  setYMin(params?.ymin)(disptach)
-  setYMax(params?.ymax)(disptach)
-  setZType(params?.ztype)(disptach)
-  setZMin(params?.zmin)(disptach)
-  setZMax(params?.zmax)(disptach)
-  setDrawOpts(params?.drawopts)(disptach)
-  setWithRefs(params?.withref)(disptach)
-}
+export const setParamsForCustomize = (params: CustomizeProps) => (dispatch: any) => {
+  console.log(params)
+  return (
+    dispatch({
+      type: FOLDERS_OR_PLOTS_REDUCER.SET_PARAMS_FOR_CUSTOMIZE,
+      payload: params,
+    })
+ )}
+
 export const setHeight = (height: number) => (dispatch: any) =>
   dispatch({
     type: FOLDERS_OR_PLOTS_REDUCER.SET_HEIGHT,
@@ -168,7 +164,6 @@ export const addPlotToList = (plot_name: string) => (
   dispatch: any
 ) => {
   const copy = [...state.selected_plots_name];
-  console.log(copy);
   copy.push(plot_name);
   setSelectedPlotsName(copy)(dispatch);
 };
@@ -232,6 +227,8 @@ export function displayFolderOrPlotComponentReducer(
       return { ...state, drawopts: action.payload };
     case FOLDERS_OR_PLOTS_REDUCER.SET_WITH_REFERENCE:
       return { ...state, withref: action.payload };
+    case FOLDERS_OR_PLOTS_REDUCER.SET_PARAMS_FOR_CUSTOMIZE:
+      return { ...state, customizeProps: action.payload };
     default:
       throw new Error();
   }
