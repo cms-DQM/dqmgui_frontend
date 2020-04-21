@@ -1,49 +1,40 @@
 import React from 'react';
 
 import { root_url } from '../../../config/config';
-import {
-  get_plot_with_overlay,
-  get_overlaied_plots_urls,
-} from '../../../config/config';
-import { ParamsForApiProps } from '../interfaces';
-import {
-  setSelectedPlotsName,
-  addPlotToList,
-} from '../../../reducers/displayFolderOrPlot';
+import { get_plot_url } from '../../../config/config';
+import { ParamsForApiProps } from '../../../containers/display/interfaces';
+import { setSelectedPlotsName } from '../../../reducers/displayFolderOrPlot';
 import {
   StyledCol,
-  PlotNameCol,
   StyledPlotRow,
+  PlotNameCol,
   Column,
   PlusIcon,
   MinusIcon,
-} from '../styledComponents';
+} from '../../../containers/display/styledComponents';
 
-interface OverlaidPlotImageProps {
-  params_for_api: ParamsForApiProps;
+interface PlotProps {
   plot_name: string;
+  params_for_api: ParamsForApiProps;
+  addPlotToList(plot_name: string): void;
   dispatch: any;
   isPlotSelected: boolean;
-  addPlotToList(plot_name: string): void;
   removePlotFromList(plot_name: string | undefined): void;
+  jsroot_mode: boolean;
 }
 
-export const OverlaidPlotImage = ({
+export const Plot = ({
+  addPlotToList,
   plot_name,
   params_for_api,
   dispatch,
   isPlotSelected,
-  addPlotToList,
   removePlotFromList,
-}: OverlaidPlotImageProps) => {
+  jsroot_mode,
+}: PlotProps) => {
   params_for_api.plot_name = plot_name;
-  const overlaid_plots_urls = get_overlaied_plots_urls(params_for_api);
-  const joined_overlaid_plots_urls = overlaid_plots_urls.join('');
-  params_for_api.joined_overlaied_plots_urls = joined_overlaid_plots_urls;
-
-  const plot_with_overlay = get_plot_with_overlay(params_for_api);
-  const source = `${root_url}/${plot_with_overlay}`;
-
+  const plot_url = get_plot_url(params_for_api);
+  const source = `${root_url}/${plot_url}`;
   return (
     <StyledCol>
       <StyledPlotRow

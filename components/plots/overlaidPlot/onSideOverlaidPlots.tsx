@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { root_url, get_plot_url } from '../../../config/config';
-import { ParamsForApiProps, TripleProps } from '../interfaces';
+import { ParamsForApiProps, TripleProps } from '../../../containers/display/interfaces';
 import {
   setSelectedPlotsName,
   addPlotToList,
@@ -13,7 +13,7 @@ import {
   Column,
   PlusIcon,
   MinusIcon,
-} from '../styledComponents';
+} from '../../../containers/display/styledComponents';
 
 interface OnSideOverlaidPlotsProps {
   params_for_api: ParamsForApiProps;

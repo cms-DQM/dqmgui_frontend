@@ -51,6 +51,8 @@ export interface DisplayFolderOrPlotComponentProps {
   jsroot_mode: boolean;
   zoomedPlotSize: SizeProps;
   customizeProps?: CustomizeProps;
+  worskpaceMenu: boolean;
+  workspace: any;
 }
 
 export interface CustomizeProps {

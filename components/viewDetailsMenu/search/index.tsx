@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Button } from 'antd';
 
 import { toggleModal } from '../../../reducers/reference';
 import Nav from '../../Nav';
 import { useSearch } from '../../../hooks/useSearch';
 import SearchResults from '../../../containers/search/SearchResults';
 import { change_value_in_reference_table } from '../../../reducers/reference';
-import { ResultsWrapper, NavWrapper, StyledModal } from '../styledComponents';
+import { ResultsWrapper, NavWrapper } from '../styledComponents';
+import { CustomModal } from '../../modal';
 
 interface CustomModalProps {
   visible: boolean;
@@ -15,7 +15,7 @@ interface CustomModalProps {
   state: any;
 }
 
-export const CustomModal = ({
+export const SearchModal = ({
   visible,
   dispatch,
   id,
@@ -65,20 +65,10 @@ export const CustomModal = ({
   );
 
   return (
-    <StyledModal
-      title="Overlay Plots data search"
+    <CustomModal
+      onClosing={onClosing}
       visible={visible}
-      onCancel={() => onClosing()}
-      footer={[
-        <Button
-          key="Close"
-          onClick={() => {
-            onClosing();
-          }}
-        >
-          Close
-        </Button>,
-      ]}
+      title="Overlay Plots data search"
     >
       {visible && (
         <>
@@ -99,10 +89,10 @@ export const CustomModal = ({
               />
             </ResultsWrapper>
           ) : (
-            <ResultsWrapper />
-          )}
+              <ResultsWrapper />
+            )}
         </>
       )}
-    </StyledModal>
+    </CustomModal>
   );
 };
