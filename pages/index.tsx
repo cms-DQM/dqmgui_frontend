@@ -3,7 +3,7 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import { useState } from 'react';
 import 'antd/dist/antd.css';
-import Router from 'next/router';
+import Router, { useRouter } from 'next/router';
 
 import Nav from '../components/Nav';
 import SearchResults from '../containers/search/SearchResults';
@@ -21,9 +21,11 @@ import {
 } from '../containers/search/styledComponents';
 import { FolderPathQuery } from '../containers/display/interfaces';
 
-const Index: NextPage<FolderPathQuery> = (query: any) => {
+const Index: NextPage<FolderPathQuery> = () => {
   const [run_number, setRunNumber] = useState('');
   const [dataset_name, setDatasetName] = useState('');
+  const router = useRouter() 
+  const query: any = router.query
   const { results, results_grouped, searching, isLoading } = useSearch(
     query.search_run_number,
     query.search_dataset_name
@@ -95,10 +97,6 @@ const Index: NextPage<FolderPathQuery> = (query: any) => {
       </StyledLayout>
     </div>
   );
-};
-
-Index.getInitialProps = ({ query }: { query: FolderPathQuery }) => {
-  return query;
 };
 
 export default Index;
