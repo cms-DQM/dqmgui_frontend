@@ -24,7 +24,7 @@ export const NavWrapper = styled.div`
 
 export const StyledModal = styled(Modal)`
   .ant-modal-content {
-    width: fit-content;
+    width: min-content;
   }
 `;
 

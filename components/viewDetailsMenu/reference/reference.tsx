@@ -31,7 +31,7 @@ import { RadioButtonsGroup } from '../../radioButtonsGroup';
 import { filter_plots, filter_valid_runs } from '../utils';
 import { Field } from './field';
 import { useRouter } from 'next/router';
-import { CustomModal } from '../search';
+import { SearchModal } from '../search';
 import { Container } from './containers';
 
 interface ReferenceProps {
@@ -73,7 +73,7 @@ export const Reference = ({
           setPlotToOverlay(filtered)(dispatch_gloabl);
         }}
       >
-        <CustomModal
+        <SearchModal
           dispatch={dispatch}
           visible={state.open}
           id={selectedTriple.id}
