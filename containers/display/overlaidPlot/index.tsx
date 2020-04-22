@@ -21,6 +21,7 @@ export const OverlaidPlot = ({
   isPlotSelected,
   removePlotFromList,
 }: OverlaidPlotProps) => {
+  
   return (
     <>
       {params_for_api.overlay === 'onSide' ? (
@@ -33,15 +34,15 @@ export const OverlaidPlot = ({
           removePlotFromList={removePlotFromList}
         />
       ) : (
-        <OverlaidPlotImage
-          plot_name={plot_name}
-          params_for_api={params_for_api}
-          dispatch={dispatch}
-          isPlotSelected={isPlotSelected}
-          addPlotToList={addPlotToList}
-          removePlotFromList={removePlotFromList}
-        />
-      )}
+          <OverlaidPlotImage
+            plot_name={plot_name}
+            params_for_api={params_for_api}
+            dispatch={dispatch}
+            isPlotSelected={isPlotSelected}
+            addPlotToList={addPlotToList}
+            removePlotFromList={removePlotFromList}
+          />
+        )}
     </>
   );
 };

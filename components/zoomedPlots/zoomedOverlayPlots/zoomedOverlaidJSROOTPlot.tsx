@@ -95,7 +95,6 @@ export const ZoomedOverlaidJSROOTPlot = ({
     );
   }
 
-  console.log(overlaidJSROOTPlot);
   const histogramParam = params_for_api.normalize ? 'hist' : 'nostack';
   //make sure that no null histograms are passed to draw func.
   //on first, second reneder overlaidJSROOTPlot.fHists.arr is [null, null]
