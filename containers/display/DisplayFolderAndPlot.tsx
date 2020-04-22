@@ -1,4 +1,4 @@
-import React, { FC, useReducer } from 'react';
+import React, { FC, useReducer, useEffect } from 'react';
 import Link from 'next/link';
 import { Col } from 'antd';
 import _ from 'lodash';
@@ -106,6 +106,11 @@ const DiplayFolder: FC<FolderProps> = ({
     {},
     [folder_path]
   );
+  let filteredDirs: any[] = []
+
+  useEffect(() => {
+    filteredDirs = (filterDirestoriesByWorkspace(directories, state.workspace.label))
+  }, [state.workspace.label])
 
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
 
@@ -126,7 +131,7 @@ const DiplayFolder: FC<FolderProps> = ({
     contents.map((content: DirectoryInterface) => content.subdir)
   );
 
-  console.log(filterDirestoriesByWorkspace('', state.workspace.label))
+
   const plots = cleanDeep(
     contents.map((content: PlotInterface) => content.obj)
   );

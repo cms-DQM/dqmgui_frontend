@@ -18,7 +18,7 @@ export const initialState: DisplayFolderOrPlotComponentProps = {
   selected_plots_name: [],
   jsroot_mode: false,
   worskpaceMenu: false,
-  workspace: summariesWorkspace[5],
+  workspace: summariesWorkspace.Everything,
   zoomedPlotSize: { h: sizes.fill.size.h, w: sizes.fill.size.w },
   customizeProps: {
     xtype: '',
