@@ -6,6 +6,7 @@ import {
   ParamsForApiProps,
   TripleProps,
   SizeProps,
+  PlotDataProps,
 } from '../../../containers/display/interfaces';
 import { useRequest } from '../../../hooks/useRequest';
 import { useEffect } from 'react';
@@ -19,39 +20,40 @@ import {
 } from '../../../containers/display/styledComponents';
 
 interface ZoomedJSROOTPlotsProps {
-  selected_plot_name: string;
-  removePlotFromList(plot_name: string | undefined): void;
+  selected_plot: PlotDataProps;
+  removePlotFromList(plot: PlotDataProps | undefined): void;
   params_for_api: ParamsForApiProps;
   size: SizeProps;
 }
 
 export const ZoomedOverlaidJSROOTPlot = ({
-  selected_plot_name,
+  selected_plot,
   removePlotFromList,
   params_for_api,
   size,
 }: ZoomedJSROOTPlotsProps) => {
   params_for_api.height = size.h;
   params_for_api.width = size.w;
-  params_for_api.plot_name = selected_plot_name;
+  params_for_api.plot_name = selected_plot.name;
+  params_for_api.folders_path = selected_plot.dir
 
   const { data } = useRequest(get_jroot_plot(params_for_api), {}, [
-    selected_plot_name,
+    selected_plot.name,
   ]);
 
   const overlaid_plots_runs_and_datasets: any[] = params_for_api?.overlay_plot
     ? params_for_api.overlay_plot.map((plot: TripleProps) => {
-        const copy: any = { ...params_for_api };
+      const copy: any = { ...params_for_api };
 
-        if (plot.dataset_name) {
-          copy.dataset_name = plot.dataset_name;
-        }
-        copy.run_number = plot.run_number;
-        const { data } = useRequest(get_jroot_plot(copy), {}, [
-          selected_plot_name,
-        ]);
-        return data;
-      })
+      if (plot.dataset_name) {
+        copy.dataset_name = plot.dataset_name;
+      }
+      copy.run_number = plot.run_number;
+      const { data } = useRequest(get_jroot_plot(copy), {}, [
+        selected_plot.name,
+      ]);
+      return data;
+    })
     : [];
 
   overlaid_plots_runs_and_datasets.push(data);
@@ -106,7 +108,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
     ) {
       //@ts-ignore
       JSROOT.redraw(
-        `${histogramParam}_${selected_plot_name}`,
+        `${histogramParam}_${selected_plot.name}`,
         //@ts-ignore
         JSROOT.parse(JSON.stringify(overlaidJSROOTPlot)),
         `${histogramParam}`
@@ -121,19 +123,19 @@ export const ZoomedOverlaidJSROOTPlot = ({
         width={params_for_api.width}
         isPlotSelected={true}
       >
-        <PlotNameCol>{selected_plot_name}</PlotNameCol>
+        <PlotNameCol>{selected_plot.name}</PlotNameCol>
         <Column>
-          <MinusIcon onClick={() => removePlotFromList(selected_plot_name)} />
+          <MinusIcon onClick={() => removePlotFromList(selected_plot)} />
         </Column>
         <ImageDiv
           style={{ display: params_for_api.normalize ? '' : 'none' }}
-          id={`hist_${selected_plot_name}`}
+          id={`hist_${selected_plot.name}`}
           width={size.w}
           height={size.h}
         />
         <ImageDiv
           style={{ display: params_for_api.normalize ? 'none' : '' }}
-          id={`nostack_${selected_plot_name}`}
+          id={`nostack_${selected_plot.name}`}
           width={size.w}
           height={size.h}
         />

@@ -3,6 +3,7 @@ import {
   DisplayFolderOrPlotComponentProps,
   SizeProps,
   CustomizeProps,
+  PlotDataProps,
 } from '../containers/display/interfaces';
 
 export const initialState: DisplayFolderOrPlotComponentProps = {
@@ -13,7 +14,7 @@ export const initialState: DisplayFolderOrPlotComponentProps = {
   normalize: true,
   overlay_plot: [],
   stats: true,
-  selected_plots_name: [],
+  selected_plots: [],
   jsroot_mode: false,
   zoomedPlotSize: { h: sizes.fill.size.h, w: sizes.fill.size.w },
   customizeProps: {
@@ -140,7 +141,7 @@ export const setOverlay = (overlay: string) => (dispatch: any) =>
     payload: overlay,
   });
 
-export const setSelectedPlotsName = (selected_plots_name: string[]) => (
+export const setSelectedPlotsName = (selected_plots_name: PlotDataProps[]) => (
   dispatch: any
 ) => {
   return dispatch({
@@ -149,21 +150,22 @@ export const setSelectedPlotsName = (selected_plots_name: string[]) => (
   });
 };
 
-export const removePlotFromList = (plot_name: string) => (
-  state: any,
+export const removePlotFromList = (plot_to_remove: PlotDataProps) => (
+  state: DisplayFolderOrPlotComponentProps,
   dispatch: any
 ) => {
-  const copy = [...state.selected_plots_name];
-  const filtered = copy.filter((plot: string) => plot !== plot_name);
+  const copy: PlotDataProps[] = [...state.selected_plots];
+  const filtered: PlotDataProps[] = copy.filter((plot: PlotDataProps) => plot.name !== plot_to_remove.name);
   setSelectedPlotsName(filtered)(dispatch);
 };
 
-export const addPlotToList = (plot_name: string) => (
-  state: any,
+export const addPlotToList = (plot: PlotDataProps) => (
+  state: DisplayFolderOrPlotComponentProps,
   dispatch: any
 ) => {
-  const copy = [...state.selected_plots_name];
-  copy.push(plot_name);
+  const copy = [...state.selected_plots];
+  copy.push(plot);
+  console.log(copy)
   setSelectedPlotsName(copy)(dispatch);
 };
 
@@ -203,29 +205,13 @@ export function displayFolderOrPlotComponentReducer(
     case FOLDERS_OR_PLOTS_REDUCER.SET_OVERLAY:
       return { ...state, overlay: action.payload };
     case FOLDERS_OR_PLOTS_REDUCER.SET_SELECTED_PLOTS_NAMES:
-      return { ...state, selected_plots_name: action.payload };
+      return { ...state, selected_plots: action.payload };
     case FOLDERS_OR_PLOTS_REDUCER.SET_STATS:
       return { ...state, stats: action.payload };
     case FOLDERS_OR_PLOTS_REDUCER.JSROOT_MODE:
       return { ...state, jsroot_mode: action.payload };
     case FOLDERS_OR_PLOTS_REDUCER.SET_ZOOMED_PLOT_SIZE:
       return { ...state, zoomedPlotSize: action.payload };
-    case FOLDERS_OR_PLOTS_REDUCER.SET_X_TYPE:
-      return { ...state, xtype: action.payload };
-    case FOLDERS_OR_PLOTS_REDUCER.SET_X_MIN:
-      return { ...state, xmin: action.payload };
-    case FOLDERS_OR_PLOTS_REDUCER.SET_X_MAX:
-      return { ...state, xmax: action.payload };
-    case FOLDERS_OR_PLOTS_REDUCER.SET_Y_TYPE:
-      return { ...state, ytype: action.payload };
-    case FOLDERS_OR_PLOTS_REDUCER.SET_Y_MIN:
-      return { ...state, ymin: action.payload };
-    case FOLDERS_OR_PLOTS_REDUCER.SET_Y_MAX:
-      return { ...state, ymax: action.payload };
-    case FOLDERS_OR_PLOTS_REDUCER.SET_DRAW_OPTS:
-      return { ...state, drawopts: action.payload };
-    case FOLDERS_OR_PLOTS_REDUCER.SET_WITH_REFERENCE:
-      return { ...state, withref: action.payload };
     case FOLDERS_OR_PLOTS_REDUCER.SET_PARAMS_FOR_CUSTOMIZE:
       return { ...state, customizeProps: action.payload };
     default:
