@@ -1,7 +1,7 @@
 # New DQM GUI 
 
 ----
-##Know bugs list
+## Know bugs list
 
 1. **Zoomed plot not visible when the window is scrolled down.**
  * It happens when users get a list of plots and select at least one of them. After that, the window is separated on two sides. Users scroll down to see the end of a folder, **the selected plot goes out of view**.
