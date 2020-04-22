@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   ParamsForApiProps,
   OptionProps,
@@ -6,7 +6,6 @@ import {
 } from '../../../containers/display/interfaces';
 import { Form, Col, Select } from 'antd';
 
-import { DropdownMenu } from '../../menu';
 import { withReference } from '../../constants';
 import {
   StyledInput,
@@ -26,11 +25,7 @@ interface CostumizeTableProps {
 }
 
 export const CostumizeTable = ({ dispatch }: CostumizeTableProps) => {
-  const [reference, setReference] = useState<OptionProps>(withReference[0]);
-  const [form] = Form.useForm();
-
   const referenceCopy: OptionProps[] = [...withReference];
-  referenceCopy.map((option: OptionProps) => (option.action = setReference));
 
   const layout = {
     labelCol: { span: 8 },
@@ -48,6 +43,7 @@ export const CostumizeTable = ({ dispatch }: CostumizeTableProps) => {
       initialValues={{ remember: true }}
       onFinish={(params) => {
         const cleanedParams = cleanDeep(params);
+        console.log(cleanedParams)
         setParamsForCustomize(cleanedParams as CustomizeProps)(dispatch);
       }}
     >
@@ -59,14 +55,12 @@ export const CostumizeTable = ({ dispatch }: CostumizeTableProps) => {
                 <td style={{ width: '30%', paddingBottom: '8px' }}>
                   <StyledFormItem label="Reference" name="withref">
                     <StyledSelect
-                      allowClear
                       defaultValue={referenceCopy[0].value}
                     >
                       {referenceCopy.map((option: OptionProps) => (
                         <Option value={option.value}>{option.label}</Option>
                       ))}
                     </StyledSelect>
-                    {/* <DropdownMenu title="Reference" options={referenceCopy} /> */}
                   </StyledFormItem>
                 </td>
                 <td style={{ width: '30%', paddingBottom: '8px' }}>

@@ -41,7 +41,7 @@ export const StyledRowImages = styled(Row)`
   justify-content: center;
 `;
 
-export const StyledPlotRow = styled(Row)<{width: number, minHeight: number, isPlotSelected: boolean}>`
+export const StyledPlotRow = styled(Row) <{ width: number, minHeight: number, isPlotSelected: boolean, noPointer?: boolean }>`
   display: flex;
   justify-content: space-between;
   width: ${(props) => props?.width && props.width}px;
@@ -51,7 +51,7 @@ export const StyledPlotRow = styled(Row)<{width: number, minHeight: number, isPl
       ? `${theme.colors.secondary.light}`
       : `${theme.colors.primary.light}`};
   ${theme.colors.primary.main};
-  cursor: pointer;
+  cursor: ${(props) => props?.noPointer ? '' : 'pointer'};
 `;
 export const PlotNameCol = styled(Col)`
   width: 70%;
@@ -63,7 +63,7 @@ export const Column = styled(Col)`
   padding: ${theme.space.spaceBetween} calc(${theme.space.spaceBetween}*2)
     ${theme.space.spaceBetween} ${theme.space.spaceBetween};
 `;
-export const Wrapper = styled.div<{zoomed?: any, noBorder?: boolean}>`
+export const Wrapper = styled.div<{ zoomed?: any, noBorder?: boolean }>`
   width: ${(props) => (props?.zoomed ? '50%' : '100%')};
   border-left: ${(props) => (props?.noBorder ? '' : '1px solid')};
   align-items: center;
@@ -97,7 +97,7 @@ export const StyledAForPath = styled.a`
   padding: 0 calc(${theme.space.spaceBetween}*2) 0
     calc(${theme.space.spaceBetween}*2);
 `;
-export const ImageDiv = styled.div<{width: number, height: number}>`
+export const ImageDiv = styled.div<{ width: number, height: number }>`
   width: ${(props) => (props.width ? props.width : '')}px;
   height: ${(props) => (props.height ? props.height : '')}px;
 `;

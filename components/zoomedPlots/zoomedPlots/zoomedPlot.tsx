@@ -41,6 +41,7 @@ export const ZoomedPlot = ({
         minHeight={params_for_api.height}
         width={params_for_api.width}
         isPlotSelected={true}
+        noPointer={true}
       >
         <PlotNameCol>{selected_plot.name}</PlotNameCol>
         <Column>
