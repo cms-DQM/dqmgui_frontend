@@ -4,6 +4,7 @@ import { get_overlaied_plots_urls } from '../../../config/config';
 import {
   ParamsForApiProps,
   SizeProps,
+  PlotDataProps,
 } from '../../../containers/display/interfaces';
 import { get_plot_source } from './utils';
 import {
@@ -16,21 +17,21 @@ import {
 } from '../../../containers/display/styledComponents';
 
 interface ZoomedPlotsProps {
-  selected_plot_name: string;
-  removePlotFromList(plot_name: string | undefined): void;
+  selected_plot: PlotDataProps;
+  removePlotFromList(plot_name: PlotDataProps | undefined): void;
   params_for_api: ParamsForApiProps;
   size: SizeProps;
 }
 
 export const ZoomedOverlaidPlot = ({
-  selected_plot_name,
+  selected_plot,
   removePlotFromList,
   params_for_api,
   size,
 }: ZoomedPlotsProps) => {
   params_for_api.height = size.h;
   params_for_api.width = size.w;
-  params_for_api.plot_name = selected_plot_name;
+  params_for_api.plot_name = selected_plot.name;
 
   const overlaid_plots_urls = get_overlaied_plots_urls(params_for_api);
   const joined_overlaid_plots_urls = overlaid_plots_urls.join('');
@@ -45,11 +46,11 @@ export const ZoomedOverlaidPlot = ({
         width={params_for_api.width}
         isPlotSelected={true}
       >
-        <PlotNameCol>{selected_plot_name}</PlotNameCol>
+        <PlotNameCol>{selected_plot.name}</PlotNameCol>
         <Column>
-          <MinusIcon onClick={() => removePlotFromList(selected_plot_name)} />
+          <MinusIcon onClick={() => removePlotFromList(selected_plot)} />
         </Column>
-        <ImageDiv id={selected_plot_name} width={size.w} height={size.h}>
+        <ImageDiv id={selected_plot.name} width={size.w} height={size.h}>
           <img
             src={source}
             style={{ width: `${size.w}`, height: `${size.h}` }}

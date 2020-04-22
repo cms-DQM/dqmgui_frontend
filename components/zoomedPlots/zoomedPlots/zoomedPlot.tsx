@@ -4,6 +4,7 @@ import { get_plot_url, root_url } from '../../../config/config';
 import {
   ParamsForApiProps,
   SizeProps,
+  PlotDataProps,
 } from '../../../containers/display/interfaces';
 import {
   StyledCol,
@@ -15,21 +16,22 @@ import {
 } from '../../../containers/display/styledComponents';
 
 interface ZoomedPlotsProps {
-  selected_plot_name: string;
-  removePlotFromList(plot_name: string | undefined): void;
+  selected_plot: PlotDataProps;
+  removePlotFromList(plot: PlotDataProps | undefined): void;
   params_for_api: ParamsForApiProps;
   size: SizeProps;
 }
 
 export const ZoomedPlot = ({
-  selected_plot_name,
+  selected_plot,
   removePlotFromList,
   params_for_api,
   size,
 }: ZoomedPlotsProps) => {
-  params_for_api.plot_name = selected_plot_name;
+  params_for_api.plot_name = selected_plot.name;
   params_for_api.height = size.h;
   params_for_api.width = size.w;
+  params_for_api.folders_path = selected_plot.dir;
   const plot_url = get_plot_url(params_for_api);
   const source = `${root_url}/${plot_url}`;
 
@@ -40,11 +42,11 @@ export const ZoomedPlot = ({
         width={params_for_api.width}
         isPlotSelected={true}
       >
-        <PlotNameCol>{selected_plot_name}</PlotNameCol>
+        <PlotNameCol>{selected_plot.name}</PlotNameCol>
         <Column>
-          <MinusIcon onClick={() => removePlotFromList(selected_plot_name)} />
+          <MinusIcon onClick={() => removePlotFromList(selected_plot)} />
         </Column>
-        <ImageDiv id={selected_plot_name} width={size.w} height={size.h}>
+        <ImageDiv id={selected_plot.name} width={size.w} height={size.h}>
           <img
             src={source}
             style={{ width: `${size.w}`, height: `${size.h}` }}
