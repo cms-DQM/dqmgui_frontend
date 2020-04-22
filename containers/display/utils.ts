@@ -14,17 +14,11 @@ export const isPlotSelected = (selected_plots: string[], plot: string) => {
 
 export const filterDirestoriesByWorkspace = (directories: any, workspaceName: string) => {
   const filtered = worspaces.map((workspace: any) => {
-    const subworkspaces = workspace.workspaces
-
-    const folders = subworkspaces.map((subworkspace: any) => {
-      if (subworkspace.label === workspaceName) {
-        const folder = subworkspace.foldersPath
-        return folder
-      }
-    })
-    return cleanDeep(folders)
+    const folders = workspace.workspaces[workspaceName] && workspace.workspaces[workspaceName].foldersPath
+    if (folders) {
+      const matching = folders.filter((folder: string) => directories.includes(folder))
+      return matching
+    }
   })
-  const cleaned = cleanDeep(filtered)[0]
-  console.log(cleaned)
-  return filtered
+  return(cleanDeep(filtered)[0])
 }

@@ -25,15 +25,19 @@ export const Workspaces = ({ visible, dispatch }: WorkspacesProps) => {
       <Tabs defaultActiveKey="0">
         {
           worspacesNames.map((name: string, index: number) => {
-            const subWorkspaces = worspaces[index].workspaces
+            const subWorkspaces: any = worspaces[index].workspaces
+            const subWorkspacesNames = Object.keys(subWorkspaces)
             return (<TabPane tab={`${name}`} key={`${index}`}>
               <div>
                 {
                   //@ts-ignore
-                  subWorkspaces.map((subWorkspace: any) =>
+                  subWorkspacesNames.map((name: any) =>
                     <div style={{ display: 'flex', justifyContent: "center", cursor: 'pointer' }}>
-                      <div style={{ fontWeight: 'bold' }} onClick={()=> setWorkspace(subWorkspace)(dispatch)}>
-                        {subWorkspace.label}
+                      <div style={{ fontWeight: 'bold' }} onClick={() => {
+                        setWorkspace(subWorkspaces[name])(dispatch)
+                        toggleWorkspaceMenu(!visible)(dispatch)
+                      }}>
+                        {subWorkspaces[name].label}
                       </div >
                     </div>)
                 }
