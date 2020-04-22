@@ -25,6 +25,11 @@ export const StyledCol = styled(Col)`
   padding: calc(${theme.space.spaceBetween} * 2);
   width: fit-content;
 `;
+
+export const OnSidePlotsWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+`
 export const StyledRow = styled(Row)`
   padding-top: calc(${theme.space.spaceBetween}*2);
   display: flex;
