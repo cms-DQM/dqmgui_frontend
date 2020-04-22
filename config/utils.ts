@@ -1,5 +1,4 @@
 export const get_customize_params = (params = {} as any) => {
-  console.log(params);
   const xtype = params.xtype ? `xtype=${params.xtype};` : '';
   const xmin = params.xmin ? `xmin=${params.xmin};` : '';
   const xmax = params.xmax ? `xmax=${params.xmax};` : '';
@@ -15,7 +14,6 @@ export const get_customize_params = (params = {} as any) => {
   const drawopts = params.drawopts ? `drawopts=${params.drawopts};` : '';
   const withref = params.withref ? `withref=${params.withref};` : '';
   const parameters = `${xtype}${xmin}${xmax}${ytype}${ymin}${ymax}${ztype}${zmin}${zmax}${drawopts}${withref}`;
-  console.log(params.xmax);
 
   return parameters;
 };

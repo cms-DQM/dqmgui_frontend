@@ -36,7 +36,7 @@ export const ZoomedPlots = ({
   }, []);
 
   params_for_api.customizeProps = customizeProps;
-  console.log(params_for_api);
+
   return (
     <>
       <ViewDetailsMenu dispatch={dispatch} jsroot_mode={jsroot_mode} />

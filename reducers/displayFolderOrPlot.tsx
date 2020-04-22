@@ -100,7 +100,6 @@ export const setWithRefs = (value: string | undefined) => (dispatch: any) =>
 export const setParamsForCustomize = (params: CustomizeProps) => (
   dispatch: any
 ) => {
-  console.log(params);
   return dispatch({
     type: FOLDERS_OR_PLOTS_REDUCER.SET_PARAMS_FOR_CUSTOMIZE,
     payload: params,
@@ -144,7 +143,6 @@ export const setOverlay = (overlay: string) => (dispatch: any) =>
 export const setSelectedPlotsName = (selected_plots_name: string[]) => (
   dispatch: any
 ) => {
-  console.log(selected_plots_name);
   return dispatch({
     type: FOLDERS_OR_PLOTS_REDUCER.SET_SELECTED_PLOTS_NAMES,
     payload: selected_plots_name,

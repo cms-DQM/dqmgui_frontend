@@ -30,7 +30,6 @@ export const Plot = ({
   dispatch,
   isPlotSelected,
   removePlotFromList,
-  jsroot_mode,
 }: PlotProps) => {
   params_for_api.plot_name = plot_name;
   const plot_url = get_plot_url(params_for_api);
