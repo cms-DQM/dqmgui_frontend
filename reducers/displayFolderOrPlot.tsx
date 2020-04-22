@@ -165,7 +165,6 @@ export const addPlotToList = (plot: PlotDataProps) => (
 ) => {
   const copy = [...state.selected_plots];
   copy.push(plot);
-  console.log(copy)
   setSelectedPlotsName(copy)(dispatch);
 };
 

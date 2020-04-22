@@ -13,6 +13,7 @@ import {
   Column,
   PlusIcon,
   MinusIcon,
+  OnSidePlotsWrapper,
 } from '../styledComponents';
 import { getOnSideOverlaidPlots } from './utils';
 
@@ -38,7 +39,7 @@ export const OnSideOverlaidPlots = ({
   const onsidePlotsURLs: string[] = getOnSideOverlaidPlots(params_for_api)
 
   return (
-    <>
+    <OnSidePlotsWrapper>
       {onsidePlotsURLs.map((url: string) => {
         const sourceForOnePlot = `${root_url}/${url}`;
         return (
@@ -69,6 +70,6 @@ export const OnSideOverlaidPlots = ({
           </StyledCol>
         );
       })}
-    </>
+    </OnSidePlotsWrapper>
   );
 };
