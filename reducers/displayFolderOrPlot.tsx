@@ -38,66 +38,6 @@ export const setErrorBars = (errBars: boolean) => (dispatch: any) =>
     payload: errBars,
   });
 
-export const setXType = (type: string | undefined) => (dispatch: any) =>
-  dispatch({
-    type: FOLDERS_OR_PLOTS_REDUCER.SET_X_TYPE,
-    payload: type,
-  });
-export const setXMin = (value: number | undefined) => (dispatch: any) =>
-  dispatch({
-    type: FOLDERS_OR_PLOTS_REDUCER.SET_X_MIN,
-    payload: value,
-  });
-export const setXMax = (value: number | undefined) => (dispatch: any) =>
-  dispatch({
-    type: FOLDERS_OR_PLOTS_REDUCER.SET_X_MAX,
-    payload: value,
-  });
-
-export const setYType = (type: string | undefined) => (dispatch: any) =>
-  dispatch({
-    type: FOLDERS_OR_PLOTS_REDUCER.SET_Y_TYPE,
-    payload: type,
-  });
-export const setYMin = (value: number | undefined) => (dispatch: any) =>
-  dispatch({
-    type: FOLDERS_OR_PLOTS_REDUCER.SET_Y_MIN,
-    payload: value,
-  });
-export const setYMax = (value: number | undefined) => (dispatch: any) =>
-  dispatch({
-    type: FOLDERS_OR_PLOTS_REDUCER.SET_Y_MAX,
-    payload: value,
-  });
-
-export const setZType = (type: string | undefined) => (dispatch: any) =>
-  dispatch({
-    type: FOLDERS_OR_PLOTS_REDUCER.SET_Z_TYPE,
-    payload: type,
-  });
-export const setZMin = (value: number | undefined) => (dispatch: any) =>
-  dispatch({
-    type: FOLDERS_OR_PLOTS_REDUCER.SET_Z_MIN,
-    payload: value,
-  });
-export const setZMax = (value: number | undefined) => (dispatch: any) =>
-  dispatch({
-    type: FOLDERS_OR_PLOTS_REDUCER.SET_Z_MAX,
-    payload: value,
-  });
-
-export const setDrawOpts = (value: string | undefined) => (dispatch: any) =>
-  dispatch({
-    type: FOLDERS_OR_PLOTS_REDUCER.SET_DRAW_OPTS,
-    payload: value,
-  });
-
-export const setWithRefs = (value: string | undefined) => (dispatch: any) =>
-  dispatch({
-    type: FOLDERS_OR_PLOTS_REDUCER.SET_WITH_REFERENCE,
-    payload: value,
-  });
-
 export const setParamsForCustomize = (params: CustomizeProps) => (
   dispatch: any
 ) => {

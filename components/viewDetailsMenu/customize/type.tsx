@@ -28,12 +28,11 @@ export const Type = ({ type }: TypesProps) => {
     <tr>
       <td>
         <StyledFormItem name={`${type}type`} label={`${type} type`}>
-          <StyledSelect allowClear defaultValue={xyzTypes[0].value}>
+          <StyledSelect  defaultValue={xyzTypes[0].value}>
             {xyzTypes.map((option: OptionProps) => (
               <Option value={option.value}>{option.label}</Option>
             ))}
           </StyledSelect>
-          {/* <DropdownMenu title="Reference" options={referenceCopy} /> */}
         </StyledFormItem>
       </td>
       <td>

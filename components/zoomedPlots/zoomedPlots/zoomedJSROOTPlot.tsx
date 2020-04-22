@@ -43,7 +43,12 @@ export const ZoomedJSROOTPlot = ({
 
   return (
     <StyledCol>
-      <StyledPlotRow minHeight={size.h} width={size.w} isPlotSelected={true}>
+      <StyledPlotRow 
+      minHeight={size.h}
+       width={size.w} 
+       isPlotSelected={true}
+       noPointer={true}
+       >
         <PlotNameCol>{selected_plot.name}</PlotNameCol>
         <Column>
           <MinusIcon onClick={() => removePlotFromList(selected_plot)} />
