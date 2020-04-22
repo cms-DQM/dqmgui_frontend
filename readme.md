@@ -22,4 +22,5 @@
 
 8. **When plots are overlaid on side, them have to be display in a row, not in column**
 
+9. **Overlaid plots options are not included in url**
 ----
