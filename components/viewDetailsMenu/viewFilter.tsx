@@ -6,7 +6,7 @@ import {
   setNormalize,
   setStats,
 } from '../../reducers/displayFolderOrPlot';
-import { CheckboxesWrapper } from './styledComponents';
+
 interface ViewFilerProps {
   dispatch(obj: any): any;
   state: any;
