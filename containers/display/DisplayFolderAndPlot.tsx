@@ -130,18 +130,18 @@ const DiplayFolder: FC<FolderProps> = ({
         run_number={run_number}
         dataset_name={dataset_name}
       />
-      {doesPlotExists(contents).length > 0 && (
-        <ViewDetailsMenu
-          dispatch={dispatch}
-          state={state}
-          overlay_plot={overlay_plot}
-        />
-      )}
       <DivWrapper selectedPlots={selected_plots.length > 0}>
         <Wrapper
           zoomed={selected_plots.length > 0}
           notZoomedPlot={true}
         >
+          {doesPlotExists(contents).length > 0 && (
+            <ViewDetailsMenu
+              dispatch={dispatch}
+              state={state}
+              overlay_plot={overlay_plot}
+            />
+          )}
           {isLoading ? (
             <SpinnerWrapper>
               <Spinner />
@@ -172,8 +172,8 @@ const DiplayFolder: FC<FolderProps> = ({
                     params_for_api.folders_path = plot.dir
 
                     return (
-                      <>  
-                      {overlay_plot.length > 0 ? (
+                      <>
+                        {overlay_plot.length > 0 ? (
                           <OverlaidPlot
                             plot={plot}
                             params_for_api={params_for_api}

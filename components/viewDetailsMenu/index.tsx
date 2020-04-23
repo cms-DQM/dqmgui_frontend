@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Collapse } from 'antd';
+import { Collapse, Row, Col, Typography } from 'antd';
 
 import { Reference } from './reference/reference';
 import { ViewFiler } from './viewFilter';
@@ -10,7 +10,9 @@ import {
   setSelectedPlotsName,
 } from '../../reducers/displayFolderOrPlot';
 import { sizes } from '../constants';
-import { StyledCollapse } from './styledComponents';
+import { StyledCollapse, CheckboxesWrapper } from './styledComponents';
+import { StyledDiv } from '../styledComponents';
+const { Title } = Typography;
 
 const { Panel } = Collapse;
 
@@ -30,17 +32,31 @@ export const ViewDetailsMenu = ({ dispatch, state }: ViewDetailsMenuProps) => {
 
   return (
     <StyledCollapse>
-      <Panel header="Overlay Options" key="1">
-        <Reference state_global={state} dispatch_gloabl={dispatch} />
-      </Panel>
-      <Panel header="Dispay Options" key="2">
-        <ViewFiler state={state} dispatch={dispatch} />
-        <SizeChanger
-          dispatch={dispatch}
-          setSize={setSize}
-          currentValue={sizes.medium.size}
-        />
-      </Panel>
-    </StyledCollapse>
+      <Panel header="Options" key="1">
+        <Row>
+          <Col style={{borderRight: '1px solid'}}>
+            <CheckboxesWrapper>
+              <Title level={3}>Overlay options</Title>
+            </CheckboxesWrapper>
+            <Reference state_global={state} dispatch_gloabl={dispatch} />
+          </Col>
+          <Col>
+            <CheckboxesWrapper>
+              <Title level={3}>Display options</Title>
+            </CheckboxesWrapper>
+            <CheckboxesWrapper>
+              <ViewFiler state={state} dispatch={dispatch} />
+            </CheckboxesWrapper>
+            <CheckboxesWrapper>
+              <SizeChanger
+                dispatch={dispatch}
+                setSize={setSize}
+                currentValue={sizes.medium.size}
+              />
+            </CheckboxesWrapper>
+          </Col >
+        </Row >
+      </Panel >
+    </StyledCollapse >
   );
 };

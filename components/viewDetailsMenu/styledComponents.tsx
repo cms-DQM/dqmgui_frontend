@@ -29,11 +29,6 @@ export const StyledModal = styled(Modal)`
   }
 `;
 
-export const FirstSectionWrapper = styled.div`
-  display: flex;
-  width: 50%;
-`;
-
 export const FullWidthRow = styled(Row)`
   width: 100%;
   padding: ${theme.space.spaceBetween};
