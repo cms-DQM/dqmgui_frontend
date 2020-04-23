@@ -48,33 +48,26 @@ export const CostumizeTable = ({ dispatch }: CostumizeTableProps) => {
       }}
     >
       <FullWidthRow>
-        <Col span={24}>
-          <table style={{ width: '100%' }}>
-            <tbody>
-              <tr>
-                <td style={{ width: '30%', paddingBottom: '8px' }}>
-                  <StyledFormItem label="Reference" name="withref">
-                    <StyledSelect
-                      defaultValue={referenceCopy[0].value}
-                    >
-                      {referenceCopy.map((option: OptionProps) => (
-                        <Option value={option.value}>{option.label}</Option>
-                      ))}
-                    </StyledSelect>
-                  </StyledFormItem>
-                </td>
-                <td style={{ width: '30%', paddingBottom: '8px' }}>
-                  <StyledFormItem label="Draw options" name="drawopts">
-                    <StyledInput />
-                  </StyledFormItem>
-                </td>
-              </tr>
-              {types.map((type) => (
-                <Type type={type} />
+        <Col span={8}>
+          <StyledFormItem label="Reference" name="withref">
+            <StyledSelect
+              defaultValue={referenceCopy[0].value}>
+              {referenceCopy.map((option: OptionProps) => (
+                <Option value={option.value}>{option.label}</Option>
               ))}
-            </tbody>
-          </table>
+            </StyledSelect>
+          </StyledFormItem>
         </Col>
+        <Col span={8}>
+          <StyledFormItem label="Draw options" name="drawopts">
+            <StyledInput />
+          </StyledFormItem>
+        </Col>
+      </FullWidthRow>
+      <FullWidthRow>
+        {types.map((type) => (
+          <Type type={type} />
+        ))}
       </FullWidthRow>
       <FullWidthRow justify="end">
         <Col>
