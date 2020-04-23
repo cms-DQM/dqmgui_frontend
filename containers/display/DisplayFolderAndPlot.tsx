@@ -20,7 +20,6 @@ import {
   DirecotryWrapper,
   StyledA,
   Wrapper,
-  StyledRowImages,
   DivWrapper,
 } from './styledComponents';
 import { FolderPath } from './folderPath';
@@ -138,14 +137,10 @@ const DiplayFolder: FC<FolderProps> = ({
           overlay_plot={overlay_plot}
         />
       )}
-      {/* <div 
-      style={{ height: '100%', overflow: 'scroll', display: 'flex', flexWrap: 'wrap' }}
-      > */}
-      <div style={{ height: '100%', overflow: selected_plots.length ? 'hidden' : 'scroll', display: 'flex' }}>
+      <DivWrapper selectedPlots={selected_plots.length > 0}>
         <Wrapper
-          zoomed={selected_plots.length}
-          noBorder
-          noScroll={selected_plots.length > 0 ? false : true}
+          zoomed={selected_plots.length > 0}
+          notZoomedPlot={true}
         >
           {isLoading ? (
             <SpinnerWrapper>
@@ -177,7 +172,6 @@ const DiplayFolder: FC<FolderProps> = ({
                     params_for_api.folders_path = plot.dir
 
                     return (
-                      // <Col key={plot?.name} style={{ display: 'felx', justifyContent: 'center', flexWrap: 'wrap' }}>
                       <>  
                       {overlay_plot.length > 0 ? (
                           <OverlaidPlot
@@ -205,7 +199,6 @@ const DiplayFolder: FC<FolderProps> = ({
                               )}
                             />
                           )}
-                      {/* // </Col> */}
                       </>
                     )
                   }
@@ -226,7 +219,7 @@ const DiplayFolder: FC<FolderProps> = ({
             />
           </Wrapper>
         )}
-      </div>
+      </DivWrapper>
     </>
   );
 };

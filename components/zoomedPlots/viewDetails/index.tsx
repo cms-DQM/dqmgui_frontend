@@ -3,6 +3,7 @@ import { Collapse } from 'antd';
 
 import { DisplayOptions } from './displayOptions';
 import { CostumizeTable } from '../../viewDetailsMenu/customize';
+import { StyledCollapse } from '../../viewDetailsMenu/styledComponents';
 
 const { Panel } = Collapse;
 
@@ -16,13 +17,13 @@ export const ViewDetailsMenu = ({
   jsroot_mode,
 }: ViewDetailsMenuProps) => {
   return (
-    <Collapse defaultActiveKey={['1']} style={{width: '100%'}}>
+    <StyledCollapse>
       <Panel header="Display Options" key="1">
         <DisplayOptions dispatch={dispatch} jsroot_mode={jsroot_mode} />
       </Panel>
       <Panel header="Customize" key="2" disabled={jsroot_mode}>
         {!jsroot_mode && <CostumizeTable dispatch={dispatch} />}
       </Panel>
-    </Collapse>
+    </StyledCollapse>
   );
 };

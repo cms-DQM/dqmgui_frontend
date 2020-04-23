@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Collapse, Switch } from 'antd';
+import { Collapse } from 'antd';
 
 import { Reference } from './reference/reference';
 import { ViewFiler } from './viewFilter';
@@ -10,6 +10,7 @@ import {
   setSelectedPlotsName,
 } from '../../reducers/displayFolderOrPlot';
 import { sizes } from '../constants';
+import { StyledCollapse } from './styledComponents';
 
 const { Panel } = Collapse;
 
@@ -28,7 +29,7 @@ export const ViewDetailsMenu = ({ dispatch, state }: ViewDetailsMenuProps) => {
   }, []);
 
   return (
-    <Collapse defaultActiveKey={['1']} style={{width: '100%'}}>
+    <StyledCollapse>
       <Panel header="Overlay Options" key="1">
         <Reference state_global={state} dispatch_gloabl={dispatch} />
       </Panel>
@@ -40,9 +41,6 @@ export const ViewDetailsMenu = ({ dispatch, state }: ViewDetailsMenuProps) => {
           currentValue={sizes.medium.size}
         />
       </Panel>
-      {/* <Panel header="Customize" key="3">
-          <CostumizeTable/>
-        </Panel> */}
-    </Collapse>
+    </StyledCollapse>
   );
 };
