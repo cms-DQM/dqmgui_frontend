@@ -20,39 +20,51 @@ import {
   ChartIcon,
 } from '../containers/search/styledComponents';
 import { FolderPathQuery } from '../containers/display/interfaces';
+import { useValidateQuery } from '../hooks/useValidateQuery';
+import { Alert } from 'antd';
+
+const navigationHandler = (
+  search_by_run_number: number,
+  search_by_dataset_name: string
+) => {
+  Router.replace({
+    pathname: '/',
+    query: {
+      search_run_number: search_by_run_number,
+      search_dataset_name: search_by_dataset_name,
+    },
+  });
+};
+
+const serchResultsHandler = (run: number, dataset: string) => {
+  Router.replace({
+    pathname: '/',
+    query: {
+      run_number: run,
+      dataset_name: dataset,
+    },
+  });
+};
 
 const Index: NextPage<FolderPathQuery> = () => {
-  const [run_number, setRunNumber] = useState('');
-  const [dataset_name, setDatasetName] = useState('');
-  const router = useRouter() 
-  const query: any = router.query
+  // const [run_number, setRunNumber] = useState('');
+  // const [dataset_name, setDatasetName] = useState('');
+  const router = useRouter();
+  const {
+    query: {
+      run_number,
+      dataset_name,
+      folder_path,
+      search_run_number,
+      search_dataset_name,
+    },
+    validation_errors,
+  } = useValidateQuery(router.query);
+
   const { results, results_grouped, searching, isLoading } = useSearch(
-    query.search_run_number,
-    query.search_dataset_name
+    search_run_number,
+    search_dataset_name
   );
-
-  const navigationHandler = (
-    search_by_run_number: number,
-    search_by_dataset_name: string
-  ) => {
-    Router.replace({
-      pathname: '/',
-      query: {
-        search_run_number: search_by_run_number,
-        search_dataset_name: search_by_dataset_name,
-      },
-    });
-  };
-
-  const serchResultsHandler = (run: number, dataset: string) => {
-    Router.replace({
-      pathname: '/',
-      query: {
-        run_number: run,
-        dataset_name: dataset,
-      },
-    });
-  };
 
   return (
     <div>
@@ -66,17 +78,29 @@ const Index: NextPage<FolderPathQuery> = () => {
       <StyledLayout>
         <StyledHeader>
           <Nav
+            initial_search_run_number={search_run_number}
+            initial_search_dataset_name={search_dataset_name}
             handler={navigationHandler}
-            setRunNumber={setRunNumber}
-            setDatasetName={setDatasetName}
           />
         </StyledHeader>
         <StyledContent>
-          {query.run_number && query.dataset_name ? (
+          {validation_errors.length > 0 ? (
+            <div>
+              {validation_errors.map((error) => (
+                <Alert
+                  message="Error in the URL query"
+                  description={error}
+                  type="error"
+                  showIcon
+                />
+              ))}
+            </div>
+          ) : run_number && dataset_name ? (
+            // If a user already has a run_number and dataset_name, he is not searching nor is he in the homepage, he is
             <DiplayFolders
-              run_number={query.run_number}
-              dataset_name={query.dataset_name}
-              folder_path={query.folder_path || ''}
+              run_number={run_number}
+              dataset_name={dataset_name}
+              folder_path={folder_path || ''}
             />
           ) : searching ? (
             <SearchResults
