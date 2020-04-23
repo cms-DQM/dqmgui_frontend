@@ -64,7 +64,8 @@ export const Column = styled(Col)`
     ${theme.space.spaceBetween} ${theme.space.spaceBetween};
 `;
 export const Wrapper = styled.div<{ zoomed?: any, notZoomedPlot?: boolean, noScroll?: boolean }>`
-  width: ${(props) => (props?.zoomed ? '50%' : '100%')};
+  max-width: ${(props) => (props?.zoomed && props?.notZoomedPlot  && '50%')};
+  width:  ${(props) => (!props?.notZoomedPlot && '100%')};
   border-left: ${(props) => (props?.notZoomedPlot ? '' : `4px solid ${theme.colors.common.lightGrey}`)};
   align-items: center;
   height: 100%;
