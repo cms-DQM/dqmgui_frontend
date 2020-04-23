@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { useRequest } from './useRequest';
 import _ from 'lodash';
 

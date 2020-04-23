@@ -33,6 +33,7 @@
     "axios": "^0.19.2",
     "babel-plugin-lodash": "^3.3.4",
     "babel-plugin-styled-components": "^1.10.7",
+    "class-validator": "^0.12.1",
     "clean-deep": "^3.3.0",
     "debounce": "^1.2.0",
     "emotion": "^10.0.27",
