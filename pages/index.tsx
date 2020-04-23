@@ -1,8 +1,6 @@
 import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import { useState } from 'react';
-import 'antd/dist/antd.css';
 import Router, { useRouter } from 'next/router';
 
 import Nav from '../components/Nav';
@@ -21,7 +19,7 @@ import {
 } from '../containers/search/styledComponents';
 import { FolderPathQuery } from '../containers/display/interfaces';
 import { useValidateQuery } from '../hooks/useValidateQuery';
-import { Alert } from 'antd';
+import { QueryValidationErrors } from '../components/queryValidationErrors';
 
 const navigationHandler = (
   search_by_run_number: number,
@@ -47,9 +45,8 @@ const serchResultsHandler = (run: number, dataset: string) => {
 };
 
 const Index: NextPage<FolderPathQuery> = () => {
-  // const [run_number, setRunNumber] = useState('');
-  // const [dataset_name, setDatasetName] = useState('');
-  const router = useRouter();
+  // We grab the query from the URL:
+  const { query } = useRouter();
   const {
     query: {
       run_number,
@@ -59,15 +56,15 @@ const Index: NextPage<FolderPathQuery> = () => {
       search_dataset_name,
     },
     validation_errors,
-  } = useValidateQuery(router.query);
+  } = useValidateQuery(query);
 
-  const { results, results_grouped, searching, isLoading } = useSearch(
+  const { results, results_grouped, searching, isLoading, error } = useSearch(
     search_run_number,
     search_dataset_name
   );
 
   return (
-    <div>
+    <>
       <Head>
         <script
           crossOrigin="anonymous"
@@ -81,20 +78,12 @@ const Index: NextPage<FolderPathQuery> = () => {
             initial_search_run_number={search_run_number}
             initial_search_dataset_name={search_dataset_name}
             handler={navigationHandler}
+            type="top"
           />
         </StyledHeader>
         <StyledContent>
           {validation_errors.length > 0 ? (
-            <div>
-              {validation_errors.map((error) => (
-                <Alert
-                  message="Error in the URL query"
-                  description={error}
-                  type="error"
-                  showIcon
-                />
-              ))}
-            </div>
+            <QueryValidationErrors validation_errors={validation_errors} />
           ) : run_number && dataset_name ? (
             // If a user already has a run_number and dataset_name, he is not searching nor is he in the homepage, he is
             <DiplayFolders
@@ -119,7 +108,7 @@ const Index: NextPage<FolderPathQuery> = () => {
           )}
         </StyledContent>
       </StyledLayout>
-    </div>
+    </>
   );
 };
 
