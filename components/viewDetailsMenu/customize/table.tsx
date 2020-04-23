@@ -4,7 +4,7 @@ import {
   OptionProps,
   CustomizeProps,
 } from '../../../containers/display/interfaces';
-import { Form, Col, Select } from 'antd';
+import { Form, Row, Col, Select } from 'antd';
 
 import { withReference } from '../../constants';
 import {
@@ -58,17 +58,19 @@ export const CostumizeTable = ({ dispatch }: CostumizeTableProps) => {
             </StyledSelect>
           </StyledFormItem>
         </Col>
+      </FullWidthRow>
+      <FullWidthRow>
         <Col span={8}>
           <StyledFormItem label="Draw options" name="drawopts">
-            <StyledInput />
+            <StyledInput style={{width: '100%'}} />
           </StyledFormItem>
         </Col>
       </FullWidthRow>
-      <FullWidthRow>
+      <Row>
         {types.map((type) => (
           <Type type={type} />
         ))}
-      </FullWidthRow>
+      </Row>
       <FullWidthRow justify="end">
         <Col>
           <StyledButton htmlType="submit">Submit</StyledButton>
