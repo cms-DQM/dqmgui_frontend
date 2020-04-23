@@ -10,6 +10,7 @@ export const StyledWrapper = styled.div`
   height: 100%;
   display: flex;
   // width: 100%;
+  overflow: scroll;
   justify-content: center;
 `;
 
