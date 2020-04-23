@@ -63,22 +63,22 @@ export const Column = styled(Col)`
   padding: ${theme.space.spaceBetween} calc(${theme.space.spaceBetween}*2)
     ${theme.space.spaceBetween} ${theme.space.spaceBetween};
 `;
-export const Wrapper = styled.div<{ zoomed?: any, noBorder?: boolean, noScroll?: boolean}>`
+export const Wrapper = styled.div<{ zoomed?: any, notZoomedPlot?: boolean, noScroll?: boolean }>`
   width: ${(props) => (props?.zoomed ? '50%' : '100%')};
-  border-left: ${(props) => (props?.noBorder ? '' : '1px solid')};
+  border-left: ${(props) => (props?.notZoomedPlot ? '' : '1px solid')};
   align-items: center;
   height: 100%;
   display: flex;
   flex-wrap: wrap;
-  overflow: ${(props)=> props.noScroll ? '' : 'scroll'};
+  overflow: scroll;
   align-items: start;
-  flex-flow: ${(props) => (props?.noBorder ? '' : 'column')};
-  justify-content:  ${(props) => (props?.noBorder ? 'center' : '')};
+  flex-flow: ${(props) => (props?.notZoomedPlot ? '' : 'column')};
+  justify-content: ${(props) => (props?.notZoomedPlot ? 'center' : '')};
   `;
-export const DivWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
+export const DivWrapper = styled.div<{selectedPlots: boolean}>` 
   height: 100%;
+  overflow: ${(props) => props.selectedPlots ? 'hidden' : 'scroll'};
+  display: flex; 
 `;
 export const MinusIcon = styled(MinusCircleFilled)`
   font-size: 1.5rem;

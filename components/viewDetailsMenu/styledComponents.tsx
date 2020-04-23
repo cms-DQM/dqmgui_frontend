@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Collapse } from 'antd';
 
 import { theme } from '../../styles/theme';
 import { Modal, Row, Select } from 'antd';
@@ -42,3 +43,8 @@ export const StyledSelect = styled(Select)`
     border-radius: 12px !important;
   }
 `;
+
+export const StyledCollapse = styled(Collapse)`
+  width: 100%;
+`
+
