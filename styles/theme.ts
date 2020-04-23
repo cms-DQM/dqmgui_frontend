@@ -15,6 +15,7 @@ export const theme = {
     common: {
       white: '#fff',
       black: '#000',
+      lightGrey: '#dfdfdf'
     },
   },
   fontFamily: {

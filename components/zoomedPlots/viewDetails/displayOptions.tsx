@@ -19,7 +19,7 @@ export const DisplayOptions = ({ dispatch }: DisplayOptionsProps) => {
       <SizeChanger
         dispatch={dispatch}
         setSize={setZoomedPlotSize}
-        currentValue={sizes.fill.size}
+        currentValue={sizes.large.size}
       />
       <div>
         <Switch

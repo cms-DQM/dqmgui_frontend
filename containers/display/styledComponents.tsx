@@ -65,7 +65,7 @@ export const Column = styled(Col)`
 `;
 export const Wrapper = styled.div<{ zoomed?: any, notZoomedPlot?: boolean, noScroll?: boolean }>`
   width: ${(props) => (props?.zoomed ? '50%' : '100%')};
-  border-left: ${(props) => (props?.notZoomedPlot ? '' : '1px solid')};
+  border-left: ${(props) => (props?.notZoomedPlot ? '' : `4px solid ${theme.colors.common.lightGrey}`)};
   align-items: center;
   height: 100%;
   display: flex;

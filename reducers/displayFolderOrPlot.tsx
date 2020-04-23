@@ -16,7 +16,7 @@ export const initialState: DisplayFolderOrPlotComponentProps = {
   stats: true,
   selected_plots: [],
   jsroot_mode: false,
-  zoomedPlotSize: { h: sizes.fill.size.h, w: sizes.fill.size.w },
+  zoomedPlotSize: { h: sizes.large.size.h, w: sizes.large.size.w },
   customizeProps: {
     xtype: '',
     xmin: NaN,
