@@ -15,8 +15,13 @@ export const theme = {
     common: {
       white: '#fff',
       black: '#000',
-      lightGrey: '#dfdfdf'
+      lightGrey: '#dfdfdf',
     },
+    notification:{
+      error: '#d01f1f',
+      success: '#41c12d',
+      warning: '#f08e13',
+    }
   },
   fontFamily: {
     sansSerif: '-apple-system, "Helvetica Neue", Arial, sans-serif',

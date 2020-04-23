@@ -64,17 +64,15 @@ export const Column = styled(Col)`
     ${theme.space.spaceBetween} ${theme.space.spaceBetween};
 `;
 export const Wrapper = styled.div<{ zoomed?: any, notZoomedPlot?: boolean, noScroll?: boolean }>`
-  max-width: ${(props) => (props?.zoomed && props?.notZoomedPlot  && '50%')};
-  width:  ${(props) => (!props?.notZoomedPlot && '100%')};
+  width: ${(props) => (props?.zoomed ? '50%' : '100%')};
   border-left: ${(props) => (props?.notZoomedPlot ? '' : `4px solid ${theme.colors.common.lightGrey}`)};
   align-items: center;
-  height: 100%;
+  height: ${(props) => (props?.zoomed ? '100%' : 'fit-content')};
   display: flex;
   flex-wrap: wrap;
-  overflow: scroll;
+  overflow: ${(props) => (props?.zoomed ? 'scroll' : '')};
   align-items: start;
   flex-flow: ${(props) => (props?.notZoomedPlot ? '' : 'column')};
-  justify-content: ${(props) => (props?.notZoomedPlot ? 'center' : '')};
   `;
 export const DivWrapper = styled.div<{selectedPlots: boolean}>` 
   height: 100%;
@@ -83,17 +81,11 @@ export const DivWrapper = styled.div<{selectedPlots: boolean}>`
 `;
 export const MinusIcon = styled(MinusCircleFilled)`
   font-size: 1.5rem;
-  color: ${theme.colors.common.white};
-  &:hover {
-    color: ${theme.colors.common.black};
-  }
+  color: ${theme.colors.notification.error};
 `;
 export const PlusIcon = styled(PlusCircleFilled)`
   font-size: 1.5rem;
-  color: ${theme.colors.common.white};
-  &:hover {
-    color: ${theme.colors.common.black};
-  }
+  color: ${theme.colors.notification.success};
 `;
 export const StyledDiv = styled.div`
   padding: ${theme.space.spaceBetween};
