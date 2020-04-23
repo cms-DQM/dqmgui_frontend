@@ -3,7 +3,7 @@ import { Collapse } from 'antd';
 
 import { theme } from '../../styles/theme';
 import { Modal, Row, Select } from 'antd';
-const { Option } = Select;
+
 export const CheckboxesWrapper = styled.div`
   padding: calc(${theme.space.spaceBetween}*2);
 `;
@@ -46,5 +46,8 @@ export const StyledSelect = styled(Select)`
 
 export const StyledCollapse = styled(Collapse)`
   width: 100%;
+  .ant-collapse-content > .ant-collapse-content-box{
+    padding: ${theme.space.spaceBetween}
+  }
 `
 
