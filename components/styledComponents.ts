@@ -89,10 +89,11 @@ export const StyledDiv = styled.div`
 `;
 
 export const ZoomedPlotsWrapper = styled.div`
-  flex-direction: column;
-  justify-content: center;
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  flex-wrap: wrap;
   padding: calc(${theme.space.spaceBetween}*2);
-  overflow: scroll;
 `;
 
 export const DisplayOptionsWrapper = styled.div`

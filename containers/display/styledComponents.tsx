@@ -63,14 +63,22 @@ export const Column = styled(Col)`
   padding: ${theme.space.spaceBetween} calc(${theme.space.spaceBetween}*2)
     ${theme.space.spaceBetween} ${theme.space.spaceBetween};
 `;
-export const Wrapper = styled.div<{ zoomed?: any, noBorder?: boolean }>`
+export const Wrapper = styled.div<{ zoomed?: any, noBorder?: boolean, noScroll?: boolean}>`
   width: ${(props) => (props?.zoomed ? '50%' : '100%')};
   border-left: ${(props) => (props?.noBorder ? '' : '1px solid')};
   align-items: center;
-`;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  overflow: ${(props)=> props.noScroll ? '' : 'scroll'};
+  align-items: start;
+  flex-flow: ${(props) => (props?.noBorder ? '' : 'column')};
+  justify-content:  ${(props) => (props?.noBorder ? 'center' : '')};
+  `;
 export const DivWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  height: 100%;
 `;
 export const MinusIcon = styled(MinusCircleFilled)`
   font-size: 1.5rem;

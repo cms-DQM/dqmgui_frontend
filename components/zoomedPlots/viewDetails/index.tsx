@@ -16,7 +16,7 @@ export const ViewDetailsMenu = ({
   jsroot_mode,
 }: ViewDetailsMenuProps) => {
   return (
-    <Collapse defaultActiveKey={['1']}>
+    <Collapse defaultActiveKey={['1']} style={{width: '100%'}}>
       <Panel header="Display Options" key="1">
         <DisplayOptions dispatch={dispatch} jsroot_mode={jsroot_mode} />
       </Panel>
