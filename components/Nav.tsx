@@ -1,24 +1,47 @@
-import React, { FC, ChangeEvent, Dispatch, useReducer, useEffect } from 'react';
-import { Form } from 'antd';
+import React, {
+  FC,
+  ChangeEvent,
+  Dispatch,
+  useReducer,
+  useEffect,
+  useState,
+} from 'react';
+import { Form, Input } from 'antd';
+import Router, { useRouter } from 'next/router';
 
-import {
-  navReducer,
-  initialState,
-  setSearchFieldByDatasetName,
-  setSearchFieldByRunNumber,
-} from '../reducers/navReducer';
 import { StyledFormItem, StyledInput } from './styledComponents';
 import { SearchButton } from './searchButton';
 import { QuestionButton } from './helpButton';
 
 interface NavProps {
-  setRunNumber: Dispatch<any>;
-  setDatasetName: Dispatch<any>;
+  setRunNumber?: Dispatch<any>;
+  setDatasetName?: Dispatch<any>;
+  initial_search_run_number?: number;
+  initial_search_dataset_name?: string;
   handler(search_by_run_number: number, search_by_dataset_name: string): void;
 }
 
-const Nav: FC<NavProps> = ({ setRunNumber, setDatasetName, handler }) => {
-  const [state, dispatch] = useReducer(navReducer, initialState);
+export const Nav: FC<NavProps> = ({
+  initial_search_run_number,
+  initial_search_dataset_name,
+  setRunNumber,
+  setDatasetName,
+  handler,
+}) => {
+  const [form] = Form.useForm();
+  const [form_search_run_number, setFormRunNumber] = useState(
+    initial_search_run_number || NaN
+  );
+  const [form_search_dataset_name, setFormDatasetName] = useState(
+    initial_search_dataset_name || ''
+  );
+
+  // We have to wait for changin initial_search_run_number and initial_search_dataset_name coming from query, because the first render they are undefined and therefore the initialValues doesn't grab them
+  useEffect(() => {
+    form.resetFields();
+    setFormRunNumber(initial_search_run_number || NaN);
+    setFormDatasetName(initial_search_dataset_name || '');
+  }, [initial_search_run_number, initial_search_dataset_name]);
 
   const layout = {
     labelCol: { span: 8 },
@@ -27,18 +50,21 @@ const Nav: FC<NavProps> = ({ setRunNumber, setDatasetName, handler }) => {
   const tailLayout = {
     wrapperCol: { offset: 0, span: 4 },
   };
-
   return (
     <div>
       <Form
+        form={form}
         layout={'inline'}
         {...layout}
         name="search_form"
         className="fieldLabel"
-        initialValues={{ remember: true }}
+        initialValues={{
+          run_number: initial_search_run_number,
+          dataset_name: initial_search_dataset_name,
+        }}
         onFinish={() => {
-          setRunNumber(state.search_by_run_number);
-          setDatasetName(state.search_by_dataset_name);
+          setRunNumber && setRunNumber(form_search_run_number);
+          setDatasetName && setDatasetName(form_search_dataset_name);
         }}
       >
         <Form.Item {...tailLayout}>
@@ -48,7 +74,7 @@ const Nav: FC<NavProps> = ({ setRunNumber, setDatasetName, handler }) => {
           <StyledInput
             id="run_number"
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setSearchFieldByRunNumber(e.target.value)(dispatch)
+              setFormRunNumber(+e.target.value)
             }
             placeholder="Enter run number"
             type="text"
@@ -60,7 +86,7 @@ const Nav: FC<NavProps> = ({ setRunNumber, setDatasetName, handler }) => {
             id="dataset_name"
             placeholder="Enter dataset name"
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setSearchFieldByDatasetName(e.target.value)(dispatch)
+              setFormDatasetName(e.target.value)
             }
             type="text"
           />
@@ -68,7 +94,7 @@ const Nav: FC<NavProps> = ({ setRunNumber, setDatasetName, handler }) => {
         <Form.Item {...tailLayout}>
           <SearchButton
             onClick={() =>
-              handler(state.search_by_run_number, state.search_by_dataset_name)
+              handler(form_search_run_number, form_search_dataset_name)
             }
           />
         </Form.Item>
