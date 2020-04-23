@@ -34,15 +34,15 @@ export const ViewDetailsMenu = ({ dispatch, state }: ViewDetailsMenuProps) => {
     <StyledCollapse>
       <Panel header="Options" key="1">
         <Row>
-          <Col style={{borderRight: '1px solid'}}>
+          <Col style={{marginRight: 88}}>
             <CheckboxesWrapper>
-              <Title level={3}>Overlay options</Title>
+              <Title level={4}>Overlay options</Title>
             </CheckboxesWrapper>
             <Reference state_global={state} dispatch_gloabl={dispatch} />
           </Col>
           <Col>
             <CheckboxesWrapper>
-              <Title level={3}>Display options</Title>
+              <Title level={4}>Display options</Title>
             </CheckboxesWrapper>
             <CheckboxesWrapper>
               <ViewFiler state={state} dispatch={dispatch} />

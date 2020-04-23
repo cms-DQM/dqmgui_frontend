@@ -35,7 +35,7 @@ export const Type = ({ type }: TypesProps) => {
           </StyledSelect>
         </StyledFormItem>
       </Col>
-      <Col span={8}>
+      <Col span={8} style={{padding: 2}}>
         <StyledFormItem label="min" name={`${type}min`}>
           <StyledInput />
         </StyledFormItem>
