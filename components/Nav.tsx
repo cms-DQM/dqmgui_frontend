@@ -19,6 +19,7 @@ interface NavProps {
   initial_search_run_number?: number;
   initial_search_dataset_name?: string;
   handler(search_by_run_number: number, search_by_dataset_name: string): void;
+  type: string;
 }
 
 export const Nav: FC<NavProps> = ({
@@ -27,6 +28,7 @@ export const Nav: FC<NavProps> = ({
   setRunNumber,
   setDatasetName,
   handler,
+  type,
 }) => {
   const [form] = Form.useForm();
   const [form_search_run_number, setFormRunNumber] = useState(
@@ -56,7 +58,7 @@ export const Nav: FC<NavProps> = ({
         form={form}
         layout={'inline'}
         {...layout}
-        name="search_form"
+        name={`search_form${type}`}
         className="fieldLabel"
         initialValues={{
           run_number: initial_search_run_number,
