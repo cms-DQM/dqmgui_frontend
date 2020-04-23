@@ -125,14 +125,12 @@ const DiplayFolder: FC<FolderProps> = ({
   );
 
   return (
-    <div>
-      <div>
-        <FolderPath
-          folder_path={folder_path}
-          run_number={run_number}
-          dataset_name={dataset_name}
-        />
-      </div>
+    <>
+      <FolderPath
+        folder_path={folder_path}
+        run_number={run_number}
+        dataset_name={dataset_name}
+      />
       {doesPlotExists(contents).length > 0 && (
         <ViewDetailsMenu
           dispatch={dispatch}
@@ -140,73 +138,78 @@ const DiplayFolder: FC<FolderProps> = ({
           overlay_plot={overlay_plot}
         />
       )}
-      <DivWrapper>
-        <Wrapper zoomed={selected_plots.length} noBorder>
+      {/* <div 
+      style={{ height: '100%', overflow: 'scroll', display: 'flex', flexWrap: 'wrap' }}
+      > */}
+      <div style={{ height: '100%', overflow: selected_plots.length ? 'hidden' : 'scroll', display: 'flex' }}>
+        <Wrapper
+          zoomed={selected_plots.length}
+          noBorder
+          noScroll={selected_plots.length > 0 ? false : true}
+        >
           {isLoading ? (
             <SpinnerWrapper>
               <Spinner />
             </SpinnerWrapper>
           ) : (
               <>
-                <StyledRow>
-                  {directories.map((directory_name: any) => (
-                    <Col span={4} key={directory_name}>
-                      <DirecotryWrapper>
-                        <Icon />
-                        <Link
-                          href={{
-                            pathname: '/',
-                            query: {
-                              run_number: run_number,
-                              dataset_name: dataset_name,
-                              folder_path: `${folder_path}/${directory_name}`,
-                            },
-                          }}
-                        >
-                          <StyledA>{directory_name}</StyledA>
-                        </Link>
-                      </DirecotryWrapper>
-                    </Col>
-                  ))}
-                </StyledRow>
-                <StyledRowImages>
-                  {plots.map((plot: PlotDataProps | undefined) => {
-                    if (plot) {
-                      params_for_api.folders_path = plot.dir
+                {directories.map((directory_name: any) => (
+                  <Col span={4} key={directory_name}>
+                    <DirecotryWrapper>
+                      <Icon />
+                      <Link
+                        href={{
+                          pathname: '/',
+                          query: {
+                            run_number: run_number,
+                            dataset_name: dataset_name,
+                            folder_path: `${folder_path}/${directory_name}`,
+                          },
+                        }}
+                      >
+                        <StyledA>{directory_name}</StyledA>
+                      </Link>
+                    </DirecotryWrapper>
+                  </Col>
+                ))}
+                {plots.map((plot: PlotDataProps | undefined) => {
+                  if (plot) {
+                    params_for_api.folders_path = plot.dir
 
-                      return (
-                        <Col key={plot?.name}>
-                          {overlay_plot.length > 0 ? (
-                            <OverlaidPlot
+                    return (
+                      // <Col key={plot?.name} style={{ display: 'felx', justifyContent: 'center', flexWrap: 'wrap' }}>
+                      <>  
+                      {overlay_plot.length > 0 ? (
+                          <OverlaidPlot
+                            plot={plot}
+                            params_for_api={params_for_api}
+                            addPlotToList={addPlot}
+                            dispatch={dispatch}
+                            removePlotFromList={removePlot}
+                            isPlotSelected={isPlotSelected(
+                              selected_plots,
+                              plot.name
+                            )}
+                          />
+                        ) : (
+                            <Plot
                               plot={plot}
                               params_for_api={params_for_api}
                               addPlotToList={addPlot}
                               dispatch={dispatch}
                               removePlotFromList={removePlot}
+                              jsroot_mode={state.jsroot_mode}
                               isPlotSelected={isPlotSelected(
                                 selected_plots,
                                 plot.name
                               )}
                             />
-                          ) : (
-                              <Plot
-                                plot={plot}
-                                params_for_api={params_for_api}
-                                addPlotToList={addPlot}
-                                dispatch={dispatch}
-                                removePlotFromList={removePlot}
-                                jsroot_mode={state.jsroot_mode}
-                                isPlotSelected={isPlotSelected(
-                                  selected_plots,
-                                  plot.name
-                                )}
-                              />
-                            )}
-                        </Col>
-                      )
-                    }
-                  })}
-                </StyledRowImages>
+                          )}
+                      {/* // </Col> */}
+                      </>
+                    )
+                  }
+                })}
               </>
             )}
         </Wrapper>
@@ -223,8 +226,8 @@ const DiplayFolder: FC<FolderProps> = ({
             />
           </Wrapper>
         )}
-      </DivWrapper>
-    </div>
+      </div>
+    </>
   );
 };
 

@@ -15,8 +15,6 @@ export const StyledHeader = styled(Header)`
   align-items: center;
 `;
 export const StyledContent = styled(Content)`
-  overflow: scroll;
-  overflow-x: hidden;
   height: 100%;
   padding: calc(${theme.space.spaceBetween}*4);
 `;
