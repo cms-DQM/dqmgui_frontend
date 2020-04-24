@@ -1,4 +1,4 @@
-import { PlotDataProps } from "./interfaces";
+import { PlotDataProps } from './interfaces';
 
 export const getFolderPath = (folders: string[], clickedFolder: string) => {
   const folderIndex = folders.indexOf(clickedFolder);
@@ -7,5 +7,10 @@ export const getFolderPath = (folders: string[], clickedFolder: string) => {
   return foldersString;
 };
 
-export const isPlotSelected = (selected_plots: PlotDataProps[], plot_name: string) =>
-  selected_plots.some((selected_plot: PlotDataProps) => selected_plot.name === plot_name)
+export const isPlotSelected = (
+  selected_plots: PlotDataProps[],
+  plot_name: string
+) =>
+  selected_plots.some(
+    (selected_plot: PlotDataProps) => selected_plot.name === plot_name
+  );

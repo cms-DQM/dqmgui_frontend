@@ -3,7 +3,10 @@ import { Collapse, Typography, Row, Col } from 'antd';
 
 import { DisplayOptions } from './displayOptions';
 import { CostumizeTable } from '../../viewDetailsMenu/customize';
-import { StyledCollapse, CheckboxesWrapper } from '../../viewDetailsMenu/styledComponents';
+import {
+  StyledCollapse,
+  CheckboxesWrapper,
+} from '../../viewDetailsMenu/styledComponents';
 
 const { Title } = Typography;
 
@@ -18,14 +21,13 @@ export const ViewDetailsMenu = ({
   dispatch,
   jsroot_mode,
 }: ViewDetailsMenuProps) => {
-
   return (
     <StyledCollapse>
       <Panel header="Display Options" key="1">
         <DisplayOptions dispatch={dispatch} jsroot_mode={jsroot_mode} />
       </Panel>
       <Panel header="Customize" key="2" disabled={jsroot_mode}>
-        {!jsroot_mode &&
+        {!jsroot_mode && (
           <>
             <CheckboxesWrapper>
               <Title level={4}>Customize</Title>
@@ -34,8 +36,8 @@ export const ViewDetailsMenu = ({
               <CostumizeTable dispatch={dispatch} />
             </CheckboxesWrapper>
           </>
-        }      
-        </Panel>
+        )}
+      </Panel>
       {/* <Panel header="Options" key="1">
         <Row>
           <Col>

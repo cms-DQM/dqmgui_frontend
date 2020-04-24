@@ -41,8 +41,7 @@ export const StyledSelect = styled(Select)`
 
 export const StyledCollapse = styled(Collapse)`
   width: 100%;
-  .ant-collapse-content > .ant-collapse-content-box{
-    padding: ${theme.space.spaceBetween}
+  .ant-collapse-content > .ant-collapse-content-box {
+    padding: ${theme.space.spaceBetween};
   }
-`
-
+`;

@@ -31,7 +31,6 @@ export const Plot = ({
   isPlotSelected,
   removePlotFromList,
 }: PlotProps) => {
-  
   params_for_api.plot_name = plot.name;
   const plot_url = get_plot_url(params_for_api);
   const source = `${root_url}/${plot_url}`;

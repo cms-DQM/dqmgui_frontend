@@ -42,9 +42,7 @@ const Nav: FC<NavProps> = ({ setRunNumber, setDatasetName, handler }) => {
             setDatasetName(state.search_by_dataset_name);
           }}
         >
-          <Col 
-          span={2}
-          >
+          <Col span={2}>
             <Form.Item {...tailLayout}>
               <QuestionButton />
             </Form.Item>
@@ -74,13 +72,14 @@ const Nav: FC<NavProps> = ({ setRunNumber, setDatasetName, handler }) => {
               />
             </StyledFormItem>
           </Col>
-          <Col 
-          span={2}
-          >
+          <Col span={2}>
             <Form.Item {...tailLayout}>
               <SearchButton
                 onClick={() =>
-                  handler(state.search_by_run_number, state.search_by_dataset_name)
+                  handler(
+                    state.search_by_run_number,
+                    state.search_by_dataset_name
+                  )
                 }
               />
             </Form.Item>

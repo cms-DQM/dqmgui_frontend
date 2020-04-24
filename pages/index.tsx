@@ -10,10 +10,7 @@ import Nav from '../components/Nav';
 import SearchResults from '../containers/search/SearchResults';
 import DiplayFolders from '../containers/display/DisplayFolderAndPlot';
 import { useSearch } from '../hooks/useSearch';
-import {
-  StyledHeader,
-  StyledContent,
-} from '../styles/styledComponents';
+import { StyledHeader, StyledContent } from '../styles/styledComponents';
 import {
   NotFoundDiv,
   NotFoundDivWrapper,
@@ -24,8 +21,8 @@ import { FolderPathQuery } from '../containers/display/interfaces';
 const Index: NextPage<FolderPathQuery> = () => {
   const [run_number, setRunNumber] = useState('');
   const [dataset_name, setDatasetName] = useState('');
-  const router = useRouter()
-  const query: any = router.query
+  const router = useRouter();
+  const query: any = router.query;
   const { results, results_grouped, searching, isLoading } = useSearch(
     query.search_run_number,
     query.search_dataset_name
@@ -55,7 +52,7 @@ const Index: NextPage<FolderPathQuery> = () => {
   };
 
   return (
-    <div style={{height: '100vh'}}>
+    <div style={{ height: '100vh' }}>
       <Head>
         <script
           crossOrigin="anonymous"
@@ -63,7 +60,7 @@ const Index: NextPage<FolderPathQuery> = () => {
           src="/jsroot-5.8.0/scripts/JSRootCore.js?2d&hist&more2d"
         ></script>
       </Head>
-      <Layout style={{height: '100%'}}>
+      <Layout style={{ height: '100%' }}>
         <StyledHeader>
           <Nav
             handler={navigationHandler}
@@ -72,27 +69,27 @@ const Index: NextPage<FolderPathQuery> = () => {
           />
         </StyledHeader>
         {/* <StyledContent> */}
-          {query.run_number && query.dataset_name ? (
-            <DiplayFolders
-              run_number={query.run_number}
-              dataset_name={query.dataset_name}
-              folder_path={query.folder_path || ''}
-            />
-          ) : searching ? (
-            <SearchResults
-              isLoading={isLoading}
-              results={results}
-              results_grouped={results_grouped}
-              handler={serchResultsHandler}
-            />
-          ) : (
-                <NotFoundDivWrapper>
-                  <NotFoundDiv noBorder>
-                    <ChartIcon />
-                Welcome to DQM GUI
-              </NotFoundDiv>
-                </NotFoundDivWrapper>
-              )}
+        {query.run_number && query.dataset_name ? (
+          <DiplayFolders
+            run_number={query.run_number}
+            dataset_name={query.dataset_name}
+            folder_path={query.folder_path || ''}
+          />
+        ) : searching ? (
+          <SearchResults
+            isLoading={isLoading}
+            results={results}
+            results_grouped={results_grouped}
+            handler={serchResultsHandler}
+          />
+        ) : (
+          <NotFoundDivWrapper>
+            <NotFoundDiv noBorder>
+              <ChartIcon />
+              Welcome to DQM GUI
+            </NotFoundDiv>
+          </NotFoundDivWrapper>
+        )}
         {/* </StyledContent> */}
       </Layout>
     </div>

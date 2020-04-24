@@ -50,14 +50,14 @@ export const ZoomedPlots = ({
           size={size}
         />
       ) : (
-          <ZoomedPlotsWithoutOverlay
-            jsroot_mode={jsroot_mode}
-            selected_plots={selected_plots}
-            removePlotFromList={removePlotFromList}
-            params_for_api={params_for_api}
-            size={size}
-          />
-        )}
+        <ZoomedPlotsWithoutOverlay
+          jsroot_mode={jsroot_mode}
+          selected_plots={selected_plots}
+          removePlotFromList={removePlotFromList}
+          params_for_api={params_for_api}
+          size={size}
+        />
+      )}
     </>
   );
 };

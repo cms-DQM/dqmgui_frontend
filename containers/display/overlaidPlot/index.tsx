@@ -3,7 +3,7 @@ import React from 'react';
 import { ParamsForApiProps } from '../interfaces';
 import { OnSideOverlaidPlots } from './onSideOverlaidPlots';
 import { OverlaidPlotImage } from './overlaidPlotImage';
-import { PlotDataProps } from '../interfaces'
+import { PlotDataProps } from '../interfaces';
 
 interface OverlaidPlotProps {
   params_for_api: ParamsForApiProps;
@@ -22,7 +22,6 @@ export const OverlaidPlot = ({
   isPlotSelected,
   removePlotFromList,
 }: OverlaidPlotProps) => {
-
   return (
     <>
       {params_for_api.overlay === 'onSide' ? (
@@ -35,15 +34,15 @@ export const OverlaidPlot = ({
           removePlotFromList={removePlotFromList}
         />
       ) : (
-          <OverlaidPlotImage
-            plot={plot}
-            params_for_api={params_for_api}
-            dispatch={dispatch}
-            isPlotSelected={isPlotSelected}
-            addPlotToList={addPlotToList}
-            removePlotFromList={removePlotFromList}
-          />
-        )}
+        <OverlaidPlotImage
+          plot={plot}
+          params_for_api={params_for_api}
+          dispatch={dispatch}
+          isPlotSelected={isPlotSelected}
+          addPlotToList={addPlotToList}
+          removePlotFromList={removePlotFromList}
+        />
+      )}
     </>
   );
 };
