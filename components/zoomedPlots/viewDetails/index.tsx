@@ -21,7 +21,22 @@ export const ViewDetailsMenu = ({
 
   return (
     <StyledCollapse>
-      <Panel header="Options" key="1">
+      <Panel header="Display Options" key="1">
+        <DisplayOptions dispatch={dispatch} jsroot_mode={jsroot_mode} />
+      </Panel>
+      <Panel header="Customize" key="2" disabled={jsroot_mode}>
+        {!jsroot_mode &&
+          <>
+            <CheckboxesWrapper>
+              <Title level={4}>Customize</Title>
+            </CheckboxesWrapper>
+            <CheckboxesWrapper>
+              <CostumizeTable dispatch={dispatch} />
+            </CheckboxesWrapper>
+          </>
+        }      
+        </Panel>
+      {/* <Panel header="Options" key="1">
         <Row>
           <Col>
             <CheckboxesWrapper>
@@ -45,7 +60,7 @@ export const ViewDetailsMenu = ({
             }
           </Col>
         </Row>
-      </Panel>
+      </Panel> */}
     </StyledCollapse>
   );
 };
