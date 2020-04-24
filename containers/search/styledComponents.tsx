@@ -28,7 +28,11 @@ export const StyledTableHead = styled.thead`
   color: ${theme.colors.common.white};
   text-transform: uppercase;
 `;
-export const StyledTableRow = styled.tr<{ index?: number, noHover?: boolean, expanded?: boolean }>`
+export const StyledTableRow = styled.tr<{
+  index?: number;
+  noHover?: boolean;
+  expanded?: boolean;
+}>`
   width: 100%;
   background: ${(props) =>
     (props?.index && props.index % 2 === 0) || props.index === 0
@@ -37,7 +41,7 @@ export const StyledTableRow = styled.tr<{ index?: number, noHover?: boolean, exp
   cursor: pointer;
   &:hover {
     background-color: ${(props) =>
-    props?.noHover ? '' : `${theme.colors.secondary.light}`};
+      props?.noHover ? '' : `${theme.colors.secondary.light}`};
   }
   font-weight: ${(props) =>
     props?.expanded && props.expanded === true ? 'bold' : ''};
@@ -60,7 +64,7 @@ export const RunsRows = styled(Row)`
   padding-left: 32px;
   font-weight: normal !important;
 `;
-export const ExpandedRow = styled.div<{ expanded: boolean, }>`
+export const ExpandedRow = styled.div<{ expanded: boolean }>`
   font-weight: ${(props) =>
     props?.expanded && props.expanded === true ? 'bold' : ''};
 `;
