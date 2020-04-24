@@ -32,9 +32,26 @@ export const ViewDetailsMenu = ({ dispatch, state }: ViewDetailsMenuProps) => {
 
   return (
     <StyledCollapse>
-      <Panel header="Options" key="1">
-        <Row>
-          <Col style={{marginRight: 88}}>
+      {/* <Panel header="Options" key="1">
+        <StyledCollapse> */}
+          <Panel header="Overlay options" key="2">
+            <Reference state_global={state} dispatch_gloabl={dispatch} />
+          </Panel>
+          <Panel header="Display options" key="3">
+            <CheckboxesWrapper>
+              <ViewFiler state={state} dispatch={dispatch} />
+            </CheckboxesWrapper>
+            <CheckboxesWrapper>
+              <SizeChanger
+                dispatch={dispatch}
+                setSize={setSize}
+                currentValue={sizes.medium.size}
+              />
+            </CheckboxesWrapper>
+          {/* </Panel>
+        </StyledCollapse> */}
+        {/* <Row>
+          <Col style={{ marginRight: 88 }}>
             <CheckboxesWrapper>
               <Title level={4}>Overlay options</Title>
             </CheckboxesWrapper>
@@ -55,7 +72,7 @@ export const ViewDetailsMenu = ({ dispatch, state }: ViewDetailsMenuProps) => {
               />
             </CheckboxesWrapper>
           </Col >
-        </Row >
+        </Row > */}
       </Panel >
     </StyledCollapse >
   );
