@@ -1,5 +1,5 @@
 import React, { FC, ChangeEvent, Dispatch, useReducer, useEffect } from 'react';
-import { Form } from 'antd';
+import { Form, Row, Col } from 'antd';
 
 import {
   navReducer,
@@ -30,49 +30,63 @@ const Nav: FC<NavProps> = ({ setRunNumber, setDatasetName, handler }) => {
 
   return (
     <div>
-      <Form
-        layout={'inline'}
-        {...layout}
-        name="search_form"
-        className="fieldLabel"
-        initialValues={{ remember: true }}
-        onFinish={() => {
-          setRunNumber(state.search_by_run_number);
-          setDatasetName(state.search_by_dataset_name);
-        }}
-      >
-        <Form.Item {...tailLayout}>
-          <QuestionButton />
-        </Form.Item>
-        <StyledFormItem name="run_number">
-          <StyledInput
-            id="run_number"
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setSearchFieldByRunNumber(e.target.value)(dispatch)
-            }
-            placeholder="Enter run number"
-            type="text"
-            name="run_number"
-          />
-        </StyledFormItem>
-        <StyledFormItem name="dataset_name">
-          <StyledInput
-            id="dataset_name"
-            placeholder="Enter dataset name"
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setSearchFieldByDatasetName(e.target.value)(dispatch)
-            }
-            type="text"
-          />
-        </StyledFormItem>
-        <Form.Item {...tailLayout}>
-          <SearchButton
-            onClick={() =>
-              handler(state.search_by_run_number, state.search_by_dataset_name)
-            }
-          />
-        </Form.Item>
-      </Form>
+      <Row>
+        <Form
+          layout={'inline'}
+          {...layout}
+          name="search_form"
+          className="fieldLabel"
+          initialValues={{ remember: true }}
+          onFinish={() => {
+            setRunNumber(state.search_by_run_number);
+            setDatasetName(state.search_by_dataset_name);
+          }}
+        >
+          <Col 
+          span={2}
+          >
+            <Form.Item {...tailLayout}>
+              <QuestionButton />
+            </Form.Item>
+          </Col>
+          <Col span={10}>
+            <StyledFormItem name="run_number">
+              <StyledInput
+                id="run_number"
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setSearchFieldByRunNumber(e.target.value)(dispatch)
+                }
+                placeholder="Enter run number"
+                type="text"
+                name="run_number"
+              />
+            </StyledFormItem>
+          </Col>
+          <Col span={10}>
+            <StyledFormItem name="dataset_name">
+              <StyledInput
+                id="dataset_name"
+                placeholder="Enter dataset name"
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setSearchFieldByDatasetName(e.target.value)(dispatch)
+                }
+                type="text"
+              />
+            </StyledFormItem>
+          </Col>
+          <Col 
+          span={2}
+          >
+            <Form.Item {...tailLayout}>
+              <SearchButton
+                onClick={() =>
+                  handler(state.search_by_run_number, state.search_by_dataset_name)
+                }
+              />
+            </Form.Item>
+          </Col>
+        </Form>
+      </Row>
     </div>
   );
 };
