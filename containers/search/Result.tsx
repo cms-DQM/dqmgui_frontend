@@ -40,9 +40,7 @@ const Result: FC<SearchResultsInterface> = ({
               {value.map(({ run }: any) => (
                 <StyledCol key={run}>
                   <RunWrapper onClick={() => handler(run, dataset)}>
-                    <StyledA >
-                      {run}
-                    </StyledA>
+                    <StyledA>{run}</StyledA>
                   </RunWrapper>
                 </StyledCol>
               ))}

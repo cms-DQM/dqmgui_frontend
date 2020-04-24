@@ -43,15 +43,14 @@ export const CostumizeTable = ({ dispatch }: CostumizeTableProps) => {
       initialValues={{ remember: true }}
       onFinish={(params) => {
         const cleanedParams = cleanDeep(params);
-        console.log(cleanedParams)
+        console.log(cleanedParams);
         setParamsForCustomize(cleanedParams as CustomizeProps)(dispatch);
       }}
     >
       <FullWidthRow>
         <Col span={8}>
           <StyledFormItem label="Reference" name="withref">
-            <StyledSelect
-              defaultValue={referenceCopy[0].value}>
+            <StyledSelect defaultValue={referenceCopy[0].value}>
               {referenceCopy.map((option: OptionProps) => (
                 <Option value={option.value}>{option.label}</Option>
               ))}
@@ -62,7 +61,7 @@ export const CostumizeTable = ({ dispatch }: CostumizeTableProps) => {
       <FullWidthRow>
         <Col span={8}>
           <StyledFormItem label="Draw options" name="drawopts">
-            <StyledInput style={{width: '100%'}} />
+            <StyledInput style={{ width: '100%' }} />
           </StyledFormItem>
         </Col>
       </FullWidthRow>

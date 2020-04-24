@@ -34,9 +34,8 @@ export const OnSideOverlaidPlots = ({
   addPlotToList,
   removePlotFromList,
 }: OnSideOverlaidPlotsProps) => {
-
   params_for_api.plot_name = plot.name;
-  const onsidePlotsURLs: string[] = getOnSideOverlaidPlots(params_for_api)
+  const onsidePlotsURLs: string[] = getOnSideOverlaidPlots(params_for_api);
 
   return (
     <OnSidePlotsWrapper>
@@ -54,8 +53,8 @@ export const OnSideOverlaidPlots = ({
                 {isPlotSelected ? (
                   <MinusIcon onClick={() => removePlotFromList(plot)} />
                 ) : (
-                    <PlusIcon onClick={() => addPlotToList(plot)} />
-                  )}{' '}
+                  <PlusIcon onClick={() => addPlotToList(plot)} />
+                )}{' '}
               </Column>
               <div
                 onClick={() => {

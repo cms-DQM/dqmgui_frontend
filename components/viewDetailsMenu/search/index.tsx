@@ -97,8 +97,8 @@ export const CustomModal = ({
               />
             </ResultsWrapper>
           ) : (
-              <ResultsWrapper />
-            )}
+            <ResultsWrapper />
+          )}
         </>
       )}
     </StyledModal>

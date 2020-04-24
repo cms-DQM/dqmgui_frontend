@@ -35,7 +35,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
   params_for_api.height = size.h;
   params_for_api.width = size.w;
   params_for_api.plot_name = selected_plot.name;
-  params_for_api.folders_path = selected_plot.dir
+  params_for_api.folders_path = selected_plot.dir;
 
   const { data } = useRequest(get_jroot_plot(params_for_api), {}, [
     selected_plot.name,
@@ -43,17 +43,17 @@ export const ZoomedOverlaidJSROOTPlot = ({
 
   const overlaid_plots_runs_and_datasets: any[] = params_for_api?.overlay_plot
     ? params_for_api.overlay_plot.map((plot: TripleProps) => {
-      const copy: any = { ...params_for_api };
+        const copy: any = { ...params_for_api };
 
-      if (plot.dataset_name) {
-        copy.dataset_name = plot.dataset_name;
-      }
-      copy.run_number = plot.run_number;
-      const { data } = useRequest(get_jroot_plot(copy), {}, [
-        selected_plot.name,
-      ]);
-      return data;
-    })
+        if (plot.dataset_name) {
+          copy.dataset_name = plot.dataset_name;
+        }
+        copy.run_number = plot.run_number;
+        const { data } = useRequest(get_jroot_plot(copy), {}, [
+          selected_plot.name,
+        ]);
+        return data;
+      })
     : [];
 
   overlaid_plots_runs_and_datasets.push(data);

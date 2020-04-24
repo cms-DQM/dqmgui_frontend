@@ -1,7 +1,7 @@
-import { ParamsForApiProps, TripleProps } from "../interfaces";
-import { get_plot_url } from "../../../config/config";
+import { ParamsForApiProps, TripleProps } from '../interfaces';
+import { get_plot_url } from '../../../config/config';
 
-export const getOnSideOverlaidPlots = (params_for_api: ParamsForApiProps, ) => {
+export const getOnSideOverlaidPlots = (params_for_api: ParamsForApiProps) => {
   const onsidePlotsURLs = [];
 
   let copy = { ...params_for_api };
@@ -17,5 +17,5 @@ export const getOnSideOverlaidPlots = (params_for_api: ParamsForApiProps, ) => {
       onsidePlotsURLs.push(get_plot_url(copy));
     });
 
-  return onsidePlotsURLs
-}
+  return onsidePlotsURLs;
+};

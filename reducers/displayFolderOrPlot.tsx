@@ -95,7 +95,9 @@ export const removePlotFromList = (plot_to_remove: PlotDataProps) => (
   dispatch: any
 ) => {
   const copy: PlotDataProps[] = [...state.selected_plots];
-  const filtered: PlotDataProps[] = copy.filter((plot: PlotDataProps) => plot.name !== plot_to_remove.name);
+  const filtered: PlotDataProps[] = copy.filter(
+    (plot: PlotDataProps) => plot.name !== plot_to_remove.name
+  );
   setSelectedPlotsName(filtered)(dispatch);
 };
 

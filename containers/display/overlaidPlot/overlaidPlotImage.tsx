@@ -6,9 +6,7 @@ import {
   get_overlaied_plots_urls,
 } from '../../../config/config';
 import { ParamsForApiProps, PlotDataProps } from '../interfaces';
-import {
-  setSelectedPlotsName,
-} from '../../../reducers/displayFolderOrPlot';
+import { setSelectedPlotsName } from '../../../reducers/displayFolderOrPlot';
 import {
   StyledCol,
   PlotNameCol,
@@ -55,8 +53,8 @@ export const OverlaidPlotImage = ({
           {isPlotSelected ? (
             <MinusIcon onClick={() => removePlotFromList(plot)} />
           ) : (
-              <PlusIcon onClick={() => addPlotToList(plot)} />
-            )}
+            <PlusIcon onClick={() => addPlotToList(plot)} />
+          )}
         </Column>
         <div
           onClick={() => {
