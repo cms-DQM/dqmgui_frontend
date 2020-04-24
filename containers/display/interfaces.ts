@@ -76,3 +76,8 @@ export interface PlotDataProps {
   name: string;
   dir: string;
 }
+
+export interface NavigationSearchFieldsProps {
+  search_by_dataset_name: string;
+  search_by_run_number: number;
+}

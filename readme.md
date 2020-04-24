@@ -2,7 +2,7 @@
 
 ---
 
-## Know bugs list
+## Known bugs list
 
 1. **Zoomed plot not visible when the window is scrolled down.**
 
@@ -23,5 +23,9 @@
 6. **Plots are not sorted by an alphabet.**
 
 7. **Customization of a plot should work with auto-submit.**
+
+8. **When plots are overlaid on side, them have to be display in a row, not in column**
+
+9. **Overlaid plots options are not included in url**
 
 ---

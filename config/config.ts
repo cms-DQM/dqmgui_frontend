@@ -9,13 +9,13 @@ const config: any = {
     root_url: 'http://localhost:8081/dqm/dev',
   },
   production: {
-    root_url: 'http://localhost:8081/dqm/dev',
+    root_url: 'https://dqm-gui.web.cern.ch/api/dqm/offline',
   },
 };
-
 export const root_url = config[process.env.NODE_ENV || 'development'].root_url;
 
 export const get_plot_url = (params: ParamsForApiProps) => {
+  console.log(get_customize_params(params.customizeProps));
   return `plotfairy/archive/${params.run_number}${params.dataset_name}${
     params.folders_path
   }/${params.plot_name}?${get_customize_params(params.customizeProps)}${
