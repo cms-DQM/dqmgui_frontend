@@ -1,55 +1,68 @@
 import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import { useState } from 'react';
-import 'antd/dist/antd.css';
 import Router, { useRouter } from 'next/router';
-import { Layout } from 'antd';
 
 import Nav from '../components/Nav';
 import SearchResults from '../containers/search/SearchResults';
 import DiplayFolders from '../containers/display/DisplayFolderAndPlot';
 import { useSearch } from '../hooks/useSearch';
-import { StyledHeader, StyledContent } from '../styles/styledComponents';
+import {
+  StyledHeader,
+  StyledLayout,
+  StyledContent,
+} from '../styles/styledComponents';
 import {
   NotFoundDiv,
   NotFoundDivWrapper,
   ChartIcon,
 } from '../containers/search/styledComponents';
 import { FolderPathQuery } from '../containers/display/interfaces';
+import { useValidateQuery } from '../hooks/useValidateQuery';
+import { QueryValidationErrors } from '../components/queryValidationErrors';
+import { Layout } from 'antd';
+
+const navigationHandler = (
+  search_by_run_number: number,
+  search_by_dataset_name: string
+) => {
+  Router.replace({
+    pathname: '/',
+    query: {
+      search_run_number: search_by_run_number,
+      search_dataset_name: search_by_dataset_name,
+    },
+  });
+};
+
+const serchResultsHandler = (run: number, dataset: string) => {
+  Router.replace({
+    pathname: '/',
+    query: {
+      run_number: run,
+      dataset_name: dataset,
+    },
+  });
+};
 
 const Index: NextPage<FolderPathQuery> = () => {
-  const [run_number, setRunNumber] = useState('');
-  const [dataset_name, setDatasetName] = useState('');
-  const router = useRouter();
-  const query: any = router.query;
-  const { results, results_grouped, searching, isLoading } = useSearch(
-    query.search_run_number,
-    query.search_dataset_name
+  // We grab the query from the URL:
+  const { query } = useRouter();
+  const {
+    query: {
+      run_number,
+      dataset_name,
+      folder_path,
+      search_run_number,
+      search_dataset_name,
+    },
+    validation_errors,
+  } = useValidateQuery(query);
+
+  const { results, results_grouped, searching, isLoading, error } = useSearch(
+    search_run_number,
+    search_dataset_name
   );
-
-  const navigationHandler = (
-    search_by_run_number: number,
-    search_by_dataset_name: string
-  ) => {
-    Router.replace({
-      pathname: '/',
-      query: {
-        search_run_number: search_by_run_number,
-        search_dataset_name: search_by_dataset_name,
-      },
-    });
-  };
-
-  const serchResultsHandler = (run: number, dataset: string) => {
-    Router.replace({
-      pathname: '/',
-      query: {
-        run_number: run,
-        dataset_name: dataset,
-      },
-    });
-  };
 
   return (
     <div style={{ height: '100vh' }}>
@@ -63,33 +76,37 @@ const Index: NextPage<FolderPathQuery> = () => {
       <Layout style={{ height: '100%' }}>
         <StyledHeader>
           <Nav
+            initial_search_run_number={search_run_number}
+            initial_search_dataset_name={search_dataset_name}
             handler={navigationHandler}
-            setRunNumber={setRunNumber}
-            setDatasetName={setDatasetName}
+            type="top"
           />
         </StyledHeader>
         {/* <StyledContent> */}
-        {query.run_number && query.dataset_name ? (
-          <DiplayFolders
-            run_number={query.run_number}
-            dataset_name={query.dataset_name}
-            folder_path={query.folder_path || ''}
-          />
-        ) : searching ? (
-          <SearchResults
-            isLoading={isLoading}
-            results={results}
-            results_grouped={results_grouped}
-            handler={serchResultsHandler}
-          />
-        ) : (
-          <NotFoundDivWrapper>
-            <NotFoundDiv noBorder>
-              <ChartIcon />
-              Welcome to DQM GUI
-            </NotFoundDiv>
-          </NotFoundDivWrapper>
-        )}
+          {validation_errors.length > 0 ? (
+            <QueryValidationErrors validation_errors={validation_errors} />
+          ) : run_number && dataset_name ? (
+            // If a user already has a run_number and dataset_name, he is not searching nor is he in the homepage, he is
+            <DiplayFolders
+              run_number={run_number}
+              dataset_name={dataset_name}
+              folder_path={folder_path || ''}
+            />
+          ) : searching ? (
+            <SearchResults
+              isLoading={isLoading}
+              results={results}
+              results_grouped={results_grouped}
+              handler={serchResultsHandler}
+            />
+          ) : (
+            <NotFoundDivWrapper>
+              <NotFoundDiv noBorder>
+                <ChartIcon />
+                Welcome to DQM GUI
+              </NotFoundDiv>
+            </NotFoundDivWrapper>
+          )}
         {/* </StyledContent> */}
       </Layout>
     </div>

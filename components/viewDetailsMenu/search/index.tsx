@@ -86,6 +86,7 @@ export const CustomModal = ({
             handler={navigationHandler}
             setRunNumber={setSearchRunNumber}
             setDatasetName={setSearchDatasetName}
+            type="overlay"
           />
           {searching ? (
             <ResultsWrapper>
