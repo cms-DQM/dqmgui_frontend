@@ -82,13 +82,11 @@ export const CustomModal = ({
     >
       {visible && (
         <>
-          <NavWrapper>
-            <Nav
-              handler={navigationHandler}
-              setRunNumber={setSearchRunNumber}
-              setDatasetName={setSearchDatasetName}
-            />
-          </NavWrapper>
+          <Nav
+            handler={navigationHandler}
+            setRunNumber={setSearchRunNumber}
+            setDatasetName={setSearchDatasetName}
+          />
           {searching ? (
             <ResultsWrapper>
               <SearchResults
@@ -99,8 +97,8 @@ export const CustomModal = ({
               />
             </ResultsWrapper>
           ) : (
-            <ResultsWrapper />
-          )}
+              <ResultsWrapper />
+            )}
         </>
       )}
     </StyledModal>
