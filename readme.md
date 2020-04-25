@@ -28,4 +28,8 @@
 
 9. **Overlaid plots options are not included in url**
 
+10. **Display qtest results (colored plots)**.
+
+11. **Display server name.**
+
 ---
