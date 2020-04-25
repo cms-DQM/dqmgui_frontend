@@ -11,8 +11,6 @@ import {
 } from '../../reducers/displayFolderOrPlot';
 import { sizes } from '../constants';
 import { StyledCollapse, CheckboxesWrapper } from './styledComponents';
-import { StyledDiv } from '../styledComponents';
-const { Title } = Typography;
 
 const { Panel } = Collapse;
 
@@ -32,8 +30,6 @@ export const ViewDetailsMenu = ({ dispatch, state }: ViewDetailsMenuProps) => {
 
   return (
     <StyledCollapse>
-      {/* <Panel header="Options" key="1">
-        <StyledCollapse> */}
       <Panel header="Overlay options" key="2">
         <Reference state_global={state} dispatch_gloabl={dispatch} />
       </Panel>
@@ -48,31 +44,6 @@ export const ViewDetailsMenu = ({ dispatch, state }: ViewDetailsMenuProps) => {
             currentValue={sizes.medium.size}
           />
         </CheckboxesWrapper>
-        {/* </Panel>
-        </StyledCollapse> */}
-        {/* <Row>
-          <Col style={{ marginRight: 88 }}>
-            <CheckboxesWrapper>
-              <Title level={4}>Overlay options</Title>
-            </CheckboxesWrapper>
-            <Reference state_global={state} dispatch_gloabl={dispatch} />
-          </Col>
-          <Col>
-            <CheckboxesWrapper>
-              <Title level={4}>Display options</Title>
-            </CheckboxesWrapper>
-            <CheckboxesWrapper>
-              <ViewFiler state={state} dispatch={dispatch} />
-            </CheckboxesWrapper>
-            <CheckboxesWrapper>
-              <SizeChanger
-                dispatch={dispatch}
-                setSize={setSize}
-                currentValue={sizes.medium.size}
-              />
-            </CheckboxesWrapper>
-          </Col >
-        </Row > */}
       </Panel>
     </StyledCollapse>
   );
