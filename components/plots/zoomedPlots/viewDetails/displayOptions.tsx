@@ -1,13 +1,13 @@
 import React from 'react';
 import { Switch } from 'antd';
 
-import { SizeChanger } from '../../sizeChanger';
+import { SizeChanger } from '../../../sizeChanger';
 import {
   setJSROOTMode,
   setZoomedPlotSize,
-} from '../../../reducers/displayFolderOrPlot';
-import { sizes } from '../../constants';
-import { CheckboxesWrapper } from '../../viewDetailsMenu/styledComponents';
+} from '../../../../reducers/displayFolderOrPlot';
+import { sizes } from '../../../constants';
+import { CheckboxesWrapper } from '../../../viewDetailsMenu/styledComponents';
 
 interface DisplayOptionsProps {
   jsroot_mode: boolean;

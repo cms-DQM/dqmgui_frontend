@@ -1,14 +1,14 @@
 import React from 'react';
 import cleanDeep from 'clean-deep';
 
-import { get_jroot_plot } from '../../../config/config';
+import { get_jroot_plot } from '../../../../config/config';
 import {
   ParamsForApiProps,
   TripleProps,
   SizeProps,
   PlotDataProps,
-} from '../../../containers/display/interfaces';
-import { useRequest } from '../../../hooks/useRequest';
+} from '../../../../containers/display/interfaces';
+import { useRequest } from '../../../../hooks/useRequest';
 import { useEffect } from 'react';
 import {
   StyledCol,
@@ -17,7 +17,7 @@ import {
   PlotNameCol,
   MinusIcon,
   ImageDiv,
-} from '../../../containers/display/styledComponents';
+} from '../../../../containers/display/styledComponents';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;

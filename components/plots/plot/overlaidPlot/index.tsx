@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { ParamsForApiProps } from '../interfaces';
+import { ParamsForApiProps } from '../../../../containers/display/interfaces';
 import { OnSideOverlaidPlots } from './onSideOverlaidPlots';
 import { OverlaidPlotImage } from './overlaidPlotImage';
-import { PlotDataProps } from '../interfaces';
+import { PlotDataProps } from '../../../../containers/display/interfaces';
 
 interface OverlaidPlotProps {
   params_for_api: ParamsForApiProps;

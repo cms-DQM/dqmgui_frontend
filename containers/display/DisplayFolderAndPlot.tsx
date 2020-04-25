@@ -4,10 +4,10 @@ import { Col } from 'antd';
 import _ from 'lodash';
 
 import { useRequest } from '../../hooks/useRequest';
-import { Plot } from './plot';
+import { Plot } from '../../components/plots/plot/singlePlot/plot';
 import { ParamsForApiProps, PlotDataProps } from './interfaces';
-import { OverlaidPlot } from './overlaidPlot';
-import { ZoomedPlots } from '../../components/zoomedPlots/';
+import { OverlaidPlot } from '../../components/plots/plot/overlaidPlot';
+import { ZoomedPlots } from '../../components/plots/zoomedPlots';
 import {
   displayFolderOrPlotComponentReducer,
   initialState,

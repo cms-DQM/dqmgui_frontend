@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { root_url, get_plot_url } from '../../../config/config';
-import { ParamsForApiProps, TripleProps, PlotDataProps } from '../interfaces';
+import { root_url, get_plot_url } from '../../../../config/config';
+import { ParamsForApiProps, TripleProps, PlotDataProps } from '../../../../containers/display/interfaces';
 import {
   setSelectedPlotsName,
   addPlotToList,
-} from '../../../reducers/displayFolderOrPlot';
+} from '../../../../reducers/displayFolderOrPlot';
 import {
   StyledCol,
   PlotNameCol,
@@ -14,7 +14,7 @@ import {
   PlusIcon,
   MinusIcon,
   OnSidePlotsWrapper,
-} from '../styledComponents';
+} from '../../../../containers/display/styledComponents';
 import { getOnSideOverlaidPlots } from './utils';
 
 interface OnSideOverlaidPlotsProps {

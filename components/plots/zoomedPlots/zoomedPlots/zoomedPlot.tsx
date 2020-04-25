@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { get_plot_url, root_url } from '../../../config/config';
+import { get_plot_url, root_url } from '../../../../config/config';
 import {
   ParamsForApiProps,
   SizeProps,
   PlotDataProps,
-} from '../../../containers/display/interfaces';
+} from '../../../../containers/display/interfaces';
 import {
   StyledCol,
   PlotNameCol,
@@ -13,7 +13,7 @@ import {
   Column,
   MinusIcon,
   ImageDiv,
-} from '../../../containers/display/styledComponents';
+} from '../../../../containers/display/styledComponents';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;

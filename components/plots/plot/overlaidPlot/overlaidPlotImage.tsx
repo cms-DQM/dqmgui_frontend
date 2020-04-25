@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { root_url } from '../../../config/config';
+import { root_url } from '../../../../config/config';
 import {
   get_plot_with_overlay,
   get_overlaied_plots_urls,
-} from '../../../config/config';
-import { ParamsForApiProps, PlotDataProps } from '../interfaces';
-import { setSelectedPlotsName } from '../../../reducers/displayFolderOrPlot';
+} from '../../../../config/config';
+import { ParamsForApiProps, PlotDataProps } from '../../../../containers/display/interfaces';
+import { setSelectedPlotsName } from '../../../../reducers/displayFolderOrPlot';
 import {
   StyledCol,
   PlotNameCol,
@@ -14,7 +14,7 @@ import {
   Column,
   PlusIcon,
   MinusIcon,
-} from '../styledComponents';
+} from '../../../../containers/display/styledComponents';
 
 interface OverlaidPlotImageProps {
   params_for_api: ParamsForApiProps;

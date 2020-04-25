@@ -4,12 +4,12 @@ import {
   SizeProps,
   CustomizeProps,
   PlotDataProps,
-} from '../../containers/display/interfaces';
+} from '../../../containers/display/interfaces';
 
-import { ZoomedPlots as ZoomedOverlaidPlots } from './zoomedOverlayPlots/';
-import { ZoomedPlots as ZoomedPlotsWithoutOverlay } from './zoomedPlots/';
+import { ZoomedPlots as ZoomedOverlaidPlots } from './zoomedOverlayPlots';
+import { ZoomedPlots as ZoomedPlotsWithoutOverlay } from './zoomedPlots';
 import { ViewDetailsMenu } from './viewDetails';
-import { setJSROOTMode } from '../../reducers/displayFolderOrPlot';
+import { setJSROOTMode } from '../../../reducers/displayFolderOrPlot';
 
 interface ZoomedPlotsProps {
   selected_plots: PlotDataProps[];

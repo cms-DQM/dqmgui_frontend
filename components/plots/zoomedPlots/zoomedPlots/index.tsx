@@ -3,10 +3,10 @@ import {
   ParamsForApiProps,
   SizeProps,
   PlotDataProps,
-} from '../../../containers/display/interfaces';
+} from '../../../../containers/display/interfaces';
 import { ZoomedPlot } from './zoomedPlot';
 import { ZoomedJSROOTPlot } from './zoomedJSROOTPlot';
-import { ZoomedPlotsWrapper } from '../../styledComponents';
+import { ZoomedPlotsWrapper } from '../../../styledComponents';
 
 interface ZoomedPlotsProps {
   selected_plots: PlotDataProps[];
