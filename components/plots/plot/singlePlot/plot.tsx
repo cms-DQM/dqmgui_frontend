@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { root_url } from '../../config/config';
-import { get_plot_url } from '../../config/config';
-import { ParamsForApiProps, PlotDataProps } from './interfaces';
-import { setSelectedPlotsName } from '../../reducers/displayFolderOrPlot';
+import { root_url } from '../../../../config/config';
+import { get_plot_url } from '../../../../config/config';
+import { ParamsForApiProps, PlotDataProps, QueryProps } from '../../../../containers/display/interfaces';
+import { setSelectedPlotsName } from '../../../../reducers/displayFolderOrPlot';
 import {
   StyledCol,
   StyledPlotRow,
@@ -11,7 +11,9 @@ import {
   Column,
   PlusIcon,
   MinusIcon,
-} from './styledComponents';
+} from '../../../../containers/display/styledComponents';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 interface PlotProps {
   plot: PlotDataProps;
@@ -34,6 +36,9 @@ export const Plot = ({
   params_for_api.plot_name = plot.name;
   const plot_url = get_plot_url(params_for_api);
   const source = `${root_url}/${plot_url}`;
+  const router = useRouter()
+  const query: QueryProps = router.query
+
   return (
     <StyledCol>
       <StyledPlotRow
@@ -46,8 +51,20 @@ export const Plot = ({
           {isPlotSelected ? (
             <MinusIcon onClick={() => removePlotFromList(plot)} />
           ) : (
-            <PlusIcon onClick={() => addPlotToList(plot)} />
-          )}
+              <Link
+                href={{
+                  pathname: '/',
+                  query: {
+                    run_number: query.run_number,
+                    dataset_name: query.dataset_name,
+                    folder_path: query.folder_path,
+                    selected_plots: plot.name
+                  },
+                }}
+              >
+                <PlusIcon onClick={() => addPlotToList(plot)} />
+              </Link>
+            )}
         </Column>
         <div
           onClick={() => {

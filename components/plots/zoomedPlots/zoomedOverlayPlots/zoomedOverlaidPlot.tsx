@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { get_overlaied_plots_urls } from '../../../config/config';
+import { get_overlaied_plots_urls } from '../../../../config/config';
 import {
   ParamsForApiProps,
   SizeProps,
   PlotDataProps,
-} from '../../../containers/display/interfaces';
+} from '../../../../containers/display/interfaces';
 import { get_plot_source } from './utils';
 import {
   StyledPlotRow,
@@ -14,7 +14,7 @@ import {
   MinusIcon,
   StyledCol,
   ImageDiv,
-} from '../../../containers/display/styledComponents';
+} from '../../../../containers/display/styledComponents';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
