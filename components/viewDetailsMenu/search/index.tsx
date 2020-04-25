@@ -82,14 +82,12 @@ export const CustomModal = ({
     >
       {visible && (
         <>
-          <NavWrapper>
-            <Nav
-              handler={navigationHandler}
-              setRunNumber={setSearchRunNumber}
-              setDatasetName={setSearchDatasetName}
-              type="overlay"
-            />
-          </NavWrapper>
+          <Nav
+            handler={navigationHandler}
+            setRunNumber={setSearchRunNumber}
+            setDatasetName={setSearchDatasetName}
+            type="overlay"
+          />
           {searching ? (
             <ResultsWrapper>
               <SearchResults

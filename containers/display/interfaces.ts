@@ -46,7 +46,7 @@ export interface DisplayFolderOrPlotComponentProps {
   normalize: boolean;
   overlay_plot: TripleProps[];
   stats: boolean;
-  selected_plots_name: string[];
+  selected_plots: PlotDataProps[];
   overlay: string;
   jsroot_mode: boolean;
   zoomedPlotSize: SizeProps;
@@ -65,6 +65,16 @@ export interface CustomizeProps {
   zmax: number;
   drawopts: string;
   withref: string;
+}
+
+export interface NavigationSearchFieldsProps {
+  search_by_dataset_name: string;
+  search_by_run_number: number;
+}
+
+export interface PlotDataProps {
+  name: string;
+  dir: string;
 }
 
 export interface NavigationSearchFieldsProps {

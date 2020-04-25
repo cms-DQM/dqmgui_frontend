@@ -7,6 +7,7 @@ import {
   setZoomedPlotSize,
 } from '../../../reducers/displayFolderOrPlot';
 import { sizes } from '../../constants';
+import { CheckboxesWrapper } from '../../viewDetailsMenu/styledComponents';
 
 interface DisplayOptionsProps {
   jsroot_mode: boolean;
@@ -16,12 +17,14 @@ interface DisplayOptionsProps {
 export const DisplayOptions = ({ dispatch }: DisplayOptionsProps) => {
   return (
     <div>
-      <SizeChanger
-        dispatch={dispatch}
-        setSize={setZoomedPlotSize}
-        currentValue={sizes.fill.size}
-      />
-      <div>
+      <CheckboxesWrapper>
+        <SizeChanger
+          dispatch={dispatch}
+          setSize={setZoomedPlotSize}
+          currentValue={sizes.large.size}
+        />
+      </CheckboxesWrapper>
+      <CheckboxesWrapper>
         <Switch
           checkedChildren="JSROOT enabled"
           unCheckedChildren="JSROOT disabled"
@@ -29,7 +32,7 @@ export const DisplayOptions = ({ dispatch }: DisplayOptionsProps) => {
             setJSROOTMode(e)(dispatch);
           }}
         />
-      </div>
+      </CheckboxesWrapper>
     </div>
   );
 };

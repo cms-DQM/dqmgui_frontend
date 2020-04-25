@@ -2,21 +2,22 @@ import React from 'react';
 import {
   ParamsForApiProps,
   SizeProps,
+  PlotDataProps,
 } from '../../../containers/display/interfaces';
 import { ZoomedPlot } from './zoomedPlot';
 import { ZoomedJSROOTPlot } from './zoomedJSROOTPlot';
 import { ZoomedPlotsWrapper } from '../../styledComponents';
 
 interface ZoomedPlotsProps {
-  selected_plots_name: string[];
-  removePlotFromList(plot_name: string | undefined): void;
+  selected_plots: PlotDataProps[];
+  removePlotFromList(plot: PlotDataProps | undefined): void;
   params_for_api: ParamsForApiProps;
   jsroot_mode: boolean;
   size: SizeProps;
 }
 
 export const ZoomedPlots = ({
-  selected_plots_name,
+  selected_plots,
   removePlotFromList,
   params_for_api,
   jsroot_mode,
@@ -24,11 +25,11 @@ export const ZoomedPlots = ({
 }: ZoomedPlotsProps) => {
   return (
     <ZoomedPlotsWrapper>
-      {selected_plots_name.map((selected_plot: string) => {
+      {selected_plots.map((selected_plot: PlotDataProps) => {
         if (jsroot_mode) {
           return (
             <ZoomedJSROOTPlot
-              selected_plot_name={selected_plot}
+              selected_plot={selected_plot}
               removePlotFromList={removePlotFromList}
               params_for_api={params_for_api}
               size={size}
@@ -37,7 +38,7 @@ export const ZoomedPlots = ({
         }
         return (
           <ZoomedPlot
-            selected_plot_name={selected_plot}
+            selected_plot={selected_plot}
             removePlotFromList={removePlotFromList}
             params_for_api={params_for_api}
             size={size}
