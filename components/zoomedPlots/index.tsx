@@ -8,7 +8,6 @@ import {
 
 import { ZoomedPlots as ZoomedOverlaidPlots } from './zoomedOverlayPlots/';
 import { ZoomedPlots as ZoomedPlotsWithoutOverlay } from './zoomedPlots/';
-import { DisplayOptionsWrapper } from '../styledComponents';
 import { ViewDetailsMenu } from './viewDetails';
 import { setJSROOTMode } from '../../reducers/displayFolderOrPlot';
 

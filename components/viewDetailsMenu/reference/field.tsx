@@ -36,7 +36,6 @@ export const Field = ({
   }, []);
 
   return (
-    // <StyledDiv>
     <StyledFormItem name={`${id}_${field_name}`}>
       <StyledInput
         disabled={disabled}
@@ -52,6 +51,5 @@ export const Field = ({
         placeholder={placeholder}
       />
     </StyledFormItem>
-    // </StyledDiv>
   );
 };
