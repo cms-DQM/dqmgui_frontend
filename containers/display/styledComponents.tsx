@@ -23,6 +23,12 @@ export const StyledA = styled.a`
 `;
 export const StyledCol = styled(Col)`
   padding: calc(${theme.space.spaceBetween} * 2);
+  width: fit-content;
+`;
+
+export const OnSidePlotsWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
 `;
 export const StyledRow = styled(Row)`
   padding-top: calc(${theme.space.spaceBetween}*2);
@@ -39,6 +45,7 @@ export const StyledPlotRow = styled(Row)<{
   width: number;
   minHeight: number;
   isPlotSelected: boolean;
+  noPointer?: boolean;
 }>`
   display: flex;
   justify-content: space-between;
@@ -49,7 +56,7 @@ export const StyledPlotRow = styled(Row)<{
       ? `${theme.colors.secondary.light}`
       : `${theme.colors.primary.light}`};
   ${theme.colors.primary.main};
-  cursor: pointer;
+  cursor: ${(props) => (props?.noPointer ? '' : 'pointer')};
 `;
 export const PlotNameCol = styled(Col)`
   width: 70%;
@@ -61,28 +68,34 @@ export const Column = styled(Col)`
   padding: ${theme.space.spaceBetween} calc(${theme.space.spaceBetween}*2)
     ${theme.space.spaceBetween} ${theme.space.spaceBetween};
 `;
-export const Wrapper = styled.div<{ zoomed?: any; noBorder?: boolean }>`
+export const Wrapper = styled.div<{
+  zoomed?: any;
+  notZoomedPlot?: boolean;
+  noScroll?: boolean;
+}>`
   width: ${(props) => (props?.zoomed ? '50%' : '100%')};
-  border-left: ${(props) => (props?.noBorder ? '' : '1px solid')};
+  border-left: ${(props) =>
+    props?.notZoomedPlot ? '' : `4px solid ${theme.colors.common.lightGrey}`};
   align-items: center;
-`;
-export const DivWrapper = styled.div`
+  height: ${(props) => (props?.zoomed ? '100%' : 'fit-content')};
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
+  overflow: ${(props) => (props?.zoomed ? 'scroll' : '')};
+  align-items: start;
+  flex-flow: ${(props) => (props?.notZoomedPlot ? '' : 'column')};
+`;
+export const DivWrapper = styled.div<{ selectedPlots: boolean }>`
+  height: 100%;
+  overflow: ${(props) => (props.selectedPlots ? 'hidden' : 'scroll')};
+  display: flex;
 `;
 export const MinusIcon = styled(MinusCircleFilled)`
   font-size: 1.5rem;
-  color: ${theme.colors.common.white};
-  &:hover {
-    color: ${theme.colors.common.black};
-  }
+  color: ${theme.colors.notification.error};
 `;
 export const PlusIcon = styled(PlusCircleFilled)`
   font-size: 1.5rem;
-  color: ${theme.colors.common.white};
-  &:hover {
-    color: ${theme.colors.common.black};
-  }
+  color: ${theme.colors.notification.success};
 `;
 export const StyledDiv = styled.div`
   padding: ${theme.space.spaceBetween};

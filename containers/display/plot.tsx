@@ -2,7 +2,7 @@ import React from 'react';
 
 import { root_url } from '../../config/config';
 import { get_plot_url } from '../../config/config';
-import { ParamsForApiProps } from './interfaces';
+import { ParamsForApiProps, PlotDataProps } from './interfaces';
 import { setSelectedPlotsName } from '../../reducers/displayFolderOrPlot';
 import {
   StyledCol,
@@ -14,25 +14,24 @@ import {
 } from './styledComponents';
 
 interface PlotProps {
-  plot_name: string;
+  plot: PlotDataProps;
   params_for_api: ParamsForApiProps;
-  addPlotToList(plot_name: string): void;
+  addPlotToList(plot: PlotDataProps): void;
   dispatch: any;
   isPlotSelected: boolean;
-  removePlotFromList(plot_name: string | undefined): void;
+  removePlotFromList(plot: PlotDataProps | undefined): void;
   jsroot_mode: boolean;
 }
 
 export const Plot = ({
   addPlotToList,
-  plot_name,
+  plot,
   params_for_api,
   dispatch,
   isPlotSelected,
   removePlotFromList,
-  jsroot_mode,
 }: PlotProps) => {
-  params_for_api.plot_name = plot_name;
+  params_for_api.plot_name = plot.name;
   const plot_url = get_plot_url(params_for_api);
   const source = `${root_url}/${plot_url}`;
   return (
@@ -42,22 +41,22 @@ export const Plot = ({
         width={params_for_api.width}
         isPlotSelected={isPlotSelected}
       >
-        <PlotNameCol>{plot_name}</PlotNameCol>
+        <PlotNameCol>{plot.name}</PlotNameCol>
         <Column>
           {isPlotSelected ? (
-            <MinusIcon onClick={() => removePlotFromList(plot_name)} />
+            <MinusIcon onClick={() => removePlotFromList(plot)} />
           ) : (
-            <PlusIcon onClick={() => addPlotToList(plot_name)} />
+            <PlusIcon onClick={() => addPlotToList(plot)} />
           )}
         </Column>
         <div
           onClick={() => {
             isPlotSelected
-              ? removePlotFromList(plot_name)
-              : setSelectedPlotsName([plot_name])(dispatch);
+              ? removePlotFromList(plot)
+              : setSelectedPlotsName([plot])(dispatch);
           }}
         >
-          <img alt={plot_name} src={source} />
+          <img alt={plot.name} src={source} />
         </div>
       </StyledPlotRow>
     </StyledCol>

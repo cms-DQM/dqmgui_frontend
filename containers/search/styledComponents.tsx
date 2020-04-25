@@ -10,13 +10,15 @@ export const StyledWrapper = styled.div`
   height: 100%;
   display: flex;
   // width: 100%;
+  overflow: scroll;
   justify-content: center;
 `;
 
 export const Spinner = () => <Spin tip="Loading..." />;
 
 export const SpinnerWrapper = styled.div`
-  height: 100%;
+  height: 80vh;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;

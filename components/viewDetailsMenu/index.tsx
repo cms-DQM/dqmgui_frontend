@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Collapse, Switch } from 'antd';
+import { Collapse, Row, Col, Typography } from 'antd';
 
 import { Reference } from './reference/reference';
 import { ViewFiler } from './viewFilter';
@@ -10,6 +10,7 @@ import {
   setSelectedPlotsName,
 } from '../../reducers/displayFolderOrPlot';
 import { sizes } from '../constants';
+import { StyledCollapse, CheckboxesWrapper } from './styledComponents';
 
 const { Panel } = Collapse;
 
@@ -28,21 +29,22 @@ export const ViewDetailsMenu = ({ dispatch, state }: ViewDetailsMenuProps) => {
   }, []);
 
   return (
-    <Collapse defaultActiveKey={['1']}>
-      <Panel header="Overlay Options" key="1">
+    <StyledCollapse>
+      <Panel header="Overlay options" key="2">
         <Reference state_global={state} dispatch_gloabl={dispatch} />
       </Panel>
-      <Panel header="Dispay Options" key="2">
-        <ViewFiler state={state} dispatch={dispatch} />
-        <SizeChanger
-          dispatch={dispatch}
-          setSize={setSize}
-          currentValue={sizes.medium.size}
-        />
+      <Panel header="Display options" key="3">
+        <CheckboxesWrapper>
+          <ViewFiler state={state} dispatch={dispatch} />
+        </CheckboxesWrapper>
+        <CheckboxesWrapper>
+          <SizeChanger
+            dispatch={dispatch}
+            setSize={setSize}
+            currentValue={sizes.medium.size}
+          />
+        </CheckboxesWrapper>
       </Panel>
-      {/* <Panel header="Customize" key="3">
-          <CostumizeTable/>
-        </Panel> */}
-    </Collapse>
+    </StyledCollapse>
   );
 };
