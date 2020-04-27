@@ -33,3 +33,11 @@
 11. **Display server name.**
 
 ---
+---
+## Need to be done
+
+1. Search plot by plot name
+2. Workspaces
+3. Zoomed plots linkability
+4. Browsing by dataset name and run number
+---
