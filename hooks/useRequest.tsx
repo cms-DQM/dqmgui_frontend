@@ -23,7 +23,7 @@ export const useRequest = (
       setIsLoading(true);
       try {
         const response: AxiosResponse = await axios.request({
-          url: `${root_url}/${url}`,
+          url: `${root_url}${url}`,
           method: options.method || 'get',
           ...options,
         });

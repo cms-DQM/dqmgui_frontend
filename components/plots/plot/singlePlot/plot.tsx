@@ -28,7 +28,7 @@ interface PlotProps {
 export const Plot = ({ plot, params_for_api, isPlotSelected }: PlotProps) => {
   params_for_api.plot_name = plot.name;
   const plot_url = get_plot_url(params_for_api);
-  const source = `${root_url}/${plot_url}`;
+  const source = `${root_url}${plot_url}`;
 
   const router = useRouter();
   const query: QueryProps = router.query;
