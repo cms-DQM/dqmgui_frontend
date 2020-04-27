@@ -11,8 +11,6 @@ import { ZoomedPlots } from '../../components/plots/zoomedPlots';
 import {
   displayFolderOrPlotComponentReducer,
   initialState,
-  removePlotFromList,
-  addPlotToList,
 } from '../../reducers/displayFolderOrPlot';
 import { ViewDetailsMenu } from '../../components/viewDetailsMenu';
 import {
@@ -86,16 +84,6 @@ const DiplayFolder: FC<FolderProps> = ({
   } = state;
 
   const selected_plots: PlotDataProps[] = getSelectedPlots(selectedPlots)
-  console.log(selected_plots)
-  const removePlot = (plot: PlotDataProps) => {
-    removePlotFromList(plot)(state, dispatch);
-  };
-
-  const addPlot = (plot: PlotDataProps) => {
-    if (selected_plots.indexOf(plot) < 0) {
-      addPlotToList(plot)(state, dispatch);
-    }
-  };
 
   const {
     data,
@@ -207,7 +195,6 @@ const DiplayFolder: FC<FolderProps> = ({
             <ZoomedPlots
               selected_plots={selected_plots}
               params_for_api={params_for_api}
-              removePlotFromList={removePlot}
               jsroot_mode={state.jsroot_mode}
               dispatch={dispatch}
               size={state.zoomedPlotSize}

@@ -1,11 +1,7 @@
 import React from 'react';
 
-import { root_url, get_plot_url } from '../../../../config/config';
-import { ParamsForApiProps, TripleProps, PlotDataProps, QueryProps } from '../../../../containers/display/interfaces';
-import {
-  setSelectedPlotsName,
-  addPlotToList,
-} from '../../../../reducers/displayFolderOrPlot';
+import { root_url } from '../../../../config/config';
+import { ParamsForApiProps, PlotDataProps, QueryProps } from '../../../../containers/display/interfaces';
 import {
   StyledCol,
   PlotNameCol,
