@@ -14,28 +14,23 @@ import {
 } from '../../../../containers/display/styledComponents';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { removePlotFromSelectedPlots, addToSelectedPlots } from './utils';
 
 interface PlotProps {
   plot: PlotDataProps;
   params_for_api: ParamsForApiProps;
-  addPlotToList(plot: PlotDataProps): void;
-  dispatch: any;
   isPlotSelected: boolean;
-  removePlotFromList(plot: PlotDataProps | undefined): void;
-  jsroot_mode: boolean;
 }
 
 export const Plot = ({
-  addPlotToList,
   plot,
   params_for_api,
-  dispatch,
   isPlotSelected,
-  removePlotFromList,
 }: PlotProps) => {
   params_for_api.plot_name = plot.name;
   const plot_url = get_plot_url(params_for_api);
   const source = `${root_url}/${plot_url}`;
+  
   const router = useRouter()
   const query: QueryProps = router.query
 
@@ -49,7 +44,19 @@ export const Plot = ({
         <PlotNameCol>{plot.name}</PlotNameCol>
         <Column>
           {isPlotSelected ? (
-            <MinusIcon onClick={() => removePlotFromList(plot)} />
+            <Link
+              href={{
+                pathname: '/',
+                query: {
+                  run_number: query.run_number,
+                  dataset_name: query.dataset_name,
+                  folder_path: query.folder_path,
+                  selected_plots: `${removePlotFromSelectedPlots(query.selected_plots, plot)}`
+                },
+              }}
+            >
+              <MinusIcon/>
+            </Link>
           ) : (
               <Link
                 href={{
@@ -58,21 +65,16 @@ export const Plot = ({
                     run_number: query.run_number,
                     dataset_name: query.dataset_name,
                     folder_path: query.folder_path,
-                    selected_plots: plot.name
+                    //addig selected plots name and directories to url
+                    selected_plots: `${addToSelectedPlots(query.selected_plots, plot)}`
                   },
                 }}
               >
-                <PlusIcon onClick={() => addPlotToList(plot)} />
+                <PlusIcon/>
               </Link>
             )}
         </Column>
-        <div
-          onClick={() => {
-            isPlotSelected
-              ? removePlotFromList(plot)
-              : setSelectedPlotsName([plot])(dispatch);
-          }}
-        >
+        <div>
           <img alt={plot.name} src={source} />
         </div>
       </StyledPlotRow>

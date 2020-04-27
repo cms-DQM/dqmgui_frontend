@@ -9,8 +9,6 @@ import DiplayFolders from '../containers/display/DisplayFolderAndPlot';
 import { useSearch } from '../hooks/useSearch';
 import {
   StyledHeader,
-  StyledLayout,
-  StyledContent,
 } from '../styles/styledComponents';
 import {
   NotFoundDiv,
@@ -63,6 +61,9 @@ const Index: NextPage<FolderPathQuery> = () => {
     search_run_number,
     search_dataset_name
   );
+
+  console.log(query)
+
 
   return (
     <div style={{ height: '100vh' }}>
