@@ -18,22 +18,20 @@ export const RadioButtonsGroup = ({
   const [value, setValue] = React.useState(current_value);
 
   return (
-    <StyledDiv>
-      <Radio.Group
-        onChange={(e) => {
-          action(e.target.value);
-          setValue(e.target.value);
-        }}
-        value={value}
-      >
-        {options.map((option: OptionProps) => {
-          return (
-            <Radio key={option.label} value={option.value}>
-              {option.label}
-            </Radio>
-          );
-        })}
-      </Radio.Group>
-    </StyledDiv>
+    <Radio.Group
+      onChange={(e) => {
+        action(e.target.value);
+        setValue(e.target.value);
+      }}
+      value={value}
+    >
+      {options.map((option: OptionProps) => {
+        return (
+          <Radio key={option.label} value={option.value}>
+            {option.label}
+          </Radio>
+        );
+      })}
+    </Radio.Group>
   );
 };

@@ -1,6 +1,5 @@
 import React from 'react';
-import { Breadcrumb, Typography } from 'antd';
-import { HomeOutlined, UserOutlined } from '@ant-design/icons';
+import { Breadcrumb } from 'antd';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
@@ -67,11 +66,10 @@ export const FolderPath = ({
               query: {
                 run_number: query.run_number,
                 dataset_name: query.dataset_name,
-                // folder_path: '/'
               },
             }}
           >
-            <HomeOutlined />
+            Home
           </Link>
         </Breadcrumb.Item>
         {filteredFolders.map((folder: string) => {

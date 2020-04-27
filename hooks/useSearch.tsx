@@ -1,4 +1,3 @@
-import React, { useState, useEffect } from 'react';
 import { useRequest } from './useRequest';
 import _ from 'lodash';
 
@@ -7,23 +6,31 @@ interface ReturnSearch {
   results_grouped: any[];
   searching: boolean;
   isLoading: boolean;
+  error: any;
 }
 
 export const useSearch = (
-  run_number: number,
-  dataset_name: string
+  run_number?: number,
+  dataset_name?: string
 ): ReturnSearch => {
   const searching = !!(run_number || dataset_name);
+  const run_number_value = run_number ? run_number : '';
 
-  const { data, isLoading } = useRequest(
-    `data/json/samples?match=${dataset_name}&run=${run_number}`,
+  const { data, isLoading, error } = useRequest(
+    `data/json/samples?match=${dataset_name}&run=${run_number_value}`,
     {},
     [run_number, dataset_name],
     searching
   );
 
   if (!searching || data === null || (data && data.samples.length === 0)) {
-    return { results: [], results_grouped: [], searching, isLoading };
+    return {
+      results: [],
+      results_grouped: [],
+      searching,
+      isLoading,
+      error: false,
+    };
   }
   const { samples: results }: { samples: any[] } = data;
   const parsed_results = results.reduce(
@@ -37,5 +44,5 @@ export const useSearch = (
     .map((value, key) => ({ dataset: key, value }))
     .value();
 
-  return { results, results_grouped, searching, isLoading };
+  return { results, results_grouped, searching, isLoading, error };
 };
