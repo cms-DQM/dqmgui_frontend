@@ -4,15 +4,13 @@ import { Col } from 'antd';
 import _ from 'lodash';
 
 import { useRequest } from '../../hooks/useRequest';
-import { Plot } from './plot';
-import { ParamsForApiProps, PlotDataProps } from './interfaces';
-import { OverlaidPlot } from './overlaidPlot';
-import { ZoomedPlots } from '../../components/zoomedPlots/';
+import { Plot } from '../../components/plots/plot/singlePlot/plot';
+import { ParamsForApiProps, PlotDataProps, QueryProps } from './interfaces';
+import { OverlaidPlot } from '../../components/plots/plot/overlaidPlot';
+import { ZoomedPlots } from '../../components/plots/zoomedPlots';
 import {
   displayFolderOrPlotComponentReducer,
   initialState,
-  removePlotFromList,
-  addPlotToList,
 } from '../../reducers/displayFolderOrPlot';
 import { ViewDetailsMenu } from '../../components/viewDetailsMenu';
 import {
@@ -23,10 +21,10 @@ import {
   DivWrapper,
 } from './styledComponents';
 import { FolderPath } from './folderPath';
-import { StyledRow } from './styledComponents';
-import { isPlotSelected } from './utils';
+import { isPlotSelected, getSelectedPlots } from './utils';
 import cleanDeep from 'clean-deep';
 import { SpinnerWrapper, Spinner } from '../search/styledComponents';
+import { useRouter } from 'next/router';
 
 interface DirectoryInterface {
   subdir: string;
@@ -49,6 +47,7 @@ const doesPlotExists = (contents: (PlotInterface & DirectoryInterface)[]) =>
   );
 
 // what is streamerinfo? (coming from api, we don't know what it is, so we filtered it out)
+// getContent also sorting data that directories should be displayed firstly, just after them- plots images.
 const getContents = (data: any) =>
   data
     ? _.sortBy(
@@ -70,6 +69,10 @@ const DiplayFolder: FC<FolderProps> = ({
     initialState
   );
 
+  const router = useRouter();
+  const query: QueryProps = router.query;
+  const selectedPlots = query.selected_plots;
+
   const {
     errorBars,
     overlay,
@@ -78,18 +81,9 @@ const DiplayFolder: FC<FolderProps> = ({
     normalize,
     overlay_plot,
     stats,
-    selected_plots,
   } = state;
 
-  const removePlot = (plot: PlotDataProps) => {
-    removePlotFromList(plot)(state, dispatch);
-  };
-
-  const addPlot = (plot: PlotDataProps) => {
-    if (selected_plots.indexOf(plot) < 0) {
-      addPlotToList(plot)(state, dispatch);
-    }
-  };
+  const selected_plots: PlotDataProps[] = getSelectedPlots(selectedPlots);
 
   const {
     data,
@@ -174,9 +168,6 @@ const DiplayFolder: FC<FolderProps> = ({
                         <OverlaidPlot
                           plot={plot}
                           params_for_api={params_for_api}
-                          addPlotToList={addPlot}
-                          dispatch={dispatch}
-                          removePlotFromList={removePlot}
                           isPlotSelected={isPlotSelected(
                             selected_plots,
                             plot.name
@@ -186,10 +177,6 @@ const DiplayFolder: FC<FolderProps> = ({
                         <Plot
                           plot={plot}
                           params_for_api={params_for_api}
-                          addPlotToList={addPlot}
-                          dispatch={dispatch}
-                          removePlotFromList={removePlot}
-                          jsroot_mode={state.jsroot_mode}
                           isPlotSelected={isPlotSelected(
                             selected_plots,
                             plot.name
@@ -208,7 +195,6 @@ const DiplayFolder: FC<FolderProps> = ({
             <ZoomedPlots
               selected_plots={selected_plots}
               params_for_api={params_for_api}
-              removePlotFromList={removePlot}
               jsroot_mode={state.jsroot_mode}
               dispatch={dispatch}
               size={state.zoomedPlotSize}

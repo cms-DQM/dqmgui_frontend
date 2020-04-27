@@ -46,7 +46,6 @@ export interface DisplayFolderOrPlotComponentProps {
   normalize: boolean;
   overlay_plot: TripleProps[];
   stats: boolean;
-  selected_plots: PlotDataProps[];
   overlay: string;
   jsroot_mode: boolean;
   zoomedPlotSize: SizeProps;
@@ -80,4 +79,13 @@ export interface PlotDataProps {
 export interface NavigationSearchFieldsProps {
   search_by_dataset_name: string;
   search_by_run_number: number;
+}
+
+export interface QueryProps {
+  run_number?: number;
+  dataset_name?: string;
+  folder_path?: string;
+  search_run_number?: string;
+  search_dataset_name?: string;
+  selected_plots?: string;
 }

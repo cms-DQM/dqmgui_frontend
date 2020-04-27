@@ -14,9 +14,10 @@ export const useSearch = (
   dataset_name?: string
 ): ReturnSearch => {
   const searching = !!(run_number || dataset_name);
+  const run_number_value = run_number ? run_number : '';
 
   const { data, isLoading, error } = useRequest(
-    `data/json/samples?match=${dataset_name}&run=${run_number}`,
+    `data/json/samples?match=${dataset_name}&run=${run_number_value}`,
     {},
     [run_number, dataset_name],
     searching
