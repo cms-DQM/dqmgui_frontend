@@ -7,7 +7,11 @@ import {
   get_plot_with_overlay,
   get_overlaied_plots_urls,
 } from '../../../../config/config';
-import { ParamsForApiProps, PlotDataProps, QueryProps } from '../../../../containers/display/interfaces';
+import {
+  ParamsForApiProps,
+  PlotDataProps,
+  QueryProps,
+} from '../../../../containers/display/interfaces';
 import {
   StyledCol,
   PlotNameCol,
@@ -16,7 +20,10 @@ import {
   PlusIcon,
   MinusIcon,
 } from '../../../../containers/display/styledComponents';
-import { removePlotFromSelectedPlots, addToSelectedPlots } from '../singlePlot/utils';
+import {
+  removePlotFromSelectedPlots,
+  addToSelectedPlots,
+} from '../singlePlot/utils';
 
 interface OverlaidPlotImageProps {
   params_for_api: ParamsForApiProps;
@@ -27,7 +34,7 @@ interface OverlaidPlotImageProps {
 export const OverlaidPlotImage = ({
   plot,
   params_for_api,
-  isPlotSelected
+  isPlotSelected,
 }: OverlaidPlotImageProps) => {
   params_for_api.plot_name = plot.name;
   const overlaid_plots_urls = get_overlaied_plots_urls(params_for_api);
@@ -37,8 +44,8 @@ export const OverlaidPlotImage = ({
   const plot_with_overlay = get_plot_with_overlay(params_for_api);
   const source = `${root_url}/${plot_with_overlay}`;
 
-  const router = useRouter()
-  const query: QueryProps = router.query
+  const router = useRouter();
+  const query: QueryProps = router.query;
 
   return (
     <StyledCol>
@@ -57,28 +64,34 @@ export const OverlaidPlotImage = ({
                   run_number: query.run_number,
                   dataset_name: query.dataset_name,
                   folder_path: query.folder_path,
-                  selected_plots: `${removePlotFromSelectedPlots(query.selected_plots, plot)}`
+                  selected_plots: `${removePlotFromSelectedPlots(
+                    query.selected_plots,
+                    plot
+                  )}`,
                 },
               }}
             >
               <MinusIcon />
             </Link>
           ) : (
-              <Link
-                href={{
-                  pathname: '/',
-                  query: {
-                    run_number: query.run_number,
-                    dataset_name: query.dataset_name,
-                    folder_path: query.folder_path,
-                    //addig selected plots name and directories to url
-                    selected_plots: `${addToSelectedPlots(query.selected_plots, plot)}`
-                  },
-                }}
-              >
-                <PlusIcon />
-              </Link>
-            )}
+            <Link
+              href={{
+                pathname: '/',
+                query: {
+                  run_number: query.run_number,
+                  dataset_name: query.dataset_name,
+                  folder_path: query.folder_path,
+                  //addig selected plots name and directories to url
+                  selected_plots: `${addToSelectedPlots(
+                    query.selected_plots,
+                    plot
+                  )}`,
+                },
+              }}
+            >
+              <PlusIcon />
+            </Link>
+          )}
         </Column>
         <div>
           <img alt={plot.name} src={source} />

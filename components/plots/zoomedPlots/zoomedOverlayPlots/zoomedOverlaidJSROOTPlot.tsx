@@ -39,8 +39,8 @@ export const ZoomedOverlaidJSROOTPlot = ({
   params_for_api.plot_name = selected_plot.name;
   params_for_api.folders_path = selected_plot.dir;
 
-  const router = useRouter()
-  const query: QueryProps = router.query
+  const router = useRouter();
+  const query: QueryProps = router.query;
 
   const { data } = useRequest(get_jroot_plot(params_for_api), {}, [
     selected_plot.name,
@@ -48,17 +48,17 @@ export const ZoomedOverlaidJSROOTPlot = ({
 
   const overlaid_plots_runs_and_datasets: any[] = params_for_api?.overlay_plot
     ? params_for_api.overlay_plot.map((plot: TripleProps) => {
-      const copy: any = { ...params_for_api };
+        const copy: any = { ...params_for_api };
 
-      if (plot.dataset_name) {
-        copy.dataset_name = plot.dataset_name;
-      }
-      copy.run_number = plot.run_number;
-      const { data } = useRequest(get_jroot_plot(copy), {}, [
-        selected_plot.name,
-      ]);
-      return data;
-    })
+        if (plot.dataset_name) {
+          copy.dataset_name = plot.dataset_name;
+        }
+        copy.run_number = plot.run_number;
+        const { data } = useRequest(get_jroot_plot(copy), {}, [
+          selected_plot.name,
+        ]);
+        return data;
+      })
     : [];
 
   overlaid_plots_runs_and_datasets.push(data);
@@ -138,7 +138,10 @@ export const ZoomedOverlaidJSROOTPlot = ({
                 run_number: query.run_number,
                 dataset_name: query.dataset_name,
                 folder_path: query.folder_path,
-                selected_plots: `${removePlotFromSelectedPlots(query.selected_plots, selected_plot)}`
+                selected_plots: `${removePlotFromSelectedPlots(
+                  query.selected_plots,
+                  selected_plot
+                )}`,
               },
             }}
           >

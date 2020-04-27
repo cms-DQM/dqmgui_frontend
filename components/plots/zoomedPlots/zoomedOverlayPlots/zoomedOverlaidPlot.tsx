@@ -35,8 +35,8 @@ export const ZoomedOverlaidPlot = ({
   params_for_api.width = size.w;
   params_for_api.plot_name = selected_plot.name;
 
-  const router = useRouter()
-  const query: QueryProps = router.query
+  const router = useRouter();
+  const query: QueryProps = router.query;
 
   const overlaid_plots_urls = get_overlaied_plots_urls(params_for_api);
   const joined_overlaid_plots_urls = overlaid_plots_urls.join('');
@@ -61,7 +61,10 @@ export const ZoomedOverlaidPlot = ({
                 run_number: query.run_number,
                 dataset_name: query.dataset_name,
                 folder_path: query.folder_path,
-                selected_plots: `${removePlotFromSelectedPlots(query.selected_plots, selected_plot)}`
+                selected_plots: `${removePlotFromSelectedPlots(
+                  query.selected_plots,
+                  selected_plot
+                )}`,
               },
             }}
           >

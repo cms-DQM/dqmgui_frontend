@@ -5,9 +5,7 @@ import { Reference } from './reference/reference';
 import { ViewFiler } from './viewFilter';
 import { SizeChanger } from '../sizeChanger';
 import { setSize } from '../../reducers/displayFolderOrPlot';
-import {
-  setPlotToOverlay,
-} from '../../reducers/displayFolderOrPlot';
+import { setPlotToOverlay } from '../../reducers/displayFolderOrPlot';
 import { sizes } from '../constants';
 import { StyledCollapse, CheckboxesWrapper } from './styledComponents';
 

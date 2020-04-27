@@ -1,4 +1,7 @@
-import { ParamsForApiProps, TripleProps } from '../../../../containers/display/interfaces';
+import {
+  ParamsForApiProps,
+  TripleProps,
+} from '../../../../containers/display/interfaces';
 import { get_plot_url } from '../../../../config/config';
 
 export const getOnSideOverlaidPlots = (params_for_api: ParamsForApiProps) => {

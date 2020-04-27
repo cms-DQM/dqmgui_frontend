@@ -37,8 +37,8 @@ export const ZoomedPlot = ({
 
   const plot_url = get_plot_url(params_for_api);
   const source = `${root_url}/${plot_url}`;
-  const router = useRouter()
-  const query: QueryProps = router.query
+  const router = useRouter();
+  const query: QueryProps = router.query;
 
   return (
     <StyledCol>
@@ -57,7 +57,10 @@ export const ZoomedPlot = ({
                 run_number: query.run_number,
                 dataset_name: query.dataset_name,
                 folder_path: query.folder_path,
-                selected_plots: `${removePlotFromSelectedPlots(query.selected_plots, selected_plot)}`
+                selected_plots: `${removePlotFromSelectedPlots(
+                  query.selected_plots,
+                  selected_plot
+                )}`,
               },
             }}
           >

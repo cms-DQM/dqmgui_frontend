@@ -25,12 +25,12 @@ export const OverlaidPlot = ({
           isPlotSelected={isPlotSelected}
         />
       ) : (
-          <OverlaidPlotImage
-            plot={plot}
-            params_for_api={params_for_api}
-            isPlotSelected={isPlotSelected}
-          />
-        )}
+        <OverlaidPlotImage
+          plot={plot}
+          params_for_api={params_for_api}
+          isPlotSelected={isPlotSelected}
+        />
+      )}
     </>
   );
 };

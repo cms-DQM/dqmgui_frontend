@@ -34,8 +34,8 @@ export const ZoomedJSROOTPlot = ({
   params_for_api.plot_name = selected_plot.name;
   params_for_api.folders_path = selected_plot.dir;
 
-  const router = useRouter()
-  const query: QueryProps = router.query
+  const router = useRouter();
+  const query: QueryProps = router.query;
 
   const { data } = useRequest(get_jroot_plot(params_for_api), {}, [
     selected_plot.name,
@@ -63,7 +63,10 @@ export const ZoomedJSROOTPlot = ({
                 run_number: query.run_number,
                 dataset_name: query.dataset_name,
                 folder_path: query.folder_path,
-                selected_plots: `${removePlotFromSelectedPlots(query.selected_plots, selected_plot)}`
+                selected_plots: `${removePlotFromSelectedPlots(
+                  query.selected_plots,
+                  selected_plot
+                )}`,
               },
             }}
           >

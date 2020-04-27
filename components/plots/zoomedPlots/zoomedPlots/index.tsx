@@ -21,7 +21,6 @@ export const ZoomedPlots = ({
   jsroot_mode,
   size,
 }: ZoomedPlotsProps) => {
-
   return (
     <ZoomedPlotsWrapper>
       {selected_plots.map((selected_plot: any) => {

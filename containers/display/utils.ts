@@ -17,19 +17,22 @@ export const isPlotSelected = (
   );
 
 export const getSelectedPlotsNames = (plotsNames: string | undefined) => {
-  const plots = plotsNames ? plotsNames.split('/') : []
+  const plots = plotsNames ? plotsNames.split('/') : [];
 
-  return plots
-}
+  return plots;
+};
 
 export const getSelectedPlots = (plotsQuery: string | undefined) => {
-  const plotsWithDirs = plotsQuery ? plotsQuery.split('&') : []
+  const plotsWithDirs = plotsQuery ? plotsQuery.split('&') : [];
   return plotsWithDirs.map((plotWithDir: string) => {
-    console.log(plotWithDir)
-    const plotAndDir = plotWithDir.split('/')
-    const name = plotAndDir.pop()
-    const directories = plotAndDir.join('/')
-    const plotObject: PlotDataProps = { name: name ? name : '', dir: directories }
-    return plotObject
-  })
-}
+    console.log(plotWithDir);
+    const plotAndDir = plotWithDir.split('/');
+    const name = plotAndDir.pop();
+    const directories = plotAndDir.join('/');
+    const plotObject: PlotDataProps = {
+      name: name ? name : '',
+      dir: directories,
+    };
+    return plotObject;
+  });
+};
