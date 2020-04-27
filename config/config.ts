@@ -6,10 +6,10 @@ import { get_customize_params } from './utils';
 
 const config: any = {
   development: {
-    root_url: 'http://localhost:8081/dqm/dev',
+    root_url: 'http://localhost:8081/dqm/dev/',
   },
   production: {
-    root_url: 'https://dqm-gui.web.cern.ch/api/dqm/offline',
+    root_url: 'https://dqm-gui.web.cern.ch/api/dqm/offline/',
   },
 };
 export const root_url = config[process.env.NODE_ENV || 'development'].root_url;
