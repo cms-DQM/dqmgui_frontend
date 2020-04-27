@@ -1,5 +1,6 @@
 import React from 'react';
 import { Breadcrumb, Typography } from 'antd';
+import { HomeOutlined, UserOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
@@ -70,7 +71,7 @@ export const FolderPath = ({
               },
             }}
           >
-            Home
+            <HomeOutlined />
           </Link>
         </Breadcrumb.Item>
         {filteredFolders.map((folder: string) => {
