@@ -3,14 +3,13 @@ import {
   ParamsForApiProps,
   SizeProps,
   PlotDataProps,
-} from '../../../containers/display/interfaces';
-import { ZoomedPlot } from './zoomedPlot';
-import { ZoomedJSROOTPlot } from './zoomedJSROOTPlot';
-import { ZoomedPlotsWrapper } from '../../styledComponents';
+} from '../../../../containers/display/interfaces';
+import { ZoomedOverlaidPlot } from './zoomedOverlaidPlot';
+import { ZoomedOverlaidJSROOTPlot } from './zoomedOverlaidJSROOTPlot';
+import { ZoomedPlotsWrapper } from '../../../styledComponents';
 
 interface ZoomedPlotsProps {
   selected_plots: PlotDataProps[];
-  removePlotFromList(plot: PlotDataProps | undefined): void;
   params_for_api: ParamsForApiProps;
   jsroot_mode: boolean;
   size: SizeProps;
@@ -18,7 +17,6 @@ interface ZoomedPlotsProps {
 
 export const ZoomedPlots = ({
   selected_plots,
-  removePlotFromList,
   params_for_api,
   jsroot_mode,
   size,
@@ -28,18 +26,16 @@ export const ZoomedPlots = ({
       {selected_plots.map((selected_plot: PlotDataProps) => {
         if (jsroot_mode) {
           return (
-            <ZoomedJSROOTPlot
+            <ZoomedOverlaidJSROOTPlot
               selected_plot={selected_plot}
-              removePlotFromList={removePlotFromList}
               params_for_api={params_for_api}
               size={size}
             />
           );
         }
         return (
-          <ZoomedPlot
+          <ZoomedOverlaidPlot
             selected_plot={selected_plot}
-            removePlotFromList={removePlotFromList}
             params_for_api={params_for_api}
             size={size}
           />

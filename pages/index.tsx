@@ -7,11 +7,7 @@ import Nav from '../components/Nav';
 import SearchResults from '../containers/search/SearchResults';
 import DiplayFolders from '../containers/display/DisplayFolderAndPlot';
 import { useSearch } from '../hooks/useSearch';
-import {
-  StyledHeader,
-  StyledLayout,
-  StyledContent,
-} from '../styles/styledComponents';
+import { StyledHeader } from '../styles/styledComponents';
 import {
   NotFoundDiv,
   NotFoundDivWrapper,
@@ -64,6 +60,8 @@ const Index: NextPage<FolderPathQuery> = () => {
     search_dataset_name
   );
 
+  console.log(query);
+
   return (
     <div style={{ height: '100vh' }}>
       <Head>
@@ -83,30 +81,30 @@ const Index: NextPage<FolderPathQuery> = () => {
           />
         </StyledHeader>
         {/* <StyledContent> */}
-          {validation_errors.length > 0 ? (
-            <QueryValidationErrors validation_errors={validation_errors} />
-          ) : run_number && dataset_name ? (
-            // If a user already has a run_number and dataset_name, he is not searching nor is he in the homepage, he is
-            <DiplayFolders
-              run_number={run_number}
-              dataset_name={dataset_name}
-              folder_path={folder_path || ''}
-            />
-          ) : searching ? (
-            <SearchResults
-              isLoading={isLoading}
-              results={results}
-              results_grouped={results_grouped}
-              handler={serchResultsHandler}
-            />
-          ) : (
-            <NotFoundDivWrapper>
-              <NotFoundDiv noBorder>
-                <ChartIcon />
-                Welcome to DQM GUI
-              </NotFoundDiv>
-            </NotFoundDivWrapper>
-          )}
+        {validation_errors.length > 0 ? (
+          <QueryValidationErrors validation_errors={validation_errors} />
+        ) : run_number && dataset_name ? (
+          // If a user already has a run_number and dataset_name, he is not searching nor is he in the homepage, he is
+          <DiplayFolders
+            run_number={run_number}
+            dataset_name={dataset_name}
+            folder_path={folder_path || ''}
+          />
+        ) : searching ? (
+          <SearchResults
+            isLoading={isLoading}
+            results={results}
+            results_grouped={results_grouped}
+            handler={serchResultsHandler}
+          />
+        ) : (
+          <NotFoundDivWrapper>
+            <NotFoundDiv noBorder>
+              <ChartIcon />
+              Welcome to DQM GUI
+            </NotFoundDiv>
+          </NotFoundDivWrapper>
+        )}
         {/* </StyledContent> */}
       </Layout>
     </div>

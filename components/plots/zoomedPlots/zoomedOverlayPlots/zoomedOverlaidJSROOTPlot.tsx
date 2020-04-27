@@ -1,14 +1,17 @@
 import React from 'react';
 import cleanDeep from 'clean-deep';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
-import { get_jroot_plot } from '../../../config/config';
+import { get_jroot_plot } from '../../../../config/config';
 import {
   ParamsForApiProps,
   TripleProps,
   SizeProps,
   PlotDataProps,
-} from '../../../containers/display/interfaces';
-import { useRequest } from '../../../hooks/useRequest';
+  QueryProps,
+} from '../../../../containers/display/interfaces';
+import { useRequest } from '../../../../hooks/useRequest';
 import { useEffect } from 'react';
 import {
   StyledCol,
@@ -17,18 +20,17 @@ import {
   PlotNameCol,
   MinusIcon,
   ImageDiv,
-} from '../../../containers/display/styledComponents';
+} from '../../../../containers/display/styledComponents';
+import { removePlotFromSelectedPlots } from '../../plot/singlePlot/utils';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;
-  removePlotFromList(plot: PlotDataProps | undefined): void;
   params_for_api: ParamsForApiProps;
   size: SizeProps;
 }
 
 export const ZoomedOverlaidJSROOTPlot = ({
   selected_plot,
-  removePlotFromList,
   params_for_api,
   size,
 }: ZoomedJSROOTPlotsProps) => {
@@ -36,6 +38,9 @@ export const ZoomedOverlaidJSROOTPlot = ({
   params_for_api.width = size.w;
   params_for_api.plot_name = selected_plot.name;
   params_for_api.folders_path = selected_plot.dir;
+
+  const router = useRouter();
+  const query: QueryProps = router.query;
 
   const { data } = useRequest(get_jroot_plot(params_for_api), {}, [
     selected_plot.name,
@@ -126,7 +131,22 @@ export const ZoomedOverlaidJSROOTPlot = ({
       >
         <PlotNameCol>{selected_plot.name}</PlotNameCol>
         <Column>
-          <MinusIcon onClick={() => removePlotFromList(selected_plot)} />
+          <Link
+            href={{
+              pathname: '/',
+              query: {
+                run_number: query.run_number,
+                dataset_name: query.dataset_name,
+                folder_path: query.folder_path,
+                selected_plots: `${removePlotFromSelectedPlots(
+                  query.selected_plots,
+                  selected_plot
+                )}`,
+              },
+            }}
+          >
+            <MinusIcon />
+          </Link>
         </Column>
         <ImageDiv
           style={{ display: params_for_api.normalize ? '' : 'none' }}

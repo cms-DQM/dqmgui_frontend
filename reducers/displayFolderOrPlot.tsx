@@ -14,7 +14,6 @@ export const initialState: DisplayFolderOrPlotComponentProps = {
   normalize: true,
   overlay_plot: [],
   stats: true,
-  selected_plots: [],
   jsroot_mode: false,
   zoomedPlotSize: { h: sizes.large.size.h, w: sizes.large.size.w },
   customizeProps: {
@@ -81,35 +80,6 @@ export const setOverlay = (overlay: string) => (dispatch: any) =>
     payload: overlay,
   });
 
-export const setSelectedPlotsName = (selected_plots_name: PlotDataProps[]) => (
-  dispatch: any
-) => {
-  return dispatch({
-    type: FOLDERS_OR_PLOTS_REDUCER.SET_SELECTED_PLOTS_NAMES,
-    payload: selected_plots_name,
-  });
-};
-
-export const removePlotFromList = (plot_to_remove: PlotDataProps) => (
-  state: DisplayFolderOrPlotComponentProps,
-  dispatch: any
-) => {
-  const copy: PlotDataProps[] = [...state.selected_plots];
-  const filtered: PlotDataProps[] = copy.filter(
-    (plot: PlotDataProps) => plot.name !== plot_to_remove.name
-  );
-  setSelectedPlotsName(filtered)(dispatch);
-};
-
-export const addPlotToList = (plot: PlotDataProps) => (
-  state: DisplayFolderOrPlotComponentProps,
-  dispatch: any
-) => {
-  const copy = [...state.selected_plots];
-  copy.push(plot);
-  setSelectedPlotsName(copy)(dispatch);
-};
-
 export const setStats = (stats: boolean) => (dispatch: any) =>
   dispatch({
     type: FOLDERS_OR_PLOTS_REDUCER.SET_STATS,
@@ -145,8 +115,6 @@ export function displayFolderOrPlotComponentReducer(
       return { ...state, overlay_plot: action.payload };
     case FOLDERS_OR_PLOTS_REDUCER.SET_OVERLAY:
       return { ...state, overlay: action.payload };
-    case FOLDERS_OR_PLOTS_REDUCER.SET_SELECTED_PLOTS_NAMES:
-      return { ...state, selected_plots: action.payload };
     case FOLDERS_OR_PLOTS_REDUCER.SET_STATS:
       return { ...state, stats: action.payload };
     case FOLDERS_OR_PLOTS_REDUCER.JSROOT_MODE:

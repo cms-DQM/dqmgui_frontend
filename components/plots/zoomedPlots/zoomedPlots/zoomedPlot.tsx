@@ -1,11 +1,12 @@
 import React from 'react';
 
-import { get_plot_url, root_url } from '../../../config/config';
+import { get_plot_url, root_url } from '../../../../config/config';
 import {
   ParamsForApiProps,
   SizeProps,
   PlotDataProps,
-} from '../../../containers/display/interfaces';
+  QueryProps,
+} from '../../../../containers/display/interfaces';
 import {
   StyledCol,
   PlotNameCol,
@@ -13,18 +14,19 @@ import {
   Column,
   MinusIcon,
   ImageDiv,
-} from '../../../containers/display/styledComponents';
+} from '../../../../containers/display/styledComponents';
+import { removePlotFromSelectedPlots } from '../../plot/singlePlot/utils';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
-  removePlotFromList(plot: PlotDataProps | undefined): void;
   params_for_api: ParamsForApiProps;
   size: SizeProps;
 }
 
 export const ZoomedPlot = ({
   selected_plot,
-  removePlotFromList,
   params_for_api,
   size,
 }: ZoomedPlotsProps) => {
@@ -32,8 +34,11 @@ export const ZoomedPlot = ({
   params_for_api.height = size.h;
   params_for_api.width = size.w;
   params_for_api.folders_path = selected_plot.dir;
+
   const plot_url = get_plot_url(params_for_api);
   const source = `${root_url}/${plot_url}`;
+  const router = useRouter();
+  const query: QueryProps = router.query;
 
   return (
     <StyledCol>
@@ -45,7 +50,22 @@ export const ZoomedPlot = ({
       >
         <PlotNameCol>{selected_plot.name}</PlotNameCol>
         <Column>
-          <MinusIcon onClick={() => removePlotFromList(selected_plot)} />
+          <Link
+            href={{
+              pathname: '/',
+              query: {
+                run_number: query.run_number,
+                dataset_name: query.dataset_name,
+                folder_path: query.folder_path,
+                selected_plots: `${removePlotFromSelectedPlots(
+                  query.selected_plots,
+                  selected_plot
+                )}`,
+              },
+            }}
+          >
+            <MinusIcon />
+          </Link>
         </Column>
         <ImageDiv id={selected_plot.name} width={size.w} height={size.h}>
           <img
