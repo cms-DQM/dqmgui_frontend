@@ -43,7 +43,6 @@ export const CostumizeTable = ({ dispatch }: CostumizeTableProps) => {
       initialValues={{ remember: true }}
       onFinish={(params) => {
         const cleanedParams = cleanDeep(params);
-        console.log(cleanedParams);
         setParamsForCustomize(cleanedParams as CustomizeProps)(dispatch);
       }}
     >
@@ -52,7 +51,7 @@ export const CostumizeTable = ({ dispatch }: CostumizeTableProps) => {
           <StyledFormItem label="Reference" name="withref">
             <StyledSelect defaultValue={referenceCopy[0].value}>
               {referenceCopy.map((option: OptionProps) => (
-                <Option value={option.value}>{option.label}</Option>
+                <Option value={option.value} key={option.value.toString()}>{option.label}</Option>
               ))}
             </StyledSelect>
           </StyledFormItem>

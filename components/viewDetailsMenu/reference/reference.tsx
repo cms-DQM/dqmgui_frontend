@@ -80,7 +80,7 @@ export const Reference = ({
           state={state}
         />
         {triples.map((triple: TripleProps) => (
-          <FieldsWrapper>
+          <FieldsWrapper key={triple.id.toString()}>
             <StyledDiv>
               <Container
                 state={state}

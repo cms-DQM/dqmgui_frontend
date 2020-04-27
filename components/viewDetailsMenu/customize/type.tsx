@@ -30,7 +30,7 @@ export const Type = ({ type }: TypesProps) => {
         <StyledFormItem name={`${type}type`} label={`${type} type`}>
           <StyledSelect defaultValue={xyzTypes[0].value}>
             {xyzTypes.map((option: OptionProps) => (
-              <Option value={option.value}>{option.label}</Option>
+              <Option value={option.value} key={option.value.toString()}>{option.label}</Option>
             ))}
           </StyledSelect>
         </StyledFormItem>
