@@ -13,7 +13,6 @@ import { setJSROOTMode } from '../../../reducers/displayFolderOrPlot';
 
 interface ZoomedPlotsProps {
   selected_plots: PlotDataProps[];
-  removePlotFromList(plot: PlotDataProps | undefined): void;
   params_for_api: ParamsForApiProps;
   jsroot_mode: boolean;
   dispatch: any;
@@ -23,7 +22,6 @@ interface ZoomedPlotsProps {
 
 export const ZoomedPlots = ({
   jsroot_mode,
-  removePlotFromList,
   params_for_api,
   selected_plots,
   dispatch,
