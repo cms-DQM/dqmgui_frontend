@@ -30,6 +30,7 @@ export const ZoomedPlots = ({
               selected_plot={selected_plot}
               params_for_api={params_for_api}
               size={size}
+              key={selected_plot.name}
             />
           );
         }
@@ -38,6 +39,7 @@ export const ZoomedPlots = ({
             selected_plot={selected_plot}
             params_for_api={params_for_api}
             size={size}
+            key={selected_plot.name}
           />
         );
       })}

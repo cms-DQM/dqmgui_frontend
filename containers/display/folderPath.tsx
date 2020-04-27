@@ -74,7 +74,7 @@ export const FolderPath = ({
         </Breadcrumb.Item>
         {filteredFolders.map((folder: string) => {
           return (
-            <Breadcrumb.Item>
+            <Breadcrumb.Item key={folder}>
               <Link
                 href={{
                   pathname: '/',

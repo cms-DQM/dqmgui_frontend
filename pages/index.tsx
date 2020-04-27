@@ -60,8 +60,6 @@ const Index: NextPage<FolderPathQuery> = () => {
     search_dataset_name
   );
 
-  console.log(query);
-
   return (
     <div style={{ height: '100vh' }}>
       <Head>
