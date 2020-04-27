@@ -44,7 +44,7 @@ interface FolderProps {
 }
 
 const doesPlotExists = (contents: (PlotInterface & DirectoryInterface)[]) =>
-  contents.filter((one_item: PlotInterface | DirectoryInterface) =>
+  contents.some((one_item: PlotInterface | DirectoryInterface) =>
     one_item.hasOwnProperty('obj')
   );
 
@@ -132,7 +132,7 @@ const DiplayFolder: FC<FolderProps> = ({
           dataset_name={dataset_name}
         />
       </div>
-      {doesPlotExists(contents).length > 0 && (
+      {doesPlotExists(contents) && (
         <ViewDetailsMenu
           dispatch={dispatch}
           state={state}
