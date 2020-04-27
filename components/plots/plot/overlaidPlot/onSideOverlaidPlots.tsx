@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { root_url, get_plot_url } from '../../../../config/config';
-import { ParamsForApiProps, TripleProps, PlotDataProps } from '../../../../containers/display/interfaces';
+import { ParamsForApiProps, TripleProps, PlotDataProps, QueryProps } from '../../../../containers/display/interfaces';
 import {
   setSelectedPlotsName,
   addPlotToList,
@@ -16,26 +16,26 @@ import {
   OnSidePlotsWrapper,
 } from '../../../../containers/display/styledComponents';
 import { getOnSideOverlaidPlots } from './utils';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+import { removePlotFromSelectedPlots, addToSelectedPlots } from '../singlePlot/utils';
 
 interface OnSideOverlaidPlotsProps {
   params_for_api: ParamsForApiProps;
   plot: PlotDataProps;
-  dispatch: any;
   isPlotSelected: boolean;
-  addPlotToList(plot: PlotDataProps): void;
-  removePlotFromList(plot: PlotDataProps | undefined): void;
 }
 
 export const OnSideOverlaidPlots = ({
   plot,
   params_for_api,
-  dispatch,
   isPlotSelected,
-  addPlotToList,
-  removePlotFromList,
 }: OnSideOverlaidPlotsProps) => {
   params_for_api.plot_name = plot.name;
   const onsidePlotsURLs: string[] = getOnSideOverlaidPlots(params_for_api);
+
+  const router = useRouter()
+  const query: QueryProps = router.query
 
   return (
     <OnSidePlotsWrapper>
@@ -51,18 +51,37 @@ export const OnSideOverlaidPlots = ({
               <PlotNameCol>{plot.name}</PlotNameCol>
               <Column>
                 {isPlotSelected ? (
-                  <MinusIcon onClick={() => removePlotFromList(plot)} />
+                  <Link
+                    href={{
+                      pathname: '/',
+                      query: {
+                        run_number: query.run_number,
+                        dataset_name: query.dataset_name,
+                        folder_path: query.folder_path,
+                        selected_plots: `${removePlotFromSelectedPlots(query.selected_plots, plot)}`
+                      },
+                    }}
+                  >
+                    <MinusIcon />
+                  </Link>
                 ) : (
-                  <PlusIcon onClick={() => addPlotToList(plot)} />
-                )}{' '}
+                    <Link
+                      href={{
+                        pathname: '/',
+                        query: {
+                          run_number: query.run_number,
+                          dataset_name: query.dataset_name,
+                          folder_path: query.folder_path,
+                          //addig selected plots name and directories to url
+                          selected_plots: `${addToSelectedPlots(query.selected_plots, plot)}`
+                        },
+                      }}
+                    >
+                      <PlusIcon />
+                    </Link>
+                  )}
               </Column>
-              <div
-                onClick={() => {
-                  isPlotSelected
-                    ? removePlotFromList(plot)
-                    : setSelectedPlotsName([plot])(dispatch);
-                }}
-              >
+              <div>
                 <img alt={plot.name} src={sourceForOnePlot} />
               </div>
             </StyledPlotRow>

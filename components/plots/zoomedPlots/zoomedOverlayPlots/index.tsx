@@ -10,7 +10,6 @@ import { ZoomedPlotsWrapper } from '../../../styledComponents';
 
 interface ZoomedPlotsProps {
   selected_plots: PlotDataProps[];
-  removePlotFromList(plot: PlotDataProps | undefined): void;
   params_for_api: ParamsForApiProps;
   jsroot_mode: boolean;
   size: SizeProps;
@@ -18,7 +17,6 @@ interface ZoomedPlotsProps {
 
 export const ZoomedPlots = ({
   selected_plots,
-  removePlotFromList,
   params_for_api,
   jsroot_mode,
   size,
@@ -30,7 +28,6 @@ export const ZoomedPlots = ({
           return (
             <ZoomedOverlaidJSROOTPlot
               selected_plot={selected_plot}
-              removePlotFromList={removePlotFromList}
               params_for_api={params_for_api}
               size={size}
             />
@@ -39,7 +36,6 @@ export const ZoomedPlots = ({
         return (
           <ZoomedOverlaidPlot
             selected_plot={selected_plot}
-            removePlotFromList={removePlotFromList}
             params_for_api={params_for_api}
             size={size}
           />

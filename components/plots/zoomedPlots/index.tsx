@@ -43,7 +43,6 @@ export const ZoomedPlots = ({
       {params_for_api.overlay_plot && params_for_api.overlay_plot.length > 0 ? (
         <ZoomedOverlaidPlots
           selected_plots={selected_plots}
-          removePlotFromList={removePlotFromList}
           params_for_api={params_for_api}
           jsroot_mode={jsroot_mode}
           size={size}
@@ -52,7 +51,6 @@ export const ZoomedPlots = ({
         <ZoomedPlotsWithoutOverlay
           jsroot_mode={jsroot_mode}
           selected_plots={selected_plots}
-          removePlotFromList={removePlotFromList}
           params_for_api={params_for_api}
           size={size}
         />
