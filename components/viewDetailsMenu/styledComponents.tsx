@@ -1,8 +1,9 @@
 import styled from 'styled-components';
+import { Collapse } from 'antd';
 
 import { theme } from '../../styles/theme';
 import { Modal, Row, Select } from 'antd';
-const { Option } = Select;
+
 export const CheckboxesWrapper = styled.div`
   padding: calc(${theme.space.spaceBetween}*2);
 `;
@@ -28,11 +29,6 @@ export const StyledModal = styled(Modal)`
   }
 `;
 
-export const FirstSectionWrapper = styled.div`
-  display: flex;
-  width: 50%;
-`;
-
 export const FullWidthRow = styled(Row)`
   width: 100%;
   padding: ${theme.space.spaceBetween};
@@ -40,5 +36,12 @@ export const FullWidthRow = styled(Row)`
 export const StyledSelect = styled(Select)`
   .ant-select-selector {
     border-radius: 12px !important;
+  }
+`;
+
+export const StyledCollapse = styled(Collapse)`
+  width: 100%;
+  .ant-collapse-content > .ant-collapse-content-box {
+    padding: ${theme.space.spaceBetween};
   }
 `;
