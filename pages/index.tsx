@@ -7,7 +7,7 @@ import Nav from '../components/Nav';
 import SearchResults from '../containers/search/SearchResults';
 import DiplayFolders from '../containers/display/DisplayFolderAndPlot';
 import { useSearch } from '../hooks/useSearch';
-import { StyledHeader } from '../styles/styledComponents';
+import { StyledHeader, StyledLayout, StyledDiv } from '../styles/styledComponents';
 import {
   NotFoundDiv,
   NotFoundDivWrapper,
@@ -16,7 +16,6 @@ import {
 import { FolderPathQuery } from '../containers/display/interfaces';
 import { useValidateQuery } from '../hooks/useValidateQuery';
 import { QueryValidationErrors } from '../components/queryValidationErrors';
-import { Layout } from 'antd';
 
 const navigationHandler = (
   search_by_run_number: number,
@@ -61,7 +60,7 @@ const Index: NextPage<FolderPathQuery> = () => {
   );
 
   return (
-    <div style={{ height: '100vh' }}>
+    <StyledDiv>
       <Head>
         <script
           crossOrigin="anonymous"
@@ -69,7 +68,7 @@ const Index: NextPage<FolderPathQuery> = () => {
           src="/jsroot-5.8.0/scripts/JSRootCore.js?2d&hist&more2d"
         ></script>
       </Head>
-      <Layout style={{ height: '100%' }}>
+      <StyledLayout>
         <StyledHeader>
           <Nav
             initial_search_run_number={search_run_number}
@@ -102,8 +101,8 @@ const Index: NextPage<FolderPathQuery> = () => {
             </NotFoundDiv>
           </NotFoundDivWrapper>
         )}
-      </Layout>
-    </div>
+      </StyledLayout>
+    </StyledDiv>
   );
 };
 
