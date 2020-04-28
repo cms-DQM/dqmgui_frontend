@@ -88,4 +88,6 @@ export interface QueryProps {
   search_run_number?: string;
   search_dataset_name?: string;
   selected_plots?: string;
+  overlay_data?: string;
+  overlay?: string;
 }

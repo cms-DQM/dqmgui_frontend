@@ -5,6 +5,7 @@ import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import {
   TripleProps,
   FolderPathQuery,
+  QueryProps,
 } from '../../../containers/display/interfaces';
 import {
   setPlotToOverlay,
@@ -33,6 +34,8 @@ import { Field } from './field';
 import { useRouter } from 'next/router';
 import { CustomModal } from '../search';
 import { Container } from './containers';
+import Link from 'next/link';
+import { addOverlayData } from '../../plots/plot/singlePlot/utils';
 
 interface ReferenceProps {
   dispatch_gloabl: any;
@@ -53,7 +56,7 @@ export const Reference = ({
     wrapperCol: { span: 16 },
   };
   const router = useRouter();
-  const query: FolderPathQuery = router.query;
+  const query: QueryProps = router.query;
 
   return (
     <StyledDiv>
@@ -139,7 +142,25 @@ export const Reference = ({
           <Col>
             <Form.Item>
               <Form.Item>
-                <StyledButton htmlType="submit">Submit</StyledButton>
+                <StyledButton htmlType="submit">
+                  {/* <Link
+                    href={{
+                      pathname: '/',
+                      query: {
+                        run_number: query.run_number,
+                        dataset_name: query.dataset_name,
+                        folder_path: query.folder_path,
+                        overlay: query.overlay,
+                        overlay_data: `${addOverlayData(query.overlay_data, triples)}`,
+                        selected_plots: query.selected_plots,
+                      }
+                    }}
+                  > */}
+                    {/* <a> */}
+                      Submit
+                      {/* </a> */}
+                  {/* </Link> */}
+                </StyledButton>
               </Form.Item>
             </Form.Item>
           </Col>
@@ -151,7 +172,8 @@ export const Reference = ({
                 }
               }}
               icon={<PlusOutlined />}
-            ></StyledSecondaryButton>
+            >
+            </StyledSecondaryButton>
           </Col>
         </StyledActionButtonRow>
       </StyledForm>

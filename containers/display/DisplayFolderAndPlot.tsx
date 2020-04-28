@@ -166,6 +166,7 @@ const DiplayFolder: FC<FolderProps> = ({
                       <>
                         {overlay_plot.length > 0 ? (
                           <OverlaidPlot
+                            key={plot.name}
                             plot={plot}
                             params_for_api={params_for_api}
                             isPlotSelected={isPlotSelected(
@@ -176,6 +177,7 @@ const DiplayFolder: FC<FolderProps> = ({
                         ) : (
                             <Plot
                               plot={plot}
+                              key={plot.name}
                               params_for_api={params_for_api}
                               isPlotSelected={isPlotSelected(
                                 selected_plots,

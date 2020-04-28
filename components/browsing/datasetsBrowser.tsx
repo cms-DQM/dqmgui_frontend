@@ -30,35 +30,33 @@ export const DatasetsBrowser = ({ setValue, datasetName, setDatasetName }: Datas
     <Col >
       <StyledFormItem label={'Dataset Name:'}>
         <StyledSelect defaultValue={datasetName}>
-          {isLoading ? (
-            <SpinnerWrapper>
-              <Spinner />
-            </SpinnerWrapper>
-          ) : <>
-              {results_grouped.map(result => (
-                <Option
-                  value={result.dataset}
-                  key={name}
-                  onClick={() => {
-                    setDatasetName(result.dataset)
-                    setValue(result.value)
-                  }}>
-                  <Link
-                    href={{
-                      pathname: '/',
-                      query: {
-                        run_number: query.run_number,
-                        dataset_name: result.dataset,
-                        folder_path: query.folder_path,
-                        selected_plots: query.selected_plots,
-                      },
-                    }}
-                  >
-                    <a>{result.dataset}</a>
-                  </Link>
-                </Option>
-              ))}
-            </>}
+          {results_grouped.map(result => (
+            <Option
+              value={result.dataset}
+              key={name}
+              onClick={() => {
+                setDatasetName(result.dataset)
+                setValue(result.value)
+              }}>
+              {isLoading ? (
+                <Spinner />
+              ) :
+                <Link
+                  href={{
+                    pathname: '/',
+                    query: {
+                      run_number: query.run_number,
+                      dataset_name: result.dataset,
+                      folder_path: query.folder_path,
+                      selected_plots: query.selected_plots,
+                    },
+                  }}
+                >
+                  <a>{result.dataset}</a>
+                </Link>
+              }
+            </Option>
+          ))}
         </StyledSelect>
       </StyledFormItem>
     </Col>

@@ -15,7 +15,6 @@ interface FieldProps {
   value: any;
   placeholder?: string;
   disabled?: boolean;
-  defaultValue?: string | number;
 }
 
 export const Field = ({
@@ -26,7 +25,6 @@ export const Field = ({
   value,
   placeholder,
   disabled,
-  defaultValue,
 }: FieldProps) => {
   useEffect(() => {
     const cleanField = () => {
@@ -39,7 +37,6 @@ export const Field = ({
     <StyledFormItem name={`${id}_${field_name}`}>
       <StyledInput
         disabled={disabled}
-        defaultValue={defaultValue}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
           change_value_in_reference_table(
             e.target.value,

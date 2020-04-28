@@ -43,20 +43,20 @@ export const StyledRowImages = styled(Row)`
 
 export const StyledPlotRow = styled(Row) <{
   width: number;
-  minHeight: number;
-  isPlotSelected: boolean;
-  noPointer?: boolean;
+  minheight?: number;
+  is_plot_selected?: string;
+  nopointer?: string;
 }>`
   display: flex;
   justify-content: space-between;
   width: ${(props) => props?.width && props.width}px;
-  min-height: ${(props) => props?.minHeight && props.minHeight}px;
+  min-height: ${(props) => props?.minheight && props.minheight}px;
   background-color: ${(props) =>
-    props?.isPlotSelected
+    props?.is_plot_selected
       ? `${theme.colors.secondary.light}`
       : `${theme.colors.primary.light}`};
   ${theme.colors.primary.main};
-  cursor: ${(props) => (props?.noPointer ? '' : 'pointer')};
+  cursor: ${(props) => (props?.nopointer ? '' : 'pointer')};
 `;
 export const PlotNameCol = styled(Col)`
   width: 70%;

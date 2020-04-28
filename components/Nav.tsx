@@ -2,12 +2,10 @@ import React, {
   FC,
   ChangeEvent,
   Dispatch,
-  useReducer,
   useEffect,
   useState,
 } from 'react';
-import { Form, Input } from 'antd';
-import Router, { useRouter } from 'next/router';
+import { Form } from 'antd';
 
 import { StyledFormItem, StyledInput } from './styledComponents';
 import { SearchButton } from './searchButton';
@@ -22,14 +20,14 @@ interface NavProps {
   type: string;
 }
 
-export const Nav: FC<NavProps> = ({
+export const Nav = ({
   initial_search_run_number,
   initial_search_dataset_name,
   setRunNumber,
   setDatasetName,
   handler,
   type,
-}) => {
+}: NavProps) => {
   const [form] = Form.useForm();
   const [form_search_run_number, setFormRunNumber] = useState(
     initial_search_run_number || NaN
