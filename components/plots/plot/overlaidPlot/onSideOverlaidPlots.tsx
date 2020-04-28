@@ -71,28 +71,44 @@ export const OnSideOverlaidPlots = ({
                     <MinusIcon />
                   </Link>
                 ) : (
-                  <Link
-                    href={{
-                      pathname: '/',
-                      query: {
-                        run_number: query.run_number,
-                        dataset_name: query.dataset_name,
-                        folder_path: query.folder_path,
-                        //addig selected plots name and directories to url
-                        selected_plots: `${addToSelectedPlots(
-                          query.selected_plots,
-                          plot
-                        )}`,
-                      },
-                    }}
-                  >
-                    <PlusIcon />
-                  </Link>
-                )}
+                    <Link
+                      href={{
+                        pathname: '/',
+                        query: {
+                          run_number: query.run_number,
+                          dataset_name: query.dataset_name,
+                          folder_path: query.folder_path,
+                          //addig selected plots name and directories to url
+                          selected_plots: `${addToSelectedPlots(
+                            query.selected_plots,
+                            plot
+                          )}`,
+                        },
+                      }}
+                    >
+                      <PlusIcon />
+                    </Link>
+                  )}
               </Column>
-              <div>
-                <img alt={plot.name} src={sourceForOnePlot} />
-              </div>
+              <Link
+                href={{
+                  pathname: '/',
+                  query: {
+                    run_number: query.run_number,
+                    dataset_name: query.dataset_name,
+                    folder_path: query.folder_path,
+                    //addig selected plots name and directories to url
+                    selected_plots: `${addToSelectedPlots(
+                      query.selected_plots,
+                      plot
+                    )}`,
+                  },
+                }}
+              >
+                <div>
+                  <img alt={plot.name} src={sourceForOnePlot} />
+                </div>
+              </Link>
             </StyledPlotRow>
           </StyledCol>
         );

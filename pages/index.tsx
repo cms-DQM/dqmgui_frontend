@@ -78,7 +78,6 @@ const Index: NextPage<FolderPathQuery> = () => {
             type="top"
           />
         </StyledHeader>
-        {/* <StyledContent> */}
         {validation_errors.length > 0 ? (
           <QueryValidationErrors validation_errors={validation_errors} />
         ) : run_number && dataset_name ? (
@@ -103,7 +102,6 @@ const Index: NextPage<FolderPathQuery> = () => {
             </NotFoundDiv>
           </NotFoundDivWrapper>
         )}
-        {/* </StyledContent> */}
       </Layout>
     </div>
   );
