@@ -52,7 +52,7 @@ export const StyledPlotRow = styled(Row) <{
   width: ${(props) => props?.width && props.width}px;
   min-height: ${(props) => props?.minheight && props.minheight}px;
   background-color: ${(props) =>
-    props?.is_plot_selected
+    props?.is_plot_selected === 'true'
       ? `${theme.colors.secondary.light}`
       : `${theme.colors.primary.light}`};
   ${theme.colors.primary.main};

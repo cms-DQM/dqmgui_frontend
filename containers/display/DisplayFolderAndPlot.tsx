@@ -161,7 +161,6 @@ const DiplayFolder: FC<FolderProps> = ({
                 {plots.map((plot: PlotDataProps | undefined) => {
                   if (plot) {
                     params_for_api.folders_path = plot.dir;
-
                     return (
                       <>
                         {overlay_plot.length > 0 ? (

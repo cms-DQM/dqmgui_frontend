@@ -62,6 +62,8 @@ export const ZoomedOverlaidPlot = ({
                 run_number: query.run_number,
                 dataset_name: query.dataset_name,
                 folder_path: query.folder_path,
+                overlay: query.overlay,
+                overlay_data: query.overlay_data,
                 selected_plots: `${removePlotFromSelectedPlots(
                   query.selected_plots,
                   selected_plot

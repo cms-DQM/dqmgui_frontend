@@ -51,6 +51,8 @@ export const RunBrowser = ({ value, run_number, setRunNumber }: RunsBrowserProps
                           run_number: run,
                           dataset_name: query.dataset_name,
                           folder_path: query.folder_path,
+                          overlay: query.overlay,
+                          overlay_data: query.overlay_data,
                           selected_plots: query.selected_plots,
                         },
                       }}

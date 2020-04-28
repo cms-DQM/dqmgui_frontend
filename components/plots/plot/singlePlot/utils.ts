@@ -23,6 +23,6 @@ export const addToSelectedPlots = (
 ) => `${plotsQuery ? plotsQuery + '&' : ''}${plot.dir}/${plot.name}`;
 
 export const addOverlayData = (plotsQuery: string | undefined, triples: TripleProps[] | undefined) => {
-  const params = triples && triples.map((triple: TripleProps) => `${triple.run_number}/${triple.dataset_name}/${triple.label}`)
+  const params = triples && triples.map((triple: TripleProps) => `${triple.run_number}/${triple.dataset_name}/${triple.label ? triple.label : triple.run_number}`)
   return `${plotsQuery ? plotsQuery + '&' : ''}${params}`;
 }
