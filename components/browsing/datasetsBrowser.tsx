@@ -48,6 +48,8 @@ export const DatasetsBrowser = ({ setValue, datasetName, setDatasetName }: Datas
                       run_number: query.run_number,
                       dataset_name: result.dataset,
                       folder_path: query.folder_path,
+                      overlay: query.overlay,
+                      overlay_data: query.overlay_data,
                       selected_plots: query.selected_plots,
                     },
                   }}

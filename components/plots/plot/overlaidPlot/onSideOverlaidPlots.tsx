@@ -46,8 +46,8 @@ export const OnSideOverlaidPlots = ({
         const sourceForOnePlot = `${root_url}/${url}`;
         return (
           <StyledCol
-          space={2}
-          key={url}>
+            space={2}
+            key={url}>
             <StyledPlotRow
               minheight={params_for_api.height}
               width={params_for_api.width}
@@ -63,6 +63,8 @@ export const OnSideOverlaidPlots = ({
                         run_number: query.run_number,
                         dataset_name: query.dataset_name,
                         folder_path: query.folder_path,
+                        overlay: query.overlay,
+                        overlay_data: query.overlay_data,
                         selected_plots: `${removePlotFromSelectedPlots(
                           query.selected_plots,
                           plot
@@ -80,6 +82,8 @@ export const OnSideOverlaidPlots = ({
                           run_number: query.run_number,
                           dataset_name: query.dataset_name,
                           folder_path: query.folder_path,
+                          overlay: query.overlay,
+                          overlay_data: query.overlay_data,
                           //addig selected plots name and directories to url
                           selected_plots: `${addToSelectedPlots(
                             query.selected_plots,
@@ -99,6 +103,8 @@ export const OnSideOverlaidPlots = ({
                     run_number: query.run_number,
                     dataset_name: query.dataset_name,
                     folder_path: query.folder_path,
+                    overlay: query.overlay,
+                    overlay_data: query.overlay_data,
                     //addig selected plots name and directories to url
                     selected_plots: `${addToSelectedPlots(
                       query.selected_plots,

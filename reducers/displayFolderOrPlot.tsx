@@ -3,7 +3,6 @@ import {
   DisplayFolderOrPlotComponentProps,
   SizeProps,
   CustomizeProps,
-  PlotDataProps,
 } from '../containers/display/interfaces';
 
 export const initialState: DisplayFolderOrPlotComponentProps = {

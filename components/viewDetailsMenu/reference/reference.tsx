@@ -29,7 +29,7 @@ import {
 } from '../../styledComponents';
 import { overlayOptions } from '../../constants';
 import { RadioButtonsGroup } from '../../radioButtonsGroup';
-import { filter_plots, filter_valid_runs } from '../utils';
+import { filter_plots, filter_valid_runs, formTriples } from '../utils';
 import { Field } from './field';
 import { useRouter } from 'next/router';
 import { CustomModal } from '../search';
@@ -71,10 +71,6 @@ export const Reference = ({
         name="search_form"
         className="fieldLabel"
         initialValues={{ remember: true }}
-        onFinish={() => {
-          const filtered: TripleProps[] = filter_valid_runs(triples);
-          setPlotToOverlay(filtered)(dispatch_gloabl);
-        }}
       >
         <CustomModal
           dispatch={dispatch}
@@ -142,24 +138,27 @@ export const Reference = ({
           <Col>
             <Form.Item>
               <Form.Item>
-                <StyledButton htmlType="submit">
-                  {/* <Link
+                <StyledButton htmlType="submit"
+                  onClick={() => {
+                    const filtered: TripleProps[] = filter_valid_runs(triples);
+                    setPlotToOverlay(filtered)(dispatch_gloabl);
+                  }}
+                >
+                  <Link
                     href={{
                       pathname: '/',
                       query: {
                         run_number: query.run_number,
                         dataset_name: query.dataset_name,
                         folder_path: query.folder_path,
-                        overlay: query.overlay,
+                        overlay: state_global.overlay,
                         overlay_data: `${addOverlayData(query.overlay_data, triples)}`,
                         selected_plots: query.selected_plots,
                       }
                     }}
-                  > */}
-                    {/* <a> */}
-                      Submit
-                      {/* </a> */}
-                  {/* </Link> */}
+                  >
+                    <a>Submit</a>
+                  </Link>
                 </StyledButton>
               </Form.Item>
             </Form.Item>
