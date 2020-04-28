@@ -104,10 +104,7 @@ export const StyledDiv = styled.div`
 export const WrapperDiv = styled.div`
   display: flex;
 `;
-export const StyledAForPath = styled.a`
-  padding: 0 calc(${theme.space.spaceBetween}*2) 0
-    calc(${theme.space.spaceBetween}*2);
-`;
+
 export const ImageDiv = styled.div<{ width: number; height: number }>`
   width: ${(props) => (props.width ? props.width : '')}px;
   height: ${(props) => (props.height ? props.height : '')}px;
