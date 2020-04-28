@@ -48,10 +48,10 @@ export const ZoomedOverlaidPlot = ({
   return (
     <StyledCol space={2}>
       <StyledPlotRow
-        minHeight={params_for_api.height}
+        minheight={params_for_api.height}
         width={params_for_api.width}
-        isPlotSelected={true}
-        noPointer={true}
+        is_plot_selected={true.toString()}
+        nopointer={true.toString()}
       >
         <PlotNameCol>{selected_plot.name}</PlotNameCol>
         <Column>

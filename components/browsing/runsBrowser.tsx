@@ -33,18 +33,17 @@ export const RunBrowser = ({ value, run_number, setRunNumber }: RunsBrowserProps
     <Col>
       <StyledFormItem name={run_number} label='Run number:'>
         <StyledSelect defaultValue={run_number}>
-          {isLoading ? (
-            <SpinnerWrapper>
-              <Spinner />
-            </SpinnerWrapper>
-          ) : <>
-              {runNumbers[0] && runNumbers[0].map((run: number) => {
-                return (
-                  <Option
-                    value={run}
-                    key={run.toString()}
-                    onClick={() =>
-                      setRunNumber(run)}>
+          {runNumbers[0] && runNumbers[0].map((run: number) => {
+            return (
+              <Option
+                value={run}
+                key={run.toString()}
+                onClick={() =>
+                  setRunNumber(run)}>
+                {
+                  isLoading ? (
+                    <Spinner />
+                  ) :
                     <Link
                       href={{
                         pathname: '/',
@@ -58,10 +57,10 @@ export const RunBrowser = ({ value, run_number, setRunNumber }: RunsBrowserProps
                     >
                       <a>{run}</a>
                     </Link>
-                  </Option>
-                )
-              })}
-            </>}
+                }
+              </Option>
+            )
+          })}
         </StyledSelect>
       </StyledFormItem>
     </Col>

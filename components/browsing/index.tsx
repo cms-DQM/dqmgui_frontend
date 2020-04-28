@@ -5,6 +5,7 @@ import { WrapperDiv } from '../../containers/display/styledComponents';
 import { DatasetsBrowser } from './datasetsBrowser';
 import { QueryProps } from '../../containers/display/interfaces';
 import { RunBrowser } from './runsBrowser';
+import Form from 'antd/lib/form/Form';
 
 interface BrowserProps {
 }
@@ -18,7 +19,7 @@ export const Browser = () => {
   const [value, setValue] = useState()
 
   return (
-    <div>
+    <Form>
       <WrapperDiv>
         <WrapperDiv>
           <RunBrowser
@@ -35,6 +36,6 @@ export const Browser = () => {
           />
         </WrapperDiv>
       </WrapperDiv>
-    </div>
+    </Form>
   )
 }

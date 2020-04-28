@@ -50,9 +50,9 @@ export const OverlaidPlotImage = ({
   return (
     <StyledCol space={2}>
       <StyledPlotRow
-        minHeight={params_for_api.height}
+        minheight={params_for_api.height}
         width={params_for_api.width}
-        isPlotSelected={isPlotSelected}
+        is_plot_selected={isPlotSelected.toString()}
       >
         <PlotNameCol>{plot.name}</PlotNameCol>
         <Column>

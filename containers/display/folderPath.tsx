@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 import { getFolderPath } from './utils';
-import { StyledDiv} from './styledComponents';
+import { StyledDiv } from './styledComponents';
 import { Browser } from '../../components/browsing';
 
 interface FolderPathProps {
@@ -38,7 +38,7 @@ export const FolderPath = ({
               },
             }}
           >
-            Home
+            <a>Home</a>
           </Link>
         </Breadcrumb.Item>
         {filteredFolders.map((folder: string) => {
@@ -54,7 +54,7 @@ export const FolderPath = ({
                   },
                 }}
               >
-                {folder}
+                <a>{folder}</a>
               </Link>
             </Breadcrumb.Item>
           );

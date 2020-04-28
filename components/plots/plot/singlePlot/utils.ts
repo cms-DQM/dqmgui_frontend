@@ -1,4 +1,4 @@
-import { PlotDataProps } from '../../../../containers/display/interfaces';
+import { PlotDataProps, TripleProps } from '../../../../containers/display/interfaces';
 import cleanDeep from 'clean-deep';
 
 export const removePlotFromSelectedPlots = (
@@ -21,3 +21,8 @@ export const addToSelectedPlots = (
   plotsQuery: string | undefined,
   plot: PlotDataProps
 ) => `${plotsQuery ? plotsQuery + '&' : ''}${plot.dir}/${plot.name}`;
+
+export const addOverlayData = (plotsQuery: string | undefined, triples: TripleProps[] | undefined) => {
+  const params = triples && triples.map((triple: TripleProps) => `${triple.run_number}/${triple.dataset_name}/${triple.label}`)
+  return `${plotsQuery ? plotsQuery + '&' : ''}${params}`;
+}
