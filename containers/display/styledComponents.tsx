@@ -21,10 +21,10 @@ export const DirecotryWrapper = styled.div`
 export const StyledA = styled.a`
   word-break: break-all;
 `;
-export const StyledCol = styled(Col)`
-  padding: calc(${theme.space.spaceBetween} * 2);
+export const StyledCol = styled(Col) <{ space?: number }>`
+  padding: ${props => props.space ? `calc(${theme.space.spaceBetween}*${props.space})` : ''};
   width: fit-content;
-`;
+  `;
 
 export const OnSidePlotsWrapper = styled.div`
   display: flex;
@@ -41,7 +41,7 @@ export const StyledRowImages = styled(Row)`
   justify-content: center;
 `;
 
-export const StyledPlotRow = styled(Row)<{
+export const StyledPlotRow = styled(Row) <{
   width: number;
   minHeight: number;
   isPlotSelected: boolean;
@@ -112,3 +112,8 @@ export const ImageDiv = styled.div<{ width: number; height: number }>`
   width: ${(props) => (props.width ? props.width : '')}px;
   height: ${(props) => (props.height ? props.height : '')}px;
 `;
+
+export const Image = styled.img<{ width: number, height: number }>`
+    width: ${(props) => props.width}px;
+    height: ${(props) => props.height}px;
+`

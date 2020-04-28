@@ -48,7 +48,7 @@ export const OverlaidPlotImage = ({
   const query: QueryProps = router.query;
 
   return (
-    <StyledCol>
+    <StyledCol space={2}>
       <StyledPlotRow
         minHeight={params_for_api.height}
         width={params_for_api.width}

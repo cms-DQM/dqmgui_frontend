@@ -45,7 +45,9 @@ export const OnSideOverlaidPlots = ({
       {onsidePlotsURLs.map((url: string) => {
         const sourceForOnePlot = `${root_url}/${url}`;
         return (
-          <StyledCol key={url}>
+          <StyledCol
+          space={2}
+          key={url}>
             <StyledPlotRow
               minHeight={params_for_api.height}
               width={params_for_api.width}

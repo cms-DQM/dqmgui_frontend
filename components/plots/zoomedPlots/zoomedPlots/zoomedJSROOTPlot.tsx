@@ -47,7 +47,7 @@ export const ZoomedJSROOTPlot = ({
   }, [data]);
 
   return (
-    <StyledCol>
+    <StyledCol space={2}>
       <StyledPlotRow
         minHeight={size.h}
         width={size.w}

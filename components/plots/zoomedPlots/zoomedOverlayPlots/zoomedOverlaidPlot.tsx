@@ -16,6 +16,7 @@ import {
   MinusIcon,
   StyledCol,
   ImageDiv,
+  Image,
 } from '../../../../containers/display/styledComponents';
 import { useRouter } from 'next/router';
 import { removePlotFromSelectedPlots } from '../../plot/singlePlot/utils';
@@ -45,7 +46,7 @@ export const ZoomedOverlaidPlot = ({
   const source = get_plot_source(params_for_api);
 
   return (
-    <StyledCol>
+    <StyledCol space={2}>
       <StyledPlotRow
         minHeight={params_for_api.height}
         width={params_for_api.width}
@@ -72,9 +73,10 @@ export const ZoomedOverlaidPlot = ({
           </Link>
         </Column>
         <ImageDiv id={selected_plot.name} width={size.w} height={size.h}>
-          <img
+          <Image
             src={source}
-            style={{ width: `${size.w}`, height: `${size.h}` }}
+            width={size.w}
+            height={size.h}
           />
         </ImageDiv>
       </StyledPlotRow>

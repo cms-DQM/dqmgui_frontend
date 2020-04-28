@@ -60,7 +60,7 @@ export const CostumizeTable = ({ dispatch }: CostumizeTableProps) => {
       <FullWidthRow>
         <Col span={8}>
           <StyledFormItem label="Draw options" name="drawopts">
-            <StyledInput style={{ width: '100%' }} />
+            <StyledInput fullWidth={true}/>
           </StyledFormItem>
         </Col>
       </FullWidthRow>

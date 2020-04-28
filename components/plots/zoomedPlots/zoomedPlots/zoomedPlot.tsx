@@ -14,6 +14,7 @@ import {
   Column,
   MinusIcon,
   ImageDiv,
+  Image
 } from '../../../../containers/display/styledComponents';
 import { removePlotFromSelectedPlots } from '../../plot/singlePlot/utils';
 import { useRouter } from 'next/router';
@@ -41,7 +42,7 @@ export const ZoomedPlot = ({
   const query: QueryProps = router.query;
 
   return (
-    <StyledCol>
+    <StyledCol space={2}>
       <StyledPlotRow
         minHeight={params_for_api.height}
         width={params_for_api.width}
@@ -68,9 +69,10 @@ export const ZoomedPlot = ({
           </Link>
         </Column>
         <ImageDiv id={selected_plot.name} width={size.w} height={size.h}>
-          <img
+          <Image
             src={source}
-            style={{ width: `${size.w}`, height: `${size.h}` }}
+            width={size.w}
+            height={size.h}
           />
         </ImageDiv>
       </StyledPlotRow>

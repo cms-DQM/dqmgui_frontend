@@ -5,6 +5,7 @@ import { xyzTypes } from '../../constants';
 import { OptionProps } from '../../../containers/display/interfaces';
 import { Select, Row, Col } from 'antd';
 import { StyledSelect } from '../styledComponents';
+import { StyledCol } from '../../../containers/display/styledComponents';
 
 const { Option } = Select;
 
@@ -35,11 +36,11 @@ export const Type = ({ type }: TypesProps) => {
           </StyledSelect>
         </StyledFormItem>
       </Col>
-      <Col span={8} style={{ padding: 2 }}>
+      <StyledCol space={1} span={8} >
         <StyledFormItem label="min" name={`${type}min`}>
           <StyledInput />
         </StyledFormItem>
-      </Col>
+      </StyledCol>
       <Col span={8}>
         <StyledFormItem label="max" name={`${type}max`}>
           <StyledInput />
