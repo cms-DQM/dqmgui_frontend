@@ -64,6 +64,7 @@ export const OverlaidPlotImage = ({
                   run_number: query.run_number,
                   dataset_name: query.dataset_name,
                   folder_path: query.folder_path,
+                  overlay: params_for_api.overlay,
                   selected_plots: `${removePlotFromSelectedPlots(
                     query.selected_plots,
                     plot
@@ -74,28 +75,51 @@ export const OverlaidPlotImage = ({
               <MinusIcon />
             </Link>
           ) : (
-            <Link
-              href={{
-                pathname: '/',
-                query: {
-                  run_number: query.run_number,
-                  dataset_name: query.dataset_name,
-                  folder_path: query.folder_path,
-                  //addig selected plots name and directories to url
-                  selected_plots: `${addToSelectedPlots(
-                    query.selected_plots,
-                    plot
-                  )}`,
-                },
-              }}
-            >
-              <PlusIcon />
-            </Link>
-          )}
+              <Link
+                href={{
+                  pathname: '/',
+                  query: {
+                    run_number: query.run_number,
+                    dataset_name: query.dataset_name,
+                    folder_path: query.folder_path,
+                    //addig selected plots name and directories to url
+                    selected_plots: `${addToSelectedPlots(
+                      query.selected_plots,
+                      plot
+                    )}`,
+                  },
+                }}
+              >
+                <PlusIcon />
+              </Link>
+            )}
         </Column>
-        <div>
-          <img alt={plot.name} src={source} />
-        </div>
+        <Link
+          href={{
+            pathname: '/',
+            query: {
+              run_number: query.run_number,
+              dataset_name: query.dataset_name,
+              folder_path: query.folder_path,
+              //if plot is laready selected, on plot click, plot will be removed from url;
+              //Otherwis-- plot and its dir will be added to url.
+              selected_plots: `${isPlotSelected ?
+                removePlotFromSelectedPlots(
+                  query.selected_plots,
+                  plot
+                )
+                :
+                addToSelectedPlots(
+                  query.selected_plots,
+                  plot,
+                )}`,
+            },
+          }}
+        >
+          <div>
+            <img alt={plot.name} src={source} />
+          </div>
+        </Link>
       </StyledPlotRow>
     </StyledCol>
   );
