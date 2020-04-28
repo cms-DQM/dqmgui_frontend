@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { DropdownMenu } from '../../menu';
 import { StyledFormItem, StyledInput } from '../../styledComponents';
 import { xyzTypes } from '../../constants';
 import { OptionProps } from '../../../containers/display/interfaces';
@@ -14,16 +13,6 @@ interface TypesProps {
 }
 
 export const Type = ({ type }: TypesProps) => {
-  const [selectedOption, setSelectedOption] = useState<OptionProps>(
-    xyzTypes[0]
-  );
-
-  const copy: OptionProps[] = [...xyzTypes];
-  const withAction: OptionProps[] = copy.map((option: OptionProps) => {
-    const copy = { ...option };
-    copy.action = setSelectedOption;
-    return copy;
-  });
 
   return (
     <>
