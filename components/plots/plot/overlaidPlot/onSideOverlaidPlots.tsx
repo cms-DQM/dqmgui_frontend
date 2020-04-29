@@ -43,7 +43,7 @@ export const OnSideOverlaidPlots = ({
   return (
     <OnSidePlotsWrapper>
       {onsidePlotsURLs.map((url: string) => {
-        const sourceForOnePlot = `${root_url}/${url}`;
+        const sourceForOnePlot = `${root_url}${url}`;
         return (
           <StyledCol space={2} key={url}>
             <StyledPlotRow

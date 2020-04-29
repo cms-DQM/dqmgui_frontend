@@ -37,7 +37,7 @@ export const ZoomedPlot = ({
   params_for_api.folders_path = selected_plot.dir;
 
   const plot_url = get_plot_url(params_for_api);
-  const source = `${root_url}/${plot_url}`;
+  const source = `${root_url}${plot_url}`;
   const router = useRouter();
   const query: QueryProps = router.query;
 
