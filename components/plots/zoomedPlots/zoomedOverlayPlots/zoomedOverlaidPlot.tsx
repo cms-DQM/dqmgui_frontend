@@ -16,6 +16,7 @@ import {
   MinusIcon,
   StyledCol,
   ImageDiv,
+  Image,
 } from '../../../../containers/display/styledComponents';
 import { useRouter } from 'next/router';
 import { removePlotFromSelectedPlots } from '../../plot/singlePlot/utils';
@@ -45,12 +46,12 @@ export const ZoomedOverlaidPlot = ({
   const source = get_plot_source(params_for_api);
 
   return (
-    <StyledCol>
+    <StyledCol space={2}>
       <StyledPlotRow
-        minHeight={params_for_api.height}
+        minheight={params_for_api.height}
         width={params_for_api.width}
-        isPlotSelected={true}
-        noPointer={true}
+        is_plot_selected={true.toString()}
+        nopointer={true.toString()}
       >
         <PlotNameCol>{selected_plot.name}</PlotNameCol>
         <Column>
@@ -61,6 +62,8 @@ export const ZoomedOverlaidPlot = ({
                 run_number: query.run_number,
                 dataset_name: query.dataset_name,
                 folder_path: query.folder_path,
+                overlay: query.overlay,
+                overlay_data: query.overlay_data,
                 selected_plots: `${removePlotFromSelectedPlots(
                   query.selected_plots,
                   selected_plot
@@ -72,10 +75,7 @@ export const ZoomedOverlaidPlot = ({
           </Link>
         </Column>
         <ImageDiv id={selected_plot.name} width={size.w} height={size.h}>
-          <img
-            src={source}
-            style={{ width: `${size.w}`, height: `${size.h}` }}
-          />
+          <Image src={source} width={size.w} height={size.h} />
         </ImageDiv>
       </StyledPlotRow>
     </StyledCol>

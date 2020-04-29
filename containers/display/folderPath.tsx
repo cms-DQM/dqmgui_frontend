@@ -4,7 +4,8 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 
 import { getFolderPath } from './utils';
-import { StyledDiv, WrapperDiv, StyledAForPath } from './styledComponents';
+import { StyledDiv } from './styledComponents';
+import { Browser } from '../../components/browsing';
 
 interface FolderPathProps {
   folder_path: string | undefined;
@@ -24,40 +25,7 @@ export const FolderPath = ({
 
   return (
     <StyledDiv>
-      <div>
-        <WrapperDiv>
-          <Link
-            href={{
-              pathname: '/',
-              query: {
-                search_run_number: run_number,
-                search_dataset_name: '',
-              },
-            }}
-            replace
-          >
-            <WrapperDiv>
-              <p>Run number:</p>
-              <StyledAForPath>{run_number}</StyledAForPath>
-            </WrapperDiv>
-          </Link>
-          <Link
-            href={{
-              pathname: '/',
-              query: {
-                search_run_number: '',
-                search_dataset_name: dataset_name,
-              },
-            }}
-            replace
-          >
-            <WrapperDiv>
-              <p>Dataset Name:</p>
-              <StyledAForPath> {dataset_name}</StyledAForPath>
-            </WrapperDiv>
-          </Link>
-        </WrapperDiv>
-      </div>
+      <Browser />
       <Breadcrumb separator=">">
         <Breadcrumb.Item>
           <Link
@@ -69,12 +37,12 @@ export const FolderPath = ({
               },
             }}
           >
-            Home
+            <a>Home</a>
           </Link>
         </Breadcrumb.Item>
         {filteredFolders.map((folder: string) => {
           return (
-            <Breadcrumb.Item>
+            <Breadcrumb.Item key={folder}>
               <Link
                 href={{
                   pathname: '/',
@@ -85,7 +53,7 @@ export const FolderPath = ({
                   },
                 }}
               >
-                {folder}
+                <a>{folder}</a>
               </Link>
             </Breadcrumb.Item>
           );
