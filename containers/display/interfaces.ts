@@ -46,7 +46,6 @@ export interface DisplayFolderOrPlotComponentProps {
   normalize: boolean;
   overlay_plot: TripleProps[];
   stats: boolean;
-  overlay: string;
   jsroot_mode: boolean;
   zoomedPlotSize: SizeProps;
   customizeProps?: CustomizeProps;

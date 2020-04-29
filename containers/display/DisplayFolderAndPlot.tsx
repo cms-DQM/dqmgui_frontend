@@ -75,7 +75,6 @@ const DiplayFolder: FC<FolderProps> = ({
 
   const {
     errorBars,
-    overlay,
     height,
     width,
     normalize,

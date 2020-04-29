@@ -7,7 +7,6 @@ import {
 
 export const initialState: DisplayFolderOrPlotComponentProps = {
   errorBars: false,
-  overlay: 'overlay',
   height: sizes.medium.size.h,
   width: sizes.medium.size.w,
   normalize: true,
@@ -73,12 +72,6 @@ export const setPlotToOverlay = (plot_to_overlay: any) => (dispatch: any) =>
     payload: plot_to_overlay,
   });
 
-export const setOverlay = (overlay: string) => (dispatch: any) =>
-  dispatch({
-    type: FOLDERS_OR_PLOTS_REDUCER.SET_OVERLAY,
-    payload: overlay,
-  });
-
 export const setStats = (stats: boolean) => (dispatch: any) =>
   dispatch({
     type: FOLDERS_OR_PLOTS_REDUCER.SET_STATS,
@@ -112,8 +105,6 @@ export function displayFolderOrPlotComponentReducer(
       return { ...state, normalize: action.payload };
     case FOLDERS_OR_PLOTS_REDUCER.SET_PLOT_TO_OVERLAY:
       return { ...state, overlay_plot: action.payload };
-    case FOLDERS_OR_PLOTS_REDUCER.SET_OVERLAY:
-      return { ...state, overlay: action.payload };
     case FOLDERS_OR_PLOTS_REDUCER.SET_STATS:
       return { ...state, stats: action.payload };
     case FOLDERS_OR_PLOTS_REDUCER.JSROOT_MODE:
