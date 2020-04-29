@@ -94,13 +94,13 @@ const Index: NextPage<FolderPathQuery> = () => {
             handler={serchResultsHandler}
           />
         ) : (
-          <NotFoundDivWrapper>
-            <NotFoundDiv noBorder>
-              <ChartIcon />
+                <NotFoundDivWrapper>
+                  <NotFoundDiv noBorder>
+                    <ChartIcon />
               Welcome to DQM GUI
             </NotFoundDiv>
-          </NotFoundDivWrapper>
-        )}
+                </NotFoundDivWrapper>
+              )}
       </StyledLayout>
     </StyledDiv>
   );

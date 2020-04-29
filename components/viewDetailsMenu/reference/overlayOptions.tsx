@@ -12,7 +12,6 @@ interface OverlayOptionsProps {
 }
 
 export const OverlayOptions = ({
-  dispatch_gloabl,
 }: OverlayOptionsProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
@@ -30,6 +29,7 @@ export const OverlayOptions = ({
       {overlayOptions.map((option: OptionProps) => {
         return (
           <Link
+            key={option.label}
             href={{
               pathname: '/',
               query: {
@@ -42,7 +42,7 @@ export const OverlayOptions = ({
               }
             }}
           >
-            <Radio key={option.label} value={option.value}>
+            <Radio value={option.value}>
               {option.label}
             </Radio>
           </Link>

@@ -38,12 +38,14 @@ export const StyledTableRow = styled.tr<{
   width: 100%;
   background: ${(props) =>
     (props?.index && props.index % 2 === 0) || props.index === 0
-      ? `${theme.colors.thirdy.light}`
+      ? `${theme.colors.primary.light}`
       : ''};
   cursor: pointer;
   &:hover {
     background-color: ${(props) =>
-      props?.noHover ? '' : `${theme.colors.secondary.light}`};
+    props?.noHover ? '' : `${theme.colors.thirdy.light}`};
+      color: ${(props) =>
+    props?.noHover ? '' : `${theme.colors.common.white}`};
   }
   font-weight: ${(props) =>
     props?.expanded && props.expanded === true ? 'bold' : ''};
@@ -61,6 +63,7 @@ export const StyledTableRunColumn = styled.td`
 export const StyledTable = styled.table`
   border: 1px solid ${theme.colors.primary.main};
   width: 70%;
+  margin-top: calc(${theme.space.spaceBetween}*2);
 `;
 export const RunsRows = styled(Row)`
   padding-left: 32px;
