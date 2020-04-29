@@ -2,7 +2,6 @@ import React from 'react';
 import { Radio } from 'antd';
 
 import { overlayOptions } from '../../constants';
-import { setOverlay } from '../../../reducers/displayFolderOrPlot';
 import { OptionProps, QueryProps } from '../../../containers/display/interfaces';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -18,13 +17,12 @@ export const OverlayOptions = ({
   const router = useRouter();
   const query: QueryProps = router.query;
   const settedOverlay = query.overlay ? query.overlay : overlayOptions[0].value
-  
+
   const [value, setValue] = React.useState(settedOverlay);
 
   return (
     <Radio.Group
       onChange={(e) => {
-        setOverlay(e.target.value)(dispatch_gloabl)
         setValue(e.target.value);
       }}
       value={value}
