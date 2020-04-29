@@ -1,15 +1,13 @@
-import React, { useReducer, useState, useEffect } from 'react';
+import React, { useReducer, useState } from 'react';
 import { Form, Col } from 'antd';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 
 import {
   TripleProps,
-  FolderPathQuery,
   QueryProps,
 } from '../../../containers/display/interfaces';
 import {
   setPlotToOverlay,
-  setOverlay,
 } from '../../../reducers/displayFolderOrPlot';
 import {
   referenceReducer,
@@ -27,15 +25,14 @@ import {
   FormItem,
   FieldsWrapper,
 } from '../../styledComponents';
-import { overlayOptions } from '../../constants';
-import { RadioButtonsGroup } from '../../radioButtonsGroup';
-import { filter_plots, filter_valid_runs, formTriples } from '../utils';
+import { filter_plots, filter_valid_runs } from '../utils';
 import { Field } from './field';
 import { useRouter } from 'next/router';
 import { CustomModal } from '../search';
 import { Container } from './containers';
 import Link from 'next/link';
 import { addOverlayData } from '../../plots/plot/singlePlot/utils';
+import { OverlayOptions } from './overlayOptions';
 
 interface ReferenceProps {
   dispatch_gloabl: any;
@@ -55,15 +52,15 @@ export const Reference = ({
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
   };
+
   const router = useRouter();
   const query: QueryProps = router.query;
 
   return (
     <StyledDiv>
-      <RadioButtonsGroup
+      <OverlayOptions
         current_value={state_global.overlay}
-        action={(value: string) => setOverlay(value)(dispatch_gloabl)}
-        options={overlayOptions}
+        dispatch_gloabl={dispatch_gloabl}
       />
       <StyledForm
         layout={'inline'}
@@ -152,7 +149,7 @@ export const Reference = ({
                         dataset_name: query.dataset_name,
                         folder_path: query.folder_path,
                         overlay: state_global.overlay,
-                        overlay_data: `${addOverlayData(query.overlay_data, triples)}`,
+                        overlay_data: `${addOverlayData(triples)}`,
                         selected_plots: query.selected_plots,
                       }
                     }}

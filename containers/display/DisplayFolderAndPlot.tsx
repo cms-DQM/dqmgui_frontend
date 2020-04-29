@@ -101,7 +101,7 @@ const DiplayFolder: FC<FolderProps> = ({
     dataset_name: dataset_name,
     width: width,
     height: height,
-    overlay: overlay,
+    overlay: query.overlay,
     stats: stats,
     normalize: normalize,
     errorBars: errorBars,
