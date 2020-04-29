@@ -21,8 +21,9 @@ export const DirecotryWrapper = styled.div`
 export const StyledA = styled.a`
   word-break: break-all;
 `;
-export const StyledCol = styled(Col)`
-  padding: calc(${theme.space.spaceBetween} * 2);
+export const StyledCol = styled(Col)<{ space?: number }>`
+  padding: ${(props) =>
+    props.space ? `calc(${theme.space.spaceBetween}*${props.space})` : ''};
   width: fit-content;
 `;
 
@@ -43,20 +44,20 @@ export const StyledRowImages = styled(Row)`
 
 export const StyledPlotRow = styled(Row)<{
   width: number;
-  minHeight: number;
-  isPlotSelected: boolean;
-  noPointer?: boolean;
+  minheight?: number;
+  is_plot_selected?: string;
+  nopointer?: string;
 }>`
   display: flex;
   justify-content: space-between;
   width: ${(props) => props?.width && props.width}px;
-  min-height: ${(props) => props?.minHeight && props.minHeight}px;
+  min-height: ${(props) => props?.minheight && props.minheight}px;
   background-color: ${(props) =>
-    props?.isPlotSelected
+    props?.is_plot_selected === 'true'
       ? `${theme.colors.secondary.light}`
       : `${theme.colors.primary.light}`};
   ${theme.colors.primary.main};
-  cursor: ${(props) => (props?.noPointer ? '' : 'pointer')};
+  cursor: ${(props) => (props?.nopointer ? '' : 'pointer')};
 `;
 export const PlotNameCol = styled(Col)`
   width: 70%;
@@ -104,11 +105,13 @@ export const StyledDiv = styled.div`
 export const WrapperDiv = styled.div`
   display: flex;
 `;
-export const StyledAForPath = styled.a`
-  padding: 0 calc(${theme.space.spaceBetween}*2) 0
-    calc(${theme.space.spaceBetween}*2);
-`;
+
 export const ImageDiv = styled.div<{ width: number; height: number }>`
   width: ${(props) => (props.width ? props.width : '')}px;
   height: ${(props) => (props.height ? props.height : '')}px;
+`;
+
+export const Image = styled.img<{ width: number; height: number }>`
+  width: ${(props) => props.width}px;
+  height: ${(props) => props.height}px;
 `;

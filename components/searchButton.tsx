@@ -9,12 +9,10 @@ interface SearchButtonProps {
 }
 
 export const SearchButton = ({ onClick }: SearchButtonProps) => (
-  <Tooltip title="search">
-    <StyledButton
-      htmlType="submit"
-      onClick={() => onClick()}
-      shape="circle"
-      icon={<SearchOutlined />}
-    />
-  </Tooltip>
+  <StyledButton
+    htmlType="submit"
+    onClick={() => onClick()}
+    shape="circle"
+    icon={<SearchOutlined />}
+  />
 );

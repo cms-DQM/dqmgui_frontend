@@ -11,6 +11,7 @@ export const QueryValidationErrors = ({
   <>
     {validation_errors.map((error) => (
       <Alert
+        key={error}
         message="Error in the URL query"
         description={error}
         type="error"

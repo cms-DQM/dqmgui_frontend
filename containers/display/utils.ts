@@ -25,7 +25,6 @@ export const getSelectedPlotsNames = (plotsNames: string | undefined) => {
 export const getSelectedPlots = (plotsQuery: string | undefined) => {
   const plotsWithDirs = plotsQuery ? plotsQuery.split('&') : [];
   return plotsWithDirs.map((plotWithDir: string) => {
-    console.log(plotWithDir);
     const plotAndDir = plotWithDir.split('/');
     const name = plotAndDir.pop();
     const directories = plotAndDir.join('/');

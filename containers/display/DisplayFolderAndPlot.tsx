@@ -73,15 +73,7 @@ const DiplayFolder: FC<FolderProps> = ({
   const query: QueryProps = router.query;
   const selectedPlots = query.selected_plots;
 
-  const {
-    errorBars,
-    overlay,
-    height,
-    width,
-    normalize,
-    overlay_plot,
-    stats,
-  } = state;
+  const { errorBars, height, width, normalize, overlay_plot, stats } = state;
 
   const selected_plots: PlotDataProps[] = getSelectedPlots(selectedPlots);
 
@@ -101,7 +93,7 @@ const DiplayFolder: FC<FolderProps> = ({
     dataset_name: dataset_name,
     width: width,
     height: height,
-    overlay: overlay,
+    overlay: query.overlay,
     stats: stats,
     normalize: normalize,
     errorBars: errorBars,
@@ -161,11 +153,11 @@ const DiplayFolder: FC<FolderProps> = ({
               {plots.map((plot: PlotDataProps | undefined) => {
                 if (plot) {
                   params_for_api.folders_path = plot.dir;
-
                   return (
                     <>
                       {overlay_plot.length > 0 ? (
                         <OverlaidPlot
+                          key={plot.name}
                           plot={plot}
                           params_for_api={params_for_api}
                           isPlotSelected={isPlotSelected(
@@ -176,6 +168,7 @@ const DiplayFolder: FC<FolderProps> = ({
                       ) : (
                         <Plot
                           plot={plot}
+                          key={plot.name}
                           params_for_api={params_for_api}
                           isPlotSelected={isPlotSelected(
                             selected_plots,

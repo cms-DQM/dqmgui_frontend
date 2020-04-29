@@ -5,7 +5,7 @@ import { Layout } from 'antd';
 const { Header, Content } = Layout;
 
 export const StyledLayout = styled(Layout)`
-  height: 100vh;
+  height: 100%;
 `;
 export const StyledHeader = styled(Header)`
   background-color: ${theme.colors.primary.main};
@@ -14,7 +14,8 @@ export const StyledHeader = styled(Header)`
   justify-content: center;
   align-items: center;
 `;
-export const StyledContent = styled(Content)`
-  height: 100%;
-  padding: calc(${theme.space.spaceBetween}*4);
+export const StyledDiv = styled.div<{ span?: number }>`
+  height: 100vh;
+  padding: ${(props) =>
+    props.span ? `calc(${theme.space.spaceBetween}*${props.span}` : ''};
 `;

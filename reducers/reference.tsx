@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { TripleProps, FolderPathQuery } from '../containers/display/interfaces';
+import { TripleProps } from '../containers/display/interfaces';
 import { REFERENCE_REDCER } from '../components/constants';
 
 const id = uuidv4();
@@ -10,7 +10,9 @@ interface StateInterface {
   open: boolean;
 }
 export const initialState: StateInterface = {
-  triples: [{ id: id, run_number: NaN, dataset_name: '', label: '' }],
+  triples: [
+    { id: id, checked: true, run_number: NaN, dataset_name: '', label: '' },
+  ],
   open: false,
 };
 
@@ -37,12 +39,29 @@ export const change_value_in_reference_table = (
   change_triples_values(copy)(dispatch);
 };
 
-export const addRun = () => (state: StateInterface, dispatch: any) => {
+export const addRun = (triples?: any[]) => (
+  state: StateInterface,
+  dispatch: any
+) => {
   const copy: TripleProps[] = [...state.triples];
   const id = uuidv4();
-  const newRun = { id: id, run_number: NaN, dataset_name: '', label: '' };
-  copy.push(newRun);
-  change_triples_values(copy)(dispatch);
+  if (triples) {
+    const checkedTriples = triples.map((triple: TripleProps) => {
+      triple.checked = true;
+      return triple;
+    });
+    change_triples_values(checkedTriples)(dispatch);
+  } else {
+    const newRun = {
+      id: id,
+      checked: true,
+      run_number: NaN,
+      dataset_name: '',
+      label: '',
+    };
+    copy.push(newRun);
+    change_triples_values(copy)(dispatch);
+  }
 };
 
 export const removeRun = (id: string | number | boolean) => (

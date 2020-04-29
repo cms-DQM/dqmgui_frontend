@@ -4,7 +4,6 @@ import {
   change_value_in_reference_table,
   removeRun,
 } from '../../../reducers/reference';
-import { StyledDiv } from '../styledComponents';
 import { StyledInput, StyledFormItem } from '../../styledComponents';
 
 interface FieldProps {
@@ -15,7 +14,7 @@ interface FieldProps {
   value: any;
   placeholder?: string;
   disabled?: boolean;
-  defaultValue?: string | number;
+  defaultValue?: string;
 }
 
 export const Field = ({
@@ -35,11 +34,11 @@ export const Field = ({
     return cleanField;
   }, []);
 
+  const inputValue = value ? value : defaultValue;
   return (
     <StyledFormItem name={`${id}_${field_name}`}>
       <StyledInput
         disabled={disabled}
-        defaultValue={defaultValue}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
           change_value_in_reference_table(
             e.target.value,
@@ -47,7 +46,8 @@ export const Field = ({
             id
           )(state, dispatch)
         }
-        value={value}
+        value={inputValue}
+        defaultValue={inputValue}
         placeholder={placeholder}
       />
     </StyledFormItem>

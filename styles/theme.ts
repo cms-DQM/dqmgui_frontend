@@ -6,11 +6,11 @@ export const theme = {
     },
     secondary: {
       main: '#AC3B61',
-      light: '#EDC7B7',
+      light: '#edc7b7',
     },
     thirdy: {
-      dark: '#BAB2B5',
-      light: '#EEE2DC',
+      dark: '#4C6B9D',
+      light: '#A4ABBD',
     },
     common: {
       white: '#fff',

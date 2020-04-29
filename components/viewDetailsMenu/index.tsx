@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Collapse, Row, Col, Typography } from 'antd';
+import { useRouter } from 'next/router';
 
 import { Reference } from './reference/reference';
 import { ViewFiler } from './viewFilter';
@@ -8,6 +9,8 @@ import { setSize } from '../../reducers/displayFolderOrPlot';
 import { setPlotToOverlay } from '../../reducers/displayFolderOrPlot';
 import { sizes } from '../constants';
 import { StyledCollapse, CheckboxesWrapper } from './styledComponents';
+import { QueryProps } from '../../containers/display/interfaces';
+import { formTriples } from './utils';
 
 const { Panel } = Collapse;
 
@@ -18,7 +21,17 @@ interface ViewDetailsMenuProps {
 }
 
 export const ViewDetailsMenu = ({ dispatch, state }: ViewDetailsMenuProps) => {
+  const router = useRouter();
+  const query: QueryProps = router.query;
+
   useEffect(() => {
+    if (query) {
+      if (query.overlay_data) {
+        const formatObjects = formTriples(query.overlay_data);
+        setPlotToOverlay(formatObjects)(dispatch);
+      }
+    }
+
     return () => {
       setPlotToOverlay([])(dispatch);
     };
