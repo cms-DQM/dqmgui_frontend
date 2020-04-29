@@ -53,10 +53,10 @@ export const StyledFormItem = styled(Form.Item)`
   }
 `;
 
-export const StyledInput = styled(Input) <{ fullWidth?: boolean }>`
+export const StyledInput = styled(Input)<{ fullWidth?: boolean }>`
   border-radius: 12px;
   width: fit-content;
-  width: ${props => props.fullWidth ? '100%' : ''};
+  width: ${(props) => (props.fullWidth ? '100%' : '')};
 `;
 
 export const StyledAutocomplete = styled(AutoComplete)`

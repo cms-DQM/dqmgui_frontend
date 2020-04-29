@@ -7,7 +7,11 @@ import Nav from '../components/Nav';
 import SearchResults from '../containers/search/SearchResults';
 import DiplayFolders from '../containers/display/DisplayFolderAndPlot';
 import { useSearch } from '../hooks/useSearch';
-import { StyledHeader, StyledLayout, StyledDiv } from '../styles/styledComponents';
+import {
+  StyledHeader,
+  StyledLayout,
+  StyledDiv,
+} from '../styles/styledComponents';
 import {
   NotFoundDiv,
   NotFoundDivWrapper,
@@ -94,13 +98,13 @@ const Index: NextPage<FolderPathQuery> = () => {
             handler={serchResultsHandler}
           />
         ) : (
-                <NotFoundDivWrapper>
-                  <NotFoundDiv noBorder>
-                    <ChartIcon />
+          <NotFoundDivWrapper>
+            <NotFoundDiv noBorder>
+              <ChartIcon />
               Welcome to DQM GUI
             </NotFoundDiv>
-                </NotFoundDivWrapper>
-              )}
+          </NotFoundDivWrapper>
+        )}
       </StyledLayout>
     </StyledDiv>
   );

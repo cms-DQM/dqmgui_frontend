@@ -18,7 +18,6 @@ export const FolderPath = ({
   run_number,
   dataset_name,
 }: FolderPathProps) => {
-
   const folders = folder_path ? folder_path.split('/') : [];
   const filteredFolders = folders.filter((folder: string) => folder !== '');
   const router = useRouter();

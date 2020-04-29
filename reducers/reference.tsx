@@ -10,7 +10,9 @@ interface StateInterface {
   open: boolean;
 }
 export const initialState: StateInterface = {
-  triples: [{ id: id, checked: true, run_number: NaN, dataset_name: '', label: '' }],
+  triples: [
+    { id: id, checked: true, run_number: NaN, dataset_name: '', label: '' },
+  ],
   open: false,
 };
 
@@ -37,17 +39,26 @@ export const change_value_in_reference_table = (
   change_triples_values(copy)(dispatch);
 };
 
-export const addRun = (triples?: any[]) => (state: StateInterface, dispatch: any) => {
+export const addRun = (triples?: any[]) => (
+  state: StateInterface,
+  dispatch: any
+) => {
   const copy: TripleProps[] = [...state.triples];
   const id = uuidv4();
   if (triples) {
     const checkedTriples = triples.map((triple: TripleProps) => {
-      triple.checked = true
-      return triple
-    })
+      triple.checked = true;
+      return triple;
+    });
     change_triples_values(checkedTriples)(dispatch);
   } else {
-    const newRun = { id: id, checked: true, run_number: NaN, dataset_name: '', label: '' };
+    const newRun = {
+      id: id,
+      checked: true,
+      run_number: NaN,
+      dataset_name: '',
+      label: '',
+    };
     copy.push(newRun);
     change_triples_values(copy)(dispatch);
   }

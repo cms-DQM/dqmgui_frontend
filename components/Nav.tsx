@@ -1,10 +1,4 @@
-import React, {
-  FC,
-  ChangeEvent,
-  Dispatch,
-  useEffect,
-  useState,
-} from 'react';
+import React, { FC, ChangeEvent, Dispatch, useEffect, useState } from 'react';
 import { Form } from 'antd';
 
 import { StyledFormItem, StyledInput } from './styledComponents';

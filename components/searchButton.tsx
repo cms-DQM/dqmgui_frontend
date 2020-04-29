@@ -9,10 +9,10 @@ interface SearchButtonProps {
 }
 
 export const SearchButton = ({ onClick }: SearchButtonProps) => (
-    <StyledButton
-      htmlType="submit"
-      onClick={() => onClick()}
-      shape="circle"
-      icon={<SearchOutlined />}
-    />
+  <StyledButton
+    htmlType="submit"
+    onClick={() => onClick()}
+    shape="circle"
+    icon={<SearchOutlined />}
+  />
 );

@@ -16,5 +16,6 @@ export const StyledHeader = styled(Header)`
 `;
 export const StyledDiv = styled.div<{ span?: number }>`
   height: 100vh;
-  padding: ${(props) => props.span ? `calc(${theme.space.spaceBetween}*${props.span}` : ''};
+  padding: ${(props) =>
+    props.span ? `calc(${theme.space.spaceBetween}*${props.span}` : ''};
 `;

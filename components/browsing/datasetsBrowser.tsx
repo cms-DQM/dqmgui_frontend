@@ -1,13 +1,16 @@
-import React from 'react'
-import { Col, Select } from 'antd'
-import { useRouter } from 'next/router'
+import React from 'react';
+import { Col, Select } from 'antd';
+import { useRouter } from 'next/router';
 
-import { StyledFormItem } from '../styledComponents'
-import { StyledSelect } from '../viewDetailsMenu/styledComponents'
-import { QueryProps } from '../../containers/display/interfaces'
-import { useSearch } from '../../hooks/useSearch'
-import Link from 'next/link'
-import { Spinner, SpinnerWrapper } from '../../containers/search/styledComponents'
+import { StyledFormItem } from '../styledComponents';
+import { StyledSelect } from '../viewDetailsMenu/styledComponents';
+import { QueryProps } from '../../containers/display/interfaces';
+import { useSearch } from '../../hooks/useSearch';
+import Link from 'next/link';
+import {
+  Spinner,
+  SpinnerWrapper,
+} from '../../containers/search/styledComponents';
 
 const { Option } = Select;
 
@@ -17,7 +20,11 @@ interface DatasetsBrowserProps {
   setDatasetName(name: string): void;
 }
 
-export const DatasetsBrowser = ({ setValue, datasetName, setDatasetName }: DatasetsBrowserProps) => {
+export const DatasetsBrowser = ({
+  setValue,
+  datasetName,
+  setDatasetName,
+}: DatasetsBrowserProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
 
@@ -27,20 +34,21 @@ export const DatasetsBrowser = ({ setValue, datasetName, setDatasetName }: Datas
   );
 
   return (
-    <Col >
+    <Col>
       <StyledFormItem label={'Dataset Name:'}>
         <StyledSelect defaultValue={datasetName}>
-          {results_grouped.map(result => (
+          {results_grouped.map((result) => (
             <Option
               value={result.dataset}
               key={name}
               onClick={() => {
-                setDatasetName(result.dataset)
-                setValue(result.value)
-              }}>
+                setDatasetName(result.dataset);
+                setValue(result.value);
+              }}
+            >
               {isLoading ? (
                 <Spinner />
-              ) :
+              ) : (
                 <Link
                   href={{
                     pathname: '/',
@@ -56,11 +64,11 @@ export const DatasetsBrowser = ({ setValue, datasetName, setDatasetName }: Datas
                 >
                   <a>{result.dataset}</a>
                 </Link>
-              }
+              )}
             </Option>
           ))}
         </StyledSelect>
       </StyledFormItem>
     </Col>
-  )
-}
+  );
+};

@@ -6,9 +6,7 @@ import {
   TripleProps,
   QueryProps,
 } from '../../../containers/display/interfaces';
-import {
-  setPlotToOverlay,
-} from '../../../reducers/displayFolderOrPlot';
+import { setPlotToOverlay } from '../../../reducers/displayFolderOrPlot';
 import {
   referenceReducer,
   initialState,
@@ -42,10 +40,10 @@ interface ReferenceProps {
 
 const isAllChecked = (triples: TripleProps[]) => {
   const checks: any[] = triples.map((triple: TripleProps) => {
-    return triple.checked
-  })
-  return checks.includes(false) ? false : true
-}
+    return triple.checked;
+  });
+  return checks.includes(false) ? false : true;
+};
 
 export const Reference = ({
   dispatch_gloabl,
@@ -63,11 +61,13 @@ export const Reference = ({
 
   const router = useRouter();
   const query: QueryProps = router.query;
-  const overlayTriples = formTriples(query.overlay_data ? query.overlay_data : '')
+  const overlayTriples = formTriples(
+    query.overlay_data ? query.overlay_data : ''
+  );
 
   useEffect(() => {
     addRun(overlayTriples)(state, dispatch);
-  }, [])
+  }, []);
 
   return (
     <StyledDiv>
@@ -97,27 +97,26 @@ export const Reference = ({
                   triple.cheked ? triple.cheked : e.target.checked,
                   'checked',
                   triple.id
-                )(state, dispatch)
-              })
-            }
-            }
-          >Check All
-        </Checkbox>
+                )(state, dispatch);
+              });
+            }}
+          >
+            Check All
+          </Checkbox>
         </StyledDiv>
         {triples.map((triple: TripleProps) => (
           <FieldsWrapper key={triple.id.toString()}>
             <StyledDiv>
               <FormItem>
                 <Checkbox
-                  checked={(triple.checked) as boolean}
+                  checked={triple.checked as boolean}
                   onChange={(e: any) => {
                     change_value_in_reference_table(
                       triple.cheked ? triple.cheked : e.target.checked,
                       'checked',
                       triple.id
-                    )(state, dispatch)
-                  }
-                  }
+                    )(state, dispatch);
+                  }}
                 />
               </FormItem>
             </StyledDiv>
@@ -180,7 +179,8 @@ export const Reference = ({
           <Col>
             <Form.Item>
               <Form.Item>
-                <StyledButton htmlType="submit"
+                <StyledButton
+                  htmlType="submit"
                   onClick={() => {
                     const filtered: TripleProps[] = filter_valid_runs(triples);
                     setPlotToOverlay(filtered)(dispatch_gloabl);
@@ -196,7 +196,7 @@ export const Reference = ({
                         overlay: state_global.overlay,
                         overlay_data: `${addOverlayData(triples)}`,
                         selected_plots: query.selected_plots,
-                      }
+                      },
                     }}
                   >
                     <a>Submit</a>
@@ -213,8 +213,7 @@ export const Reference = ({
                 }
               }}
               icon={<PlusOutlined />}
-            >
-            </StyledSecondaryButton>
+            ></StyledSecondaryButton>
           </Col>
         </StyledActionButtonRow>
       </StyledForm>

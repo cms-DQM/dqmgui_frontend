@@ -62,26 +62,26 @@ export const Plot = ({ plot, params_for_api, isPlotSelected }: PlotProps) => {
               <MinusIcon />
             </Link>
           ) : (
-              <Link
-                href={{
-                  pathname: '/',
-                  query: {
-                    run_number: query.run_number,
-                    dataset_name: query.dataset_name,
-                    folder_path: query.folder_path,
-                    overlay: query.overlay,
-                    overlay_data: query.overlay_data,
-                    //addig selected plots name and directories to url
-                    selected_plots: `${addToSelectedPlots(
-                      query.selected_plots,
-                      plot
-                    )}`,
-                  },
-                }}
-              >
-                <PlusIcon />
-              </Link>
-            )}
+            <Link
+              href={{
+                pathname: '/',
+                query: {
+                  run_number: query.run_number,
+                  dataset_name: query.dataset_name,
+                  folder_path: query.folder_path,
+                  overlay: query.overlay,
+                  overlay_data: query.overlay_data,
+                  //addig selected plots name and directories to url
+                  selected_plots: `${addToSelectedPlots(
+                    query.selected_plots,
+                    plot
+                  )}`,
+                },
+              }}
+            >
+              <PlusIcon />
+            </Link>
+          )}
         </Column>
         <Link
           href={{
@@ -94,16 +94,11 @@ export const Plot = ({ plot, params_for_api, isPlotSelected }: PlotProps) => {
               overlay_data: query.overlay_data,
               //if plot is laready selected, on plot click, plot will be removed from url;
               //Otherwis-- plot and its dir will be added to url.
-              selected_plots: `${isPlotSelected ?
-                removePlotFromSelectedPlots(
-                  query.selected_plots,
-                  plot
-                )
-                :
-                addToSelectedPlots(
-                  query.selected_plots,
-                  plot,
-                )}`,
+              selected_plots: `${
+                isPlotSelected
+                  ? removePlotFromSelectedPlots(query.selected_plots, plot)
+                  : addToSelectedPlots(query.selected_plots, plot)
+              }`,
             },
           }}
         >

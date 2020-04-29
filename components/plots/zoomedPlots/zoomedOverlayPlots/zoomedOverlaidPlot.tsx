@@ -75,11 +75,7 @@ export const ZoomedOverlaidPlot = ({
           </Link>
         </Column>
         <ImageDiv id={selected_plot.name} width={size.w} height={size.h}>
-          <Image
-            src={source}
-            width={size.w}
-            height={size.h}
-          />
+          <Image src={source} width={size.w} height={size.h} />
         </ImageDiv>
       </StyledPlotRow>
     </StyledCol>

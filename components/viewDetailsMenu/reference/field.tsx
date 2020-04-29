@@ -34,7 +34,7 @@ export const Field = ({
     return cleanField;
   }, []);
 
-  const inputValue = value ? value : defaultValue
+  const inputValue = value ? value : defaultValue;
   return (
     <StyledFormItem name={`${id}_${field_name}`}>
       <StyledInput

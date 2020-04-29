@@ -43,9 +43,8 @@ export const StyledTableRow = styled.tr<{
   cursor: pointer;
   &:hover {
     background-color: ${(props) =>
-    props?.noHover ? '' : `${theme.colors.thirdy.light}`};
-      color: ${(props) =>
-    props?.noHover ? '' : `${theme.colors.common.white}`};
+      props?.noHover ? '' : `${theme.colors.thirdy.light}`};
+    color: ${(props) => (props?.noHover ? '' : `${theme.colors.common.white}`)};
   }
   font-weight: ${(props) =>
     props?.expanded && props.expanded === true ? 'bold' : ''};

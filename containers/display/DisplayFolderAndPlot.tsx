@@ -51,12 +51,12 @@ const doesPlotExists = (contents: (PlotInterface & DirectoryInterface)[]) =>
 const getContents = (data: any) =>
   data
     ? _.sortBy(
-      data.contents.filter(
-        (one_item: PlotInterface | DirectoryInterface) =>
-          !one_item.hasOwnProperty('streamerinfo')
-      ),
-      ['subdir']
-    )
+        data.contents.filter(
+          (one_item: PlotInterface | DirectoryInterface) =>
+            !one_item.hasOwnProperty('streamerinfo')
+        ),
+        ['subdir']
+      )
     : [];
 
 const DiplayFolder: FC<FolderProps> = ({
@@ -73,14 +73,7 @@ const DiplayFolder: FC<FolderProps> = ({
   const query: QueryProps = router.query;
   const selectedPlots = query.selected_plots;
 
-  const {
-    errorBars,
-    height,
-    width,
-    normalize,
-    overlay_plot,
-    stats,
-  } = state;
+  const { errorBars, height, width, normalize, overlay_plot, stats } = state;
 
   const selected_plots: PlotDataProps[] = getSelectedPlots(selectedPlots);
 
@@ -137,58 +130,58 @@ const DiplayFolder: FC<FolderProps> = ({
               <Spinner />
             </SpinnerWrapper>
           ) : (
-              <>
-                {directories.map((directory_name: any) => (
-                  <Col span={4} key={directory_name}>
-                    <DirecotryWrapper>
-                      <Icon />
-                      <Link
-                        href={{
-                          pathname: '/',
-                          query: {
-                            run_number: run_number,
-                            dataset_name: dataset_name,
-                            folder_path: `${folder_path}/${directory_name}`,
-                          },
-                        }}
-                      >
-                        <StyledA>{directory_name}</StyledA>
-                      </Link>
-                    </DirecotryWrapper>
-                  </Col>
-                ))}
-                {plots.map((plot: PlotDataProps | undefined) => {
-                  if (plot) {
-                    params_for_api.folders_path = plot.dir;
-                    return (
-                      <>
-                        {overlay_plot.length > 0 ? (
-                          <OverlaidPlot
-                            key={plot.name}
-                            plot={plot}
-                            params_for_api={params_for_api}
-                            isPlotSelected={isPlotSelected(
-                              selected_plots,
-                              plot.name
-                            )}
-                          />
-                        ) : (
-                            <Plot
-                              plot={plot}
-                              key={plot.name}
-                              params_for_api={params_for_api}
-                              isPlotSelected={isPlotSelected(
-                                selected_plots,
-                                plot.name
-                              )}
-                            />
+            <>
+              {directories.map((directory_name: any) => (
+                <Col span={4} key={directory_name}>
+                  <DirecotryWrapper>
+                    <Icon />
+                    <Link
+                      href={{
+                        pathname: '/',
+                        query: {
+                          run_number: run_number,
+                          dataset_name: dataset_name,
+                          folder_path: `${folder_path}/${directory_name}`,
+                        },
+                      }}
+                    >
+                      <StyledA>{directory_name}</StyledA>
+                    </Link>
+                  </DirecotryWrapper>
+                </Col>
+              ))}
+              {plots.map((plot: PlotDataProps | undefined) => {
+                if (plot) {
+                  params_for_api.folders_path = plot.dir;
+                  return (
+                    <>
+                      {overlay_plot.length > 0 ? (
+                        <OverlaidPlot
+                          key={plot.name}
+                          plot={plot}
+                          params_for_api={params_for_api}
+                          isPlotSelected={isPlotSelected(
+                            selected_plots,
+                            plot.name
                           )}
-                      </>
-                    );
-                  }
-                })}
-              </>
-            )}
+                        />
+                      ) : (
+                        <Plot
+                          plot={plot}
+                          key={plot.name}
+                          params_for_api={params_for_api}
+                          isPlotSelected={isPlotSelected(
+                            selected_plots,
+                            plot.name
+                          )}
+                        />
+                      )}
+                    </>
+                  );
+                }
+              })}
+            </>
+          )}
         </Wrapper>
         {selected_plots.length > 0 && (
           <Wrapper zoomed={selected_plots.length}>
