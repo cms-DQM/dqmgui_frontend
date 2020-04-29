@@ -6,7 +6,7 @@ export const theme = {
     },
     secondary: {
       main: '#AC3B61',
-      light: '#CF6AA7',
+      light: '#edc7b7',
     },
     thirdy: {
       dark: '#4C6B9D',
