@@ -27,7 +27,7 @@ export const ViewDetailsMenu = ({ dispatch, state }: ViewDetailsMenuProps) => {
   useEffect(() => {
     if (query) {
       if (query.overlay_data) {
-        const formatObjects = formTriples(query.overlay_data)
+        const formatObjects = formTriples(query.overlay_data);
         setPlotToOverlay(formatObjects)(dispatch);
       }
     }

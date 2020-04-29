@@ -51,7 +51,9 @@ export const CostumizeTable = ({ dispatch }: CostumizeTableProps) => {
           <StyledFormItem label="Reference" name="withref">
             <StyledSelect defaultValue={referenceCopy[0].value}>
               {referenceCopy.map((option: OptionProps) => (
-                <Option value={option.value} key={option.value.toString()}>{option.label}</Option>
+                <Option value={option.value} key={option.value.toString()}>
+                  {option.label}
+                </Option>
               ))}
             </StyledSelect>
           </StyledFormItem>
@@ -60,7 +62,7 @@ export const CostumizeTable = ({ dispatch }: CostumizeTableProps) => {
       <FullWidthRow>
         <Col span={8}>
           <StyledFormItem label="Draw options" name="drawopts">
-            <StyledInput fullWidth={true}/>
+            <StyledInput fullWidth={true} />
           </StyledFormItem>
         </Col>
       </FullWidthRow>

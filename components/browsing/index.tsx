@@ -7,16 +7,15 @@ import { QueryProps } from '../../containers/display/interfaces';
 import { RunBrowser } from './runsBrowser';
 import Form from 'antd/lib/form/Form';
 
-interface BrowserProps {
-}
+interface BrowserProps {}
 
 export const Browser = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
 
-  const [datasetName, setDatasetName] = useState(query.dataset_name)
-  const [run_number, setRunNumber] = useState(query.run_number)
-  const [value, setValue] = useState()
+  const [datasetName, setDatasetName] = useState(query.dataset_name);
+  const [run_number, setRunNumber] = useState(query.run_number);
+  const [value, setValue] = useState();
 
   return (
     <Form>
@@ -37,5 +36,5 @@ export const Browser = () => {
         </WrapperDiv>
       </WrapperDiv>
     </Form>
-  )
-}
+  );
+};

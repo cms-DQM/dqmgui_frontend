@@ -8,15 +8,15 @@ interface QuerValidationErrrorsProps {
 export const QueryValidationErrors = ({
   validation_errors,
 }: QuerValidationErrrorsProps): ReactElement => (
-    <>
-      {validation_errors.map((error) => (
-        <Alert
-          key={error}
-          message="Error in the URL query"
-          description={error}
-          type="error"
-          showIcon
-        />
-      ))}
-    </>
-  );
+  <>
+    {validation_errors.map((error) => (
+      <Alert
+        key={error}
+        message="Error in the URL query"
+        description={error}
+        type="error"
+        showIcon
+      />
+    ))}
+  </>
+);

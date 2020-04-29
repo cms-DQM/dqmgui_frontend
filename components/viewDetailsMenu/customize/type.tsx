@@ -13,19 +13,20 @@ interface TypesProps {
 }
 
 export const Type = ({ type }: TypesProps) => {
-
   return (
     <>
       <Col span={8}>
         <StyledFormItem name={`${type}type`} label={`${type} type`}>
           <StyledSelect defaultValue={xyzTypes[0].value}>
             {xyzTypes.map((option: OptionProps) => (
-              <Option value={option.value} key={option.value.toString()}>{option.label}</Option>
+              <Option value={option.value} key={option.value.toString()}>
+                {option.label}
+              </Option>
             ))}
           </StyledSelect>
         </StyledFormItem>
       </Col>
-      <StyledCol space={1} span={8} >
+      <StyledCol space={1} span={8}>
         <StyledFormItem label="min" name={`${type}min`}>
           <StyledInput />
         </StyledFormItem>
