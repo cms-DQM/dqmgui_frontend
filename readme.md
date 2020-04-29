@@ -26,10 +26,17 @@
 
 8. **When plots are overlaid on side, them have to be display in a row, not in column**
 
-9. **Overlaid plots options are not included in url**
+---
+---
+## Need to be done
 
-10. **Display qtest results (colored plots)**.
-
-11. **Display server name.**
-
+1. Search plot by plot name
+2. Workspaces
+3. Zoomed plots linkability
+4. Browsing by dataset name and run number
+5. Services
+6. Downloading of ROOT files
+7. Display qtest results (colored plots)
+8. Display server name
+9. Integrate P5 alarm manager
 ---
