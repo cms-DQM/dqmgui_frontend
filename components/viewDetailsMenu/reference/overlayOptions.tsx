@@ -17,8 +17,9 @@ export const OverlayOptions = ({
 }: OverlayOptionsProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
-
-  const [value, setValue] = React.useState(query.overlay);
+  const settedOverlay = query.overlay ? query.overlay : overlayOptions[0].value
+  
+  const [value, setValue] = React.useState(settedOverlay);
 
   return (
     <Radio.Group
