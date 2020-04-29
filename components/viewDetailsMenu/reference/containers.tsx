@@ -29,7 +29,7 @@ export const Container = ({
 
   useEffect(() => {
     change_value_in_reference_table(
-      defaultValue ? defaultValue : '',
+      inputValue,
       field_name,
       id
     )(state, dispatch);

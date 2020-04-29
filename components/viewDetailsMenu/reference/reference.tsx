@@ -1,5 +1,5 @@
-import React, { useReducer, useState } from 'react';
-import { Form, Col } from 'antd';
+import React, { useReducer, useState, useEffect } from 'react';
+import { Form, Col, Checkbox } from 'antd';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 
 import {
@@ -15,6 +15,7 @@ import {
   removeRun,
   addRun,
   toggleModal,
+  change_value_in_reference_table,
 } from '../../../reducers/reference';
 import { StyledDiv } from '../../styledComponents';
 import {
@@ -25,7 +26,7 @@ import {
   FormItem,
   FieldsWrapper,
 } from '../../styledComponents';
-import { filter_plots, filter_valid_runs } from '../utils';
+import { filter_plots, filter_valid_runs, formTriples } from '../utils';
 import { Field } from './field';
 import { useRouter } from 'next/router';
 import { CustomModal } from '../search';
@@ -37,6 +38,13 @@ import { OverlayOptions } from './overlayOptions';
 interface ReferenceProps {
   dispatch_gloabl: any;
   state_global: any;
+}
+
+const isAllChecked = (triples: TripleProps[]) => {
+  const checks: any[] = triples.map((triple: TripleProps) => {
+    return triple.checked
+  })
+  return checks.includes(false) ? false : true
 }
 
 export const Reference = ({
@@ -55,6 +63,11 @@ export const Reference = ({
 
   const router = useRouter();
   const query: QueryProps = router.query;
+  const overlayTriples = formTriples(query.overlay_data ? query.overlay_data : '')
+
+  useEffect(() => {
+    addRun(overlayTriples)(state, dispatch);
+  }, [])
 
   return (
     <StyledDiv>
@@ -75,8 +88,39 @@ export const Reference = ({
           id={selectedTriple.id}
           state={state}
         />
+        <StyledDiv>
+          <Checkbox
+            checked={isAllChecked(triples)}
+            onChange={(e: any) => {
+              triples.map((triple: TripleProps) => {
+                change_value_in_reference_table(
+                  triple.cheked ? triple.cheked : e.target.checked,
+                  'checked',
+                  triple.id
+                )(state, dispatch)
+              })
+            }
+            }
+          >Check All
+        </Checkbox>
+        </StyledDiv>
         {triples.map((triple: TripleProps) => (
           <FieldsWrapper key={triple.id.toString()}>
+            <StyledDiv>
+              <FormItem>
+                <Checkbox
+                  checked={(triple.checked) as boolean}
+                  onChange={(e: any) => {
+                    change_value_in_reference_table(
+                      triple.cheked ? triple.cheked : e.target.checked,
+                      'checked',
+                      triple.id
+                    )(state, dispatch)
+                  }
+                  }
+                />
+              </FormItem>
+            </StyledDiv>
             <StyledDiv>
               <Container
                 state={state}
@@ -114,6 +158,7 @@ export const Reference = ({
                 id={triple.id}
                 field_name="label"
                 placeholder="label"
+                defaultValue={triple.label as string}
                 value={triple.label}
               />
             </StyledDiv>
