@@ -12,7 +12,8 @@ interface PartsBrowserProps {
   allParts: string[];
   part: string;
   name: string | undefined;
-  setDatasetError(error: boolean): void;
+  setSelectedParts(selectedPart: any): void;
+  selectedParts: any;
 }
 
 export const PartsBrowser = ({
@@ -22,12 +23,15 @@ export const PartsBrowser = ({
   allParts,
   part,
   name,
-  setDatasetError,
+  setSelectedParts,
+  selectedParts,
 }: PartsBrowserProps) => {
 
   return (
     <StyledSelect dropdownMatchSelectWidth={false} defaultValue={name}
       onChange={(e: any) => {
+        selectedParts[part] = e
+        setSelectedParts(selectedParts)
         setGroupBy(part);
         setName(e);
       }}>
@@ -51,6 +55,6 @@ export const PartsBrowser = ({
           </Option>
         ))
       }
-    </StyledSelect>
+    </StyledSelect >
   );
 };

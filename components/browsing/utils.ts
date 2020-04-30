@@ -2,13 +2,8 @@ import { getDatasetParts } from "../viewDetailsMenu/utils";
 
 export const getRestOptions = (firstResultsNames: string[], datasets: string[], part: string) => {
   const all = Object.keys(getDatasetParts(datasets, part))
-  firstResultsNames.map((result: string) => {
-    const index = all.indexOf(result)
-    if (index > -1) {
-      all.splice(index, 1);
-    }
-  })
-  return all
+  
+  return all.filter(item => !firstResultsNames.includes(item));
 }
 
 export const getOneDatasetParts = (dataset: string | undefined) => {
