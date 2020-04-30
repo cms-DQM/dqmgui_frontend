@@ -2,15 +2,15 @@ import React from 'react';
 import { Col, Select } from 'antd';
 import { useRouter } from 'next/router';
 
-import { StyledFormItem } from '../styledComponents';
-import { StyledSelect } from '../viewDetailsMenu/styledComponents';
-import { QueryProps } from '../../containers/display/interfaces';
-import { useSearch } from '../../hooks/useSearch';
+import { StyledFormItem } from '../../styledComponents';
+import { StyledSelect } from '../../viewDetailsMenu/styledComponents';
+import { QueryProps } from '../../../containers/display/interfaces';
+import { useSearch } from '../../../hooks/useSearch';
 import Link from 'next/link';
 import {
   Spinner,
   SpinnerWrapper,
-} from '../../containers/search/styledComponents';
+} from '../../../containers/search/styledComponents';
 
 const { Option } = Select;
 
