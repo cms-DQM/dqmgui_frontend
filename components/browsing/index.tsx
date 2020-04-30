@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { WrapperDiv } from '../../containers/display/styledComponents';
-import { DatasetsBrowser } from './datasetsBrowser';
+import { DatasetsBrowser } from './datasetsBrowsing/datasetsBrowser';
+import { OptionalDatasetsBrowser } from './datasetsBrowsing/optionalDatasetname';
 import { QueryProps } from '../../containers/display/interfaces';
 import { RunBrowser } from './runsBrowser';
 import Form from 'antd/lib/form/Form';
 
-interface BrowserProps {}
+interface BrowserProps { }
 
 export const Browser = () => {
   const router = useRouter();
@@ -29,6 +30,13 @@ export const Browser = () => {
         </WrapperDiv>
         <WrapperDiv>
           <DatasetsBrowser
+            datasetName={datasetName}
+            setDatasetName={setDatasetName}
+            setValue={setValue}
+          />
+        </WrapperDiv>
+        <WrapperDiv>
+          <OptionalDatasetsBrowser
             datasetName={datasetName}
             setDatasetName={setDatasetName}
             setValue={setValue}
