@@ -29,11 +29,11 @@ export const PartsBrowser = ({
 
   return (
     <StyledSelect dropdownMatchSelectWidth={false} defaultValue={name}
-      onChange={(e: any) => {
-        selectedParts[part] = e
+      onChange={(value: any) => {
+        selectedParts[part] = value
         setSelectedParts(selectedParts)
         setGroupBy(part);
-        setName(e);
+        setName(value);
       }}>
       {
         resultsNames.map((result: string) => (
