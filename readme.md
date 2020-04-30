@@ -18,6 +18,10 @@
 
 5. **Searching data for overlay plot data is not found**.
 
+6. On plot selection (when screen divided to two sides), need to scroll down until selected plot (on the left side list).
+
+7. Fit dataset name in select fiel.
+
 - When the search is done by dataset name results are not found, even then they exist.
 
 6. **Plots are not sorted by an alphabet.**
