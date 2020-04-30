@@ -43,8 +43,7 @@ export const getDatasetParts = (datsets: string[], part: string) => {
     const datasetParts = dataset.split('/')
     return { first: datasetParts[1], second: datasetParts[2], third: datasetParts[3] }
   })
-  // return parts
- return( _.chain(parts)
-  .groupBy(part)
-  .value())
+  return (_.chain(parts)
+    .groupBy(part)
+    .value())
 }
