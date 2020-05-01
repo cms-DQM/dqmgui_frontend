@@ -83,3 +83,14 @@ export const withReference = [
   { label: 'Yes', value: 'yes' },
   { label: 'No', value: 'no' },
 ];
+
+export const dataSetSelections = [
+  {
+    label: 'Dataset Select',
+    value: 'datasetSelect'
+  },
+  {
+    label: 'Dataset Builder',
+    value: 'datasetBuilder'
+  }
+]

@@ -1,19 +1,22 @@
 import React from 'react';
 import { Radio } from 'antd';
+
 import { OptionProps } from '../containers/display/interfaces';
 
-import { StyledDiv } from './styledComponents';
-
 interface RadioButtonsGroupProps {
-  options: OptionProps[];
+  options: any[];
   action(value: any): void;
   current_value?: any;
+  getOptionValue(value: any): any;
+  getOptionLabel(value: any): string;
 }
 
 export const RadioButtonsGroup = ({
   options,
   action,
   current_value,
+  getOptionValue,
+  getOptionLabel,
 }: RadioButtonsGroupProps) => {
   const [value, setValue] = React.useState(current_value);
 
@@ -27,8 +30,8 @@ export const RadioButtonsGroup = ({
     >
       {options.map((option: OptionProps) => {
         return (
-          <Radio key={option.label} value={option.value}>
-            {option.label}
+          <Radio key={getOptionValue(option.value)} value={getOptionValue(option)}>
+            {getOptionLabel(option)}
           </Radio>
         );
       })}
