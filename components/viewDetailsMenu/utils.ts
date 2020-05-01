@@ -40,10 +40,12 @@ export const formTriples = (overlay_data: string | undefined) => {
 
 export const getDatasetParts = (datsets: string[], part: string) => {
   const parts = datsets.map((dataset: string) => {
-    const datasetParts = dataset.split('/')
-    return { first: datasetParts[1], second: datasetParts[2], third: datasetParts[3] }
-  })
-  return (_.chain(parts)
-    .groupBy(part)
-    .value())
-}
+    const datasetParts = dataset.split('/');
+    return {
+      first: datasetParts[1],
+      second: datasetParts[2],
+      third: datasetParts[3],
+    };
+  });
+  return _.chain(parts).groupBy(part).value();
+};

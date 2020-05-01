@@ -6,9 +6,7 @@ import { StyledSelect } from '../../viewDetailsMenu/styledComponents';
 import { QueryProps } from '../../../containers/display/interfaces';
 import { useSearch } from '../../../hooks/useSearch';
 import Link from 'next/link';
-import {
-  Spinner,
-} from '../../../containers/search/styledComponents';
+import { Spinner } from '../../../containers/search/styledComponents';
 
 const { Option } = Select;
 
@@ -33,9 +31,7 @@ export const DatasetsBrowser = ({
 
   return (
     <Col>
-      <StyledSelect
-        dropdownMatchSelectWidth={false}
-        defaultValue={datasetName}>
+      <StyledSelect dropdownMatchSelectWidth={false} defaultValue={datasetName}>
         {results_grouped.map((result) => (
           <Option
             value={result.dataset}
@@ -48,22 +44,22 @@ export const DatasetsBrowser = ({
             {isLoading ? (
               <Spinner />
             ) : (
-                <Link
-                  href={{
-                    pathname: '/',
-                    query: {
-                      run_number: query.run_number,
-                      dataset_name: result.dataset,
-                      folder_path: query.folder_path,
-                      overlay: query.overlay,
-                      overlay_data: query.overlay_data,
-                      selected_plots: query.selected_plots,
-                    },
-                  }}
-                >
-                  <a>{result.dataset}</a>
-                </Link>
-              )}
+              <Link
+                href={{
+                  pathname: '/',
+                  query: {
+                    run_number: query.run_number,
+                    dataset_name: result.dataset,
+                    folder_path: query.folder_path,
+                    overlay: query.overlay,
+                    overlay_data: query.overlay_data,
+                    selected_plots: query.selected_plots,
+                  },
+                }}
+              >
+                <a>{result.dataset}</a>
+              </Link>
+            )}
           </Option>
         ))}
       </StyledSelect>

@@ -30,7 +30,10 @@ export const RadioButtonsGroup = ({
     >
       {options.map((option: OptionProps) => {
         return (
-          <Radio key={getOptionValue(option.value)} value={getOptionValue(option)}>
+          <Radio
+            key={getOptionValue(option.value)}
+            value={getOptionValue(option)}
+          >
             {getOptionLabel(option)}
           </Radio>
         );

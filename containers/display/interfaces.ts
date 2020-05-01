@@ -90,4 +90,3 @@ export interface QueryProps {
   overlay_data?: string;
   overlay?: string;
 }
-

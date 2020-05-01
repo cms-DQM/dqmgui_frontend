@@ -39,8 +39,7 @@ export const RunBrowser = ({
   return (
     <Col>
       <StyledFormItem name={run_number} label="Run number:">
-        <StyledSelect 
-        defaultValue={run_number}>
+        <StyledSelect defaultValue={run_number}>
           {runNumbers[0] &&
             runNumbers[0].map((run: number) => {
               return (

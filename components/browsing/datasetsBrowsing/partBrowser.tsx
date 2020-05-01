@@ -29,41 +29,32 @@ export const PartsBrowser = ({
   selectedParts,
   selectedName,
 }: PartsBrowserProps) => {
-
-  const [value, setValue] = useState(name)
+  const [value, setValue] = useState(name);
   return (
     <StyledSelect
       dropdownMatchSelectWidth={false}
       defaultValue={name}
       selected={selectedName === value ? 'selected' : ''}
       onChange={(value: any) => {
-        selectedParts[part] = value
-        setSelectedParts(selectedParts)
+        selectedParts[part] = value;
+        setSelectedParts(selectedParts);
         setGroupBy(part);
-        setValue(value)
+        setValue(value);
         setName(value);
-      }}>
-      {
-        resultsNames.map((result: string) => (
-          <Option
-            value={result}
-            key={result}
-          >
-            <StyledOptionContent
-              availability="available"
-            >{result}</StyledOptionContent>
-          </Option>
-        ))
-      }
-      {
-        restParts.map((result: string) => (
-          <Option
-            key={result}
-            value={result}>
-            <StyledOptionContent>{result}</StyledOptionContent>
-          </Option>
-        ))
-      }
-    </StyledSelect >
+      }}
+    >
+      {resultsNames.map((result: string) => (
+        <Option value={result} key={result}>
+          <StyledOptionContent availability="available">
+            {result}
+          </StyledOptionContent>
+        </Option>
+      ))}
+      {restParts.map((result: string) => (
+        <Option key={result} value={result}>
+          <StyledOptionContent>{result}</StyledOptionContent>
+        </Option>
+      ))}
+    </StyledSelect>
   );
 };

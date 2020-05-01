@@ -10,15 +10,15 @@ export interface MenuProps {
 }
 
 export const DropdownMenu = ({ options, defaultValue, action }: MenuProps) => {
-  const [value, setValue] = useState(defaultValue)
+  const [value, setValue] = useState(defaultValue);
   const plotMenu = (options: OptionProps[], defaultValue: OptionProps) => (
     <Menu>
       {options.map((option: OptionProps) => (
         <Menu.Item
           key={option.value}
           onClick={() => {
-            action && action(option.value)
-            setValue(option)
+            action && action(option.value);
+            setValue(option);
           }}
         >
           <p>{option.label} </p>
@@ -31,9 +31,7 @@ export const DropdownMenu = ({ options, defaultValue, action }: MenuProps) => {
     <Row>
       <Col>
         <Dropdown overlay={plotMenu(options, defaultValue)} trigger={['hover']}>
-          <a>
-            {value.label}
-          </a>
+          <a>{value.label}</a>
         </Dropdown>
       </Col>
     </Row>
