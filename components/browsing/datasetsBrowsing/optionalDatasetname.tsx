@@ -45,7 +45,6 @@ export const OptionalDatasetsBrowser = ({
     ''
   );
 
-
   const datasets = results_grouped.map((result) => (result.dataset))
   //grouping by last selected part of dataset
   const resultsNames: any = getDatasetParts(datasets, groupBy)
@@ -54,23 +53,23 @@ export const OptionalDatasetsBrowser = ({
   // Uniq because more than one item from resultsNames[name] array could have the same 'first' attribute value
   const firstResultsNames: string[] = resultsNames[name] ? _.uniq(resultsNames[name].map((datasetname: any) => datasetname.first)) : []
   //all existing first parts of dataset (from all available choices)
-  const allFirstNames = getRestOptions(firstResultsNames, datasets, 'first')
+  const restFirstNames = getRestOptions(firstResultsNames, datasets, 'first')
 
   const secondResultsNames: string[] = resultsNames[name] ? _.uniq(resultsNames[name].map((name: any) => name.second)) : []
-  const allSecondNames = getRestOptions(secondResultsNames, datasets, 'second')
+  const restSecondNames = getRestOptions(secondResultsNames, datasets, 'second')
 
   const thirdResultsNames: string[] = resultsNames[name] ? _.uniq(resultsNames[name].map((name: any) => name.third)) : []
-  const allThirdNames = getRestOptions(thirdResultsNames, datasets, 'third')
+  const restThirdNames = getRestOptions(thirdResultsNames, datasets, 'third')
   // we put the first item in array as empty string, because by default dataset name starts with slash
   const fullDatasetName = ['', selectedParts.first, selectedParts.second, selectedParts.third].join('/')
   const isThatDatasetExist = datasets.includes(fullDatasetName)
 
   return (
-    <StyledFormItem label={'Oprional Dataset Name:'}>
+    <StyledFormItem label={'Dataset Name Builder:'}>
       <Row>
         <Col>
           <PartsBrowser
-            allParts={allFirstNames}
+            restParts={restFirstNames}
             part='first'
             resultsNames={firstResultsNames}
             setGroupBy={setGroupBy}
@@ -82,7 +81,7 @@ export const OptionalDatasetsBrowser = ({
         </Col>
         <Col>
           <PartsBrowser
-            allParts={allSecondNames}
+            restParts={restSecondNames}
             part='second'
             resultsNames={secondResultsNames}
             setGroupBy={setGroupBy}
@@ -94,7 +93,7 @@ export const OptionalDatasetsBrowser = ({
         </Col>
         <Col>
           <PartsBrowser
-            allParts={allThirdNames}
+            restParts={restThirdNames}
             part='third'
             resultsNames={thirdResultsNames}
             setGroupBy={setGroupBy}

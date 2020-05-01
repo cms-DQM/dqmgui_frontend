@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Col, Select } from 'antd';
 import _ from 'lodash';
 
@@ -9,7 +9,7 @@ interface PartsBrowserProps {
   setGroupBy(groupBy: string): void;
   setName(name: string): void;
   resultsNames: any;
-  allParts: string[];
+  restParts: string[];
   part: string;
   name: string | undefined;
   setSelectedParts(selectedPart: any): void;
@@ -20,15 +20,20 @@ export const PartsBrowser = ({
   setName,
   setGroupBy,
   resultsNames,
-  allParts,
+  restParts,
   part,
   name,
   setSelectedParts,
   selectedParts,
 }: PartsBrowserProps) => {
 
+  const [error, setError] = useState(false)
+
   return (
-    <StyledSelect dropdownMatchSelectWidth={false} defaultValue={name}
+    <StyledSelect
+      dropdownMatchSelectWidth={false}
+      defaultValue={name}
+      // style={{ color: error ? 'red' : 'green' }}
       onChange={(value: any) => {
         selectedParts[part] = value
         setSelectedParts(selectedParts)
@@ -40,18 +45,19 @@ export const PartsBrowser = ({
           <Option
             value={result}
             key={result}
+            // style={{ color: 'green' }}
           >
-            {result}
+            <p onClick={() => setError(false)}>{result}</p>
           </Option>
         ))
       }
       {
-        allParts.map((result: string) => (
+        restParts.map((result: string) => (
           <Option
             key={result}
-            style={{ background: '#e61b25a3' }}
+            style={{ color: '#e61b25a3' }}
             value={result}>
-            {result}
+            <p onClick={() => setError(true)}>{result}</p>
           </Option>
         ))
       }
