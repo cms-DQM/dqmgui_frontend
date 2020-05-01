@@ -55,7 +55,7 @@ export const StyledFormItem = styled(Form.Item)`
   }
 `;
 
-export const StyledInput = styled(Input) <{ fullWidth?: boolean }>`
+export const StyledInput = styled(Input)<{ fullWidth?: boolean }>`
   border-radius: 12px;
   width: fit-content;
   width: ${(props) => (props.fullWidth ? '100%' : '')};
@@ -104,16 +104,19 @@ export const DisplayOptionsWrapper = styled.div`
   padding: calc(${theme.space.padding}*2);
 `;
 
-export const StyledOptionContent = styled.p <{ availability?: string }>`
-  color: ${(props) => props.availability === 'available' ? theme.colors.notification.success : theme.colors.notification.error};
-  `
+export const StyledOptionContent = styled.p<{ availability?: string }>`
+  color: ${(props) =>
+    props.availability === 'available'
+      ? theme.colors.notification.success
+      : theme.colors.notification.error};
+`;
 export const StyledErrorIcon = styled(CloseCircleFilled)`
-    font-size: 25px;
-    padding-left: 8px;
-    color: ${theme.colors.notification.error}; 
-  `
+  font-size: 25px;
+  padding-left: 8px;
+  color: ${theme.colors.notification.error};
+`;
 export const StyledSuccessIcon = styled(CheckCircleFilled)`
-    font-size: 25px;
-    padding-left: 8px;
-    color: ${theme.colors.notification.success}; 
-  `
+  font-size: 25px;
+  padding-left: 8px;
+  color: ${theme.colors.notification.success};
+`;

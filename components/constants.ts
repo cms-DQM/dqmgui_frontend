@@ -87,10 +87,10 @@ export const withReference = [
 export const dataSetSelections = [
   {
     label: 'Dataset Select',
-    value: 'datasetSelect'
+    value: 'datasetSelect',
   },
   {
     label: 'Dataset Builder',
-    value: 'datasetBuilder'
-  }
-]
+    value: 'datasetBuilder',
+  },
+];

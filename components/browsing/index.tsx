@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Select } from 'antd'
+import { Select } from 'antd';
 
 import { WrapperDiv } from '../../containers/display/styledComponents';
 import { DatasetsBrowser } from './datasetsBrowsing/datasetsBrowser';
@@ -13,9 +13,9 @@ import { RadioButtonsGroup } from '../radioButtonsGroup';
 import { StyledFormItem } from '../styledComponents';
 import { StyledSelect } from '../viewDetailsMenu/styledComponents';
 import { SelectValue } from 'antd/lib/select';
-import { DropdownMenu } from '../menu'
+import { DropdownMenu } from '../menu';
 
-const { Option } = Select
+const { Option } = Select;
 
 export const Browser = () => {
   const router = useRouter();
@@ -24,7 +24,9 @@ export const Browser = () => {
   const [datasetName, setDatasetName] = useState(query.dataset_name);
   const [run_number, setRunNumber] = useState(query.run_number);
   const [value, setValue] = useState();
-  const [datasetOption, setDatasetOption] = useState(dataSetSelections[0].value)
+  const [datasetOption, setDatasetOption] = useState(
+    dataSetSelections[0].value
+  );
 
   return (
     <Form>
@@ -36,11 +38,16 @@ export const Browser = () => {
             setRunNumber={setRunNumber}
           />
         </WrapperDiv>
-        <StyledFormItem label={<DropdownMenu
-          options={dataSetSelections}
-          action={setDatasetOption}
-          defaultValue={dataSetSelections[0]} />}>
-          {datasetOption === dataSetSelections[0].value ?
+        <StyledFormItem
+          label={
+            <DropdownMenu
+              options={dataSetSelections}
+              action={setDatasetOption}
+              defaultValue={dataSetSelections[0]}
+            />
+          }
+        >
+          {datasetOption === dataSetSelections[0].value ? (
             <WrapperDiv>
               <DatasetsBrowser
                 datasetName={datasetName}
@@ -48,7 +55,7 @@ export const Browser = () => {
                 setValue={setValue}
               />
             </WrapperDiv>
-            :
+          ) : (
             <WrapperDiv>
               <OptionalDatasetsBrowser
                 datasetName={datasetName}
@@ -56,7 +63,7 @@ export const Browser = () => {
                 setValue={setValue}
               />
             </WrapperDiv>
-          }
+          )}
         </StyledFormItem>
       </WrapperDiv>
     </Form>
