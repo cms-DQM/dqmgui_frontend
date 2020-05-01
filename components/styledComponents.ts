@@ -1,6 +1,7 @@
-import { Form, Button, Input, Tag, Row, AutoComplete } from 'antd';
+import { Form, Button, Input, Tag, Row, AutoComplete, Select } from 'antd';
 import styled from 'styled-components';
 import { QuestionOutlined } from '@ant-design/icons';
+const { Option } = Select;
 
 import { theme } from '../styles/theme';
 
@@ -53,7 +54,7 @@ export const StyledFormItem = styled(Form.Item)`
   }
 `;
 
-export const StyledInput = styled(Input)<{ fullWidth?: boolean }>`
+export const StyledInput = styled(Input) <{ fullWidth?: boolean }>`
   border-radius: 12px;
   width: fit-content;
   width: ${(props) => (props.fullWidth ? '100%' : '')};
@@ -101,3 +102,7 @@ export const DisplayOptionsWrapper = styled.div`
   background: ${theme.colors.common.white};
   padding: calc(${theme.space.padding}*2);
 `;
+
+export const StyledOptionContent = styled.p <{ availability?: string}>`
+  color: ${(props) => props.availability === 'available' ? theme.colors.notification.success : theme.colors.notification.error};
+  `

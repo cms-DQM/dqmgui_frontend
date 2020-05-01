@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { Col, Select } from 'antd';
+import { Col, Select, Popover } from 'antd';
 import _ from 'lodash';
 
 import { StyledSelect } from '../../viewDetailsMenu/styledComponents';
+import { StyledOptionContent } from '../../styledComponents';
 const { Option } = Select;
 
 interface PartsBrowserProps {
@@ -14,6 +15,7 @@ interface PartsBrowserProps {
   name: string | undefined;
   setSelectedParts(selectedPart: any): void;
   selectedParts: any;
+  selectedName: string;
 }
 
 export const PartsBrowser = ({
@@ -25,19 +27,32 @@ export const PartsBrowser = ({
   name,
   setSelectedParts,
   selectedParts,
+  selectedName,
 }: PartsBrowserProps) => {
 
-  const [error, setError] = useState(false)
+  const [value, setValue] = useState(name)
 
+  const content = (
+    <div>
+      <p>{`Available combination with ${selectedName}`}</p>
+    </div>
+  );
+
+  const notAvailableContent = (
+    <div>
+      <p>{`Not available combination with ${selectedName}`}</p>
+    </div>
+  );
   return (
     <StyledSelect
       dropdownMatchSelectWidth={false}
       defaultValue={name}
-      // style={{ color: error ? 'red' : 'green' }}
+      selected={selectedName === value ? 'selected' : ''}
       onChange={(value: any) => {
         selectedParts[part] = value
         setSelectedParts(selectedParts)
         setGroupBy(part);
+        setValue(value)
         setName(value);
       }}>
       {
@@ -45,9 +60,12 @@ export const PartsBrowser = ({
           <Option
             value={result}
             key={result}
-            // style={{ color: 'green' }}
           >
-            <p onClick={() => setError(false)}>{result}</p>
+            <Popover content={content} title="" trigger="hover" placement="right">
+              <StyledOptionContent
+                availability="available"
+              >{result}</StyledOptionContent>
+            </Popover >
           </Option>
         ))
       }
@@ -55,9 +73,10 @@ export const PartsBrowser = ({
         restParts.map((result: string) => (
           <Option
             key={result}
-            style={{ color: '#e61b25a3' }}
             value={result}>
-            <p onClick={() => setError(true)}>{result}</p>
+            <Popover content={notAvailableContent} title="" trigger="hover" placement="right">
+              <StyledOptionContent>{result}</StyledOptionContent>
+            </Popover>
           </Option>
         ))
       }
