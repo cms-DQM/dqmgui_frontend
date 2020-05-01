@@ -1,16 +1,21 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import { Select } from 'antd'
 
 import { WrapperDiv } from '../../containers/display/styledComponents';
 import { DatasetsBrowser } from './datasetsBrowsing/datasetsBrowser';
-import { OptionalDatasetsBrowser } from './datasetsBrowsing/optionalDatasetname';
+import { OptionalDatasetsBrowser } from './datasetsBrowsing/datasetNameBuilder';
 import { QueryProps, OptionProps } from '../../containers/display/interfaces';
 import { RunBrowser } from './runsBrowser';
 import Form from 'antd/lib/form/Form';
 import { dataSetSelections } from '../constants';
 import { RadioButtonsGroup } from '../radioButtonsGroup';
+import { StyledFormItem } from '../styledComponents';
+import { StyledSelect } from '../viewDetailsMenu/styledComponents';
+import { SelectValue } from 'antd/lib/select';
+import { DropdownMenu } from '../menu'
 
-interface BrowserProps { }
+const { Option } = Select
 
 export const Browser = () => {
   const router = useRouter();
@@ -31,29 +36,28 @@ export const Browser = () => {
             setRunNumber={setRunNumber}
           />
         </WrapperDiv>
-        <RadioButtonsGroup
-          action={(value) => setDatasetOption(value)}
+        <StyledFormItem label={<DropdownMenu
           options={dataSetSelections}
-          getOptionLabel={(option: OptionProps) => option.label}
-          getOptionValue={(option: OptionProps) => option.value}
-        />
-        {datasetOption === dataSetSelections[0].value ?
-          <WrapperDiv>
-            <DatasetsBrowser
-              datasetName={datasetName}
-              setDatasetName={setDatasetName}
-              setValue={setValue}
-            />
-          </WrapperDiv>
-          :
-          <WrapperDiv>
-            <OptionalDatasetsBrowser
-              datasetName={datasetName}
-              setDatasetName={setDatasetName}
-              setValue={setValue}
-            />
-          </WrapperDiv>
-        }
+          action={setDatasetOption}
+          defaultValue={dataSetSelections[0]} />}>
+          {datasetOption === dataSetSelections[0].value ?
+            <WrapperDiv>
+              <DatasetsBrowser
+                datasetName={datasetName}
+                setDatasetName={setDatasetName}
+                setValue={setValue}
+              />
+            </WrapperDiv>
+            :
+            <WrapperDiv>
+              <OptionalDatasetsBrowser
+                datasetName={datasetName}
+                setDatasetName={setDatasetName}
+                setValue={setValue}
+              />
+            </WrapperDiv>
+          }
+        </StyledFormItem>
       </WrapperDiv>
     </Form>
   );

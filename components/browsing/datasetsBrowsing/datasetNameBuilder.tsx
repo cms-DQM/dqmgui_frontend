@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col, Select, Row } from 'antd';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
+import Router from 'next/router'
 
 import { StyledFormItem } from '../../styledComponents';
 import { QueryProps } from '../../../containers/display/interfaces';
 import { useSearch } from '../../../hooks/useSearch';
 import { getDatasetParts } from '../../viewDetailsMenu/utils';
-import { PartsBrowser } from './firstPart';
+import { PartsBrowser } from './partBrowser';
 import { getRestOptions, getOneDatasetParts } from '../utils';
-
-const { Option } = Select;
 
 interface DatasetsBrowserProps {
   setValue(value: any): void;
@@ -64,52 +63,71 @@ export const OptionalDatasetsBrowser = ({
   const fullDatasetName = ['', selectedParts.first, selectedParts.second, selectedParts.third].join('/')
   const isThatDatasetExist = datasets.includes(fullDatasetName)
 
+  useEffect(() => {
+    if (isThatDatasetExist) {
+      Router.replace(
+        {
+          pathname: '/',
+          query: {
+            run_number: query.run_number,
+            dataset_name: fullDatasetName,
+            folder_path: query.folder_path,
+            overlay: query.overlay,
+            overlay_data: query.overlay_data,
+            selected_plots: query.selected_plots,
+          },
+        }
+      )
+    }
+  }, [fullDatasetName])
+
   return (
-    <StyledFormItem label={'Dataset Name Builder:'}>
-      <Row>
-        <Col>
-          <PartsBrowser
-            restParts={restFirstNames}
-            part='first'
-            resultsNames={firstResultsNames}
-            setGroupBy={setGroupBy}
-            setName={setName}
-            name={selectedDatasetParts.first}
-            setSelectedParts={setSelectedParts}
-            selectedParts={selectedParts}
-          />
-        </Col>
-        <Col>
-          <PartsBrowser
-            restParts={restSecondNames}
-            part='second'
-            resultsNames={secondResultsNames}
-            setGroupBy={setGroupBy}
-            setName={setName}
-            name={selectedDatasetParts.second}
-            setSelectedParts={setSelectedParts}
-            selectedParts={selectedParts}
-          />
-        </Col>
-        <Col>
-          <PartsBrowser
-            restParts={restThirdNames}
-            part='third'
-            resultsNames={thirdResultsNames}
-            setGroupBy={setGroupBy}
-            setName={setName}
-            name={selectedDatasetParts.third}
-            setSelectedParts={setSelectedParts}
-            selectedParts={selectedParts}
-          />
-        </Col >
-        <Col>
-          {
-            isThatDatasetExist ?
-              <CheckCircleFilled style={{ fontSize: 25, paddingLeft: 8, color: 'green' }} /> :
-              <CloseCircleFilled style={{ fontSize: 25, paddingLeft: 8, color: 'red' }} />}
-        </Col>
-      </Row>
-    </StyledFormItem>
+    <Row>
+      <Col>
+        <PartsBrowser
+          restParts={restFirstNames}
+          part='first'
+          resultsNames={firstResultsNames}
+          setGroupBy={setGroupBy}
+          setName={setName}
+          selectedName={name}
+          name={selectedDatasetParts.first}
+          setSelectedParts={setSelectedParts}
+          selectedParts={selectedParts}
+        />
+      </Col>
+      <Col>
+        <PartsBrowser
+          restParts={restSecondNames}
+          part='second'
+          resultsNames={secondResultsNames}
+          setGroupBy={setGroupBy}
+          setName={setName}
+          selectedName={name}
+          name={selectedDatasetParts.second}
+          setSelectedParts={setSelectedParts}
+          selectedParts={selectedParts}
+        />
+      </Col>
+      <Col>
+        <PartsBrowser
+          restParts={restThirdNames}
+          part='third'
+          resultsNames={thirdResultsNames}
+          setGroupBy={setGroupBy}
+          setName={setName}
+          selectedName={name}
+          name={selectedDatasetParts.third}
+          setSelectedParts={setSelectedParts}
+          selectedParts={selectedParts}
+        />
+      </Col >
+      <Col>
+        {
+          isThatDatasetExist ?
+            <CheckCircleFilled style={{ fontSize: 25, paddingLeft: 8, color: 'green' }} /> :
+            <CloseCircleFilled style={{ fontSize: 25, paddingLeft: 8, color: 'red' }} />}
+      </Col>
+    </Row>
   );
 };
