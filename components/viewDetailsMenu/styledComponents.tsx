@@ -33,9 +33,11 @@ export const FullWidthRow = styled(Row)`
   width: 100%;
   padding: ${theme.space.spaceBetween};
 `;
-export const StyledSelect = styled(Select)`
+export const StyledSelect = styled(Select)<{ selected?: string }>`
   .ant-select-selector {
     border-radius: 12px !important;
+    font-weight: ${(props) =>
+      props.selected === 'selected' ? 'bold' : 'inherit'} !important;
   }
 `;
 
