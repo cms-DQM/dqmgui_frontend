@@ -1,9 +1,7 @@
-import React, { useState, MouseEvent } from 'react';
+import React, { useState } from 'react';
 import { Menu, Dropdown, Row, Col } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
 
 import { OptionProps } from '../containers/display/interfaces';
-import { StyledSecondaryButton } from './styledComponents';
 
 export interface MenuProps {
   options: OptionProps[];
@@ -32,7 +30,7 @@ export const DropdownMenu = ({ options, defaultValue, action }: MenuProps) => {
   return (
     <Row>
       <Col>
-        <Dropdown overlay={plotMenu(options, defaultValue)} trigger={['click']}>
+        <Dropdown overlay={plotMenu(options, defaultValue)} trigger={['hover']}>
           <a>
             {value.label}
           </a>

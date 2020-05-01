@@ -33,7 +33,9 @@ export const DatasetsBrowser = ({
 
   return (
     <Col>
-      <StyledSelect defaultValue={datasetName}>
+      <StyledSelect
+        dropdownMatchSelectWidth={false}
+        defaultValue={datasetName}>
         {results_grouped.map((result) => (
           <Option
             value={result.dataset}

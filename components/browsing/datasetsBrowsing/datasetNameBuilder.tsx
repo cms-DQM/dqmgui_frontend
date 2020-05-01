@@ -2,15 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { Col, Select, Row } from 'antd';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
-import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import Router from 'next/router'
 
-import { StyledFormItem } from '../../styledComponents';
 import { QueryProps } from '../../../containers/display/interfaces';
 import { useSearch } from '../../../hooks/useSearch';
 import { getDatasetParts } from '../../viewDetailsMenu/utils';
 import { PartsBrowser } from './partBrowser';
-import { getRestOptions, getOneDatasetParts } from '../utils';
+import { getRestOptions, getOneDatasetParts, getAvailableChoices } from '../utils';
+import { StyledSuccessIcon, StyledErrorIcon } from '../../styledComponents';
 
 interface DatasetsBrowserProps {
   setValue(value: any): void;
@@ -48,16 +47,16 @@ export const OptionalDatasetsBrowser = ({
   //grouping by last selected part of dataset
   const resultsNames: any = getDatasetParts(datasets, groupBy)
 
-  //finding first part of dataset name, which exists by last selected part.
-  // Uniq because more than one item from resultsNames[name] array could have the same 'first' attribute value
-  const firstResultsNames: string[] = resultsNames[name] ? _.uniq(resultsNames[name].map((datasetname: any) => datasetname.first)) : []
+  //getAvailableChoices finds first part of dataset name, which exists by last selected part;
+  //if the last selected part was the first one, it returns all possible forst choices 
+  const firstResultsNames: string[] = getAvailableChoices(resultsNames, name, 'first')
   //all existing first parts of dataset (from all available choices)
   const restFirstNames = getRestOptions(firstResultsNames, datasets, 'first')
 
-  const secondResultsNames: string[] = resultsNames[name] ? _.uniq(resultsNames[name].map((name: any) => name.second)) : []
+  const secondResultsNames: string[] = getAvailableChoices(resultsNames, name, 'second')
   const restSecondNames = getRestOptions(secondResultsNames, datasets, 'second')
 
-  const thirdResultsNames: string[] = resultsNames[name] ? _.uniq(resultsNames[name].map((name: any) => name.third)) : []
+  const thirdResultsNames: string[] = getAvailableChoices(resultsNames, name, 'third')
   const restThirdNames = getRestOptions(thirdResultsNames, datasets, 'third')
   // we put the first item in array as empty string, because by default dataset name starts with slash
   const fullDatasetName = ['', selectedParts.first, selectedParts.second, selectedParts.third].join('/')
@@ -125,8 +124,10 @@ export const OptionalDatasetsBrowser = ({
       <Col>
         {
           isThatDatasetExist ?
-            <CheckCircleFilled style={{ fontSize: 25, paddingLeft: 8, color: 'green' }} /> :
-            <CloseCircleFilled style={{ fontSize: 25, paddingLeft: 8, color: 'red' }} />}
+            < StyledSuccessIcon />
+            :
+            < StyledErrorIcon />
+        }
       </Col>
     </Row>
   );
