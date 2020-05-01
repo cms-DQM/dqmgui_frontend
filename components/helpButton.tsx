@@ -1,6 +1,5 @@
 import React from 'react';
-import { Tag, Tooltip } from 'antd';
-import { QuestionOutlined } from '@ant-design/icons';
+import { Tooltip } from 'antd';
 
 import { StyledQuestionTag, Icon } from './styledComponents';
 

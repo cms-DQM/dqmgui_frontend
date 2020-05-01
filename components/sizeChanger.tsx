@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { sizes } from './constants';
 import { RadioButtonsGroup } from './radioButtonsGroup';
-import { SizeProps } from '../containers/display/interfaces';
+import { SizeProps, OptionProps } from '../containers/display/interfaces';
 
 interface SizeChangerProps {
   dispatch(params: any): void;
@@ -29,6 +29,8 @@ export const SizeChanger = ({
   return (
     <RadioButtonsGroup
       current_value={currentValue}
+      getOptionLabel={(option: OptionProps) => option.label}
+      getOptionValue={(option: OptionProps) => option.value}
       action={(value: SizeProps) => {
         setSize(value)(dispatch);
       }}

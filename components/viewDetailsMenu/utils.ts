@@ -1,5 +1,6 @@
 import cleanDeep from 'clean-deep';
 import { v4 as uuidv4 } from 'uuid';
+import _ from 'lodash';
 
 import { TripleProps } from '../../containers/display/interfaces';
 
@@ -35,4 +36,16 @@ export const formTriples = (overlay_data: string | undefined) => {
     };
     return triple_object;
   });
+};
+
+export const getDatasetParts = (datsets: string[], part: string) => {
+  const parts = datsets.map((dataset: string) => {
+    const datasetParts = dataset.split('/');
+    return {
+      first: datasetParts[1],
+      second: datasetParts[2],
+      third: datasetParts[3],
+    };
+  });
+  return _.chain(parts).groupBy(part).value();
 };
