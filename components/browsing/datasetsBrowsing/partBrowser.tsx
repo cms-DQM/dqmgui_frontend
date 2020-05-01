@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Col, Select, Popover } from 'antd';
+import { Select } from 'antd';
 import _ from 'lodash';
 
 import { StyledSelect } from '../../viewDetailsMenu/styledComponents';
@@ -31,18 +31,6 @@ export const PartsBrowser = ({
 }: PartsBrowserProps) => {
 
   const [value, setValue] = useState(name)
-
-  const content = (
-    <div>
-      <p>{`Available combination with ${selectedName}`}</p>
-    </div>
-  );
-
-  const notAvailableContent = (
-    <div>
-      <p>{`Not available combination with ${selectedName}`}</p>
-    </div>
-  );
   return (
     <StyledSelect
       dropdownMatchSelectWidth={false}
@@ -61,11 +49,9 @@ export const PartsBrowser = ({
             value={result}
             key={result}
           >
-            <Popover content={content} title="" trigger="hover" placement="right">
-              <StyledOptionContent
-                availability="available"
-              >{result}</StyledOptionContent>
-            </Popover >
+            <StyledOptionContent
+              availability="available"
+            >{result}</StyledOptionContent>
           </Option>
         ))
       }
@@ -74,9 +60,7 @@ export const PartsBrowser = ({
           <Option
             key={result}
             value={result}>
-            <Popover content={notAvailableContent} title="" trigger="hover" placement="right">
-              <StyledOptionContent>{result}</StyledOptionContent>
-            </Popover>
+            <StyledOptionContent>{result}</StyledOptionContent>
           </Option>
         ))
       }

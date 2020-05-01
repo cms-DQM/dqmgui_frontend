@@ -1,4 +1,5 @@
 import { Form, Button, Input, Tag, Row, AutoComplete, Select } from 'antd';
+import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import styled from 'styled-components';
 import { QuestionOutlined } from '@ant-design/icons';
 const { Option } = Select;
@@ -103,6 +104,16 @@ export const DisplayOptionsWrapper = styled.div`
   padding: calc(${theme.space.padding}*2);
 `;
 
-export const StyledOptionContent = styled.p <{ availability?: string}>`
+export const StyledOptionContent = styled.p <{ availability?: string }>`
   color: ${(props) => props.availability === 'available' ? theme.colors.notification.success : theme.colors.notification.error};
+  `
+export const StyledErrorIcon = styled(CloseCircleFilled)`
+    font-size: 25px;
+    padding-left: 8px;
+    color: ${theme.colors.notification.error}; 
+  `
+export const StyledSuccessIcon = styled(CheckCircleFilled)`
+    font-size: 25px;
+    padding-left: 8px;
+    color: ${theme.colors.notification.success}; 
   `
