@@ -1,26 +1,16 @@
 import React, { useState } from 'react';
-import { useRouter } from 'next/router';
-import { Select } from 'antd';
+import Form from 'antd/lib/form/Form';
 
 import { WrapperDiv } from '../../containers/display/styledComponents';
 import { DatasetsBrowser } from './datasetsBrowsing/datasetsBrowser';
-import { OptionalDatasetsBrowser } from './datasetsBrowsing/datasetNameBuilder';
-import { QueryProps, OptionProps } from '../../containers/display/interfaces';
+import { DatasetsBuilder } from './datasetsBrowsing/datasetNameBuilder';
 import { RunBrowser } from './runsBrowser';
-import Form from 'antd/lib/form/Form';
 import { dataSetSelections } from '../constants';
-import { RadioButtonsGroup } from '../radioButtonsGroup';
 import { StyledFormItem } from '../styledComponents';
-import { StyledSelect } from '../viewDetailsMenu/styledComponents';
-import { SelectValue } from 'antd/lib/select';
 import { DropdownMenu } from '../menu';
 
-const { Option } = Select;
 
 export const Browser = () => {
-  const router = useRouter();
-  const query: QueryProps = router.query;
-
   const [datasetOption, setDatasetOption] = useState(
     dataSetSelections[0].value
   );
@@ -29,7 +19,7 @@ export const Browser = () => {
     <Form>
       <WrapperDiv>
         <WrapperDiv>
-          <RunBrowser/>
+          <RunBrowser />
         </WrapperDiv>
         <StyledFormItem
           label={
@@ -42,13 +32,13 @@ export const Browser = () => {
         >
           {datasetOption === dataSetSelections[0].value ? (
             <WrapperDiv>
-              <DatasetsBrowser/>
+              <DatasetsBrowser />
             </WrapperDiv>
           ) : (
-            <WrapperDiv>
-              <OptionalDatasetsBrowser />
-            </WrapperDiv>
-          )}
+              <WrapperDiv>
+                <DatasetsBuilder />
+              </WrapperDiv>
+            )}
         </StyledFormItem>
       </WrapperDiv>
     </Form>
