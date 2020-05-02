@@ -21,9 +21,6 @@ export const Browser = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
 
-  const [datasetName, setDatasetName] = useState(query.dataset_name);
-  const [run_number, setRunNumber] = useState(query.run_number);
-  const [value, setValue] = useState();
   const [datasetOption, setDatasetOption] = useState(
     dataSetSelections[0].value
   );
@@ -32,11 +29,7 @@ export const Browser = () => {
     <Form>
       <WrapperDiv>
         <WrapperDiv>
-          <RunBrowser
-            value={value}
-            run_number={run_number}
-            setRunNumber={setRunNumber}
-          />
+          <RunBrowser/>
         </WrapperDiv>
         <StyledFormItem
           label={
@@ -49,19 +42,11 @@ export const Browser = () => {
         >
           {datasetOption === dataSetSelections[0].value ? (
             <WrapperDiv>
-              <DatasetsBrowser
-                datasetName={datasetName}
-                setDatasetName={setDatasetName}
-                setValue={setValue}
-              />
+              <DatasetsBrowser/>
             </WrapperDiv>
           ) : (
             <WrapperDiv>
-              <OptionalDatasetsBrowser
-                datasetName={datasetName}
-                setDatasetName={setDatasetName}
-                setValue={setValue}
-              />
+              <OptionalDatasetsBrowser />
             </WrapperDiv>
           )}
         </StyledFormItem>

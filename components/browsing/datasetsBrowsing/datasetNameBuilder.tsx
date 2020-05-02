@@ -15,20 +15,10 @@ import {
 } from '../utils';
 import { StyledSuccessIcon, StyledErrorIcon } from '../../styledComponents';
 
-interface DatasetsBrowserProps {
-  setValue(value: any): void;
-  datasetName: string | undefined;
-  setDatasetName(name: string): void;
-}
-
-export const OptionalDatasetsBrowser = ({
-  setValue,
-  datasetName,
-  setDatasetName,
-}: DatasetsBrowserProps) => {
+export const OptionalDatasetsBrowser = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
-  const selectedDatasetParts = getOneDatasetParts(datasetName);
+  const selectedDatasetParts = getOneDatasetParts(query.dataset_name);
 
   // groupBy- save the last selected dataset part (first, second or third). Group by is used for do
   // a grouping by last selected part of dataset. By default it set 'first'
