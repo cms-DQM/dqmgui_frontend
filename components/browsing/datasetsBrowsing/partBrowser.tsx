@@ -29,6 +29,7 @@ export const PartsBrowser = ({
   selectedParts,
   selectedName,
 }: PartsBrowserProps) => {
+  
   const [value, setValue] = useState(name);
   return (
     <StyledSelect

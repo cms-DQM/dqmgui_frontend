@@ -6,16 +6,20 @@ import Router from 'next/router';
 
 import { QueryProps } from '../../../containers/display/interfaces';
 import { useSearch } from '../../../hooks/useSearch';
-import { getDatasetParts } from '../../viewDetailsMenu/utils';
 import { PartsBrowser } from './partBrowser';
 import {
-  getRestOptions,
   getOneDatasetParts,
-  getAvailableChoices,
 } from '../utils';
 import { StyledSuccessIcon, StyledErrorIcon } from '../../styledComponents';
+import { useDatasetPart } from '../../../hooks/useDatasetParts';
 
-export const OptionalDatasetsBrowser = () => {
+export interface DatasetPartsProps {
+  first: string;
+  second: string;
+  third: string;
+}
+
+export const DatasetsBuilder = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
   const selectedDatasetParts = getOneDatasetParts(query.dataset_name);
@@ -26,7 +30,7 @@ export const OptionalDatasetsBrowser = () => {
   const [groupBy, setGroupBy] = useState('first');
   const [name, setName] = useState(selectedDatasetParts.first);
 
-  const [selectedParts, setSelectedParts] = useState({
+  const [selectedParts, setSelectedParts] = useState<DatasetPartsProps>({
     first: selectedDatasetParts.first,
     second: selectedDatasetParts.second,
     third: selectedDatasetParts.third,
@@ -36,38 +40,9 @@ export const OptionalDatasetsBrowser = () => {
     query.run_number,
     ''
   );
-
+  const run_number = query.run_number ? query.run_number : NaN
   const datasets = results_grouped.map((result) => result.dataset);
-  //grouping by last selected part of dataset
-  const resultsNames: any = getDatasetParts(datasets, groupBy);
 
-  //getAvailableChoices finds first part of dataset name, which exists by last selected part;
-  //if the last selected part was the first one, it returns all possible forst choices
-  const firstResultsNames: string[] = getAvailableChoices(
-    resultsNames,
-    name,
-    'first'
-  );
-  //all existing first parts of dataset (from all available choices)
-  const restFirstNames = getRestOptions(firstResultsNames, datasets, 'first');
-
-  const secondResultsNames: string[] = getAvailableChoices(
-    resultsNames,
-    name,
-    'second'
-  );
-  const restSecondNames = getRestOptions(
-    secondResultsNames,
-    datasets,
-    'second'
-  );
-
-  const thirdResultsNames: string[] = getAvailableChoices(
-    resultsNames,
-    name,
-    'third'
-  );
-  const restThirdNames = getRestOptions(thirdResultsNames, datasets, 'third');
   // we put the first item in array as empty string, because by default dataset name starts with slash
   const fullDatasetName = [
     '',
@@ -93,47 +68,32 @@ export const OptionalDatasetsBrowser = () => {
     }
   }, [fullDatasetName]);
 
+  const datasetParts = useDatasetPart(run_number, ['first', 'second', 'third'], name, groupBy)
+
   return (
     <Row>
-      <Col>
-        <PartsBrowser
-          restParts={restFirstNames}
-          part="first"
-          resultsNames={firstResultsNames}
-          setGroupBy={setGroupBy}
-          setName={setName}
-          selectedName={name}
-          name={selectedDatasetParts.first}
-          setSelectedParts={setSelectedParts}
-          selectedParts={selectedParts}
-        />
-      </Col>
-      <Col>
-        <PartsBrowser
-          restParts={restSecondNames}
-          part="second"
-          resultsNames={secondResultsNames}
-          setGroupBy={setGroupBy}
-          setName={setName}
-          selectedName={name}
-          name={selectedDatasetParts.second}
-          setSelectedParts={setSelectedParts}
-          selectedParts={selectedParts}
-        />
-      </Col>
-      <Col>
-        <PartsBrowser
-          restParts={restThirdNames}
-          part="third"
-          resultsNames={thirdResultsNames}
-          setGroupBy={setGroupBy}
-          setName={setName}
-          selectedName={name}
-          name={selectedDatasetParts.third}
-          setSelectedParts={setSelectedParts}
-          selectedParts={selectedParts}
-        />
-      </Col>
+      {
+        datasetParts.map((part: any) => {
+          const partName = Object.keys(part)[0]
+
+          return (
+            <Col>
+              <PartsBrowser
+                restParts={part[partName].notAvailableChoices}
+                part={partName}
+                resultsNames={part[partName].availableChoices}
+                setGroupBy={setGroupBy}
+                setName={setName}
+                selectedName={name}
+                //@ts-ignore
+                name={selectedDatasetParts[partName]}
+                setSelectedParts={setSelectedParts}
+                selectedParts={selectedParts}
+              />
+            </Col>)
+
+        })
+      }
       <Col>
         {isThatDatasetExist ? <StyledSuccessIcon /> : <StyledErrorIcon />}
       </Col>

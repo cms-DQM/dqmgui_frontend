@@ -24,7 +24,6 @@ export const DatasetsBrowser = () => {
   });
 
   useEffect(() => {
-    console.log('update')
     Router.replace({
       pathname: '/',
       query: {
