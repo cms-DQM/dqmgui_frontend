@@ -15,18 +15,18 @@ const getRunNumbers = (results_grouped: any[]) => {
   const runs: number[] = [];
   results_grouped.forEach((result) => {
     result.value.forEach((data: any) => {
-      runs.push(data.run)
+      runs.push(data.run);
     });
-  })
-  return runs
+  });
+  return runs;
 };
 
 export const RunBrowser = () => {
   const inputEl = useRef(null);
   const router = useRouter();
   const query: QueryProps = router.query;
-  const run_number = query.run_number ? query.run_number : NaN
-  const [currentRunNumber, setCurrentRunNumber] = useState(run_number)
+  const run_number = query.run_number ? query.run_number : NaN;
+  const [currentRunNumber, setCurrentRunNumber] = useState(run_number);
 
   useEffect(() => {
     Router.replace({
@@ -40,15 +40,15 @@ export const RunBrowser = () => {
         selected_plots: query.selected_plots,
       },
     });
-  }, [currentRunNumber])
+  }, [currentRunNumber]);
 
   const { results_grouped, searching, isLoading, error } = useSearch(
     NaN,
     query.dataset_name
   );
 
-  const runNumbers = getRunNumbers(results_grouped)
-  const currentRunNumberIndex = runNumbers.indexOf(currentRunNumber)
+  const runNumbers = getRunNumbers(results_grouped);
+  const currentRunNumberIndex = runNumbers.indexOf(currentRunNumber);
 
   return (
     <Col>
@@ -59,7 +59,8 @@ export const RunBrowser = () => {
               disabled={!runNumbers[currentRunNumberIndex - 1]}
               icon={<CaretLeftFilled />}
               type="link"
-              onClick={() => setCurrentRunNumber(runNumbers[currentRunNumberIndex - 1])
+              onClick={() =>
+                setCurrentRunNumber(runNumbers[currentRunNumberIndex - 1])
               }
             />
           </Col>
@@ -71,27 +72,22 @@ export const RunBrowser = () => {
               {runNumbers &&
                 runNumbers.map((run: number) => {
                   return (
-                    <Option
-                      value={run}
-                      key={run.toString()}
-                    >
-                      {isLoading ? (
-                        <Spin />
-                      ) : (
-                          <p>{run}</p>
-                        )}
+                    <Option value={run} key={run.toString()}>
+                      {isLoading ? <Spin /> : <p>{run}</p>}
                     </Option>
                   );
                 })}
             </StyledSelect>
           </Col>
-          <Col >
+          <Col>
             <Button
               icon={<CaretRightFilled />}
               disabled={!runNumbers[currentRunNumberIndex + 1]}
               type="link"
-              onClick={() => setCurrentRunNumber(runNumbers[currentRunNumberIndex + 1])
-              } />
+              onClick={() =>
+                setCurrentRunNumber(runNumbers[currentRunNumberIndex + 1])
+              }
+            />
           </Col>
         </Row>
       </StyledFormItem>

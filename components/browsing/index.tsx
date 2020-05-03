@@ -9,7 +9,6 @@ import { dataSetSelections } from '../constants';
 import { StyledFormItem } from '../styledComponents';
 import { DropdownMenu } from '../menu';
 
-
 export const Browser = () => {
   const [datasetOption, setDatasetOption] = useState(
     dataSetSelections[0].value
@@ -35,10 +34,10 @@ export const Browser = () => {
               <DatasetsBrowser />
             </WrapperDiv>
           ) : (
-              <WrapperDiv>
-                <DatasetsBuilder />
-              </WrapperDiv>
-            )}
+            <WrapperDiv>
+              <DatasetsBuilder />
+            </WrapperDiv>
+          )}
         </StyledFormItem>
       </WrapperDiv>
     </Form>
