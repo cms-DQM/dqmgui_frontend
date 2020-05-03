@@ -15,7 +15,7 @@ interface PartsBrowserProps {
   name: string | undefined;
   setSelectedParts(selectedPart: any): void;
   selectedParts: any;
-  selectedName: string;
+  selectedName: any;
 }
 
 export const PartsBrowser = ({
@@ -29,7 +29,6 @@ export const PartsBrowser = ({
   selectedParts,
   selectedName,
 }: PartsBrowserProps) => {
-  
   const [value, setValue] = useState(name);
   return (
     <StyledSelect

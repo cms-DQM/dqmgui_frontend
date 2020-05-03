@@ -13,14 +13,14 @@ const { Option } = Select;
 export const DatasetsBrowser = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
-  const [currentDataset, setCurrentDataset] = useState(query.dataset_name)
+  const [currentDataset, setCurrentDataset] = useState(query.dataset_name);
 
   const { results, results_grouped, searching, isLoading, error } = useSearch(
     query.run_number,
     ''
   );
-  const datasets = results_grouped.map(result => {
-    return result.dataset
+  const datasets = results_grouped.map((result) => {
+    return result.dataset;
   });
 
   useEffect(() => {
@@ -35,9 +35,9 @@ export const DatasetsBrowser = () => {
         selected_plots: query.selected_plots,
       },
     });
-  }, [currentDataset])
+  }, [currentDataset]);
 
-  const currentDatasetNameIndex = datasets.indexOf(currentDataset)
+  const currentDatasetNameIndex = datasets.indexOf(currentDataset);
 
   return (
     <Row justify="center" align="middle">
@@ -47,26 +47,21 @@ export const DatasetsBrowser = () => {
           type="link"
           icon={<CaretLeftFilled />}
           onClick={() =>
-            setCurrentDataset(datasets[currentDatasetNameIndex - 1])} />
+            setCurrentDataset(datasets[currentDatasetNameIndex - 1])
+          }
+        />
       </Col>
       <Col>
         <StyledSelect
           onChange={(e: any) => {
-            setCurrentDataset(e)
+            setCurrentDataset(e);
           }}
           value={currentDataset}
           dropdownMatchSelectWidth={false}
         >
           {results_grouped.map((result) => (
-            <Option
-              value={result.dataset}
-              key={result.dataset}
-            >
-              {isLoading ? (
-                <Spin />
-              ) : (
-                  <p>{result.dataset}</p>
-                )}
+            <Option value={result.dataset} key={result.dataset}>
+              {isLoading ? <Spin /> : <p>{result.dataset}</p>}
             </Option>
           ))}
         </StyledSelect>
@@ -75,7 +70,7 @@ export const DatasetsBrowser = () => {
         <Button
           type="link"
           disabled={!datasets[currentDatasetNameIndex + 1]}
-          icon={< CaretRightFilled />}
+          icon={<CaretRightFilled />}
           onClick={() =>
             setCurrentDataset(datasets[currentDatasetNameIndex + 1])
           }
