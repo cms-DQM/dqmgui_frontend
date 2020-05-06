@@ -74,7 +74,11 @@ export const DatasetsBuilder = () => {
         );
       })}
       <Col>
-        {doesCombinationOfSelectedDatasetPartsExists ? <StyledSuccessIcon /> : <StyledErrorIcon />}
+        {doesCombinationOfSelectedDatasetPartsExists ? (
+          <StyledSuccessIcon />
+        ) : (
+          <StyledErrorIcon />
+        )}
       </Col>
     </Row>
   );
