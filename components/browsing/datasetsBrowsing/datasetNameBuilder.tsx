@@ -1,94 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import { Col, Select, Row } from 'antd';
+import { Col, Row } from 'antd';
 import { useRouter } from 'next/router';
 import _ from 'lodash';
 import Router from 'next/router';
 
 import { QueryProps } from '../../../containers/display/interfaces';
-import { useSearch } from '../../../hooks/useSearch';
-import { getDatasetParts } from '../../viewDetailsMenu/utils';
 import { PartsBrowser } from './partBrowser';
-import {
-  getRestOptions,
-  getOneDatasetParts,
-  getAvailableChoices,
-} from '../utils';
 import { StyledSuccessIcon, StyledErrorIcon } from '../../styledComponents';
+import { useAvailbleAndNotAvailableDatasetPartsOptions } from '../../../hooks/useAvailbleAndNotAvailableDatasetPartsOptions';
 
-interface DatasetsBrowserProps {
-  setValue(value: any): void;
-  datasetName: string | undefined;
-  setDatasetName(name: string): void;
+export interface DatasetPartsProps {
+  part_0: any;
+  part_1: any;
+  part_2: any;
 }
 
-export const OptionalDatasetsBrowser = ({
-  setValue,
-  datasetName,
-  setDatasetName,
-}: DatasetsBrowserProps) => {
+export const DatasetsBuilder = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
-  const selectedDatasetParts = getOneDatasetParts(datasetName);
 
-  // groupBy- save the last selected dataset part (first, second or third). Group by is used for do
-  // a grouping by last selected part of dataset. By default it set 'first'
-  //setGroupBy set a groupBy variable value.
-  const [groupBy, setGroupBy] = useState('first');
-  const [name, setName] = useState(selectedDatasetParts.first);
+  const run_number = query.run_number ? query.run_number : NaN;
+  const currentDatasetName = query.dataset_name ? query.dataset_name : '';
 
-  const [selectedParts, setSelectedParts] = useState({
-    first: selectedDatasetParts.first,
-    second: selectedDatasetParts.second,
-    third: selectedDatasetParts.third,
-  });
-
-  const { results, results_grouped, searching, isLoading, error } = useSearch(
-    query.run_number,
-    ''
+  const {
+    availableAndNotAvailableDatasetParts,
+    setSelectedParts,
+    selectedParts,
+    setLastSelectedDatasetPartValue,
+    lastSelectedDatasetPartValue,
+    setLastSelectedDatasetPartPosition,
+    doesCombinationOfSelectedDatasetPartsExists,
+    fullDatasetName,
+  } = useAvailbleAndNotAvailableDatasetPartsOptions(
+    run_number,
+    currentDatasetName
   );
-
-  const datasets = results_grouped.map((result) => result.dataset);
-  //grouping by last selected part of dataset
-  const resultsNames: any = getDatasetParts(datasets, groupBy);
-
-  //getAvailableChoices finds first part of dataset name, which exists by last selected part;
-  //if the last selected part was the first one, it returns all possible forst choices
-  const firstResultsNames: string[] = getAvailableChoices(
-    resultsNames,
-    name,
-    'first'
-  );
-  //all existing first parts of dataset (from all available choices)
-  const restFirstNames = getRestOptions(firstResultsNames, datasets, 'first');
-
-  const secondResultsNames: string[] = getAvailableChoices(
-    resultsNames,
-    name,
-    'second'
-  );
-  const restSecondNames = getRestOptions(
-    secondResultsNames,
-    datasets,
-    'second'
-  );
-
-  const thirdResultsNames: string[] = getAvailableChoices(
-    resultsNames,
-    name,
-    'third'
-  );
-  const restThirdNames = getRestOptions(thirdResultsNames, datasets, 'third');
-  // we put the first item in array as empty string, because by default dataset name starts with slash
-  const fullDatasetName = [
-    '',
-    selectedParts.first,
-    selectedParts.second,
-    selectedParts.third,
-  ].join('/');
-  const isThatDatasetExist = datasets.includes(fullDatasetName);
 
   useEffect(() => {
-    if (isThatDatasetExist) {
+    if (doesCombinationOfSelectedDatasetPartsExists) {
       Router.replace({
         pathname: '/',
         query: {
@@ -105,47 +54,31 @@ export const OptionalDatasetsBrowser = ({
 
   return (
     <Row>
+      {availableAndNotAvailableDatasetParts.map((part: any) => {
+        const partName = Object.keys(part)[0];
+        return (
+          <Col>
+            <PartsBrowser
+              restParts={part[partName].notAvailableChoices}
+              part={partName}
+              resultsNames={part[partName].availableChoices}
+              setGroupBy={setLastSelectedDatasetPartPosition}
+              setName={setLastSelectedDatasetPartValue}
+              selectedName={lastSelectedDatasetPartValue}
+              //@ts-ignore
+              name={selectedParts[partName]}
+              setSelectedParts={setSelectedParts}
+              selectedParts={selectedParts}
+            />
+          </Col>
+        );
+      })}
       <Col>
-        <PartsBrowser
-          restParts={restFirstNames}
-          part="first"
-          resultsNames={firstResultsNames}
-          setGroupBy={setGroupBy}
-          setName={setName}
-          selectedName={name}
-          name={selectedDatasetParts.first}
-          setSelectedParts={setSelectedParts}
-          selectedParts={selectedParts}
-        />
-      </Col>
-      <Col>
-        <PartsBrowser
-          restParts={restSecondNames}
-          part="second"
-          resultsNames={secondResultsNames}
-          setGroupBy={setGroupBy}
-          setName={setName}
-          selectedName={name}
-          name={selectedDatasetParts.second}
-          setSelectedParts={setSelectedParts}
-          selectedParts={selectedParts}
-        />
-      </Col>
-      <Col>
-        <PartsBrowser
-          restParts={restThirdNames}
-          part="third"
-          resultsNames={thirdResultsNames}
-          setGroupBy={setGroupBy}
-          setName={setName}
-          selectedName={name}
-          name={selectedDatasetParts.third}
-          setSelectedParts={setSelectedParts}
-          selectedParts={selectedParts}
-        />
-      </Col>
-      <Col>
-        {isThatDatasetExist ? <StyledSuccessIcon /> : <StyledErrorIcon />}
+        {doesCombinationOfSelectedDatasetPartsExists ? (
+          <StyledSuccessIcon />
+        ) : (
+          <StyledErrorIcon />
+        )}
       </Col>
     </Row>
   );

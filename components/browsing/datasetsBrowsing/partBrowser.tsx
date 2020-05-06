@@ -15,7 +15,7 @@ interface PartsBrowserProps {
   name: string | undefined;
   setSelectedParts(selectedPart: any): void;
   selectedParts: any;
-  selectedName: string;
+  selectedName: any;
 }
 
 export const PartsBrowser = ({
