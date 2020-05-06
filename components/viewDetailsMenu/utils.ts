@@ -3,6 +3,8 @@ import { v4 as uuidv4 } from 'uuid';
 import _ from 'lodash';
 
 import { TripleProps } from '../../containers/display/interfaces';
+import { DatasetPartsProps } from '../browsing/datasetsBrowsing/datasetNameBuilder';
+import { getDatasetNameSplitBySlashIntoObject } from '../browsing/utils';
 
 export const filter_valid_runs = (triples: TripleProps[]) =>
   triples.filter((triple: TripleProps) => {
@@ -38,14 +40,9 @@ export const formTriples = (overlay_data: string | undefined) => {
   });
 };
 
-export const getDatasetParts = (datsets: string[], part: string) => {
-  const parts = datsets.map((dataset: string) => {
-    const datasetParts = dataset.split('/');
-    return {
-      first: datasetParts[1],
-      second: datasetParts[2],
-      third: datasetParts[3],
-    };
-  });
+export const getDatasetParts = (datasets: string[], part: string) => {
+  const parts: DatasetPartsProps[] = datasets.map((dataset: string) =>
+    getDatasetNameSplitBySlashIntoObject(dataset)
+  );
   return _.chain(parts).groupBy(part).value();
 };
