@@ -12,7 +12,7 @@ In order to search for plots, first of all, you need to determine which run/data
  * Run, you will see that all rows in the table are filled with dataset names, which searched run has.
 
 3. If you click on a row, which represents a dataset name, a row will be expanded and there you will see a list with runs, whose have this dataset. 
-![](public/images/selectedDatasetName.jpg) 
+![](public/images/selectedDatasetName.png) 
 
 
 4. Click on the wanted run number. 
@@ -21,7 +21,7 @@ Now all data which you need to do a search for plots is selected: **dataset name
 ----
 ## Browsing through subsystems
 When full set is selected (dataset name and run number) you will see a list of **directories**.
-![Directories list](public/images/subsystems.jpg) 
+![Directories list](public/images/subsystems.png) 
  Every **directory** represents a specific subsystem. Click on whichever you want. Then a list of inner directories (folders) or plots will be shown.
 
  On the left side you can see a navigation (highlighted in red), which represents directories path. The last item in it is your **current directory**. If you want to get back to another directory (which is listed in navigation), you need just to select and your current directory will be changed to selected one.
@@ -41,19 +41,19 @@ If you want **to change a dataset name**, you could do this in three ways:
 1. Select a new dataset name from the **dropdown list**, which is open when you click on a dataset field. Options in dropdown list depend on slected run number. It means that all datasets in this list have **selected run number**.
 2. Use **blue arrows**. They let browsing through prev/next dataset names. If a left arrow is grey it means that the current dataset name is the first in the list of available dataset, so you cannot go further. The same with a right arrow- it becomes grey when a current run number is the last in the list of available datasets.
 3. Use **dataset builder**. Firstly, you need to change the *dataset select mode* to *dataset builder mode*. It could be done by clicking on "Dataset Select". You will see dropdown list with two options: "Dataset Select" and "Dataset Builder". Click on "Dataset Builder". You should see a view like this:
-![Folder path](public/images/datasetBuilder.jpg) 
+![Folder path](public/images/datasetBuilder.png) 
 With dataset builder, you can change all three parts of dataset name. Click on a part which you want to change, a dropdown list will be opened with all available options. They could be in two colors: green or red. **These colors depend on a part that is written in bold**. **Bolden part** is the last clicked part. Other parts depend on it. So, if the option is red, that means that this option does not compatible with the bolden part, but that does not mean that you cannot select it! If you select the red one, the thick (on the right) will be change to exit cross, and parts whose are not compatible with the last selected part become red.
-![Invalid builder](public/images/invalidBuilder.jpg) 
+![Invalid builder](public/images/invalidBuilder.png) 
  It means that this dataset, which consists of selected dataset parts, is not existing (or in other words- is not valid). In order to make a request with a valid dataset name, you need to combine all three green parts.
 
  ---
  ## Plots
 On certain level of browsing subsystem you will reach plots list. 
-![Plots](public/images/plots.jpg)
+![Plots](public/images/plots.png)
 1. **Changing size**
 * If you want to change the size of these plots, you need to
 click on "Display Options" and choose from 5 available options: *Tiny*, *Small*, *Medium* (default), *Large* or *Fill*.
-![Plots](public/images/fill.jpg) 
+![Plots](public/images/fill.png) 
 2. **Overlay plots**
 * In order to overlay plots, you need to click "Overlay options". There you will see a line with *run_number* and *dataset_name* (by default they are the same as current selected). This line reperesents plots' data whose will be overlaid with current visible plots. For example, my current select data:
   * dataset name: /Cosmics/Commissioning2018-PromptReco-v1/DQMIO
@@ -65,9 +65,9 @@ click on "Display Options" and choose from 5 available options: *Tiny*, *Small*,
 
    What should I do?
    Firstly, need click on "Change" button, it will open a dialog with two search fields. They work on the same principle as previuos discussed search (in a header). Find a dataset name which you need and select wanted run number. 
-    ![Plots](public/images/overlaySearch.jpg) 
+    ![Plots](public/images/overlaySearch.png) 
    After this, click "Submit" and plots will be overlaid.
-    ![Plots](public/images/overlaidPlotsList.jpg) 
+    ![Plots](public/images/overlaidPlotsList.png) 
     In the left corner of a plot, you can see a small table. It is statistics of plot, which was overlaid on the current one. You can change the label of this table, just need to fill text field with placeholder *label* before you click *Submit*.  
     If you want to overlay one more time just with different data, you should click plus button and it will add one more row with *run_number* and *dataset_name*. The maximum amount of these lines is 4, because of backend reasons.
 
