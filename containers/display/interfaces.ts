@@ -71,7 +71,8 @@ export interface NavigationSearchFieldsProps {
 }
 
 export interface PlotDataProps {
-  name: string;
+  displayedName?: string;
+  name: string | undefined;
   dir: string;
 }
 

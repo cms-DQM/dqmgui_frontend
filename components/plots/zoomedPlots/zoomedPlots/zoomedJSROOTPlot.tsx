@@ -54,7 +54,7 @@ export const ZoomedJSROOTPlot = ({
         is_plot_selected={true.toString()}
         nopointer={true.toString()}
       >
-        <PlotNameCol>{selected_plot.name}</PlotNameCol>
+        <PlotNameCol>{selected_plot.displayedName}</PlotNameCol>
         <Column>
           <Link
             href={{

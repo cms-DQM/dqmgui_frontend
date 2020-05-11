@@ -51,7 +51,7 @@ export const OnSideOverlaidPlots = ({
               width={params_for_api.width}
               is_plot_selected={isPlotSelected.toString()}
             >
-              <PlotNameCol>{plot.name}</PlotNameCol>
+              <PlotNameCol>{plot.displayedName}</PlotNameCol>
               <Column>
                 {isPlotSelected ? (
                   <Link
