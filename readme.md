@@ -105,6 +105,8 @@ click on "Display Options" and choose from 5 available options: *Tiny*, *Small*,
 
 8. ~~**When plots are overlaid on side, them have to be display in a row, not in column**~~
 
+9. Overlay *overlay* and *stack* looks the same (?)
+
 ---
 
 ---
@@ -122,5 +124,8 @@ click on "Display Options" and choose from 5 available options: *Tiny*, *Small*,
 9. Integrate P5 alarm manager
 10. ~~On plot selection (when screen divided to two sides), need to scroll down until selected plot (on the left side list)~~.
 11. ~~Fit dataset name in select field.~~
+12. Change style: need to save some space.
+13. Data earch for overlay could be done in one window for all 4 runs
+
 
 ---
