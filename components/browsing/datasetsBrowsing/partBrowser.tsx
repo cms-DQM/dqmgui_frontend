@@ -30,6 +30,8 @@ export const PartsBrowser = ({
   selectedName,
 }: PartsBrowserProps) => {
   const [value, setValue] = useState(name);
+  const [openSelect, setSelect] = useState(false)
+
   return (
     <StyledSelect
       dropdownMatchSelectWidth={false}
@@ -42,9 +44,14 @@ export const PartsBrowser = ({
         setValue(value);
         setName(value);
       }}
+      onClick={() => setSelect(!openSelect)}
+      open={openSelect}
     >
       {resultsNames.map((result: string) => (
-        <Option value={result} key={result}>
+        <Option
+          value={result}
+          key={result}
+          onClick={() => setSelect(false)}>
           <StyledOptionContent availability="available">
             {result}
           </StyledOptionContent>

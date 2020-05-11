@@ -4,7 +4,7 @@ import { CaretRightFilled, CaretLeftFilled } from '@ant-design/icons';
 import Router from 'next/router';
 
 import { StyledFormItem } from '../styledComponents';
-import { StyledSelect } from '../viewDetailsMenu/styledComponents';
+import { StyledSelect, OptionParagraph } from '../viewDetailsMenu/styledComponents';
 import { useRouter } from 'next/router';
 import { QueryProps } from '../../containers/display/interfaces';
 import { useSearch } from '../../hooks/useSearch';
@@ -27,6 +27,12 @@ export const RunBrowser = () => {
   const query: QueryProps = router.query;
   const run_number = query.run_number ? query.run_number : NaN;
   const [currentRunNumber, setCurrentRunNumber] = useState(run_number);
+  const [openSelect, setSelect] = useState(false)
+
+   //seting  run field width to prev. selected run name field width,
+  // because when spinner is shown, field becomes spinner width
+  const refElem = useRef(0)
+  const [width, setWidth] = useState<number | undefined>()
 
   useEffect(() => {
     Router.replace({
@@ -51,7 +57,7 @@ export const RunBrowser = () => {
   const currentRunNumberIndex = runNumbers.indexOf(currentRunNumber);
 
   return (
-    <Col>
+    <Col >
       <StyledFormItem name={currentRunNumber} label="Run number:">
         <Row justify="center" align="middle">
           <Col>
@@ -59,34 +65,60 @@ export const RunBrowser = () => {
               disabled={!runNumbers[currentRunNumberIndex - 1]}
               icon={<CaretLeftFilled />}
               type="link"
-              onClick={() =>
+              onClick={() => {
+                setWidth(undefined)
                 setCurrentRunNumber(runNumbers[currentRunNumberIndex - 1])
-              }
+              }}
             />
           </Col>
           <Col>
-            <StyledSelect
-              value={currentRunNumber}
-              onChange={(e: any) => setCurrentRunNumber(e)}
-            >
-              {runNumbers &&
-                runNumbers.map((run: number) => {
-                  return (
-                    <Option value={run} key={run.toString()}>
-                      {isLoading ? <Spin /> : <p>{run}</p>}
-                    </Option>
-                  );
-                })}
-            </StyledSelect>
+            <div ref={(refElem: HTMLDivElement) => {
+              if (refElem && !openSelect) {
+                setWidth(refElem.clientWidth)
+              }
+            }}>
+              <StyledSelect
+                onClick={() => setSelect(!openSelect)}
+                value={currentRunNumber}
+                onChange={(e: any) => {
+                  setCurrentRunNumber(e)
+                  setSelect(!openSelect)
+                }}
+                showSearch={true}
+                open={openSelect}
+                width={width}
+              >
+                {runNumbers &&
+                  runNumbers.map((run: number) => {
+                    return (
+                      <Option
+                        onClick={() => {
+                          setSelect(false)
+                        }}
+                        value={run}
+                        key={run.toString()}>
+                        {isLoading ?
+                          <OptionParagraph>
+                            <Spin />
+                          </OptionParagraph> :
+                          <p onClick={() => setWidth(undefined)}>
+                            {run}
+                          </p>}
+                      </Option>
+                    );
+                  })}
+              </StyledSelect>
+            </div>
           </Col>
           <Col>
             <Button
               icon={<CaretRightFilled />}
               disabled={!runNumbers[currentRunNumberIndex + 1]}
               type="link"
-              onClick={() =>
+              onClick={() => {
+                setWidth(undefined)
                 setCurrentRunNumber(runNumbers[currentRunNumberIndex + 1])
-              }
+              }}
             />
           </Col>
         </Row>
