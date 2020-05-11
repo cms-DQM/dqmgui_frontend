@@ -102,6 +102,7 @@ const DiplayFolder: FC<FolderProps> = ({
     contents.map((content: DirectoryInterface) => content.subdir)
   );
   const plots = useDisplayedName(contents, data)
+  console.log(contents)
   const selected_plots: PlotDataProps[] = getSelectedPlots(selectedPlots, plots);
 
   return (
