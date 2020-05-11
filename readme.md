@@ -125,7 +125,7 @@ click on "Display Options" and choose from 5 available options: *Tiny*, *Small*,
 10. ~~On plot selection (when screen divided to two sides), need to scroll down until selected plot (on the left side list)~~.
 11. ~~Fit dataset name in select field.~~
 12. Change style: need to save some space.
-13. ~~Add lickability on arrows of run number and dataset name browser fields.~~
+13. ~~Add clickability on arrows of run number and dataset name browser fields.~~
 14. Data earch for overlay could be done in one window for all 4 runs
 
 
