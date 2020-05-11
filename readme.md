@@ -1,4 +1,7 @@
 # How to use DGM GUI?
+
+# https://dqm-gui.web.cern.ch/
+
 ## Search
 In order to search for plots, first of all, you need to determine which run/dataset you want to look at. After that do a search by it.
 
