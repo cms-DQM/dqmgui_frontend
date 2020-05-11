@@ -23,7 +23,6 @@ export const useDisplayedName = (contents: any, data: any) => {
     );
     const result = plotsData ? plotsData : []
     setPlotContent(result)
-    console.log(result)
   }, [data])
 
 
