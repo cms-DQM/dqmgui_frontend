@@ -1,11 +1,12 @@
 import styled from 'styled-components';
-import { theme } from '../../styles/theme';
 import {
   FolderFilled,
   MinusCircleFilled,
   PlusCircleFilled,
 } from '@ant-design/icons';
-import { Col, Row } from 'antd';
+import { Col, Row, Breadcrumb } from 'antd';
+
+import { theme } from '../../styles/theme';
 
 export const Icon = styled(FolderFilled)`
   font-size: 2rem;
@@ -98,10 +99,14 @@ export const PlusIcon = styled(PlusCircleFilled)`
   font-size: 1.5rem;
   color: ${theme.colors.notification.success};
 `;
-export const StyledDiv = styled.div`
+export const StyledDiv = styled.div<{display?: string}>`
   padding: ${theme.space.spaceBetween};
   color: ${theme.colors.primary.main};
+  display: flex;
+  flex-direction: ${(props) => props.display ? props.display : ''};
+  align-items: center;
 `;
+
 export const WrapperDiv = styled.div`
   display: flex;
 `;
@@ -115,3 +120,7 @@ export const Image = styled.img<{ width: number; height: number }>`
   width: ${(props) => props.width}px;
   height: ${(props) => props.height}px;
 `;
+
+export const StyledBreadcrumb = styled(Breadcrumb)`
+    width: fit-content;
+`

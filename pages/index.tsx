@@ -20,6 +20,7 @@ import {
 import { FolderPathQuery } from '../containers/display/interfaces';
 import { useValidateQuery } from '../hooks/useValidateQuery';
 import { QueryValidationErrors } from '../components/queryValidationErrors';
+import { Browser } from '../components/browsing';
 
 const navigationHandler = (
   search_by_run_number: number,
@@ -63,6 +64,8 @@ const Index: NextPage<FolderPathQuery> = () => {
     search_dataset_name
   );
 
+  const isDatasetAndRunNumberSelected = !!query.run_number && !!query.dataset_name
+console.log(query)
   return (
     <StyledDiv>
       <Head>
@@ -74,12 +77,17 @@ const Index: NextPage<FolderPathQuery> = () => {
       </Head>
       <StyledLayout>
         <StyledHeader>
-          <Nav
-            initial_search_run_number={search_run_number}
-            initial_search_dataset_name={search_dataset_name}
-            handler={navigationHandler}
-            type="top"
-          />
+          {
+            isDatasetAndRunNumberSelected ?
+              <Browser />
+              :
+              <Nav
+                initial_search_run_number={search_run_number}
+                initial_search_dataset_name={search_dataset_name}
+                handler={navigationHandler}
+                type="top"
+              />
+          }
         </StyledHeader>
         {validation_errors.length > 0 ? (
           <QueryValidationErrors validation_errors={validation_errors} />
@@ -98,13 +106,13 @@ const Index: NextPage<FolderPathQuery> = () => {
             handler={serchResultsHandler}
           />
         ) : (
-          <NotFoundDivWrapper>
-            <NotFoundDiv noBorder>
-              <ChartIcon />
+                <NotFoundDivWrapper>
+                  <NotFoundDiv noBorder>
+                    <ChartIcon />
               Welcome to DQM GUI
             </NotFoundDiv>
-          </NotFoundDivWrapper>
-        )}
+                </NotFoundDivWrapper>
+              )}
       </StyledLayout>
     </StyledDiv>
   );

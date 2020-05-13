@@ -36,7 +36,7 @@ export const FullWidthRow = styled(Row)`
 export const StyledSelect = styled(Select) <{ selected?: string, width?: number | undefined }>`
   .ant-select-selector {
     border-radius: 12px !important;
-    width: ${(props) => props.width ? `${props.width}px` : 'max-content'} !important;
+    width: ${(props) => props.width ? `${props.width}px` : ''} !important;
     font-weight: ${(props) =>
     props.selected === 'selected' ? 'bold' : 'inherit'} !important;
   }

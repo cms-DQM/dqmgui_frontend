@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Col, Row, Select, Spin, Button } from 'antd';
 import { CaretRightFilled, CaretLeftFilled } from '@ant-design/icons';
 import Router from 'next/router';
+import { useRouter } from 'next/router';
 
 import { StyledFormItem } from '../styledComponents';
 import { StyledSelect, OptionParagraph } from '../viewDetailsMenu/styledComponents';
-import { useRouter } from 'next/router';
 import { QueryProps } from '../../containers/display/interfaces';
 import { useSearch } from '../../hooks/useSearch';
 
@@ -29,7 +29,7 @@ export const RunBrowser = () => {
   const [currentRunNumber, setCurrentRunNumber] = useState(run_number);
   const [openSelect, setSelect] = useState(false)
 
-   //seting  run field width to prev. selected run name field width,
+  //seting  run field width to prev. selected run name field width,
   // because when spinner is shown, field becomes spinner width
   const refElem = useRef(0)
   const [width, setWidth] = useState<number | undefined>()
@@ -58,7 +58,10 @@ export const RunBrowser = () => {
 
   return (
     <Col >
-      <StyledFormItem name={currentRunNumber} label="Run number:">
+      <StyledFormItem
+        labelColor="white"
+        name={currentRunNumber}
+        label="Run:">
         <Row justify="center" align="middle">
           <Col>
             <Button

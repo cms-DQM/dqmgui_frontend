@@ -10,6 +10,7 @@ import { ZoomedPlots as ZoomedOverlaidPlots } from './zoomedOverlayPlots';
 import { ZoomedPlots as ZoomedPlotsWithoutOverlay } from './zoomedPlots';
 import { ViewDetailsMenu } from './viewDetails';
 import { setJSROOTMode } from '../../../reducers/displayFolderOrPlot';
+import { Row } from 'antd';
 
 interface ZoomedPlotsProps {
   selected_plots: PlotDataProps[];
@@ -37,7 +38,9 @@ export const ZoomedPlots = ({
 
   return (
     <>
-      <ViewDetailsMenu dispatch={dispatch} jsroot_mode={jsroot_mode} />
+      <Row style={{ width: '100%', height: 30 }}>
+        <ViewDetailsMenu dispatch={dispatch} jsroot_mode={jsroot_mode} />
+      </Row>
       {params_for_api.overlay_plot && params_for_api.overlay_plot.length > 0 ? (
         <ZoomedOverlaidPlots
           selected_plots={selected_plots}
@@ -46,13 +49,13 @@ export const ZoomedPlots = ({
           size={size}
         />
       ) : (
-        <ZoomedPlotsWithoutOverlay
-          jsroot_mode={jsroot_mode}
-          selected_plots={selected_plots}
-          params_for_api={params_for_api}
-          size={size}
-        />
-      )}
+          <ZoomedPlotsWithoutOverlay
+            jsroot_mode={jsroot_mode}
+            selected_plots={selected_plots}
+            params_for_api={params_for_api}
+            size={size}
+          />
+        )}
     </>
   );
 };
