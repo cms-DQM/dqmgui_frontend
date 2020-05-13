@@ -46,16 +46,19 @@ export const StyledQuestionTag = styled(Tag)`
   border-radius: 100px;
 `;
 
-export const StyledFormItem = styled(Form.Item)`
+export const StyledFormItem = styled(Form.Item) <{ labelColor?: string }>`
   .ant-form-item-label > label {
-    color: ${theme.colors.common.black};
+    color: ${(props) => props.labelColor ? props.labelColor : theme.colors.common.black};
     padding-right: ${theme.space.spaceBetween};
     width: fit-content;
     padding: ${theme.space.spaceBetween};
+  },
+  .ant-form-item {
+    margin-bottom: 0px !important;
   }
 `;
 
-export const StyledInput = styled(Input)<{ fullWidth?: boolean }>`
+export const StyledInput = styled(Input) <{ fullWidth?: boolean }>`
   border-radius: 12px;
   width: fit-content;
   width: ${(props) => (props.fullWidth ? '100%' : '')};

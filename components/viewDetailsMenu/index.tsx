@@ -1,18 +1,16 @@
 import React, { useEffect } from 'react';
-import { Collapse, Row, Col, Typography } from 'antd';
+import { Collapse, Divider } from 'antd';
 import { useRouter } from 'next/router';
 
 import { Reference } from './reference/reference';
-import { ViewFiler } from './viewFilter';
 import { SizeChanger } from '../sizeChanger';
 import { setSize } from '../../reducers/displayFolderOrPlot';
 import { setPlotToOverlay } from '../../reducers/displayFolderOrPlot';
 import { sizes } from '../constants';
-import { StyledCollapse, CheckboxesWrapper } from './styledComponents';
 import { QueryProps } from '../../containers/display/interfaces';
 import { formTriples } from './utils';
+import FormItem from 'antd/lib/form/FormItem';
 
-const { Panel } = Collapse;
 
 interface ViewDetailsMenuProps {
   dispatch: any;
@@ -38,22 +36,23 @@ export const ViewDetailsMenu = ({ dispatch, state }: ViewDetailsMenuProps) => {
   }, []);
 
   return (
-    <StyledCollapse>
-      <Panel header="Overlay options" key="2">
+    <div style={{ background: 'white', padding: 8, borderTop: '1px solid' }}>
+      <FormItem
+        name="SizeChanger"
+        label="Size">
+        <SizeChanger
+          dispatch={dispatch}
+          setSize={setSize}
+          currentValue={sizes.medium.size}
+        />
+      </FormItem>
+      <hr />
+      <FormItem
+        style={{ margin: 0 }}
+        name="Reference"
+        label="Reference">
         <Reference state_global={state} dispatch_gloabl={dispatch} />
-      </Panel>
-      <Panel header="Display options" key="3">
-        <CheckboxesWrapper>
-          <ViewFiler state={state} dispatch={dispatch} />
-        </CheckboxesWrapper>
-        <CheckboxesWrapper>
-          <SizeChanger
-            dispatch={dispatch}
-            setSize={setSize}
-            currentValue={sizes.medium.size}
-          />
-        </CheckboxesWrapper>
-      </Panel>
-    </StyledCollapse>
+      </FormItem>
+    </div>
   );
 };
