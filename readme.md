@@ -129,7 +129,8 @@ click on "Display Options" and choose from 5 available options: *Tiny*, *Small*,
 11. ~~Fit dataset name in select field.~~
 12. Change style: need to save some space.
 13. ~~Add clickability on arrows of run number and dataset name browser fields.~~
-14. Data earch for overlay could be done in one window for all 4 runs
+14. Data earch for overlay could be done in one window for all 4 runs.
+15. Add the most popular options explanation to customize.
 
 
 ---
