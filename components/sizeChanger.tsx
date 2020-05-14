@@ -31,6 +31,7 @@ export const SizeChanger = ({
       current_value={currentValue}
       getOptionLabel={(option: OptionProps) => option.label}
       getOptionValue={(option: OptionProps) => option.value}
+      radioColor="white"
       action={(value: SizeProps) => {
         setSize(value)(dispatch);
       }}

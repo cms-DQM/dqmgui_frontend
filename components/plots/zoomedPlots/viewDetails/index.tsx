@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
-import { Button, Row, Col, } from 'antd';
+import { Col, } from 'antd';
 
 import { DisplayOptions } from './displayOptions';
 import { CostumizeTable } from '../../../viewDetailsMenu/customize';
 import {
-  StyledCollapse,
-  CheckboxesWrapper,
+  OptionsRow,
+  ViewDetailsRow,
+  ViewDetailsMenuWrapper,
 } from '../../../viewDetailsMenu/styledComponents';
-import FormItem from 'antd/lib/form/FormItem';
+import { StyledSecondaryButton } from '../../../styledComponents';
+import { OpenCloseIcons } from '../../../viewDetailsMenu/openCloseIcon';
+import Form from 'antd/lib/form/Form';
 
 
 interface ViewDetailsMenuProps {
   dispatch: any;
   jsroot_mode: boolean;
 }
+
 
 export const ViewDetailsMenu = ({
   dispatch,
@@ -22,28 +26,31 @@ export const ViewDetailsMenu = ({
   const [visible, setVisible] = useState(false)
 
   return (
-    <Row style={{ position: 'fixed', zIndex: 3, background: '#f0f2f5', opacity: 0.93, width: '50%' }}>
+    <OptionsRow zoomedPlots="true">
       <Col>
-        <Button onClick={() => setVisible(!visible)} type="link">
+        <StyledSecondaryButton onClick={() => setVisible(!visible)} type="link">
           Options
-          </Button>
+          <OpenCloseIcons open={visible} />
+        </StyledSecondaryButton>
       </Col>
-      <Row style={{ width: '100%', background: 'white', margin: 8, display: visible ? '' : 'none', opacity: 1 }}>
-        <Col>
-          <DisplayOptions dispatch={dispatch} jsroot_mode={jsroot_mode} />
-        </Col>
-        {!jsroot_mode && (
-          <>
-          <hr />
-          <FormItem
-            name="Customize"
-            label="Customize">
-            <CostumizeTable dispatch={dispatch} />
-          </FormItem>
-          </>
-        )}
-      </Row>
-    </Row>
+      <ViewDetailsRow visible={visible.toString()}>
+        <Form style={{margin: 8}}>
+          <Col>
+            <DisplayOptions dispatch={dispatch} jsroot_mode={jsroot_mode} />
+          </Col>
+          {/* {!jsroot_mode && (
+            <>
+              <hr />
+              <FormItem
+                name="Customize"
+                label="Customize">
+                <CostumizeTable dispatch={dispatch} />
+              </FormItem>
+            </>
+          )} */}
+        </Form>
+      </ViewDetailsRow>
+    </OptionsRow>
 
   );
 };

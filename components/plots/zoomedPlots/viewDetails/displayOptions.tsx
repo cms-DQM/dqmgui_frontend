@@ -7,8 +7,7 @@ import {
   setZoomedPlotSize,
 } from '../../../../reducers/displayFolderOrPlot';
 import { sizes } from '../../../constants';
-import { CheckboxesWrapper } from '../../../viewDetailsMenu/styledComponents';
-import FormItem from 'antd/lib/form/FormItem';
+import { CutomFormItem } from '../../../styledComponents';
 
 interface DisplayOptionsProps {
   jsroot_mode: boolean;
@@ -18,7 +17,8 @@ interface DisplayOptionsProps {
 export const DisplayOptions = ({ dispatch }: DisplayOptionsProps) => {
   return (
     <div>
-      <FormItem
+      <CutomFormItem
+        color="white"
         name="SizeChanger"
         label="Size">
         <SizeChanger
@@ -26,9 +26,10 @@ export const DisplayOptions = ({ dispatch }: DisplayOptionsProps) => {
           setSize={setZoomedPlotSize}
           currentValue={sizes.large.size}
         />
-      </FormItem>
-      <hr/>
-      <FormItem
+      </CutomFormItem>
+      <hr />
+      <CutomFormItem
+        color="white"
         name="Jsroot"
         label="JSROOT">
         <Switch
@@ -38,7 +39,7 @@ export const DisplayOptions = ({ dispatch }: DisplayOptionsProps) => {
             setJSROOTMode(e)(dispatch);
           }}
         />
-      </FormItem>
+      </CutomFormItem>
     </div>
   );
 };
