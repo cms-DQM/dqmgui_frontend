@@ -1,8 +1,7 @@
-import { Form, Button, Input, Tag, Row, AutoComplete, Select } from 'antd';
+import { Form, Button, Input, Tag, Row, AutoComplete, Checkbox, Radio } from 'antd';
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import styled from 'styled-components';
 import { QuestionOutlined } from '@ant-design/icons';
-const { Option } = Select;
 
 import { theme } from '../styles/theme';
 
@@ -123,3 +122,14 @@ export const StyledSuccessIcon = styled(CheckCircleFilled)`
   padding-left: 8px;
   color: ${theme.colors.notification.success};
 `;
+export const StyledRadio = styled(Radio) <{ color?: string }>`
+    color: ${(props) => props.color ? props.color : theme.colors.common.black}
+`
+export const CutomFormItem = styled(FormItem) <{ color?: string }>`
+.ant-form-item-label > label {
+  color: ${(props) => props.color ? props.color : theme.colors.common.black};
+}`
+
+export const CustomCheckbox = styled(Checkbox) <{ color?: string }>`
+  color: ${(props) => props.color ? props.color : theme.colors.common.black};
+`

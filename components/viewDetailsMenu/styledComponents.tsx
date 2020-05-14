@@ -55,3 +55,26 @@ align-items: center;
 justify-content: center;
 width: 100%; 
 `
+
+export const OptionsRow = styled(Row) <{ zoomedPlots?: string }>`
+  position: fixed;
+  z-index: 3;
+  background: #f0f2f5;
+  opacity: 0.93;
+  width: ${(props) => props.zoomedPlots === "true" ? '50%' : ''}
+`
+
+export const ViewDetailsRow = styled(Row) <{ visible?: string }>`
+  width: 100%;
+  background-color: ${theme.colors.secondary.dark};
+  margin: ${theme.space.padding};
+  display: ${(props) => props.visible === "true" ? '' : 'none'};
+  opacity: 1;
+  padding: calc(${theme.space.padding}*2);
+`
+
+export const ViewDetailsMenuWrapper = styled.div`
+  background-color: ${theme.colors.secondary.dark};
+  padding: ${theme.space.padding};
+  border-top: 1px solid;
+`

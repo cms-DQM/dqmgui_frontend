@@ -37,7 +37,7 @@ export const ZoomedPlots = ({
   params_for_api.customizeProps = customizeProps;
 
   return (
-    <>
+    <div>
       <Row style={{ width: '100%', height: 30 }}>
         <ViewDetailsMenu dispatch={dispatch} jsroot_mode={jsroot_mode} />
       </Row>
@@ -56,6 +56,6 @@ export const ZoomedPlots = ({
             size={size}
           />
         )}
-    </>
+    </div>
   );
 };

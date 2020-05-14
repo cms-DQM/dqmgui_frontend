@@ -11,7 +11,7 @@ import {
   addRun,
   change_value_in_reference_table,
 } from '../../../reducers/reference';
-import { StyledDiv } from '../../styledComponents';
+import { StyledDiv, CustomCheckbox, CutomFormItem } from '../../styledComponents';
 import {
   StyledForm,
 } from '../../styledComponents';
@@ -72,7 +72,8 @@ export const Reference = ({
           <FormItem
             name="CustomizeAll"
           >
-            <Checkbox
+            <CustomCheckbox
+              color="white"
               checked={isAllChecked(triples)}
               onChange={(e: any) => {
                 triples.map((triple: TripleProps) => {
@@ -85,7 +86,7 @@ export const Reference = ({
               }}
             >
               Check All
-          </Checkbox>
+          </CustomCheckbox>
           </FormItem>
           <Col>
             <FormItem
@@ -99,12 +100,13 @@ export const Reference = ({
           </Col>
           <Col>
             <FormItem>
-              <Checkbox
+              <CustomCheckbox
+                color="white"
                 onClick={(e: any) => setNormalize(e.target.checked)(dispatch_gloabl)}
                 checked={state_global.normalize}
               >
                 Normalize
-               </Checkbox>
+               </CustomCheckbox>
             </FormItem>
           </Col>
           <Col>

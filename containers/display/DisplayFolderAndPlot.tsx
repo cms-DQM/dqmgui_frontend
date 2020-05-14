@@ -1,6 +1,6 @@
 import React, { FC, useReducer, useState } from 'react';
 import Link from 'next/link';
-import { Col, Row, Dropdown, Menu, Button } from 'antd';
+import { Col, Row, Button } from 'antd';
 import _ from 'lodash';
 
 import { useRequest } from '../../hooks/useRequest';
@@ -25,7 +25,7 @@ import { isPlotSelected, getSelectedPlots } from './utils';
 import cleanDeep from 'clean-deep';
 import { SpinnerWrapper, Spinner } from '../search/styledComponents';
 import { useRouter } from 'next/router';
-import { StyledSecondaryButton } from '../../components/styledComponents';
+import { ViewDetailsRow, OptionsRow } from '../../components/viewDetailsMenu/styledComponents';
 
 interface DirectoryInterface {
   subdir: string;
@@ -73,7 +73,6 @@ const DiplayFolder: FC<FolderProps> = ({
   const router = useRouter();
   const query: QueryProps = router.query;
   const selectedPlots = query.selected_plots;
-  const [visible, setVisible] = useState(false)
 
 
   const { errorBars, height, width, normalize, overlay_plot, stats } = state;
@@ -123,22 +122,12 @@ const DiplayFolder: FC<FolderProps> = ({
         <Wrapper zoomed={selected_plots.length > 0} notZoomedPlot={true}>
           {doesPlotExists(contents).length > 0 && (
             <Row style={{ width: '100%', height: 30 }}>
-              <Row style={{ position: 'fixed', zIndex: 3, background: '#f0f2f5', opacity: 0.93, width: '50%' }}>
-                <Col>
-                  <Button onClick={() => setVisible(!visible)} type="link">
-                    Options
-            </Button>
-                </Col>
-                <Row style={{ width: '100%', margin: 8, display: visible ? '' : 'none', opacity: 1 }}>
-                  <Col>
-                    <ViewDetailsMenu
-                      dispatch={dispatch}
-                      state={state}
-                      overlay_plot={overlay_plot}
-                    />
-                  </Col>
-                </Row>
-              </Row>
+              <ViewDetailsMenu
+                dispatch={dispatch}
+                state={state}
+                overlay_plot={overlay_plot}
+                selected_plots={selected_plots.length > 0}
+              />
             </Row>
           )}
           {isLoading ? (

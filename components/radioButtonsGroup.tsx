@@ -2,6 +2,7 @@ import React from 'react';
 import { Radio } from 'antd';
 
 import { OptionProps } from '../containers/display/interfaces';
+import { StyledRadio } from './styledComponents';
 
 interface RadioButtonsGroupProps {
   options: any[];
@@ -9,6 +10,7 @@ interface RadioButtonsGroupProps {
   current_value?: any;
   getOptionValue(value: any): any;
   getOptionLabel(value: any): string;
+  radioColor?: string;
 }
 
 export const RadioButtonsGroup = ({
@@ -17,6 +19,7 @@ export const RadioButtonsGroup = ({
   current_value,
   getOptionValue,
   getOptionLabel,
+  radioColor,
 }: RadioButtonsGroupProps) => {
   const [value, setValue] = React.useState(current_value);
 
@@ -30,12 +33,13 @@ export const RadioButtonsGroup = ({
     >
       {options.map((option: OptionProps) => {
         return (
-          <Radio
+          <StyledRadio
+            color={radioColor}
             key={getOptionValue(option.value)}
             value={getOptionValue(option)}
           >
             {getOptionLabel(option)}
-          </Radio>
+          </StyledRadio>
         );
       })}
     </Radio.Group>

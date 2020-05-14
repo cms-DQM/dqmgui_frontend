@@ -24,9 +24,22 @@ export const FolderPath = ({
   const query = router.query;
 
   return (
-    <Row>
+    <Row style={{margin: 8}}>
       <Col span={8}>
         <StyledBreadcrumb separator=">">
+        <Breadcrumb.Item>
+            <Link
+              href={{
+                pathname: '/',
+                query: {
+                  search_run_number: '',
+                  search_dataset_name: '',
+                },
+              }}
+            >
+              <a>Main Page</a>
+            </Link>
+          </Breadcrumb.Item>
           <Breadcrumb.Item>
             <Link
               href={{
