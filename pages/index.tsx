@@ -2,6 +2,7 @@ import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Router, { useRouter } from 'next/router';
+import { Tooltip } from 'antd';
 
 import Nav from '../components/Nav';
 import SearchResults from '../containers/search/SearchResults';
@@ -11,6 +12,8 @@ import {
   StyledHeader,
   StyledLayout,
   StyledDiv,
+  StyledLogoWrapper,
+  StyledLogo,
 } from '../styles/styledComponents';
 import {
   NotFoundDiv,
@@ -26,6 +29,7 @@ const navigationHandler = (
   search_by_run_number: number,
   search_by_dataset_name: string
 ) => {
+
   Router.replace({
     pathname: '/',
     query: {
@@ -44,6 +48,17 @@ const serchResultsHandler = (run: number, dataset: string) => {
     },
   });
 };
+
+
+const backToMainPage = () => {
+  Router.replace({
+    pathname: '/',
+    query: {
+      search_run_number: '',
+      search_dataset_name: '',
+    },
+  });
+}
 
 const Index: NextPage<FolderPathQuery> = () => {
   // We grab the query from the URL:
@@ -65,7 +80,7 @@ const Index: NextPage<FolderPathQuery> = () => {
   );
 
   const isDatasetAndRunNumberSelected = !!query.run_number && !!query.dataset_name
-console.log(query)
+
   return (
     <StyledDiv>
       <Head>
@@ -77,7 +92,17 @@ console.log(query)
       </Head>
       <StyledLayout>
         <StyledHeader>
+        <Tooltip title="Back to main page" placement="bottomLeft">
+          <StyledLogoWrapper
+            onClick={() => backToMainPage()}
+          >
+              <StyledLogo src="/images/CMSlogo_white_red_nolabel_1024_May2014.png" />
+          </StyledLogoWrapper>
+          </Tooltip>
           {
+            //if all full set is selected: dataset name and run number, then regular search field is not visible. 
+            //Instead, run and dataset browser is is displayed.
+            //Regular search fields are displayed just in the main page.
             isDatasetAndRunNumberSelected ?
               <Browser />
               :

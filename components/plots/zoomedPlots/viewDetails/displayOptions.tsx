@@ -27,7 +27,7 @@ export const DisplayOptions = ({ dispatch }: DisplayOptionsProps) => {
           currentValue={sizes.large.size}
         />
       </CutomFormItem>
-      <hr />
+      <hr  />
       <CutomFormItem
         color="white"
         name="Jsroot"

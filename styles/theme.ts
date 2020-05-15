@@ -18,6 +18,7 @@ export const theme = {
       white: '#fff',
       black: '#000',
       lightGrey: '#dfdfdf',
+      blueGrey: '#f0f2f5',
     },
     notification: {
       error: '#d01f1f',
