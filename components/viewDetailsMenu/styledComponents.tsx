@@ -56,12 +56,20 @@ justify-content: center;
 width: 100%; 
 `
 
-export const OptionsRow = styled(Row) <{ zoomedPlots?: string }>`
+export const OptionsRow = styled(Row) <{ zoomedPlots?: string, menuIsVisible?: string }>`
   position: fixed;
   z-index: 3;
   background: #f0f2f5;
   opacity: 0.93;
-  width: ${(props) => props.zoomedPlots === "true" ? '50%' : ''}
+  width: ${(props) => {
+    if (props.zoomedPlots === "true") {
+      return '50%'
+    } else if (props.menuIsVisible === "true") {
+      return ''
+    } else {
+      return '100%'
+    }
+  }};
 `
 
 export const ViewDetailsRow = styled(Row) <{ visible?: string }>`
@@ -77,4 +85,8 @@ export const ViewDetailsMenuWrapper = styled.div`
   background-color: ${theme.colors.secondary.dark};
   padding: ${theme.space.padding};
   border-top: 1px solid;
+`
+export const OptionsButtonRow = styled(Row)`
+  width: 100%;
+  height: 30px;
 `

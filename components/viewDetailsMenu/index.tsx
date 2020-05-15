@@ -40,9 +40,10 @@ export const ViewDetailsMenu = ({ selected_plots, dispatch, state }: ViewDetails
   }, []);
 
   return (
-    <OptionsRow zoomedPlots={selected_plots.toString()}>
-      <Col>
-        <StyledSecondaryButton style={{ background: 'white', color: "blue" }} onClick={() => setVisible(!visible)} type="primary">
+    <OptionsRow zoomedPlots={selected_plots.toString()}
+      menuIsVisible={visible.toString()}>
+      <Col span={24} >
+        <StyledSecondaryButton onClick={() => setVisible(!visible)} type="primary">
           Options
           <OpenCloseIcons open={visible} />
         </StyledSecondaryButton>
@@ -50,23 +51,23 @@ export const ViewDetailsMenu = ({ selected_plots, dispatch, state }: ViewDetails
       <ViewDetailsRow visible={visible.toString()}>
         <Form>
           <Col>
-              <CutomFormItem
-                name="SizeChanger"
-                color="white"
-                label="Size">
-                <SizeChanger
-                  dispatch={dispatch}
-                  setSize={setSize}
-                  currentValue={sizes.medium.size}
-                />
-              </CutomFormItem>
-              <hr />
-              <CutomFormItem
-                color="white"
-                name="Reference"
-                label="Reference">
-                <Reference state_global={state} dispatch_gloabl={dispatch} />
-              </CutomFormItem>
+            <CutomFormItem
+              name="SizeChanger"
+              color="white"
+              label="Size">
+              <SizeChanger
+                dispatch={dispatch}
+                setSize={setSize}
+                currentValue={sizes.medium.size}
+              />
+            </CutomFormItem>
+            <hr />
+            <CutomFormItem
+              color="white"
+              name="Reference"
+              label="Reference">
+              <Reference state_global={state} dispatch_gloabl={dispatch} />
+            </CutomFormItem>
           </Col>
         </Form>
       </ViewDetailsRow>
