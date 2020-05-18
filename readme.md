@@ -99,7 +99,7 @@ click on "Display Options" and choose from 5 available options: *Tiny*, *Small*,
 
 ~~- When the search is done by dataset name results are not found, even then they exist.~~
 
-6. **Plots are not sorted by an alphabet.**
+6. ~~Plots are not sorted by an alphabet.~~
 
 7. **Customization of a plot should work with auto-submit.**
 
