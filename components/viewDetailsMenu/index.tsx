@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Form } from 'antd';
 import { useRouter } from 'next/router';
+import { Collapse, Row } from 'antd';
 
 import { Reference } from './reference/reference';
 import { SizeChanger } from '../sizeChanger';
@@ -9,9 +10,10 @@ import { setPlotToOverlay } from '../../reducers/displayFolderOrPlot';
 import { sizes } from '../constants';
 import { QueryProps } from '../../containers/display/interfaces';
 import { formTriples } from './utils';
-import { OptionsRow, ViewDetailsRow } from './styledComponents';
-import { StyledSecondaryButton, CutomFormItem } from '../styledComponents';
-import { OpenCloseIcons } from './openCloseIcon';
+import { StyledCollapse } from './styledComponents';
+import { CutomFormItem } from '../styledComponents';
+
+const { Panel } = Collapse;
 
 
 interface ViewDetailsMenuProps {
@@ -40,37 +42,26 @@ export const ViewDetailsMenu = ({ selected_plots, dispatch, state }: ViewDetails
   }, []);
 
   return (
-    <OptionsRow zoomedPlots={selected_plots.toString()}
-      menuIsVisible={visible.toString()}>
-      <Col span={24} >
-        <StyledSecondaryButton onClick={() => setVisible(!visible)} type="primary">
-          Options
-          <OpenCloseIcons open={visible} />
-        </StyledSecondaryButton>
-      </Col>
-      <ViewDetailsRow visible={visible.toString()}>
+    <StyledCollapse >
+      <Panel header="Options" key="1">
         <Form>
-          <Col>
-            <CutomFormItem
-              name="SizeChanger"
-              color="white"
-              label="Size">
-              <SizeChanger
-                dispatch={dispatch}
-                setSize={setSize}
-                currentValue={sizes.medium.size}
-              />
-            </CutomFormItem>
-            <hr />
-            <CutomFormItem
-              color="white"
-              name="Reference"
-              label="Reference">
-              <Reference state_global={state} dispatch_gloabl={dispatch} />
-            </CutomFormItem>
-          </Col>
+          <CutomFormItem
+            name="SizeChanger"
+            label="Size">
+            <SizeChanger
+              dispatch={dispatch}
+              setSize={setSize}
+              currentValue={sizes.medium.size}
+            />
+          </CutomFormItem>
+          <hr />
+          <CutomFormItem
+            name="Reference"
+            label="Reference">
+            <Reference state_global={state} dispatch_gloabl={dispatch} />
+          </CutomFormItem>
         </Form>
-      </ViewDetailsRow>
-    </OptionsRow>
+      </Panel>
+    </StyledCollapse>
   );
 };

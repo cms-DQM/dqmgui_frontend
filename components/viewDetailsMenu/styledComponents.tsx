@@ -48,45 +48,9 @@ export const StyledCollapse = styled(Collapse)`
     padding: ${theme.space.spaceBetween};
   }
 `;
-
 export const OptionParagraph = styled.p`
 display: flex;
 align-items: center;
 justify-content: center;
 width: 100%; 
-`
-
-export const OptionsRow = styled(Row) <{ zoomedPlots?: string, menuIsVisible?: string }>`
-  position: fixed;
-  z-index: 3;
-  background: #f0f2f5;
-  opacity: 0.93;
-  width: ${(props) => {
-    if (props.zoomedPlots === "true") {
-      return '50%'
-    } else if (props.menuIsVisible === "true") {
-      return ''
-    } else {
-      return '100%'
-    }
-  }};
-`
-
-export const ViewDetailsRow = styled(Row) <{ visible?: string }>`
-  width: 100%;
-  background-color: ${theme.colors.secondary.dark};
-  margin: ${theme.space.padding};
-  display: ${(props) => props.visible === "true" ? '' : 'none'};
-  opacity: 1;
-  padding: calc(${theme.space.padding}*2);
-`
-
-export const ViewDetailsMenuWrapper = styled.div`
-  background-color: ${theme.colors.secondary.dark};
-  padding: ${theme.space.padding};
-  border-top: 1px solid;
-`
-export const OptionsButtonRow = styled(Row)`
-  width: 100%;
-  height: 30px;
 `
