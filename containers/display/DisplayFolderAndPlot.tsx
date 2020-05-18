@@ -108,7 +108,7 @@ const DiplayFolder: FC<FolderProps> = ({
     contents.map((content: PlotInterface) => {
       return { name: content.obj, dir: content.dir && '/' + content.dir };
     })
-  );
+  ).sort();
 
   return (
     <>
