@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { useState, useEffect, useRef } from 'react';
+import axios, { AxiosRequestConfig, AxiosResponse, CancelTokenSource } from 'axios';
 
+import {message} from '../components/notifications'
 import { root_url } from '../config/config';
 
 interface ReturnRequest {
@@ -8,6 +9,7 @@ interface ReturnRequest {
   error: any;
   isLoading: boolean;
 }
+//for traching, which req. should be canceled
 
 export const useRequest = (
   url: string,
@@ -18,21 +20,33 @@ export const useRequest = (
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  
+  const cancelSource = useRef<CancelTokenSource | null>(null)
+
   useEffect(() => {
+    const CancelToken = axios.CancelToken
+    cancelSource.current = CancelToken.source()
+
     const fetchData = async () => {
       setIsLoading(true);
       try {
+        setTimeout(cancelSource.current?.cancel , 180000)
         const response: AxiosResponse = await axios.request({
           url: `${root_url}${url}`,
           method: options.method || 'get',
+          cancelToken: cancelSource.current?.token,
           ...options,
         });
         const { data } = response;
         setData(data);
         setIsLoading(false);
       } catch (error) {
+        setIsLoading(false)
+        if (axios.isCancel(error)) {
+          setIsLoading(false)
+          message('Request Timeout')
+        }
         setError(error);
+        cancelSource.current?.cancel()
       }
     };
     if (should_we_fetch) {

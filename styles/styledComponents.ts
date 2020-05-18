@@ -28,7 +28,7 @@ export const StyledLogoWrapper = styled.div`
   transition: 0.5s;
   &:hover{
     background-color: ${theme.colors.secondary.dark} !important;
-    color: ${(props) => { console.log('ll'); return 'white'}}
+    color: ${theme.colors.common.white};
   }
 `
 export const StyledLogo = styled.img`
