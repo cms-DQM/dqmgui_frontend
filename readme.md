@@ -105,6 +105,8 @@ click on "Display Options" and choose from 5 available options: *Tiny*, *Small*,
 
 8. ~~**When plots are overlaid on side, them have to be display in a row, not in column**~~
 
+9. When window is divided in two parts, plot which is selected should be visible on the right side (scrolled)
+
 ---
 
 ---
