@@ -74,7 +74,7 @@ const Index: NextPage<FolderPathQuery> = () => {
     validation_errors,
   } = useValidateQuery(query);
 
-  const { results, results_grouped, searching, isLoading, error } = useSearch(
+  const { results, results_grouped, searching, isLoading, errors } = useSearch(
     search_run_number,
     search_dataset_name
   );
@@ -92,12 +92,12 @@ const Index: NextPage<FolderPathQuery> = () => {
       </Head>
       <StyledLayout>
         <StyledHeader>
-        <Tooltip title="Back to main page" placement="bottomLeft">
-          <StyledLogoWrapper
-            onClick={() => backToMainPage()}
-          >
+          <Tooltip title="Back to main page" placement="bottomLeft">
+            <StyledLogoWrapper
+              onClick={() => backToMainPage()}
+            >
               <StyledLogo src="/images/CMSlogo_white_red_nolabel_1024_May2014.png" />
-          </StyledLogoWrapper>
+            </StyledLogoWrapper>
           </Tooltip>
           {
             //if all full set is selected: dataset name and run number, then regular search field is not visible. 
@@ -129,6 +129,7 @@ const Index: NextPage<FolderPathQuery> = () => {
             results={results}
             results_grouped={results_grouped}
             handler={serchResultsHandler}
+            errors={errors}
           />
         ) : (
                 <NotFoundDivWrapper>

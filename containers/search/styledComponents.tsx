@@ -1,10 +1,9 @@
 import React from 'react';
 import { SearchOutlined, BarChartOutlined } from '@ant-design/icons';
+import { Spin, Row, Col, Alert } from 'antd';
 
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
-import { Spin, Row, Col } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
 
 export const StyledWrapper = styled.div`
   height: 100%;
@@ -114,3 +113,8 @@ export const RunWrapper = styled.div`
 export const StyledA = styled.a`
   color: ${theme.colors.common.white} !important;
 `;
+
+export const StyledAlert = styled(Alert)`
+  width: 100vw;
+  height: fit-content;
+`
