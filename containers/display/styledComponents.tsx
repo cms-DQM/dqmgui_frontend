@@ -7,6 +7,7 @@ import {
 import { Col, Row, Breadcrumb } from 'antd';
 
 import { theme } from '../../styles/theme';
+import { PlotPropertiesReportProps } from './interfaces';
 
 export const Icon = styled(FolderFilled)`
   font-size: 2rem;
@@ -22,7 +23,7 @@ export const DirecotryWrapper = styled.div`
 export const StyledA = styled.a`
   word-break: break-all;
 `;
-export const StyledCol = styled(Col)<{ space?: number }>`
+export const StyledCol = styled(Col) <{ space?: number }>`
   padding: ${(props) =>
     props.space ? `calc(${theme.space.spaceBetween}*${props.space})` : ''};
   width: fit-content;
@@ -43,21 +44,41 @@ export const StyledRowImages = styled(Row)`
   justify-content: center;
 `;
 
-export const StyledPlotRow = styled(Row)<{
+export const StyledPlotRow = styled(Row) <{
   width: number;
   minheight?: number;
   is_plot_selected?: string;
   nopointer?: string;
+  report?: PlotPropertiesReportProps;
 }>`
   display: flex;
   justify-content: space-between;
   width: ${(props) => props?.width && props.width}px;
   min-height: ${(props) => props?.minheight && props.minheight}px;
-  background-color: ${(props) =>
-    props?.is_plot_selected === 'true'
-      ? `${theme.colors.secondary.light}`
-      : `${theme.colors.primary.light}`};
-  ${theme.colors.primary.main};
+  background-color: ${(props) => {
+    if (props?.is_plot_selected === 'true') {
+      return `${theme.colors.secondary.light}`
+    }
+    return `${theme.colors.primary.light}`
+  }};
+  color: ${(props) => {
+    if (props.report?.alarm === 1) {
+      return theme.colors.notification.error
+    }
+    else  if (props.report?.warn === 1){
+      return theme.colors.notification.warning
+    }
+    return theme.colors.common.black
+  }};
+  font-weight: ${(props) => {
+    if (props.report?.alarm === 1) {
+      return 'bold'
+    }
+    else  if (props.report?.warn === 1){
+      return 'bold'
+    }
+    return ''
+  }};
   cursor: ${(props) => (props?.nopointer ? '' : 'pointer')};
 `;
 export const PlotNameCol = styled(Col)`
@@ -99,7 +120,7 @@ export const PlusIcon = styled(PlusCircleFilled)`
   font-size: 1.5rem;
   color: ${theme.colors.notification.success};
 `;
-export const StyledDiv = styled.div<{display?: string}>`
+export const StyledDiv = styled.div<{ display?: string }>`
   padding: ${theme.space.spaceBetween};
   color: ${theme.colors.primary.main};
   display: flex;

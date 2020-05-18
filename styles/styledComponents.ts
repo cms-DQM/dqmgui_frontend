@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { theme } from './theme';
 import { Layout } from 'antd';
 
-const { Header, Content } = Layout;
+const { Header } = Layout;
 
 export const StyledLayout = styled(Layout)`
   height: 100%;
