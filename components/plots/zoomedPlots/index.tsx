@@ -36,7 +36,7 @@ export const ZoomedPlots = ({
   params_for_api.customizeProps = customizeProps;
 
   return (
-    <>
+    <div style={{width: '100%'}}>
       <ViewDetailsMenu dispatch={dispatch} jsroot_mode={jsroot_mode} />
       {params_for_api.overlay_plot && params_for_api.overlay_plot.length > 0 ? (
         <ZoomedOverlaidPlots
@@ -46,13 +46,13 @@ export const ZoomedPlots = ({
           size={size}
         />
       ) : (
-        <ZoomedPlotsWithoutOverlay
-          jsroot_mode={jsroot_mode}
-          selected_plots={selected_plots}
-          params_for_api={params_for_api}
-          size={size}
-        />
-      )}
-    </>
+          <ZoomedPlotsWithoutOverlay
+            jsroot_mode={jsroot_mode}
+            selected_plots={selected_plots}
+            params_for_api={params_for_api}
+            size={size}
+          />
+        )}
+    </div>
   );
 };

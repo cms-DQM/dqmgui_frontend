@@ -73,6 +73,7 @@ export interface NavigationSearchFieldsProps {
 export interface PlotDataProps {
   name: string;
   dir: string;
+  properties: PlotPropertiesProps;
 }
 
 export interface NavigationSearchFieldsProps {
@@ -89,4 +90,19 @@ export interface QueryProps {
   selected_plots?: string;
   overlay_data?: string;
   overlay?: string;
+}
+
+export interface PlotPropertiesProps {
+  hasref: number;
+  isEff: number,
+  kind: string;
+  lumisect: string;
+  report: PlotPropertiesReportProps;
+}
+
+export interface PlotPropertiesReportProps {
+  alarm: number;
+  error: number,
+  other: number;
+  warn: number;
 }

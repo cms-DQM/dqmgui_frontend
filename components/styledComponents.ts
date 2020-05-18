@@ -1,8 +1,7 @@
-import { Form, Button, Input, Tag, Row, AutoComplete, Select } from 'antd';
+import { Form, Button, Input, Tag, Row, AutoComplete, Checkbox, Radio } from 'antd';
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import styled from 'styled-components';
 import { QuestionOutlined } from '@ant-design/icons';
-const { Option } = Select;
 
 import { theme } from '../styles/theme';
 
@@ -46,16 +45,19 @@ export const StyledQuestionTag = styled(Tag)`
   border-radius: 100px;
 `;
 
-export const StyledFormItem = styled(Form.Item)`
+export const StyledFormItem = styled(Form.Item) <{ labelColor?: string }>`
   .ant-form-item-label > label {
-    color: ${theme.colors.common.black};
+    color: ${(props) => props.labelColor ? props.labelColor : theme.colors.common.black};
     padding-right: ${theme.space.spaceBetween};
     width: fit-content;
     padding: ${theme.space.spaceBetween};
+  },
+  .ant-form-item {
+    margin-bottom: 0px !important;
   }
 `;
 
-export const StyledInput = styled(Input)<{ fullWidth?: boolean }>`
+export const StyledInput = styled(Input) <{ fullWidth?: boolean }>`
   border-radius: 12px;
   width: fit-content;
   width: ${(props) => (props.fullWidth ? '100%' : '')};
@@ -120,3 +122,17 @@ export const StyledSuccessIcon = styled(CheckCircleFilled)`
   padding-left: 8px;
   color: ${theme.colors.notification.success};
 `;
+export const StyledRadio = styled(Radio) <{ color?: string }>`
+    color: ${(props) => props.color ? props.color : theme.colors.common.black}
+`
+export const CutomFormItem = styled(FormItem) <{ color?: string }>`
+.ant-form-item-label > label {
+  color: ${(props) => props.color ? props.color : theme.colors.common.black};
+}`
+
+export const CustomCheckbox = styled(Checkbox) <{ color?: string }>`
+  color: ${(props) => props.color ? props.color : theme.colors.common.black};
+`
+export const CustomParagraph = styled.p<{ color?: string }>`
+  color: ${(props) => props.color ? props.color : theme.colors.common.black};
+`
