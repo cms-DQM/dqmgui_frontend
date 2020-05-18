@@ -1,6 +1,6 @@
 import React, { FC, useReducer, useState } from 'react';
 import Link from 'next/link';
-import { Col, Row, Button } from 'antd';
+import { Col } from 'antd';
 import _ from 'lodash';
 
 import { useRequest } from '../../hooks/useRequest';
@@ -33,6 +33,8 @@ interface DirectoryInterface {
 export interface PlotInterface {
   obj: string;
   dir: string;
+  content: any;
+  properties: any;
 }
 
 interface FolderProps {
@@ -106,7 +108,8 @@ const DiplayFolder: FC<FolderProps> = ({
 
   const plots = cleanDeep(
     contents.map((content: PlotInterface) => {
-      return { name: content.obj, dir: content.dir && '/' + content.dir };
+      console.log(content)
+      return { name: content.obj, dir: content.dir && '/' + content.dir,  properties: content.properties};
     })
   ).sort();
 

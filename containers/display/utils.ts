@@ -31,6 +31,7 @@ export const getSelectedPlots = (plotsQuery: string | undefined) => {
     const plotObject: PlotDataProps = {
       name: name ? name : '',
       dir: directories,
+      properties: '' as any,
     };
     return plotObject;
   });

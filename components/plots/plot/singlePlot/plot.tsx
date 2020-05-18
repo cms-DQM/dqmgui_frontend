@@ -39,6 +39,7 @@ export const Plot = ({ plot, params_for_api, isPlotSelected }: PlotProps) => {
         minheight={params_for_api.height}
         width={params_for_api.width}
         is_plot_selected={isPlotSelected.toString()}
+        report={plot.properties.report}
       >
         <PlotNameCol>{plot.name}</PlotNameCol>
         <Column>
