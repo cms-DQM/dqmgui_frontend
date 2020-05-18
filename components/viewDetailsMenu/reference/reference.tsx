@@ -73,7 +73,6 @@ export const Reference = ({
             name="CustomizeAll"
           >
             <CustomCheckbox
-              color="white"
               checked={isAllChecked(triples)}
               onChange={(e: any) => {
                 triples.map((triple: TripleProps) => {
@@ -101,7 +100,6 @@ export const Reference = ({
           <Col>
             <FormItem>
               <CustomCheckbox
-                color="white"
                 onClick={(e: any) => setNormalize(e.target.checked)(dispatch_gloabl)}
                 checked={state_global.normalize}
               >

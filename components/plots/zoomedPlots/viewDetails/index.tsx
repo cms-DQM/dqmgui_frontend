@@ -1,17 +1,11 @@
 import React, { useState } from 'react';
-import { Col, } from 'antd';
+import { Col, Collapse } from 'antd';
 
 import { DisplayOptions } from './displayOptions';
-import { CostumizeTable } from '../../../viewDetailsMenu/customize';
-import {
-  OptionsRow,
-  ViewDetailsRow,
-  ViewDetailsMenuWrapper,
-} from '../../../viewDetailsMenu/styledComponents';
-import { StyledSecondaryButton } from '../../../styledComponents';
-import { OpenCloseIcons } from '../../../viewDetailsMenu/openCloseIcon';
+import {StyledCollapse} from '../../../viewDetailsMenu/styledComponents';
 import Form from 'antd/lib/form/Form';
 
+const { Panel } = Collapse;
 
 interface ViewDetailsMenuProps {
   dispatch: any;
@@ -26,15 +20,10 @@ export const ViewDetailsMenu = ({
   const [visible, setVisible] = useState(false)
 
   return (
-    <OptionsRow zoomedPlots="true">
-      <Col>
-        <StyledSecondaryButton onClick={() => setVisible(!visible)} type="link">
-          Options
-          <OpenCloseIcons open={visible} />
-        </StyledSecondaryButton>
-      </Col>
-      <ViewDetailsRow visible={visible.toString()}>
-        <Form style={{margin: 8}}>
+    <StyledCollapse >
+      <Panel header="Options" key="1">
+        {/* <ViewDetailsRow visible={visible.toString()}> */}
+        <Form style={{ margin: 8 }}>
           <Col>
             <DisplayOptions dispatch={dispatch} jsroot_mode={jsroot_mode} />
           </Col>
@@ -49,8 +38,8 @@ export const ViewDetailsMenu = ({
             </>
           )} */}
         </Form>
-      </ViewDetailsRow>
-    </OptionsRow>
+      </Panel>
+    </StyledCollapse>
 
   );
 };

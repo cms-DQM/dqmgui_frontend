@@ -25,7 +25,6 @@ import { isPlotSelected, getSelectedPlots } from './utils';
 import cleanDeep from 'clean-deep';
 import { SpinnerWrapper, Spinner } from '../search/styledComponents';
 import { useRouter } from 'next/router';
-import { ViewDetailsRow, OptionsRow, OptionsButtonRow } from '../../components/viewDetailsMenu/styledComponents';
 
 interface DirectoryInterface {
   subdir: string;
@@ -121,14 +120,12 @@ const DiplayFolder: FC<FolderProps> = ({
       <DivWrapper selectedPlots={selected_plots.length > 0}>
         <Wrapper zoomed={selected_plots.length > 0} notZoomedPlot={true}>
           {doesPlotExists(contents).length > 0 && (
-            <OptionsButtonRow>
-              <ViewDetailsMenu
-                dispatch={dispatch}
-                state={state}
-                overlay_plot={overlay_plot}
-                selected_plots={selected_plots.length > 0}
-              />
-            </OptionsButtonRow>
+            <ViewDetailsMenu
+              dispatch={dispatch}
+              state={state}
+              overlay_plot={overlay_plot}
+              selected_plots={selected_plots.length > 0}
+            />
           )}
           {isLoading ? (
             <SpinnerWrapper>

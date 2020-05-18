@@ -18,7 +18,6 @@ export const DisplayOptions = ({ dispatch }: DisplayOptionsProps) => {
   return (
     <div>
       <CutomFormItem
-        color="white"
         name="SizeChanger"
         label="Size">
         <SizeChanger
@@ -29,7 +28,6 @@ export const DisplayOptions = ({ dispatch }: DisplayOptionsProps) => {
       </CutomFormItem>
       <hr  />
       <CutomFormItem
-        color="white"
         name="Jsroot"
         label="JSROOT">
         <Switch
