@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import axios, { AxiosRequestConfig, AxiosResponse, CancelTokenSource } from 'axios';
 
-import {message} from '../components/notifications'
+import { message } from '../components/notifications'
 import { root_url } from '../config/config';
 
 interface ReturnRequest {
@@ -29,7 +29,7 @@ export const useRequest = (
     const fetchData = async () => {
       setIsLoading(true);
       try {
-        setTimeout(cancelSource.current?.cancel , 180000)
+        setTimeout(cancelSource.current?.cancel, 180000)
         const response: AxiosResponse = await axios.request({
           url: `${root_url}${url}`,
           method: options.method || 'get',
@@ -47,6 +47,7 @@ export const useRequest = (
         }
         setError(error);
         cancelSource.current?.cancel()
+        message(error.toString())
       }
     };
     if (should_we_fetch) {
