@@ -133,3 +133,6 @@ export const CutomFormItem = styled(FormItem) <{ color?: string }>`
 export const CustomCheckbox = styled(Checkbox) <{ color?: string }>`
   color: ${(props) => props.color ? props.color : theme.colors.common.black};
 `
+export const CustomParagraph = styled.p<{ color?: string }>`
+  color: ${(props) => props.color ? props.color : theme.colors.common.black};
+`
