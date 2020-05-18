@@ -1,37 +1,27 @@
 import React, { useReducer, useState, useEffect } from 'react';
-import { Form, Col, Checkbox } from 'antd';
-import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import { Checkbox, Col, Row } from 'antd';
 
 import {
   TripleProps,
   QueryProps,
 } from '../../../containers/display/interfaces';
-import { setPlotToOverlay } from '../../../reducers/displayFolderOrPlot';
 import {
   referenceReducer,
   initialState,
-  removeRun,
   addRun,
-  toggleModal,
   change_value_in_reference_table,
 } from '../../../reducers/reference';
-import { StyledDiv } from '../../styledComponents';
+import { StyledDiv, CustomCheckbox, CutomFormItem } from '../../styledComponents';
 import {
   StyledForm,
-  StyledActionButtonRow,
-  StyledSecondaryButton,
-  StyledButton,
-  FormItem,
-  FieldsWrapper,
 } from '../../styledComponents';
-import { filter_plots, filter_valid_runs, formTriples } from '../utils';
-import { Field } from './field';
+import { formTriples } from '../utils';
 import { useRouter } from 'next/router';
 import { CustomModal } from '../search';
-import { Container } from './containers';
-import Link from 'next/link';
-import { addOverlayData } from '../../plots/plot/singlePlot/utils';
 import { OverlayOptions } from './overlayOptions';
+import { OverlayRuns } from './overlayRuns'
+import { setNormalize } from '../../../reducers/displayFolderOrPlot';
+import FormItem from 'antd/lib/form/FormItem';
 
 interface ReferenceProps {
   dispatch_gloabl: any;
@@ -71,10 +61,6 @@ export const Reference = ({
 
   return (
     <StyledDiv>
-      <OverlayOptions
-        current_value={state_global.overlay}
-        dispatch_gloabl={dispatch_gloabl}
-      />
       <StyledForm
         layout={'inline'}
         {...layout}
@@ -82,140 +68,63 @@ export const Reference = ({
         className="fieldLabel"
         initialValues={{ remember: true }}
       >
+        <Row>
+          <FormItem
+            name="CustomizeAll"
+          >
+            <CustomCheckbox
+              checked={isAllChecked(triples)}
+              onChange={(e: any) => {
+                triples.map((triple: TripleProps) => {
+                  change_value_in_reference_table(
+                    triple.cheked ? triple.cheked : e.target.checked,
+                    'checked',
+                    triple.id
+                  )(state, dispatch);
+                });
+              }}
+            >
+              Check All
+          </CustomCheckbox>
+          </FormItem>
+          <Col>
+            <FormItem
+              name="OverlayPosition"
+              label="Position:">
+              <OverlayOptions
+                current_value={state_global.overlay}
+                dispatch_gloabl={dispatch_gloabl}
+              />
+            </FormItem>
+          </Col>
+          <Col>
+            <FormItem>
+              <CustomCheckbox
+                onClick={(e: any) => setNormalize(e.target.checked)(dispatch_gloabl)}
+                checked={state_global.normalize}
+              >
+                Normalize
+               </CustomCheckbox>
+            </FormItem>
+          </Col>
+          <Col>
+          </Col>
+        </Row>
         <CustomModal
           dispatch={dispatch}
           visible={state.open}
           id={selectedTriple.id}
           state={state}
         />
-        <StyledDiv>
-          <Checkbox
-            checked={isAllChecked(triples)}
-            onChange={(e: any) => {
-              triples.map((triple: TripleProps) => {
-                change_value_in_reference_table(
-                  triple.cheked ? triple.cheked : e.target.checked,
-                  'checked',
-                  triple.id
-                )(state, dispatch);
-              });
-            }}
-          >
-            Check All
-          </Checkbox>
-        </StyledDiv>
-        {triples.map((triple: TripleProps) => (
-          <FieldsWrapper key={triple.id.toString()}>
-            <StyledDiv>
-              <FormItem>
-                <Checkbox
-                  checked={triple.checked as boolean}
-                  onChange={(e: any) => {
-                    change_value_in_reference_table(
-                      triple.cheked ? triple.cheked : e.target.checked,
-                      'checked',
-                      triple.id
-                    )(state, dispatch);
-                  }}
-                />
-              </FormItem>
-            </StyledDiv>
-            <StyledDiv>
-              <Container
-                state={state}
-                dispatch={dispatch}
-                id={triple.id}
-                defaultValue={query.run_number}
-                field_name="run_number"
-                value={triple.run_number}
-              />
-            </StyledDiv>
-            <StyledDiv>
-              <Container
-                state={state}
-                defaultValue={query.dataset_name}
-                dispatch={dispatch}
-                id={triple.id}
-                field_name="dataset_name"
-                value={triple.dataset_name}
-              />
-            </StyledDiv>
-            <FormItem>
-              <StyledSecondaryButton
-                onClick={() => {
-                  toggleModal(!state.open)(dispatch);
-                  setTriple(triple);
-                }}
-              >
-                Change
-              </StyledSecondaryButton>
-            </FormItem>
-            <StyledDiv>
-              <Field
-                state={state}
-                dispatch={dispatch}
-                id={triple.id}
-                field_name="label"
-                placeholder="label"
-                defaultValue={triple.label as string}
-                value={triple.label}
-              />
-            </StyledDiv>
-            <FormItem>
-              <StyledSecondaryButton
-                onClick={() => {
-                  if (triples.length > 1) {
-                    removeRun(triple.id)(state, dispatch);
-                    const filteredPlots = filter_plots(triples, triple.id);
-                    setPlotToOverlay(filteredPlots)(dispatch_gloabl);
-                  }
-                }}
-                icon={<MinusOutlined />}
-              ></StyledSecondaryButton>
-            </FormItem>
-          </FieldsWrapper>
-        ))}
-        <StyledActionButtonRow>
-          <Col>
-            <Form.Item>
-              <Form.Item>
-                <StyledButton
-                  htmlType="submit"
-                  onClick={() => {
-                    const filtered: TripleProps[] = filter_valid_runs(triples);
-                    setPlotToOverlay(filtered)(dispatch_gloabl);
-                  }}
-                >
-                  <Link
-                    href={{
-                      pathname: '/',
-                      query: {
-                        run_number: query.run_number,
-                        dataset_name: query.dataset_name,
-                        folder_path: query.folder_path,
-                        overlay: state_global.overlay,
-                        overlay_data: `${addOverlayData(triples)}`,
-                        selected_plots: query.selected_plots,
-                      },
-                    }}
-                  >
-                    <a>Submit</a>
-                  </Link>
-                </StyledButton>
-              </Form.Item>
-            </Form.Item>
-          </Col>
-          <Col>
-            <StyledSecondaryButton
-              onClick={() => {
-                if (triples.length < 4) {
-                  addRun()(state, dispatch);
-                }
-              }}
-              icon={<PlusOutlined />}
-            ></StyledSecondaryButton>
-          </Col>
-        </StyledActionButtonRow>
+        <OverlayRuns
+          triples={triples}
+          state={state}
+          dispatch={dispatch}
+          query={query}
+          setTriple={setTriple}
+          dispatch_gloabl={dispatch_gloabl}
+          state_global={state_global}
+        />
       </StyledForm>
     </StyledDiv>
   );
