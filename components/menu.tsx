@@ -32,7 +32,7 @@ export const DropdownMenu = ({ options, defaultValue, action }: MenuProps) => {
     <Row>
       <Col>
         <Dropdown overlay={plotMenu(options, defaultValue)} trigger={['hover']}>
-          <a>
+          <a style={{color: 'white'}}>
             {value.label} <DownOutlined />{' '}
           </a>
         </Dropdown>
