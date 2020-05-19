@@ -20,7 +20,7 @@ export const DatasetsBrowser = () => {
   // because when spinner is shown, field becomes spinner width
   const [width, setWidth] = useState<number | undefined>()
 
-  const { results, results_grouped, searching, isLoading, error } = useSearch(
+  const { results, results_grouped, searching, isLoading, errors } = useSearch(
     query.run_number,
     ''
   );

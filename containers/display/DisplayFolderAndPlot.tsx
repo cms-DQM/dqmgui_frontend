@@ -108,7 +108,6 @@ const DiplayFolder: FC<FolderProps> = ({
 
   const plots = cleanDeep(
     contents.map((content: PlotInterface) => {
-      console.log(content)
       return { name: content.obj, dir: content.dir && '/' + content.dir,  properties: content.properties};
     })
   ).sort();

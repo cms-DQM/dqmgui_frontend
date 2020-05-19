@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   ParamsForApiProps,
   SizeProps,
@@ -28,6 +28,7 @@ export const ZoomedPlots = ({
   size,
   customizeProps,
 }: ZoomedPlotsProps) => {
+
   useEffect(() => {
     const disableJSROOT = setJSROOTMode(false)(dispatch);
     return disableJSROOT;
@@ -36,7 +37,7 @@ export const ZoomedPlots = ({
   params_for_api.customizeProps = customizeProps;
 
   return (
-    <div style={{width: '100%'}}>
+    <div style={{ width: '100%' }} >
       <ViewDetailsMenu dispatch={dispatch} jsroot_mode={jsroot_mode} />
       {params_for_api.overlay_plot && params_for_api.overlay_plot.length > 0 ? (
         <ZoomedOverlaidPlots
