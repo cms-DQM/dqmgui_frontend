@@ -24,12 +24,6 @@ export const useRequest = (
   const cancelSource = useRef<CancelTokenSource | null>(null)
   const [errors, setEerrors] = useState<string[]>([])
 
-  const addError = (error: string) => {
-    const copy = [...errors]
-    copy.push(error.toString())
-    setEerrors(copy)
-  }
-
   useEffect(() => {
     const CancelToken = axios.CancelToken
     cancelSource.current = CancelToken.source()
@@ -49,12 +43,11 @@ export const useRequest = (
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false)
-        addError(error)
+        setEerrors([error.toString()])
         if (axios.isCancel(error)) {
           setIsLoading(false)
-          addError('Request Timeout')
+          setEerrors(['Request Timeout'])
         }
-        errors.push(error.toString());
         cancelSource.current?.cancel()
       }
     };
