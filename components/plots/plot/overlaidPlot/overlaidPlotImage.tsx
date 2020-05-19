@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import Router, { useRouter } from 'next/router';
 
 import { root_url } from '../../../../config/config';
 import {
@@ -47,7 +47,52 @@ export const OverlaidPlotImage = ({
   const router = useRouter();
   const query: QueryProps = router.query;
 
+  const imageRef = useRef(null);
+
+  const addPlotToRightSide = () => Router.replace({
+    pathname: '/',
+    query: {
+      run_number: query.run_number,
+      dataset_name: query.dataset_name,
+      folder_path: query.folder_path,
+      overlay: query.overlay,
+      overlay_data: query.overlay_data,
+      //addig selected plots name and directories to url
+      selected_plots: `${addToSelectedPlots(
+        query.selected_plots,
+        plot
+      )}`,
+    },
+  })
+
+  const removePlotFromRightSide = () => Router.replace({
+    pathname: '/',
+    query: {
+      run_number: query.run_number,
+      dataset_name: query.dataset_name,
+      folder_path: query.folder_path,
+      overlay: query.overlay,
+      overlay_data: query.overlay_data,
+      selected_plots: `${removePlotFromSelectedPlots(
+        query.selected_plots,
+        plot
+      )}`,
+    },
+  })
+
+  const scroll = () => {
+    if (imageRef) {
+      //@ts-ignore
+      imageRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'center',
+      });
+    }
+  }
+
   return (
+    <div ref={imageRef}>
     <StyledCol space={2}>
       <StyledPlotRow
         minheight={params_for_api.height}
@@ -58,70 +103,22 @@ export const OverlaidPlotImage = ({
         <PlotNameCol>{plot.name}</PlotNameCol>
         <Column>
           {isPlotSelected ? (
-            <Link
-              href={{
-                pathname: '/',
-                query: {
-                  run_number: query.run_number,
-                  dataset_name: query.dataset_name,
-                  folder_path: query.folder_path,
-                  overlay: query.overlay,
-                  overlay_data: query.overlay_data,
-                  selected_plots: `${removePlotFromSelectedPlots(
-                    query.selected_plots,
-                    plot
-                  )}`,
-                },
-              }}
-            >
-              <MinusIcon />
-            </Link>
+            <MinusIcon onClick={removePlotFromRightSide} />
           ) : (
-            <Link
-              href={{
-                pathname: '/',
-                query: {
-                  run_number: query.run_number,
-                  dataset_name: query.dataset_name,
-                  folder_path: query.folder_path,
-                  overlay: query.overlay,
-                  overlay_data: query.overlay_data,
-                  //addig selected plots name and directories to url
-                  selected_plots: `${addToSelectedPlots(
-                    query.selected_plots,
-                    plot
-                  )}`,
-                },
-              }}
-            >
-              <PlusIcon />
-            </Link>
-          )}
+              <PlusIcon onClick={async () => {
+                await addPlotToRightSide()
+                scroll()
+              }} />
+            )}
         </Column>
-        <Link
-          href={{
-            pathname: '/',
-            query: {
-              run_number: query.run_number,
-              dataset_name: query.dataset_name,
-              folder_path: query.folder_path,
-              overlay: query.overlay,
-              overlay_data: query.overlay_data,
-              //if plot is laready selected, on plot click, plot will be removed from url;
-              //Otherwis-- plot and its dir will be added to url.
-              selected_plots: `${
-                isPlotSelected
-                  ? removePlotFromSelectedPlots(query.selected_plots, plot)
-                  : addToSelectedPlots(query.selected_plots, plot)
-              }`,
-            },
-          }}
-        >
-          <div>
-            <img alt={plot.name} src={source} />
-          </div>
-        </Link>
+        <div onClick={async () => {
+          isPlotSelected ? await removePlotFromRightSide() : await addPlotToRightSide()
+          scroll()
+        }}>
+          <img alt={plot.name} src={source} />
+        </div>
       </StyledPlotRow>
     </StyledCol>
+    </div>
   );
 };

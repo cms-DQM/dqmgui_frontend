@@ -48,7 +48,7 @@ export const RunBrowser = () => {
     });
   }, [currentRunNumber]);
 
-  const { results_grouped, searching, isLoading, error } = useSearch(
+  const { results_grouped, searching, isLoading, errors } = useSearch(
     NaN,
     query.dataset_name
   );

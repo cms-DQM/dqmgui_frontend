@@ -6,7 +6,7 @@ interface ReturnSearch {
   results_grouped: any[];
   searching: boolean;
   isLoading: boolean;
-  error: any;
+  errors: any[];
 }
 
 export const useSearch = (
@@ -16,7 +16,7 @@ export const useSearch = (
   const searching = !!(run_number || dataset_name);
   const run_number_value = run_number ? run_number : '';
 
-  const { data, isLoading, error } = useRequest(
+  const { data, isLoading, errors } = useRequest(
     `/data/json/samples?match=${dataset_name}&run=${run_number_value}`,
     {},
     [run_number, dataset_name],
@@ -29,7 +29,7 @@ export const useSearch = (
       results_grouped: [],
       searching,
       isLoading,
-      error: false,
+      errors: errors,
     };
   }
   const { samples: results }: { samples: any[] } = data;
@@ -44,5 +44,5 @@ export const useSearch = (
     .map((value, key) => ({ dataset: key, value }))
     .value();
 
-  return { results, results_grouped, searching, isLoading, error };
+  return { results, results_grouped, searching, isLoading, errors };
 };

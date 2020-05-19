@@ -6,9 +6,11 @@ import { root_url } from '../config/config';
 
 interface ReturnRequest {
   data: any;
-  error: any;
+  errors: any;
   isLoading: boolean;
 }
+
+
 //for traching, which req. should be canceled
 
 export const useRequest = (
@@ -18,9 +20,9 @@ export const useRequest = (
   should_we_fetch: boolean = true
 ): ReturnRequest => {
   const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const cancelSource = useRef<CancelTokenSource | null>(null)
+  const [errors, setEerrors] = useState<string[]>([])
 
   useEffect(() => {
     const CancelToken = axios.CancelToken
@@ -41,18 +43,18 @@ export const useRequest = (
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false)
+        setEerrors([error.toString()])
         if (axios.isCancel(error)) {
           setIsLoading(false)
-          message('Request Timeout')
+          setEerrors(['Request Timeout'])
         }
-        setError(error);
         cancelSource.current?.cancel()
-        message(error.toString())
       }
     };
     if (should_we_fetch) {
       fetchData();
     }
   }, watchers);
-  return { data, error, isLoading };
+
+  return { data, isLoading, errors };
 };
