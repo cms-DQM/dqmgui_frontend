@@ -4,7 +4,6 @@ import { RadioButtonsGroup } from './radioButtonsGroup';
 import { SizeProps, OptionProps } from '../containers/display/interfaces';
 
 interface SizeChangerProps {
-  dispatch(params: any): void;
   setSize(value: SizeProps): any;
   currentValue: SizeProps;
 }
@@ -17,13 +16,14 @@ const formatOptions = () => {
   });
   return options;
 };
+
 export const SizeChanger = ({
-  dispatch,
   setSize,
   currentValue,
 }: SizeChangerProps) => {
+
   useEffect(() => {
-    return () => setSize(currentValue)(dispatch);
+    return () => setSize(currentValue);
   }, []);
 
   return (
@@ -32,7 +32,7 @@ export const SizeChanger = ({
       getOptionLabel={(option: OptionProps) => option.label}
       getOptionValue={(option: OptionProps) => option.value}
       action={(value: SizeProps) => {
-        setSize(value)(dispatch);
+        setSize(value)
       }}
       options={formatOptions()}
     />

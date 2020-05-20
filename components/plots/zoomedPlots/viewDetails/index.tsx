@@ -2,20 +2,17 @@ import React, { useState } from 'react';
 import { Col, Collapse } from 'antd';
 
 import { DisplayOptions } from './displayOptions';
-import {StyledCollapse} from '../../../viewDetailsMenu/styledComponents';
+import { StyledCollapse } from '../../../viewDetailsMenu/styledComponents';
 import Form from 'antd/lib/form/Form';
 
 const { Panel } = Collapse;
 
 interface ViewDetailsMenuProps {
-  dispatch: any;
-  jsroot_mode: boolean;
 }
 
 
 export const ViewDetailsMenu = ({
-  dispatch,
-  jsroot_mode,
+
 }: ViewDetailsMenuProps) => {
   const [visible, setVisible] = useState(false)
 
@@ -25,7 +22,7 @@ export const ViewDetailsMenu = ({
         {/* <ViewDetailsRow visible={visible.toString()}> */}
         <Form style={{ margin: 8 }}>
           <Col>
-            <DisplayOptions dispatch={dispatch} jsroot_mode={jsroot_mode} />
+            <DisplayOptions />
           </Col>
           {/* {!jsroot_mode && (
             <>

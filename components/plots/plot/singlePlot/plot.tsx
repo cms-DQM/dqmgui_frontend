@@ -1,12 +1,12 @@
-import React, { useRef } from 'react';
-import Router, { useRouter } from 'next/router';
+import React, { useRef, useContext } from 'react';
+import { useRouter } from 'next/router';
 
 import { root_url } from '../../../../config/config';
 import { get_plot_url } from '../../../../config/config';
 import {
-  ParamsForApiProps,
   PlotDataProps,
   QueryProps,
+  ParamsForApiProps,
 } from '../../../../containers/display/interfaces';
 import {
   StyledCol,
@@ -16,65 +16,23 @@ import {
   PlusIcon,
   MinusIcon,
 } from '../../../../containers/display/styledComponents';
-import { removePlotFromSelectedPlots, addToSelectedPlots } from './utils';
+import { addPlotToRightSide, removePlotFromRightSide, scroll } from './utils';
+import { store } from '../../../../contexts/leftSideContext';
 
 interface PlotProps {
   plot: PlotDataProps;
-  params_for_api: ParamsForApiProps;
   isPlotSelected: boolean;
+  params_for_api: ParamsForApiProps;
 }
 
-export const Plot = ({ plot, params_for_api, isPlotSelected }: PlotProps) => {
-  params_for_api.plot_name = plot.name;
-  const plot_url = get_plot_url(params_for_api);
-  const source = `${root_url}${plot_url}`;
-
+export const Plot = ({ plot, isPlotSelected, params_for_api }: PlotProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
 
+  const plot_url = get_plot_url(params_for_api);
+  const source = `${root_url}${plot_url}`;
+
   const imageRef = useRef(null);
-
-  const addPlotToRightSide = () => Router.replace({
-    pathname: '/',
-    query: {
-      run_number: query.run_number,
-      dataset_name: query.dataset_name,
-      folder_path: query.folder_path,
-      overlay: query.overlay,
-      overlay_data: query.overlay_data,
-      //addig selected plots name and directories to url
-      selected_plots: `${addToSelectedPlots(
-        query.selected_plots,
-        plot
-      )}`,
-    },
-  })
-
-  const removePlotFromRightSide = () => Router.replace({
-    pathname: '/',
-    query: {
-      run_number: query.run_number,
-      dataset_name: query.dataset_name,
-      folder_path: query.folder_path,
-      overlay: query.overlay,
-      overlay_data: query.overlay_data,
-      selected_plots: `${removePlotFromSelectedPlots(
-        query.selected_plots,
-        plot
-      )}`,
-    },
-  })
-
-  const scroll = () => {
-    if (imageRef) {
-      //@ts-ignore
-      imageRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-        inline: 'center',
-      });
-    }
-  }
 
   return (
     <div ref={imageRef}>
@@ -88,17 +46,17 @@ export const Plot = ({ plot, params_for_api, isPlotSelected }: PlotProps) => {
           <PlotNameCol>{plot.name}</PlotNameCol>
           <Column>
             {isPlotSelected ? (
-              <MinusIcon onClick={removePlotFromRightSide} />
+              <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
             ) : (
                 <PlusIcon onClick={async () => {
-                  await addPlotToRightSide()
-                  scroll()
+                  await addPlotToRightSide(query, plot)
+                  scroll(imageRef)
                 }} />
               )}
           </Column>
           <div onClick={async () => {
-            isPlotSelected ?  await removePlotFromRightSide() : await addPlotToRightSide()
-            scroll()
+            isPlotSelected ? await removePlotFromRightSide(query, plot) : await addPlotToRightSide(query, plot)
+            scroll(imageRef)
           }}>
             <img alt={plot.name} src={source} />
           </div>

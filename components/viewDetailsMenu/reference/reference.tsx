@@ -1,5 +1,5 @@
 import React, { useReducer, useState, useEffect } from 'react';
-import { Checkbox, Col, Row } from 'antd';
+import { Col, Row } from 'antd';
 
 import {
   TripleProps,
@@ -11,7 +11,7 @@ import {
   addRun,
   change_value_in_reference_table,
 } from '../../../reducers/reference';
-import { StyledDiv, CustomCheckbox, CutomFormItem } from '../../styledComponents';
+import { StyledDiv, CustomCheckbox } from '../../styledComponents';
 import {
   StyledForm,
 } from '../../styledComponents';
@@ -20,12 +20,13 @@ import { useRouter } from 'next/router';
 import { CustomModal } from '../search';
 import { OverlayOptions } from './overlayOptions';
 import { OverlayRuns } from './overlayRuns'
-import { setNormalize } from '../../../reducers/displayFolderOrPlot';
 import FormItem from 'antd/lib/form/FormItem';
 
 interface ReferenceProps {
-  dispatch_gloabl: any;
-  state_global: any;
+  normalize: boolean;
+  setNormalize(normalize: boolean): void;
+  overlayPlots: string;
+  setOverlay(overlayPlots: TripleProps[]): void
 }
 
 const isAllChecked = (triples: TripleProps[]) => {
@@ -36,8 +37,10 @@ const isAllChecked = (triples: TripleProps[]) => {
 };
 
 export const Reference = ({
-  dispatch_gloabl,
-  state_global,
+  normalize,
+  setNormalize,
+  overlayPlots,
+  setOverlay
 }: ReferenceProps) => {
   const [state, dispatch] = useReducer(referenceReducer, initialState);
   const [selectedTriple, setTriple] = useState<TripleProps>({});
@@ -91,17 +94,14 @@ export const Reference = ({
             <FormItem
               name="OverlayPosition"
               label="Position:">
-              <OverlayOptions
-                current_value={state_global.overlay}
-                dispatch_gloabl={dispatch_gloabl}
-              />
+              <OverlayOptions/>
             </FormItem>
           </Col>
           <Col>
             <FormItem>
               <CustomCheckbox
-                onClick={(e: any) => setNormalize(e.target.checked)(dispatch_gloabl)}
-                checked={state_global.normalize}
+                onClick={(e: any) => setNormalize(e.target.checked)}
+                checked={normalize}
               >
                 Normalize
                </CustomCheckbox>
@@ -122,8 +122,8 @@ export const Reference = ({
           dispatch={dispatch}
           query={query}
           setTriple={setTriple}
-          dispatch_gloabl={dispatch_gloabl}
-          state_global={state_global}
+          setOverlay={setOverlay}
+          overlayPlots={overlayPlots}
         />
       </StyledForm>
     </StyledDiv>

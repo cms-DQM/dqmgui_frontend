@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import { get_jroot_plot } from '../../../../config/config';
 import {
   ParamsForApiProps,
-  SizeProps,
   PlotDataProps,
   QueryProps,
 } from '../../../../containers/display/interfaces';
@@ -23,17 +22,12 @@ import { removePlotFromSelectedPlots } from '../../plot/singlePlot/utils';
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;
   params_for_api: ParamsForApiProps;
-  size: SizeProps;
 }
 
 export const ZoomedJSROOTPlot = ({
   selected_plot,
   params_for_api,
-  size,
 }: ZoomedJSROOTPlotsProps) => {
-  params_for_api.plot_name = selected_plot.name;
-  params_for_api.folders_path = selected_plot.dir;
-
   const router = useRouter();
   const query: QueryProps = router.query;
 
@@ -49,8 +43,8 @@ export const ZoomedJSROOTPlot = ({
   return (
     <StyledCol space={2}>
       <StyledPlotRow
-        minheight={size.h}
-        width={size.w}
+        minheight={params_for_api.height}
+        width={params_for_api.width}
         is_plot_selected={true.toString()}
         nopointer={true.toString()}
       >
@@ -75,7 +69,7 @@ export const ZoomedJSROOTPlot = ({
             <MinusIcon />
           </Link>
         </Column>
-        <ImageDiv id={selected_plot.name} width={size.w} height={size.h} />
+        <ImageDiv id={selected_plot.name} width={params_for_api.width} height={params_for_api.height} />
       </StyledPlotRow>
     </StyledCol>
   );

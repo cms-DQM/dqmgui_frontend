@@ -1,17 +1,11 @@
-import React, { FC, useReducer, useState } from 'react';
+import React, { FC } from 'react';
 import Link from 'next/link';
 import { Col } from 'antd';
 import _ from 'lodash';
 
 import { useRequest } from '../../hooks/useRequest';
-import { Plot } from '../../components/plots/plot/singlePlot/plot';
-import { ParamsForApiProps, PlotDataProps, QueryProps } from './interfaces';
-import { OverlaidPlot } from '../../components/plots/plot/overlaidPlot';
-import { ZoomedPlots } from '../../components/plots/zoomedPlots';
-import {
-  displayFolderOrPlotComponentReducer,
-  initialState,
-} from '../../reducers/displayFolderOrPlot';
+import { PlotDataProps, QueryProps } from './interfaces';
+import { ZoomedPlots } from '../../components/plots/zoomedPlots';;
 import { ViewDetailsMenu } from '../../components/viewDetailsMenu';
 import {
   Icon,
@@ -21,10 +15,12 @@ import {
   DivWrapper,
 } from './styledComponents';
 import { FolderPath } from './folderPath';
-import { isPlotSelected, getSelectedPlots } from './utils';
+import { getSelectedPlots } from './utils';
 import cleanDeep from 'clean-deep';
 import { SpinnerWrapper, Spinner } from '../search/styledComponents';
 import { useRouter } from 'next/router';
+import { RightSideStateProvider } from '../../contexts/rightSideContext';
+import { LeftSidePlots } from '../../components/plots/plot';
 
 interface DirectoryInterface {
   subdir: string;
@@ -66,17 +62,10 @@ const DiplayFolder: FC<FolderProps> = ({
   run_number,
   dataset_name,
 }) => {
-  const [state, dispatch] = useReducer(
-    displayFolderOrPlotComponentReducer,
-    initialState
-  );
 
   const router = useRouter();
   const query: QueryProps = router.query;
   const selectedPlots = query.selected_plots;
-
-
-  const { errorBars, height, width, normalize, overlay_plot, stats } = state;
 
   const selected_plots: PlotDataProps[] = getSelectedPlots(selectedPlots);
 
@@ -90,17 +79,6 @@ const DiplayFolder: FC<FolderProps> = ({
   );
 
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
-  const params_for_api: ParamsForApiProps = {
-    overlay_plot: overlay_plot,
-    run_number: run_number,
-    dataset_name: dataset_name,
-    width: width,
-    height: height,
-    overlay: query.overlay,
-    stats: stats,
-    normalize: normalize,
-    errorBars: errorBars,
-  };
 
   const directories = cleanDeep(
     contents.map((content: DirectoryInterface) => content.subdir)
@@ -108,7 +86,7 @@ const DiplayFolder: FC<FolderProps> = ({
 
   const plots = cleanDeep(
     contents.map((content: PlotInterface) => {
-      return { name: content.obj, dir: content.dir && '/' + content.dir,  properties: content.properties};
+      return { name: content.obj, dir: content.dir && '/' + content.dir, properties: content.properties };
     })
   ).sort();
 
@@ -123,9 +101,6 @@ const DiplayFolder: FC<FolderProps> = ({
         <Wrapper zoomed={selected_plots.length > 0} notZoomedPlot={true}>
           {doesPlotExists(contents).length > 0 && (
             <ViewDetailsMenu
-              dispatch={dispatch}
-              state={state}
-              overlay_plot={overlay_plot}
               selected_plots={selected_plots.length > 0}
             />
           )}
@@ -156,31 +131,8 @@ const DiplayFolder: FC<FolderProps> = ({
                 ))}
                 {plots.map((plot: PlotDataProps | undefined) => {
                   if (plot) {
-                    params_for_api.folders_path = plot.dir;
                     return (
-                      <>
-                        {overlay_plot.length > 0 ? (
-                          <OverlaidPlot
-                            key={plot.name}
-                            plot={plot}
-                            params_for_api={params_for_api}
-                            isPlotSelected={isPlotSelected(
-                              selected_plots,
-                              plot.name
-                            )}
-                          />
-                        ) : (
-                            <Plot
-                              plot={plot}
-                              key={plot.name}
-                              params_for_api={params_for_api}
-                              isPlotSelected={isPlotSelected(
-                                selected_plots,
-                                plot.name
-                              )}
-                            />
-                          )}
-                      </>
+                      <LeftSidePlots plot={plot} />
                     );
                   }
                 })}
@@ -189,14 +141,11 @@ const DiplayFolder: FC<FolderProps> = ({
         </Wrapper>
         {selected_plots.length > 0 && (
           <Wrapper zoomed={selected_plots.length}>
-            <ZoomedPlots
-              selected_plots={selected_plots}
-              params_for_api={params_for_api}
-              jsroot_mode={state.jsroot_mode}
-              dispatch={dispatch}
-              size={state.zoomedPlotSize}
-              customizeProps={state.customizeProps}
-            />
+            <RightSideStateProvider>
+              <ZoomedPlots
+                selected_plots={selected_plots}
+              />
+            </RightSideStateProvider>
           </Wrapper>
         )}
       </DivWrapper>

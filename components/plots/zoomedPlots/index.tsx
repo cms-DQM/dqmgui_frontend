@@ -1,57 +1,36 @@
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import {
-  ParamsForApiProps,
-  SizeProps,
-  CustomizeProps,
+
   PlotDataProps,
+  QueryProps,
 } from '../../../containers/display/interfaces';
 
 import { ZoomedPlots as ZoomedOverlaidPlots } from './zoomedOverlayPlots';
 import { ZoomedPlots as ZoomedPlotsWithoutOverlay } from './zoomedPlots';
 import { ViewDetailsMenu } from './viewDetails';
-import { setJSROOTMode } from '../../../reducers/displayFolderOrPlot';
+import { useRouter } from 'next/router';
 
 interface ZoomedPlotsProps {
   selected_plots: PlotDataProps[];
-  params_for_api: ParamsForApiProps;
-  jsroot_mode: boolean;
-  dispatch: any;
-  size: SizeProps;
-  customizeProps: CustomizeProps;
 }
 
 export const ZoomedPlots = ({
-  jsroot_mode,
-  params_for_api,
   selected_plots,
-  dispatch,
-  size,
-  customizeProps,
 }: ZoomedPlotsProps) => {
+  const router = useRouter();
+  const query: QueryProps = router.query;
 
-  useEffect(() => {
-    const disableJSROOT = setJSROOTMode(false)(dispatch);
-    return disableJSROOT;
-  }, []);
-
-  params_for_api.customizeProps = customizeProps;
-
+  const overlay_plot = query.overlay_data
   return (
     <div style={{ width: '100%' }} >
-      <ViewDetailsMenu dispatch={dispatch} jsroot_mode={jsroot_mode} />
-      {params_for_api.overlay_plot && params_for_api.overlay_plot.length > 0 ? (
+      <ViewDetailsMenu />
+      {overlay_plot ? (
         <ZoomedOverlaidPlots
           selected_plots={selected_plots}
-          params_for_api={params_for_api}
-          jsroot_mode={jsroot_mode}
-          size={size}
         />
       ) : (
           <ZoomedPlotsWithoutOverlay
-            jsroot_mode={jsroot_mode}
             selected_plots={selected_plots}
-            params_for_api={params_for_api}
-            size={size}
           />
         )}
     </div>

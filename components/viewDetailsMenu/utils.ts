@@ -30,11 +30,11 @@ export const formTriples = (overlay_data: string | undefined) => {
     const label = splitedParams ? splitedParams.pop() : '';
     const run_number = splitedParams ? splitedParams.shift() : '';
     const dataset_name = splitedParams ? '/' + splitedParams?.join('/') : '';
-    const triple_object = {
+    const triple_object: TripleProps = {
       id: id,
-      run_number: run_number,
+      run_number: run_number as any,
       dataset_name: dataset_name,
-      label: label,
+      label: label as any,
     };
     return triple_object;
   });

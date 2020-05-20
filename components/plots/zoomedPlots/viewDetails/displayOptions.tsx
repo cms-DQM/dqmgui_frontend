@@ -1,32 +1,32 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Switch } from 'antd';
 
 import { SizeChanger } from '../../../sizeChanger';
-import {
-  setJSROOTMode,
-  setZoomedPlotSize,
-} from '../../../../reducers/displayFolderOrPlot';
-import { sizes } from '../../../constants';
 import { CutomFormItem } from '../../../styledComponents';
+import { store } from '../../../../contexts/rightSideContext';
 
 interface DisplayOptionsProps {
-  jsroot_mode: boolean;
-  dispatch: any;
+
 }
 
-export const DisplayOptions = ({ dispatch }: DisplayOptionsProps) => {
+export const DisplayOptions = () => {
+  const { setJSROOTmode, size, setSize } = useContext(store)
+
+  useEffect(() => {
+    return () => setJSROOTmode(false);
+  }, []);
+
   return (
     <div>
       <CutomFormItem
         name="SizeChanger"
         label="Size">
         <SizeChanger
-          dispatch={dispatch}
-          setSize={setZoomedPlotSize}
-          currentValue={sizes.large.size}
+          currentValue={size}
+          setSize={setSize}
         />
       </CutomFormItem>
-      <hr  />
+      <hr />
       <CutomFormItem
         name="Jsroot"
         label="JSROOT">
@@ -34,7 +34,7 @@ export const DisplayOptions = ({ dispatch }: DisplayOptionsProps) => {
           checkedChildren="JSROOT enabled"
           unCheckedChildren="JSROOT disabled"
           onChange={(e) => {
-            setJSROOTMode(e)(dispatch);
+            setJSROOTmode(e)
           }}
         />
       </CutomFormItem>

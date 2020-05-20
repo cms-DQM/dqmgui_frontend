@@ -6,7 +6,7 @@ import Nav from '../../Nav';
 import { useSearch } from '../../../hooks/useSearch';
 import SearchResults from '../../../containers/search/SearchResults';
 import { change_value_in_reference_table } from '../../../reducers/reference';
-import { ResultsWrapper, NavWrapper, StyledModal } from '../styledComponents';
+import { ResultsWrapper, StyledModal } from '../styledComponents';
 
 interface CustomModalProps {
   visible: boolean;
