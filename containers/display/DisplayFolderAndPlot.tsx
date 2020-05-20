@@ -132,7 +132,9 @@ const DiplayFolder: FC<FolderProps> = ({
                 {plots.map((plot: PlotDataProps | undefined) => {
                   if (plot) {
                     return (
-                      <LeftSidePlots plot={plot} />
+                      <div key={plot.name}>
+                        <LeftSidePlots plot={plot} />
+                      </div>
                     );
                   }
                 })}
