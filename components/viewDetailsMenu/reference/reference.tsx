@@ -11,7 +11,7 @@ import {
   addRun,
   change_value_in_reference_table,
 } from '../../../reducers/reference';
-import { StyledDiv, CustomCheckbox } from '../../styledComponents';
+import { StyledDiv, CustomCheckbox, CustomRow, CustomCol } from '../../styledComponents';
 import {
   StyledForm,
 } from '../../styledComponents';
@@ -47,11 +47,6 @@ export const Reference = ({
 
   const { triples } = state;
 
-  const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
-  };
-
   const router = useRouter();
   const query: QueryProps = router.query;
   const overlayTriples = formTriples(
@@ -64,14 +59,8 @@ export const Reference = ({
 
   return (
     <StyledDiv>
-      <StyledForm
-        layout={'inline'}
-        {...layout}
-        name="search_form"
-        className="fieldLabel"
-        initialValues={{ remember: true }}
-      >
-        <Row>
+      <CustomRow>
+        <CustomCol space={'2'}>
           <FormItem
             name="CustomizeAll"
           >
@@ -90,42 +79,42 @@ export const Reference = ({
               Check All
           </CustomCheckbox>
           </FormItem>
-          <Col>
-            <FormItem
-              name="OverlayPosition"
-              label="Position:">
-              <OverlayOptions/>
-            </FormItem>
-          </Col>
-          <Col>
-            <FormItem>
-              <CustomCheckbox
-                onClick={(e: any) => setNormalize(e.target.checked)}
-                checked={normalize}
-              >
-                Normalize
+        </CustomCol>
+        <CustomCol space={'2'}>
+          <FormItem
+            name="OverlayPosition"
+            label="Position:">
+            <OverlayOptions />
+          </FormItem>
+        </CustomCol>
+        <CustomCol space={'2'}>
+          <FormItem>
+            <CustomCheckbox
+              onClick={(e: any) => setNormalize(e.target.checked)}
+              checked={normalize}
+            >
+              Normalize
                </CustomCheckbox>
-            </FormItem>
-          </Col>
-          <Col>
-          </Col>
-        </Row>
-        <CustomModal
-          dispatch={dispatch}
-          visible={state.open}
-          id={selectedTriple.id}
-          state={state}
-        />
-        <OverlayRuns
-          triples={triples}
-          state={state}
-          dispatch={dispatch}
-          query={query}
-          setTriple={setTriple}
-          setOverlay={setOverlay}
-          overlayPlots={overlayPlots}
-        />
-      </StyledForm>
+          </FormItem>
+        </CustomCol>
+        <Col>
+        </Col>
+      </CustomRow>
+      <CustomModal
+        dispatch={dispatch}
+        visible={state.open}
+        id={selectedTriple.id}
+        state={state}
+      />
+      <OverlayRuns
+        triples={triples}
+        state={state}
+        dispatch={dispatch}
+        query={query}
+        setTriple={setTriple}
+        setOverlay={setOverlay}
+        overlayPlots={overlayPlots}
+      />
     </StyledDiv>
   );
 };

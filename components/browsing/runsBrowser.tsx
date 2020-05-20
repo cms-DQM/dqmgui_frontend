@@ -59,7 +59,7 @@ export const RunBrowser = () => {
   return (
     <Col >
       <StyledFormItem
-        labelColor="white"
+        labelcolor="white"
         name={currentRunNumber}
         label="Run:">
         <Row justify="center" align="middle">
@@ -104,9 +104,9 @@ export const RunBrowser = () => {
                           <OptionParagraph>
                             <Spin />
                           </OptionParagraph> :
-                          <p onClick={() => setWidth(undefined)}>
+                          <div onClick={() => setWidth(undefined)}>
                             {run}
-                          </p>}
+                          </div>}
                       </Option>
                     );
                   })}

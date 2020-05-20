@@ -48,7 +48,7 @@ export const StyledCollapse = styled(Collapse)`
     padding: ${theme.space.spaceBetween};
   }
 `;
-export const OptionParagraph = styled.p`
+export const OptionParagraph = styled.div`
 display: flex;
 align-items: center;
 justify-content: center;

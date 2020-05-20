@@ -45,7 +45,7 @@ export const OverlayOptions = () => {
           <Option
             value={option.value}
             key={option.toString()}>
-            <p>{option.label}</p>
+            <div>{option.label}</div>
           </Option>
         );
       })}
