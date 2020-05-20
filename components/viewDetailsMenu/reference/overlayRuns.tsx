@@ -1,15 +1,14 @@
 import React from 'react'
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import FormItem from 'antd/lib/form/FormItem';
-import { Checkbox, Col, Form, Row } from 'antd';
+import { Checkbox, Col, Row } from 'antd';
 import { addOverlayData } from '../../plots/plot/singlePlot/utils';
 
 import { TripleProps, QueryProps } from '../../../containers/display/interfaces';
-import { FieldsWrapper, StyledDiv, StyledSecondaryButton, StyledActionButtonRow, StyledButton } from '../../styledComponents';
+import { FieldsWrapper, StyledDiv, StyledSecondaryButton, StyledButton } from '../../styledComponents';
 import { change_value_in_reference_table, toggleModal, removeRun, addRun } from '../../../reducers/reference';
 import { Field } from './field';
 import { filter_plots, filter_valid_runs } from '../utils';
-import { setPlotToOverlay } from '../../../reducers/displayFolderOrPlot';
 import { Container } from './containers';
 import Link from 'next/link';
 
@@ -19,11 +18,11 @@ interface OverlayRunsProps {
   dispatch: any;
   query: QueryProps;
   setTriple(triple: TripleProps): void;
-  dispatch_gloabl: any;
-  state_global: any;
+  overlayPlots: string;
+  setOverlay(overlayPlots: TripleProps[]): void
 }
 
-export const OverlayRuns = ({ state_global, triples, state, dispatch, query, setTriple, dispatch_gloabl }: OverlayRunsProps) => {
+export const OverlayRuns = ({  overlayPlots, setOverlay, triples, state, dispatch, query, setTriple }: OverlayRunsProps) => {
   return (
     <div>
       <Row justify="space-between">
@@ -85,7 +84,7 @@ export const OverlayRuns = ({ state_global, triples, state, dispatch, query, set
                     if (triples.length > 1) {
                       removeRun(triple.id)(state, dispatch);
                       const filteredPlots = filter_plots(triples, triple.id);
-                      setPlotToOverlay(filteredPlots)(dispatch_gloabl);
+                      setOverlay(filteredPlots);
                     }
                   }}
                   icon={<MinusOutlined />}
@@ -104,7 +103,7 @@ export const OverlayRuns = ({ state_global, triples, state, dispatch, query, set
                 htmlType="submit"
                 onClick={() => {
                   const filtered: TripleProps[] = filter_valid_runs(triples);
-                  setPlotToOverlay(filtered)(dispatch_gloabl);
+                  setOverlay(filtered);
                 }}
               >
                 <Link
@@ -114,7 +113,7 @@ export const OverlayRuns = ({ state_global, triples, state, dispatch, query, set
                       run_number: query.run_number,
                       dataset_name: query.dataset_name,
                       folder_path: query.folder_path,
-                      overlay: state_global.overlay,
+                      overlay: overlayPlots,
                       overlay_data: `${addOverlayData(triples)}`,
                       selected_plots: query.selected_plots,
                     },

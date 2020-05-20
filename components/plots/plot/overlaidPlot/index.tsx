@@ -1,21 +1,29 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
-import { ParamsForApiProps } from '../../../../containers/display/interfaces';
+import { QueryProps, ParamsForApiProps } from '../../../../containers/display/interfaces';
 import { OnSideOverlaidPlots } from './onSideOverlaidPlots';
 import { OverlaidPlotImage } from './overlaidPlotImage';
 import { PlotDataProps } from '../../../../containers/display/interfaces';
+import { store } from '../../../../contexts/leftSideContext';
+import { useRouter } from 'next/router';
+import { FormatParamsForAPI } from '../singlePlot/utils';
 
 interface OverlaidPlotProps {
-  params_for_api: ParamsForApiProps;
   plot: PlotDataProps;
   isPlotSelected: boolean;
+  params_for_api: ParamsForApiProps
 }
 
 export const OverlaidPlot = ({
   plot,
-  params_for_api,
   isPlotSelected,
+  params_for_api,
 }: OverlaidPlotProps) => {
+  
+  const globalState = useContext(store)
+  const router = useRouter();
+  const query: QueryProps = router.query;
+
   return (
     <>
       {params_for_api.overlay === 'onSide' ? (

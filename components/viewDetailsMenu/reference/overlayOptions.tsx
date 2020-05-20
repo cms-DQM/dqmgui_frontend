@@ -8,17 +8,11 @@ import {
   OptionProps,
   QueryProps,
 } from '../../../containers/display/interfaces';
-import Link from 'next/link';
 import { StyledSelect } from '../styledComponents';
 
 const { Option } = Select
 
-interface OverlayOptionsProps {
-  current_value?: any;
-  dispatch_gloabl: any;
-}
-
-export const OverlayOptions = ({ }: OverlayOptionsProps) => {
+export const OverlayOptions = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
   const settedOverlay = query.overlay ? query.overlay : overlayOptions[0].value;

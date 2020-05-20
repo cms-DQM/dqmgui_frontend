@@ -5,6 +5,7 @@ import { ThemeProvider, createGlobalStyle } from 'styled-components';
 import { Reset } from 'styled-reset';
 
 import { theme } from '../styles/theme';
+import {LeftSideStateProvider} from '../contexts/leftSideContext'
 
 const GlobalStyles = createGlobalStyle`
   html {
@@ -51,6 +52,7 @@ export default class MyApp extends App {
   public render() {
     const { Component, pageProps } = this.props;
     return (
+      <LeftSideStateProvider>
       <ThemeProvider theme={theme}>
         <>
           <Reset />
@@ -58,6 +60,7 @@ export default class MyApp extends App {
           <Component {...pageProps} />
         </>
       </ThemeProvider>
+      </LeftSideStateProvider>
     );
   }
 }
