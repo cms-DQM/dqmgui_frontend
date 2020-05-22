@@ -22,7 +22,7 @@ export const DropdownMenu = ({ options, defaultValue, action }: MenuProps) => {
             setValue(option);
           }}
         >
-          <p>{option.label}</p>
+          <div>{option.label}</div>
         </Menu.Item>
       ))}
     </Menu>

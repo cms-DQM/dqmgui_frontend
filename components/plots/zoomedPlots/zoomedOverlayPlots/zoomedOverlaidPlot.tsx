@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { get_overlaied_plots_urls } from '../../../../config/config';
 import {
   ParamsForApiProps,
-  SizeProps,
   PlotDataProps,
   QueryProps,
 } from '../../../../containers/display/interfaces';
@@ -24,18 +23,12 @@ import { removePlotFromSelectedPlots } from '../../plot/singlePlot/utils';
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
   params_for_api: ParamsForApiProps;
-  size: SizeProps;
 }
 
 export const ZoomedOverlaidPlot = ({
   selected_plot,
   params_for_api,
-  size,
 }: ZoomedPlotsProps) => {
-  params_for_api.height = size.h;
-  params_for_api.width = size.w;
-  params_for_api.plot_name = selected_plot.name;
-
   const router = useRouter();
   const query: QueryProps = router.query;
 
@@ -75,8 +68,8 @@ export const ZoomedOverlaidPlot = ({
             <MinusIcon />
           </Link>
         </Column>
-        <ImageDiv id={selected_plot.name} width={size.w} height={size.h}>
-          <Image src={source} width={size.w} height={size.h} />
+        <ImageDiv id={selected_plot.name} width={params_for_api.width} height={params_for_api.height}>
+          <Image src={source} width={params_for_api.width} height={params_for_api.height} />
         </ImageDiv>
       </StyledPlotRow>
     </StyledCol>

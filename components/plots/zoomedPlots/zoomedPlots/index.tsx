@@ -1,35 +1,36 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
-  ParamsForApiProps,
-  SizeProps,
   PlotDataProps,
+  QueryProps,
 } from '../../../../containers/display/interfaces';
 import { ZoomedPlot } from './zoomedPlot';
 import { ZoomedJSROOTPlot } from './zoomedJSROOTPlot';
 import { ZoomedPlotsWrapper } from '../../../styledComponents';
+import { useRouter } from 'next/router';
+import { store } from '../../../../contexts/rightSideContext';
+import { FormatParamsForAPI } from '../../plot/singlePlot/utils';
 
 interface ZoomedPlotsProps {
   selected_plots: PlotDataProps[];
-  params_for_api: ParamsForApiProps;
-  jsroot_mode: boolean;
-  size: SizeProps;
 }
 
 export const ZoomedPlots = ({
   selected_plots,
-  params_for_api,
-  jsroot_mode,
-  size,
 }: ZoomedPlotsProps) => {
+
+  const globalState = useContext(store)
+  const router = useRouter();
+  const query: QueryProps = router.query;
+
   return (
     <ZoomedPlotsWrapper>
       {selected_plots.map((selected_plot: any) => {
-        if (jsroot_mode) {
+        const params_for_api = FormatParamsForAPI(globalState, query, selected_plot.name, selected_plot.dir)
+        if (globalState.JSROOTmode) {
           return (
             <ZoomedJSROOTPlot
               selected_plot={selected_plot}
               params_for_api={params_for_api}
-              size={size}
               key={selected_plot.name}
             />
           );
@@ -38,7 +39,6 @@ export const ZoomedPlots = ({
           <ZoomedPlot
             selected_plot={selected_plot}
             params_for_api={params_for_api}
-            size={size}
             key={selected_plot.name}
           />
         );

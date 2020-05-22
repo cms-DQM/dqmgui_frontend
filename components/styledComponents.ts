@@ -1,4 +1,4 @@
-import { Form, Button, Input, Tag, Row, AutoComplete, Checkbox, Radio } from 'antd';
+import { Form, Button, Input, Tag, Row, AutoComplete, Checkbox, Radio, Col } from 'antd';
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import styled from 'styled-components';
 import { QuestionOutlined } from '@ant-design/icons';
@@ -45,9 +45,9 @@ export const StyledQuestionTag = styled(Tag)`
   border-radius: 100px;
 `;
 
-export const StyledFormItem = styled(Form.Item) <{ labelColor?: string }>`
+export const StyledFormItem = styled(Form.Item) <{ labelcolor?: string }>`
   .ant-form-item-label > label {
-    color: ${(props) => props.labelColor ? props.labelColor : theme.colors.common.black};
+    color: ${(props) => props.labelcolor ? props.labelcolor : theme.colors.common.black};
     padding-right: ${theme.space.spaceBetween};
     width: fit-content;
     padding: ${theme.space.spaceBetween};
@@ -70,7 +70,7 @@ export const StyledAutocomplete = styled(AutoComplete)`
   }
 `;
 
-export const StyledForm = styled(Form)`
+export const StyledForm = styled.div`
   flex-direction: column;
   width: fit-content;
 `;
@@ -135,4 +135,26 @@ export const CustomCheckbox = styled(Checkbox) <{ color?: string }>`
 `
 export const CustomParagraph = styled.p<{ color?: string }>`
   color: ${(props) => props.color ? props.color : theme.colors.common.black};
+`
+export const CustomRow = styled(Row) <{ display?: string, justifycontent?: string, space?: string, alignitems?: string }>`
+  display: ${(props) => props.display ? props.display : ''};
+  justify-content: ${(props) => props.justifycontent ? props.justifycontent : ''};
+  padding: ${(props) => props.space ? theme.space.padding : ''};
+  align-items: ${(props) => props.alignitems ? props.alignitems : ''};
+`
+
+export const CustomCol = styled(Col) <{ display?: string, justifycontent?: string, space?: string, alignitems?: string }>`
+  display: ${(props) => props.display ? props.display : ''};
+  justify-content: ${(props) => props.justifycontent ? props.justifycontent : ''};
+  padding-right: ${(props) => props.space ? `calc(${theme.space.padding}*${props.space})` : ''};
+  align-items: ${(props) => props.alignitems ? props.alignitems : ''};
+  height: fit-content;
+`
+export const CustomDiv = styled(Col) <{ display?: string, justifycontent?: string, space?: string, alignitems?: string }>`
+  display: ${(props) => props.display ? props.display : ''};
+  justify-content: ${(props) => props.justifycontent ? props.justifycontent : ''};
+  padding-right: ${(props) => props.space ? `calc(${theme.space.padding}*${props.space})` : ''};
+  align-items: ${(props) => props.alignitems ? props.alignitems : ''};
+  height: fit-content;
+  width: fit-content;
 `

@@ -40,9 +40,9 @@ export const Container = ({
   }, []);
 
   return (
-    <div style={{ paddingRight: 8 }}>
+    <>
       <Text>{field_name}: </Text>
       <Text strong >{inputValue}</Text>
-    </div>
+    </>
   );
 };

@@ -1,9 +1,10 @@
 import React from 'react';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 import { get_plot_url, root_url } from '../../../../config/config';
 import {
   ParamsForApiProps,
-  SizeProps,
   PlotDataProps,
   QueryProps,
 } from '../../../../containers/display/interfaces';
@@ -17,25 +18,17 @@ import {
   Image,
 } from '../../../../containers/display/styledComponents';
 import { removePlotFromSelectedPlots } from '../../plot/singlePlot/utils';
-import { useRouter } from 'next/router';
-import Link from 'next/link';
+
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
   params_for_api: ParamsForApiProps;
-  size: SizeProps;
 }
 
 export const ZoomedPlot = ({
   selected_plot,
   params_for_api,
-  size,
 }: ZoomedPlotsProps) => {
-  params_for_api.plot_name = selected_plot.name;
-  params_for_api.height = size.h;
-  params_for_api.width = size.w;
-  params_for_api.folders_path = selected_plot.dir;
-
   const plot_url = get_plot_url(params_for_api);
   const source = `${root_url}${plot_url}`;
   const router = useRouter();
@@ -70,8 +63,8 @@ export const ZoomedPlot = ({
             <MinusIcon />
           </Link>
         </Column>
-        <ImageDiv id={selected_plot.name} width={size.w} height={size.h}>
-          <Image src={source} width={size.w} height={size.h} />
+        <ImageDiv id={selected_plot.name} width={params_for_api.width} height={params_for_api.height}>
+          <Image src={source} width={params_for_api.width} height={params_for_api.height} />
         </ImageDiv>
       </StyledPlotRow>
     </StyledCol>

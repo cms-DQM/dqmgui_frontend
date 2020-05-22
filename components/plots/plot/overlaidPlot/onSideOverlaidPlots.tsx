@@ -18,20 +18,24 @@ import {
 } from '../../../../containers/display/styledComponents';
 import { getOnSideOverlaidPlots } from './utils';
 import {
-  removePlotFromSelectedPlots,
-  addToSelectedPlots,
+  addPlotToRightSide,
+  removePlotFromRightSide,
+  scroll,
+  scrollToBottom,
 } from '../singlePlot/utils';
 
 interface OnSideOverlaidPlotsProps {
   params_for_api: ParamsForApiProps;
   plot: PlotDataProps;
   isPlotSelected: boolean;
+  imageRefScrollDown:any;
 }
 
 export const OnSideOverlaidPlots = ({
   plot,
   params_for_api,
   isPlotSelected,
+  imageRefScrollDown,
 }: OnSideOverlaidPlotsProps) => {
   params_for_api.plot_name = plot.name;
   const onsidePlotsURLs: string[] = getOnSideOverlaidPlots(params_for_api);
@@ -39,48 +43,6 @@ export const OnSideOverlaidPlots = ({
   const router = useRouter();
   const query: QueryProps = router.query;
   const imageRef = useRef(null);
-
-  const addPlotToRightSide = () => Router.replace({
-    pathname: '/',
-    query: {
-      run_number: query.run_number,
-      dataset_name: query.dataset_name,
-      folder_path: query.folder_path,
-      overlay: query.overlay,
-      overlay_data: query.overlay_data,
-      //addig selected plots name and directories to url
-      selected_plots: `${addToSelectedPlots(
-        query.selected_plots,
-        plot
-      )}`,
-    },
-  })
-
-  const removePlotFromRightSide = () => Router.replace({
-    pathname: '/',
-    query: {
-      run_number: query.run_number,
-      dataset_name: query.dataset_name,
-      folder_path: query.folder_path,
-      overlay: query.overlay,
-      overlay_data: query.overlay_data,
-      selected_plots: `${removePlotFromSelectedPlots(
-        query.selected_plots,
-        plot
-      )}`,
-    },
-  })
-
-  const scroll = () => {
-    if (imageRef) {
-      //@ts-ignore
-      imageRef.current.scrollIntoView({
-        behavior: 'smooth',
-        block: 'center',
-        inline: 'center',
-      });
-    }
-  }
 
   return (
     <OnSidePlotsWrapper>
@@ -98,17 +60,18 @@ export const OnSideOverlaidPlots = ({
                 <PlotNameCol>{plot.name}</PlotNameCol>
                 <Column>
                   {isPlotSelected ? (
-                    <MinusIcon onClick={removePlotFromRightSide} />
+                    <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
                   ) : (
                       <PlusIcon onClick={async () => {
-                        await addPlotToRightSide()
-                        scroll()
+                        await addPlotToRightSide(query, plot)
+                        scroll(imageRef)
+                        scrollToBottom(imageRefScrollDown)
                       }} />
                     )}
                 </Column>
                 <div onClick={async () => {
-                  isPlotSelected ? await removePlotFromRightSide() : await addPlotToRightSide()
-                  scroll()
+                  isPlotSelected ? await removePlotFromRightSide(query, plot) : await addPlotToRightSide(query, plot)
+                  scroll(imageRef)
                 }}>
                   <img alt={plot.name} src={sourceForOnePlot} />
                 </div>

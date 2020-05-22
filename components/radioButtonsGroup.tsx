@@ -35,7 +35,7 @@ export const RadioButtonsGroup = ({
         return (
           <StyledRadio
             color={radioColor}
-            key={getOptionValue(option.value)}
+            key={option.value}
             value={getOptionValue(option)}
           >
             {getOptionLabel(option)}

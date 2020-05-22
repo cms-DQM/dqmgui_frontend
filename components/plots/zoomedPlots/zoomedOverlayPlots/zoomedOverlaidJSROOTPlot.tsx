@@ -7,7 +7,6 @@ import { get_jroot_plot } from '../../../../config/config';
 import {
   ParamsForApiProps,
   TripleProps,
-  SizeProps,
   PlotDataProps,
   QueryProps,
 } from '../../../../containers/display/interfaces';
@@ -26,19 +25,12 @@ import { removePlotFromSelectedPlots } from '../../plot/singlePlot/utils';
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;
   params_for_api: ParamsForApiProps;
-  size: SizeProps;
 }
 
 export const ZoomedOverlaidJSROOTPlot = ({
   selected_plot,
   params_for_api,
-  size,
 }: ZoomedJSROOTPlotsProps) => {
-  params_for_api.height = size.h;
-  params_for_api.width = size.w;
-  params_for_api.plot_name = selected_plot.name;
-  params_for_api.folders_path = selected_plot.dir;
-
   const router = useRouter();
   const query: QueryProps = router.query;
 
@@ -48,17 +40,17 @@ export const ZoomedOverlaidJSROOTPlot = ({
 
   const overlaid_plots_runs_and_datasets: any[] = params_for_api?.overlay_plot
     ? params_for_api.overlay_plot.map((plot: TripleProps) => {
-        const copy: any = { ...params_for_api };
+      const copy: any = { ...params_for_api };
 
-        if (plot.dataset_name) {
-          copy.dataset_name = plot.dataset_name;
-        }
-        copy.run_number = plot.run_number;
-        const { data } = useRequest(get_jroot_plot(copy), {}, [
-          selected_plot.name,
-        ]);
-        return data;
-      })
+      if (plot.dataset_name) {
+        copy.dataset_name = plot.dataset_name;
+      }
+      copy.run_number = plot.run_number;
+      const { data } = useRequest(get_jroot_plot(copy), {}, [
+        selected_plot.name,
+      ]);
+      return data;
+    })
     : [];
 
   overlaid_plots_runs_and_datasets.push(data);
@@ -154,14 +146,14 @@ export const ZoomedOverlaidJSROOTPlot = ({
         <ImageDiv
           style={{ display: params_for_api.normalize ? '' : 'none' }}
           id={`hist_${selected_plot.name}`}
-          width={size.w}
-          height={size.h}
+          width={params_for_api.width}
+          height={params_for_api.height}
         />
         <ImageDiv
           style={{ display: params_for_api.normalize ? 'none' : '' }}
           id={`nostack_${selected_plot.name}`}
-          width={size.w}
-          height={size.h}
+          width={params_for_api.width}
+          height={params_for_api.height}
         />
       </StyledPlotRow>
     </StyledCol>
