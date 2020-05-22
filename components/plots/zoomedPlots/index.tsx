@@ -1,57 +1,45 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import {
-  ParamsForApiProps,
-  SizeProps,
-  CustomizeProps,
+
   PlotDataProps,
+  QueryProps,
 } from '../../../containers/display/interfaces';
 
 import { ZoomedPlots as ZoomedOverlaidPlots } from './zoomedOverlayPlots';
 import { ZoomedPlots as ZoomedPlotsWithoutOverlay } from './zoomedPlots';
 import { ViewDetailsMenu } from './viewDetails';
-import { setJSROOTMode } from '../../../reducers/displayFolderOrPlot';
+import { useRouter } from 'next/router';
+import { store } from '../../../contexts/leftSideContext';
 
 interface ZoomedPlotsProps {
   selected_plots: PlotDataProps[];
-  params_for_api: ParamsForApiProps;
-  jsroot_mode: boolean;
-  dispatch: any;
-  size: SizeProps;
-  customizeProps: CustomizeProps;
 }
 
 export const ZoomedPlots = ({
-  jsroot_mode,
-  params_for_api,
   selected_plots,
-  dispatch,
-  size,
-  customizeProps,
 }: ZoomedPlotsProps) => {
+  const router = useRouter();
+  const query: QueryProps = router.query;
+  const globalState = useContext(store)
 
+  const { setImageRefScrollDown } = globalState
+
+  const rightSideRef = useRef(null)
   useEffect(() => {
-    const disableJSROOT = setJSROOTMode(false)(dispatch);
-    return disableJSROOT;
-  }, []);
+    setImageRefScrollDown(rightSideRef)
+  }, [])
 
-  params_for_api.customizeProps = customizeProps;
-
+  const overlay_plot = query.overlay_data
   return (
-    <div style={{ width: '100%' }} >
-      <ViewDetailsMenu dispatch={dispatch} jsroot_mode={jsroot_mode} />
-      {params_for_api.overlay_plot && params_for_api.overlay_plot.length > 0 ? (
+    <div style={{ width: '100%', overflow: 'scroll' }} ref={rightSideRef}>
+      <ViewDetailsMenu />
+      {overlay_plot ? (
         <ZoomedOverlaidPlots
           selected_plots={selected_plots}
-          params_for_api={params_for_api}
-          jsroot_mode={jsroot_mode}
-          size={size}
         />
       ) : (
           <ZoomedPlotsWithoutOverlay
-            jsroot_mode={jsroot_mode}
             selected_plots={selected_plots}
-            params_for_api={params_for_api}
-            size={size}
           />
         )}
     </div>
