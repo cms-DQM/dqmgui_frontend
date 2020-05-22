@@ -8,9 +8,6 @@ import { PlotDataProps, QueryProps } from './interfaces';
 import { ZoomedPlots } from '../../components/plots/zoomedPlots';;
 import { ViewDetailsMenu } from '../../components/viewDetailsMenu';
 import {
-  Icon,
-  DirecotryWrapper,
-  StyledA,
   Wrapper,
   DivWrapper,
 } from './styledComponents';
@@ -21,7 +18,7 @@ import { SpinnerWrapper, Spinner } from '../search/styledComponents';
 import { useRouter } from 'next/router';
 import { RightSideStateProvider } from '../../contexts/rightSideContext';
 import { LeftSidePlots } from '../../components/plots/plot';
-
+import {Directories } from './directories'
 interface DirectoryInterface {
   subdir: string;
 }
@@ -110,25 +107,7 @@ const DiplayFolder: FC<FolderProps> = ({
             </SpinnerWrapper>
           ) : (
               <>
-                {directories.map((directory_name: any) => (
-                  <Col span={4} key={directory_name}>
-                    <DirecotryWrapper>
-                      <Icon />
-                      <Link
-                        href={{
-                          pathname: '/',
-                          query: {
-                            run_number: run_number,
-                            dataset_name: dataset_name,
-                            folder_path: `${folder_path}/${directory_name}`,
-                          },
-                        }}
-                      >
-                        <StyledA>{directory_name}</StyledA>
-                      </Link>
-                    </DirecotryWrapper>
-                  </Col>
-                ))}
+              <Directories directories={directories ? directories: []}/>
                 {plots.map((plot: PlotDataProps | undefined) => {
                   if (plot) {
                     return (
