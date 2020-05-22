@@ -2,7 +2,7 @@ import React, { createContext, useState, ReactElement } from 'react';
 
 import { sizes } from '../components/constants';
 import { SizeProps, PlotProps, TripleProps } from '../containers/display/interfaces';
-import {overlayOptions} from '../components/constants'
+import { overlayOptions } from '../components/constants'
 
 export interface LeftSideStateProviderProps {
   children: ReactElement;
@@ -15,6 +15,7 @@ export interface LeftSideState {
   overlayPosition: string;
   overlay: PlotProps[]
   overlayPlots: TripleProps[];
+  workspaceFolders: string[];
 }
 
 export const initialState: any = {
@@ -42,8 +43,9 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
   const [overlayPosition, setOverlaiPosition] = useState(initialState.overlayPosition)
   const [overlayPlots, setOverlay] = useState(initialState.overlayPlots)
   const [imageRefScrollDown, setImageRefScrollDown] = useState(null)
+  const [workspaceFolders, setWorkspaceFolders] = React.useState([])
 
-console.log('provider update')
+  console.log('provider update')
   return <Provider value={{
     size, setSize,
     normalize, setNormalize,
@@ -51,7 +53,8 @@ console.log('provider update')
     plotsWhichAreOverlaid, setPlotsWhichAreOverlaid,
     overlayPosition, setOverlaiPosition,
     overlayPlots, setOverlay,
-    imageRefScrollDown, setImageRefScrollDown
+    imageRefScrollDown, setImageRefScrollDown,
+    workspaceFolders, setWorkspaceFolders
   }}>{children}</Provider>;
 }
 
