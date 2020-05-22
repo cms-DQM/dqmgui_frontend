@@ -18,7 +18,7 @@ export const LeftSidePlots = ({ plot }: LeftSidePlotsProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
   const selectedPlots = query.selected_plots;
-
+  const { imageRefScrollDown } = globalState
   const selected_plots: PlotDataProps[] = getSelectedPlots(selectedPlots);
   const params_for_api = FormatParamsForAPI(globalState, query, plot.name, plot.dir)
   return (
@@ -28,6 +28,7 @@ export const LeftSidePlots = ({ plot }: LeftSidePlotsProps) => {
           key={plot.name}
           plot={plot}
           params_for_api={params_for_api}
+          imageRefScrollDown={imageRefScrollDown}
           isPlotSelected={isPlotSelected(
             selected_plots,
             plot.name
@@ -36,6 +37,7 @@ export const LeftSidePlots = ({ plot }: LeftSidePlotsProps) => {
       ) : (
           <Plot
             plot={plot}
+            imageRefScrollDown={imageRefScrollDown}
             params_for_api={params_for_api}
             key={plot.name}
             isPlotSelected={isPlotSelected(

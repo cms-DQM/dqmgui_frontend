@@ -41,6 +41,7 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
   const [plotsWhichAreOverlaid, setPlotsWhichAreOverlaid] = useState({})
   const [overlayPosition, setOverlaiPosition] = useState(initialState.overlayPosition)
   const [overlayPlots, setOverlay] = useState(initialState.overlayPlots)
+  const [imageRefScrollDown, setImageRefScrollDown] = useState(null)
 
 console.log('provider update')
   return <Provider value={{
@@ -49,7 +50,8 @@ console.log('provider update')
     stats, setStats,
     plotsWhichAreOverlaid, setPlotsWhichAreOverlaid,
     overlayPosition, setOverlaiPosition,
-    overlayPlots, setOverlay
+    overlayPlots, setOverlay,
+    imageRefScrollDown, setImageRefScrollDown
   }}>{children}</Provider>;
 }
 

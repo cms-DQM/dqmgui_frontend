@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { get_plot_url, root_url } from '../../../../config/config';
 import {
   ParamsForApiProps,
-  SizeProps,
   PlotDataProps,
   QueryProps,
 } from '../../../../containers/display/interfaces';

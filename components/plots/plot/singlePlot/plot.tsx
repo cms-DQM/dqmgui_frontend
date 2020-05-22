@@ -16,16 +16,16 @@ import {
   PlusIcon,
   MinusIcon,
 } from '../../../../containers/display/styledComponents';
-import { addPlotToRightSide, removePlotFromRightSide, scroll } from './utils';
-import { store } from '../../../../contexts/leftSideContext';
+import { addPlotToRightSide, removePlotFromRightSide, scroll, scrollToBottom } from './utils';
 
 interface PlotProps {
   plot: PlotDataProps;
   isPlotSelected: boolean;
   params_for_api: ParamsForApiProps;
+  imageRefScrollDown: any;
 }
 
-export const Plot = ({ plot, isPlotSelected, params_for_api }: PlotProps) => {
+export const Plot = ({ plot, isPlotSelected, params_for_api, imageRefScrollDown }: PlotProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
 
@@ -51,6 +51,7 @@ export const Plot = ({ plot, isPlotSelected, params_for_api }: PlotProps) => {
                 <PlusIcon onClick={async () => {
                   await addPlotToRightSide(query, plot)
                   scroll(imageRef)
+                  scrollToBottom(imageRefScrollDown)
                 }} />
               )}
           </Column>
