@@ -45,7 +45,6 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
   const [imageRefScrollDown, setImageRefScrollDown] = useState(null)
   const [workspaceFolders, setWorkspaceFolders] = React.useState([])
 
-  console.log('provider update')
   return <Provider value={{
     size, setSize,
     normalize, setNormalize,

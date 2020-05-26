@@ -36,3 +36,7 @@ export const getSelectedPlots = (plotsQuery: string | undefined) => {
     return plotObject;
   });
 };
+
+export const getFolderPathToQuery = (previuosFolderPath: string | undefined, currentSelected: string) => {
+  return previuosFolderPath ? `${previuosFolderPath}/${currentSelected}` : `/${currentSelected}`
+}
