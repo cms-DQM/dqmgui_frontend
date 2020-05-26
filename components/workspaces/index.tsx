@@ -9,6 +9,7 @@ import { store } from '../../contexts/leftSideContext';
 import { useRouter } from 'next/router';
 import { setWorkspaceToQuery } from './utils';
 import { QueryProps } from '../../containers/display/interfaces';
+import { useFilterFoldersByWorkspaces } from '../../hooks/useFolderLayers';
 
 const { TabPane } = Tabs;
 
@@ -18,26 +19,27 @@ interface WorspaceProps {
 }
 const Workspaces = () => {
   const [openWorkspaces, toggleWorkspaces] = React.useState(false)
-  //@ts-ignore
-
-  const globalState = React.useContext(store)
-  const { workspaceFolders, setWorkspaceFolders } = globalState
 
   const router = useRouter();
   const query: QueryProps = router.query;
+
   const [workspace, setWorkspace] = React.useState(query.workspace)
+  const [folderPath, setFolderPath] = React.useState<string[]>([])
+
+  const { setAvailableFolders } = useFilterFoldersByWorkspaces(query)
 
   React.useEffect(() => {
-    setWorkspaceToQuery(query, workspaces[0].workspaces[0].label)
-    if(query.workspace){
-      setWorkspace(query.workspace)
-    }else{
+    const workspaceValue = query.workspace ? query.workspace : workspaces[0].workspaces[0].label
+    setWorkspaceToQuery(query, workspaceValue)
+    setWorkspace(query.workspace)
+    if (!query.workspace) {
       setWorkspace(workspaces[0].workspaces[0].label)
     }
-    // if (query.workspace) {
-    //   setWorkspace(query.workspace)
-    // }
   }, [])
+
+  React.useEffect(() => {
+    setAvailableFolders(folderPath)
+  }, [folderPath, query.folder_path])
 
   return (
     <Form>
@@ -60,13 +62,13 @@ const Workspaces = () => {
                 tab={workspace.label}
               >
                 {workspace.workspaces.map((subWorkspace: any) => (
-                  <Button type="link" onClick={() => {
+                  <Button type="link" onClick={async () => {
                     setWorkspace(subWorkspace.label)
                     toggleWorkspaces(!openWorkspaces)
-                    setWorkspaceFolders(subWorkspace.foldersPath)
+                    setFolderPath(subWorkspace.foldersPath)
                     //if workspace is selected, folder_path in query is set to ''. Then we can regonize
                     //that workspace is selected, and wee need to filter the forst layer of folders.
-                    setWorkspaceToQuery(query, subWorkspace.label)
+                    await setWorkspaceToQuery(query, subWorkspace.label)
                   }}>{subWorkspace.label}</Button>
                 ))}
               </TabPane>

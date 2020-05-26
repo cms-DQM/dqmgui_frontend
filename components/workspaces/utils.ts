@@ -29,3 +29,12 @@ export const setWorkspaceToQuery = (query: QueryProps, workspace: string) => {
   })
 
 }
+
+export const removeFirstSlash = (path: string) => {
+  const firstChar = path.substring(0, 1)
+  if (firstChar === "/") {
+    return path.substring(1, path.length)
+  } else {
+    return path
+  }
+}

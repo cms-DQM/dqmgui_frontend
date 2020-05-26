@@ -11,21 +11,15 @@ interface FoldersFilter {
 }
 
 const getFilteredDirectories = (query: QueryProps, workspaceFolders: string[], directories: (string | undefined)[]) => {
-  //when workspace is selected folder path in query is set to '', thats why in condition is cheking is !query.folder_path
-  // after that is checking is workspaceFolders array from context is not empty;
-  // if it's not- then we taking intersection between all directories and workspaceFolders
-  if (!query.folder_path && workspaceFolders.length > 0) {
+  //if workspaceFolders array from context is not empty we taking intersection between all directories and workspaceFolders
+  // workspace folders are fileterd folders array by selected workspace
+  if (workspaceFolders.length > 0) {
     //@ts-ignore
     const filteredDirectories = directories.filter((directory: string) => workspaceFolders.includes(directory))
-    console.log(workspaceFolders)
     return filteredDirectories
   }
   // if folder_path and workspaceFolders are empty, we return all direstories 
-  else if (!query.folder_path && workspaceFolders.length === 0) {
-    return directories
-  }
-  // if folder_path is NOT empty, we return all direstories, because was selected wnated folder and noo additional filterig is needed
-  else if (query.folder_path) {
+  else if (workspaceFolders.length === 0) {
     return directories
   }
 }
@@ -51,6 +45,7 @@ export const Directories = ({ directories }: FoldersFilter) => {
                   run_number: query.run_number,
                   dataset_name: query.dataset_name,
                   folder_path: `${query.folder_path}/${directory_name}`,
+                  workspace: query.workspace,
                 },
               }}
             >
