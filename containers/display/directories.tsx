@@ -5,6 +5,7 @@ import { store } from '../../contexts/leftSideContext';
 import { Col } from 'antd';
 import { DirecotryWrapper, StyledA, Icon } from './styledComponents';
 import Link from 'next/link';
+import { getFolderPathToQuery } from './utils';
 
 interface FoldersFilter {
   directories: (string | undefined)[]
@@ -44,7 +45,7 @@ export const Directories = ({ directories }: FoldersFilter) => {
                 query: {
                   run_number: query.run_number,
                   dataset_name: query.dataset_name,
-                  folder_path: `${query.folder_path}/${directory_name}`,
+                  folder_path: getFolderPathToQuery(query.folder_path, directory_name),
                   workspace: query.workspace,
                 },
               }}

@@ -31,7 +31,7 @@ export const useFilterFoldersByWorkspaces = (query: QueryProps) => {
         const matchBeginingInAvailableFolders = foldersPath.search(folderPathFromQueryWithoutFirstSlash) //searching in available folders, is clicked folder is part of availableFolders path
 
         if (matchBeginingInAvailableFolders >= 0) {
-          
+
           // if selected folder is a part of available folderspath, we trying to get further layer folders.
           //matchEnd is the index, which indicates the end of seleced folder path string (we can see it in url) in available path
           // (availble path we set with setAvailableFolders action)
