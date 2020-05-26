@@ -26,6 +26,7 @@ export const OverlayOptions = () => {
         run_number: query.run_number,
         dataset_name: query.dataset_name,
         folder_path: query.folder_path,
+        workspace: query.workspace,
         overlay: value,
         overlay_data: query.overlay_data,
         selected_plots: query.selected_plots,

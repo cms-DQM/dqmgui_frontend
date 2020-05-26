@@ -65,6 +65,7 @@ export const addPlotToRightSide = (query: QueryProps, plot: PlotDataProps) => Ro
     run_number: query.run_number,
     dataset_name: query.dataset_name,
     folder_path: query.folder_path,
+    workspace: query.workspace,
     overlay: query.overlay,
     overlay_data: query.overlay_data,
     //addig selected plots name and directories to url
@@ -81,6 +82,7 @@ export const removePlotFromRightSide = (query: QueryProps, plot: PlotDataProps) 
     run_number: query.run_number,
     dataset_name: query.dataset_name,
     folder_path: query.folder_path,
+    workspace: query.workspace,
     overlay: query.overlay,
     overlay_data: query.overlay_data,
     selected_plots: `${removePlotFromSelectedPlots(

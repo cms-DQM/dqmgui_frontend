@@ -35,6 +35,7 @@ export const DatasetsBrowser = () => {
         run_number: query.run_number,
         dataset_name: currentDataset,
         folder_path: query.folder_path,
+        workspace: query.workspace,
         overlay: query.overlay,
         overlay_data: query.overlay_data,
         selected_plots: query.selected_plots,
