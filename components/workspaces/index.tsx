@@ -5,7 +5,6 @@ import { workspaces } from '../../workspaces/offline'
 import { StyledModal } from '../viewDetailsMenu/styledComponents';
 import Form from 'antd/lib/form/Form';
 import { StyledFormItem } from '../styledComponents';
-import { store } from '../../contexts/leftSideContext';
 import { useRouter } from 'next/router';
 import { setWorkspaceToQuery } from './utils';
 import { QueryProps } from '../../containers/display/interfaces';
