@@ -30,7 +30,7 @@ export const removePlotFromSelectedPlots = (
 export const addToSelectedPlots = (
   plotsQuery: string | undefined,
   plot: PlotDataProps
-) => `${plotsQuery ? plotsQuery + '&' : ''}${plot.dir}/${plot.name}`;
+) => `${plotsQuery ? plotsQuery + '&' : ''}${plot.path}/${plot.name}`;
 
 export const addOverlayData = (triples: TripleProps[] | undefined) => {
   const params =

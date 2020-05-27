@@ -120,9 +120,9 @@ export const ZoomedOverlaidJSROOTPlot = ({
         width={params_for_api.width}
         is_plot_selected={true.toString()}
         nopointer={true.toString()}
-        report={selected_plot.properties.report}
+        // report={selected_plot.properties.report}
       >
-        <PlotNameCol>{selected_plot.name}</PlotNameCol>
+        <PlotNameCol>{selected_plot.displayedName}</PlotNameCol>
         <Column>
           <Link
             href={{

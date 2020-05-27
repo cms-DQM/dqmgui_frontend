@@ -26,6 +26,7 @@ import { Directories } from './directories'
 import { NoResultsFound } from '../search/noResultsFound';
 import { store } from '../../contexts/leftSideContext';
 import { CustomDiv } from '../../components/styledComponents';
+import { useDisplayedName } from '../../hooks/useDisplayName';
 
 interface DirectoryInterface {
   subdir: string;
@@ -33,7 +34,7 @@ interface DirectoryInterface {
 
 export interface PlotInterface {
   obj: string;
-  dir: string;
+  path: string;
   content: any;
   properties: any;
 }
@@ -62,12 +63,12 @@ const DiplayFolder: FC<FolderProps> = ({
 
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
   const directories = getDirectories(contents)
-  const plots = getFormatedPlotsObject(contents)
+  const plots = useDisplayedName(contents, data)
 
   const router = useRouter();
   const query: QueryProps = router.query;
   const selectedPlots = query.selected_plots;
-  const selected_plots: PlotDataProps[] = getSelectedPlots(selectedPlots);
+  const selected_plots: PlotDataProps[] = getSelectedPlots(selectedPlots, plots);
 
   const globalState = React.useContext(store)
   const { workspaceFolders } = globalState;
@@ -99,7 +100,7 @@ const DiplayFolder: FC<FolderProps> = ({
                   if (plot) {
                     return (
                       <div key={plot.name}>
-                        <LeftSidePlots plot={plot} />
+                        <LeftSidePlots plot={plot} selected_plots={selected_plots} />
                       </div>
                     );
                   }

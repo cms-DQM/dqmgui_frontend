@@ -27,7 +27,7 @@ export const ZoomedPlots = ({
   return (
     <ZoomedPlotsWrapper>
       {selected_plots.map((selected_plot: PlotDataProps) => {
-        const params_for_api = FormatParamsForAPI(globalState, query, selected_plot.name, selected_plot.dir)
+        const params_for_api = FormatParamsForAPI(globalState, query, selected_plot.name, selected_plot.path)
 
         if (globalState.JSROOTmode) {
           return (

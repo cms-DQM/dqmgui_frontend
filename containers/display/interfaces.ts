@@ -72,8 +72,9 @@ export interface NavigationSearchFieldsProps {
 
 export interface PlotDataProps {
   name: string;
-  dir: string;
-  properties: PlotPropertiesProps;
+  displayedName: string;
+  path: string;
+  properties?: PlotPropertiesProps;
 }
 
 export interface NavigationSearchFieldsProps {
@@ -110,7 +111,7 @@ export interface PlotPropertiesReportProps {
 
 export interface PlotInterface {
   obj: string;
-  dir: string;
+  path: string;
   content: any;
   properties: any;
 }

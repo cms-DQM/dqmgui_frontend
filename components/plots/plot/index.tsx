@@ -10,17 +10,16 @@ import { OverlaidPlot } from './overlaidPlot';
 
 interface LeftSidePlotsProps {
   plot: PlotDataProps;
+  selected_plots: any;
 }
 
-export const LeftSidePlots = ({ plot }: LeftSidePlotsProps) => {
+export const LeftSidePlots = ({ plot, selected_plots }: LeftSidePlotsProps) => {
 
   const globalState = useContext(store)
   const router = useRouter();
   const query: QueryProps = router.query;
-  const selectedPlots = query.selected_plots;
   const { imageRefScrollDown } = globalState
-  const selected_plots: PlotDataProps[] = getSelectedPlots(selectedPlots);
-  const params_for_api = FormatParamsForAPI(globalState, query, plot.name, plot.dir)
+  const params_for_api = FormatParamsForAPI(globalState, query, plot.name, plot.path)
   return (
     <>
       {query.overlay_data ? (
