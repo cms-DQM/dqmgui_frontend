@@ -4,14 +4,14 @@ export interface WorskapacesProps{
 }
 
 export const summariesWorkspace = [
-  {
-    label: 'Summary',
-    foldersPath: []
-  },
-  {
-    label: 'Reports',
-    foldersPath: []
-  },
+  // {
+  //   label: 'Summary',
+  //   foldersPath: []
+  // },
+  // {
+  //   label: 'Reports',
+  //   foldersPath: []
+  // },
   {
     label: 'Shift',
     foldersPath: ['00 Shift']
@@ -20,45 +20,13 @@ export const summariesWorkspace = [
     label: 'Info',
     foldersPath: ['Info']
   },
-  {
-    label: 'Certification',
-    foldersPath: []
-  },
+  // {
+  //   label: 'Certification',
+  //   foldersPath: []
+  // },
   {
     label: 'Everything',
-    foldersPath: [
-      'Info',
-      '00 Shift',
-      'AlcaBeamMonitor',
-      'AlCaReco',
-      'Btag',
-      'CSC',
-      'CTPPS',
-      'Castor',
-      'Collisions',
-      'DT',
-      'Ecal',
-      'EcalBarrel',
-      'EcalEndcap',
-      'EcalPreshower',
-      'Egamma',
-      'HLT',
-      'Hcal',
-      'Hcal2',
-      'HcalCalib',
-      'JetMet',
-      'L1T',
-      'L1TEMU',
-      'Muons',
-      'OfflinePV',
-      'Pixel',
-      'PixelPhase1',
-      'RPC',
-      'RecoTauV',
-      'SiStrip',
-      'Tau',
-      'Tracking'
-    ]
+    foldersPath: [ ]
   },
 ]
 

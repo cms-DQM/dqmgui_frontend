@@ -24,22 +24,18 @@ const Workspaces = () => {
   const query: QueryProps = router.query;
 
   const [workspace, setWorkspace] = React.useState(query.workspace)
-  const [folderPath, setFolderPath] = React.useState<string[]>([])
 
-  const { setAvailableFolders } = useFilterFoldersByWorkspaces(query)
+  useFilterFoldersByWorkspaces(query)
 
   React.useEffect(() => {
-    const workspaceValue = query.workspace ? query.workspace : workspaces[0].workspaces[0].label
+    const workspaceValue = query.workspace ? query.workspace : workspaces[0].workspaces[2].label //Everything by default
     setWorkspaceToQuery(query, workspaceValue)
     setWorkspace(query.workspace)
     if (!query.workspace) {
-      setWorkspace(workspaces[0].workspaces[0].label)
+      setWorkspace(workspaces[0].workspaces[2].label)//Everything by default
     }
   }, [])
 
-  React.useEffect(() => {
-    setAvailableFolders(folderPath)
-  }, [folderPath, query.folder_path])
 
   return (
     <Form>
@@ -65,7 +61,6 @@ const Workspaces = () => {
                   <Button type="link" onClick={async () => {
                     setWorkspace(subWorkspace.label)
                     toggleWorkspaces(!openWorkspaces)
-                    setFolderPath(subWorkspace.foldersPath)
                     //if workspace is selected, folder_path in query is set to ''. Then we can regonize
                     //that workspace is selected, and wee need to filter the forst layer of folders.
                     await setWorkspaceToQuery(query, subWorkspace.label)
