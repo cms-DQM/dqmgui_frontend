@@ -15,6 +15,7 @@ export const Browser = () => {
   );
 
   return (
+    <Form>
       <WrapperDiv>
         <WrapperDiv>
           <RunBrowser />
@@ -39,5 +40,6 @@ export const Browser = () => {
           )}
         </StyledFormItem>
       </WrapperDiv>
+      </Form>
   );
 };
