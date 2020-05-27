@@ -103,7 +103,7 @@ export const scroll = (imageRef: any) => {
 }
 
 export const scrollToBottom = (imageRef: any) => {
-  if (imageRef.current) {
+  if (imageRef && imageRef.current) {
     imageRef.current.scrollTop  = imageRef.current.scrollHeight
   }
 }

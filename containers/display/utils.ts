@@ -1,4 +1,4 @@
-import { PlotDataProps, PlotInterface, DirectoryInterface } from './interfaces';
+import { PlotDataProps, PlotInterface, DirectoryInterface, QueryProps } from './interfaces';
 import cleanDeep from 'clean-deep';
 import _ from 'lodash';
 
@@ -71,3 +71,17 @@ export const getFormatedPlotsObject = (contents: PlotInterface[]) => (
     })
   ).sort()
 )
+
+export const getFilteredDirectories = (query: QueryProps, workspaceFolders: string[], directories: (string | undefined)[]) => {
+  //if workspaceFolders array from context is not empty we taking intersection between all directories and workspaceFolders
+  // workspace folders are fileterd folders array by selected workspace
+  if (workspaceFolders.length > 0) {
+    //@ts-ignore
+    const filteredDirectories = directories.filter((directory: string) => workspaceFolders.includes(directory))
+    return filteredDirectories
+  }
+  // if folder_path and workspaceFolders are empty, we return all direstories 
+  else if (workspaceFolders.length === 0) {
+    return directories
+  }
+}
