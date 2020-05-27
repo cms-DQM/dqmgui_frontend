@@ -1,5 +1,6 @@
-import { PlotDataProps } from './interfaces';
+import { PlotDataProps, PlotInterface, DirectoryInterface } from './interfaces';
 import cleanDeep from 'clean-deep';
+import _ from 'lodash';
 
 export const getFolderPath = (folders: string[], clickedFolder: string) => {
   const folderIndex = folders.indexOf(clickedFolder);
@@ -40,3 +41,33 @@ export const getSelectedPlots = (plotsQuery: string | undefined) => {
 export const getFolderPathToQuery = (previuosFolderPath: string | undefined, currentSelected: string) => {
   return previuosFolderPath ? `${previuosFolderPath}/${currentSelected}` : `/${currentSelected}`
 }
+
+export const doesPlotExists = (contents: (PlotInterface & DirectoryInterface)[]) =>
+  contents.filter((one_item: PlotInterface | DirectoryInterface) =>
+    one_item.hasOwnProperty('obj')
+  );
+
+// what is streamerinfo? (coming from api, we don't know what it is, so we filtered it out)
+// getContent also sorting data that directories should be displayed firstly, just after them- plots images.
+export const getContents = (data: any) =>
+  data
+    ? _.sortBy(
+      data.contents.filter(
+        (one_item: PlotInterface | DirectoryInterface) =>
+          !one_item.hasOwnProperty('streamerinfo')
+      ),
+      ['subdir']
+    )
+    : [];
+
+export const getDirectories = (contents: DirectoryInterface[]) => cleanDeep(
+  contents.map((content: DirectoryInterface) => content.subdir)
+);
+
+export const getFormatedPlotsObject = (contents: PlotInterface[]) => (
+  cleanDeep(
+    contents.map((content: PlotInterface) => {
+      return { name: content.obj, dir: content.dir && '/' + content.dir, properties: content.properties };
+    })
+  ).sort()
+)

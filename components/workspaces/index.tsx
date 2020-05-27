@@ -48,7 +48,16 @@ const Workspaces = () => {
           title="Worspaces"
           visible={openWorkspaces}
           onCancel={() => toggleWorkspaces(false)}
-
+          footer={[
+            <Button
+              key="Close"
+              onClick={() => {
+                toggleWorkspaces(false)
+              }}
+            >
+              Close
+            </Button>,
+          ]}
         >
           <Tabs defaultActiveKey="1" type="card"
           >
