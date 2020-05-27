@@ -31,7 +31,8 @@ export const Directories = ({ directories }: FoldersFilter) => {
 
   const globalState = React.useContext(store)
   const { workspaceFolders } = globalState;
-  const filteredDirectories = directories ? getFilteredDirectories(query, workspaceFolders, directories) : []
+  //filtering directories by selected workspace
+  const filteredDirectories = getFilteredDirectories(query, workspaceFolders, directories)
 
   return (
     <>

@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { QueryProps } from '../containers/display/interfaces';
 import _ from 'lodash';
+
+import { QueryProps } from '../containers/display/interfaces';
 import { removeFirstSlash } from '../components/workspaces/utils';
 import { store } from '../contexts/leftSideContext';
 import { workspaces } from '../workspaces/offline';

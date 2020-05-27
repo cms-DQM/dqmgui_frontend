@@ -12,13 +12,15 @@ import {
   DivWrapper,
 } from './styledComponents';
 import { FolderPath } from './folderPath';
-import { getSelectedPlots } from './utils';
+import { getSelectedPlots, doesPlotExists, getContents, getDirectories, getFormatedPlotsObject } from './utils';
 import cleanDeep from 'clean-deep';
 import { SpinnerWrapper, Spinner } from '../search/styledComponents';
 import { useRouter } from 'next/router';
 import { RightSideStateProvider } from '../../contexts/rightSideContext';
 import { LeftSidePlots } from '../../components/plots/plot';
-import {Directories } from './directories'
+import { Directories } from './directories'
+import { NoResultsFound } from '../search/noResultsFound';
+
 interface DirectoryInterface {
   subdir: string;
 }
@@ -36,36 +38,13 @@ interface FolderProps {
   dataset_name: string;
 }
 
-const doesPlotExists = (contents: (PlotInterface & DirectoryInterface)[]) =>
-  contents.filter((one_item: PlotInterface | DirectoryInterface) =>
-    one_item.hasOwnProperty('obj')
-  );
 
-// what is streamerinfo? (coming from api, we don't know what it is, so we filtered it out)
-// getContent also sorting data that directories should be displayed firstly, just after them- plots images.
-const getContents = (data: any) =>
-  data
-    ? _.sortBy(
-      data.contents.filter(
-        (one_item: PlotInterface | DirectoryInterface) =>
-          !one_item.hasOwnProperty('streamerinfo')
-      ),
-      ['subdir']
-    )
-    : [];
 
 const DiplayFolder: FC<FolderProps> = ({
   folder_path,
   run_number,
   dataset_name,
 }) => {
-
-  const router = useRouter();
-  const query: QueryProps = router.query;
-  const selectedPlots = query.selected_plots;
-
-  const selected_plots: PlotDataProps[] = getSelectedPlots(selectedPlots);
-
   const {
     data,
     isLoading,
@@ -76,16 +55,13 @@ const DiplayFolder: FC<FolderProps> = ({
   );
 
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
+  const directories = getDirectories(contents)
+  const plots = getFormatedPlotsObject(contents)
 
-  const directories = cleanDeep(
-    contents.map((content: DirectoryInterface) => content.subdir)
-  );
-
-  const plots = cleanDeep(
-    contents.map((content: PlotInterface) => {
-      return { name: content.obj, dir: content.dir && '/' + content.dir, properties: content.properties };
-    })
-  ).sort();
+  const router = useRouter();
+  const query: QueryProps = router.query;
+  const selectedPlots = query.selected_plots;
+  const selected_plots: PlotDataProps[] = getSelectedPlots(selectedPlots);
 
   return (
     <>
@@ -107,7 +83,9 @@ const DiplayFolder: FC<FolderProps> = ({
             </SpinnerWrapper>
           ) : (
               <>
-              <Directories directories={directories ? directories: []}/>
+                {directories && directories.length > 0 &&
+                  <Directories directories={directories} />
+                }
                 {plots.map((plot: PlotDataProps | undefined) => {
                   if (plot) {
                     return (
@@ -118,7 +96,10 @@ const DiplayFolder: FC<FolderProps> = ({
                   }
                 })}
               </>
-            )}
+            )}{
+            !directories || directories.length === 0 && plots.length === 0 &&
+            <NoResultsFound />
+          }
         </Wrapper>
         {selected_plots.length > 0 && (
           <Wrapper zoomed={selected_plots.length}>

@@ -107,3 +107,14 @@ export interface PlotPropertiesReportProps {
   other: number;
   warn: number;
 }
+
+export interface PlotInterface {
+  obj: string;
+  dir: string;
+  content: any;
+  properties: any;
+}
+
+export interface DirectoryInterface {
+  subdir: string;
+}
