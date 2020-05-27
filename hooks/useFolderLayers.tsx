@@ -3,6 +3,7 @@ import { QueryProps } from '../containers/display/interfaces';
 import _ from 'lodash';
 import { removeFirstSlash } from '../components/workspaces/utils';
 import { store } from '../contexts/leftSideContext';
+import { workspaces } from '../workspaces/offline';
 
 
 export const useFilterFoldersByWorkspaces = (query: QueryProps) => {
@@ -16,6 +17,15 @@ export const useFilterFoldersByWorkspaces = (query: QueryProps) => {
   const { setWorkspaceFolders } = globalState
 
   React.useEffect(() => {
+
+    workspaces.forEach((workspaceFromList: any) => {
+      workspaceFromList.workspaces.forEach((oneWorkspace: any) => {
+        if (oneWorkspace.label === workspace) {
+          setAvailableFolders(oneWorkspace.foldersPath)
+        }
+      })
+    })
+
     if (workspace && !folderPathFromQuery) {
       const firstLayerFolders = _.uniq(availableFolders.map((foldersPath: string) => {
         const firstLayer = foldersPath.split('/')[0]
@@ -24,8 +34,6 @@ export const useFilterFoldersByWorkspaces = (query: QueryProps) => {
       setWorkspaceFolders(firstLayerFolders)
     }
     else if (!!workspace && !!folderPathFromQuery) {
-
-
       availableFolders.forEach((foldersPath: string) => {
         const folderPathFromQueryWithoutFirstSlash = removeFirstSlash(folderPathFromQuery) //if folderPath has a slash in the begining- removing it
         const matchBeginingInAvailableFolders = foldersPath.search(folderPathFromQueryWithoutFirstSlash) //searching in available folders, is clicked folder is part of availableFolders path
@@ -48,7 +56,6 @@ export const useFilterFoldersByWorkspaces = (query: QueryProps) => {
       })
       setWorkspaceFolders(filteredInnerFolders)
     }
-  }, [query.folder_path, query.workspace])
+  }, [query.folder_path, query.workspace, availableFolders])
 
-  return { setAvailableFolders }
 }
