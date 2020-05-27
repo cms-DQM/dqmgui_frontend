@@ -11,32 +11,13 @@ interface FoldersFilter {
   directories: (string | undefined)[]
 }
 
-const getFilteredDirectories = (query: QueryProps, workspaceFolders: string[], directories: (string | undefined)[]) => {
-  //if workspaceFolders array from context is not empty we taking intersection between all directories and workspaceFolders
-  // workspace folders are fileterd folders array by selected workspace
-  if (workspaceFolders.length > 0) {
-    //@ts-ignore
-    const filteredDirectories = directories.filter((directory: string) => workspaceFolders.includes(directory))
-    return filteredDirectories
-  }
-  // if folder_path and workspaceFolders are empty, we return all direstories 
-  else if (workspaceFolders.length === 0) {
-    return directories
-  }
-}
-
 export const Directories = ({ directories }: FoldersFilter) => {
   const router = useRouter();
   const query: QueryProps = router.query;
 
-  const globalState = React.useContext(store)
-  const { workspaceFolders } = globalState;
-  //filtering directories by selected workspace
-  const filteredDirectories = getFilteredDirectories(query, workspaceFolders, directories)
-
   return (
     <>
-      {filteredDirectories && filteredDirectories.map((directory_name: any) => (
+      {directories.map((directory_name: any) => (
         <Col span={4} key={directory_name}>
           <DirecotryWrapper>
             <Icon />

@@ -1,6 +1,4 @@
 import React, { FC } from 'react';
-import Link from 'next/link';
-import { Col } from 'antd';
 import _ from 'lodash';
 
 import { useRequest } from '../../hooks/useRequest';
@@ -12,14 +10,22 @@ import {
   DivWrapper,
 } from './styledComponents';
 import { FolderPath } from './folderPath';
-import { getSelectedPlots, doesPlotExists, getContents, getDirectories, getFormatedPlotsObject } from './utils';
-import cleanDeep from 'clean-deep';
+import {
+  getSelectedPlots,
+  doesPlotExists,
+  getContents,
+  getDirectories,
+  getFormatedPlotsObject,
+  getFilteredDirectories
+} from './utils';
 import { SpinnerWrapper, Spinner } from '../search/styledComponents';
 import { useRouter } from 'next/router';
 import { RightSideStateProvider } from '../../contexts/rightSideContext';
 import { LeftSidePlots } from '../../components/plots/plot';
 import { Directories } from './directories'
 import { NoResultsFound } from '../search/noResultsFound';
+import { store } from '../../contexts/leftSideContext';
+import { CustomDiv } from '../../components/styledComponents';
 
 interface DirectoryInterface {
   subdir: string;
@@ -63,6 +69,11 @@ const DiplayFolder: FC<FolderProps> = ({
   const selectedPlots = query.selected_plots;
   const selected_plots: PlotDataProps[] = getSelectedPlots(selectedPlots);
 
+  const globalState = React.useContext(store)
+  const { workspaceFolders } = globalState;
+  //filtering directories by selected workspace
+  const filteredDirectories = getFilteredDirectories(query, workspaceFolders, directories)
+
   return (
     <>
       <FolderPath
@@ -83,9 +94,7 @@ const DiplayFolder: FC<FolderProps> = ({
             </SpinnerWrapper>
           ) : (
               <>
-                {directories && directories.length > 0 &&
-                  <Directories directories={directories} />
-                }
+                <Directories directories={filteredDirectories} />
                 {plots.map((plot: PlotDataProps | undefined) => {
                   if (plot) {
                     return (
@@ -97,8 +106,10 @@ const DiplayFolder: FC<FolderProps> = ({
                 })}
               </>
             )}{
-            !directories || directories.length === 0 && plots.length === 0 &&
-            <NoResultsFound />
+            !filteredDirectories || filteredDirectories.length === 0 && plots.length === 0 &&
+            <CustomDiv fullwidth="true">
+              <NoResultsFound />
+            </CustomDiv>
           }
         </Wrapper>
         {selected_plots.length > 0 && (
