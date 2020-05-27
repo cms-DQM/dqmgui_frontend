@@ -1,6 +1,7 @@
-import { PlotDataProps, PlotInterface, DirectoryInterface, QueryProps } from './interfaces';
 import cleanDeep from 'clean-deep';
 import _ from 'lodash';
+
+import { PlotDataProps, PlotInterface, DirectoryInterface, QueryProps } from './interfaces';
 
 export const getFolderPath = (folders: string[], clickedFolder: string) => {
   const folderIndex = folders.indexOf(clickedFolder);

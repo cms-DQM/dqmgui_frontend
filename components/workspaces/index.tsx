@@ -67,7 +67,7 @@ const Workspaces = () => {
                 tab={workspace.label}
               >
                 {workspace.workspaces.map((subWorkspace: any) => (
-                  <Button type="link" onClick={async () => {
+                  <Button key={subWorkspace.label} type="link" onClick={async () => {
                     setWorkspace(subWorkspace.label)
                     toggleWorkspaces(!openWorkspaces)
                     //if workspace is selected, folder_path in query is set to ''. Then we can regonize
