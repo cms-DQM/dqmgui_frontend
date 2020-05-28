@@ -105,8 +105,9 @@ const DiplayFolder: FC<FolderProps> = ({
                   }
                 })}
               </>
-            )}{
-            !filteredDirectories || filteredDirectories.length === 0 && plots.length === 0 &&
+            )}
+            {
+              !isLoading &&  filteredDirectories.length === 0 && plots.length === 0 &&
             <CustomDiv fullwidth="true">
               <NoResultsFound />
             </CustomDiv>
