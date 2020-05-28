@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useMemo } from 'react';
 import _ from 'lodash';
 
 import { useRequest } from '../../hooks/useRequest';
@@ -26,6 +26,8 @@ import { Directories } from './directories'
 import { NoResultsFound } from '../search/noResultsFound';
 import { store } from '../../contexts/leftSideContext';
 import { CustomDiv } from '../../components/styledComponents';
+import { PlotSearch } from '../../components/plots/plotSearch';
+import { Row, Col } from 'antd';
 
 interface DirectoryInterface {
   subdir: string;
@@ -69,18 +71,20 @@ const DiplayFolder: FC<FolderProps> = ({
   const selectedPlots = query.selected_plots;
   const selected_plots: PlotDataProps[] = getSelectedPlots(selectedPlots);
 
-  const globalState = React.useContext(store)
-  const { workspaceFolders } = globalState;
-  //filtering directories by selected workspace
-  const filteredDirectories = getFilteredDirectories(query, workspaceFolders, directories)
-
   return (
     <>
-      <FolderPath
-        folder_path={folder_path}
-        run_number={run_number}
-        dataset_name={dataset_name}
-      />
+      <Row style={{ padding: 8 }}>
+        <Col span={6} >
+          <FolderPath
+            folder_path={folder_path}
+            run_number={run_number}
+            dataset_name={dataset_name}
+          />
+        </Col>
+        <Col>
+          <PlotSearch />
+        </Col>
+      </Row>
       <DivWrapper selectedPlots={selected_plots.length > 0}>
         <Wrapper zoomed={selected_plots.length > 0} notZoomedPlot={true}>
           {doesPlotExists(contents).length > 0 && (
@@ -94,7 +98,7 @@ const DiplayFolder: FC<FolderProps> = ({
             </SpinnerWrapper>
           ) : (
               <>
-                <Directories directories={filteredDirectories} />
+                <Directories directories={directories} />
                 {plots.map((plot: PlotDataProps | undefined) => {
                   if (plot) {
                     return (
@@ -106,10 +110,10 @@ const DiplayFolder: FC<FolderProps> = ({
                 })}
               </>
             )}{
-            !filteredDirectories || filteredDirectories.length === 0 && plots.length === 0 &&
-            <CustomDiv fullwidth="true">
-              <NoResultsFound />
-            </CustomDiv>
+            // !filteredDirectories || filteredDirectories.length === 0 && plots.length === 0 &&
+            // <CustomDiv fullwidth="true">
+            //   <NoResultsFound />
+            // </CustomDiv>
           }
         </Wrapper>
         {selected_plots.length > 0 && (

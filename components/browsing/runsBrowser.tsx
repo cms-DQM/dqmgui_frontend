@@ -22,7 +22,6 @@ const getRunNumbers = (results_grouped: any[]) => {
 };
 
 export const RunBrowser = () => {
-  const inputEl = useRef(null);
   const router = useRouter();
   const query: QueryProps = router.query;
   const run_number = query.run_number ? query.run_number : NaN;
@@ -31,7 +30,6 @@ export const RunBrowser = () => {
 
   //seting  run field width to prev. selected run name field width,
   // because when spinner is shown, field becomes spinner width
-  const refElem = useRef(0)
   const [width, setWidth] = useState<number | undefined>()
 
   useEffect(() => {

@@ -5,7 +5,7 @@ import { store } from '../../contexts/leftSideContext';
 import { Col } from 'antd';
 import { DirecotryWrapper, StyledA, Icon } from './styledComponents';
 import Link from 'next/link';
-import { getFolderPathToQuery } from './utils';
+import { getFolderPathToQuery, getFilteredDirectories } from './utils';
 
 interface FoldersFilter {
   directories: (string | undefined)[]
@@ -15,9 +15,15 @@ export const Directories = ({ directories }: FoldersFilter) => {
   const router = useRouter();
   const query: QueryProps = router.query;
 
+  const globalState = React.useContext(store)
+  const { workspaceFolders } = globalState;
+  console.log(workspaceFolders, directories)
+  //filtering directories by selected workspace
+  const filteredDirectories = getFilteredDirectories(query, workspaceFolders, directories)
+
   return (
     <>
-      {directories.map((directory_name: any) => (
+      {filteredDirectories.map((directory_name: any) => (
         <Col span={4} key={directory_name}>
           <DirecotryWrapper>
             <Icon />

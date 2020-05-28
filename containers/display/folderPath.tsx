@@ -25,8 +25,8 @@ export const FolderPath = ({
   const query = router.query;
 
   return (
-    <Row style={{margin: 8}}>
-      <Col span={8}>
+    // <Row style={{margin: 8}}>
+      // <Col span={8}>
         <StyledBreadcrumb separator=">">
         <Breadcrumb.Item>
             <Link
@@ -75,7 +75,7 @@ export const FolderPath = ({
             );
           })}
         </StyledBreadcrumb>
-      </Col>
-    </Row>
+      // </Col>
+    // </Row>
   );
 };
