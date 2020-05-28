@@ -53,7 +53,7 @@ export const doesPlotExists = (contents: (PlotInterface & DirectoryInterface)[])
 export const getContents = (data: any) =>
   data
     ? _.sortBy(
-      data.contents.filter(
+      data.contents ? data.contents : [].filter(
         (one_item: PlotInterface | DirectoryInterface) =>
           !one_item.hasOwnProperty('streamerinfo')
       ),

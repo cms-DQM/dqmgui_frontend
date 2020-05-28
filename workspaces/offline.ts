@@ -41,7 +41,7 @@ const triggerWorkspace = [
   },
   {
     label: 'HLT',
-    foldersPath: ['HLT/EgOffline']
+    foldersPath: ['HLT']
   },
 ]
 
