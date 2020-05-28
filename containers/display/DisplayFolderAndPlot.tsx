@@ -1,6 +1,4 @@
 import React, { FC } from 'react';
-import Link from 'next/link';
-import { Col } from 'antd';
 import _ from 'lodash';
 
 import { useRequest } from '../../hooks/useRequest';
@@ -8,19 +6,26 @@ import { PlotDataProps, QueryProps } from './interfaces';
 import { ZoomedPlots } from '../../components/plots/zoomedPlots';;
 import { ViewDetailsMenu } from '../../components/viewDetailsMenu';
 import {
-  Icon,
-  DirecotryWrapper,
-  StyledA,
   Wrapper,
   DivWrapper,
 } from './styledComponents';
 import { FolderPath } from './folderPath';
-import { getSelectedPlots } from './utils';
-import cleanDeep from 'clean-deep';
+import {
+  getSelectedPlots,
+  doesPlotExists,
+  getContents,
+  getDirectories,
+  getFormatedPlotsObject,
+  getFilteredDirectories
+} from './utils';
 import { SpinnerWrapper, Spinner } from '../search/styledComponents';
 import { useRouter } from 'next/router';
 import { RightSideStateProvider } from '../../contexts/rightSideContext';
 import { LeftSidePlots } from '../../components/plots/plot';
+import { Directories } from './directories'
+import { NoResultsFound } from '../search/noResultsFound';
+import { store } from '../../contexts/leftSideContext';
+import { CustomDiv } from '../../components/styledComponents';
 
 interface DirectoryInterface {
   subdir: string;
@@ -39,36 +44,13 @@ interface FolderProps {
   dataset_name: string;
 }
 
-const doesPlotExists = (contents: (PlotInterface & DirectoryInterface)[]) =>
-  contents.filter((one_item: PlotInterface | DirectoryInterface) =>
-    one_item.hasOwnProperty('obj')
-  );
 
-// what is streamerinfo? (coming from api, we don't know what it is, so we filtered it out)
-// getContent also sorting data that directories should be displayed firstly, just after them- plots images.
-const getContents = (data: any) =>
-  data
-    ? _.sortBy(
-      data.contents.filter(
-        (one_item: PlotInterface | DirectoryInterface) =>
-          !one_item.hasOwnProperty('streamerinfo')
-      ),
-      ['subdir']
-    )
-    : [];
 
 const DiplayFolder: FC<FolderProps> = ({
   folder_path,
   run_number,
   dataset_name,
 }) => {
-
-  const router = useRouter();
-  const query: QueryProps = router.query;
-  const selectedPlots = query.selected_plots;
-
-  const selected_plots: PlotDataProps[] = getSelectedPlots(selectedPlots);
-
   const {
     data,
     isLoading,
@@ -79,16 +61,18 @@ const DiplayFolder: FC<FolderProps> = ({
   );
 
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
+  const directories = getDirectories(contents)
+  const plots = getFormatedPlotsObject(contents)
 
-  const directories = cleanDeep(
-    contents.map((content: DirectoryInterface) => content.subdir)
-  );
+  const router = useRouter();
+  const query: QueryProps = router.query;
+  const selectedPlots = query.selected_plots;
+  const selected_plots: PlotDataProps[] = getSelectedPlots(selectedPlots);
 
-  const plots = cleanDeep(
-    contents.map((content: PlotInterface) => {
-      return { name: content.obj, dir: content.dir && '/' + content.dir, properties: content.properties };
-    })
-  ).sort();
+  const globalState = React.useContext(store)
+  const { workspaceFolders } = globalState;
+  //filtering directories by selected workspace
+  const filteredDirectories = getFilteredDirectories(query, workspaceFolders, directories)
 
   return (
     <>
@@ -110,25 +94,7 @@ const DiplayFolder: FC<FolderProps> = ({
             </SpinnerWrapper>
           ) : (
               <>
-                {directories.map((directory_name: any) => (
-                  <Col span={4} key={directory_name}>
-                    <DirecotryWrapper>
-                      <Icon />
-                      <Link
-                        href={{
-                          pathname: '/',
-                          query: {
-                            run_number: run_number,
-                            dataset_name: dataset_name,
-                            folder_path: `${folder_path}/${directory_name}`,
-                          },
-                        }}
-                      >
-                        <StyledA>{directory_name}</StyledA>
-                      </Link>
-                    </DirecotryWrapper>
-                  </Col>
-                ))}
+                <Directories directories={filteredDirectories} />
                 {plots.map((plot: PlotDataProps | undefined) => {
                   if (plot) {
                     return (
@@ -140,6 +106,12 @@ const DiplayFolder: FC<FolderProps> = ({
                 })}
               </>
             )}
+            {
+              !isLoading &&  filteredDirectories.length === 0 && plots.length === 0 &&
+            <CustomDiv fullwidth="true">
+              <NoResultsFound />
+            </CustomDiv>
+          }
         </Wrapper>
         {selected_plots.length > 0 && (
           <Wrapper zoomed={selected_plots.length}>

@@ -17,6 +17,7 @@ import {
   TableBody,
   StyledAlert,
 } from './styledComponents';
+import { NoResultsFound } from './noResultsFound';
 
 interface SearchResultsInterface {
   results: any[];
@@ -43,12 +44,7 @@ const SearchResults: FC<SearchResultsInterface> = ({
       ) : (
           <>
             {results_grouped.length === 0 && !isLoading && errorsList.length === 0 ? (
-              <NotFoundDivWrapper>
-                <NotFoundDiv>
-                  <Icon />
-                  <div>No Results Found</div>
-                </NotFoundDiv>
-              </NotFoundDivWrapper>
+              <NoResultsFound />
             ) : !isLoading && errorsList.length === 0 ? (
               <StyledTable>
                 <StyledTableHead>

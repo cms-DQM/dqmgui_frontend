@@ -24,6 +24,8 @@ import { FolderPathQuery } from '../containers/display/interfaces';
 import { useValidateQuery } from '../hooks/useValidateQuery';
 import { QueryValidationErrors } from '../components/queryValidationErrors';
 import { Browser } from '../components/browsing';
+import Workspaces from '../components/workspaces';
+import { workspaces } from '../workspaces/offline';
 
 const navigationHandler = (
   search_by_run_number: number,
@@ -45,6 +47,7 @@ const serchResultsHandler = (run: number, dataset: string) => {
     query: {
       run_number: run,
       dataset_name: dataset,
+      workspaces: workspaces[0].workspaces[0].label,
     },
   });
 };
@@ -104,15 +107,22 @@ const Index: NextPage<FolderPathQuery> = () => {
             //Instead, run and dataset browser is is displayed.
             //Regular search fields are displayed just in the main page.
             isDatasetAndRunNumberSelected ?
-              <Browser />
+              <>
+                <Workspaces />
+                <Browser />
+
+              </>
               :
+              <>
               <Nav
                 initial_search_run_number={search_run_number}
                 initial_search_dataset_name={search_dataset_name}
                 handler={navigationHandler}
                 type="top"
               />
+            </>
           }
+
         </StyledHeader>
         {validation_errors.length > 0 ? (
           <QueryValidationErrors validation_errors={validation_errors} />

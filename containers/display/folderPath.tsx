@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { getFolderPath } from './utils';
 import { StyledDiv, StyledBreadcrumb } from './styledComponents';
 import { Browser } from '../../components/browsing';
+import cleanDeep from 'clean-deep';
 
 interface FolderPathProps {
   folder_path: string | undefined;
@@ -19,7 +20,7 @@ export const FolderPath = ({
   dataset_name,
 }: FolderPathProps) => {
   const folders = folder_path ? folder_path.split('/') : [];
-  const filteredFolders = folders.filter((folder: string) => folder !== '');
+  const filteredFolders = folders.filter((folder: string) => folder !== '' );
   const router = useRouter();
   const query = router.query;
 
@@ -47,6 +48,7 @@ export const FolderPath = ({
                 query: {
                   run_number: query.run_number,
                   dataset_name: query.dataset_name,
+                  workspace: query.workspace,
                 },
               }}
             >
@@ -63,6 +65,7 @@ export const FolderPath = ({
                       run_number: query.run_number,
                       dataset_name: query.dataset_name,
                       folder_path: getFolderPath(folders, folder),
+                      workspace: query.workspace,
                     },
                   }}
                 >
