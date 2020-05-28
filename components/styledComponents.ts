@@ -150,11 +150,17 @@ export const CustomCol = styled(Col) <{ display?: string, justifycontent?: strin
   align-items: ${(props) => props.alignitems ? props.alignitems : ''};
   height: fit-content;
 `
-export const CustomDiv = styled(Col) <{ display?: string, justifycontent?: string, space?: string, alignitems?: string }>`
+export const CustomDiv = styled(Col) <{
+  display?: string,
+  justifycontent?: string,
+  space?: string,
+  alignitems?: string,
+  fullwidth?: string
+}>`
   display: ${(props) => props.display ? props.display : ''};
   justify-content: ${(props) => props.justifycontent ? props.justifycontent : ''};
   padding-right: ${(props) => props.space ? `calc(${theme.space.padding}*${props.space})` : ''};
   align-items: ${(props) => props.alignitems ? props.alignitems : ''};
   height: fit-content;
-  width: fit-content;
+  width: ${(props) => props.fullwidth === 'true' ? '100vw' : 'fit-content' };
 `

@@ -90,6 +90,7 @@ export interface QueryProps {
   selected_plots?: string;
   overlay_data?: string;
   overlay?: string;
+  workspace?: string;
 }
 
 export interface PlotPropertiesProps {
@@ -105,4 +106,15 @@ export interface PlotPropertiesReportProps {
   error: number,
   other: number;
   warn: number;
+}
+
+export interface PlotInterface {
+  obj: string;
+  dir: string;
+  content: any;
+  properties: any;
+}
+
+export interface DirectoryInterface {
+  subdir: string;
 }
