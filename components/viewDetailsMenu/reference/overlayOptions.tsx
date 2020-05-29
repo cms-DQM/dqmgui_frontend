@@ -1,6 +1,5 @@
-import React, { useEffect } from 'react';
+import React  from 'react';
 import { Select } from 'antd';
-import Router from 'next/router';
 import { useRouter } from 'next/router';
 
 import { overlayOptions } from '../../constants';
@@ -9,6 +8,7 @@ import {
   QueryProps,
 } from '../../../containers/display/interfaces';
 import { StyledSelect } from '../styledComponents';
+import { useChangeRouter } from '../../../hooks/useChangeRouter';
 
 const { Option } = Select
 
@@ -18,21 +18,7 @@ export const OverlayOptions = () => {
   const settedOverlay = query.overlay ? query.overlay : overlayOptions[0].value;
 
   const [value, setValue] = React.useState(settedOverlay);
-
-  useEffect(() => {
-    Router.replace({
-      pathname: '/',
-      query: {
-        run_number: query.run_number,
-        dataset_name: query.dataset_name,
-        folder_path: query.folder_path,
-        workspace: query.workspace,
-        overlay: value,
-        overlay_data: query.overlay_data,
-        selected_plots: query.selected_plots,
-      },
-    });
-  }, [value])
+  useChangeRouter({ overlay: value }, [value], true)
 
   return (
     <StyledSelect
