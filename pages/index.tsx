@@ -110,7 +110,6 @@ const Index: NextPage<FolderPathQuery> = () => {
               <>
                 <Workspaces />
                 <Browser />
-
               </>
               :
               <>
