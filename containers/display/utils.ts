@@ -2,6 +2,8 @@ import cleanDeep from 'clean-deep';
 import _ from 'lodash';
 
 import { PlotDataProps, PlotInterface, DirectoryInterface, QueryProps } from './interfaces';
+import Router from 'next/router';
+import { ParsedUrlQueryInput } from 'querystring';
 
 export const getFolderPath = (folders: string[], clickedFolder: string) => {
   const folderIndex = folders.indexOf(clickedFolder);
@@ -85,4 +87,23 @@ export const getFilteredDirectories = (query: QueryProps, workspaceFolders: stri
   else if (workspaceFolders.length === 0) {
     return directories
   }
+}
+
+export const getChangedQueryParams = (params: ParsedUrlQueryInput, query: QueryProps) => {
+  params.dataset_name = params.dataset_name ? params.dataset_name : query.dataset_name
+  params.run_number = params.run_number ? params.run_number : query.run_number
+  params.folder_path = params.folder_path ? params.folder_path : query.folder_path
+  params.workspace = params.workspace ? params.workspace : query.workspace
+  params.overlay = params.overlay ? params.overlay : query.overlay
+  params.overlay_data = params.overlay_data ? params.overlay_data : query.overlay_data
+  params.selected_plots = params.selected_plots ? params.selected_plots : query.selected_plots
+
+  return params
+}
+
+export const changeRouter = (parameters: ParsedUrlQueryInput) => {
+  Router.replace({
+    pathname: '/',
+    query: parameters,
+  })
 }

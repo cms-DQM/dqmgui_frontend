@@ -15,7 +15,7 @@ export const useFilterFoldersByWorkspaces = (query: QueryProps) => {
   const folderPathFromQuery = query.folder_path
 
   const globalState = React.useContext(store)
-  const { setWorkspaceFolders } = globalState
+  const { setWorkspaceFolders,  workspaceFolders} = globalState
 
   React.useEffect(() => {
     //getting folderPath by selected workspace
