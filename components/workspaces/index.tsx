@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import { setWorkspaceToQuery } from './utils';
 import { QueryProps } from '../../containers/display/interfaces';
 import { useFilterFoldersByWorkspaces } from '../../hooks/useFolderLayers';
+import { useChangeRouter } from '../../hooks/useChangeRouter';
 
 const { TabPane } = Tabs;
 
@@ -23,8 +24,6 @@ const Workspaces = () => {
   const query: QueryProps = router.query;
 
   const [workspace, setWorkspace] = React.useState(query.workspace)
-
-  useFilterFoldersByWorkspaces(query)
 
   React.useEffect(() => {
     const workspaceValue = query.workspace ? query.workspace : workspaces[0].workspaces[2].label //Everything by default

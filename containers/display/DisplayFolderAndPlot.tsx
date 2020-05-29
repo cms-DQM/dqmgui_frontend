@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import _ from 'lodash';
+import { Row, Col } from 'antd';
 
 import { useRequest } from '../../hooks/useRequest';
 import { PlotDataProps, QueryProps } from './interfaces';
@@ -26,6 +27,7 @@ import { Directories } from './directories'
 import { NoResultsFound } from '../search/noResultsFound';
 import { store } from '../../contexts/leftSideContext';
 import { CustomDiv } from '../../components/styledComponents';
+import { PlotSearch } from '../../components/plots/plot/plotSearch';
 
 interface DirectoryInterface {
   subdir: string;
@@ -73,14 +75,19 @@ const DiplayFolder: FC<FolderProps> = ({
   const { workspaceFolders } = globalState;
   //filtering directories by selected workspace
   const filteredDirectories = getFilteredDirectories(query, workspaceFolders, directories)
-
+console.log(filteredDirectories)
   return (
     <>
-      <FolderPath
-        folder_path={folder_path}
-        run_number={run_number}
-        dataset_name={dataset_name}
-      />
+      <Row style={{ padding: 8 }}>
+        <Col span={6}>
+          <FolderPath
+            folder_path={folder_path}
+          />
+        </Col>
+        <Col>
+          <PlotSearch />
+        </Col>
+      </Row>
       <DivWrapper selectedPlots={selected_plots.length > 0}>
         <Wrapper zoomed={selected_plots.length > 0} notZoomedPlot={true}>
           {doesPlotExists(contents).length > 0 && (
@@ -106,8 +113,8 @@ const DiplayFolder: FC<FolderProps> = ({
                 })}
               </>
             )}
-            {
-              !isLoading &&  filteredDirectories.length === 0 && plots.length === 0 &&
+          {
+            !isLoading && filteredDirectories.length === 0 && plots.length === 0 &&
             <CustomDiv fullwidth="true">
               <NoResultsFound />
             </CustomDiv>
