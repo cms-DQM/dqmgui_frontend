@@ -7,13 +7,14 @@ import Router from 'next/router';
 import { StyledSelect, OptionParagraph } from '../../viewDetailsMenu/styledComponents';
 import { QueryProps } from '../../../containers/display/interfaces';
 import { useSearch } from '../../../hooks/useSearch';
+import { useChangeRouter } from '../../../hooks/useChangeRouter';
 
 const { Option } = Select;
 
 export const DatasetsBrowser = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
-  const [currentDataset, setCurrentDataset] = useState(query.dataset_name);
+  const [currentDataset, setCurrentDataset] = useState<string|undefined>(query.dataset_name);
   const [openSelect, setSelect] = useState(false)
   const refElem = useRef(0)
   //setting  dataset field width to prev. selected dataset name field width,
@@ -28,20 +29,8 @@ export const DatasetsBrowser = () => {
     return result.dataset;
   });
 
-  useEffect(() => {
-    Router.replace({
-      pathname: '/',
-      query: {
-        run_number: query.run_number,
-        dataset_name: currentDataset,
-        folder_path: query.folder_path,
-        workspace: query.workspace,
-        overlay: query.overlay,
-        overlay_data: query.overlay_data,
-        selected_plots: query.selected_plots,
-      },
-    });
-  }, [currentDataset]);
+  useChangeRouter({ dataset_name: currentDataset }, [currentDataset], true)
+
   const currentDatasetNameIndex = datasets.indexOf(currentDataset);
 
   return (

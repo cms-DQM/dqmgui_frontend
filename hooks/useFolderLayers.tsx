@@ -18,7 +18,7 @@ export const useFilterFoldersByWorkspaces = (query: QueryProps) => {
   const { setWorkspaceFolders } = globalState
 
   React.useEffect(() => {
-
+    //getting folderPath by selected workspace
     workspaces.forEach((workspaceFromList: any) => {
       workspaceFromList.workspaces.forEach((oneWorkspace: any) => {
         if (oneWorkspace.label === workspace) {

@@ -8,6 +8,7 @@ import { StyledFormItem } from '../styledComponents';
 import { StyledSelect, OptionParagraph } from '../viewDetailsMenu/styledComponents';
 import { QueryProps } from '../../containers/display/interfaces';
 import { useSearch } from '../../hooks/useSearch';
+import { useChangeRouter } from '../../hooks/useChangeRouter';
 
 const { Option } = Select;
 
@@ -22,7 +23,6 @@ const getRunNumbers = (results_grouped: any[]) => {
 };
 
 export const RunBrowser = () => {
-  const inputEl = useRef(null);
   const router = useRouter();
   const query: QueryProps = router.query;
   const run_number = query.run_number ? query.run_number : NaN;
@@ -34,20 +34,7 @@ export const RunBrowser = () => {
   const refElem = useRef(0)
   const [width, setWidth] = useState<number | undefined>()
 
-  useEffect(() => {
-    Router.replace({
-      pathname: '/',
-      query: {
-        run_number: currentRunNumber,
-        dataset_name: query.dataset_name,
-        folder_path: query.folder_path,
-        workspace: query.workspace,
-        overlay: query.overlay,
-        overlay_data: query.overlay_data,
-        selected_plots: query.selected_plots,
-      },
-    });
-  }, [currentRunNumber]);
+  useChangeRouter({ run_number: currentRunNumber }, [currentRunNumber], true)
 
   const { results_grouped, searching, isLoading, errors } = useSearch(
     NaN,
