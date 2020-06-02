@@ -75,7 +75,7 @@ const DiplayFolder: FC<FolderProps> = ({
   const { workspaceFolders } = globalState;
   //filtering directories by selected workspace
   const filteredDirectories = getFilteredDirectories(query, workspaceFolders, directories)
-console.log(filteredDirectories)
+
   return (
     <>
       <Row style={{ padding: 8 }}>

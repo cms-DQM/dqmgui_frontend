@@ -3,7 +3,7 @@ import { Breadcrumb } from 'antd';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
-import { getFolderPath, changeRouter } from './utils';
+import { getFolderPath, changeRouter, getChangedQueryParams } from './utils';
 import { StyledBreadcrumb } from './styledComponents';
 import { ParsedUrlQueryInput } from 'querystring';
 
@@ -19,7 +19,7 @@ export const FolderPath = ({
   const router = useRouter();
   const query = router.query;
 
-  const changeFolderPathByBreadcrumb = (parameters: ParsedUrlQueryInput) => changeRouter(parameters)
+  const changeFolderPathByBreadcrumb = (parameters: ParsedUrlQueryInput) => changeRouter(getChangedQueryParams(parameters, query))
 
   return (
     <>
@@ -38,7 +38,7 @@ export const FolderPath = ({
           </Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item onClick={() => {
-          changeFolderPathByBreadcrumb({ folder_path: '' })
+          changeFolderPathByBreadcrumb({ folder_path: '/' })
         }}>
           <a>Home</a>
         </Breadcrumb.Item>
