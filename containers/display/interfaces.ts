@@ -91,6 +91,7 @@ export interface QueryProps {
   overlay_data?: string;
   overlay?: string;
   workspace?: string;
+  plot_search?: string;
 }
 
 export interface PlotPropertiesProps {

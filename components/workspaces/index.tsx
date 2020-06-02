@@ -25,6 +25,8 @@ const Workspaces = () => {
 
   const [workspace, setWorkspace] = React.useState(query.workspace)
 
+  useFilterFoldersByWorkspaces(query)
+  
   React.useEffect(() => {
     const workspaceValue = query.workspace ? query.workspace : workspaces[0].workspaces[2].label //Everything by default
     setWorkspaceToQuery(query, workspaceValue)
