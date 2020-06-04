@@ -75,7 +75,7 @@ const DiplayFolder: FC<FolderProps> = ({
     return (
       <>
         <Row style={{ padding: 8 }}>
-          <Col span={6}>
+          <Col style={{ padding: 8 }}>
             <FolderPath
               folder_path={folder_path}
             />

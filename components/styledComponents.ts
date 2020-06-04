@@ -2,6 +2,7 @@ import { Form, Button, Input, Tag, Row, AutoComplete, Checkbox, Radio, Col } fro
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import styled from 'styled-components';
 import { QuestionOutlined } from '@ant-design/icons';
+const { Search } = Input;
 
 import { theme } from '../styles/theme';
 
@@ -62,6 +63,12 @@ export const StyledInput = styled(Input) <{ fullWidth?: boolean }>`
   width: fit-content;
   width: ${(props) => (props.fullWidth ? '100%' : '')};
 `;
+
+export const StyledSearch = styled(Search) <{ fullWidth?: boolean }>`
+  border-radius: 12px;
+  width: fit-content;
+  width: ${(props) => (props.fullWidth ? '100%' : '')};
+`
 
 export const StyledAutocomplete = styled(AutoComplete)`
   .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
