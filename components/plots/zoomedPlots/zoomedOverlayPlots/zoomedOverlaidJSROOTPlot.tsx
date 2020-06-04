@@ -20,7 +20,9 @@ import {
   MinusIcon,
   ImageDiv,
 } from '../../../../containers/display/styledComponents';
-import { removePlotFromSelectedPlots } from '../../plot/singlePlot/utils';
+import { removePlotFromSelectedPlots, removePlotFromRightSide } from '../../plot/singlePlot/utils';
+import { Button } from 'antd';
+import { changeRouter, getChangedQueryParams } from '../../../../containers/display/utils';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;
@@ -124,24 +126,12 @@ export const ZoomedOverlaidJSROOTPlot = ({
       >
         <PlotNameCol>{selected_plot.name}</PlotNameCol>
         <Column>
-          <Link
-            href={{
-              pathname: '/',
-              query: {
-                run_number: query.run_number,
-                dataset_name: query.dataset_name,
-                folder_path: query.folder_path,
-                overlay: query.overlay,
-                overlay_data: query.overlay_data,
-                selected_plots: `${removePlotFromSelectedPlots(
-                  query.selected_plots,
-                  selected_plot
-                )}`,
-              },
-            }}
-          >
-            <MinusIcon />
-          </Link>
+          <Button
+            type="link"
+            onClick={() => removePlotFromRightSide(query, selected_plot)}
+            icon={<MinusIcon />
+            }
+          />
         </Column>
         <ImageDiv
           style={{ display: params_for_api.normalize ? '' : 'none' }}

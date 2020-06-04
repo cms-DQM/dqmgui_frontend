@@ -53,7 +53,7 @@ const DiplayFolder: FC<FolderProps> = ({
     data,
     isLoading,
   } = useRequest(
-    `/data/json/archive/${run_number}${dataset_name}${folder_path}`,
+    `/data/json/archive/${run_number}${dataset_name}/${folder_path}`,
     {},
     [folder_path]
   );
@@ -127,7 +127,7 @@ const DiplayFolder: FC<FolderProps> = ({
         </DivWrapper>
       </>
     );
-  }, [plots, filteredFolders.toString()])
+  }, [plots, filteredFolders.toString(), selectedPlots])
 };
 
 export default DiplayFolder;
