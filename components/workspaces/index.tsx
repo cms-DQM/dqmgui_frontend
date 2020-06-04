@@ -24,7 +24,7 @@ const Workspaces = () => {
   const [openWorkspaces, toggleWorkspaces] = React.useState(false)
   const [workspace, setWorkspace] = React.useState(workspaceOption)
 
-  useChangeRouter({ workspace: workspaceOption }, undefined, true)
+  useChangeRouter({ workspace: workspaceOption }, [], true)
 
   return (
     <Form>
