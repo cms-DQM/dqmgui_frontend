@@ -10,36 +10,33 @@ import { getChangedQueryParams, changeRouter } from '../../../../containers/disp
 const { Search } = Input;
 
 interface PlotSearchProps {
-
+  isLoadingFolders: boolean
 }
 
-export const PlotSearch = () => {
+export const PlotSearch = ({ isLoadingFolders }: PlotSearchProps) => {
   const [plotName, setPlotName] = React.useState<string>('')
 
   const router = useRouter();
   const query: QueryProps = router.query;
 
   React.useEffect(() => {
-    if (!!plotName === false) {
-      const params = getChangedQueryParams({ plot_search: '.*' }, query)
-      console.log(params)
-      changeRouter(params)
-    } else {
-      const params = getChangedQueryParams({ plot_search: plotName }, query)
-      changeRouter(params)
-    }
+    const params = getChangedQueryParams({ plot_search: plotName }, query)
+    changeRouter(params)
   }, [plotName])
 
-  return (
-    <Form
-      onChange={(e: any) => setPlotName(e.target.value)}
-    >
-      <StyledFormItem>
-        <Search
-          id="plot_search"
-          placeholder="Enter plot name"
-        />
-      </StyledFormItem>
-    </Form>
-  )
+  return React.useMemo(() => {
+    return (
+      <Form
+        onChange={(e: any) => setPlotName(e.target.value)}>
+        <StyledFormItem>
+          <Search
+            defaultValue={query.plot_search}
+            loading={isLoadingFolders}
+            id="plot_search"
+            placeholder="Enter plot name"
+          />
+        </StyledFormItem>
+      </Form>
+    )
+  }, [plotName])
 }

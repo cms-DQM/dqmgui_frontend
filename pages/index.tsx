@@ -47,7 +47,7 @@ const serchResultsHandler = (run: number, dataset: string) => {
     query: {
       run_number: run,
       dataset_name: dataset,
-      workspaces: workspaces[0].workspaces[0].label,
+      workspaces: workspaces[0].workspaces[2].label,
     },
   });
 };
