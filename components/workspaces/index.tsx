@@ -8,8 +8,7 @@ import { StyledFormItem } from '../styledComponents';
 import { useRouter } from 'next/router';
 import { setWorkspaceToQuery } from './utils';
 import { QueryProps } from '../../containers/display/interfaces';
-import { useFilterFoldersByWorkspaces } from '../../hooks/useFilterFoldersByWorkspace';
-import { store } from '../../contexts/leftSideContext';
+import { useChangeRouter } from '../../hooks/useChangeRouter';
 
 const { TabPane } = Tabs;
 
@@ -18,23 +17,14 @@ interface WorspaceProps {
   workspaces: any;
 }
 const Workspaces = () => {
-  const [openWorkspaces, toggleWorkspaces] = React.useState(false)
-
   const router = useRouter();
   const query: QueryProps = router.query;
+  const workspaceOption = query.workspace ? query.workspace : workspaces[0].workspaces[2].label
 
-  const [workspace, setWorkspace] = React.useState(query.workspace)
+  const [openWorkspaces, toggleWorkspaces] = React.useState(false)
+  const [workspace, setWorkspace] = React.useState(workspaceOption)
 
-  React.useEffect(() => {
-    if (!query.workspace) {
-      setWorkspace(workspaces[0].workspaces[2].label)//Everything by default
-      setWorkspaceToQuery(query, workspaces[0].workspaces[2].label)
-    }
-    else {
-      setWorkspace(query.workspace)
-      setWorkspaceToQuery(query, query.workspace)
-    }
-  }, [])
+  useChangeRouter({ workspace: workspaceOption }, undefined, true)
 
   return (
     <Form>
