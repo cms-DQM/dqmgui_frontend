@@ -2,10 +2,10 @@ import * as React from 'react'
 import { useRouter } from 'next/router';
 import { QueryProps } from './interfaces';
 import { store } from '../../contexts/leftSideContext';
-import { Col } from 'antd';
-import { DirecotryWrapper, StyledA, Icon } from './styledComponents';
+import { Col, Button } from 'antd';
+import { DirecotryWrapper, StyledA, Icon, DirecotryButton } from './styledComponents';
 import Link from 'next/link';
-import { getFolderPathToQuery } from './utils';
+import { getFolderPathToQuery, changeRouter, getChangedQueryParams } from './utils';
 
 interface FoldersFilter {
   directories: (string | undefined)[]
@@ -20,21 +20,14 @@ export const Directories = ({ directories }: FoldersFilter) => {
       {directories.map((directory_name: any) => (
         <Col span={4} key={directory_name}>
           <DirecotryWrapper>
-            <Icon />
-            <Link
-              href={{
-                pathname: '/',
-                query: {
-                  run_number: query.run_number,
-                  dataset_name: query.dataset_name,
-                  folder_path: getFolderPathToQuery(query.folder_path, directory_name),
-                  workspace: query.workspace,
-                  plot_search: query.plot_search
-                },
-              }}
+            <div
+              onClick={() => changeRouter(getChangedQueryParams({
+                folder_path: getFolderPathToQuery(query.folder_path, directory_name),
+              }, query))}
             >
+              <Icon />
               <StyledA>{directory_name}</StyledA>
-            </Link>
+            </div>
           </DirecotryWrapper>
         </Col>
       ))}
