@@ -16,7 +16,7 @@ export const useFilterFolders = (query: QueryProps, allDirectories: any[]) => {
     React.useEffect(() => {
         const folders = getFilteredDirectories(directories as any, foldersFromWorkspaces)
         setFoldersByPlotSearch(folders as any)        
-    }, [directories, filteredFolders])
+    }, [directories, filteredFolders, isLoading])
 
     const isLoadingFolders = isLoading
     return { foldersByPlotSearch, plots, isLoadingFolders }

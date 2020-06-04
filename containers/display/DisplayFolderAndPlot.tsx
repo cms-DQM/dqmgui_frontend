@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo } from 'react';
+import React, { FC, useEffect, useMemo, useContext } from 'react';
 import _ from 'lodash';
 import { Row, Col } from 'antd';
 
@@ -26,6 +26,7 @@ import { NoResultsFound } from '../search/noResultsFound';
 import { CustomDiv } from '../../components/styledComponents';
 import { PlotSearch } from '../../components/plots/plot/plotSearch';
 import { useFilterFolders } from '../../hooks/useFilterFolders';
+import { store } from '../../contexts/leftSideContext';
 
 interface DirectoryInterface {
   subdir: string;
@@ -127,7 +128,7 @@ const DiplayFolder: FC<FolderProps> = ({
         </DivWrapper>
       </>
     );
-  }, [plots, filteredFolders.toString(), selectedPlots])
+  }, [plots, filteredFolders.toString(), selectedPlots, isLoading])
 };
 
 export default DiplayFolder;

@@ -31,6 +31,5 @@ export const usePlotSearch = (plot_name: string, run_number_value?: number, data
     setDirectories(getDirectories(contents))
     setPlots(getFormatedPlotsObject(contents))
   }, [data, folders, isLoading])
-  
   return { directories, plots, isLoading, errors }
 }
