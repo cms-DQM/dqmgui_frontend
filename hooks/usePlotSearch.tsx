@@ -1,38 +1,36 @@
 import { useRequest } from './useRequest'
 
-import { getContents, getDirectories } from '../containers/display/utils'
-import { DirectoryInterface, QueryProps } from '../containers/display/interfaces';
-import { message } from '../components/notifications/index'
+import { getContents, getDirectories, getFormatedPlotsObject } from '../containers/display/utils'
+import { DirectoryInterface, PlotDataProps } from '../containers/display/interfaces';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { removeFirstSlash } from '../components/workspaces/utils';
+import { PlotInterface } from '../containers/display/DisplayFolderAndPlot';
 
 interface usePlotSearchReturn {
   directories: (string | undefined)[];
   isLoading: boolean;
   errors: string;
+  plots: PlotDataProps[]
 }
 
 export const usePlotSearch = (plot_name: string, run_number_value?: number, dataset_name?: string, folder_path?: string): usePlotSearchReturn => {
-  const searching = !!(plot_name);
   const [directories, setDirectories] = useState<(string | undefined)[]>([])
+  const [plots, setPlots] = useState<any[]>([])
+
+  const folders = folder_path ? removeFirstSlash(folder_path) : ''
 
   const { data, isLoading, errors } = useRequest(
-    `/data/json/archive/${run_number_value}${dataset_name}?search=${plot_name}`,
-    { params: { processData: false, contentType: false } },
+    `/data/json/archive/${run_number_value}${dataset_name}/${folders}?search=${plot_name}`,
+    {},
     [plot_name, folder_path],
-    searching
+    true
   );
 
-  const contents: DirectoryInterface[] = getContents(data) ? getContents(data) : []
+  const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
   useEffect(() => {
     setDirectories(getDirectories(contents))
-  }, [isLoading])
-
-
-  // if (data && directories.length === 0) {
-  //   message("No Plots found by search", 'error')
-  // } else if (data && directories.length > 0) {
-  //   message("Plot are found by search", 'success')
-  // }
-  return { directories, isLoading, errors }
+    setPlots(getFormatedPlotsObject(contents))
+  }, [data, folders])
+  
+  return { directories, plots, isLoading, errors }
 }

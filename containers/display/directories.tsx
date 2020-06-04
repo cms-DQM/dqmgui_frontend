@@ -29,6 +29,7 @@ export const Directories = ({ directories }: FoldersFilter) => {
                   dataset_name: query.dataset_name,
                   folder_path: getFolderPathToQuery(query.folder_path, directory_name),
                   workspace: query.workspace,
+                  plot_search: query.plot_search
                 },
               }}
             >

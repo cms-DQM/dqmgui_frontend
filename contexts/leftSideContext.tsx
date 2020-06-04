@@ -43,6 +43,7 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
   const [overlayPosition, setOverlaiPosition] = useState(initialState.overlayPosition)
   const [overlayPlots, setOverlay] = useState(initialState.overlayPlots)
   const [imageRefScrollDown, setImageRefScrollDown] = useState(null)
+  const [plotSearchFolders, setPlotSearchFolders] = React.useState([])
   const [workspaceFolders, setWorkspaceFolders] = React.useState([])
 
   return <Provider value={{
@@ -53,7 +54,8 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
     overlayPosition, setOverlaiPosition,
     overlayPlots, setOverlay,
     imageRefScrollDown, setImageRefScrollDown,
-    workspaceFolders, setWorkspaceFolders
+    workspaceFolders, setWorkspaceFolders,
+    plotSearchFolders, setPlotSearchFolders
   }}>{children}</Provider>;
 }
 
