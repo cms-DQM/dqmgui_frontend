@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import axios, { AxiosRequestConfig, AxiosResponse, CancelTokenSource } from 'axios';
 
-import { message } from '../components/notifications'
 import { root_url } from '../config/config';
 
 interface ReturnRequest {

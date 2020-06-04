@@ -14,10 +14,9 @@ interface PlotSearchProps {
 }
 
 export const PlotSearch = ({ isLoadingFolders }: PlotSearchProps) => {
-  const [plotName, setPlotName] = React.useState<string>('')
-
   const router = useRouter();
   const query: QueryProps = router.query;
+  const [plotName, setPlotName] = React.useState<string | undefined>(query.plot_search)
 
   React.useEffect(() => {
     const params = getChangedQueryParams({ plot_search: plotName }, query)
