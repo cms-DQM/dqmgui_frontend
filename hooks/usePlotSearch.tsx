@@ -22,7 +22,7 @@ export const usePlotSearch = (plot_name: string, run_number_value?: number, data
   const { data, isLoading, errors } = useRequest(
     `/data/json/archive/${run_number_value}${dataset_name}/${folders}?search=${plot_name}`,
     {},
-    [plot_name, folder_path],
+    [plot_name, folders],
     true
   );
 
@@ -30,7 +30,7 @@ export const usePlotSearch = (plot_name: string, run_number_value?: number, data
   useEffect(() => {
     setDirectories(getDirectories(contents))
     setPlots(getFormatedPlotsObject(contents))
-  }, [data, folders])
+  }, [data, folders, isLoading])
   
   return { directories, plots, isLoading, errors }
 }

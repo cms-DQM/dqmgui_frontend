@@ -18,7 +18,9 @@ import {
   Image,
 } from '../../../../containers/display/styledComponents';
 import { useRouter } from 'next/router';
-import { removePlotFromSelectedPlots } from '../../plot/singlePlot/utils';
+import { removePlotFromSelectedPlots, removePlotFromRightSide } from '../../plot/singlePlot/utils';
+import { Button } from 'antd';
+import { changeRouter, getChangedQueryParams } from '../../../../containers/display/utils';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -49,24 +51,12 @@ export const ZoomedOverlaidPlot = ({
       >
         <PlotNameCol>{selected_plot.name}</PlotNameCol>
         <Column>
-          <Link
-            href={{
-              pathname: '/',
-              query: {
-                run_number: query.run_number,
-                dataset_name: query.dataset_name,
-                folder_path: query.folder_path,
-                overlay: query.overlay,
-                overlay_data: query.overlay_data,
-                selected_plots: `${removePlotFromSelectedPlots(
-                  query.selected_plots,
-                  selected_plot
-                )}`,
-              },
-            }}
-          >
-            <MinusIcon />
-          </Link>
+          <Button
+            type="link"
+            onClick={() => removePlotFromRightSide(query, selected_plot)}
+            icon={<MinusIcon />
+            }
+          />
         </Column>
         <ImageDiv id={selected_plot.name} width={params_for_api.width} height={params_for_api.height}>
           <Image src={source} width={params_for_api.width} height={params_for_api.height} />
