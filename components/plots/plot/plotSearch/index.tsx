@@ -3,11 +3,9 @@ import Form from 'antd/lib/form/Form'
 import { Input } from 'antd';
 
 import { useRouter } from 'next/router';
-import { StyledFormItem } from '../../../styledComponents';
+import { StyledFormItem, StyledInput, StyledSearch } from '../../../styledComponents';
 import { QueryProps } from '../../../../containers/display/interfaces';
 import { getChangedQueryParams, changeRouter } from '../../../../containers/display/utils';
-
-const { Search } = Input;
 
 interface PlotSearchProps {
   isLoadingFolders: boolean
@@ -28,7 +26,7 @@ export const PlotSearch = ({ isLoadingFolders }: PlotSearchProps) => {
       <Form
         onChange={(e: any) => setPlotName(e.target.value)}>
         <StyledFormItem>
-          <Search
+          <StyledSearch
             defaultValue={query.plot_search}
             loading={isLoadingFolders}
             id="plot_search"
