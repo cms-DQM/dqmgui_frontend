@@ -2,6 +2,9 @@ import cleanDeep from 'clean-deep';
 import _ from 'lodash';
 
 import { PlotDataProps, PlotInterface, DirectoryInterface, QueryProps } from './interfaces';
+import Router from 'next/router';
+import { ParsedUrlQueryInput } from 'querystring';
+import { removeFirstSlash } from '../../components/workspaces/utils';
 
 export const getFolderPath = (folders: string[], clickedFolder: string) => {
   const folderIndex = folders.indexOf(clickedFolder);
@@ -73,16 +76,38 @@ export const getFormatedPlotsObject = (contents: PlotInterface[]) => (
   ).sort()
 )
 
-export const getFilteredDirectories = (query: QueryProps, workspaceFolders: string[], directories: (string | undefined)[]) => {
+export const getFilteredDirectories = (plot_search_folders: string[], workspace_folders: (string | undefined)[]) => {
   //if workspaceFolders array from context is not empty we taking intersection between all directories and workspaceFolders
   // workspace folders are fileterd folders array by selected workspace
-  if (workspaceFolders.length > 0) {
+  if (workspace_folders.length > 0) {
     //@ts-ignore
-    const filteredDirectories = directories.filter((directory: string) => workspaceFolders.includes(directory))
+    const filteredDirectories = workspace_folders.filter((directory: string) => plot_search_folders.includes(directory))
     return filteredDirectories
   }
   // if folder_path and workspaceFolders are empty, we return all direstories 
-  else if (workspaceFolders.length === 0) {
-    return directories
+  else if (workspace_folders.length === 0) {
+    return plot_search_folders
   }
+}
+
+export const getChangedQueryParams = (params: ParsedUrlQueryInput, query: QueryProps) => {
+  params.dataset_name = params.dataset_name ? params.dataset_name : query.dataset_name
+  params.run_number = params.run_number ? params.run_number : query.run_number
+  params.folder_path = params.folder_path ? removeFirstSlash(params.folder_path as string) : query.folder_path
+  params.workspace = params.workspace ? params.workspace : query.workspace
+  params.overlay = params.overlay ? params.overlay : query.overlay
+  params.overlay_data = params.overlay_data ? params.overlay_data : query.overlay_data
+  params.selected_plots = params.selected_plots === '' || params.selected_plots ? params.selected_plots : query.selected_plots
+  // if value of search field is empty string, should be retuned all folders. 
+  // if params.plot_search == '' when request is done, params.plot_search is changed to .*
+  params.plot_search = params.plot_search === '' || params.plot_search ? params.plot_search : query.plot_search
+
+  return params
+}
+
+export const changeRouter = (parameters: ParsedUrlQueryInput) => {
+  Router.replace({
+    pathname: '/',
+    query: parameters,
+  })
 }

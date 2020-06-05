@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from 'react';
+import React, { useRef, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { root_url } from '../../../../config/config';
@@ -33,6 +33,15 @@ export const Plot = ({ plot, isPlotSelected, params_for_api, imageRefScrollDown 
   const source = `${root_url}${plot_url}`;
 
   const imageRef = useRef(null);
+  useEffect(() => {
+    const scrollPlot = () => {
+      scroll(imageRef)
+      scrollToBottom(imageRefScrollDown)
+    }
+    if (isPlotSelected) {
+      scrollPlot()
+    }
+  }, [isPlotSelected, query.selected_plots])
 
   return (
     <div ref={imageRef}>
@@ -48,10 +57,8 @@ export const Plot = ({ plot, isPlotSelected, params_for_api, imageRefScrollDown 
             {isPlotSelected ? (
               <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
             ) : (
-                <PlusIcon onClick={async () => {
-                  await addPlotToRightSide(query, plot)
-                  scroll(imageRef)
-                  scrollToBottom(imageRefScrollDown)
+                <PlusIcon onClick={() => {
+                  addPlotToRightSide(query, plot)
                 }} />
               )}
           </Column>

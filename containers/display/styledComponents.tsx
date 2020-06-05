@@ -4,7 +4,7 @@ import {
   MinusCircleFilled,
   PlusCircleFilled,
 } from '@ant-design/icons';
-import { Col, Row, Breadcrumb } from 'antd';
+import { Col, Row, Breadcrumb, Button } from 'antd';
 
 import { theme } from '../../styles/theme';
 import { PlotPropertiesReportProps } from './interfaces';
@@ -144,4 +144,9 @@ export const Image = styled.img<{ width: number; height: number }>`
 
 export const StyledBreadcrumb = styled(Breadcrumb)`
     width: fit-content;
+`
+export const DirecotryButton = styled(Button)`
+  word-break: break-all;
+  color: ${theme.colors.primary.main};
+  width: 100%;
 `

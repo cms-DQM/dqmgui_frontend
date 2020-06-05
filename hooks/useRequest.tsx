@@ -1,13 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import axios, { AxiosRequestConfig, AxiosResponse, CancelTokenSource } from 'axios';
 
-import { message } from '../components/notifications'
 import { root_url } from '../config/config';
 
 interface ReturnRequest {
   data: any;
   errors: any;
   isLoading: boolean;
+  cancelSource: any;
 }
 
 
@@ -23,6 +23,12 @@ export const useRequest = (
   const [isLoading, setIsLoading] = useState(false);
   const cancelSource = useRef<CancelTokenSource | null>(null)
   const [errors, setEerrors] = useState<string[]>([])
+
+useEffect(()=>{
+  if (cancelSource) {
+    cancelSource.current?.cancel()
+  }
+},[])
 
   useEffect(() => {
     const CancelToken = axios.CancelToken
@@ -55,6 +61,5 @@ export const useRequest = (
       fetchData();
     }
   }, watchers);
-
-  return { data, isLoading, errors };
+  return { data, isLoading, errors, cancelSource };
 };
