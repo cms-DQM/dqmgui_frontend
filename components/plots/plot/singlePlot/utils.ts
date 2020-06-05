@@ -10,6 +10,7 @@ import Router, { useRouter } from 'next/router';
 import { LeftSideState } from '../../../../contexts/leftSideContext';
 import { RightSideState } from '../../../../contexts/rightSideContext';
 import { formTriples } from '../../../viewDetailsMenu/utils';
+import { changeRouter, getChangedQueryParams } from '../../../../containers/display/utils';
 
 export const removePlotFromSelectedPlots = (
   plotsQuery: string | undefined,
@@ -59,38 +60,22 @@ export const FormatParamsForAPI = (globalState: LeftSideState & RightSideState, 
   })
 }
 
-export const addPlotToRightSide = (query: QueryProps, plot: PlotDataProps) => Router.replace({
-  pathname: '/',
-  query: {
-    run_number: query.run_number,
-    dataset_name: query.dataset_name,
-    folder_path: query.folder_path,
-    workspace: query.workspace,
-    overlay: query.overlay,
-    overlay_data: query.overlay_data,
-    //addig selected plots name and directories to url
+export const addPlotToRightSide = (query: QueryProps, plot: PlotDataProps) =>
+  changeRouter(getChangedQueryParams({
     selected_plots: `${addToSelectedPlots(
       query.selected_plots,
       plot
-    )}`,
-  },
-})
+    )}`
+  }, query))
 
-export const removePlotFromRightSide = (query: QueryProps, plot: PlotDataProps) => Router.replace({
-  pathname: '/',
-  query: {
-    run_number: query.run_number,
-    dataset_name: query.dataset_name,
-    folder_path: query.folder_path,
-    workspace: query.workspace,
-    overlay: query.overlay,
-    overlay_data: query.overlay_data,
+
+export const removePlotFromRightSide = (query: QueryProps, plot: PlotDataProps) =>
+  changeRouter(getChangedQueryParams({
     selected_plots: `${removePlotFromSelectedPlots(
       query.selected_plots,
       plot
-    )}`,
-  },
-})
+    )}`
+  }, query))
 
 export const scroll = (imageRef: any) => {
   if (imageRef) {
@@ -104,6 +89,6 @@ export const scroll = (imageRef: any) => {
 
 export const scrollToBottom = (imageRef: any) => {
   if (imageRef && imageRef.current) {
-    imageRef.current.scrollTop  = imageRef.current.scrollHeight
+    imageRef.current.scrollTop = imageRef.current.scrollHeight
   }
 }

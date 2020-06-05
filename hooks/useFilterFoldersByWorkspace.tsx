@@ -3,22 +3,22 @@ import _ from 'lodash';
 
 import { QueryProps } from '../containers/display/interfaces';
 import { removeFirstSlash } from '../components/workspaces/utils';
-import { store } from '../contexts/leftSideContext';
 import { workspaces } from '../workspaces/offline';
+import { store } from '../contexts/leftSideContext';
 
 
-export const useFilterFoldersByWorkspaces = (query: QueryProps) => {
+export const useFilterFoldersByWorkspaces = (query: QueryProps, watchers?: any[]) => {
   const [availableFolders, setAvailableFolders] = React.useState<string[]>([])
+  const [filteredFolders, setFilteredFolders] = React.useState<string[]>([])
+
   const filteredInnerFolders: string[] = []
 
   const workspace = query.workspace
   const folderPathFromQuery = query.folder_path
-
-  const globalState = React.useContext(store)
-  const { setWorkspaceFolders } = globalState
+  const plot_search = query.plot_search
 
   React.useEffect(() => {
-
+    //getting folderPath by selected workspace
     workspaces.forEach((workspaceFromList: any) => {
       workspaceFromList.workspaces.forEach((oneWorkspace: any) => {
         if (oneWorkspace.label === workspace) {
@@ -26,13 +26,16 @@ export const useFilterFoldersByWorkspaces = (query: QueryProps) => {
         }
       })
     })
+  }, [workspace])
+
+  React.useEffect(() => {
 
     if (workspace && !folderPathFromQuery) {
       const firstLayerFolders = _.uniq(availableFolders.map((foldersPath: string) => {
         const firstLayer = foldersPath.split('/')[0]
         return firstLayer
       }))
-      setWorkspaceFolders(firstLayerFolders)
+      setFilteredFolders(firstLayerFolders)
     }
     else if (!!workspace && !!folderPathFromQuery) {
       availableFolders.forEach((foldersPath: string) => {
@@ -55,8 +58,10 @@ export const useFilterFoldersByWorkspaces = (query: QueryProps) => {
           }
         }
       })
-      setWorkspaceFolders(filteredInnerFolders)
+      setFilteredFolders(filteredInnerFolders)
     }
-  }, [query.folder_path, query.workspace, availableFolders])
 
+  }, [folderPathFromQuery, availableFolders, plot_search])
+
+  return { filteredFolders }
 }

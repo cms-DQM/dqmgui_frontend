@@ -8,6 +8,7 @@ import { QueryProps } from '../../../containers/display/interfaces';
 import { PartsBrowser } from './partBrowser';
 import { StyledSuccessIcon, StyledErrorIcon } from '../../styledComponents';
 import { useAvailbleAndNotAvailableDatasetPartsOptions } from '../../../hooks/useAvailbleAndNotAvailableDatasetPartsOptions';
+import { useChangeRouter } from '../../../hooks/useChangeRouter';
 
 export interface DatasetPartsProps {
   part_0: any;
@@ -36,22 +37,10 @@ export const DatasetsBuilder = () => {
     currentDatasetName
   );
 
-  useEffect(() => {
-    if (doesCombinationOfSelectedDatasetPartsExists) {
-      Router.replace({
-        pathname: '/',
-        query: {
-          run_number: query.run_number,
-          dataset_name: fullDatasetName,
-          folder_path: query.folder_path,
-          workspace: query.workspace,
-          overlay: query.overlay,
-          overlay_data: query.overlay_data,
-          selected_plots: query.selected_plots,
-        },
-      });
-    }
-  }, [fullDatasetName]);
+  useChangeRouter(
+    { dataset_name: fullDatasetName },
+    [fullDatasetName],
+    doesCombinationOfSelectedDatasetPartsExists)
 
   return (
     <Row>
@@ -78,8 +67,8 @@ export const DatasetsBuilder = () => {
         {doesCombinationOfSelectedDatasetPartsExists ? (
           <StyledSuccessIcon />
         ) : (
-          <StyledErrorIcon />
-        )}
+            <StyledErrorIcon />
+          )}
       </Col>
     </Row>
   );

@@ -1,5 +1,6 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect, useMemo, useContext } from 'react';
 import _ from 'lodash';
+import { Row, Col } from 'antd';
 
 import { useRequest } from '../../hooks/useRequest';
 import { PlotDataProps, QueryProps } from './interfaces';
@@ -15,8 +16,6 @@ import {
   doesPlotExists,
   getContents,
   getDirectories,
-  getFormatedPlotsObject,
-  getFilteredDirectories
 } from './utils';
 import { SpinnerWrapper, Spinner } from '../search/styledComponents';
 import { useRouter } from 'next/router';
@@ -24,8 +23,10 @@ import { RightSideStateProvider } from '../../contexts/rightSideContext';
 import { LeftSidePlots } from '../../components/plots/plot';
 import { Directories } from './directories'
 import { NoResultsFound } from '../search/noResultsFound';
-import { store } from '../../contexts/leftSideContext';
 import { CustomDiv } from '../../components/styledComponents';
+import { PlotSearch } from '../../components/plots/plot/plotSearch';
+import { useFilterFolders } from '../../hooks/useFilterFolders';
+import { store } from '../../contexts/leftSideContext';
 
 interface DirectoryInterface {
   subdir: string;
@@ -44,8 +45,6 @@ interface FolderProps {
   dataset_name: string;
 }
 
-
-
 const DiplayFolder: FC<FolderProps> = ({
   folder_path,
   run_number,
@@ -55,76 +54,81 @@ const DiplayFolder: FC<FolderProps> = ({
     data,
     isLoading,
   } = useRequest(
-    `/data/json/archive/${run_number}${dataset_name}${folder_path}`,
+    `/data/json/archive/${run_number}${dataset_name}/${folder_path}`,
     {},
     [folder_path]
   );
 
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
-  const directories = getDirectories(contents)
-  const plots = getFormatedPlotsObject(contents)
-
+  const allDirectories = getDirectories(contents)
   const router = useRouter();
   const query: QueryProps = router.query;
   const selectedPlots = query.selected_plots;
   const selected_plots: PlotDataProps[] = getSelectedPlots(selectedPlots);
 
-  const globalState = React.useContext(store)
-  const { workspaceFolders } = globalState;
   //filtering directories by selected workspace
-  const filteredDirectories = getFilteredDirectories(query, workspaceFolders, directories)
+  const { foldersByPlotSearch, isLoadingFolders, plots } = useFilterFolders(query, allDirectories)
+  //@ts-ignore
+  const filteredFolders: any[] = foldersByPlotSearch ? foldersByPlotSearch : []
 
-  return (
-    <>
-      <FolderPath
-        folder_path={folder_path}
-        run_number={run_number}
-        dataset_name={dataset_name}
-      />
-      <DivWrapper selectedPlots={selected_plots.length > 0}>
-        <Wrapper zoomed={selected_plots.length > 0} notZoomedPlot={true}>
-          {doesPlotExists(contents).length > 0 && (
-            <ViewDetailsMenu
-              selected_plots={selected_plots.length > 0}
+  // return useMemo(() => {
+    return (
+      <>
+        <Row style={{ padding: 8 }}>
+          <Col style={{ padding: 8 }}>
+            <FolderPath
+              folder_path={folder_path}
             />
-          )}
-          {isLoading ? (
-            <SpinnerWrapper>
-              <Spinner />
-            </SpinnerWrapper>
-          ) : (
-              <>
-                <Directories directories={filteredDirectories} />
-                {plots.map((plot: PlotDataProps | undefined) => {
-                  if (plot) {
-                    return (
-                      <div key={plot.name}>
-                        <LeftSidePlots plot={plot} />
-                      </div>
-                    );
-                  }
-                })}
-              </>
-            )}
-            {
-              !isLoading &&  filteredDirectories.length === 0 && plots.length === 0 &&
-            <CustomDiv fullwidth="true">
-              <NoResultsFound />
-            </CustomDiv>
-          }
-        </Wrapper>
-        {selected_plots.length > 0 && (
-          <Wrapper zoomed={selected_plots.length}>
-            <RightSideStateProvider>
-              <ZoomedPlots
-                selected_plots={selected_plots}
+          </Col>
+          {/* <Col>
+            <PlotSearch isLoadingFolders={isLoadingFolders} />
+          </Col> */}
+        </Row>
+        <DivWrapper selectedPlots={selected_plots.length > 0}>
+          <Wrapper zoomed={selected_plots.length > 0} notZoomedPlot={true}>
+            {doesPlotExists(contents).length > 0 && (
+              <ViewDetailsMenu
+                selected_plots={selected_plots.length > 0}
               />
-            </RightSideStateProvider>
+            )}
+            {isLoading ? (
+              <SpinnerWrapper>
+                <Spinner />
+              </SpinnerWrapper>
+            ) : (
+                <>
+                  <Directories directories={filteredFolders} />
+                  {plots.map((plot: PlotDataProps | undefined) => {
+                    if (plot) {
+                      return (
+                        <div key={plot.name}>
+                          <LeftSidePlots plot={plot} />
+                        </div>
+                      );
+                    }
+                  })}
+                </>
+              )}
+            {
+              !isLoading && filteredFolders.length === 0 && plots.length === 0 &&
+              <CustomDiv fullwidth="true">
+                <NoResultsFound />
+              </CustomDiv>
+            }
           </Wrapper>
-        )}
-      </DivWrapper>
-    </>
-  );
+          {selected_plots.length > 0 && (
+            <Wrapper zoomed={selected_plots.length}>
+              <RightSideStateProvider>
+                <ZoomedPlots
+                  selected_plots={selected_plots}
+                />
+              </RightSideStateProvider>
+            </Wrapper>
+          )}
+        </DivWrapper>
+      </>
+    );
+  // }, [plots, filteredFolders.toString(), selectedPlots, isLoading])
 };
 
 export default DiplayFolder;
