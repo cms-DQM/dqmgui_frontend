@@ -71,7 +71,7 @@ const DiplayFolder: FC<FolderProps> = ({
   //@ts-ignore
   const filteredFolders: any[] = foldersByPlotSearch ? foldersByPlotSearch : []
 
-  return useMemo(() => {
+  // return useMemo(() => {
     return (
       <>
         <Row style={{ padding: 8 }}>
@@ -128,7 +128,7 @@ const DiplayFolder: FC<FolderProps> = ({
         </DivWrapper>
       </>
     );
-  }, [plots, filteredFolders.toString(), selectedPlots, isLoading])
+  // }, [plots, filteredFolders.toString(), selectedPlots, isLoading])
 };
 
 export default DiplayFolder;
