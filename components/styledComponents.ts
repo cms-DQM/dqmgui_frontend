@@ -143,11 +143,12 @@ export const CustomCheckbox = styled(Checkbox) <{ color?: string }>`
 export const CustomParagraph = styled.p<{ color?: string }>`
   color: ${(props) => props.color ? props.color : theme.colors.common.black};
 `
-export const CustomRow = styled(Row) <{ display?: string, justifycontent?: string, space?: string, alignitems?: string }>`
+export const CustomRow = styled(Row) <{ width?: string, display?: string, justifycontent?: string, space?: string, alignitems?: string }>`
   display: ${(props) => props.display ? props.display : ''};
   justify-content: ${(props) => props.justifycontent ? props.justifycontent : ''};
   padding: ${(props) => props.space ? theme.space.padding : ''};
   align-items: ${(props) => props.alignitems ? props.alignitems : ''};
+  width: ${(props) => props.width ? props.width : ''};
 `
 
 export const CustomCol = styled(Col) <{ display?: string, justifycontent?: string, space?: string, alignitems?: string }>`
@@ -162,12 +163,16 @@ export const CustomDiv = styled(Col) <{
   justifycontent?: string,
   space?: string,
   alignitems?: string,
-  fullwidth?: string
+  fullwidth?: string,
+  width?: string;
+  height?: string;
 }>`
   display: ${(props) => props.display ? props.display : ''};
   justify-content: ${(props) => props.justifycontent ? props.justifycontent : ''};
   padding-right: ${(props) => props.space ? `calc(${theme.space.padding}*${props.space})` : ''};
   align-items: ${(props) => props.alignitems ? props.alignitems : ''};
   height: fit-content;
-  width: ${(props) => props.fullwidth === 'true' ? '100vw' : 'fit-content' };
+  width: ${(props) => props.fullwidth === 'true' ? '100vw' : 'fit-content'};
+  width: ${(props) => props.width ? props.width : ''};
+  height: ${(props) => props.height ? props.height : ''};
 `

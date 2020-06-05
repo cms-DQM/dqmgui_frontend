@@ -2,7 +2,7 @@ import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Router, { useRouter } from 'next/router';
-import { Tooltip } from 'antd';
+import { Tooltip, Row, Col } from 'antd';
 
 import Nav from '../components/Nav';
 import SearchResults from '../containers/search/SearchResults';
@@ -14,6 +14,7 @@ import {
   StyledDiv,
   StyledLogoWrapper,
   StyledLogo,
+  StyledLogoDiv,
 } from '../styles/styledComponents';
 import {
   NotFoundDiv,
@@ -26,6 +27,8 @@ import { QueryValidationErrors } from '../components/queryValidationErrors';
 import { Browser } from '../components/browsing';
 import Workspaces from '../components/workspaces';
 import { workspaces } from '../workspaces/offline';
+import { PlotSearch } from '../components/plots/plot/plotSearch';
+import { CustomRow } from '../components/styledComponents';
 
 const navigationHandler = (
   search_by_run_number: number,
@@ -96,30 +99,45 @@ const Index: NextPage<FolderPathQuery> = () => {
       <StyledLayout>
         <StyledHeader>
           <Tooltip title="Back to main page" placement="bottomLeft">
-            <StyledLogoWrapper
-              onClick={() => backToMainPage()}
-            >
-              <StyledLogo src="/images/CMSlogo_white_red_nolabel_1024_May2014.png" />
-            </StyledLogoWrapper>
+            <StyledLogoDiv>
+              <StyledLogoWrapper
+                onClick={() => backToMainPage()}
+              >
+                <StyledLogo src="/images/CMSlogo_white_red_nolabel_1024_May2014.png" />
+              </StyledLogoWrapper>
+            </StyledLogoDiv>
           </Tooltip>
           {
             //if all full set is selected: dataset name and run number, then regular search field is not visible. 
             //Instead, run and dataset browser is is displayed.
             //Regular search fields are displayed just in the main page.
             isDatasetAndRunNumberSelected ?
-              <>
-                <Workspaces />
-                <Browser />
-              </>
+              <CustomRow
+                width='100%'
+                display='flex'
+                justifycontent='space-between'
+              >
+                <CustomRow width='fit-content'>
+                  <Col>
+                    <Workspaces />
+                  </Col>
+                  <Col>
+                    <Browser />
+                  </Col>
+                </CustomRow>
+                <Col>
+                  <PlotSearch isLoadingFolders={false} />
+                </Col>
+              </CustomRow>
               :
               <>
-              <Nav
-                initial_search_run_number={search_run_number}
-                initial_search_dataset_name={search_dataset_name}
-                handler={navigationHandler}
-                type="top"
-              />
-            </>
+                <Nav
+                  initial_search_run_number={search_run_number}
+                  initial_search_dataset_name={search_dataset_name}
+                  handler={navigationHandler}
+                  type="top"
+                />
+              </>
           }
 
         </StyledHeader>
