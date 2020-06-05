@@ -79,6 +79,8 @@ export const removePlotFromRightSide = (query: QueryProps, plot: PlotDataProps) 
 
 export const scroll = (imageRef: any) => {
   if (imageRef) {
+    // window.scrollTo(0, imageRef.current.offsetTop) 
+    // imageRef.current = window.pageYOffset
     imageRef.current.scrollIntoView({
       behavior: 'smooth',
       block: 'center',
