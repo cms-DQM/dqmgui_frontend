@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Col, Select, Row, Spin, Button } from 'antd';
 import { useRouter } from 'next/router';
 import { CaretRightFilled, CaretLeftFilled } from '@ant-design/icons';
-import Router from 'next/router';
 
 import {
   StyledSelect,
