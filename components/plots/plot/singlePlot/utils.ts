@@ -10,7 +10,10 @@ import Router, { useRouter } from 'next/router';
 import { LeftSideState } from '../../../../contexts/leftSideContext';
 import { RightSideState } from '../../../../contexts/rightSideContext';
 import { formTriples } from '../../../viewDetailsMenu/utils';
-import { changeRouter, getChangedQueryParams } from '../../../../containers/display/utils';
+import {
+  changeRouter,
+  getChangedQueryParams,
+} from '../../../../containers/display/utils';
 
 export const removePlotFromSelectedPlots = (
   plotsQuery: string | undefined,
@@ -39,15 +42,20 @@ export const addOverlayData = (triples: TripleProps[] | undefined) => {
     triples.map(
       (triple: TripleProps) =>
         `${triple.run_number}${triple.dataset_name}/${
-        triple.label ? triple.label : triple.run_number
+          triple.label ? triple.label : triple.run_number
         }`
     );
   const query = params?.join('&');
   return query;
 };
 
-export const FormatParamsForAPI = (globalState: LeftSideState & RightSideState, query: QueryProps, plotName: string, dir?: string): ParamsForApiProps => {
-  return ({
+export const FormatParamsForAPI = (
+  globalState: LeftSideState & RightSideState,
+  query: QueryProps,
+  plotName: string,
+  dir?: string
+): ParamsForApiProps => {
+  return {
     run_number: query.run_number ? query.run_number : NaN,
     dataset_name: query.dataset_name ? query.dataset_name : '',
     folders_path: dir,
@@ -56,26 +64,35 @@ export const FormatParamsForAPI = (globalState: LeftSideState & RightSideState, 
     width: globalState.size.w,
     customizeProps: globalState.customizeProps,
     stats: globalState.stats,
-    overlay_plot: query.overlay_data ? formTriples(query.overlay_data) : []
-  })
-}
+    overlay_plot: query.overlay_data ? formTriples(query.overlay_data) : [],
+  };
+};
 
 export const addPlotToRightSide = (query: QueryProps, plot: PlotDataProps) =>
-  changeRouter(getChangedQueryParams({
-    selected_plots: `${addToSelectedPlots(
-      query.selected_plots,
-      plot
-    )}`
-  }, query))
+  changeRouter(
+    getChangedQueryParams(
+      {
+        selected_plots: `${addToSelectedPlots(query.selected_plots, plot)}`,
+      },
+      query
+    )
+  );
 
-
-export const removePlotFromRightSide = (query: QueryProps, plot: PlotDataProps) =>
-  changeRouter(getChangedQueryParams({
-    selected_plots: `${removePlotFromSelectedPlots(
-      query.selected_plots,
-      plot
-    )}`
-  }, query))
+export const removePlotFromRightSide = (
+  query: QueryProps,
+  plot: PlotDataProps
+) =>
+  changeRouter(
+    getChangedQueryParams(
+      {
+        selected_plots: `${removePlotFromSelectedPlots(
+          query.selected_plots,
+          plot
+        )}`,
+      },
+      query
+    )
+  );
 
 export const scroll = (imageRef: any) => {
   if (imageRef) {
@@ -85,10 +102,10 @@ export const scroll = (imageRef: any) => {
       inline: 'center',
     });
   }
-}
+};
 
 export const scrollToBottom = (imageRef: any) => {
   if (imageRef && imageRef.current) {
-    imageRef.current.scrollTop = imageRef.current.scrollHeight
+    imageRef.current.scrollTop = imageRef.current.scrollHeight;
   }
-}
+};

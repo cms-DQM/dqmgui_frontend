@@ -34,7 +34,6 @@ const navigationHandler = (
   search_by_run_number: number,
   search_by_dataset_name: string
 ) => {
-
   Router.replace({
     pathname: '/',
     query: {
@@ -55,7 +54,6 @@ const serchResultsHandler = (run: number, dataset: string) => {
   });
 };
 
-
 const backToMainPage = () => {
   Router.replace({
     pathname: '/',
@@ -64,7 +62,7 @@ const backToMainPage = () => {
       search_dataset_name: '',
     },
   });
-}
+};
 
 const Index: NextPage<FolderPathQuery> = () => {
   // We grab the query from the URL:
@@ -85,7 +83,8 @@ const Index: NextPage<FolderPathQuery> = () => {
     search_dataset_name
   );
 
-  const isDatasetAndRunNumberSelected = !!query.run_number && !!query.dataset_name
+  const isDatasetAndRunNumberSelected =
+    !!query.run_number && !!query.dataset_name;
 
   return (
     <StyledDiv>
@@ -100,24 +99,22 @@ const Index: NextPage<FolderPathQuery> = () => {
         <StyledHeader>
           <Tooltip title="Back to main page" placement="bottomLeft">
             <StyledLogoDiv>
-              <StyledLogoWrapper
-                onClick={() => backToMainPage()}
-              >
+              <StyledLogoWrapper onClick={() => backToMainPage()}>
                 <StyledLogo src="/images/CMSlogo_white_red_nolabel_1024_May2014.png" />
               </StyledLogoWrapper>
             </StyledLogoDiv>
           </Tooltip>
           {
-            //if all full set is selected: dataset name and run number, then regular search field is not visible. 
+            //if all full set is selected: dataset name and run number, then regular search field is not visible.
             //Instead, run and dataset browser is is displayed.
             //Regular search fields are displayed just in the main page.
-            isDatasetAndRunNumberSelected ?
+            isDatasetAndRunNumberSelected ? (
               <CustomRow
-                width='100%'
-                display='flex'
-                justifycontent='space-between'
+                width="100%"
+                display="flex"
+                justifycontent="space-between"
               >
-                <CustomRow width='fit-content'>
+                <CustomRow width="fit-content">
                   <Col>
                     <Workspaces />
                   </Col>
@@ -129,7 +126,7 @@ const Index: NextPage<FolderPathQuery> = () => {
                   <PlotSearch isLoadingFolders={false} />
                 </Col>
               </CustomRow>
-              :
+            ) : (
               <>
                 <Nav
                   initial_search_run_number={search_run_number}
@@ -138,8 +135,8 @@ const Index: NextPage<FolderPathQuery> = () => {
                   type="top"
                 />
               </>
+            )
           }
-
         </StyledHeader>
         {validation_errors.length > 0 ? (
           <QueryValidationErrors validation_errors={validation_errors} />
@@ -159,13 +156,13 @@ const Index: NextPage<FolderPathQuery> = () => {
             errors={errors}
           />
         ) : (
-                <NotFoundDivWrapper>
-                  <NotFoundDiv noBorder>
-                    <ChartIcon />
+          <NotFoundDivWrapper>
+            <NotFoundDiv noBorder>
+              <ChartIcon />
               Welcome to DQM GUI
             </NotFoundDiv>
-                </NotFoundDivWrapper>
-              )}
+          </NotFoundDivWrapper>
+        )}
       </StyledLayout>
     </StyledDiv>
   );

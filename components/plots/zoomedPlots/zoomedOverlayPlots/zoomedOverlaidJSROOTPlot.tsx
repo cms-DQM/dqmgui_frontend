@@ -20,9 +20,15 @@ import {
   MinusIcon,
   ImageDiv,
 } from '../../../../containers/display/styledComponents';
-import { removePlotFromSelectedPlots, removePlotFromRightSide } from '../../plot/singlePlot/utils';
+import {
+  removePlotFromSelectedPlots,
+  removePlotFromRightSide,
+} from '../../plot/singlePlot/utils';
 import { Button } from 'antd';
-import { changeRouter, getChangedQueryParams } from '../../../../containers/display/utils';
+import {
+  changeRouter,
+  getChangedQueryParams,
+} from '../../../../containers/display/utils';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;
@@ -42,17 +48,17 @@ export const ZoomedOverlaidJSROOTPlot = ({
 
   const overlaid_plots_runs_and_datasets: any[] = params_for_api?.overlay_plot
     ? params_for_api.overlay_plot.map((plot: TripleProps) => {
-      const copy: any = { ...params_for_api };
+        const copy: any = { ...params_for_api };
 
-      if (plot.dataset_name) {
-        copy.dataset_name = plot.dataset_name;
-      }
-      copy.run_number = plot.run_number;
-      const { data } = useRequest(get_jroot_plot(copy), {}, [
-        selected_plot.name,
-      ]);
-      return data;
-    })
+        if (plot.dataset_name) {
+          copy.dataset_name = plot.dataset_name;
+        }
+        copy.run_number = plot.run_number;
+        const { data } = useRequest(get_jroot_plot(copy), {}, [
+          selected_plot.name,
+        ]);
+        return data;
+      })
     : [];
 
   overlaid_plots_runs_and_datasets.push(data);
@@ -129,8 +135,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
           <Button
             type="link"
             onClick={() => removePlotFromRightSide(query, selected_plot)}
-            icon={<MinusIcon />
-            }
+            icon={<MinusIcon />}
           />
         </Column>
         <ImageDiv

@@ -8,12 +8,12 @@ export interface RightSideStateProviderProps {
 
 export interface RightSideState {
   height: number;
-  width: number,
-  normalize: boolean,
-  stats: boolean,
+  width: number;
+  normalize: boolean;
+  stats: boolean;
   size: SizeProps;
   JSROOTmode: boolean;
-  customizeProps: CustomizeProps
+  customizeProps: CustomizeProps;
 }
 
 export const initialState: any = {
@@ -45,10 +45,10 @@ const store = createContext(initialState);
 const { Provider } = store;
 
 const RightSideStateProvider = ({ children }: RightSideStateProviderProps) => {
-  const [size, setSize] = useState<number>(initialState.size)
-  const [normalize, setNormalize] = useState<boolean>(true)
-  const [stats, setStats] = useState<boolean>(true)
-  const [JSROOTmode, setJSROOTmode] = useState<boolean>(false)
+  const [size, setSize] = useState<number>(initialState.size);
+  const [normalize, setNormalize] = useState<boolean>(true);
+  const [stats, setStats] = useState<boolean>(true);
+  const [JSROOTmode, setJSROOTmode] = useState<boolean>(false);
   const [customize, setCustomize] = useState<CustomizeProps>({
     xtype: '',
     xmin: NaN,
@@ -61,15 +61,26 @@ const RightSideStateProvider = ({ children }: RightSideStateProviderProps) => {
     zmax: NaN,
     drawopts: '',
     withref: '',
-  })
+  });
 
-  return <Provider value={{
-    size, setSize,
-    normalize, setNormalize,
-    stats, setStats,
-    JSROOTmode, setJSROOTmode,
-    customize, setCustomize
-  }}>{children}</Provider>;
-}
+  return (
+    <Provider
+      value={{
+        size,
+        setSize,
+        normalize,
+        setNormalize,
+        stats,
+        setStats,
+        JSROOTmode,
+        setJSROOTmode,
+        customize,
+        setCustomize,
+      }}
+    >
+      {children}
+    </Provider>
+  );
+};
 
-export { store, RightSideStateProvider }
+export { store, RightSideStateProvider };

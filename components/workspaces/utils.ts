@@ -1,4 +1,4 @@
-import { QueryProps } from "../../containers/display/interfaces";
+import { QueryProps } from '../../containers/display/interfaces';
 import Router from 'next/router';
 
 export const setWorkspaceToQuery = (query: QueryProps, workspace: string) => {
@@ -11,17 +11,16 @@ export const setWorkspaceToQuery = (query: QueryProps, workspace: string) => {
       workspace: workspace,
       overlay: '',
       overlay_data: '',
-      selected_plots: ''
+      selected_plots: '',
     },
-  })
-
-}
+  });
+};
 
 export const removeFirstSlash = (path: string) => {
-  const firstChar = path.substring(0, 1)
-  if (firstChar === "/") {
-    return path.substring(1, path.length)
+  const firstChar = path.substring(0, 1);
+  if (firstChar === '/') {
+    return path.substring(1, path.length);
   } else {
-    return path
+    return path;
   }
-}
+};

@@ -117,4 +117,4 @@ export const StyledA = styled.a`
 export const StyledAlert = styled(Alert)`
   width: 100vw;
   height: fit-content;
-`
+`;

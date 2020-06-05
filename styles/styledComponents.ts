@@ -23,19 +23,19 @@ export const StyledDiv = styled.div<{ span?: number }>`
 export const StyledLogoWrapper = styled.div`
   position: absolute;
   left: 0;
-  height: 55px; 
+  height: 55px;
   cursor: pointer;
   transition: 0.5s;
-  &:hover{
+  &:hover {
     background-color: ${theme.colors.secondary.dark} !important;
     color: ${theme.colors.common.white};
   }
-`
+`;
 export const StyledLogo = styled.img`
   width: 55px;
   height: 55px;
-`
+`;
 export const StyledLogoDiv = styled.div`
   width: 55px;
   height: 55px;
-`
+`;

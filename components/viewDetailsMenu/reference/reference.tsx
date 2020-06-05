@@ -11,22 +11,25 @@ import {
   addRun,
   change_value_in_reference_table,
 } from '../../../reducers/reference';
-import { StyledDiv, CustomCheckbox, CustomRow, CustomCol } from '../../styledComponents';
 import {
-  StyledForm,
+  StyledDiv,
+  CustomCheckbox,
+  CustomRow,
+  CustomCol,
 } from '../../styledComponents';
+import { StyledForm } from '../../styledComponents';
 import { formTriples } from '../utils';
 import { useRouter } from 'next/router';
 import { CustomModal } from '../search';
 import { OverlayOptions } from './overlayOptions';
-import { OverlayRuns } from './overlayRuns'
+import { OverlayRuns } from './overlayRuns';
 import FormItem from 'antd/lib/form/FormItem';
 
 interface ReferenceProps {
   normalize: boolean;
   setNormalize(normalize: boolean): void;
   overlayPlots: string;
-  setOverlay(overlayPlots: TripleProps[]): void
+  setOverlay(overlayPlots: TripleProps[]): void;
 }
 
 const isAllChecked = (triples: TripleProps[]) => {
@@ -40,7 +43,7 @@ export const Reference = ({
   normalize,
   setNormalize,
   overlayPlots,
-  setOverlay
+  setOverlay,
 }: ReferenceProps) => {
   const [state, dispatch] = useReducer(referenceReducer, initialState);
   const [selectedTriple, setTriple] = useState<TripleProps>({});
@@ -61,9 +64,7 @@ export const Reference = ({
     <StyledDiv>
       <CustomRow>
         <CustomCol space={'2'}>
-          <FormItem
-            name="CustomizeAll"
-          >
+          <FormItem name="CustomizeAll">
             <CustomCheckbox
               checked={isAllChecked(triples)}
               onChange={(e: any) => {
@@ -77,13 +78,11 @@ export const Reference = ({
               }}
             >
               Check All
-          </CustomCheckbox>
+            </CustomCheckbox>
           </FormItem>
         </CustomCol>
         <CustomCol space={'2'}>
-          <FormItem
-            name="OverlayPosition"
-            label="Position:">
+          <FormItem name="OverlayPosition" label="Position:">
             <OverlayOptions />
           </FormItem>
         </CustomCol>
@@ -94,11 +93,10 @@ export const Reference = ({
               checked={normalize}
             >
               Normalize
-               </CustomCheckbox>
+            </CustomCheckbox>
           </FormItem>
         </CustomCol>
-        <Col>
-        </Col>
+        <Col></Col>
       </CustomRow>
       <CustomModal
         dispatch={dispatch}

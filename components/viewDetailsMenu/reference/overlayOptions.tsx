@@ -1,4 +1,4 @@
-import React  from 'react';
+import React from 'react';
 import { Select } from 'antd';
 import { useRouter } from 'next/router';
 
@@ -10,7 +10,7 @@ import {
 import { StyledSelect } from '../styledComponents';
 import { useChangeRouter } from '../../../hooks/useChangeRouter';
 
-const { Option } = Select
+const { Option } = Select;
 
 export const OverlayOptions = () => {
   const router = useRouter();
@@ -18,7 +18,7 @@ export const OverlayOptions = () => {
   const settedOverlay = query.overlay ? query.overlay : overlayOptions[0].value;
 
   const [value, setValue] = React.useState(settedOverlay);
-  useChangeRouter({ overlay: value }, [value], true)
+  useChangeRouter({ overlay: value }, [value], true);
 
   return (
     <StyledSelect
@@ -29,9 +29,7 @@ export const OverlayOptions = () => {
     >
       {overlayOptions.map((option: OptionProps) => {
         return (
-          <Option
-            value={option.value}
-            key={option.toString()}>
+          <Option value={option.value} key={option.toString()}>
             <div>{option.label}</div>
           </Option>
         );

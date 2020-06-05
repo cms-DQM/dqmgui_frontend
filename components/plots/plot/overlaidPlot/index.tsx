@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 interface OverlaidPlotProps {
   plot: PlotDataProps;
   isPlotSelected: boolean;
-  params_for_api: ParamsForApiProps
+  params_for_api: ParamsForApiProps;
   imageRefScrollDown: any;
 }
 
@@ -17,9 +17,8 @@ export const OverlaidPlot = ({
   plot,
   isPlotSelected,
   params_for_api,
-  imageRefScrollDown
+  imageRefScrollDown,
 }: OverlaidPlotProps) => {
-
   return (
     <>
       {params_for_api.overlay === 'onSide' ? (
@@ -30,13 +29,13 @@ export const OverlaidPlot = ({
           imageRefScrollDown={imageRefScrollDown}
         />
       ) : (
-          <OverlaidPlotImage
-            plot={plot}
-            params_for_api={params_for_api}
-            isPlotSelected={isPlotSelected}
-            imageRefScrollDown={imageRefScrollDown}
-          />
-        )}
+        <OverlaidPlotImage
+          plot={plot}
+          params_for_api={params_for_api}
+          isPlotSelected={isPlotSelected}
+          imageRefScrollDown={imageRefScrollDown}
+        />
+      )}
     </>
   );
 };

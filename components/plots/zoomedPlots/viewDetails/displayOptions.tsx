@@ -5,12 +5,10 @@ import { SizeChanger } from '../../../sizeChanger';
 import { CutomFormItem } from '../../../styledComponents';
 import { store } from '../../../../contexts/rightSideContext';
 
-interface DisplayOptionsProps {
-
-}
+interface DisplayOptionsProps {}
 
 export const DisplayOptions = () => {
-  const { setJSROOTmode, size, setSize } = useContext(store)
+  const { setJSROOTmode, size, setSize } = useContext(store);
 
   useEffect(() => {
     return () => setJSROOTmode(false);
@@ -18,23 +16,16 @@ export const DisplayOptions = () => {
 
   return (
     <div>
-      <CutomFormItem
-        name="SizeChanger"
-        label="Size">
-        <SizeChanger
-          currentValue={size}
-          setSize={setSize}
-        />
+      <CutomFormItem name="SizeChanger" label="Size">
+        <SizeChanger currentValue={size} setSize={setSize} />
       </CutomFormItem>
       <hr />
-      <CutomFormItem
-        name="Jsroot"
-        label="JSROOT">
+      <CutomFormItem name="Jsroot" label="JSROOT">
         <Switch
           checkedChildren="JSROOT enabled"
           unCheckedChildren="JSROOT disabled"
           onChange={(e) => {
-            setJSROOTmode(e)
+            setJSROOTmode(e);
           }}
         />
       </CutomFormItem>

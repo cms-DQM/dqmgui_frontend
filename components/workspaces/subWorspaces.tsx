@@ -3,7 +3,7 @@ import { TreeSelect } from 'antd';
 const { TreeNode } = TreeSelect;
 
 export interface CustomazeProps {
-  [key: string]: { label: string; foldersPathPath: string[] }
+  [key: string]: { label: string; foldersPathPath: string[] };
 }
 
 interface SubWorkspacesProps {
@@ -11,14 +11,18 @@ interface SubWorkspacesProps {
 }
 
 const SubWorkspaces = ({ workspaces }: SubWorkspacesProps) => {
-  const labelOfSubWorkspaces = Object.keys(workspaces)
+  const labelOfSubWorkspaces = Object.keys(workspaces);
   return (
     <>
       {labelOfSubWorkspaces.map((subWorkspace: string) => (
-        <TreeNode key={subWorkspace} value={subWorkspace} title={subWorkspace} />
+        <TreeNode
+          key={subWorkspace}
+          value={subWorkspace}
+          title={subWorkspace}
+        />
       ))}
     </>
-  )
-}
+  );
+};
 
-export default SubWorkspaces
+export default SubWorkspaces;

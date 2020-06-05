@@ -96,7 +96,7 @@ export interface QueryProps {
 
 export interface PlotPropertiesProps {
   hasref: number;
-  isEff: number,
+  isEff: number;
   kind: string;
   lumisect: string;
   report: PlotPropertiesReportProps;
@@ -104,7 +104,7 @@ export interface PlotPropertiesProps {
 
 export interface PlotPropertiesReportProps {
   alarm: number;
-  error: number,
+  error: number;
   other: number;
   warn: number;
 }

@@ -1,11 +1,26 @@
-import React from 'react'
+import React from 'react';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { Checkbox, Col, Row } from 'antd';
 import { addOverlayData } from '../../plots/plot/singlePlot/utils';
 
-import { TripleProps, QueryProps } from '../../../containers/display/interfaces';
-import { FieldsWrapper, StyledDiv, StyledSecondaryButton, StyledButton, CustomCol,CustomDiv } from '../../styledComponents';
-import { change_value_in_reference_table, toggleModal, removeRun, addRun } from '../../../reducers/reference';
+import {
+  TripleProps,
+  QueryProps,
+} from '../../../containers/display/interfaces';
+import {
+  FieldsWrapper,
+  StyledDiv,
+  StyledSecondaryButton,
+  StyledButton,
+  CustomCol,
+  CustomDiv,
+} from '../../styledComponents';
+import {
+  change_value_in_reference_table,
+  toggleModal,
+  removeRun,
+  addRun,
+} from '../../../reducers/reference';
 import { Field } from './field';
 import { filter_plots, filter_valid_runs } from '../utils';
 import { Container } from './containers';
@@ -18,10 +33,18 @@ interface OverlayRunsProps {
   query: QueryProps;
   setTriple(triple: TripleProps): void;
   overlayPlots: string;
-  setOverlay(overlayPlots: TripleProps[]): void
+  setOverlay(overlayPlots: TripleProps[]): void;
 }
 
-export const OverlayRuns = ({ overlayPlots, setOverlay, triples, state, dispatch, query, setTriple }: OverlayRunsProps) => {
+export const OverlayRuns = ({
+  overlayPlots,
+  setOverlay,
+  triples,
+  state,
+  dispatch,
+  query,
+  setTriple,
+}: OverlayRunsProps) => {
   return (
     <CustomDiv>
       <Row justify="space-between">
@@ -64,15 +87,15 @@ export const OverlayRuns = ({ overlayPlots, setOverlay, triples, state, dispatch
               </CustomCol>
               <CustomCol space="2">
                 <StyledDiv>
-                  <CustomCol space="2">                    
-                  <StyledSecondaryButton
-                    onClick={() => {
-                      toggleModal(!state.open)(dispatch);
-                      setTriple(triple);
-                    }}
-                  >
-                    Change
-                </StyledSecondaryButton>
+                  <CustomCol space="2">
+                    <StyledSecondaryButton
+                      onClick={() => {
+                        toggleModal(!state.open)(dispatch);
+                        setTriple(triple);
+                      }}
+                    >
+                      Change
+                    </StyledSecondaryButton>
                   </CustomCol>
                 </StyledDiv>
               </CustomCol>
@@ -97,8 +120,7 @@ export const OverlayRuns = ({ overlayPlots, setOverlay, triples, state, dispatch
                     }
                   }}
                   icon={<MinusOutlined />}
-                >
-                </StyledSecondaryButton>
+                ></StyledSecondaryButton>
               </CustomCol>
             </FieldsWrapper>
           ))}
@@ -141,6 +163,6 @@ export const OverlayRuns = ({ overlayPlots, setOverlay, triples, state, dispatch
           ></StyledSecondaryButton>
         </CustomCol>
       </Row>
-    </CustomDiv >
-  )
-}
+    </CustomDiv>
+  );
+};

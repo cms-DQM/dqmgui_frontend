@@ -13,17 +13,23 @@ import { store } from '../../contexts/leftSideContext';
 
 const { Panel } = Collapse;
 
-
 interface ViewDetailsMenuProps {
-  selected_plots: boolean
+  selected_plots: boolean;
 }
 
 export const ViewDetailsMenu = ({ selected_plots }: ViewDetailsMenuProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
 
-  const globalState = useContext(store)
-  const { size, setSize, normalize, setNormalize, overlayPlots, setOverlay } = globalState
+  const globalState = useContext(store);
+  const {
+    size,
+    setSize,
+    normalize,
+    setNormalize,
+    overlayPlots,
+    setOverlay,
+  } = globalState;
 
   useEffect(() => {
     if (query) {
@@ -39,21 +45,14 @@ export const ViewDetailsMenu = ({ selected_plots }: ViewDetailsMenuProps) => {
   }, []);
 
   return (
-    <StyledCollapse >
+    <StyledCollapse>
       <Panel header="Options" key="1">
         <Form>
-          <CutomFormItem
-            name="SizeChanger"
-            label="Size">
-            <SizeChanger
-              currentValue={size}
-              setSize={setSize}
-            />
+          <CutomFormItem name="SizeChanger" label="Size">
+            <SizeChanger currentValue={size} setSize={setSize} />
           </CutomFormItem>
           <hr />
-          <CutomFormItem
-            name="Reference"
-            label="Reference">
+          <CutomFormItem name="Reference" label="Reference">
             <Reference
               normalize={normalize}
               setNormalize={setNormalize}

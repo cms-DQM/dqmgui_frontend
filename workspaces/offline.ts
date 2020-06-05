@@ -1,4 +1,4 @@
-export interface WorskapacesProps{
+export interface WorskapacesProps {
   label: string;
   workspaces: any;
 }
@@ -14,11 +14,11 @@ export const summariesWorkspace = [
   // },
   {
     label: 'Shift',
-    foldersPath: ['00 Shift']
+    foldersPath: ['00 Shift'],
   },
   {
     label: 'Info',
-    foldersPath: ['Info']
+    foldersPath: ['Info'],
   },
   // {
   //   label: 'Certification',
@@ -26,24 +26,24 @@ export const summariesWorkspace = [
   // },
   {
     label: 'Everything',
-    foldersPath: [ ]
+    foldersPath: [],
   },
-]
+];
 
 const triggerWorkspace = [
   {
     label: 'L1T',
-    foldersPath: ['L1T']
+    foldersPath: ['L1T'],
   },
   {
     label: 'L1TEMU',
-    foldersPath: ['L1TEMU']
+    foldersPath: ['L1TEMU'],
   },
   {
     label: 'HLT',
-    foldersPath: ['HLT']
+    foldersPath: ['HLT'],
   },
-]
+];
 
 const trackerWorkspace = [
   {
@@ -56,47 +56,47 @@ const trackerWorkspace = [
   },
   {
     label: 'SiStrip',
-    foldersPath: ['SiStrip']
+    foldersPath: ['SiStrip'],
   },
-]
+];
 
 const calorimetersWorkspace = [
   {
     label: 'Ecal',
-    foldersPath: ['Ecal', 'EcalBarrel', 'EcalEndcap']
+    foldersPath: ['Ecal', 'EcalBarrel', 'EcalEndcap'],
   },
   {
     label: 'EcalPreshower',
-    foldersPath: ['EcalPreshower']
+    foldersPath: ['EcalPreshower'],
   },
   {
     label: 'HCAL',
-    foldersPath: ['Hcal', 'Hcal2']
+    foldersPath: ['Hcal', 'Hcal2'],
   },
   {
     label: 'HCALcalib',
-    foldersPath: ['HcalCalib']
+    foldersPath: ['HcalCalib'],
   },
   {
     label: 'Castor',
-    foldersPath: ['Castor']
+    foldersPath: ['Castor'],
   },
-]
+];
 
 const mounsWorkspace = [
   {
     label: 'CSC',
-    foldersPath: ['CSC']
+    foldersPath: ['CSC'],
   },
   {
     label: 'DT',
-    foldersPath: ['DT']
+    foldersPath: ['DT'],
   },
   {
     label: 'RPC',
-    foldersPath: ['RPC']
+    foldersPath: ['RPC'],
   },
-]
+];
 
 const cttpsWorspace = [
   {
@@ -105,57 +105,57 @@ const cttpsWorspace = [
   },
   {
     label: 'TrackingPixel',
-    foldersPath: ['CTPPS/TrackingPixel', 'CTPPS/common']
+    foldersPath: ['CTPPS/TrackingPixel', 'CTPPS/common'],
   },
   {
     label: 'TimingDiamond',
-    foldersPath: ['CTPPS/TimingDiamond', 'CTPPS/common']
+    foldersPath: ['CTPPS/TimingDiamond', 'CTPPS/common'],
   },
   {
     label: 'TimingFastSilicon',
-    foldersPath: ['CTPPS/TimingFastSilicon', 'CTPPS/common']
+    foldersPath: ['CTPPS/TimingFastSilicon', 'CTPPS/common'],
   },
-]
+];
 
 const pogWorkspace = [
   {
     label: 'Muons',
-    foldersPath: ['Muons']
+    foldersPath: ['Muons'],
   },
   {
     label: 'JetMet',
-    foldersPath: ['JetMet']
+    foldersPath: ['JetMet'],
   },
   {
     label: 'EGamma',
-    foldersPath: ['Egamma']
+    foldersPath: ['Egamma'],
   },
   {
     label: 'Btag',
-    foldersPath: ['Btag']
+    foldersPath: ['Btag'],
   },
   {
     label: 'Tracking',
-    foldersPath: ['Tracking', 'AlcaBeamMonitor', 'OfflinePV']
+    foldersPath: ['Tracking', 'AlcaBeamMonitor', 'OfflinePV'],
   },
   {
     label: 'Tau',
-    foldersPath: ['RecoTauV']
-  }
-]
+    foldersPath: ['RecoTauV'],
+  },
+];
 
 export const workspaces = [
   {
     label: 'Summaries',
-    workspaces: summariesWorkspace
+    workspaces: summariesWorkspace,
   },
   {
     label: 'Trigger',
-    workspaces: triggerWorkspace
+    workspaces: triggerWorkspace,
   },
   {
     label: 'Tracker',
-    workspaces: trackerWorkspace
+    workspaces: trackerWorkspace,
   },
   {
     label: 'Calorimeters',
@@ -167,10 +167,10 @@ export const workspaces = [
   },
   {
     label: 'CTPPS',
-    workspaces: cttpsWorspace
+    workspaces: cttpsWorspace,
   },
   {
     label: 'POG',
-    workspaces: pogWorkspace
+    workspaces: pogWorkspace,
   },
-]
+];

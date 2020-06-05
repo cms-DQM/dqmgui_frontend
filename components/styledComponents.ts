@@ -1,4 +1,14 @@
-import { Form, Button, Input, Tag, Row, AutoComplete, Checkbox, Radio, Col } from 'antd';
+import {
+  Form,
+  Button,
+  Input,
+  Tag,
+  Row,
+  AutoComplete,
+  Checkbox,
+  Radio,
+  Col,
+} from 'antd';
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import styled from 'styled-components';
 import { QuestionOutlined } from '@ant-design/icons';
@@ -46,29 +56,31 @@ export const StyledQuestionTag = styled(Tag)`
   border-radius: 100px;
 `;
 
-export const StyledFormItem = styled(Form.Item) <{ labelcolor?: string }>`
+export const StyledFormItem = styled(Form.Item)<{ labelcolor?: string }>`
   .ant-form-item-label > label {
-    color: ${(props) => props.labelcolor ? props.labelcolor : theme.colors.common.black};
+    color: ${(props) =>
+      props.labelcolor ? props.labelcolor : theme.colors.common.black};
     padding-right: ${theme.space.spaceBetween};
     width: fit-content;
     padding: ${theme.space.spaceBetween};
-  },
+  }
+  ,
   .ant-form-item {
     margin-bottom: 0px !important;
   }
 `;
 
-export const StyledInput = styled(Input) <{ fullWidth?: boolean }>`
+export const StyledInput = styled(Input)<{ fullWidth?: boolean }>`
   border-radius: 12px;
   width: fit-content;
   width: ${(props) => (props.fullWidth ? '100%' : '')};
 `;
 
-export const StyledSearch = styled(Search) <{ fullWidth?: boolean }>`
+export const StyledSearch = styled(Search)<{ fullWidth?: boolean }>`
   border-radius: 12px;
   width: fit-content;
   width: ${(props) => (props.fullWidth ? '100%' : '')};
-`
+`;
 
 export const StyledAutocomplete = styled(AutoComplete)`
   .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
@@ -129,50 +141,68 @@ export const StyledSuccessIcon = styled(CheckCircleFilled)`
   padding-left: 8px;
   color: ${theme.colors.notification.success};
 `;
-export const StyledRadio = styled(Radio) <{ color?: string }>`
-    color: ${(props) => props.color ? props.color : theme.colors.common.black}
-`
-export const CutomFormItem = styled(FormItem) <{ color?: string }>`
-.ant-form-item-label > label {
-  color: ${(props) => props.color ? props.color : theme.colors.common.black};
-}`
+export const StyledRadio = styled(Radio)<{ color?: string }>`
+  color: ${(props) => (props.color ? props.color : theme.colors.common.black)};
+`;
+export const CutomFormItem = styled(FormItem)<{ color?: string }>`
+  .ant-form-item-label > label {
+    color: ${(props) =>
+      props.color ? props.color : theme.colors.common.black};
+  }
+`;
 
-export const CustomCheckbox = styled(Checkbox) <{ color?: string }>`
-  color: ${(props) => props.color ? props.color : theme.colors.common.black};
-`
+export const CustomCheckbox = styled(Checkbox)<{ color?: string }>`
+  color: ${(props) => (props.color ? props.color : theme.colors.common.black)};
+`;
 export const CustomParagraph = styled.p<{ color?: string }>`
-  color: ${(props) => props.color ? props.color : theme.colors.common.black};
-`
-export const CustomRow = styled(Row) <{ width?: string, display?: string, justifycontent?: string, space?: string, alignitems?: string }>`
-  display: ${(props) => props.display ? props.display : ''};
-  justify-content: ${(props) => props.justifycontent ? props.justifycontent : ''};
-  padding: ${(props) => props.space ? theme.space.padding : ''};
-  align-items: ${(props) => props.alignitems ? props.alignitems : ''};
-  width: ${(props) => props.width ? props.width : ''};
-`
+  color: ${(props) => (props.color ? props.color : theme.colors.common.black)};
+`;
+export const CustomRow = styled(Row)<{
+  width?: string;
+  display?: string;
+  justifycontent?: string;
+  space?: string;
+  alignitems?: string;
+}>`
+  display: ${(props) => (props.display ? props.display : '')};
+  justify-content: ${(props) =>
+    props.justifycontent ? props.justifycontent : ''};
+  padding: ${(props) => (props.space ? theme.space.padding : '')};
+  align-items: ${(props) => (props.alignitems ? props.alignitems : '')};
+  width: ${(props) => (props.width ? props.width : '')};
+`;
 
-export const CustomCol = styled(Col) <{ display?: string, justifycontent?: string, space?: string, alignitems?: string }>`
-  display: ${(props) => props.display ? props.display : ''};
-  justify-content: ${(props) => props.justifycontent ? props.justifycontent : ''};
-  padding-right: ${(props) => props.space ? `calc(${theme.space.padding}*${props.space})` : ''};
-  align-items: ${(props) => props.alignitems ? props.alignitems : ''};
+export const CustomCol = styled(Col)<{
+  display?: string;
+  justifycontent?: string;
+  space?: string;
+  alignitems?: string;
+}>`
+  display: ${(props) => (props.display ? props.display : '')};
+  justify-content: ${(props) =>
+    props.justifycontent ? props.justifycontent : ''};
+  padding-right: ${(props) =>
+    props.space ? `calc(${theme.space.padding}*${props.space})` : ''};
+  align-items: ${(props) => (props.alignitems ? props.alignitems : '')};
   height: fit-content;
-`
-export const CustomDiv = styled(Col) <{
-  display?: string,
-  justifycontent?: string,
-  space?: string,
-  alignitems?: string,
-  fullwidth?: string,
+`;
+export const CustomDiv = styled(Col)<{
+  display?: string;
+  justifycontent?: string;
+  space?: string;
+  alignitems?: string;
+  fullwidth?: string;
   width?: string;
   height?: string;
 }>`
-  display: ${(props) => props.display ? props.display : ''};
-  justify-content: ${(props) => props.justifycontent ? props.justifycontent : ''};
-  padding-right: ${(props) => props.space ? `calc(${theme.space.padding}*${props.space})` : ''};
-  align-items: ${(props) => props.alignitems ? props.alignitems : ''};
+  display: ${(props) => (props.display ? props.display : '')};
+  justify-content: ${(props) =>
+    props.justifycontent ? props.justifycontent : ''};
+  padding-right: ${(props) =>
+    props.space ? `calc(${theme.space.padding}*${props.space})` : ''};
+  align-items: ${(props) => (props.alignitems ? props.alignitems : '')};
   height: fit-content;
-  width: ${(props) => props.fullwidth === 'true' ? '100vw' : 'fit-content'};
-  width: ${(props) => props.width ? props.width : ''};
-  height: ${(props) => props.height ? props.height : ''};
-`
+  width: ${(props) => (props.fullwidth === 'true' ? '100vw' : 'fit-content')};
+  width: ${(props) => (props.width ? props.width : '')};
+  height: ${(props) => (props.height ? props.height : '')};
+`;
