@@ -42,7 +42,7 @@ export const Container = ({
   return (
     <>
       <Text>{field_name}: </Text>
-      <Text strong >{inputValue}</Text>
+      <Text strong>{inputValue}</Text>
     </>
   );
 };

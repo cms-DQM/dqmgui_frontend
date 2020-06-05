@@ -11,15 +11,14 @@ interface FolderPathProps {
   folder_path: string | undefined;
 }
 
-export const FolderPath = ({
-  folder_path,
-}: FolderPathProps) => {
+export const FolderPath = ({ folder_path }: FolderPathProps) => {
   const folders = folder_path ? folder_path.split('/') : [];
   const filteredFolders = folders.filter((folder: string) => folder !== '');
   const router = useRouter();
   const query = router.query;
 
-  const changeFolderPathByBreadcrumb = (parameters: ParsedUrlQueryInput) => changeRouter(getChangedQueryParams(parameters, query))
+  const changeFolderPathByBreadcrumb = (parameters: ParsedUrlQueryInput) =>
+    changeRouter(getChangedQueryParams(parameters, query));
 
   return (
     <>
@@ -37,16 +36,23 @@ export const FolderPath = ({
             <a>Main Page</a>
           </Link>
         </Breadcrumb.Item>
-        <Breadcrumb.Item onClick={() => {
-          changeFolderPathByBreadcrumb({ folder_path: '/' })
-        }}>
+        <Breadcrumb.Item
+          onClick={() => {
+            changeFolderPathByBreadcrumb({ folder_path: '/' });
+          }}
+        >
           <a>Home</a>
         </Breadcrumb.Item>
         {filteredFolders.map((folder: string) => {
           return (
-            <Breadcrumb.Item key={folder} onClick={() => {
-              changeFolderPathByBreadcrumb({ folder_path: getFolderPath(folders, folder) })
-            }}>
+            <Breadcrumb.Item
+              key={folder}
+              onClick={() => {
+                changeFolderPathByBreadcrumb({
+                  folder_path: getFolderPath(folders, folder),
+                });
+              }}
+            >
               <a>{folder}</a>
             </Breadcrumb.Item>
           );

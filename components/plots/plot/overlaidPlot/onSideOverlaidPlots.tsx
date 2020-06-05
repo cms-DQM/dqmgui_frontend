@@ -28,7 +28,7 @@ interface OnSideOverlaidPlotsProps {
   params_for_api: ParamsForApiProps;
   plot: PlotDataProps;
   isPlotSelected: boolean;
-  imageRefScrollDown:any;
+  imageRefScrollDown: any;
 }
 
 export const OnSideOverlaidPlots = ({
@@ -60,19 +60,27 @@ export const OnSideOverlaidPlots = ({
                 <PlotNameCol>{plot.name}</PlotNameCol>
                 <Column>
                   {isPlotSelected ? (
-                    <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
+                    <MinusIcon
+                      onClick={() => removePlotFromRightSide(query, plot)}
+                    />
                   ) : (
-                      <PlusIcon onClick={async () => {
-                        await addPlotToRightSide(query, plot)
-                        scroll(imageRef)
-                        scrollToBottom(imageRefScrollDown)
-                      }} />
-                    )}
+                    <PlusIcon
+                      onClick={async () => {
+                        await addPlotToRightSide(query, plot);
+                        scroll(imageRef);
+                        scrollToBottom(imageRefScrollDown);
+                      }}
+                    />
+                  )}
                 </Column>
-                <div onClick={async () => {
-                  isPlotSelected ? await removePlotFromRightSide(query, plot) : await addPlotToRightSide(query, plot)
-                  scroll(imageRef)
-                }}>
+                <div
+                  onClick={async () => {
+                    isPlotSelected
+                      ? await removePlotFromRightSide(query, plot)
+                      : await addPlotToRightSide(query, plot);
+                    scroll(imageRef);
+                  }}
+                >
                   <img alt={plot.name} src={sourceForOnePlot} />
                 </div>
               </StyledPlotRow>

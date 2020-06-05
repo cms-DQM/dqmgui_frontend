@@ -40,7 +40,8 @@ export const DatasetsBuilder = () => {
   useChangeRouter(
     { dataset_name: fullDatasetName },
     [fullDatasetName],
-    doesCombinationOfSelectedDatasetPartsExists)
+    doesCombinationOfSelectedDatasetPartsExists
+  );
 
   return (
     <Row>
@@ -67,8 +68,8 @@ export const DatasetsBuilder = () => {
         {doesCombinationOfSelectedDatasetPartsExists ? (
           <StyledSuccessIcon />
         ) : (
-            <StyledErrorIcon />
-          )}
+          <StyledErrorIcon />
+        )}
       </Col>
     </Row>
   );

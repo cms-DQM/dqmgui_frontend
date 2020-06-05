@@ -40,6 +40,6 @@ export const Browser = () => {
           )}
         </StyledFormItem>
       </WrapperDiv>
-      </Form>
+    </Form>
   );
 };

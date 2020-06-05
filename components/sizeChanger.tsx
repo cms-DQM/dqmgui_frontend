@@ -17,11 +17,7 @@ const formatOptions = () => {
   return options;
 };
 
-export const SizeChanger = ({
-  setSize,
-  currentValue,
-}: SizeChangerProps) => {
-
+export const SizeChanger = ({ setSize, currentValue }: SizeChangerProps) => {
   useEffect(() => {
     return () => setSize(currentValue);
   }, []);
@@ -32,7 +28,7 @@ export const SizeChanger = ({
       getOptionLabel={(option: OptionProps) => option.label}
       getOptionValue={(option: OptionProps) => option.value}
       action={(value: SizeProps) => {
-        setSize(value)
+        setSize(value);
       }}
       options={formatOptions()}
     />

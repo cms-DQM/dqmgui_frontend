@@ -17,9 +17,15 @@ import {
   ImageDiv,
 } from '../../../../containers/display/styledComponents';
 import Link from 'next/link';
-import { removePlotFromSelectedPlots, removePlotFromRightSide } from '../../plot/singlePlot/utils';
+import {
+  removePlotFromSelectedPlots,
+  removePlotFromRightSide,
+} from '../../plot/singlePlot/utils';
 import { Button } from 'antd';
-import { changeRouter, getChangedQueryParams } from '../../../../containers/display/utils';
+import {
+  changeRouter,
+  getChangedQueryParams,
+} from '../../../../containers/display/utils';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;
@@ -55,11 +61,14 @@ export const ZoomedJSROOTPlot = ({
           <Button
             type="link"
             onClick={() => removePlotFromRightSide(query, selected_plot)}
-            icon={<MinusIcon />
-            }
+            icon={<MinusIcon />}
           />
         </Column>
-        <ImageDiv id={selected_plot.name} width={params_for_api.width} height={params_for_api.height} />
+        <ImageDiv
+          id={selected_plot.name}
+          width={params_for_api.width}
+          height={params_for_api.height}
+        />
       </StyledPlotRow>
     </StyledCol>
   );

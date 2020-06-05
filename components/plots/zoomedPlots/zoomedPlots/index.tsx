@@ -14,18 +14,20 @@ interface ZoomedPlotsProps {
   selected_plots: PlotDataProps[];
 }
 
-export const ZoomedPlots = ({
-  selected_plots,
-}: ZoomedPlotsProps) => {
-
-  const globalState = useContext(store)
+export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
+  const globalState = useContext(store);
   const router = useRouter();
   const query: QueryProps = router.query;
 
   return (
     <ZoomedPlotsWrapper>
       {selected_plots.map((selected_plot: any) => {
-        const params_for_api = FormatParamsForAPI(globalState, query, selected_plot.name, selected_plot.dir)
+        const params_for_api = FormatParamsForAPI(
+          globalState,
+          query,
+          selected_plot.name,
+          selected_plot.dir
+        );
         if (globalState.JSROOTmode) {
           return (
             <ZoomedJSROOTPlot

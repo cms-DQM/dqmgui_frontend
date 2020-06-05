@@ -1,30 +1,38 @@
-import * as React from 'react'
-import Form from 'antd/lib/form/Form'
+import * as React from 'react';
+import Form from 'antd/lib/form/Form';
 import { Input } from 'antd';
 
 import { useRouter } from 'next/router';
-import { StyledFormItem, StyledInput, StyledSearch } from '../../../styledComponents';
+import {
+  StyledFormItem,
+  StyledInput,
+  StyledSearch,
+} from '../../../styledComponents';
 import { QueryProps } from '../../../../containers/display/interfaces';
-import { getChangedQueryParams, changeRouter } from '../../../../containers/display/utils';
+import {
+  getChangedQueryParams,
+  changeRouter,
+} from '../../../../containers/display/utils';
 
 interface PlotSearchProps {
-  isLoadingFolders: boolean
+  isLoadingFolders: boolean;
 }
 
 export const PlotSearch = ({ isLoadingFolders }: PlotSearchProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
-  const [plotName, setPlotName] = React.useState<string | undefined>(query.plot_search)
+  const [plotName, setPlotName] = React.useState<string | undefined>(
+    query.plot_search
+  );
 
   React.useEffect(() => {
-    const params = getChangedQueryParams({ plot_search: plotName }, query)
-    changeRouter(params)
-  }, [plotName])
+    const params = getChangedQueryParams({ plot_search: plotName }, query);
+    changeRouter(params);
+  }, [plotName]);
 
   return React.useMemo(() => {
     return (
-      <Form
-        onChange={(e: any) => setPlotName(e.target.value)}>
+      <Form onChange={(e: any) => setPlotName(e.target.value)}>
         <StyledFormItem>
           <StyledSearch
             defaultValue={query.plot_search}
@@ -34,6 +42,6 @@ export const PlotSearch = ({ isLoadingFolders }: PlotSearchProps) => {
           />
         </StyledFormItem>
       </Form>
-    )
-  }, [plotName])
-}
+    );
+  }, [plotName]);
+};

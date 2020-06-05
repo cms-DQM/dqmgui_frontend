@@ -33,12 +33,15 @@ export const FullWidthRow = styled(Row)`
   width: 100%;
   padding: ${theme.space.spaceBetween};
 `;
-export const StyledSelect = styled(Select) <{ selected?: string, width?: number | undefined }>`
+export const StyledSelect = styled(Select)<{
+  selected?: string;
+  width?: number | undefined;
+}>`
   .ant-select-selector {
     border-radius: 12px !important;
-    width: ${(props) => props.width ? `${props.width}px` : ''} !important;
+    width: ${(props) => (props.width ? `${props.width}px` : '')} !important;
     font-weight: ${(props) =>
-    props.selected === 'selected' ? 'bold' : 'inherit'} !important;
+      props.selected === 'selected' ? 'bold' : 'inherit'} !important;
   }
 `;
 
@@ -49,8 +52,8 @@ export const StyledCollapse = styled(Collapse)`
   }
 `;
 export const OptionParagraph = styled.div`
-display: flex;
-align-items: center;
-justify-content: center;
-width: 100%; 
-`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+`;

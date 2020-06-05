@@ -68,17 +68,23 @@ export const OverlaidPlotImage = ({
             {isPlotSelected ? (
               <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
             ) : (
-                <PlusIcon onClick={async () => {
-                  await addPlotToRightSide(query, plot)
-                  scroll(imageRef)
-                  scrollToBottom(imageRefScrollDown)
-                }} />
-              )}
+              <PlusIcon
+                onClick={async () => {
+                  await addPlotToRightSide(query, plot);
+                  scroll(imageRef);
+                  scrollToBottom(imageRefScrollDown);
+                }}
+              />
+            )}
           </Column>
-          <div onClick={async () => {
-            isPlotSelected ? await removePlotFromRightSide(query, plot) : await addPlotToRightSide(query, plot)
-            scroll(imageRef)
-          }}>
+          <div
+            onClick={async () => {
+              isPlotSelected
+                ? await removePlotFromRightSide(query, plot)
+                : await addPlotToRightSide(query, plot);
+              scroll(imageRef);
+            }}
+          >
             <img alt={plot.name} src={source} />
           </div>
         </StyledPlotRow>

@@ -16,7 +16,12 @@ import {
   PlusIcon,
   MinusIcon,
 } from '../../../../containers/display/styledComponents';
-import { addPlotToRightSide, removePlotFromRightSide, scroll, scrollToBottom } from './utils';
+import {
+  addPlotToRightSide,
+  removePlotFromRightSide,
+  scroll,
+  scrollToBottom,
+} from './utils';
 
 interface PlotProps {
   plot: PlotDataProps;
@@ -25,7 +30,12 @@ interface PlotProps {
   imageRefScrollDown: any;
 }
 
-export const Plot = ({ plot, isPlotSelected, params_for_api, imageRefScrollDown }: PlotProps) => {
+export const Plot = ({
+  plot,
+  isPlotSelected,
+  params_for_api,
+  imageRefScrollDown,
+}: PlotProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
 
@@ -35,17 +45,17 @@ export const Plot = ({ plot, isPlotSelected, params_for_api, imageRefScrollDown 
   const imageRef = useRef(null);
   useEffect(() => {
     const scrollPlot = () => {
-      scroll(imageRef)
-      scrollToBottom(imageRefScrollDown)
-    }
+      scroll(imageRef);
+      scrollToBottom(imageRefScrollDown);
+    };
     if (isPlotSelected) {
-      scrollPlot()
+      scrollPlot();
     }
-  }, [isPlotSelected, query.selected_plots])
+  }, [isPlotSelected, query.selected_plots]);
 
   return (
     <div ref={imageRef}>
-      <StyledCol space={2} >
+      <StyledCol space={2}>
         <StyledPlotRow
           minheight={params_for_api.height}
           width={params_for_api.width}
@@ -57,19 +67,25 @@ export const Plot = ({ plot, isPlotSelected, params_for_api, imageRefScrollDown 
             {isPlotSelected ? (
               <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
             ) : (
-                <PlusIcon onClick={() => {
-                  addPlotToRightSide(query, plot)
-                }} />
-              )}
+              <PlusIcon
+                onClick={() => {
+                  addPlotToRightSide(query, plot);
+                }}
+              />
+            )}
           </Column>
-          <div onClick={async () => {
-            isPlotSelected ? await removePlotFromRightSide(query, plot) : await addPlotToRightSide(query, plot)
-            scroll(imageRef)
-          }}>
+          <div
+            onClick={async () => {
+              isPlotSelected
+                ? await removePlotFromRightSide(query, plot)
+                : await addPlotToRightSide(query, plot);
+              scroll(imageRef);
+            }}
+          >
             <img alt={plot.name} src={source} />
           </div>
         </StyledPlotRow>
-      </StyledCol >
+      </StyledCol>
     </div>
   );
 };
