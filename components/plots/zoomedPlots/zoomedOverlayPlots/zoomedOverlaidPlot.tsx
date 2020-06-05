@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import { get_overlaied_plots_urls } from '../../../../config/config';
 import {
@@ -17,16 +17,10 @@ import {
   ImageDiv,
   Image,
 } from '../../../../containers/display/styledComponents';
-import { useRouter } from 'next/router';
 import {
-  removePlotFromSelectedPlots,
   removePlotFromRightSide,
 } from '../../plot/singlePlot/utils';
 import { Button } from 'antd';
-import {
-  changeRouter,
-  getChangedQueryParams,
-} from '../../../../containers/display/utils';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
