@@ -80,9 +80,9 @@ const DiplayFolder: FC<FolderProps> = ({
               folder_path={folder_path}
             />
           </Col>
-          <Col>
+          {/* <Col>
             <PlotSearch isLoadingFolders={isLoadingFolders} />
-          </Col>
+          </Col> */}
         </Row>
         <DivWrapper selectedPlots={selected_plots.length > 0}>
           <Wrapper zoomed={selected_plots.length > 0} notZoomedPlot={true}>
