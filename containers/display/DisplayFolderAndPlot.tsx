@@ -20,7 +20,7 @@ import { RightSideStateProvider } from '../../contexts/rightSideContext';
 import { LeftSidePlots } from '../../components/plots/plot';
 import { Directories } from './directories';
 import { NoResultsFound } from '../search/noResultsFound';
-import { CustomDiv } from '../../components/styledComponents';
+import { CustomDiv, CustomRow } from '../../components/styledComponents';
 import { PlotSearch } from '../../components/plots/plot/plotSearch';
 import { useFilterFolders } from '../../hooks/useFilterFolders';
 import { store } from '../../contexts/leftSideContext';
@@ -68,19 +68,14 @@ const DiplayFolder: FC<FolderProps> = ({
     query,
     allDirectories
   );
-  //@ts-ignore
   const filteredFolders: any[] = foldersByPlotSearch ? foldersByPlotSearch : [];
 
-  // return useMemo(() => {
   return (
     <>
       <Row style={{ padding: 8 }}>
         <Col style={{ padding: 8 }}>
           <FolderPath folder_path={folder_path} />
         </Col>
-        {/* <Col>
-            <PlotSearch isLoadingFolders={isLoadingFolders} />
-          </Col> */}
       </Row>
       <DivWrapper selectedPlots={selected_plots.length > 0}>
         <Wrapper zoomed={selected_plots.length > 0} notZoomedPlot={true}>
@@ -92,19 +87,25 @@ const DiplayFolder: FC<FolderProps> = ({
               <Spinner />
             </SpinnerWrapper>
           ) : (
-            <>
-              <Directories directories={filteredFolders} />
-              {plots.map((plot: PlotDataProps | undefined) => {
-                if (plot) {
-                  return (
-                    <div key={plot.name}>
-                      <LeftSidePlots plot={plot} />
-                    </div>
-                  );
-                }
-              })}
-            </>
-          )}
+              <>
+                <CustomRow
+                  width='100%'>
+                  <Directories directories={filteredFolders} />
+                </CustomRow>
+                <Row>
+                  {plots.map((plot: PlotDataProps | undefined) => {
+                    if (plot) {
+                      return (
+                        <div key={plot.name}>
+                          <LeftSidePlots plot={plot} />
+                        </div>
+                      );
+                    }
+                  })}
+                </Row>
+              </>
+            )}
+
           {!isLoading && filteredFolders.length === 0 && plots.length === 0 && (
             <CustomDiv fullwidth="true">
               <NoResultsFound />
@@ -121,7 +122,6 @@ const DiplayFolder: FC<FolderProps> = ({
       </DivWrapper>
     </>
   );
-  // }, [plots, filteredFolders.toString(), selectedPlots, isLoading])
 };
 
 export default DiplayFolder;
