@@ -103,7 +103,7 @@ export const Wrapper = styled.div<{
   flex-wrap: wrap;
   overflow: ${(props) => (props?.zoomed ? 'scroll' : '')};
   align-items: start;
-  flex-flow: ${(props) => (props?.notZoomedPlot ? '' : 'column')};
+  flex-flow: column;
 `;
 export const DivWrapper = styled.div<{ selectedPlots: boolean }>`
   height: 100%;

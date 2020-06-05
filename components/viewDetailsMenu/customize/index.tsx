@@ -1,1 +1,0 @@
-export { CostumizeTable } from './table';

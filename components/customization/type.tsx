@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { StyledFormItem, StyledInput } from '../../styledComponents';
-import { xyzTypes } from '../../constants';
-import { OptionProps } from '../../../containers/display/interfaces';
+import { StyledFormItem, StyledInput } from '../styledComponents';
+import { xyzTypes } from '../constants';
+import { OptionProps } from '../../containers/display/interfaces';
 import { Select, Row, Col } from 'antd';
-import { StyledSelect } from '../styledComponents';
-import { StyledCol } from '../../../containers/display/styledComponents';
+import { StyledSelect } from '../viewDetailsMenu/styledComponents';
+import { StyledCol } from '../../containers/display/styledComponents';
 
 const { Option } = Select;
 

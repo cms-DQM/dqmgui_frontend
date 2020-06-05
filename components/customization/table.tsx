@@ -3,17 +3,17 @@ import {
   ParamsForApiProps,
   OptionProps,
   CustomizeProps,
-} from '../../../containers/display/interfaces';
+} from '../../containers/display/interfaces';
 import { Form, Row, Col, Select } from 'antd';
 
-import { withReference } from '../../constants';
+import { withReference } from '../constants';
 import {
   StyledInput,
   StyledFormItem,
   StyledButton,
-} from '../../styledComponents';
+} from '../styledComponents';
 import { Type } from './type';
-import { FullWidthRow, StyledSelect } from '../styledComponents';
+import { FullWidthRow, StyledSelect } from '../viewDetailsMenu/styledComponents';
 // import { setParamsForCustomize } from '../../../reducers/displayFolderOrPlot';
 import cleanDeep from 'clean-deep';
 
@@ -24,7 +24,7 @@ interface CostumizeTableProps {
   dispatch: any;
 }
 
-export const CostumizeTable = ({ dispatch }: CostumizeTableProps) => {
+export const CostumizeTable = () => {
   const referenceCopy: OptionProps[] = [...withReference];
 
   const layout = {
