@@ -64,7 +64,7 @@ const DiplayFolder: FC<FolderProps> = ({
   const selected_plots: PlotDataProps[] = getSelectedPlots(selectedPlots);
 
   //filtering directories by selected workspace
-  const { foldersByPlotSearch, isLoadingFolders, plots } = useFilterFolders(
+  const { foldersByPlotSearch, plots } = useFilterFolders(
     query,
     allDirectories
   );

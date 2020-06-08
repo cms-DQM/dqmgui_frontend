@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { StyledFormItem, StyledInput } from '../styledComponents';
+import React from 'react';
+import { Select, Row, Col, Input } from 'antd';
+import FormItem from 'antd/lib/form/FormItem';
+
+import { StyledInput } from '../styledComponents';
 import { xyzTypes } from '../constants';
 import { OptionProps } from '../../containers/display/interfaces';
-import { Select, Row, Col } from 'antd';
 import { StyledSelect } from '../viewDetailsMenu/styledComponents';
-import { StyledCol } from '../../containers/display/styledComponents';
 
 const { Option } = Select;
 
@@ -14,9 +15,9 @@ interface TypesProps {
 
 export const Type = ({ type }: TypesProps) => {
   return (
-    <>
+    <Row gutter={[8, 8]}>
       <Col span={8}>
-        <StyledFormItem name={`${type}type`} label={`${type} type`}>
+        <FormItem name={`${type}type`} label={`${type} type`}>
           <StyledSelect defaultValue={xyzTypes[0].value}>
             {xyzTypes.map((option: OptionProps) => (
               <Option value={option.value} key={option.value.toString()}>
@@ -24,18 +25,18 @@ export const Type = ({ type }: TypesProps) => {
               </Option>
             ))}
           </StyledSelect>
-        </StyledFormItem>
+        </FormItem>
       </Col>
-      <StyledCol space={1} span={8}>
-        <StyledFormItem label="min" name={`${type}min`}>
-          <StyledInput />
-        </StyledFormItem>
-      </StyledCol>
       <Col span={8}>
-        <StyledFormItem label="max" name={`${type}max`}>
-          <StyledInput />
-        </StyledFormItem>
+        <FormItem name={`${type}min`}>
+          <StyledInput prefix={"min:"} fullWidth={true} />
+        </FormItem>
       </Col>
-    </>
+      <Col span={8}>
+        <FormItem name={`${type}max`} style={{ display: 'flex' }}>
+          <StyledInput prefix={"max:"} fullWidth={true} />
+        </FormItem>
+      </Col>
+    </Row>
   );
 };

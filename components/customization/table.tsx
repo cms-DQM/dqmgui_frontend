@@ -1,54 +1,54 @@
-import React from 'react';
-import {
-  ParamsForApiProps,
-  OptionProps,
-  CustomizeProps,
-} from '../../containers/display/interfaces';
-import { Form, Row, Col, Select } from 'antd';
+import React, { useContext } from 'react';
+import { OptionProps } from '../../containers/display/interfaces';
+import { Col, Select, Form } from 'antd';
+import { InfoCircleOutlined } from '@ant-design/icons';
+import cleanDeep from 'clean-deep';
 
 import { withReference } from '../constants';
 import {
   StyledInput,
-  StyledFormItem,
-  StyledButton,
 } from '../styledComponents';
 import { Type } from './type';
 import { FullWidthRow, StyledSelect } from '../viewDetailsMenu/styledComponents';
-// import { setParamsForCustomize } from '../../../reducers/displayFolderOrPlot';
-import cleanDeep from 'clean-deep';
+import FormItem from 'antd/lib/form/FormItem';
+import { store } from '../../contexts/rightSideContext';
+import { Info } from '../info';
+import { mostPopularCommands } from './drawOptions';
 
 const { Option } = Select;
 
 interface CostumizeTableProps {
-  params?: ParamsForApiProps;
-  dispatch: any;
+  form: any;
 }
 
-export const CostumizeTable = () => {
+const layout = {
+  labelCol: { span: 8 },
+  wrapperCol: { span: 16 },
+};
+
+
+export const CostumizeTable = ({ form }: CostumizeTableProps) => {
   const referenceCopy: OptionProps[] = [...withReference];
-
-  const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
-  };
-
   const types = ['x', 'y', 'z'];
+  const globalState = useContext(store)
+  const { setCustomize } = globalState
 
   return (
     <Form
       layout={'inline'}
       {...layout}
+      form={form}
       name="search_form"
       className="fieldLabel"
       initialValues={{ remember: true }}
       onFinish={(params) => {
         const cleanedParams = cleanDeep(params);
-        // setParamsForCustomize(cleanedParams as CustomizeProps)(dispatch);
+        setCustomize(cleanedParams)
       }}
     >
-      <FullWidthRow>
-        <Col span={8}>
-          <StyledFormItem label="Reference" name="withref">
+      <FullWidthRow gutter={[8, 8]}>
+        <Col span={24}>
+          <FormItem label="Reference" name="withref">
             <StyledSelect defaultValue={referenceCopy[0].value}>
               {referenceCopy.map((option: OptionProps) => (
                 <Option value={option.value} key={option.value.toString()}>
@@ -56,25 +56,21 @@ export const CostumizeTable = () => {
                 </Option>
               ))}
             </StyledSelect>
-          </StyledFormItem>
+          </FormItem>
         </Col>
-      </FullWidthRow>
-      <FullWidthRow>
-        <Col span={8}>
-          <StyledFormItem label="Draw options" name="drawopts">
-            <StyledInput fullWidth={true} />
-          </StyledFormItem>
+        <Col span={24}>
+          <FormItem label="Draw options" name="drawopts">
+            <StyledInput suffix={
+              <Info content={mostPopularCommands} >
+                <InfoCircleOutlined />
+              </Info>} fullWidth={true} />
+          </FormItem>
         </Col>
-      </FullWidthRow>
-      <Row>
-        {types.map((type) => (
-          <Type type={type} />
-        ))}
-      </Row>
-      <FullWidthRow justify="end">
-        <Col>
-          <StyledButton htmlType="submit">Submit</StyledButton>
-        </Col>
+        <>
+          {types.map((type) => (
+            <Type type={type} />
+          ))}
+        </>
       </FullWidthRow>
     </Form>
   );
