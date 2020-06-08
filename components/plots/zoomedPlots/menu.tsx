@@ -1,7 +1,7 @@
 import * as React from 'react'
-import { Menu, Dropdown, Row, Col } from 'antd';
+import { Menu, Dropdown, Row, Col, Button } from 'antd';
 import {
-  MoreOutlined
+  DownOutlined
 } from '@ant-design/icons';
 import { OptionProps } from '../../../containers/display/interfaces';
 
@@ -31,9 +31,9 @@ export const ZoomedPlotMenu = ({ options }: MenuProps) => {
     <Row>
       <Col>
         <Dropdown overlay={plotMenu(options)} trigger={['hover']}>
-          <a style={{ color: 'white' }}>
-            More <MoreOutlined />{' '}
-          </a>
+          <Button type="link">
+            More <DownOutlined />
+          </Button>
         </Dropdown>
       </Col>
     </Row>

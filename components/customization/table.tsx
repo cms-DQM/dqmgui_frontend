@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { OptionProps } from '../../containers/display/interfaces';
+import React from 'react';
+import { OptionProps, CustomizeProps } from '../../containers/display/interfaces';
 import { Col, Select, Form } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import cleanDeep from 'clean-deep';
@@ -11,14 +11,15 @@ import {
 import { Type } from './type';
 import { FullWidthRow, StyledSelect } from '../viewDetailsMenu/styledComponents';
 import FormItem from 'antd/lib/form/FormItem';
-import { store } from '../../contexts/rightSideContext';
 import { Info } from '../info';
 import { mostPopularCommands } from './drawOptions';
+import { Store } from 'antd/lib/form/interface';
 
 const { Option } = Select;
 
 interface CostumizeTableProps {
   form: any;
+  setCustomizationParams(custProps: Partial<Store> & CustomizeProps): void
 }
 
 const layout = {
@@ -27,11 +28,9 @@ const layout = {
 };
 
 
-export const CostumizeTable = ({ form }: CostumizeTableProps) => {
+export const CostumizeTable = ({ form, setCustomizationParams }: CostumizeTableProps) => {
   const referenceCopy: OptionProps[] = [...withReference];
   const types = ['x', 'y', 'z'];
-  const globalState = useContext(store)
-  const { setCustomize } = globalState
 
   return (
     <Form
@@ -43,7 +42,7 @@ export const CostumizeTable = ({ form }: CostumizeTableProps) => {
       initialValues={{ remember: true }}
       onFinish={(params) => {
         const cleanedParams = cleanDeep(params);
-        setCustomize(cleanedParams)
+        setCustomizationParams(cleanedParams as Partial<Store> & CustomizeProps)
       }}
     >
       <FullWidthRow gutter={[8, 8]}>

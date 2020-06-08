@@ -17,16 +17,18 @@ const { Search } = Input;
 
 import { theme } from '../styles/theme';
 
-export const StyledButton = styled(Button)`
-  background-color: ${theme.colors.secondary.main} !important;
+export const StyledButton = styled(Button) <{ background?: string, color?: string }>`
+  background-color: ${(props) => props.background ? props.background : ` ${theme.colors.secondary.main}`}  !important;
   border-style: none;
   border-radius: 5px;
   text-transform: uppercase;
   &:hover {
     background-color: ${theme.colors.secondary.light} !important;
     color: ${theme.colors.common.black} !important;
+    border: 1px solid ${theme.colors.secondary.main};
   }
-  color: ${theme.colors.common.white} !important;
+  border: 1px solid ${theme.colors.secondary.main};
+  color: ${(props) => props.color ? props.color : ` ${theme.colors.common.white}`}  !important;
 `;
 
 export const StyledSecondaryButton = styled(Button)`
