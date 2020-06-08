@@ -12,6 +12,7 @@ import {
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import styled from 'styled-components';
 import { QuestionOutlined } from '@ant-design/icons';
+
 const { Search } = Input;
 
 import { theme } from '../styles/theme';
