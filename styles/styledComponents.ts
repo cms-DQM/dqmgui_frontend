@@ -27,7 +27,7 @@ export const StyledLogoWrapper = styled.div`
   cursor: pointer;
   transition: 0.5s;
   &:hover {
-    background-color: ${theme.colors.secondary.dark} !important;
+    background-color: ${theme.colors.primary.light} !important;
     color: ${theme.colors.common.white};
   }
 `;
