@@ -17,7 +17,6 @@ import {
   CustomRow,
   CustomCol,
 } from '../../styledComponents';
-import { StyledForm } from '../../styledComponents';
 import { formTriples } from '../utils';
 import { useRouter } from 'next/router';
 import { CustomModal } from '../search';

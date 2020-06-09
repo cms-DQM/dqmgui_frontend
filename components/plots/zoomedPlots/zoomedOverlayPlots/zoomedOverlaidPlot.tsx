@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Store } from 'antd/lib/form/interface';
 import {
@@ -40,6 +40,7 @@ export const ZoomedOverlaidPlot = ({
 }: ZoomedPlotsProps) => {
   const [customizationParams, setCustomizationParams] = useState<Partial<Store> & CustomizeProps>()
   const [openCustomization, toggleCustomizationMenu] = useState(false)
+  const [source, setSource] = useState('')
 
   params_for_api.customizeProps = customizationParams
 
@@ -64,7 +65,10 @@ export const ZoomedOverlaidPlot = ({
   const joined_overlaid_plots_urls = overlaid_plots_urls.join('');
   params_for_api.joined_overlaied_plots_urls = joined_overlaid_plots_urls;
 
-  const source = get_plot_source(params_for_api);
+  useEffect(() => {
+    setSource(get_plot_source(params_for_api));
+    console.log(params_for_api)
+  }, [params_for_api])
 
   return (
     <StyledCol space={2}>
