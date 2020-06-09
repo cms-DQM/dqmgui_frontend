@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Button } from 'antd';
-import {
-  MinusCircleOutlined,
-  SettingOutlined
-} from '@ant-design/icons';
+import { MinusCircleOutlined, SettingOutlined } from '@ant-design/icons';
 import { Store } from 'antd/lib/form/interface';
 
 import { get_plot_url, root_url } from '../../../../config/config';
@@ -24,9 +21,7 @@ import {
   ImageDiv,
   Image,
 } from '../../../../containers/display/styledComponents';
-import {
-  removePlotFromRightSide,
-} from '../../plot/singlePlot/utils';
+import { removePlotFromRightSide } from '../../plot/singlePlot/utils';
 import { Customization } from '../../../customization';
 import { ZoomedPlotMenu } from '../menu';
 
@@ -39,28 +34,31 @@ export const ZoomedPlot = ({
   selected_plot,
   params_for_api,
 }: ZoomedPlotsProps) => {
-  const [customizationParams, setCustomizationParams] = useState<Partial<Store> & CustomizeProps>()
-  const [openCustomization, toggleCustomizationMenu] = useState(false)
+  const [customizationParams, setCustomizationParams] = useState<
+    Partial<Store> & CustomizeProps
+  >();
+  const [openCustomization, toggleCustomizationMenu] = useState(false);
 
-  params_for_api.customizeProps = customizationParams
+  params_for_api.customizeProps = customizationParams;
   const plot_url = get_plot_url(params_for_api);
   const source = `${root_url}${plot_url}`;
   const router = useRouter();
   const query: QueryProps = router.query;
 
-  const zoomedPlotMenuOptions = [{
-    label: 'Remove',
-    value: 'Remove',
-    action: () => removePlotFromRightSide(query, selected_plot),
-    icon: <MinusCircleOutlined />
-  },
-  {
-    label: 'Customization',
-    value: 'Customization',
-    action: () => toggleCustomizationMenu(true),
-    icon: <SettingOutlined />
-  }
-  ]
+  const zoomedPlotMenuOptions = [
+    {
+      label: 'Remove',
+      value: 'Remove',
+      action: () => removePlotFromRightSide(query, selected_plot),
+      icon: <MinusCircleOutlined />,
+    },
+    {
+      label: 'Customize',
+      value: 'Customize',
+      action: () => toggleCustomizationMenu(true),
+      icon: <SettingOutlined />,
+    },
+  ];
 
   return (
     <StyledCol space={2}>

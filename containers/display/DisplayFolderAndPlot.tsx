@@ -85,24 +85,23 @@ const DiplayFolder: FC<FolderProps> = ({
               <Spinner />
             </SpinnerWrapper>
           ) : (
-              <>
-                <CustomRow
-                  width='100%'>
-                  <Directories directories={filteredFolders} />
-                </CustomRow>
-                <Row>
-                  {plots.map((plot: PlotDataProps | undefined) => {
-                    if (plot) {
-                      return (
-                        <div key={plot.name}>
-                          <LeftSidePlots plot={plot} />
-                        </div>
-                      );
-                    }
-                  })}
-                </Row>
-              </>
-            )}
+            <>
+              <CustomRow width="100%">
+                <Directories directories={filteredFolders} />
+              </CustomRow>
+              <Row>
+                {plots.map((plot: PlotDataProps | undefined) => {
+                  if (plot) {
+                    return (
+                      <div key={plot.name}>
+                        <LeftSidePlots plot={plot} />
+                      </div>
+                    );
+                  }
+                })}
+              </Row>
+            </>
+          )}
 
           {!isLoading && filteredFolders.length === 0 && plots.length === 0 && (
             <CustomDiv fullwidth="true">

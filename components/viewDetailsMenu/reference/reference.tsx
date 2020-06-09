@@ -31,7 +31,7 @@ interface ReferenceProps {
   overlayPlots: string;
   setOverlay(overlayPlots: TripleProps[]): void;
   overlayPosition: string;
-  setOverlaiPosition(position: string): void
+  setOverlaiPosition(position: string): void;
 }
 
 const isAllChecked = (triples: TripleProps[]) => {
@@ -41,13 +41,10 @@ const isAllChecked = (triples: TripleProps[]) => {
   return checks.includes(false) ? false : true;
 };
 
-export const Reference = ({
-  normalize,
-  setNormalize
-}: ReferenceProps) => {
+export const Reference = ({ normalize, setNormalize }: ReferenceProps) => {
   const [state, dispatch] = useReducer(referenceReducer, initialState);
   const [selectedTriple, setTriple] = useState<TripleProps>({});
-  const checkedValue = normalize === 'True' ? true : false
+  const checkedValue = normalize === 'True' ? true : false;
   const [checked, setChecked] = useState(checkedValue);
 
   const { triples } = state;
@@ -61,8 +58,7 @@ export const Reference = ({
   useEffect(() => {
     addRun(overlayTriples)(state, dispatch);
   }, []);
-console.log(normalize)
-  useChangeRouter({ normalize: normalize }, [normalize as any], true)
+  useChangeRouter({ normalize: normalize }, [normalize as any], true);
   return (
     <StyledDiv>
       <CustomRow>
@@ -93,9 +89,9 @@ console.log(normalize)
           <FormItem>
             <CustomCheckbox
               onClick={(e: any) => {
-                setChecked(e.target.checked)
-                const normalizeValue = e.target.checked ? 'True' : 'False'
-                setNormalize(normalizeValue)
+                setChecked(e.target.checked);
+                const normalizeValue = e.target.checked ? 'True' : 'False';
+                setNormalize(normalizeValue);
               }}
               checked={checked}
             >

@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Store } from 'antd/lib/form/interface';
-import {
-  MinusCircleOutlined,
-  SettingOutlined
-} from '@ant-design/icons';
+import { MinusCircleOutlined, SettingOutlined } from '@ant-design/icons';
 
 import { get_overlaied_plots_urls } from '../../../../config/config';
 import {
@@ -22,12 +19,9 @@ import {
   ImageDiv,
   Image,
 } from '../../../../containers/display/styledComponents';
-import {
-  removePlotFromRightSide,
-} from '../../plot/singlePlot/utils';
+import { removePlotFromRightSide } from '../../plot/singlePlot/utils';
 import { ZoomedPlotMenu } from '../menu';
 import { Customization } from '../../../customization';
-
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -38,23 +32,26 @@ export const ZoomedOverlaidPlot = ({
   selected_plot,
   params_for_api,
 }: ZoomedPlotsProps) => {
-  const [customizationParams, setCustomizationParams] = useState<Partial<Store> & CustomizeProps>()
-  const [openCustomization, toggleCustomizationMenu] = useState(false)
-  params_for_api.customizeProps = customizationParams
+  const [customizationParams, setCustomizationParams] = useState<
+    Partial<Store> & CustomizeProps
+  >();
+  const [openCustomization, toggleCustomizationMenu] = useState(false);
+  params_for_api.customizeProps = customizationParams;
 
-  const zoomedPlotMenuOptions = [{
-    label: 'Remove',
-    value: 'Remove',
-    action: () => removePlotFromRightSide(query, selected_plot),
-    icon: <MinusCircleOutlined />
-  },
-  {
-    label: 'Customize',
-    value: 'Customize',
-    action: () => toggleCustomizationMenu(true),
-    icon: <SettingOutlined />
-  }
-  ]
+  const zoomedPlotMenuOptions = [
+    {
+      label: 'Remove',
+      value: 'Remove',
+      action: () => removePlotFromRightSide(query, selected_plot),
+      icon: <MinusCircleOutlined />,
+    },
+    {
+      label: 'Customize',
+      value: 'Customize',
+      action: () => toggleCustomizationMenu(true),
+      icon: <SettingOutlined />,
+    },
+  ];
 
   const router = useRouter();
   const query: QueryProps = router.query;
@@ -63,7 +60,7 @@ export const ZoomedOverlaidPlot = ({
   const joined_overlaid_plots_urls = overlaid_plots_urls.join('');
   params_for_api.joined_overlaied_plots_urls = joined_overlaid_plots_urls;
 
-  const source = get_plot_source(params_for_api)
+  const source = get_plot_source(params_for_api);
 
   return (
     <StyledCol space={2}>

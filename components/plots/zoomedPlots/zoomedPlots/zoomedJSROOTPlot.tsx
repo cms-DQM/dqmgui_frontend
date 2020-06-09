@@ -16,9 +16,7 @@ import {
   Column,
   ImageDiv,
 } from '../../../../containers/display/styledComponents';
-import {
-  removePlotFromRightSide,
-} from '../../plot/singlePlot/utils';
+import { removePlotFromRightSide } from '../../plot/singlePlot/utils';
 import { Button } from 'antd';
 
 interface ZoomedJSROOTPlotsProps {

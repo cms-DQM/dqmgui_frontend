@@ -68,14 +68,14 @@ export const doesPlotExists = (
 export const getContents = (data: any) =>
   data
     ? _.sortBy(
-      data.contents
-        ? data.contents
-        : [].filter(
-          (one_item: PlotInterface | DirectoryInterface) =>
-            !one_item.hasOwnProperty('streamerinfo')
-        ),
-      ['subdir']
-    )
+        data.contents
+          ? data.contents
+          : [].filter(
+              (one_item: PlotInterface | DirectoryInterface) =>
+                !one_item.hasOwnProperty('streamerinfo')
+            ),
+        ['subdir']
+      )
     : [];
 
 export const getDirectories = (contents: DirectoryInterface[]) =>
@@ -145,14 +145,9 @@ export const getChangedQueryParams = (
       ? params.plot_search
       : query.plot_search;
 
+  params.overlay = params.overlay ? params.overlay : query.overlay;
 
-  params.overlay = params.overlay
-    ? params.overlay
-    : query.overlay;
-
-  params.normalize = params.normalize
-    ? params.normalize
-    : query.normalize;
+  params.normalize = params.normalize ? params.normalize : query.normalize;
 
   return params;
 };

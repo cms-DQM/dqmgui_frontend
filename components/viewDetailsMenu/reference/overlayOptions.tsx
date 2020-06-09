@@ -18,16 +18,16 @@ export const OverlayOptions = () => {
   const query: QueryProps = router.query;
   const settedOverlay = query.overlay ? query.overlay : overlayOptions[0].value;
 
-  const globalState = useContext(store)
-  const { setOverlaiPosition } = globalState
+  const globalState = useContext(store);
+  const { setOverlaiPosition } = globalState;
 
   const [value, setValue] = React.useState(settedOverlay);
   useChangeRouter({ overlay: value }, [], true);
   useChangeRouter({ overlay: value }, [value], true);
 
   useEffect(() => {
-    setOverlaiPosition(value)
-  }, [value])
+    setOverlaiPosition(value);
+  }, [value]);
 
   return (
     <StyledSelect
