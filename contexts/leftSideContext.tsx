@@ -24,7 +24,7 @@ export interface LeftSideState {
 
 export const initialState: any = {
   size: sizes.medium.size,
-  normalize: true,
+  normalize: 'True',
   stats: true,
   overlayPosition: overlayOptions[0].value,
   overlay: undefined,

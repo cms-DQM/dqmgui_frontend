@@ -17,4 +17,3 @@ export const get_customize_params = (params = {} as any) => {
 
   return parameters;
 };
-

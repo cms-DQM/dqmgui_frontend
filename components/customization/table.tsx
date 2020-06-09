@@ -1,15 +1,19 @@
 import React from 'react';
-import { OptionProps, CustomizeProps } from '../../containers/display/interfaces';
+import {
+  OptionProps,
+  CustomizeProps,
+} from '../../containers/display/interfaces';
 import { Col, Select, Form } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import cleanDeep from 'clean-deep';
 
 import { withReference } from '../constants';
-import {
-  StyledInput,
-} from '../styledComponents';
+import { StyledInput } from '../styledComponents';
 import { Type } from './type';
-import { FullWidthRow, StyledSelect } from '../viewDetailsMenu/styledComponents';
+import {
+  FullWidthRow,
+  StyledSelect,
+} from '../viewDetailsMenu/styledComponents';
 import FormItem from 'antd/lib/form/FormItem';
 import { Info } from '../info';
 import { mostPopularCommands } from './drawOptions';
@@ -19,7 +23,7 @@ const { Option } = Select;
 
 interface CostumizeTableProps {
   form: any;
-  setCustomizationParams(custProps: Partial<Store> & CustomizeProps): void
+  setCustomizationParams(custProps: Partial<Store> & CustomizeProps): void;
 }
 
 const layout = {
@@ -27,8 +31,10 @@ const layout = {
   wrapperCol: { span: 16 },
 };
 
-
-export const CostumizeTable = ({ form, setCustomizationParams }: CostumizeTableProps) => {
+export const CostumizeTable = ({
+  form,
+  setCustomizationParams,
+}: CostumizeTableProps) => {
   const referenceCopy: OptionProps[] = [...withReference];
   const types = ['x', 'y', 'z'];
 
@@ -42,7 +48,9 @@ export const CostumizeTable = ({ form, setCustomizationParams }: CostumizeTableP
       initialValues={{ remember: true }}
       onFinish={(params) => {
         const cleanedParams = cleanDeep(params);
-        setCustomizationParams(cleanedParams as Partial<Store> & CustomizeProps)
+        setCustomizationParams(
+          cleanedParams as Partial<Store> & CustomizeProps
+        );
       }}
     >
       <FullWidthRow gutter={[8, 8]}>
@@ -59,10 +67,14 @@ export const CostumizeTable = ({ form, setCustomizationParams }: CostumizeTableP
         </Col>
         <Col span={24}>
           <FormItem label="Draw options" name="drawopts">
-            <StyledInput suffix={
-              <Info content={mostPopularCommands} >
-                <InfoCircleOutlined />
-              </Info>} fullWidth={true} />
+            <StyledInput
+              suffix={
+                <Info content={mostPopularCommands}>
+                  <InfoCircleOutlined />
+                </Info>
+              }
+              fullWidth={true}
+            />
           </FormItem>
         </Col>
         <>

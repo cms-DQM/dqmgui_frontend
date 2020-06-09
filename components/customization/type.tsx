@@ -29,12 +29,12 @@ export const Type = ({ type }: TypesProps) => {
       </Col>
       <Col span={8}>
         <FormItem name={`${type}min`}>
-          <StyledInput prefix={"min:"} fullWidth={true} />
+          <StyledInput prefix={'min:'} fullWidth={true} />
         </FormItem>
       </Col>
       <Col span={8}>
         <FormItem name={`${type}max`} style={{ display: 'flex' }}>
-          <StyledInput prefix={"max:"} fullWidth={true} />
+          <StyledInput prefix={'max:'} fullWidth={true} />
         </FormItem>
       </Col>
     </Row>

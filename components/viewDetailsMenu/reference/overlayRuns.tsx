@@ -42,8 +42,8 @@ export const OverlayRuns = ({
   query,
   setTriple,
 }: OverlayRunsProps) => {
-  const globalState = useContext(store)
-  const { setOverlay, overlayPosition } = globalState
+  const globalState = useContext(store);
+  const { setOverlay, overlayPosition } = globalState;
 
   return (
     <CustomDiv>

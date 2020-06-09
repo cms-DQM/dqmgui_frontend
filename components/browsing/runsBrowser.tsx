@@ -95,8 +95,8 @@ export const RunBrowser = () => {
                             <Spin />
                           </OptionParagraph>
                         ) : (
-                            <div onClick={() => setWidth(undefined)}>{run}</div>
-                          )}
+                          <div onClick={() => setWidth(undefined)}>{run}</div>
+                        )}
                       </Option>
                     );
                   })}

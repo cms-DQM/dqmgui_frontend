@@ -1,8 +1,6 @@
-import * as React from 'react'
+import * as React from 'react';
 import { Menu, Dropdown, Row, Col, Button } from 'antd';
-import {
-  DownOutlined
-} from '@ant-design/icons';
+import { DownOutlined } from '@ant-design/icons';
 
 import { OptionProps } from '../../../containers/display/interfaces';
 import { CustomDiv } from '../../styledComponents';
@@ -12,7 +10,6 @@ export interface MenuProps {
 }
 
 export const ZoomedPlotMenu = ({ options }: MenuProps) => {
-
   const plotMenu = (options: OptionProps[]) => (
     <Menu>
       {options.map((option: OptionProps) => (
@@ -23,8 +20,8 @@ export const ZoomedPlotMenu = ({ options }: MenuProps) => {
           }}
         >
           <CustomDiv display="flex" justifycontent="space-around">
-            <CustomDiv space="2" >{option.icon}</CustomDiv>
-            <CustomDiv space="2" >{option.label}</CustomDiv>
+            <CustomDiv space="2">{option.icon}</CustomDiv>
+            <CustomDiv space="2">{option.label}</CustomDiv>
           </CustomDiv>
         </Menu.Item>
       ))}
