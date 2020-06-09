@@ -64,7 +64,9 @@ export const FormatParamsForAPI = (
     width: globalState.size.w,
     customizeProps: globalState.customizeProps,
     stats: globalState.stats,
+    overlay: query.overlay,
     overlay_plot: query.overlay_data ? formTriples(query.overlay_data) : [],
+    normalize: query.normalize ? query.normalize : 'False',
   };
 };
 

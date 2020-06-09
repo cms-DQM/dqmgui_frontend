@@ -12,20 +12,30 @@ import {
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import styled from 'styled-components';
 import { QuestionOutlined } from '@ant-design/icons';
+
 const { Search } = Input;
 
 import { theme } from '../styles/theme';
 
-export const StyledButton = styled(Button)`
-  background-color: ${theme.colors.secondary.main} !important;
+export const StyledButton = styled(Button)<{
+  background?: string;
+  color?: string;
+}>`
+  background-color: ${(props) =>
+    props.background
+      ? props.background
+      : ` ${theme.colors.secondary.main}`} !important;
   border-style: none;
   border-radius: 5px;
   text-transform: uppercase;
   &:hover {
     background-color: ${theme.colors.secondary.light} !important;
     color: ${theme.colors.common.black} !important;
+    border: 1px solid ${theme.colors.secondary.main};
   }
-  color: ${theme.colors.common.white} !important;
+  border: 1px solid ${theme.colors.secondary.main};
+  color: ${(props) =>
+    props.color ? props.color : ` ${theme.colors.common.white}`} !important;
 `;
 
 export const StyledSecondaryButton = styled(Button)`
@@ -194,6 +204,7 @@ export const CustomDiv = styled(Col)<{
   fullwidth?: string;
   width?: string;
   height?: string;
+  hover?: string;
 }>`
   display: ${(props) => (props.display ? props.display : '')};
   justify-content: ${(props) =>
@@ -205,4 +216,8 @@ export const CustomDiv = styled(Col)<{
   width: ${(props) => (props.fullwidth === 'true' ? '100vw' : 'fit-content')};
   width: ${(props) => (props.width ? props.width : '')};
   height: ${(props) => (props.height ? props.height : '')};
+  &:hover {
+    color: ${(props) =>
+      props.hover ? theme.colors.primary.main : ''}!important;
+  }
 `;

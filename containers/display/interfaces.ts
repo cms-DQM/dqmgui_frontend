@@ -1,3 +1,5 @@
+import { ReactElement } from 'react';
+
 export interface TripleProps {
   [key: string]: string | number | boolean;
 }
@@ -12,6 +14,7 @@ export interface OptionProps {
   label: string;
   value: any;
   action?(option?: any): void;
+  icon?: JSX.Element;
 }
 
 export interface SizeProps {
@@ -29,7 +32,7 @@ export interface PlotProps {
   height: number;
   overlay?: string;
   stats?: boolean;
-  normalize?: boolean;
+  normalize?: string;
   errorBars?: boolean;
 }
 
@@ -92,6 +95,7 @@ export interface QueryProps {
   overlay?: string;
   workspace?: string;
   plot_search?: string;
+  normalize?: string;
 }
 
 export interface PlotPropertiesProps {

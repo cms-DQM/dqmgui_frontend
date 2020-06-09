@@ -16,16 +16,8 @@ import {
   Column,
   ImageDiv,
 } from '../../../../containers/display/styledComponents';
-import Link from 'next/link';
-import {
-  removePlotFromSelectedPlots,
-  removePlotFromRightSide,
-} from '../../plot/singlePlot/utils';
+import { removePlotFromRightSide } from '../../plot/singlePlot/utils';
 import { Button } from 'antd';
-import {
-  changeRouter,
-  getChangedQueryParams,
-} from '../../../../containers/display/utils';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;

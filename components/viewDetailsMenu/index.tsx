@@ -29,6 +29,8 @@ export const ViewDetailsMenu = ({ selected_plots }: ViewDetailsMenuProps) => {
     setNormalize,
     overlayPlots,
     setOverlay,
+    overlayPosition,
+    setOverlaiPosition,
   } = globalState;
 
   useEffect(() => {
@@ -58,6 +60,8 @@ export const ViewDetailsMenu = ({ selected_plots }: ViewDetailsMenuProps) => {
               setNormalize={setNormalize}
               overlayPlots={overlayPlots}
               setOverlay={setOverlay}
+              overlayPosition={overlayPosition}
+              setOverlaiPosition={setOverlaiPosition}
             />
           </CutomFormItem>
         </Form>

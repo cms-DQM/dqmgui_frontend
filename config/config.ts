@@ -19,22 +19,21 @@ export const get_plot_url = (params: ParamsForApiProps) => {
     params.folders_path
   }/${params.plot_name}?${get_customize_params(params.customizeProps)}${
     params.stats ? '' : 'showstats=0;'
-  }${params.errorBars ? 'showerrbars=1;' : ''}${
-    params.normalize ? '' : 'norm=False;'
-  }w=${params.width};h=${params.height}`;
+  }${params.errorBars ? 'showerrbars=1;' : ''};w=${params.width};h=${
+    params.height
+  }`;
 };
 
 export const get_plot_with_overlay = (params: ParamsForApiProps) => {
-  return `/plotfairy/overlay?
-  ${get_customize_params(params.customizeProps)}ref=${
-    params.overlay
-  };obj=archive/${params.run_number}${params.dataset_name}${
-    params.folders_path
-  }/${params.plot_name}${params.joined_overlaied_plots_urls};${
-    params.stats ? '' : 'showstats=0;'
-  }${params.errorBars ? 'showerrbars=1;' : ''}${
-    params.normalize ? '' : 'norm=False;'
-  }w=${params.width};h=${params.height}`;
+  return `/plotfairy/overlay?${get_customize_params(
+    params.customizeProps
+  )}ref=${params.overlay};obj=archive/${params.run_number}${
+    params.dataset_name
+  }${params.folders_path}/${params.plot_name}${
+    params.joined_overlaied_plots_urls
+  };${params.stats ? '' : 'showstats=0;'}${
+    params.errorBars ? 'showerrbars=1;' : ''
+  }norm=${params.normalize};w=${params.width};h=${params.height}`;
 };
 
 export const get_overlaied_plots_urls = (params: ParamsForApiProps) => {

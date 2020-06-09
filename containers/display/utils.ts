@@ -118,25 +118,36 @@ export const getChangedQueryParams = (
   params.dataset_name = params.dataset_name
     ? params.dataset_name
     : query.dataset_name;
+
   params.run_number = params.run_number ? params.run_number : query.run_number;
+
   params.folder_path = params.folder_path
     ? removeFirstSlash(params.folder_path as string)
     : query.folder_path;
+
   params.workspace = params.workspace ? params.workspace : query.workspace;
+
   params.overlay = params.overlay ? params.overlay : query.overlay;
+
   params.overlay_data = params.overlay_data
     ? params.overlay_data
     : query.overlay_data;
+
   params.selected_plots =
     params.selected_plots === '' || params.selected_plots
       ? params.selected_plots
       : query.selected_plots;
+
   // if value of search field is empty string, should be retuned all folders.
   // if params.plot_search == '' when request is done, params.plot_search is changed to .*
   params.plot_search =
     params.plot_search === '' || params.plot_search
       ? params.plot_search
       : query.plot_search;
+
+  params.overlay = params.overlay ? params.overlay : query.overlay;
+
+  params.normalize = params.normalize ? params.normalize : query.normalize;
 
   return params;
 };

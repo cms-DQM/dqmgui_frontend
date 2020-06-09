@@ -1,7 +1,5 @@
 import React, { useContext } from 'react';
 import {
-  ParamsForApiProps,
-  SizeProps,
   PlotDataProps,
   QueryProps,
 } from '../../../../containers/display/interfaces';

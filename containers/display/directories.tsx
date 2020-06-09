@@ -15,6 +15,7 @@ import {
   changeRouter,
   getChangedQueryParams,
 } from './utils';
+import { CustomDiv } from '../../components/styledComponents';
 
 interface FoldersFilter {
   directories: (string | undefined)[];
@@ -29,7 +30,10 @@ export const Directories = ({ directories }: FoldersFilter) => {
       {directories.map((directory_name: any) => (
         <Col span={4} key={directory_name}>
           <DirecotryWrapper>
-            <div
+            <CustomDiv
+              hover="true"
+              display="flex"
+              alignitems="center"
               onClick={() =>
                 changeRouter(
                   getChangedQueryParams(
@@ -46,7 +50,7 @@ export const Directories = ({ directories }: FoldersFilter) => {
             >
               <Icon />
               <StyledA>{directory_name}</StyledA>
-            </div>
+            </CustomDiv>
           </DirecotryWrapper>
         </Col>
       ))}
