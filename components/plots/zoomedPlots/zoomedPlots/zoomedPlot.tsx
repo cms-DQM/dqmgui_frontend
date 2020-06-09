@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Button } from 'antd';
 import {
-  MoreOutlined
+  MinusCircleOutlined,
+  SettingOutlined
 } from '@ant-design/icons';
 import { Store } from 'antd/lib/form/interface';
 
@@ -12,6 +13,7 @@ import {
   PlotDataProps,
   QueryProps,
   CustomizeProps,
+  OptionProps,
 } from '../../../../containers/display/interfaces';
 import {
   StyledCol,
@@ -45,16 +47,18 @@ export const ZoomedPlot = ({
   const source = `${root_url}${plot_url}`;
   const router = useRouter();
   const query: QueryProps = router.query;
-
+console.log(source)
   const zoomedPlotMenuOptions = [{
     label: 'Remove',
     value: 'Remove',
     action: () => removePlotFromRightSide(query, selected_plot),
+    icon: <MinusCircleOutlined />
   },
   {
     label: 'Customization',
     value: 'Customization',
     action: () => toggleCustomizationMenu(true),
+    icon: <SettingOutlined />
   }
   ]
 

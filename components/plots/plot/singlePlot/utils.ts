@@ -42,7 +42,7 @@ export const addOverlayData = (triples: TripleProps[] | undefined) => {
     triples.map(
       (triple: TripleProps) =>
         `${triple.run_number}${triple.dataset_name}/${
-          triple.label ? triple.label : triple.run_number
+        triple.label ? triple.label : triple.run_number
         }`
     );
   const query = params?.join('&');
@@ -64,6 +64,7 @@ export const FormatParamsForAPI = (
     width: globalState.size.w,
     customizeProps: globalState.customizeProps,
     stats: globalState.stats,
+    overlay: query.overlay,
     overlay_plot: query.overlay_data ? formTriples(query.overlay_data) : [],
   };
 };

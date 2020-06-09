@@ -4,7 +4,6 @@ import { ParamsForApiProps } from '../../../../containers/display/interfaces';
 import { OnSideOverlaidPlots } from './onSideOverlaidPlots';
 import { OverlaidPlotImage } from './overlaidPlotImage';
 import { PlotDataProps } from '../../../../containers/display/interfaces';
-import { useRouter } from 'next/router';
 
 interface OverlaidPlotProps {
   plot: PlotDataProps;

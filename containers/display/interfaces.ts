@@ -1,3 +1,5 @@
+import { ReactElement } from "react";
+
 export interface TripleProps {
   [key: string]: string | number | boolean;
 }
@@ -12,6 +14,7 @@ export interface OptionProps {
   label: string;
   value: any;
   action?(option?: any): void;
+  icon?: JSX.Element;
 }
 
 export interface SizeProps {
