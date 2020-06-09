@@ -8,7 +8,6 @@ interface InfoProps {
 }
 
 export const Info = ({ content, title, ...props }: InfoProps) => {
-  console.log(props)
   return (
     <Popover
       content={content}

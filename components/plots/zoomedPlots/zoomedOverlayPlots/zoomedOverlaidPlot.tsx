@@ -67,7 +67,6 @@ export const ZoomedOverlaidPlot = ({
 
   useEffect(() => {
     setSource(get_plot_source(params_for_api));
-    console.log(params_for_api)
   }, [params_for_api])
 
   return (

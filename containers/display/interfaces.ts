@@ -32,7 +32,7 @@ export interface PlotProps {
   height: number;
   overlay?: string;
   stats?: boolean;
-  normalize?: boolean;
+  normalize?: string;
   errorBars?: boolean;
 }
 
@@ -95,6 +95,7 @@ export interface QueryProps {
   overlay?: string;
   workspace?: string;
   plot_search?: string;
+  normalize?: string;
 }
 
 export interface PlotPropertiesProps {

@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Col, Row, Select, Spin, Button } from 'antd';
 import { CaretRightFilled, CaretLeftFilled } from '@ant-design/icons';
-import Router from 'next/router';
 import { useRouter } from 'next/router';
 
 import { StyledFormItem } from '../styledComponents';
@@ -96,8 +95,8 @@ export const RunBrowser = () => {
                             <Spin />
                           </OptionParagraph>
                         ) : (
-                          <div onClick={() => setWidth(undefined)}>{run}</div>
-                        )}
+                            <div onClick={() => setWidth(undefined)}>{run}</div>
+                          )}
                       </Option>
                     );
                   })}

@@ -66,6 +66,7 @@ export const FormatParamsForAPI = (
     stats: globalState.stats,
     overlay: query.overlay,
     overlay_plot: query.overlay_data ? formTriples(query.overlay_data) : [],
+    normalize:  query.normalize ?  query.normalize : 'False',
   };
 };
 
