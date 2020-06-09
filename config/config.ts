@@ -23,6 +23,7 @@ export const get_plot_url = (params: ParamsForApiProps) => {
 };
 
 export const get_plot_with_overlay = (params: ParamsForApiProps) => {
+  console.log(params.customizeProps)
   return `/plotfairy/overlay?${get_customize_params(params.customizeProps)}ref=${
     params.overlay
   };obj=archive/${params.run_number}${params.dataset_name}${

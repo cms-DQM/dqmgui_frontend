@@ -40,8 +40,6 @@ export const ZoomedOverlaidPlot = ({
 }: ZoomedPlotsProps) => {
   const [customizationParams, setCustomizationParams] = useState<Partial<Store> & CustomizeProps>()
   const [openCustomization, toggleCustomizationMenu] = useState(false)
-  const [source, setSource] = useState('')
-
   params_for_api.customizeProps = customizationParams
 
   const zoomedPlotMenuOptions = [{
@@ -51,8 +49,8 @@ export const ZoomedOverlaidPlot = ({
     icon: <MinusCircleOutlined />
   },
   {
-    label: 'Customization',
-    value: 'Customization',
+    label: 'Customize',
+    value: 'Customize',
     action: () => toggleCustomizationMenu(true),
     icon: <SettingOutlined />
   }
@@ -65,9 +63,7 @@ export const ZoomedOverlaidPlot = ({
   const joined_overlaid_plots_urls = overlaid_plots_urls.join('');
   params_for_api.joined_overlaied_plots_urls = joined_overlaid_plots_urls;
 
-  useEffect(() => {
-    setSource(get_plot_source(params_for_api));
-  }, [params_for_api])
+  const source = get_plot_source(params_for_api)
 
   return (
     <StyledCol space={2}>
