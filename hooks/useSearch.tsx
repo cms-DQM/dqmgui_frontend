@@ -23,7 +23,7 @@ export const useSearch = (
     searching
   );
 
-  if (!searching || data === null || (data && data.samples.length === 0)) {
+  if (!searching || data === null || (data &&  data.samples && data.samples.length === 0)) {
     return {
       results: [],
       results_grouped: [],
