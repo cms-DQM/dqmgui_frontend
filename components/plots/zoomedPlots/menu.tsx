@@ -3,10 +3,9 @@ import { Menu, Dropdown, Row, Col, Button } from 'antd';
 import {
   DownOutlined
 } from '@ant-design/icons';
-import { OptionProps } from '../../../containers/display/interfaces';
-import { FullWidthRow } from '../../viewDetailsMenu/styledComponents';
-import { CustomDiv } from '../../styledComponents';
 
+import { OptionProps } from '../../../containers/display/interfaces';
+import { CustomDiv } from '../../styledComponents';
 
 export interface MenuProps {
   options: OptionProps[];
