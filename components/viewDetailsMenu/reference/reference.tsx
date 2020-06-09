@@ -30,6 +30,8 @@ interface ReferenceProps {
   setNormalize(normalize: boolean): void;
   overlayPlots: string;
   setOverlay(overlayPlots: TripleProps[]): void;
+  overlayPosition: string;
+  setOverlaiPosition(position: string): void
 }
 
 const isAllChecked = (triples: TripleProps[]) => {
@@ -41,9 +43,7 @@ const isAllChecked = (triples: TripleProps[]) => {
 
 export const Reference = ({
   normalize,
-  setNormalize,
-  overlayPlots,
-  setOverlay,
+  setNormalize
 }: ReferenceProps) => {
   const [state, dispatch] = useReducer(referenceReducer, initialState);
   const [selectedTriple, setTriple] = useState<TripleProps>({});
@@ -110,8 +110,6 @@ export const Reference = ({
         dispatch={dispatch}
         query={query}
         setTriple={setTriple}
-        setOverlay={setOverlay}
-        overlayPlots={overlayPlots}
       />
     </StyledDiv>
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { Checkbox, Col, Row } from 'antd';
 import { addOverlayData } from '../../plots/plot/singlePlot/utils';
@@ -25,6 +25,7 @@ import { Field } from './field';
 import { filter_plots, filter_valid_runs } from '../utils';
 import { Container } from './containers';
 import Link from 'next/link';
+import { store } from '../../../contexts/leftSideContext';
 
 interface OverlayRunsProps {
   triples: TripleProps[];
@@ -32,19 +33,18 @@ interface OverlayRunsProps {
   dispatch: any;
   query: QueryProps;
   setTriple(triple: TripleProps): void;
-  overlayPlots: string;
-  setOverlay(overlayPlots: TripleProps[]): void;
 }
 
 export const OverlayRuns = ({
-  overlayPlots,
-  setOverlay,
   triples,
   state,
   dispatch,
   query,
   setTriple,
 }: OverlayRunsProps) => {
+  const globalState = useContext(store)
+  const { setOverlay, overlayPosition } = globalState
+
   return (
     <CustomDiv>
       <Row justify="space-between">
@@ -142,7 +142,7 @@ export const OverlayRuns = ({
                   run_number: query.run_number,
                   dataset_name: query.dataset_name,
                   folder_path: query.folder_path,
-                  overlay: overlayPlots,
+                  overlay: overlayPosition,
                   overlay_data: `${addOverlayData(triples)}`,
                   selected_plots: query.selected_plots,
                 },

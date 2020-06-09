@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useMemo, useContext } from 'react';
+import React, { FC } from 'react';
 import _ from 'lodash';
 import { Row, Col } from 'antd';
 
@@ -21,9 +21,7 @@ import { LeftSidePlots } from '../../components/plots/plot';
 import { Directories } from './directories';
 import { NoResultsFound } from '../search/noResultsFound';
 import { CustomDiv, CustomRow } from '../../components/styledComponents';
-import { PlotSearch } from '../../components/plots/plot/plotSearch';
 import { useFilterFolders } from '../../hooks/useFilterFolders';
-import { store } from '../../contexts/leftSideContext';
 
 interface DirectoryInterface {
   subdir: string;

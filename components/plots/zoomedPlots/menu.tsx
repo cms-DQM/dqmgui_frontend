@@ -4,6 +4,8 @@ import {
   DownOutlined
 } from '@ant-design/icons';
 import { OptionProps } from '../../../containers/display/interfaces';
+import { FullWidthRow } from '../../viewDetailsMenu/styledComponents';
+import { CustomDiv } from '../../styledComponents';
 
 
 export interface MenuProps {
@@ -21,7 +23,10 @@ export const ZoomedPlotMenu = ({ options }: MenuProps) => {
             option.action && option.action(option.value);
           }}
         >
-          <div>{option.label}</div>
+          <CustomDiv display="flex" justifycontent="space-around">
+            <CustomDiv space="2" >{option.icon}</CustomDiv>
+            <CustomDiv space="2" >{option.label}</CustomDiv>
+          </CustomDiv>
         </Menu.Item>
       ))}
     </Menu>
