@@ -22,7 +22,6 @@ export const OverlayOptions = () => {
   const { setOverlaiPosition } = globalState
 
   const [value, setValue] = React.useState(settedOverlay);
-  console.log(value)
   useChangeRouter({ overlay: value }, [], true);
   useChangeRouter({ overlay: value }, [value], true);
 

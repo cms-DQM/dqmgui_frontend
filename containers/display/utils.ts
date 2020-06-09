@@ -149,6 +149,11 @@ export const getChangedQueryParams = (
   params.overlay = params.overlay
     ? params.overlay
     : query.overlay;
+
+  params.normalize = params.normalize
+    ? params.normalize
+    : query.normalize;
+
   return params;
 };
 

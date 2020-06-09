@@ -47,7 +47,7 @@ export const ZoomedPlot = ({
   const source = `${root_url}${plot_url}`;
   const router = useRouter();
   const query: QueryProps = router.query;
-console.log(source)
+
   const zoomedPlotMenuOptions = [{
     label: 'Remove',
     value: 'Remove',
