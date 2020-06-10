@@ -7,29 +7,14 @@ import Form from 'antd/lib/form/Form';
 
 const { Panel } = Collapse;
 
-interface ViewDetailsMenuProps {}
-
-export const ViewDetailsMenu = ({}: ViewDetailsMenuProps) => {
-  const [visible, setVisible] = useState(false);
-
+export const ViewDetailsMenu = () => {
   return (
     <StyledCollapse>
       <Panel header="Options" key="1">
-        {/* <ViewDetailsRow visible={visible.toString()}> */}
         <Form style={{ margin: 8 }}>
           <Col>
             <DisplayOptions />
           </Col>
-          {/* {!jsroot_mode && (
-            <>
-              <hr />
-              <FormItem
-                name="Customize"
-                label="Customize">
-                <CostumizeTable dispatch={dispatch} />
-              </FormItem>
-            </>
-          )} */}
         </Form>
       </Panel>
     </StyledCollapse>

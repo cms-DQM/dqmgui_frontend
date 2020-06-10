@@ -19,7 +19,10 @@ import { Field } from './field';
 import { filter_plots, filter_valid_runs } from '../utils';
 import { Container } from './containers';
 import { store } from '../../../contexts/leftSideContext';
-import { changeRouter, getChangedQueryParams } from '../../../containers/display/utils';
+import {
+  changeRouter,
+  getChangedQueryParams,
+} from '../../../containers/display/utils';
 
 interface OverlayRunsProps {
   triples: TripleProps[];
@@ -33,12 +36,14 @@ export const OverlayRuns = ({
   setTriple,
 }: OverlayRunsProps) => {
   const globalState = useContext(store);
-  const { setOverlay,
+  const {
+    setOverlay,
     overlayPosition,
     change_value_in_reference_table,
     removeRun,
     addRun,
-    toggleOverlayDataMenu, openOverlayDataMenu } = globalState;
+    toggleOverlayDataMenu,
+  } = globalState;
 
   return (
     <CustomDiv>
@@ -62,7 +67,9 @@ export const OverlayRuns = ({
               </Col>
               <CustomCol space="2">
                 <Container
-                  change_value_in_reference_table={change_value_in_reference_table}
+                  change_value_in_reference_table={
+                    change_value_in_reference_table
+                  }
                   removeRun={removeRun}
                   id={triple.id}
                   defaultValue={query.run_number}
@@ -72,7 +79,9 @@ export const OverlayRuns = ({
               </CustomCol>
               <CustomCol space="2">
                 <Container
-                  change_value_in_reference_table={change_value_in_reference_table}
+                  change_value_in_reference_table={
+                    change_value_in_reference_table
+                  }
                   removeRun={removeRun}
                   defaultValue={query.dataset_name}
                   id={triple.id}
@@ -96,7 +105,9 @@ export const OverlayRuns = ({
               </CustomCol>
               <CustomCol space="2">
                 <Field
-                  change_value_in_reference_table={change_value_in_reference_table}
+                  change_value_in_reference_table={
+                    change_value_in_reference_table
+                  }
                   removeRun={removeRun}
                   id={triple.id}
                   field_name="label"
@@ -111,9 +122,14 @@ export const OverlayRuns = ({
                     await removeRun(triple.id);
                     const filteredPlots = filter_plots(triples, triple.id);
                     setOverlay(filteredPlots);
-                    changeRouter(getChangedQueryParams({
-                      overlay_data: `${addOverlayData(filteredPlots)}`
-                    }, query))
+                    changeRouter(
+                      getChangedQueryParams(
+                        {
+                          overlay_data: `${addOverlayData(filteredPlots)}`,
+                        },
+                        query
+                      )
+                    );
                   }}
                   icon={<MinusOutlined />}
                 ></StyledSecondaryButton>
@@ -129,10 +145,15 @@ export const OverlayRuns = ({
             onClick={() => {
               const filtered: TripleProps[] = filter_valid_runs(triples);
               setOverlay(filtered);
-              changeRouter(getChangedQueryParams({
-                overlay: overlayPosition,
-                overlay_data: `${addOverlayData(filtered)}`
-              }, query))
+              changeRouter(
+                getChangedQueryParams(
+                  {
+                    overlay: overlayPosition,
+                    overlay_data: `${addOverlayData(filtered)}`,
+                  },
+                  query
+                )
+              );
             }}
           >
             <a>Submit</a>

@@ -36,7 +36,7 @@ export const Reference = () => {
     setNormalize,
     addRun,
     triples,
-    change_value_in_reference_table
+    change_value_in_reference_table,
   } = globalState;
 
   const checkedValue = normalize === 'True' ? true : false;
@@ -95,14 +95,8 @@ export const Reference = () => {
         </CustomCol>
         <Col></Col>
       </CustomRow>
-      <CustomModal
-        id={selectedTriple.id}
-      />
-      <OverlayRuns
-        triples={triples}
-        query={query}
-        setTriple={setTriple}
-      />
+      <CustomModal id={selectedTriple.id} />
+      <OverlayRuns triples={triples} query={query} setTriple={setTriple} />
     </StyledDiv>
   );
 };

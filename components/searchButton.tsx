@@ -1,5 +1,4 @@
 import React from 'react';
-import { Tooltip } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 
 import { StyledButton } from './styledComponents';

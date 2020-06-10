@@ -1,15 +1,12 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
 import { QueryProps } from './interfaces';
-import { store } from '../../contexts/leftSideContext';
-import { Col, Button } from 'antd';
+import { Col } from 'antd';
 import {
   DirecotryWrapper,
   StyledA,
   Icon,
-  DirecotryButton,
 } from './styledComponents';
-import Link from 'next/link';
 import {
   getFolderPathToQuery,
   changeRouter,

@@ -1,4 +1,4 @@
-import React, { FC, ChangeEvent, Dispatch, useEffect, useState } from 'react';
+import React, { ChangeEvent, Dispatch, useEffect, useState } from 'react';
 import { Form } from 'antd';
 
 import { StyledFormItem, StyledInput } from './styledComponents';
@@ -35,7 +35,7 @@ export const Nav = ({
     form.resetFields();
     setFormRunNumber(initial_search_run_number || NaN);
     setFormDatasetName(initial_search_dataset_name || '');
-  }, [initial_search_run_number, initial_search_dataset_name]);
+  }, [initial_search_run_number, initial_search_dataset_name, form]);
 
   const layout = {
     labelCol: { span: 8 },

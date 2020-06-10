@@ -10,7 +10,7 @@ export const filter_valid_runs = (triples: TripleProps[]) =>
   triples.filter((triple: TripleProps) => {
     if (triple.run_number && triple.checked) {
       return triple;
-    }
+    } return undefined
   });
 
 export const filter_plots = (triples: TripleProps[], id: any) => {

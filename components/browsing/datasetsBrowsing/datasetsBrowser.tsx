@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Col, Select, Row, Spin, Button } from 'antd';
 import { useRouter } from 'next/router';
 import { CaretRightFilled, CaretLeftFilled } from '@ant-design/icons';
@@ -20,15 +20,11 @@ export const DatasetsBrowser = () => {
     query.dataset_name
   );
   const [openSelect, setSelect] = useState(false);
-  const refElem = useRef(0);
   //setting  dataset field width to prev. selected dataset name field width,
   // because when spinner is shown, field becomes spinner width
   const [width, setWidth] = useState<number | undefined>();
 
-  const { results, results_grouped, searching, isLoading, errors } = useSearch(
-    query.run_number,
-    ''
-  );
+  const { results_grouped, isLoading } = useSearch(query.run_number, '');
   const datasets = results_grouped.map((result) => {
     return result.dataset;
   });

@@ -5,14 +5,16 @@ import { Typography } from 'antd';
 const { Text } = Typography;
 
 interface FieldProps {
-  removeRun(id: string | number | boolean): void,
+  removeRun(id: string | number | boolean): void;
   id: any;
   field_name: string;
   value: any;
   defaultValue?: string | number;
-  change_value_in_reference_table(value: string | number,
+  change_value_in_reference_table(
+    value: string | number,
     key: string,
-    id: string | number | boolean): void;
+    id: string | number | boolean
+  ): void;
 }
 
 export const Container = ({
@@ -26,11 +28,7 @@ export const Container = ({
   const inputValue = value ? value : defaultValue;
 
   useEffect(() => {
-    change_value_in_reference_table(
-      inputValue,
-      field_name,
-      id
-    );
+    change_value_in_reference_table(inputValue, field_name, id);
     const cleanField = () => {
       removeRun(id);
     };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Select, Row, Col, Input } from 'antd';
+import { Select, Row, Col } from 'antd';
 import FormItem from 'antd/lib/form/FormItem';
 
 import { StyledInput } from '../styledComponents';

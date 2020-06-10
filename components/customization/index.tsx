@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Modal, Button, Form } from 'antd';
+import { Modal, Form } from 'antd';
 import { Store } from 'antd/lib/form/interface';
 
 import { CostumizeTable } from './table';

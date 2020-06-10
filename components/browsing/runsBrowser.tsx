@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { Col, Row, Select, Spin, Button } from 'antd';
 import { CaretRightFilled, CaretLeftFilled } from '@ant-design/icons';
 import { useRouter } from 'next/router';
@@ -33,15 +33,11 @@ export const RunBrowser = () => {
 
   //seting  run field width to prev. selected run name field width,
   // because when spinner is shown, field becomes spinner width
-  const refElem = useRef(0);
   const [width, setWidth] = useState<number | undefined>();
 
   useChangeRouter({ run_number: currentRunNumber }, [currentRunNumber], true);
 
-  const { results_grouped, searching, isLoading, errors } = useSearch(
-    NaN,
-    query.dataset_name
-  );
+  const { results_grouped, isLoading } = useSearch(NaN, query.dataset_name);
 
   const runNumbers = getRunNumbers(results_grouped);
   const currentRunNumberIndex = runNumbers.indexOf(currentRunNumber);

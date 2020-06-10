@@ -36,7 +36,7 @@ export const initialState: any = {
   triples: [
     { id: id, checked: true, run_number: NaN, dataset_name: '', label: '' },
   ],
-  openOverlayDataMenu: false
+  openOverlayDataMenu: false,
 };
 
 export interface ActionProps {
@@ -60,7 +60,9 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
   const [plotSearchFolders, setPlotSearchFolders] = React.useState([]);
   const [workspaceFolders, setWorkspaceFolders] = React.useState([]);
   const [triples, setTriples] = React.useState(initialState.triples);
-  const [openOverlayDataMenu, toggleOverlayDataMenu] = React.useState(initialState.openOverlayDataMenu);
+  const [openOverlayDataMenu, toggleOverlayDataMenu] = React.useState(
+    initialState.openOverlayDataMenu
+  );
 
   const change_value_in_reference_table = (
     value: string | number,
@@ -122,7 +124,8 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         addRun,
         removeRun,
         triples,
-        openOverlayDataMenu, toggleOverlayDataMenu
+        openOverlayDataMenu,
+        toggleOverlayDataMenu,
       }}
     >
       {children}

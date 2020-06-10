@@ -1,7 +1,6 @@
 import { getDatasetParts } from '../viewDetailsMenu/utils';
 import _ from 'lodash';
 import cleanDeep from 'clean-deep';
-import { DatasetPartsProps } from '../../components/browsing/datasetsBrowsing/datasetNameBuilder';
 
 export const getRestOptions = (
   availableResultsNames: string[],
@@ -9,7 +8,6 @@ export const getRestOptions = (
   part: string
 ) => {
   const all = Object.keys(getDatasetParts(allPossibledatasets, part));
-
   return all.filter((item) => !availableResultsNames.includes(item));
 };
 

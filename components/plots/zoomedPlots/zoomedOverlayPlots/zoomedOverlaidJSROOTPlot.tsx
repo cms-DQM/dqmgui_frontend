@@ -1,6 +1,5 @@
 import React from 'react';
 import cleanDeep from 'clean-deep';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { get_jroot_plot } from '../../../../config/config';

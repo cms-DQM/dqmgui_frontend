@@ -4,10 +4,7 @@ import { Switch } from 'antd';
 import { SizeChanger } from '../../../sizeChanger';
 import { CutomFormItem } from '../../../styledComponents';
 import { store } from '../../../../contexts/rightSideContext';
-import { store as leftSideStore } from '../../../../contexts/leftSideContext';
 import { Reference } from '../../../viewDetailsMenu/reference/reference';
-
-interface DisplayOptionsProps { }
 
 export const DisplayOptions = () => {
   const { setJSROOTmode, size, setSize } = useContext(store);
@@ -35,6 +32,6 @@ export const DisplayOptions = () => {
           }}
         />
       </CutomFormItem>
-    </div >
+    </div>
   );
 };

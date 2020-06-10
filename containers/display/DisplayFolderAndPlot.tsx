@@ -1,5 +1,4 @@
 import React, { FC } from 'react';
-import _ from 'lodash';
 import { Row, Col } from 'antd';
 
 import { useRequest } from '../../hooks/useRequest';
@@ -88,26 +87,26 @@ const DiplayFolder: FC<FolderProps> = ({
               <Spinner />
             </SpinnerWrapper>
           ) : (
-            <>
-              <CustomRow width="100%">
-                <Directories directories={filteredFolders} />
-              </CustomRow>
-              <Row>
-                {plots.map((plot: PlotDataProps | undefined) => {
-                  if (plot) {
-                    return (
-                      <div key={plot.name}>
-                        <LeftSidePlots
-                          plot={plot}
-                          selected_plots={selected_plots}
-                        />
-                      </div>
-                    );
-                  }
-                })}
-              </Row>
-            </>
-          )}
+              <>
+                <CustomRow width="100%">
+                  <Directories directories={filteredFolders} />
+                </CustomRow>
+                <Row>
+                  {plots.map((plot: PlotDataProps | undefined) => {
+                    if (plot) {
+                      return (
+                        <div key={plot.name}>
+                          <LeftSidePlots
+                            plot={plot}
+                            selected_plots={selected_plots}
+                          />
+                        </div>
+                      );
+                    } return <></>
+                  })}
+                </Row>
+              </>
+            )}
 
           {!isLoading && filteredFolders.length === 0 && plots.length === 0 && (
             <CustomDiv fullwidth="true">
