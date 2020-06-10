@@ -1,25 +1,23 @@
 import React, { useEffect } from 'react';
 
-import {
-  removeRun,
-  change_value_in_reference_table,
-} from '../../../reducers/reference';
 import { Typography } from 'antd';
 
 const { Text } = Typography;
 
 interface FieldProps {
-  dispatch: any;
-  state: any;
+  removeRun(id: string | number | boolean): void,
   id: any;
   field_name: string;
   value: any;
   defaultValue?: string | number;
+  change_value_in_reference_table(value: string | number,
+    key: string,
+    id: string | number | boolean): void;
 }
 
 export const Container = ({
-  state,
-  dispatch,
+  removeRun,
+  change_value_in_reference_table,
   id,
   field_name,
   value,
@@ -32,9 +30,9 @@ export const Container = ({
       inputValue,
       field_name,
       id
-    )(state, dispatch);
+    );
     const cleanField = () => {
-      removeRun(id)(state, dispatch);
+      removeRun(id);
     };
     return cleanField;
   }, []);

@@ -138,7 +138,7 @@ export const getChangedQueryParams = (
 
   params.overlay = params.overlay ? params.overlay : query.overlay;
 
-  params.overlay_data = params.overlay_data
+  params.overlay_data =  params.overlay_data === '' ||  params.overlay_data
     ? params.overlay_data
     : query.overlay_data;
 
