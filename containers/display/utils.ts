@@ -32,16 +32,19 @@ export const getSelectedPlotsNames = (plotsNames: string | undefined) => {
   return plots;
 };
 
-export const getSelectedPlots = (plotsQuery: string | undefined) => {
+export const getSelectedPlots = (plotsQuery: string | undefined, plots: PlotDataProps[]) => {
   const plotsWithDirs = plotsQuery ? plotsQuery.split('&') : [];
   return plotsWithDirs.map((plotWithDir: string) => {
     const plotAndDir = plotWithDir.split('/');
     const name = plotAndDir.pop();
     const directories = plotAndDir.join('/');
+    const plot = plots.filter(plot => plot.name === name && plot.path === directories)
+    const displayedName = plot.length > 0 && plot[0].displayedName ? plot[0].displayedName : ''
+
     const plotObject: PlotDataProps = {
       name: name ? name : '',
-      dir: directories,
-      properties: '' as any,
+      path: directories,
+      displayedName: displayedName
     };
     return plotObject;
   });
@@ -85,8 +88,8 @@ export const getFormatedPlotsObject = (contents: PlotInterface[]) =>
   cleanDeep(
     contents.map((content: PlotInterface) => {
       return {
-        name: content.obj,
-        dir: content.dir && '/' + content.dir,
+        displayedName: content.obj,
+        path: content.path && '/' + content.path,
         properties: content.properties,
       };
     })
@@ -158,3 +161,12 @@ export const changeRouter = (parameters: ParsedUrlQueryInput) => {
     query: parameters,
   });
 };
+
+export const getNameAndDirectoriesFromDir = (content: PlotInterface) => {
+  const dir = content.path
+  const partsOfDir = dir.split('/')
+  const name = partsOfDir.pop()
+  const directories = partsOfDir.join('/')
+
+  return { name, directories }
+}
