@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Button } from 'antd';
 
 import { toggleModal } from '../../../reducers/reference';
 import Nav from '../../Nav';
 import { useSearch } from '../../../hooks/useSearch';
 import SearchResults from '../../../containers/search/SearchResults';
-import { change_value_in_reference_table } from '../../../reducers/reference';
 import { ResultsWrapper, StyledModal } from '../styledComponents';
+import { store } from '../../../contexts/leftSideContext';
 
 interface CustomModalProps {
   visible: boolean;
@@ -23,6 +23,7 @@ export const CustomModal = ({
 }: CustomModalProps) => {
   const [search_run_number, setSearchRunNumber] = useState(NaN);
   const [search_dataset_name, setSearchDatasetName] = useState('');
+  const { change_value_in_reference_table } = useContext(store)
 
   const navigationHandler = (
     search_by_run_number: number,
@@ -47,13 +48,13 @@ export const CustomModal = ({
       run_number,
       'run_number',
       id
-    )(state, dispatch);
+    );
 
     change_value_in_reference_table(
       dataset_name,
       'dataset_name',
       id
-    )(state, dispatch);
+    );
 
     toggleModal(false)(dispatch);
     clear();
@@ -99,8 +100,8 @@ export const CustomModal = ({
               />
             </ResultsWrapper>
           ) : (
-            <ResultsWrapper />
-          )}
+              <ResultsWrapper />
+            )}
         </>
       )}
     </StyledModal>
