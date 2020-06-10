@@ -16,15 +16,11 @@ import {
   CustomDiv,
 } from '../../styledComponents';
 import {
-  change_value_in_reference_table,
   toggleModal,
-  removeRun,
-  addRun,
 } from '../../../reducers/reference';
 import { Field } from './field';
 import { filter_plots, filter_valid_runs } from '../utils';
 import { Container } from './containers';
-import Link from 'next/link';
 import { store } from '../../../contexts/leftSideContext';
 import { changeRouter, getChangedQueryParams } from '../../../containers/display/utils';
 
@@ -44,7 +40,11 @@ export const OverlayRuns = ({
   setTriple,
 }: OverlayRunsProps) => {
   const globalState = useContext(store);
-  const { setOverlay, overlayPosition } = globalState;
+  const { setOverlay,
+    overlayPosition,
+    change_value_in_reference_table,
+    removeRun,
+    addRun } = globalState;
 
 
   return (
@@ -62,15 +62,15 @@ export const OverlayRuns = ({
                         triple.cheked ? triple.cheked : e.target.checked,
                         'checked',
                         triple.id
-                      )(state, dispatch);
+                      );
                     }}
                   />
                 </CustomCol>
               </Col>
               <CustomCol space="2">
                 <Container
-                  state={state}
-                  dispatch={dispatch}
+                  change_value_in_reference_table={change_value_in_reference_table}
+                  removeRun={removeRun}
                   id={triple.id}
                   defaultValue={query.run_number}
                   field_name="run_number"
@@ -79,9 +79,9 @@ export const OverlayRuns = ({
               </CustomCol>
               <CustomCol space="2">
                 <Container
-                  state={state}
+                  change_value_in_reference_table={change_value_in_reference_table}
+                  removeRun={removeRun}
                   defaultValue={query.dataset_name}
-                  dispatch={dispatch}
                   id={triple.id}
                   field_name="dataset_name"
                   value={triple.dataset_name}
@@ -103,8 +103,8 @@ export const OverlayRuns = ({
               </CustomCol>
               <CustomCol space="2">
                 <Field
-                  state={state}
-                  dispatch={dispatch}
+                  change_value_in_reference_table={change_value_in_reference_table}
+                  removeRun={removeRun}
                   id={triple.id}
                   field_name="label"
                   placeholder="label"
@@ -115,7 +115,7 @@ export const OverlayRuns = ({
               <CustomCol space="2">
                 <StyledSecondaryButton
                   onClick={async () => {
-                    await removeRun(triple.id)(state, dispatch);
+                    await removeRun(triple.id);
                     const filteredPlots = filter_plots(triples, triple.id);
                     setOverlay(filteredPlots);
                     changeRouter(getChangedQueryParams({
@@ -138,7 +138,7 @@ export const OverlayRuns = ({
               setOverlay(filtered);
               changeRouter(getChangedQueryParams({
                 overlay: overlayPosition,
-                overlay_data: `${addOverlayData(triples)}`
+                overlay_data: `${addOverlayData(filtered)}`
               }, query))
             }}
           >
@@ -149,7 +149,7 @@ export const OverlayRuns = ({
           <StyledSecondaryButton
             onClick={() => {
               if (triples.length < 4) {
-                addRun()(state, dispatch);
+                addRun();
               }
             }}
             icon={<PlusOutlined />}

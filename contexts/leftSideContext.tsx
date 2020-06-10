@@ -1,4 +1,5 @@
 import React, { createContext, useState, ReactElement } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import { sizes } from '../components/constants';
 import {
@@ -11,6 +12,7 @@ import { overlayOptions } from '../components/constants';
 export interface LeftSideStateProviderProps {
   children: ReactElement;
 }
+const id = uuidv4();
 
 export interface LeftSideState {
   size: SizeProps;
@@ -18,6 +20,7 @@ export interface LeftSideState {
   stats: boolean;
   overlayPosition: string;
   overlay: PlotProps[];
+  triples: TripleProps[];
   overlayPlots: TripleProps[];
   workspaceFolders: string[];
 }
@@ -29,6 +32,9 @@ export const initialState: any = {
   overlayPosition: overlayOptions[0].value,
   overlay: undefined,
   overlayPlots: undefined,
+  triples: [
+    { id: id, checked: true, run_number: NaN, dataset_name: '', label: '' },
+  ],
 };
 
 export interface ActionProps {
@@ -51,6 +57,43 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
   const [imageRefScrollDown, setImageRefScrollDown] = useState(null);
   const [plotSearchFolders, setPlotSearchFolders] = React.useState([]);
   const [workspaceFolders, setWorkspaceFolders] = React.useState([]);
+  const [triples, setTriples] = React.useState(initialState.triples);
+
+  const change_value_in_reference_table = (
+    value: string | number,
+    key: string,
+    id: string | number | boolean
+  ) => {
+    const copy = [...triples];
+    const current_line: TripleProps = copy.filter(
+      (line: TripleProps) => line.id === id
+    )[0];
+    const index_of_line: number = copy.indexOf(current_line);
+    current_line[key] = value;
+    copy[index_of_line] = current_line;
+    setTriples(copy);
+  };
+
+  const addRun = () => {
+    console.log('add', triples)
+    const copy: TripleProps[] = [...triples];
+    const id = uuidv4();
+    const newRun = {
+      id: id,
+      checked: true,
+      run_number: NaN,
+      dataset_name: '',
+      label: '',
+    };
+    copy.push(newRun);
+    setTriples(copy);
+  };
+
+  const removeRun = (id: string | number | boolean) => {
+    const copy: TripleProps[] = [...triples];
+    const removed = copy.filter((run: TripleProps) => run.id !== id);
+    setTriples(removed);
+  };
 
   return (
     <Provider
@@ -73,6 +116,10 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         setWorkspaceFolders,
         plotSearchFolders,
         setPlotSearchFolders,
+        change_value_in_reference_table,
+        addRun,
+        removeRun,
+        triples
       }}
     >
       {children}

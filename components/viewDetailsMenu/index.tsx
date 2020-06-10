@@ -55,14 +55,7 @@ export const ViewDetailsMenu = ({ selected_plots }: ViewDetailsMenuProps) => {
           </CutomFormItem>
           <hr />
           <CutomFormItem name="Reference" label="Reference">
-            <Reference
-              normalize={normalize}
-              setNormalize={setNormalize}
-              overlayPlots={overlayPlots}
-              setOverlay={setOverlay}
-              overlayPosition={overlayPosition}
-              setOverlaiPosition={setOverlaiPosition}
-            />
+            <Reference/>
           </CutomFormItem>
         </Form>
       </Panel>

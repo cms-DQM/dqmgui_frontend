@@ -1,4 +1,4 @@
-import React, { useReducer, useState, useEffect } from 'react';
+import React, { useReducer, useState, useEffect, useContext } from 'react';
 import { Col } from 'antd';
 
 import {
@@ -24,15 +24,7 @@ import { OverlayOptions } from './overlayOptions';
 import { OverlayRuns } from './overlayRuns';
 import FormItem from 'antd/lib/form/FormItem';
 import { useChangeRouter } from '../../../hooks/useChangeRouter';
-
-interface ReferenceProps {
-  normalize: string;
-  setNormalize(normalize: string): void;
-  overlayPlots: string;
-  setOverlay(overlayPlots: TripleProps[]): void;
-  overlayPosition: string;
-  setOverlaiPosition(position: string): void;
-}
+import { store } from '../../../contexts/leftSideContext';
 
 const isAllChecked = (triples: TripleProps[]) => {
   const checks: any[] = triples.map((triple: TripleProps) => {
@@ -41,13 +33,23 @@ const isAllChecked = (triples: TripleProps[]) => {
   return checks.includes(false) ? false : true;
 };
 
-export const Reference = ({ normalize, setNormalize }: ReferenceProps) => {
+export const Reference = () => {
   const [state, dispatch] = useReducer(referenceReducer, initialState);
   const [selectedTriple, setTriple] = useState<TripleProps>({});
+
+  const globalState = useContext(store);
+  const {
+    normalize,
+    setNormalize,
+    addRun,
+    triples,
+    change_value_in_reference_table
+  } = globalState;
+
   const checkedValue = normalize === 'True' ? true : false;
   const [checked, setChecked] = useState(checkedValue);
-
-  const { triples } = state;
+console.log(triples)
+  // const { triples } = state;
 
   const router = useRouter();
   const query: QueryProps = router.query;
@@ -56,8 +58,9 @@ export const Reference = ({ normalize, setNormalize }: ReferenceProps) => {
   );
 
   useEffect(() => {
-    addRun(overlayTriples)(state, dispatch);
+    addRun(overlayTriples);
   }, []);
+
   useChangeRouter({ normalize: normalize }, [normalize as any], true);
   return (
     <StyledDiv>
@@ -72,7 +75,7 @@ export const Reference = ({ normalize, setNormalize }: ReferenceProps) => {
                     triple.cheked ? triple.cheked : e.target.checked,
                     'checked',
                     triple.id
-                  )(state, dispatch);
+                  );
                 });
               }}
             >
@@ -93,7 +96,7 @@ export const Reference = ({ normalize, setNormalize }: ReferenceProps) => {
                 const normalizeValue = e.target.checked ? 'True' : 'False';
                 setNormalize(normalizeValue);
               }}
-              checked={checked}
+              checked={normalize === 'True' ? true : false}
             >
               Normalize
             </CustomCheckbox>

@@ -4,8 +4,10 @@ import { Switch } from 'antd';
 import { SizeChanger } from '../../../sizeChanger';
 import { CutomFormItem } from '../../../styledComponents';
 import { store } from '../../../../contexts/rightSideContext';
+import { store as leftSideStore } from '../../../../contexts/leftSideContext';
+import { Reference } from '../../../viewDetailsMenu/reference/reference';
 
-interface DisplayOptionsProps {}
+interface DisplayOptionsProps { }
 
 export const DisplayOptions = () => {
   const { setJSROOTmode, size, setSize } = useContext(store);
@@ -20,6 +22,10 @@ export const DisplayOptions = () => {
         <SizeChanger currentValue={size} setSize={setSize} />
       </CutomFormItem>
       <hr />
+      <CutomFormItem name="Reference" label="Reference">
+        <Reference />
+      </CutomFormItem>
+      <hr />
       <CutomFormItem name="Jsroot" label="JSROOT">
         <Switch
           checkedChildren="JSROOT enabled"
@@ -29,6 +35,6 @@ export const DisplayOptions = () => {
           }}
         />
       </CutomFormItem>
-    </div>
+    </div >
   );
 };
