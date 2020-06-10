@@ -3,10 +3,12 @@ import React, { ChangeEvent, useEffect } from 'react';
 import { StyledInput, StyledFormItem } from '../../styledComponents';
 
 interface FieldProps {
-  change_value_in_reference_table(value: string | number,
+  change_value_in_reference_table(
+    value: string | number,
     key: string,
-    id: string | number | boolean): void;
-  removeRun(id: string | number | boolean): void,
+    id: string | number | boolean
+  ): void;
+  removeRun(id: string | number | boolean): void;
   id: any;
   field_name: string;
   value: any;
@@ -38,11 +40,7 @@ export const Field = ({
       <StyledInput
         disabled={disabled}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          change_value_in_reference_table(
-            e.target.value,
-            field_name,
-            id
-          )
+          change_value_in_reference_table(e.target.value, field_name, id)
         }
         value={inputValue}
         defaultValue={inputValue}

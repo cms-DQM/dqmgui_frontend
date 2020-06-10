@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Select } from 'antd';
-import _ from 'lodash';
 
 import { StyledSelect } from '../../viewDetailsMenu/styledComponents';
 import { StyledOptionContent } from '../../styledComponents';

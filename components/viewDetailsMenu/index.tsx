@@ -22,16 +22,7 @@ export const ViewDetailsMenu = ({ selected_plots }: ViewDetailsMenuProps) => {
   const query: QueryProps = router.query;
 
   const globalState = useContext(store);
-  const {
-    size,
-    setSize,
-    normalize,
-    setNormalize,
-    overlayPlots,
-    setOverlay,
-    overlayPosition,
-    setOverlaiPosition,
-  } = globalState;
+  const { size, setSize, setOverlay } = globalState;
 
   useEffect(() => {
     if (query) {
@@ -55,7 +46,7 @@ export const ViewDetailsMenu = ({ selected_plots }: ViewDetailsMenuProps) => {
           </CutomFormItem>
           <hr />
           <CutomFormItem name="Reference" label="Reference">
-            <Reference/>
+            <Reference />
           </CutomFormItem>
         </Form>
       </Panel>

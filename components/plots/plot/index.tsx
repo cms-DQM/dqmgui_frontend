@@ -7,10 +7,7 @@ import {
   PlotDataProps,
 } from '../../../containers/display/interfaces';
 import { FormatParamsForAPI } from './singlePlot/utils';
-import {
-  getSelectedPlots,
-  isPlotSelected,
-} from '../../../containers/display/utils';
+import { isPlotSelected } from '../../../containers/display/utils';
 import { Plot } from './singlePlot/plot';
 import { OverlaidPlot } from './overlaidPlot';
 

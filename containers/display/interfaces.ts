@@ -1,5 +1,3 @@
-import { ReactElement } from 'react';
-
 export interface TripleProps {
   [key: string]: string | number | boolean;
 }

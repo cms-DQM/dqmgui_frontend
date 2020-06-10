@@ -1,13 +1,8 @@
 import * as React from 'react';
 import Form from 'antd/lib/form/Form';
-import { Input } from 'antd';
 
 import { useRouter } from 'next/router';
-import {
-  StyledFormItem,
-  StyledInput,
-  StyledSearch,
-} from '../../../styledComponents';
+import { StyledFormItem, StyledSearch } from '../../../styledComponents';
 import { QueryProps } from '../../../../containers/display/interfaces';
 import {
   getChangedQueryParams,

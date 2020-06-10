@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { Button } from 'antd';
 import { MinusCircleOutlined, SettingOutlined } from '@ant-design/icons';
 import { Store } from 'antd/lib/form/interface';
 
@@ -10,14 +9,12 @@ import {
   PlotDataProps,
   QueryProps,
   CustomizeProps,
-  OptionProps,
 } from '../../../../containers/display/interfaces';
 import {
   StyledCol,
   PlotNameCol,
   StyledPlotRow,
   Column,
-  MinusIcon,
   ImageDiv,
   Image,
 } from '../../../../containers/display/styledComponents';

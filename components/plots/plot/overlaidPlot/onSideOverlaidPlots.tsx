@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import Router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 
 import { root_url } from '../../../../config/config';
 import {

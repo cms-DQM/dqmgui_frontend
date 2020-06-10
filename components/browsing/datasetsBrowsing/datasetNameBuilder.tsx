@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Col, Row } from 'antd';
 import { useRouter } from 'next/router';
-import _ from 'lodash';
-import Router from 'next/router';
 
 import { QueryProps } from '../../../containers/display/interfaces';
 import { PartsBrowser } from './partBrowser';

@@ -1,5 +1,4 @@
 import React, { FC, useState } from 'react';
-import { Col } from 'antd';
 
 import {
   RunsRows,

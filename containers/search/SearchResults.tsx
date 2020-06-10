@@ -11,9 +11,6 @@ import {
   StyledTableDatasetColumn,
   StyledTableRow,
   StyledTable,
-  NotFoundDiv,
-  Icon,
-  NotFoundDivWrapper,
   TableBody,
   StyledAlert,
 } from './styledComponents';

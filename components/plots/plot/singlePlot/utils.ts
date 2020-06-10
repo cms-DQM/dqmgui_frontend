@@ -5,7 +5,6 @@ import {
   ParamsForApiProps,
 } from '../../../../containers/display/interfaces';
 import cleanDeep from 'clean-deep';
-import Router, { useRouter } from 'next/router';
 
 import { LeftSideState } from '../../../../contexts/leftSideContext';
 import { RightSideState } from '../../../../contexts/rightSideContext';

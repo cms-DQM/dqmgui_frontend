@@ -11,12 +11,14 @@ interface CustomModalProps {
   id: any;
 }
 
-export const CustomModal = ({
-  id,
-}: CustomModalProps) => {
+export const CustomModal = ({ id }: CustomModalProps) => {
   const [search_run_number, setSearchRunNumber] = useState(NaN);
   const [search_dataset_name, setSearchDatasetName] = useState('');
-  const { change_value_in_reference_table, toggleOverlayDataMenu, openOverlayDataMenu } = useContext(store)
+  const {
+    change_value_in_reference_table,
+    toggleOverlayDataMenu,
+    openOverlayDataMenu,
+  } = useContext(store);
 
   const navigationHandler = (
     search_by_run_number: number,
@@ -37,17 +39,9 @@ export const CustomModal = ({
   };
 
   const searchHandler = (run_number: number, dataset_name: string) => {
-    change_value_in_reference_table(
-      run_number,
-      'run_number',
-      id
-    );
+    change_value_in_reference_table(run_number, 'run_number', id);
 
-    change_value_in_reference_table(
-      dataset_name,
-      'dataset_name',
-      id
-    );
+    change_value_in_reference_table(dataset_name, 'dataset_name', id);
 
     toggleOverlayDataMenu(false);
     clear();
@@ -93,8 +87,8 @@ export const CustomModal = ({
               />
             </ResultsWrapper>
           ) : (
-              <ResultsWrapper />
-            )}
+            <ResultsWrapper />
+          )}
         </>
       )}
     </StyledModal>
