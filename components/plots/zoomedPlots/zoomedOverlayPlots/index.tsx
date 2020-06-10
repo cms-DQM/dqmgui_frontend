@@ -26,7 +26,7 @@ export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
           globalState,
           query,
           selected_plot.name,
-          selected_plot.dir
+          selected_plot.path
         );
 
         if (globalState.JSROOTmode) {

@@ -34,7 +34,7 @@ export const removePlotFromSelectedPlots = (
 export const addToSelectedPlots = (
   plotsQuery: string | undefined,
   plot: PlotDataProps
-) => `${plotsQuery ? plotsQuery + '&' : ''}${plot.dir}/${plot.name}`;
+) => `${plotsQuery ? plotsQuery + '&' : ''}${plot.path}/${plot.name}`;
 
 export const addOverlayData = (triples: TripleProps[] | undefined) => {
   const params =
@@ -53,12 +53,12 @@ export const FormatParamsForAPI = (
   globalState: LeftSideState & RightSideState,
   query: QueryProps,
   plotName: string,
-  dir?: string
+  path?: string
 ): ParamsForApiProps => {
   return {
     run_number: query.run_number ? query.run_number : NaN,
     dataset_name: query.dataset_name ? query.dataset_name : '',
-    folders_path: dir,
+    folders_path: path,
     plot_name: plotName,
     height: globalState.size.h,
     width: globalState.size.w,

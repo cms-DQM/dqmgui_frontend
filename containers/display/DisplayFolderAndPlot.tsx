@@ -29,7 +29,7 @@ interface DirectoryInterface {
 
 export interface PlotInterface {
   obj: string;
-  dir: string;
+  path: string;
   content: any;
   properties: any;
 }
@@ -59,7 +59,6 @@ const DiplayFolder: FC<FolderProps> = ({
   const router = useRouter();
   const query: QueryProps = router.query;
   const selectedPlots = query.selected_plots;
-  const selected_plots: PlotDataProps[] = getSelectedPlots(selectedPlots);
 
   //filtering directories by selected workspace
   const { foldersByPlotSearch, plots } = useFilterFolders(
@@ -67,6 +66,10 @@ const DiplayFolder: FC<FolderProps> = ({
     allDirectories
   );
   const filteredFolders: any[] = foldersByPlotSearch ? foldersByPlotSearch : [];
+  const selected_plots: PlotDataProps[] = getSelectedPlots(
+    selectedPlots,
+    plots
+  );
 
   return (
     <>
@@ -94,7 +97,10 @@ const DiplayFolder: FC<FolderProps> = ({
                   if (plot) {
                     return (
                       <div key={plot.name}>
-                        <LeftSidePlots plot={plot} />
+                        <LeftSidePlots
+                          plot={plot}
+                          selected_plots={selected_plots}
+                        />
                       </div>
                     );
                   }
