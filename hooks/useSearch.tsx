@@ -33,10 +33,10 @@ export const useSearch = (
     };
   }
   const { samples: results }: { samples: any[] } = data;
-  const parsed_results = results.reduce(
+  const parsed_results = results ? results.reduce(
     (prev, { items }) => [...prev, ...items],
     []
-  );
+  ) : [];
 
   const results_grouped = _.chain(parsed_results)
     .sortBy('dataset')
