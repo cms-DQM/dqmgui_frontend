@@ -12,6 +12,8 @@ interface NavProps {
   initial_search_dataset_name?: string;
   handler(search_by_run_number: number, search_by_dataset_name: string): void;
   type: string;
+  defaultRunNumber?: number | undefined;
+  defaultDatasetName?: string | undefined;
 }
 
 export const Nav = ({
@@ -21,6 +23,8 @@ export const Nav = ({
   setDatasetName,
   handler,
   type,
+  defaultRunNumber,
+  defaultDatasetName
 }: NavProps) => {
   const [form] = Form.useForm();
   const [form_search_run_number, setFormRunNumber] = useState(
@@ -44,6 +48,7 @@ export const Nav = ({
   const tailLayout = {
     wrapperCol: { offset: 0, span: 4 },
   };
+
   return (
     <div>
       <Form
@@ -73,6 +78,7 @@ export const Nav = ({
             placeholder="Enter run number"
             type="text"
             name="run_number"
+            value={defaultRunNumber}
           />
         </StyledFormItem>
         <StyledFormItem name="dataset_name">
@@ -83,6 +89,7 @@ export const Nav = ({
               setFormDatasetName(e.target.value)
             }
             type="text"
+            value={defaultDatasetName}
           />
         </StyledFormItem>
         <Form.Item {...tailLayout}>
