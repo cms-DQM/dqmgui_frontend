@@ -12,6 +12,7 @@ import {
 import { useState, useEffect } from 'react';
 import { removeFirstSlash } from '../components/workspaces/utils';
 import { PlotInterface } from '../containers/display/DisplayFolderAndPlot';
+import { useDisplayedName } from './useDisplayName';
 
 interface usePlotSearchReturn {
   directories: (string | undefined)[];
@@ -39,9 +40,11 @@ export const usePlotSearch = (
   );
 
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
+  const formattedPlotsObject = useDisplayedName(contents, data)
+
   useEffect(() => {
     setDirectories(getDirectories(contents));
-    setPlots(getFormatedPlotsObject(contents));
+    setPlots(formattedPlotsObject);
   }, [data, folders, isLoading]);
   return { directories, plots, isLoading, errors };
 };
