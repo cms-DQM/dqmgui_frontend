@@ -34,7 +34,7 @@ export const OverlayOptions = () => {
       onChange={(e: any) => {
         setValue(e);
       }}
-      value={query.overlay}
+      value={settedOverlay}
     >
       {overlayOptions.map((option: OptionProps) => {
         return (
