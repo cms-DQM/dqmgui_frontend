@@ -3,7 +3,6 @@ import { useRequest } from './useRequest';
 import {
   getContents,
   getDirectories,
-  getFormatedPlotsObject,
 } from '../containers/display/utils';
 import {
   DirectoryInterface,
