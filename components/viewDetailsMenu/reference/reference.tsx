@@ -1,5 +1,5 @@
 import React, { useReducer, useState, useEffect } from 'react';
-import { Col, Row } from 'antd';
+import { Col } from 'antd';
 
 import {
   TripleProps,

@@ -26,6 +26,7 @@ import { filter_plots, filter_valid_runs } from '../utils';
 import { Container } from './containers';
 import Link from 'next/link';
 import { store } from '../../../contexts/leftSideContext';
+import { changeRouter, getChangedQueryParams } from '../../../containers/display/utils';
 
 interface OverlayRunsProps {
   triples: TripleProps[];
@@ -44,6 +45,7 @@ export const OverlayRuns = ({
 }: OverlayRunsProps) => {
   const globalState = useContext(store);
   const { setOverlay, overlayPosition } = globalState;
+
 
   return (
     <CustomDiv>
@@ -112,12 +114,13 @@ export const OverlayRuns = ({
               </CustomCol>
               <CustomCol space="2">
                 <StyledSecondaryButton
-                  onClick={() => {
-                    if (triples.length > 1) {
-                      removeRun(triple.id)(state, dispatch);
-                      const filteredPlots = filter_plots(triples, triple.id);
-                      setOverlay(filteredPlots);
-                    }
+                  onClick={async () => {
+                    await removeRun(triple.id)(state, dispatch);
+                    const filteredPlots = filter_plots(triples, triple.id);
+                    setOverlay(filteredPlots);
+                    changeRouter(getChangedQueryParams({
+                      overlay_data: `${addOverlayData(filteredPlots)}`
+                    }, query))
                   }}
                   icon={<MinusOutlined />}
                 ></StyledSecondaryButton>
@@ -133,23 +136,13 @@ export const OverlayRuns = ({
             onClick={() => {
               const filtered: TripleProps[] = filter_valid_runs(triples);
               setOverlay(filtered);
+              changeRouter(getChangedQueryParams({
+                overlay: overlayPosition,
+                overlay_data: `${addOverlayData(triples)}`
+              }, query))
             }}
           >
-            <Link
-              href={{
-                pathname: '/',
-                query: {
-                  run_number: query.run_number,
-                  dataset_name: query.dataset_name,
-                  folder_path: query.folder_path,
-                  overlay: overlayPosition,
-                  overlay_data: `${addOverlayData(triples)}`,
-                  selected_plots: query.selected_plots,
-                },
-              }}
-            >
-              <a>Submit</a>
-            </Link>
+            <a>Submit</a>
           </StyledButton>
         </CustomCol>
         <CustomCol space="2">
