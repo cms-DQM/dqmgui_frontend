@@ -1,9 +1,6 @@
 import { useRequest } from './useRequest';
 
-import {
-  getContents,
-  getDirectories,
-} from '../containers/display/utils';
+import { getContents, getDirectories } from '../containers/display/utils';
 import {
   DirectoryInterface,
   PlotDataProps,
@@ -39,7 +36,7 @@ export const usePlotSearch = (
   );
 
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
-  const formattedPlotsObject = useDisplayedName(contents, data)
+  const formattedPlotsObject = useDisplayedName(contents, data);
 
   useEffect(() => {
     setDirectories(getDirectories(contents));

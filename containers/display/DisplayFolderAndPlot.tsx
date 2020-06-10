@@ -66,7 +66,10 @@ const DiplayFolder: FC<FolderProps> = ({
     allDirectories
   );
   const filteredFolders: any[] = foldersByPlotSearch ? foldersByPlotSearch : [];
-  const selected_plots: PlotDataProps[] = getSelectedPlots(selectedPlots, plots);
+  const selected_plots: PlotDataProps[] = getSelectedPlots(
+    selectedPlots,
+    plots
+  );
 
   return (
     <>
@@ -94,7 +97,10 @@ const DiplayFolder: FC<FolderProps> = ({
                   if (plot) {
                     return (
                       <div key={plot.name}>
-                        <LeftSidePlots plot={plot} selected_plots={selected_plots}/>
+                        <LeftSidePlots
+                          plot={plot}
+                          selected_plots={selected_plots}
+                        />
                       </div>
                     );
                   }

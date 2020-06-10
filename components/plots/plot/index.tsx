@@ -41,14 +41,14 @@ export const LeftSidePlots = ({ plot, selected_plots }: LeftSidePlotsProps) => {
           isPlotSelected={isPlotSelected(selected_plots, plot.name)}
         />
       ) : (
-          <Plot
-            plot={plot}
-            imageRefScrollDown={imageRefScrollDown}
-            params_for_api={params_for_api}
-            key={plot.name}
-            isPlotSelected={isPlotSelected(selected_plots, plot.name)}
-          />
-        )}
+        <Plot
+          plot={plot}
+          imageRefScrollDown={imageRefScrollDown}
+          params_for_api={params_for_api}
+          key={plot.name}
+          isPlotSelected={isPlotSelected(selected_plots, plot.name)}
+        />
+      )}
     </>
   );
 };
