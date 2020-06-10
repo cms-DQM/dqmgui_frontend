@@ -41,8 +41,6 @@ export const Reference = () => {
 
   const checkedValue = normalize === 'True' ? true : false;
   const [checked, setChecked] = useState(checkedValue);
-console.log(triples)
-  // const { triples } = state;
 
   const router = useRouter();
   const query: QueryProps = router.query;

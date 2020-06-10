@@ -78,7 +78,6 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
   };
 
   const addRun = () => {
-    console.log('add', triples)
     const copy: TripleProps[] = [...triples];
     const id = uuidv4();
     const newRun = {
