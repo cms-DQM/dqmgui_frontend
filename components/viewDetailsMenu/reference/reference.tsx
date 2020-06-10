@@ -1,16 +1,10 @@
-import React, { useReducer, useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Col } from 'antd';
 
 import {
   TripleProps,
   QueryProps,
 } from '../../../containers/display/interfaces';
-import {
-  referenceReducer,
-  initialState,
-  addRun,
-  change_value_in_reference_table,
-} from '../../../reducers/reference';
 import {
   StyledDiv,
   CustomCheckbox,
@@ -34,7 +28,6 @@ const isAllChecked = (triples: TripleProps[]) => {
 };
 
 export const Reference = () => {
-  const [state, dispatch] = useReducer(referenceReducer, initialState);
   const [selectedTriple, setTriple] = useState<TripleProps>({});
 
   const globalState = useContext(store);
@@ -105,15 +98,10 @@ console.log(triples)
         <Col></Col>
       </CustomRow>
       <CustomModal
-        dispatch={dispatch}
-        visible={state.open}
         id={selectedTriple.id}
-        state={state}
       />
       <OverlayRuns
         triples={triples}
-        state={state}
-        dispatch={dispatch}
         query={query}
         setTriple={setTriple}
       />
