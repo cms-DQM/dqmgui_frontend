@@ -15,9 +15,6 @@ import {
   CustomCol,
   CustomDiv,
 } from '../../styledComponents';
-import {
-  toggleModal,
-} from '../../../reducers/reference';
 import { Field } from './field';
 import { filter_plots, filter_valid_runs } from '../utils';
 import { Container } from './containers';
@@ -26,16 +23,12 @@ import { changeRouter, getChangedQueryParams } from '../../../containers/display
 
 interface OverlayRunsProps {
   triples: TripleProps[];
-  state: any;
-  dispatch: any;
   query: QueryProps;
   setTriple(triple: TripleProps): void;
 }
 
 export const OverlayRuns = ({
   triples,
-  state,
-  dispatch,
   query,
   setTriple,
 }: OverlayRunsProps) => {
@@ -44,8 +37,8 @@ export const OverlayRuns = ({
     overlayPosition,
     change_value_in_reference_table,
     removeRun,
-    addRun } = globalState;
-
+    addRun,
+    toggleOverlayDataMenu, openOverlayDataMenu } = globalState;
 
   return (
     <CustomDiv>
@@ -92,7 +85,7 @@ export const OverlayRuns = ({
                   <CustomCol space="2">
                     <StyledSecondaryButton
                       onClick={() => {
-                        toggleModal(!state.open)(dispatch);
+                        toggleOverlayDataMenu(true);
                         setTriple(triple);
                       }}
                     >

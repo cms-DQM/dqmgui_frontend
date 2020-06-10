@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Button } from 'antd';
 
-import { toggleModal } from '../../../reducers/reference';
 import Nav from '../../Nav';
 import { useSearch } from '../../../hooks/useSearch';
 import SearchResults from '../../../containers/search/SearchResults';
@@ -9,21 +8,15 @@ import { ResultsWrapper, StyledModal } from '../styledComponents';
 import { store } from '../../../contexts/leftSideContext';
 
 interface CustomModalProps {
-  visible: boolean;
-  dispatch: any;
   id: any;
-  state: any;
 }
 
 export const CustomModal = ({
-  visible,
-  dispatch,
   id,
-  state,
 }: CustomModalProps) => {
   const [search_run_number, setSearchRunNumber] = useState(NaN);
   const [search_dataset_name, setSearchDatasetName] = useState('');
-  const { change_value_in_reference_table } = useContext(store)
+  const { change_value_in_reference_table, toggleOverlayDataMenu, openOverlayDataMenu } = useContext(store)
 
   const navigationHandler = (
     search_by_run_number: number,
@@ -40,7 +33,7 @@ export const CustomModal = ({
 
   const onClosing = () => {
     clear();
-    toggleModal(false)(dispatch);
+    toggleOverlayDataMenu(false);
   };
 
   const searchHandler = (run_number: number, dataset_name: string) => {
@@ -56,7 +49,7 @@ export const CustomModal = ({
       id
     );
 
-    toggleModal(false)(dispatch);
+    toggleOverlayDataMenu(false);
     clear();
   };
 
@@ -68,7 +61,7 @@ export const CustomModal = ({
   return (
     <StyledModal
       title="Overlay Plots data search"
-      visible={visible}
+      visible={openOverlayDataMenu}
       onCancel={() => onClosing()}
       footer={[
         <Button
@@ -81,7 +74,7 @@ export const CustomModal = ({
         </Button>,
       ]}
     >
-      {visible && (
+      {openOverlayDataMenu && (
         <>
           <Nav
             handler={navigationHandler}
