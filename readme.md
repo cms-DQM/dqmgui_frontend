@@ -154,4 +154,5 @@ On certain level of browsing subsystem you will reach plots list.
 18. Plots per Lumi
 19. Horizontal an Vertical plot display
 20. ~~Customization for ONE plot~~ (09/06/2020)
+
 ---
