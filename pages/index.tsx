@@ -2,7 +2,7 @@ import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Router, { useRouter } from 'next/router';
-import { Tooltip, Row, Col, Button } from 'antd';
+import { Tooltip } from 'antd';
 
 import Nav from '../components/Nav';
 import SearchResults from '../containers/search/SearchResults';
