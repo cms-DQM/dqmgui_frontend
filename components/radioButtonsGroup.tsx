@@ -11,6 +11,7 @@ interface RadioButtonsGroupProps {
   getOptionValue(value: any): any;
   getOptionLabel(value: any): string;
   radioColor?: string;
+  disabled?: boolean;
 }
 
 export const RadioButtonsGroup = ({
@@ -20,6 +21,7 @@ export const RadioButtonsGroup = ({
   getOptionValue,
   getOptionLabel,
   radioColor,
+  disabled,
 }: RadioButtonsGroupProps) => {
   const [value, setValue] = React.useState(current_value);
 
@@ -30,6 +32,7 @@ export const RadioButtonsGroup = ({
         setValue(e.target.value);
       }}
       value={value}
+      disabled={disabled}
     >
       {options.map((option: OptionProps) => {
         return (
