@@ -1,5 +1,6 @@
-import React, { FC } from 'react';
-import { Row, Col } from 'antd';
+import React, { FC, useState, useContext } from 'react';
+import { Row, Col, Button } from 'antd';
+import { SettingOutlined } from '@ant-design/icons';
 
 import { useRequest } from '../../hooks/useRequest';
 import { PlotDataProps, QueryProps } from './interfaces';
@@ -19,8 +20,10 @@ import { RightSideStateProvider } from '../../contexts/rightSideContext';
 import { LeftSidePlots } from '../../components/plots/plot';
 import { Directories } from './directories';
 import { NoResultsFound } from '../search/noResultsFound';
-import { CustomDiv, CustomRow } from '../../components/styledComponents';
+import { CustomDiv, CustomRow, StyledSecondaryButton } from '../../components/styledComponents';
 import { useFilterFolders } from '../../hooks/useFilterFolders';
+import { SettingsModal } from '../../components/settings'
+import { store } from '../../contexts/leftSideContext';
 
 interface DirectoryInterface {
   subdir: string;
@@ -53,17 +56,19 @@ const DiplayFolder: FC<FolderProps> = ({
     [folder_path]
   );
 
+  const [openSettings, toggleSettingsModal] = useState(false)
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
   const allDirectories = getDirectories(contents);
   const router = useRouter();
   const query: QueryProps = router.query;
   const selectedPlots = query.selected_plots;
-
+  const { viewPlotsPosition, proportion } = useContext(store)
   //filtering directories by selected workspace
   const { foldersByPlotSearch, plots } = useFilterFolders(
     query,
     allDirectories
   );
+
   const filteredFolders: any[] = foldersByPlotSearch ? foldersByPlotSearch : [];
   const selected_plots: PlotDataProps[] = getSelectedPlots(
     selectedPlots,
@@ -72,13 +77,28 @@ const DiplayFolder: FC<FolderProps> = ({
 
   return (
     <>
-      <Row style={{ padding: 8 }}>
+      <Row style={{ padding: 8, width: '100%', justifyContent: 'space-between' }}>
+        <SettingsModal
+          openSettings={openSettings}
+          toggleSettingsModal={toggleSettingsModal} />
         <Col style={{ padding: 8 }}>
           <FolderPath folder_path={folder_path} />
         </Col>
+        <Col>
+          <StyledSecondaryButton
+            icon={<SettingOutlined />}
+            onClick={() => toggleSettingsModal(true)}
+          >
+            Settings
+          </StyledSecondaryButton>
+        </Col>
       </Row>
-      <DivWrapper selectedPlots={selected_plots.length > 0}>
-        <Wrapper zoomed={selected_plots.length > 0} notZoomedPlot={true}>
+      <DivWrapper selectedPlots={selected_plots.length > 0} position={viewPlotsPosition}>
+        <Wrapper zoomed={selected_plots.length > 0}
+         notZoomedPlot={true} 
+         position={viewPlotsPosition}
+         proportion={proportion}
+         >
           {doesPlotExists(contents).length > 0 && (
             <ViewDetailsMenu selected_plots={selected_plots.length > 0} />
           )}
@@ -115,7 +135,7 @@ const DiplayFolder: FC<FolderProps> = ({
           )}
         </Wrapper>
         {selected_plots.length > 0 && (
-          <Wrapper zoomed={selected_plots.length}>
+          <Wrapper zoomed={selected_plots.length} position={viewPlotsPosition}>
             <RightSideStateProvider>
               <ZoomedPlots selected_plots={selected_plots} />
             </RightSideStateProvider>
