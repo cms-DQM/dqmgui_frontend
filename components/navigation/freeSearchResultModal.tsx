@@ -7,6 +7,8 @@ import SearchResults from '../../containers/search/SearchResults';
 import { useSearch } from '../../hooks/useSearch';
 import { QueryProps } from '../../containers/display/interfaces';
 import { changeRouter, getChangedQueryParams } from '../../containers/display/utils';
+import { StyledButton } from '../styledComponents';
+import { theme } from '../../styles/theme';
 
 interface FreeSeacrhModalProps {
   setModalState(state: boolean): void,
@@ -45,14 +47,14 @@ export const FreeSeacrhModal = ({ setModalState, modalState, search_run_number, 
       visible={modalState}
       onCancel={() => onClosing()}
       footer={[
-        <Button
+        <StyledButton
+          color={theme.colors.secondary.main}
+          background="white"
           key="Close"
-          onClick={() => {
-            onClosing();
-          }}
+          onClick={() => onClosing()}
         >
           Close
-        </Button>,
+        </StyledButton>,
       ]}
     >
       {searching ? (

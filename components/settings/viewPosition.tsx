@@ -6,9 +6,10 @@ import { OptionProps } from '../../containers/display/interfaces'
 interface ViewPositionProps {
   viewPlotsPosition: string;
   setViewPlotsPosition(position: string): void;
+  disabled: boolean;
 }
 
-export const ViewPosition = ({ viewPlotsPosition, setViewPlotsPosition }: ViewPositionProps) => {
+export const ViewPosition = ({ viewPlotsPosition, setViewPlotsPosition, disabled }: ViewPositionProps) => {
   return (
     <RadioButtonsGroup
       options={viewPositions}
@@ -16,6 +17,7 @@ export const ViewPosition = ({ viewPlotsPosition, setViewPlotsPosition }: ViewPo
       getOptionValue={(option: OptionProps) => option.value}
       current_value={viewPlotsPosition}
       action={setViewPlotsPosition}
+      disabled={disabled}
     />
 
   )
