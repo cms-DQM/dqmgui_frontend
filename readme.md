@@ -152,7 +152,8 @@ On certain level of browsing subsystem you will reach plots list.
 16. ~~Make sure that options, which could be change on a right and left side (when at least one plot is selected), would be around the same.~~~(10/06/2020)
 17. Layouts
 18. Plots per Lumi
-19. Horizontal an Vertical plot display
+19. ~~Horizontal an Vertical plot display~~ (11/06/2020)
 20. ~~Customization for ONE plot~~ (09/06/2020)
+21. ~~Free and combined search~~ (09/06/2020)
 
 ---
