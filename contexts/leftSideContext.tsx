@@ -1,7 +1,7 @@
 import React, { createContext, useState, ReactElement } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { sizes } from '../components/constants';
+import { sizes, searchOptions, viewPositions, plotsProportionsOptions } from '../components/constants';
 import {
   SizeProps,
   PlotProps,
@@ -24,6 +24,8 @@ export interface LeftSideState {
   overlayPlots: TripleProps[];
   workspaceFolders: string[];
   openOverlayDataMenu: boolean;
+  searchOption: boolean;
+  viewPlotsPosition: boolean;
 }
 
 export const initialState: any = {
@@ -37,6 +39,9 @@ export const initialState: any = {
     { id: id, checked: true, run_number: NaN, dataset_name: '', label: '' },
   ],
   openOverlayDataMenu: false,
+  searchOption: searchOptions[1].value,
+  viewPlotsPosition: viewPositions[1].value,
+  proportion: plotsProportionsOptions[0].value,
 };
 
 export interface ActionProps {
@@ -63,6 +68,9 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
   const [openOverlayDataMenu, toggleOverlayDataMenu] = React.useState(
     initialState.openOverlayDataMenu
   );
+  const [viewPlotsPosition, setViewPlotsPosition] = React.useState(initialState.viewPlotsPosition);
+  const [searchOption, setSearchOption] = React.useState(initialState.searchOption);
+  const [proportion, setProportion] = React.useState(initialState.proportion);
 
   const change_value_in_reference_table = (
     value: string | number,
@@ -126,6 +134,9 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         triples,
         openOverlayDataMenu,
         toggleOverlayDataMenu,
+        viewPlotsPosition, setViewPlotsPosition,
+        searchOption, setSearchOption,
+        proportion, setProportion
       }}
     >
       {children}
