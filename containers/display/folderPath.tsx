@@ -37,7 +37,7 @@ export const FolderPath = ({ folder_path }: FolderPathProps) => {
         </Breadcrumb.Item>
         <Breadcrumb.Item
           onClick={() => {
-            changeFolderPathByBreadcrumb({ folder_path: '/' });
+            changeFolderPathByBreadcrumb({ folder_path: '/', selected_plots: '' });
           }}
         >
           <a>Home</a>
@@ -49,6 +49,7 @@ export const FolderPath = ({ folder_path }: FolderPathProps) => {
               onClick={() => {
                 changeFolderPathByBreadcrumb({
                   folder_path: getFolderPath(folders, folder),
+                  selected_plots: '' 
                 });
               }}
             >
