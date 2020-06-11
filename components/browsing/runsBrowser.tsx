@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col, Row, Select, Spin, Button } from 'antd';
 import { CaretRightFilled, CaretLeftFilled } from '@ant-design/icons';
 import { useRouter } from 'next/router';
@@ -41,6 +41,11 @@ export const RunBrowser = () => {
 
   const runNumbers = getRunNumbers(results_grouped);
   const currentRunNumberIndex = runNumbers.indexOf(currentRunNumber);
+
+  useEffect(() => {
+    const run_number = query.run_number ? query.run_number : NaN;
+    setCurrentRunNumber(run_number)
+  }, [query.run_number])
 
   return (
     <Col>
@@ -91,8 +96,8 @@ export const RunBrowser = () => {
                             <Spin />
                           </OptionParagraph>
                         ) : (
-                          <div onClick={() => setWidth(undefined)}>{run}</div>
-                        )}
+                            <div onClick={() => setWidth(undefined)}>{run}</div>
+                          )}
                       </Option>
                     );
                   })}

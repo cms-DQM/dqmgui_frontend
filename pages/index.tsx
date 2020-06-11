@@ -2,7 +2,7 @@ import React from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import Router, { useRouter } from 'next/router';
-import { Tooltip, Row, Col } from 'antd';
+import { Tooltip, Row, Col, Button } from 'antd';
 
 import Nav from '../components/Nav';
 import SearchResults from '../containers/search/SearchResults';
@@ -24,11 +24,8 @@ import {
 import { FolderPathQuery } from '../containers/display/interfaces';
 import { useValidateQuery } from '../hooks/useValidateQuery';
 import { QueryValidationErrors } from '../components/queryValidationErrors';
-import { Browser } from '../components/browsing';
-import Workspaces from '../components/workspaces';
 import { workspaces } from '../workspaces/offline';
-import { PlotSearch } from '../components/plots/plot/plotSearch';
-import { CustomRow } from '../components/styledComponents';
+import { ComposedSearch } from '../components/navigation/composedSearch';
 
 const navigationHandler = (
   search_by_run_number: number,
@@ -109,33 +106,17 @@ const Index: NextPage<FolderPathQuery> = () => {
             //Instead, run and dataset browser is is displayed.
             //Regular search fields are displayed just in the main page.
             isDatasetAndRunNumberSelected ? (
-              <CustomRow
-                width="100%"
-                display="flex"
-                justifycontent="space-between"
-              >
-                <CustomRow width="fit-content">
-                  <Col>
-                    <Workspaces />
-                  </Col>
-                  <Col>
-                    <Browser />
-                  </Col>
-                </CustomRow>
-                <Col>
-                  <PlotSearch isLoadingFolders={false} />
-                </Col>
-              </CustomRow>
+              <ComposedSearch />
             ) : (
-              <>
-                <Nav
-                  initial_search_run_number={search_run_number}
-                  initial_search_dataset_name={search_dataset_name}
-                  handler={navigationHandler}
-                  type="top"
-                />
-              </>
-            )
+                <>
+                  <Nav
+                    initial_search_run_number={search_run_number}
+                    initial_search_dataset_name={search_dataset_name}
+                    handler={navigationHandler}
+                    type="top"
+                  />
+                </>
+              )
           }
         </StyledHeader>
         {validation_errors.length > 0 ? (
@@ -156,13 +137,13 @@ const Index: NextPage<FolderPathQuery> = () => {
             errors={errors}
           />
         ) : (
-          <NotFoundDivWrapper>
-            <NotFoundDiv noBorder>
-              <ChartIcon />
+                <NotFoundDivWrapper>
+                  <NotFoundDiv noBorder>
+                    <ChartIcon />
               Welcome to DQM GUI
             </NotFoundDiv>
-          </NotFoundDivWrapper>
-        )}
+                </NotFoundDivWrapper>
+              )}
       </StyledLayout>
     </StyledDiv>
   );

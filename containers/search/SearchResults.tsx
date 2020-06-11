@@ -33,7 +33,7 @@ const SearchResults: FC<SearchResultsInterface> = ({
   const errorsList = errors && errors.length > 0 ? errors : [];
 
   return (
-    <StyledWrapper>
+    <StyledWrapper overflowx="hidden">
       {isLoading ? (
         <SpinnerWrapper>
           <Spinner />
