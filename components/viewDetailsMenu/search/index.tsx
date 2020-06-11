@@ -6,6 +6,8 @@ import { useSearch } from '../../../hooks/useSearch';
 import SearchResults from '../../../containers/search/SearchResults';
 import { ResultsWrapper, StyledModal } from '../styledComponents';
 import { store } from '../../../contexts/leftSideContext';
+import { StyledButton } from '../../styledComponents';
+import { theme } from '../../../styles/theme';
 
 interface CustomModalProps {
   id: any;
@@ -59,14 +61,14 @@ export const CustomModal = ({ id }: CustomModalProps) => {
       visible={openOverlayDataMenu}
       onCancel={() => onClosing()}
       footer={[
-        <Button
+        <StyledButton
+          color={theme.colors.secondary.main}
+          background="white"
           key="Close"
-          onClick={() => {
-            onClosing();
-          }}
+          onClick={() => onClosing()}
         >
           Close
-        </Button>,
+      </StyledButton>,
       ]}
     >
       {openOverlayDataMenu && (

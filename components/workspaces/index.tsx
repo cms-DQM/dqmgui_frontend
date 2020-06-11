@@ -4,11 +4,12 @@ import { Tabs, Button } from 'antd';
 import { workspaces } from '../../workspaces/offline';
 import { StyledModal } from '../viewDetailsMenu/styledComponents';
 import Form from 'antd/lib/form/Form';
-import { StyledFormItem } from '../styledComponents';
+import { StyledFormItem, StyledButton } from '../styledComponents';
 import { useRouter } from 'next/router';
 import { setWorkspaceToQuery } from './utils';
 import { QueryProps } from '../../containers/display/interfaces';
 import { useChangeRouter } from '../../hooks/useChangeRouter';
+import { theme } from '../../styles/theme';
 
 const { TabPane } = Tabs;
 
@@ -44,14 +45,14 @@ const Workspaces = () => {
           visible={openWorkspaces}
           onCancel={() => toggleWorkspaces(false)}
           footer={[
-            <Button
+            <StyledButton
+              color={theme.colors.secondary.main}
+              background="white"
               key="Close"
-              onClick={() => {
-                toggleWorkspaces(false);
-              }}
+              onClick={() => toggleWorkspaces(false)}
             >
               Close
-            </Button>,
+          </StyledButton>
           ]}
         >
           <Tabs defaultActiveKey="1" type="card">

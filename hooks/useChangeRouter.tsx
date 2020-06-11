@@ -14,7 +14,6 @@ export const useChangeRouter = (
   const query: QueryProps = router.query;
 
   const parameters = getChangedQueryParams(params, query);
-console.log(params)
   React.useEffect(() => {
     if (condition) {
       Router.replace({
