@@ -5,12 +5,12 @@ import { Spin, Row, Col, Alert } from 'antd';
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
 
-export const StyledWrapper = styled.div`
+export const StyledWrapper = styled.div<{ overflowx?: string }>`
   height: 100%;
   display: flex;
-  // width: 100%;
   overflow: scroll;
   justify-content: center;
+  overflow-x: ${(props) => props.overflowx ? props.overflowx : ''}
 `;
 
 export const Spinner = () => <Spin tip="Loading..." />;
@@ -42,7 +42,7 @@ export const StyledTableRow = styled.tr<{
   cursor: pointer;
   &:hover {
     background-color: ${(props) =>
-      props?.noHover ? '' : `${theme.colors.thirdy.light}`};
+    props?.noHover ? '' : `${theme.colors.thirdy.light}`};
     color: ${(props) => (props?.noHover ? '' : `${theme.colors.common.white}`)};
   }
   font-weight: ${(props) =>

@@ -54,6 +54,7 @@ export const Nav = ({
       <Form
         form={form}
         layout={'inline'}
+        style={{justifyContent: 'center'}}
         {...layout}
         name={`search_form${type}`}
         className="fieldLabel"
