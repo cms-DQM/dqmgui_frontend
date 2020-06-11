@@ -16,6 +16,7 @@ export const FolderPath = ({ folder_path }: FolderPathProps) => {
   const filteredFolders = folders.filter((folder: string) => folder !== '');
   const router = useRouter();
   const query = router.query;
+
   const changeFolderPathByBreadcrumb = (parameters: ParsedUrlQueryInput) =>
     changeRouter(getChangedQueryParams(parameters, query));
 
