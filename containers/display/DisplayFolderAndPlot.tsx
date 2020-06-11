@@ -80,7 +80,9 @@ const DiplayFolder: FC<FolderProps> = ({
       <Row style={{ padding: 8, width: '100%', justifyContent: 'space-between' }}>
         <SettingsModal
           openSettings={openSettings}
-          toggleSettingsModal={toggleSettingsModal} />
+          toggleSettingsModal={toggleSettingsModal}
+          isAnyPlotSelected={selected_plots.length === 0}
+          />
         <Col style={{ padding: 8 }}>
           <FolderPath folder_path={folder_path} />
         </Col>
