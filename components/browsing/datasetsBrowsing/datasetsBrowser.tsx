@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col, Select, Row, Spin, Button } from 'antd';
 import { useRouter } from 'next/router';
 import { CaretRightFilled, CaretLeftFilled } from '@ant-design/icons';
@@ -32,6 +32,10 @@ export const DatasetsBrowser = () => {
   useChangeRouter({ dataset_name: currentDataset }, [currentDataset], true);
 
   const currentDatasetNameIndex = datasets.indexOf(currentDataset);
+
+  useEffect(() => {
+    setCurrentDataset(query.dataset_name)
+  }, [query.run_number])
 
   return (
     <Row justify="center" align="middle">
