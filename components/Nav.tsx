@@ -77,7 +77,7 @@ export const Nav = ({
               setFormRunNumber(+e.target.value)
             }
             placeholder="Enter run number"
-            type="text"
+            // type="text"
             name="run_number"
             value={defaultRunNumber}
           />
@@ -89,7 +89,7 @@ export const Nav = ({
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setFormDatasetName(e.target.value)
             }
-            type="text"
+            // type="text"
             value={defaultDatasetName}
           />
         </StyledFormItem>

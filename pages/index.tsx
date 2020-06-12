@@ -119,9 +119,10 @@ const Index: NextPage<FolderPathQuery> = () => {
               )
           }
         </StyledHeader>
-        {validation_errors.length > 0 ? (
+        {/* {validation_errors.length > 0 ? (
           <QueryValidationErrors validation_errors={validation_errors} />
-        ) : run_number && dataset_name ? (
+        ) : */}
+        {run_number && dataset_name ? (
           // If a user already has a run_number and dataset_name, he is not searching nor is he in the homepage, he is
           <DiplayFolders
             run_number={run_number}
