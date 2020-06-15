@@ -5,6 +5,7 @@ import { WrapperDiv } from '../../containers/display/styledComponents';
 import { DatasetsBrowser } from './datasetsBrowsing/datasetsBrowser';
 import { DatasetsBuilder } from './datasetsBrowsing/datasetNameBuilder';
 import { RunBrowser } from './runsBrowser';
+import { LumesectionBroweser } from './lumesectionBroweser';
 import { dataSetSelections } from '../constants';
 import { StyledFormItem } from '../styledComponents';
 import { DropdownMenu } from '../menu';
@@ -20,6 +21,9 @@ export const Browser = () => {
         <WrapperDiv>
           <RunBrowser />
         </WrapperDiv>
+        <WrapperDiv>
+          <LumesectionBroweser />
+        </WrapperDiv>
         <StyledFormItem
           label={
             <DropdownMenu
@@ -34,10 +38,10 @@ export const Browser = () => {
               <DatasetsBrowser />
             </WrapperDiv>
           ) : (
-            <WrapperDiv>
-              <DatasetsBuilder />
-            </WrapperDiv>
-          )}
+              <WrapperDiv>
+                <DatasetsBuilder />
+              </WrapperDiv>
+            )}
         </StyledFormItem>
       </WrapperDiv>
     </Form>

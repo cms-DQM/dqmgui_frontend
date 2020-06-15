@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Col, Button } from 'antd';
+import { Col } from 'antd';
 import { useRouter } from 'next/router';
 
 import Workspaces from '../workspaces';
-import { CustomRow, StyledButton } from '../styledComponents';
+import { CustomRow } from '../styledComponents';
 import { Browser } from '../browsing';
 import { PlotSearch } from '../plots/plot/plotSearch';
 import Nav from '../Nav';

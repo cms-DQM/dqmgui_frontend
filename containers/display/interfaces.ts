@@ -20,10 +20,8 @@ export interface SizeProps {
   h: number;
 }
 
-export interface PlotProps {
+export interface PlotProps extends LumisectionRequestProps {
   plot_name?: string;
-  dataset_name: string;
-  run_number: number;
   folders_path?: string;
   overlay_plot?: TripleProps[];
   width: number;
@@ -32,6 +30,12 @@ export interface PlotProps {
   stats?: boolean;
   normalize?: string;
   errorBars?: boolean;
+}
+
+export interface LumisectionRequestProps {
+  dataset_name: string;
+  run_number: number | string;
+  lumi?: number | string;
 }
 
 export interface ParamsForApiProps extends PlotProps {
@@ -95,6 +99,7 @@ export interface QueryProps {
   workspace?: string;
   plot_search?: string;
   normalize?: string;
+  lumi?: number | string;
 }
 
 export interface PlotPropertiesProps {
@@ -122,3 +127,4 @@ export interface PlotInterface {
 export interface DirectoryInterface {
   subdir: string;
 }
+

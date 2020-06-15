@@ -26,6 +26,7 @@ export interface LeftSideState {
   openOverlayDataMenu: boolean;
   searchOption: boolean;
   viewPlotsPosition: boolean;
+  lumisection: string | number;
 }
 
 export const initialState: any = {
@@ -36,12 +37,13 @@ export const initialState: any = {
   overlay: undefined,
   overlayPlots: undefined,
   triples: [
-    { id: id, checked: true, run_number: NaN, dataset_name: '', label: '' },
+    { id: id, checked: true, run_number: NaN, lumi: 'All', dataset_name: '', label: '' },
   ],
   openOverlayDataMenu: false,
   searchOption: searchOptions[1].value,
   viewPlotsPosition: viewPositions[1].value,
   proportion: plotsProportionsOptions[0].value,
+  lumisection: 'All',
 };
 
 export interface ActionProps {
@@ -71,6 +73,7 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
   const [viewPlotsPosition, setViewPlotsPosition] = React.useState(initialState.viewPlotsPosition);
   const [searchOption, setSearchOption] = React.useState(initialState.searchOption);
   const [proportion, setProportion] = React.useState(initialState.proportion);
+  const [lumisection, setLumisection] = React.useState(initialState.lumisection);
 
   const change_value_in_reference_table = (
     value: string | number,
@@ -136,7 +139,8 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         toggleOverlayDataMenu,
         viewPlotsPosition, setViewPlotsPosition,
         searchOption, setSearchOption,
-        proportion, setProportion
+        proportion, setProportion,
+        lumisection, setLumisection
       }}
     >
       {children}

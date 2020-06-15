@@ -1,3 +1,5 @@
+import { ParamsForApiProps, TripleProps } from "../containers/display/interfaces";
+
 export const get_customize_params = (params = {} as any) => {
   const xtype = params.xtype ? `xtype=${params.xtype};` : '';
   const xmin = params.xmin ? `xmin=${params.xmin};` : '';
@@ -17,3 +19,17 @@ export const get_customize_params = (params = {} as any) => {
 
   return parameters;
 };
+
+export const getRunsWithLumisections = (params: ParamsForApiProps | TripleProps) => {
+  const lumisectionValue = params.lumi === 'All' ? undefined : params.lumi
+  const lumisectionParameter = lumisectionValue ? `${params.run_number}:${lumisectionValue}` : params.run_number
+
+  return lumisectionParameter
+}
+
+export const getRunsWithLumisectionsForOverlaidPlots = (params: TripleProps) => {
+  const lumisectionValue = params.lumi === 'All' ? undefined : params.lumi
+  const lumisectionParameter = lumisectionValue ? `${params.run_number}:${lumisectionValue}` : params.run_number
+
+  return lumisectionParameter
+}
