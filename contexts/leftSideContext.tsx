@@ -37,7 +37,7 @@ export const initialState: any = {
   overlay: undefined,
   overlayPlots: undefined,
   triples: [
-    { id: id, checked: true, run_number: NaN, lumi: 'All', dataset_name: '', label: '' },
+    // { id: id, checked: true, run_number: NaN, lumi: 'All', dataset_name: '', label: '' },
   ],
   openOverlayDataMenu: false,
   searchOption: searchOptions[1].value,
@@ -90,7 +90,7 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
     setTriples(copy);
   };
 
-  const addRun = () => {
+  const addRun = (run_from_query: TripleProps[]) => {
     const copy: TripleProps[] = [...triples];
     const id = uuidv4();
     const newRun = {
@@ -101,7 +101,8 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
       label: '',
     };
     copy.push(newRun);
-    setTriples(copy);
+    const runs = run_from_query ? run_from_query : copy
+    setTriples(runs);
   };
 
   const removeRun = (id: string | number | boolean) => {

@@ -24,7 +24,8 @@ export const Nav = ({
   handler,
   type,
   defaultRunNumber,
-  defaultDatasetName
+  defaultDatasetName,
+  searchForm
 }: NavProps) => {
   const [form] = Form.useForm();
   const [form_search_run_number, setFormRunNumber] = useState(
@@ -54,7 +55,7 @@ export const Nav = ({
       <Form
         form={form}
         layout={'inline'}
-        style={{justifyContent: 'center', width: 'max-content'}}
+        style={{ justifyContent: 'center', width: 'max-content' }}
         {...layout}
         name={`search_form${type}`}
         className="fieldLabel"

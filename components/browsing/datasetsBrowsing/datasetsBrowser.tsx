@@ -1,41 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Col, Select, Row, Spin, Button } from 'antd';
-import { useRouter } from 'next/router';
 import { CaretRightFilled, CaretLeftFilled } from '@ant-design/icons';
 
 import {
   StyledSelect,
   OptionParagraph,
 } from '../../viewDetailsMenu/styledComponents';
-import { QueryProps } from '../../../containers/display/interfaces';
 import { useSearch } from '../../../hooks/useSearch';
-import { useChangeRouter } from '../../../hooks/useChangeRouter';
+import { QueryProps } from '../../../containers/display/interfaces';
+import { getChangedQueryParams, changeRouter } from '../../../containers/display/utils';
+
+interface DatasetsBrowserProps {
+  currentDataset: string;
+  query: QueryProps;
+  currentRunNumber: number;
+}
 
 const { Option } = Select;
 
-export const DatasetsBrowser = () => {
-  const router = useRouter();
-  const query: QueryProps = router.query;
-  const [currentDataset, setCurrentDataset] = useState<string | undefined>(
-    query.dataset_name
-  );
+export const DatasetsBrowser = ({ currentDataset, query, currentRunNumber }: DatasetsBrowserProps) => {
   const [openSelect, setSelect] = useState(false);
   //setting  dataset field width to prev. selected dataset name field width,
   // because when spinner is shown, field becomes spinner width
   const [width, setWidth] = useState<number | undefined>();
-
-  const { results_grouped, isLoading } = useSearch(query.run_number, '');
+  const { results_grouped, isLoading } = useSearch(currentRunNumber, '');
   const datasets = results_grouped.map((result) => {
     return result.dataset;
   });
-
-  useChangeRouter({ dataset_name: currentDataset }, [currentDataset], true);
-
   const currentDatasetNameIndex = datasets.indexOf(currentDataset);
-
-  useEffect(() => {
-    setCurrentDataset(query.dataset_name)
-  }, [query.run_number])
 
   return (
     <Row justify="center" align="middle">
@@ -45,7 +37,7 @@ export const DatasetsBrowser = () => {
           type="link"
           icon={<CaretLeftFilled />}
           onClick={() => {
-            setCurrentDataset(datasets[currentDatasetNameIndex - 1]);
+            changeRouter(getChangedQueryParams({ dataset_name: datasets[currentDatasetNameIndex - 1] }, query));
             setWidth(undefined);
           }}
         />
@@ -60,7 +52,7 @@ export const DatasetsBrowser = () => {
         >
           <StyledSelect
             onChange={(e: any) => {
-              setCurrentDataset(e);
+              changeRouter(getChangedQueryParams({ dataset_name: e }, query));
             }}
             value={currentDataset}
             dropdownMatchSelectWidth={false}
@@ -82,8 +74,8 @@ export const DatasetsBrowser = () => {
                     <Spin />
                   </OptionParagraph>
                 ) : (
-                  <p onClick={() => setWidth(undefined)}>{result.dataset}</p>
-                )}
+                    <p onClick={() => setWidth(undefined)}>{result.dataset}</p>
+                  )}
               </Option>
             ))}
           </StyledSelect>
@@ -95,7 +87,7 @@ export const DatasetsBrowser = () => {
           disabled={!datasets[currentDatasetNameIndex + 1]}
           icon={<CaretRightFilled />}
           onClick={() => {
-            setCurrentDataset(datasets[currentDatasetNameIndex + 1]);
+            changeRouter(getChangedQueryParams({ dataset_name: datasets[currentDatasetNameIndex + 1] }, query));
             setWidth(undefined);
           }}
         />

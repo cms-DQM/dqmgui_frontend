@@ -99,7 +99,7 @@ export interface QueryProps {
   workspace?: string;
   plot_search?: string;
   normalize?: string;
-  lumi?: number | string;
+  lumi?: string;
 }
 
 export interface PlotPropertiesProps {

@@ -1,34 +1,56 @@
 import * as React from 'react'
 import { Row, Col } from 'antd'
-import { LumesectionBroweser } from '../browsing/lumesectionBroweser'
+import { LumesectionBrowser } from '../browsing/lumesectionBroweser'
 import Form from 'antd/lib/form/Form'
 import { StyledFormItem } from '../styledComponents'
+import { store } from '../../contexts/leftSideContext'
+import { changeRouter, getChangedQueryParams } from '../../containers/display/utils'
+import { useRouter } from 'next/router'
+import { QueryProps } from '../../containers/display/interfaces'
 
 interface SelectedDataProps {
-  dataset_name: string | undefined;
-  run_number: string | number | undefined;
+  dataset_name: string;
+  run_number: number;
+  form: any;
 }
 
-export const SelectedData = ({ dataset_name, run_number }: SelectedDataProps) => {
+export const SelectedData = ({ dataset_name, run_number, form }: SelectedDataProps) => {
+  const { lumisection, setLumisection } = React.useContext(store)
+  const router = useRouter();
+
   return (
-    <Form>
-      <hr/>
+    <Form
+      form={form}
+      onFinish={(params) => {
+        const query: QueryProps = router.query;
+        changeRouter(getChangedQueryParams(params, query))
+      }}
+      fields={[{ name: 'dataset_name', value: dataset_name },
+      { name: 'run_number', value: run_number },
+      { name: 'lumi', value: lumisection }]}
+    >
+      <hr />
       <Row>
-        <StyledFormItem name={dataset_name} label="Dataset name">
-          <Col style={{fontWeight: 'bold', fontStyle: "italic"}}>{dataset_name}</Col>
+        <StyledFormItem name={'dataset_name'} label="Dataset name">
+          <Col style={{ fontWeight: 'bold', fontStyle: "italic" }}>{dataset_name}</Col>
         </StyledFormItem>
       </Row>
       <Row>
-        <StyledFormItem name={dataset_name} label="Run number">
-          <Col style={{fontWeight: 'bold', fontStyle: "italic"}} >{run_number}</Col>
+        <StyledFormItem name={'run_number'} label="Run number">
+          <Col style={{ fontWeight: 'bold', fontStyle: "italic" }} >{run_number}</Col>
         </StyledFormItem>
       </Row>
       <Row>
-        <StyledFormItem name={dataset_name} label="Lumi">
-          <Col><LumesectionBroweser /></Col>
-        </StyledFormItem>
+        <Col>
+          <LumesectionBrowser
+            color="black"
+            setCurrentLumisection={setLumisection}
+            currentLumisection={lumisection}
+            currentDataset={dataset_name}
+            currentRunNumber={run_number}
+          /></Col>
       </Row>
-      <hr/>
+      <hr />
     </Form>
   )
 }

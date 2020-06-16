@@ -1,12 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Col, Row } from 'antd';
-import { useRouter } from 'next/router';
 
-import { QueryProps } from '../../../containers/display/interfaces';
 import { PartsBrowser } from './partBrowser';
 import { StyledSuccessIcon, StyledErrorIcon } from '../../styledComponents';
 import { useAvailbleAndNotAvailableDatasetPartsOptions } from '../../../hooks/useAvailbleAndNotAvailableDatasetPartsOptions';
-import { useChangeRouter } from '../../../hooks/useChangeRouter';
+import { QueryProps } from '../../../containers/display/interfaces';
+import { getChangedQueryParams, changeRouter } from '../../../containers/display/utils';
 
 export interface DatasetPartsProps {
   part_0: any;
@@ -14,13 +13,13 @@ export interface DatasetPartsProps {
   part_2: any;
 }
 
-export const DatasetsBuilder = () => {
-  const router = useRouter();
-  const query: QueryProps = router.query;
+interface DatasetsBuilderProps {
+  currentDataset: string;
+  query: QueryProps;
+  currentRunNumber: number;
+}
 
-  const run_number = query.run_number ? parseInt(query.run_number) : NaN;
-  const currentDatasetName = query.dataset_name ? query.dataset_name : '';
-
+export const DatasetsBuilder = ({ currentDataset, query, currentRunNumber }: DatasetsBuilderProps) => {
   const {
     availableAndNotAvailableDatasetParts,
     setSelectedParts,
@@ -31,15 +30,15 @@ export const DatasetsBuilder = () => {
     doesCombinationOfSelectedDatasetPartsExists,
     fullDatasetName,
   } = useAvailbleAndNotAvailableDatasetPartsOptions(
-    run_number,
-    currentDatasetName
+    currentRunNumber,
+    currentDataset
   );
 
-  useChangeRouter(
-    { dataset_name: fullDatasetName },
-    [fullDatasetName],
-    doesCombinationOfSelectedDatasetPartsExists
-  );
+  useEffect(() => {
+    if (doesCombinationOfSelectedDatasetPartsExists) {
+      changeRouter(getChangedQueryParams({ dataset_name: fullDatasetName }, query));
+    }
+  }, [fullDatasetName])
 
   return (
     <Row>
@@ -66,8 +65,8 @@ export const DatasetsBuilder = () => {
         {doesCombinationOfSelectedDatasetPartsExists ? (
           <StyledSuccessIcon />
         ) : (
-          <StyledErrorIcon />
-        )}
+            <StyledErrorIcon />
+          )}
       </Col>
     </Row>
   );

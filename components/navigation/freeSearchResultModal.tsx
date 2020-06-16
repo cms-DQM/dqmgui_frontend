@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
+import { Form } from 'antd';
 
 import { StyledModal, ResultsWrapper } from '../viewDetailsMenu/styledComponents';
 import SearchResults from '../../containers/search/SearchResults';
@@ -23,7 +24,9 @@ interface FreeSeacrhModalProps {
 export const SearchModal = ({ setModalState, modalState, search_run_number, search_dataset_name, setSearchDatasetName, setSearchRunNumber }: FreeSeacrhModalProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
-  const [datasetName, setDatasetName] = useState(query.dataset_name)
+  const dataset = query.dataset_name ? query.dataset_name : ''
+
+  const [datasetName, setDatasetName] = useState(dataset)
   const run = query.run_number ? parseInt(query.run_number) : NaN
   const [runNumber, setRunNumber] = useState(run)
 
@@ -32,10 +35,8 @@ export const SearchModal = ({ setModalState, modalState, search_run_number, sear
   };
 
   const searchHandler = (run_number: number, dataset_name: string) => {
-    const params = getChangedQueryParams({ run_number: run_number, dataset_name: dataset_name }, query);
     setDatasetName(dataset_name)
     setRunNumber(run_number)
-    changeRouter(params)
   };
 
   const navigationHandler = (
@@ -51,6 +52,13 @@ export const SearchModal = ({ setModalState, modalState, search_run_number, sear
     search_dataset_name
   );
 
+  const onOk = async () => {
+    await form.submit();
+    onClosing();
+  };
+
+  const [form] = Form.useForm();
+
   return (
     <StyledModal
       title="Search data"
@@ -65,6 +73,9 @@ export const SearchModal = ({ setModalState, modalState, search_run_number, sear
         >
           Close
         </StyledButton>,
+        <StyledButton key="OK" onClick={onOk}>
+          OK
+       </StyledButton>,
       ]}
     >
       {modalState &&
@@ -77,7 +88,7 @@ export const SearchModal = ({ setModalState, modalState, search_run_number, sear
             handler={navigationHandler}
             type="top"
           />
-          <SelectedData dataset_name={datasetName} run_number={runNumber} />
+          <SelectedData form={form} dataset_name={datasetName} run_number={runNumber} />
           {searching ? (
             <ResultsWrapper>
               <SearchResults

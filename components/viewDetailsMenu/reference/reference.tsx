@@ -44,12 +44,15 @@ export const Reference = () => {
 
   const router = useRouter();
   const query: QueryProps = router.query;
-  const overlayTriples = formTriples(
-    query.overlay_data ? query.overlay_data : ''
-  );
 
   useEffect(() => {
-    addRun(overlayTriples);
+    const overlayTriples = formTriples(
+      query.overlay_data ? query.overlay_data : ''
+    );
+    if (overlayTriples) {
+      //adding overlaid runs from query
+      addRun(overlayTriples)
+    }
   }, []);
 
   useChangeRouter({ normalize: normalize }, [normalize as any], true);

@@ -1,14 +1,11 @@
 import * as React from 'react'
-import { useRouter } from 'next/router';
 import { Col, Select, Spin, Button, Row } from 'antd';
 import { CaretRightFilled, CaretLeftFilled } from '@ant-design/icons';
 
 import { useRequest } from '../../hooks/useRequest'
-import { QueryProps } from '../../containers/display/interfaces';
 import { getLumisections } from '../../config/config';
 import { StyledSelect, OptionParagraph } from '../viewDetailsMenu/styledComponents';
 import { StyledFormItem } from '../styledComponents';
-import { store } from '../../contexts/leftSideContext';
 import { useChangeRouter } from '../../hooks/useChangeRouter';
 
 const { Option } = Select;
@@ -18,29 +15,32 @@ interface AllRunsWithLumiProps {
   lumi: number;
   dataset: string;
 }
+interface LumesectionBrowserProps {
+  currentLumisection: number | string;
+  setCurrentLumisection(currentLumisection: number | string): void;
+  currentRunNumber: number;
+  currentDataset: string;
+  color?: string;
+}
+export const LumesectionBrowser = ({ color, currentLumisection, setCurrentLumisection, currentRunNumber, currentDataset }: LumesectionBrowserProps) => {
+  const { data, isLoading, errors } = useRequest(getLumisections({
+    run_number: currentRunNumber,
+    dataset_name: currentDataset, lumi: -1
+  }))
 
-export const LumesectionBroweser = () => {
-  const router = useRouter();
-  const query: QueryProps = router.query;
-
-  const run = query.run_number ? query.run_number : NaN
-  const datasetName = query.dataset_name ? query.dataset_name : ''
-
-  const { data, isLoading, errors } = useRequest(getLumisections({ run_number: run, dataset_name: datasetName, lumi: -1 }))
   const all_runs_with_lumi = data ? data.data : []
   const lumisections: (number | string)[] = all_runs_with_lumi.length > 0 ? all_runs_with_lumi.map((run: AllRunsWithLumiProps) => {
     return run.lumi
   }) : []
 
   lumisections.unshift('All')
-  const { lumisection, setLumisection } = React.useContext(store)
-  const currentLumiIndex = lumisections.indexOf(lumisection);
+  const currentLumiIndex = lumisections.indexOf(currentLumisection);
 
-  useChangeRouter({lumi: lumisection}, [lumisection], true)
+  useChangeRouter({ lumi: currentLumisection }, [currentLumisection], true)
 
   return (
     <Col>
-      <StyledFormItem labelcolor="white" name={lumisection} label="Lumi:">
+      <StyledFormItem labelcolor={color} name={'lumi'} label="Lumi">
         <Row justify="center" align="middle">
           <Col>
             <Button
@@ -48,28 +48,28 @@ export const LumesectionBroweser = () => {
               icon={<CaretLeftFilled />}
               type="link"
               onClick={() => {
-                setLumisection(lumisections[currentLumiIndex - 1]);
+                setCurrentLumisection(lumisections[currentLumiIndex - 1]);
               }}
             />
           </Col>
 
           <Col>
             <StyledSelect
-              value={lumisection}
+              value={currentLumisection}
               onChange={(e: any) => {
-                setLumisection(e);
+                setCurrentLumisection(e);
               }}
               showSearch={true}
             >
-              {lumisections && lumisections.map((lumisection: number | string) => {
+              {lumisections && lumisections.map((currentLumisection: number | string) => {
                 return (
-                  <Option value={lumisection} key={lumisection.toString()} >
+                  <Option value={currentLumisection} key={currentLumisection.toString()} >
                     {isLoading ? (
                       <OptionParagraph>
                         <Spin />
                       </OptionParagraph>
                     ) : (
-                        <div>{lumisection}</div>
+                        <div>{currentLumisection}</div>
                       )}
                   </Option>
                 )
@@ -83,7 +83,7 @@ export const LumesectionBroweser = () => {
               disabled={!lumisections[currentLumiIndex + 1]}
               type="link"
               onClick={() => {
-                setLumisection(lumisections[currentLumiIndex + 1]);
+                setCurrentLumisection(lumisections[currentLumiIndex + 1]);
               }}
             />
           </Col>

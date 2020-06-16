@@ -1,18 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Col, Row, Select, Spin, Button } from 'antd';
 import { CaretRightFilled, CaretLeftFilled } from '@ant-design/icons';
-import { useRouter } from 'next/router';
 
 import { StyledFormItem } from '../styledComponents';
 import {
   StyledSelect,
   OptionParagraph,
 } from '../viewDetailsMenu/styledComponents';
-import { QueryProps } from '../../containers/display/interfaces';
 import { useSearch } from '../../hooks/useSearch';
-import { useChangeRouter } from '../../hooks/useChangeRouter';
+import { QueryProps } from '../../containers/display/interfaces';
+import { changeRouter, getChangedQueryParams } from '../../containers/display/utils';
 
 const { Option } = Select;
+
+interface RunBrowserProps {
+  currentRunNumber: number;
+  currentDataset: string;
+  query: QueryProps;
+}
 
 const getRunNumbers = (results_grouped: any[]) => {
   const runs: number[] = [];
@@ -24,27 +29,21 @@ const getRunNumbers = (results_grouped: any[]) => {
   return runs;
 };
 
-export const RunBrowser = () => {
-  const router = useRouter();
-  const query: QueryProps = router.query;
-  const run_number = query.run_number ? parseInt(query.run_number) : NaN;
-  const [currentRunNumber, setCurrentRunNumber] = useState(run_number);
+export const RunBrowser = ({ currentRunNumber, currentDataset, query }: RunBrowserProps) => {
   const [openSelect, setSelect] = useState(false);
 
   //seting  run field width to prev. selected run name field width,
   // because when spinner is shown, field becomes spinner width
   const [width, setWidth] = useState<number | undefined>();
 
-  useChangeRouter({ run_number: currentRunNumber }, [currentRunNumber], true);
-
-  const { results_grouped, isLoading } = useSearch(NaN, query.dataset_name);
+  const { results_grouped, isLoading } = useSearch(NaN, currentDataset);
 
   const runNumbers = getRunNumbers(results_grouped);
   const currentRunNumberIndex = runNumbers.indexOf(currentRunNumber);
 
   return (
     <Col>
-      <StyledFormItem labelcolor="white" name={currentRunNumber}  label="Run:">
+      <StyledFormItem labelcolor="white" name={currentRunNumber} label="Run:">
         <Row justify="center" align="middle">
           <Col>
             <Button
@@ -53,7 +52,7 @@ export const RunBrowser = () => {
               type="link"
               onClick={() => {
                 setWidth(undefined);
-                setCurrentRunNumber(runNumbers[currentRunNumberIndex - 1]);
+                changeRouter(getChangedQueryParams({ run_number: runNumbers[currentRunNumberIndex - 1] }, query));
               }}
             />
           </Col>
@@ -69,7 +68,7 @@ export const RunBrowser = () => {
                 onClick={() => setSelect(!openSelect)}
                 value={currentRunNumber}
                 onChange={(e: any) => {
-                  setCurrentRunNumber(e);
+                  changeRouter(getChangedQueryParams({ run_number: e }, query));
                   setSelect(!openSelect);
                 }}
                 showSearch={true}
@@ -106,7 +105,7 @@ export const RunBrowser = () => {
               type="link"
               onClick={() => {
                 setWidth(undefined);
-                setCurrentRunNumber(runNumbers[currentRunNumberIndex + 1]);
+                changeRouter(getChangedQueryParams({ run_number: runNumbers[currentRunNumberIndex + 1] }, query));
               }}
             />
           </Col>
