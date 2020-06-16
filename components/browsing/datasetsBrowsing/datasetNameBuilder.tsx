@@ -18,7 +18,7 @@ export const DatasetsBuilder = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
 
-  const run_number = query.run_number ? query.run_number : NaN;
+  const run_number = query.run_number ? parseInt(query.run_number) : NaN;
   const currentDatasetName = query.dataset_name ? query.dataset_name : '';
 
   const {

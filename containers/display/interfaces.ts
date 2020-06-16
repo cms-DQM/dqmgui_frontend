@@ -88,7 +88,7 @@ export interface NavigationSearchFieldsProps {
 }
 
 export interface QueryProps {
-  run_number?: number;
+  run_number?: string;
   dataset_name?: string;
   folder_path?: string;
   search_run_number?: string;

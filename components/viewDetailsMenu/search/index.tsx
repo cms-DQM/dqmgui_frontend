@@ -56,7 +56,6 @@ export const CustomModal = ({ id }: CustomModalProps) => {
 
   return (
     <StyledModal
-      width='max-content'
       title="Overlay Plots data search"
       visible={openOverlayDataMenu}
       onCancel={() => onClosing()}

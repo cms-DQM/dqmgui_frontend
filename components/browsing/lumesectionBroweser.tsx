@@ -62,7 +62,6 @@ export const LumesectionBroweser = () => {
               showSearch={true}
             >
               {lumisections && lumisections.map((lumisection: number | string) => {
-                console.log(lumisection)
                 return (
                   <Option value={lumisection} key={lumisection.toString()} >
                     {isLoading ? (

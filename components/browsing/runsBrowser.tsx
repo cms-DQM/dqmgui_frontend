@@ -27,7 +27,7 @@ const getRunNumbers = (results_grouped: any[]) => {
 export const RunBrowser = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
-  const run_number = query.run_number ? query.run_number : NaN;
+  const run_number = query.run_number ? parseInt(query.run_number) : NaN;
   const [currentRunNumber, setCurrentRunNumber] = useState(run_number);
   const [openSelect, setSelect] = useState(false);
 
@@ -42,14 +42,9 @@ export const RunBrowser = () => {
   const runNumbers = getRunNumbers(results_grouped);
   const currentRunNumberIndex = runNumbers.indexOf(currentRunNumber);
 
-  useEffect(() => {
-    const run_number = query.run_number ? query.run_number : NaN;
-    setCurrentRunNumber(run_number)
-  }, [query.run_number])
-
   return (
     <Col>
-      <StyledFormItem labelcolor="white" name={currentRunNumber} label="Run:">
+      <StyledFormItem labelcolor="white" name={currentRunNumber}  label="Run:">
         <Row justify="center" align="middle">
           <Col>
             <Button

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Button } from 'antd';
 import { useRouter } from 'next/router';
 
 import { StyledModal, ResultsWrapper } from '../viewDetailsMenu/styledComponents';
@@ -9,6 +8,8 @@ import { QueryProps } from '../../containers/display/interfaces';
 import { changeRouter, getChangedQueryParams } from '../../containers/display/utils';
 import { StyledButton } from '../styledComponents';
 import { theme } from '../../styles/theme';
+import { SelectedData } from './selectedData';
+import Nav from '../Nav';
 
 interface FreeSeacrhModalProps {
   setModalState(state: boolean): void,
@@ -19,10 +20,12 @@ interface FreeSeacrhModalProps {
   setSearchRunNumber(run_number: any): void;
 }
 
-export const FreeSeacrhModal = ({ setModalState, modalState, search_run_number, search_dataset_name, setSearchDatasetName, setSearchRunNumber }: FreeSeacrhModalProps) => {
-
+export const SearchModal = ({ setModalState, modalState, search_run_number, search_dataset_name, setSearchDatasetName, setSearchRunNumber }: FreeSeacrhModalProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
+  const [datasetName, setDatasetName] = useState(query.dataset_name)
+  const run = query.run_number ? parseInt(query.run_number) : NaN
+  const [runNumber, setRunNumber] = useState(run)
 
   const onClosing = () => {
     setModalState(false);
@@ -30,11 +33,18 @@ export const FreeSeacrhModal = ({ setModalState, modalState, search_run_number, 
 
   const searchHandler = (run_number: number, dataset_name: string) => {
     const params = getChangedQueryParams({ run_number: run_number, dataset_name: dataset_name }, query);
-    setSearchDatasetName(dataset_name)
-    setSearchRunNumber(run_number)
-    setModalState(false);
+    setDatasetName(dataset_name)
+    setRunNumber(run_number)
     changeRouter(params)
   };
+
+  const navigationHandler = (
+    search_by_run_number: number,
+    search_by_dataset_name: string
+  ) => {
+    setSearchRunNumber(search_by_run_number)
+    setSearchDatasetName(search_by_dataset_name)
+  }
 
   const { results, results_grouped, searching, isLoading, errors } = useSearch(
     search_run_number,
@@ -43,7 +53,7 @@ export const FreeSeacrhModal = ({ setModalState, modalState, search_run_number, 
 
   return (
     <StyledModal
-      title="Overlay Plots data search"
+      title="Search data"
       visible={modalState}
       onCancel={() => onClosing()}
       footer={[
@@ -57,19 +67,32 @@ export const FreeSeacrhModal = ({ setModalState, modalState, search_run_number, 
         </StyledButton>,
       ]}
     >
-      {searching ? (
-        <ResultsWrapper>
-          <SearchResults
-            handler={searchHandler}
-            isLoading={isLoading}
-            results={results}
-            results_grouped={results_grouped}
-            errors={errors}
+      {modalState &&
+        <>
+          <Nav
+            initial_search_run_number={search_run_number}
+            initial_search_dataset_name={search_dataset_name}
+            defaultDatasetName={datasetName}
+            defaultRunNumber={runNumber}
+            handler={navigationHandler}
+            type="top"
           />
-        </ResultsWrapper>
-      ) : (
-          <ResultsWrapper />
-        )}
+          <SelectedData dataset_name={datasetName} run_number={runNumber} />
+          {searching ? (
+            <ResultsWrapper>
+              <SearchResults
+                handler={searchHandler}
+                isLoading={isLoading}
+                results={results}
+                results_grouped={results_grouped}
+                errors={errors}
+              />
+            </ResultsWrapper>
+          ) : (
+              <ResultsWrapper />
+            )}
+        </>
+      }
     </StyledModal>
   );
 };

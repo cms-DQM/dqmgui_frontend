@@ -22,25 +22,12 @@ export const FolderPath = ({ folder_path }: FolderPathProps) => {
   return (
     <>
       <StyledBreadcrumb separator=">">
-        <Breadcrumb.Item>
-          <Link
-            href={{
-              pathname: '/',
-              query: {
-                search_run_number: '',
-                search_dataset_name: '',
-              },
-            }}
-          >
-            <a>Main Page</a>
-          </Link>
-        </Breadcrumb.Item>
         <Breadcrumb.Item
           onClick={() => {
             changeFolderPathByBreadcrumb({ folder_path: '/', selected_plots: '' });
           }}
         >
-          <a>Home</a>
+          <a>/</a>
         </Breadcrumb.Item>
         {filteredFolders.map((folder: string) => {
           return (
