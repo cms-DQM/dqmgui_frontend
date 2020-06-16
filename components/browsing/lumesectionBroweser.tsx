@@ -21,12 +21,13 @@ interface LumesectionBrowserProps {
   currentRunNumber: number;
   currentDataset: string;
   color?: string;
+  type?: string;
 }
-export const LumesectionBrowser = ({ color, currentLumisection, setCurrentLumisection, currentRunNumber, currentDataset }: LumesectionBrowserProps) => {
+export const LumesectionBrowser = ({ type, color, currentLumisection, setCurrentLumisection, currentRunNumber, currentDataset }: LumesectionBrowserProps) => {
   const { data, isLoading, errors } = useRequest(getLumisections({
     run_number: currentRunNumber,
     dataset_name: currentDataset, lumi: -1
-  }))
+  }), {}, [currentRunNumber, currentDataset])
 
   const all_runs_with_lumi = data ? data.data : []
   const lumisections: (number | string)[] = all_runs_with_lumi.length > 0 ? all_runs_with_lumi.map((run: AllRunsWithLumiProps) => {
@@ -36,7 +37,9 @@ export const LumesectionBrowser = ({ color, currentLumisection, setCurrentLumise
   lumisections.unshift('All')
   const currentLumiIndex = lumisections.indexOf(currentLumisection);
 
-  useChangeRouter({ lumi: currentLumisection }, [currentLumisection], true)
+  // if lumisection browser type is nav (it means this lumisection is in navgation), then
+  //in every lumisection change, query also have to be change. 
+  useChangeRouter({ lumi: currentLumisection }, [currentLumisection], type === 'nav')
 
   return (
     <Col>
@@ -55,6 +58,7 @@ export const LumesectionBrowser = ({ color, currentLumisection, setCurrentLumise
 
           <Col>
             <StyledSelect
+              dropdownMatchSelectWidth={false}
               value={currentLumisection}
               onChange={(e: any) => {
                 setCurrentLumisection(e);

@@ -11,8 +11,7 @@ import { StyledFormItem } from '../styledComponents';
 import { DropdownMenu } from '../menu';
 import { useRouter } from 'next/router';
 import { QueryProps } from '../../containers/display/interfaces';
-import { useChangeRouter } from '../../hooks/useChangeRouter';
-import { setLazyProp } from 'next/dist/next-server/server/api-utils';
+
 
 export const Browser = () => {
   const [datasetOption, setDatasetOption] = useState(
@@ -53,6 +52,7 @@ export const Browser = () => {
             currentRunNumber={currentRunNumber}
             currentDataset={currentDataset}
             color='white'
+            type="nav"
           />
         </WrapperDiv>
         <StyledFormItem
