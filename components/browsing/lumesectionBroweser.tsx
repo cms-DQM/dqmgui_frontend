@@ -7,6 +7,7 @@ import { getLumisections } from '../../config/config';
 import { StyledSelect, OptionParagraph } from '../viewDetailsMenu/styledComponents';
 import { StyledFormItem } from '../styledComponents';
 import { useChangeRouter } from '../../hooks/useChangeRouter';
+import { QueryProps } from '../../containers/display/interfaces';
 
 const { Option } = Select;
 
@@ -21,9 +22,9 @@ interface LumesectionBrowserProps {
   currentRunNumber: number;
   currentDataset: string;
   color?: string;
-  type?: string;
+  query: QueryProps;
 }
-export const LumesectionBrowser = ({ type, color, currentLumisection, setCurrentLumisection, currentRunNumber, currentDataset }: LumesectionBrowserProps) => {
+export const LumesectionBrowser = ({ query, color, currentLumisection, setCurrentLumisection, currentRunNumber, currentDataset }: LumesectionBrowserProps) => {
   const { data, isLoading, errors } = useRequest(getLumisections({
     run_number: currentRunNumber,
     dataset_name: currentDataset, lumi: -1
@@ -35,11 +36,8 @@ export const LumesectionBrowser = ({ type, color, currentLumisection, setCurrent
   }) : []
 
   lumisections.unshift('All')
-  const currentLumiIndex = lumisections.indexOf(currentLumisection);
-
-  // if lumisection browser type is nav (it means this lumisection is in navgation), then
-  //in every lumisection change, query also have to be change. 
-  useChangeRouter({ lumi: currentLumisection }, [currentLumisection], type === 'nav')
+  const lumi = query.lumi ? query.lumi : NaN
+  const currentLumiIndex = lumisections.indexOf(lumi);
 
   return (
     <Col>
@@ -67,7 +65,7 @@ export const LumesectionBrowser = ({ type, color, currentLumisection, setCurrent
             >
               {lumisections && lumisections.map((currentLumisection: number | string) => {
                 return (
-                  <Option value={currentLumisection} key={currentLumisection.toString()} >
+                  <Option value={lumi} key={currentLumisection.toString()} >
                     {isLoading ? (
                       <OptionParagraph>
                         <Spin />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Form } from 'antd';
 
@@ -27,8 +27,15 @@ export const SearchModal = ({ setModalState, modalState, search_run_number, sear
   const dataset = query.dataset_name ? query.dataset_name : ''
 
   const [datasetName, setDatasetName] = useState(dataset)
-  const run = query.run_number ? parseInt(query.run_number) : NaN
+  const run = query.run_number ? query.run_number : NaN
   const [runNumber, setRunNumber] = useState(run)
+
+  useEffect(() => {
+    const run = query.run_number ? query.run_number : NaN
+    const dataset = query.dataset_name ? query.dataset_name : ''
+    setDatasetName(dataset)
+    setRunNumber(run)
+  }, [query.dataset_name, query.run_number])
 
   const onClosing = () => {
     setModalState(false);

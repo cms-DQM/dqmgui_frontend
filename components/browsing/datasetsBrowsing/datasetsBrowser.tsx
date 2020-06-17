@@ -14,20 +14,24 @@ interface DatasetsBrowserProps {
   currentDataset: string;
   query: QueryProps;
   currentRunNumber: number;
+  setCurrentDataset(currentDataset: string): void;
 }
 
 const { Option } = Select;
 
-export const DatasetsBrowser = ({ currentDataset, query, currentRunNumber }: DatasetsBrowserProps) => {
+export const DatasetsBrowser = ({ setCurrentDataset, query, currentRunNumber }: DatasetsBrowserProps) => {
   const [openSelect, setSelect] = useState(false);
   //setting  dataset field width to prev. selected dataset name field width,
   // because when spinner is shown, field becomes spinner width
   const [width, setWidth] = useState<number | undefined>();
   const { results_grouped, isLoading } = useSearch(currentRunNumber, '');
+
   const datasets = results_grouped.map((result) => {
     return result.dataset;
   });
-  const currentDatasetNameIndex = datasets.indexOf(currentDataset);
+
+  const query_dataset = query.dataset_name ? query.dataset_name : ''
+  const currentDatasetNameIndex = datasets.indexOf(query_dataset);
 
   return (
     <Row justify="center" align="middle">
@@ -37,7 +41,7 @@ export const DatasetsBrowser = ({ currentDataset, query, currentRunNumber }: Dat
           type="link"
           icon={<CaretLeftFilled />}
           onClick={() => {
-            changeRouter(getChangedQueryParams({ dataset_name: datasets[currentDatasetNameIndex - 1] }, query));
+            setCurrentDataset(datasets[currentDatasetNameIndex - 1])
             setWidth(undefined);
           }}
         />
@@ -52,9 +56,9 @@ export const DatasetsBrowser = ({ currentDataset, query, currentRunNumber }: Dat
         >
           <StyledSelect
             onChange={(e: any) => {
-              changeRouter(getChangedQueryParams({ dataset_name: e }, query));
+              setCurrentDataset(e)
             }}
-            value={currentDataset}
+            value={query_dataset}
             dropdownMatchSelectWidth={false}
             onClick={() => setSelect(!openSelect)}
             open={openSelect}
@@ -87,7 +91,7 @@ export const DatasetsBrowser = ({ currentDataset, query, currentRunNumber }: Dat
           disabled={!datasets[currentDatasetNameIndex + 1]}
           icon={<CaretRightFilled />}
           onClick={() => {
-            changeRouter(getChangedQueryParams({ dataset_name: datasets[currentDatasetNameIndex + 1] }, query));
+            setCurrentDataset(datasets[currentDatasetNameIndex + 1])
             setWidth(undefined);
           }}
         />

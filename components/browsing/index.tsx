@@ -11,6 +11,7 @@ import { StyledFormItem } from '../styledComponents';
 import { DropdownMenu } from '../menu';
 import { useRouter } from 'next/router';
 import { QueryProps } from '../../containers/display/interfaces';
+import { useChangeRouter } from '../../hooks/useChangeRouter';
 
 
 export const Browser = () => {
@@ -19,7 +20,7 @@ export const Browser = () => {
   );
   const router = useRouter();
   const query: QueryProps = router.query;
-  const run_number = query.run_number ? parseInt(query.run_number) : NaN;
+  const run_number = query.run_number ? query.run_number : NaN;
   const dataset_name = query.dataset_name ? query.dataset_name : '';
   const lumi = query.lumi ? query.lumi : 'All';
 
@@ -27,14 +28,10 @@ export const Browser = () => {
   const [currentDataset, setCurrentDataset] = useState<string>(dataset_name);
   const [currentLumisection, setCurrentLumisection] = useState<string | number>(lumi);
 
-  useEffect(() => {
-
-    setCurrentDataset(query.dataset_name)
-    setCurrentLumisection(query.lumi)
-    setCurrentRunNumber(parseInt(run_number))
-
-  }, [query.dataset_name, query.run_number, query.lumi])
-
+  useChangeRouter({ 
+    // lumi: currentLumisection,
+     run_number: currentRunNumber, dataset_name: currentDataset }, [currentLumisection, currentRunNumber, currentDataset], true)
+  
   return (
     <Form>
       <WrapperDiv>
@@ -42,19 +39,20 @@ export const Browser = () => {
           <RunBrowser
             query={query}
             currentRunNumber={currentRunNumber}
+            setCurrentRunNumber={setCurrentRunNumber}
             currentDataset={currentDataset}
           />
         </WrapperDiv>
-        <WrapperDiv>
+        {/* <WrapperDiv>
           <LumesectionBrowser
             currentLumisection={currentLumisection}
             setCurrentLumisection={setCurrentLumisection}
             currentRunNumber={currentRunNumber}
             currentDataset={currentDataset}
+            query={query}
             color='white'
-            type="nav"
           />
-        </WrapperDiv>
+        </WrapperDiv> */}
         <StyledFormItem
           label={
             <DropdownMenu
@@ -69,6 +67,7 @@ export const Browser = () => {
               <DatasetsBrowser
                 currentRunNumber={currentRunNumber}
                 currentDataset={currentDataset}
+                setCurrentDataset={setCurrentDataset}
                 query={query}
               />
             </WrapperDiv>

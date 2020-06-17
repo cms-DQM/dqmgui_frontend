@@ -17,6 +17,7 @@ interface RunBrowserProps {
   currentRunNumber: number;
   currentDataset: string;
   query: QueryProps;
+  setCurrentRunNumber(currentRunNumber: number): void;
 }
 
 const getRunNumbers = (results_grouped: any[]) => {
@@ -29,7 +30,7 @@ const getRunNumbers = (results_grouped: any[]) => {
   return runs;
 };
 
-export const RunBrowser = ({ currentRunNumber, currentDataset, query }: RunBrowserProps) => {
+export const RunBrowser = ({ currentRunNumber, currentDataset, query, setCurrentRunNumber }: RunBrowserProps) => {
   const [openSelect, setSelect] = useState(false);
 
   //seting  run field width to prev. selected run name field width,
@@ -39,11 +40,13 @@ export const RunBrowser = ({ currentRunNumber, currentDataset, query }: RunBrows
   const { results_grouped, isLoading } = useSearch(NaN, currentDataset);
 
   const runNumbers = getRunNumbers(results_grouped);
-  const currentRunNumberIndex = runNumbers.indexOf(currentRunNumber);
+  const query_run_number = query.run_number ? query.run_number : NaN
+  console.log(query_run_number, runNumbers)
+  const currentRunNumberIndex = runNumbers.indexOf(query_run_number);
 
   return (
     <Col>
-      <StyledFormItem labelcolor="white" name={currentRunNumber} label="Run:">
+      <StyledFormItem labelcolor="white" name={'dataset_name'} label="Run:">
         <Row justify="center" align="middle">
           <Col>
             <Button
@@ -52,7 +55,7 @@ export const RunBrowser = ({ currentRunNumber, currentDataset, query }: RunBrows
               type="link"
               onClick={() => {
                 setWidth(undefined);
-                changeRouter(getChangedQueryParams({ run_number: runNumbers[currentRunNumberIndex - 1] }, query));
+                setCurrentRunNumber(runNumbers[currentRunNumberIndex - 1]);
               }}
             />
           </Col>
@@ -66,9 +69,9 @@ export const RunBrowser = ({ currentRunNumber, currentDataset, query }: RunBrows
             >
               <StyledSelect
                 onClick={() => setSelect(!openSelect)}
-                value={currentRunNumber}
+                value={query_run_number}
                 onChange={(e: any) => {
-                  changeRouter(getChangedQueryParams({ run_number: e }, query));
+                  setCurrentRunNumber(e);
                   setSelect(!openSelect);
                 }}
                 showSearch={true}
@@ -105,7 +108,7 @@ export const RunBrowser = ({ currentRunNumber, currentDataset, query }: RunBrows
               type="link"
               onClick={() => {
                 setWidth(undefined);
-                changeRouter(getChangedQueryParams({ run_number: runNumbers[currentRunNumberIndex + 1] }, query));
+                setCurrentRunNumber(runNumbers[currentRunNumberIndex + 1]);
               }}
             />
           </Col>

@@ -17,12 +17,12 @@ interface SelectedDataProps {
 export const SelectedData = ({ dataset_name, run_number, form }: SelectedDataProps) => {
   const { lumisection, setLumisection } = React.useContext(store)
   const router = useRouter();
-
+  const query: QueryProps = router.query;
   return (
     <Form
       form={form}
       onFinish={(params) => {
-        const query: QueryProps = router.query;
+        console.log(params)
         changeRouter(getChangedQueryParams(params, query))
       }}
       fields={[{ name: 'dataset_name', value: dataset_name },
@@ -40,16 +40,17 @@ export const SelectedData = ({ dataset_name, run_number, form }: SelectedDataPro
           <Col style={{ fontWeight: 'bold', fontStyle: "italic" }} >{run_number}</Col>
         </StyledFormItem>
       </Row>
-      <Row>
+      {/* <Row>
         <Col>
           <LumesectionBrowser
             color="black"
+            query={query}
             setCurrentLumisection={setLumisection}
             currentLumisection={lumisection}
             currentDataset={dataset_name}
             currentRunNumber={run_number}
           /></Col>
-      </Row>
+      </Row> */}
       <hr />
     </Form>
   )
