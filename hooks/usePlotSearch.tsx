@@ -19,7 +19,7 @@ interface usePlotSearchReturn {
 
 export const usePlotSearch = (
   plot_name: string,
-  run_number_value?: number,
+  run_number_value?: string,
   dataset_name?: string,
   folder_path?: string
 ): usePlotSearchReturn => {

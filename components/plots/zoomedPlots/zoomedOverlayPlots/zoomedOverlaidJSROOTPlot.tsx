@@ -20,14 +20,9 @@ import {
   ImageDiv,
 } from '../../../../containers/display/styledComponents';
 import {
-  removePlotFromSelectedPlots,
   removePlotFromRightSide,
 } from '../../plot/singlePlot/utils';
 import { Button } from 'antd';
-import {
-  changeRouter,
-  getChangedQueryParams,
-} from '../../../../containers/display/utils';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;

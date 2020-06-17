@@ -10,7 +10,7 @@ import {
 import { DatasetPartsProps } from '../components/browsing/datasetsBrowsing/datasetNameBuilder';
 
 export const useAvailbleAndNotAvailableDatasetPartsOptions = (
-  run_number: number,
+  run_number: number | string,
   currentDataset: any
 ) => {
   const selectedDatasetParts = getDatasetNameSplitBySlashIntoObject(

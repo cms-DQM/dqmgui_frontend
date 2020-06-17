@@ -8,11 +8,11 @@ import { QuestionButton } from './helpButton';
 interface NavProps {
   setRunNumber?: Dispatch<any>;
   setDatasetName?: Dispatch<any>;
-  initial_search_run_number?: number;
+  initial_search_run_number?: number | string ;
   initial_search_dataset_name?: string;
-  handler(search_by_run_number: number, search_by_dataset_name: string): void;
+  handler(search_by_run_number: number | string, search_by_dataset_name: string): void;
   type: string;
-  defaultRunNumber?: number | undefined;
+  defaultRunNumber?: number | undefined| string;
   defaultDatasetName?: string | undefined;
 }
 
@@ -24,7 +24,7 @@ export const Nav = ({
   handler,
   type,
   defaultRunNumber,
-  defaultDatasetName
+  defaultDatasetName,
 }: NavProps) => {
   const [form] = Form.useForm();
   const [form_search_run_number, setFormRunNumber] = useState(
@@ -54,7 +54,7 @@ export const Nav = ({
       <Form
         form={form}
         layout={'inline'}
-        style={{justifyContent: 'center'}}
+        style={{ justifyContent: 'center', width: 'max-content' }}
         {...layout}
         name={`search_form${type}`}
         className="fieldLabel"
@@ -77,7 +77,7 @@ export const Nav = ({
               setFormRunNumber(+e.target.value)
             }
             placeholder="Enter run number"
-            // type="text"
+            type="text"
             name="run_number"
             value={defaultRunNumber}
           />
@@ -89,7 +89,7 @@ export const Nav = ({
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setFormDatasetName(e.target.value)
             }
-            // type="text"
+            type="text"
             value={defaultDatasetName}
           />
         </StyledFormItem>

@@ -31,7 +31,7 @@ const Workspaces = () => {
 
   return (
     <Form>
-      <StyledFormItem labelcolor="white" label="Worskpaces">
+      <StyledFormItem labelcolor="white" label="Workspace">
         <Button
           onClick={() => {
             toggleWorkspaces(!openWorkspaces);
@@ -41,7 +41,7 @@ const Workspaces = () => {
           {workspace}
         </Button>
         <StyledModal
-          title="Worspaces"
+          title="Workspaces"
           visible={openWorkspaces}
           onCancel={() => toggleWorkspaces(false)}
           footer={[

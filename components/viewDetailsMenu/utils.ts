@@ -22,22 +22,27 @@ export const filter_plots = (triples: TripleProps[], id: any) => {
 };
 
 export const formTriples = (overlay_data: string | undefined) => {
-  const data = overlay_data?.split('&');
-  return data?.map((oneRun: string) => {
-    const id = uuidv4();
+  if (!!overlay_data) {
+    const data = overlay_data?.split('&');
+    const triples = data?.map((oneRun: string) => {
+      const id = uuidv4();
+      const splitedParams = oneRun ? cleanDeep(oneRun.split('/')) : undefined;
+      const label = splitedParams ? splitedParams.pop() : '';
+      const run_number = splitedParams ? splitedParams.shift() : '';
+      const dataset_name = splitedParams ? '/' + splitedParams?.join('/') : '';
+      const triple_object: TripleProps = {
+        id: id,
+        checked: true,
+        run_number: run_number as any,
+        dataset_name: dataset_name,
+        label: label as any,
+      };
 
-    const splitedParams = oneRun ? cleanDeep(oneRun.split('/')) : undefined;
-    const label = splitedParams ? splitedParams.pop() : '';
-    const run_number = splitedParams ? splitedParams.shift() : '';
-    const dataset_name = splitedParams ? '/' + splitedParams?.join('/') : '';
-    const triple_object: TripleProps = {
-      id: id,
-      run_number: run_number as any,
-      dataset_name: dataset_name,
-      label: label as any,
-    };
-    return triple_object;
-  });
+      return triple_object;
+    })
+    return triples
+  }
+  return undefined
 };
 
 export const getDatasetParts = (datasets: string[], part: string) => {

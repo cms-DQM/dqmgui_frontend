@@ -1,21 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Col, Row, Select, Spin, Button } from 'antd';
 import { CaretRightFilled, CaretLeftFilled } from '@ant-design/icons';
-import { useRouter } from 'next/router';
 
 import { StyledFormItem } from '../styledComponents';
 import {
   StyledSelect,
   OptionParagraph,
 } from '../viewDetailsMenu/styledComponents';
-import { QueryProps } from '../../containers/display/interfaces';
 import { useSearch } from '../../hooks/useSearch';
-import { useChangeRouter } from '../../hooks/useChangeRouter';
+import { QueryProps } from '../../containers/display/interfaces';
+import { changeRouter, getChangedQueryParams } from '../../containers/display/utils';
 
 const { Option } = Select;
 
+interface RunBrowserProps {
+  currentRunNumber: number | string;
+  currentDataset: string;
+  query: QueryProps;
+  setCurrentRunNumber(currentRunNumber: number | string): void;
+}
+
 const getRunNumbers = (results_grouped: any[]) => {
-  const runs: number[] = [];
+  const runs: (number|string)[] = [];
   results_grouped.forEach((result) => {
     result.value.forEach((data: any) => {
       runs.push(data.run);
@@ -24,32 +30,22 @@ const getRunNumbers = (results_grouped: any[]) => {
   return runs;
 };
 
-export const RunBrowser = () => {
-  const router = useRouter();
-  const query: QueryProps = router.query;
-  const run_number = query.run_number ? query.run_number : NaN;
-  const [currentRunNumber, setCurrentRunNumber] = useState(run_number);
+export const RunBrowser = ({ currentRunNumber, currentDataset, query, setCurrentRunNumber }: RunBrowserProps) => {
   const [openSelect, setSelect] = useState(false);
 
   //seting  run field width to prev. selected run name field width,
   // because when spinner is shown, field becomes spinner width
   const [width, setWidth] = useState<number | undefined>();
 
-  useChangeRouter({ run_number: currentRunNumber }, [currentRunNumber], true);
-
-  const { results_grouped, isLoading } = useSearch(NaN, query.dataset_name);
+  const { results_grouped, isLoading } = useSearch(NaN, currentDataset);
 
   const runNumbers = getRunNumbers(results_grouped);
-  const currentRunNumberIndex = runNumbers.indexOf(currentRunNumber);
-
-  useEffect(() => {
-    const run_number = query.run_number ? query.run_number : NaN;
-    setCurrentRunNumber(run_number)
-  }, [query.run_number])
+  const query_run_number = query.run_number ? query.run_number : NaN
+  const currentRunNumberIndex = runNumbers.indexOf(query_run_number);
 
   return (
     <Col>
-      <StyledFormItem labelcolor="white" name={currentRunNumber} label="Run:">
+      <StyledFormItem labelcolor="white" name={'dataset_name'} label="Run:">
         <Row justify="center" align="middle">
           <Col>
             <Button
@@ -72,7 +68,7 @@ export const RunBrowser = () => {
             >
               <StyledSelect
                 onClick={() => setSelect(!openSelect)}
-                value={currentRunNumber}
+                value={query_run_number}
                 onChange={(e: any) => {
                   setCurrentRunNumber(e);
                   setSelect(!openSelect);
@@ -82,7 +78,7 @@ export const RunBrowser = () => {
                 width={width}
               >
                 {runNumbers &&
-                  runNumbers.map((run: number) => {
+                  runNumbers.map((run: any) => {
                     return (
                       <Option
                         onClick={() => {
