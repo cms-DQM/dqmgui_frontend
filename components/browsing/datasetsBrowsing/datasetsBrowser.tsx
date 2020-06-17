@@ -8,12 +8,11 @@ import {
 } from '../../viewDetailsMenu/styledComponents';
 import { useSearch } from '../../../hooks/useSearch';
 import { QueryProps } from '../../../containers/display/interfaces';
-import { getChangedQueryParams, changeRouter } from '../../../containers/display/utils';
 
 interface DatasetsBrowserProps {
   currentDataset: string;
   query: QueryProps;
-  currentRunNumber: number;
+  currentRunNumber: number | string;
   setCurrentDataset(currentDataset: string): void;
 }
 

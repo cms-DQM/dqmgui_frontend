@@ -8,11 +8,11 @@ import { QuestionButton } from './helpButton';
 interface NavProps {
   setRunNumber?: Dispatch<any>;
   setDatasetName?: Dispatch<any>;
-  initial_search_run_number?: number;
+  initial_search_run_number?: number | string ;
   initial_search_dataset_name?: string;
-  handler(search_by_run_number: number, search_by_dataset_name: string): void;
+  handler(search_by_run_number: number | string, search_by_dataset_name: string): void;
   type: string;
-  defaultRunNumber?: number | undefined;
+  defaultRunNumber?: number | undefined| string;
   defaultDatasetName?: string | undefined;
 }
 
@@ -25,7 +25,6 @@ export const Nav = ({
   type,
   defaultRunNumber,
   defaultDatasetName,
-  searchForm
 }: NavProps) => {
   const [form] = Form.useForm();
   const [form_search_run_number, setFormRunNumber] = useState(

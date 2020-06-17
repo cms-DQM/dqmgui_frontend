@@ -10,7 +10,7 @@ import { QueryProps } from '../../containers/display/interfaces'
 
 interface SelectedDataProps {
   dataset_name: string;
-  run_number: number;
+  run_number: number | string;
   form: any;
 }
 

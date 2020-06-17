@@ -14,14 +14,14 @@ import { changeRouter, getChangedQueryParams } from '../../containers/display/ut
 const { Option } = Select;
 
 interface RunBrowserProps {
-  currentRunNumber: number;
+  currentRunNumber: number | string;
   currentDataset: string;
   query: QueryProps;
-  setCurrentRunNumber(currentRunNumber: number): void;
+  setCurrentRunNumber(currentRunNumber: number | string): void;
 }
 
 const getRunNumbers = (results_grouped: any[]) => {
-  const runs: number[] = [];
+  const runs: (number|string)[] = [];
   results_grouped.forEach((result) => {
     result.value.forEach((data: any) => {
       runs.push(data.run);
@@ -41,7 +41,6 @@ export const RunBrowser = ({ currentRunNumber, currentDataset, query, setCurrent
 
   const runNumbers = getRunNumbers(results_grouped);
   const query_run_number = query.run_number ? query.run_number : NaN
-  console.log(query_run_number, runNumbers)
   const currentRunNumberIndex = runNumbers.indexOf(query_run_number);
 
   return (
@@ -79,7 +78,7 @@ export const RunBrowser = ({ currentRunNumber, currentDataset, query, setCurrent
                 width={width}
               >
                 {runNumbers &&
-                  runNumbers.map((run: number) => {
+                  runNumbers.map((run: any) => {
                     return (
                       <Option
                         onClick={() => {

@@ -6,7 +6,6 @@ import { StyledModal, ResultsWrapper } from '../viewDetailsMenu/styledComponents
 import SearchResults from '../../containers/search/SearchResults';
 import { useSearch } from '../../hooks/useSearch';
 import { QueryProps } from '../../containers/display/interfaces';
-import { changeRouter, getChangedQueryParams } from '../../containers/display/utils';
 import { StyledButton } from '../styledComponents';
 import { theme } from '../../styles/theme';
 import { SelectedData } from './selectedData';
@@ -15,7 +14,7 @@ import Nav from '../Nav';
 interface FreeSeacrhModalProps {
   setModalState(state: boolean): void,
   modalState: boolean;
-  search_run_number: number | undefined;
+  search_run_number: number | undefined | string;
   search_dataset_name: string | undefined;
   setSearchDatasetName(dataset_name: any): void;
   setSearchRunNumber(run_number: any): void;

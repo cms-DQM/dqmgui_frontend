@@ -10,7 +10,7 @@ interface ReturnSearch {
 }
 
 export const useSearch = (
-  run_number?: number,
+  run_number?: number | string,
   dataset_name?: string
 ): ReturnSearch => {
   const searching = !!(run_number || dataset_name);
