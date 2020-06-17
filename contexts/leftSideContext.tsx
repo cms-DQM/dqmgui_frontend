@@ -1,7 +1,7 @@
 import React, { createContext, useState, ReactElement } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { sizes, searchOptions, viewPositions, plotsProportionsOptions } from '../components/constants';
+import { sizes, viewPositions, plotsProportionsOptions } from '../components/constants';
 import {
   SizeProps,
   PlotProps,
@@ -24,7 +24,6 @@ export interface LeftSideState {
   overlayPlots: TripleProps[];
   workspaceFolders: string[];
   openOverlayDataMenu: boolean;
-  searchOption: boolean;
   viewPlotsPosition: boolean;
   lumisection: string | number;
 }
@@ -36,11 +35,8 @@ export const initialState: any = {
   overlayPosition: overlayOptions[0].value,
   overlay: undefined,
   overlayPlots: undefined,
-  triples: [
-    // { id: id, checked: true, run_number: NaN, lumi: 'All', dataset_name: '', label: '' },
-  ],
+  triples: [ ],
   openOverlayDataMenu: false,
-  searchOption: searchOptions[1].value,
   viewPlotsPosition: viewPositions[1].value,
   proportion: plotsProportionsOptions[0].value,
   lumisection: 'All',
@@ -71,7 +67,6 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
     initialState.openOverlayDataMenu
   );
   const [viewPlotsPosition, setViewPlotsPosition] = React.useState(initialState.viewPlotsPosition);
-  const [searchOption, setSearchOption] = React.useState(initialState.searchOption);
   const [proportion, setProportion] = React.useState(initialState.proportion);
   const [lumisection, setLumisection] = React.useState(initialState.lumisection);
 
@@ -139,7 +134,6 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         openOverlayDataMenu,
         toggleOverlayDataMenu,
         viewPlotsPosition, setViewPlotsPosition,
-        searchOption, setSearchOption,
         proportion, setProportion,
         lumisection, setLumisection
       }}

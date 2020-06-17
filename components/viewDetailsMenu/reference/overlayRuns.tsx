@@ -122,14 +122,6 @@ export const OverlayRuns = ({
                     await removeRun(triple.id);
                     const filteredPlots = filter_plots(triples, triple.id);
                     setOverlay(filteredPlots);
-                    changeRouter(
-                      getChangedQueryParams(
-                        {
-                          overlay_data: `${addOverlayData(filteredPlots)}`,
-                        },
-                        query
-                      )
-                    );
                   }}
                   icon={<MinusOutlined />}
                 ></StyledSecondaryButton>
@@ -139,26 +131,26 @@ export const OverlayRuns = ({
         </Col>
       </Row>
       <Row justify="space-between">
-        <CustomCol space="2">
-          <StyledButton
-            htmlType="submit"
-            onClick={() => {
-              const filtered: TripleProps[] = filter_valid_runs(triples);
-              setOverlay(filtered);
-              changeRouter(
-                getChangedQueryParams(
-                  {
-                    overlay: overlayPosition,
-                    overlay_data: `${addOverlayData(filtered)}`,
-                  },
-                  query
-                )
-              );
-            }}
-          >
-            <a>Submit</a>
-          </StyledButton>
-        </CustomCol>
+          <CustomCol space="2">
+            <StyledButton
+              htmlType="submit"
+              onClick={() => {
+                const filtered: TripleProps[] = filter_valid_runs(triples);
+                setOverlay(filtered);
+                changeRouter(
+                  getChangedQueryParams(
+                    {
+                      overlay: overlayPosition,
+                      overlay_data: `${addOverlayData(filtered)}`,
+                    },
+                    query
+                  )
+                );
+              }}
+            >
+              <a>Submit</a>
+            </StyledButton>
+          </CustomCol>
         <CustomCol space="2">
           <StyledSecondaryButton
             onClick={() => {
@@ -167,7 +159,7 @@ export const OverlayRuns = ({
               }
             }}
             icon={<PlusOutlined />}
-          ></StyledSecondaryButton>
+          >ADD RUN</StyledSecondaryButton>
         </CustomCol>
       </Row>
     </CustomDiv>

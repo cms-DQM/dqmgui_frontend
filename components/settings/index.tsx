@@ -4,7 +4,6 @@ import Form from 'antd/lib/form/Form'
 import { InfoCircleOutlined } from '@ant-design/icons';
 
 import { ViewPosition } from './viewPosition'
-import { SearchOptions } from './searchOptions'
 import { StyledModal } from '../viewDetailsMenu/styledComponents'
 import { StyledFormItem, CustomRow, StyledButton } from '../styledComponents'
 import { store } from '../../contexts/leftSideContext'
@@ -27,7 +26,6 @@ const info = (disabled: boolean) => {
 
 export const SettingsModal = ({ openSettings, toggleSettingsModal, isAnyPlotSelected }: SettingsModalProps) => {
   const { viewPlotsPosition, setViewPlotsPosition,
-    searchOption, setSearchOption,
     proportion, setProportion } = React.useContext(store)
   return (
     <StyledModal
@@ -81,21 +79,6 @@ export const SettingsModal = ({ openSettings, toggleSettingsModal, isAnyPlotSele
             </Col>
             <Col>
               {info(isAnyPlotSelected)}
-            </Col>
-          </Row>
-        </StyledFormItem>
-        <hr />
-        <StyledFormItem
-          name="search"
-          label="Search Option"
-          labelweight="bold"
-        >
-          <Row>
-            <Col>
-              <SearchOptions
-                searchOption={searchOption}
-                setSearchOption={setSearchOption}
-              />
             </Col>
           </Row>
         </StyledFormItem>

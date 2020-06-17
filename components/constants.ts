@@ -100,11 +100,6 @@ export const viewPositions = [
   { label: 'Vertical', value: 'vertical' }
 ]
 
-export const searchOptions = [
-  { label: 'Free Search', value: 'free search' },
-  { label: 'Combined Search', value: 'Combined Search' }
-]
-
 export const plotsProportionsOptions = [
   { label: '50% : 50%', value: '50%' },
   { label:  '25% : 75%', value: '25%' }
