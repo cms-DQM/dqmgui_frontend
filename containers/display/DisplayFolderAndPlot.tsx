@@ -38,7 +38,7 @@ export interface PlotInterface {
 
 interface FolderProps {
   folder_path?: string;
-  run_number: number;
+  run_number: string;
   dataset_name: string;
 }
 

@@ -14,7 +14,7 @@ interface CustomModalProps {
 }
 
 export const CustomModal = ({ id }: CustomModalProps) => {
-  const [search_run_number, setSearchRunNumber] = useState(NaN);
+  const [search_run_number, setSearchRunNumber] = useState('');
   const [search_dataset_name, setSearchDatasetName] = useState('');
   const {
     change_value_in_reference_table,
@@ -23,7 +23,7 @@ export const CustomModal = ({ id }: CustomModalProps) => {
   } = useContext(store);
 
   const navigationHandler = (
-    search_by_run_number: number,
+    search_by_run_number: string,
     search_by_dataset_name: string
   ) => {
     setSearchRunNumber(search_by_run_number);

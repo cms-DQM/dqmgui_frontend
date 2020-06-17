@@ -8,11 +8,11 @@ import { QuestionButton } from './helpButton';
 interface NavProps {
   setRunNumber?: Dispatch<any>;
   setDatasetName?: Dispatch<any>;
-  initial_search_run_number?: number | string ;
+  initial_search_run_number?: string ;
   initial_search_dataset_name?: string;
-  handler(search_by_run_number: number | string, search_by_dataset_name: string): void;
+  handler(search_by_run_number: string, search_by_dataset_name: string): void;
   type: string;
-  defaultRunNumber?: number | undefined| string;
+  defaultRunNumber?: undefined| string;
   defaultDatasetName?: string | undefined;
 }
 

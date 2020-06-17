@@ -16,7 +16,7 @@ export interface DatasetPartsProps {
 interface DatasetsBuilderProps {
   currentDataset: string;
   query: QueryProps;
-  currentRunNumber: number | string;
+  currentRunNumber: string;
 }
 
 export const DatasetsBuilder = ({ currentDataset, query, currentRunNumber }: DatasetsBuilderProps) => {

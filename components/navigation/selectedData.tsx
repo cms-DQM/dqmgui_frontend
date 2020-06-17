@@ -10,19 +10,19 @@ import { QueryProps } from '../../containers/display/interfaces'
 
 interface SelectedDataProps {
   dataset_name: string;
-  run_number: number | string;
+  run_number: string;
   form: any;
 }
 
 export const SelectedData = ({ dataset_name, run_number, form }: SelectedDataProps) => {
   const { lumisection, setLumisection } = React.useContext(store)
   const router = useRouter();
+  console.log(lumisection)
   const query: QueryProps = router.query;
   return (
     <Form
       form={form}
       onFinish={(params) => {
-        console.log(params)
         changeRouter(getChangedQueryParams(params, query))
       }}
       fields={[{ name: 'dataset_name', value: dataset_name },
@@ -40,7 +40,7 @@ export const SelectedData = ({ dataset_name, run_number, form }: SelectedDataPro
           <Col style={{ fontWeight: 'bold', fontStyle: "italic" }} >{run_number}</Col>
         </StyledFormItem>
       </Row>
-      {/* <Row>
+      <Row>
         <Col>
           <LumesectionBrowser
             color="black"
@@ -50,7 +50,7 @@ export const SelectedData = ({ dataset_name, run_number, form }: SelectedDataPro
             currentDataset={dataset_name}
             currentRunNumber={run_number}
           /></Col>
-      </Row> */}
+      </Row>
       <hr />
     </Form>
   )

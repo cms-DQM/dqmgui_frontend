@@ -14,14 +14,14 @@ import { changeRouter, getChangedQueryParams } from '../../containers/display/ut
 const { Option } = Select;
 
 interface RunBrowserProps {
-  currentRunNumber: number | string;
+  currentRunNumber: string;
   currentDataset: string;
   query: QueryProps;
-  setCurrentRunNumber(currentRunNumber: number | string): void;
+  setCurrentRunNumber(currentRunNumber: string): void;
 }
 
 const getRunNumbers = (results_grouped: any[]) => {
-  const runs: (number|string)[] = [];
+  const runs: (string)[] = [];
   results_grouped.forEach((result) => {
     result.value.forEach((data: any) => {
       runs.push(data.run);
@@ -37,10 +37,10 @@ export const RunBrowser = ({ currentRunNumber, currentDataset, query, setCurrent
   // because when spinner is shown, field becomes spinner width
   const [width, setWidth] = useState<number | undefined>();
 
-  const { results_grouped, isLoading } = useSearch(NaN, currentDataset);
+  const { results_grouped, isLoading } = useSearch('', currentDataset);
 
   const runNumbers = getRunNumbers(results_grouped);
-  const query_run_number = query.run_number ? query.run_number : NaN
+  const query_run_number = query.run_number ? query.run_number : ''
   const currentRunNumberIndex = runNumbers.indexOf(query_run_number);
 
   return (

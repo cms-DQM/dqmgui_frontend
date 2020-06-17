@@ -14,10 +14,10 @@ import Nav from '../Nav';
 interface FreeSeacrhModalProps {
   setModalState(state: boolean): void,
   modalState: boolean;
-  search_run_number: number | undefined | string;
+  search_run_number: undefined | string;
   search_dataset_name: string | undefined;
   setSearchDatasetName(dataset_name: any): void;
-  setSearchRunNumber(run_number: any): void;
+  setSearchRunNumber(run_number: string): void;
 }
 
 export const SearchModal = ({ setModalState, modalState, search_run_number, search_dataset_name, setSearchDatasetName, setSearchRunNumber }: FreeSeacrhModalProps) => {
@@ -26,11 +26,11 @@ export const SearchModal = ({ setModalState, modalState, search_run_number, sear
   const dataset = query.dataset_name ? query.dataset_name : ''
 
   const [datasetName, setDatasetName] = useState(dataset)
-  const run = query.run_number ? query.run_number : NaN
-  const [runNumber, setRunNumber] = useState(run)
+  const run = query.run_number ? query.run_number : ''
+  const [runNumber, setRunNumber] = useState<string>(run)
 
   useEffect(() => {
-    const run = query.run_number ? query.run_number : NaN
+    const run = query.run_number ? query.run_number : ''
     const dataset = query.dataset_name ? query.dataset_name : ''
     setDatasetName(dataset)
     setRunNumber(run)
@@ -40,13 +40,13 @@ export const SearchModal = ({ setModalState, modalState, search_run_number, sear
     setModalState(false);
   };
 
-  const searchHandler = (run_number: number, dataset_name: string) => {
+  const searchHandler = (run_number: string, dataset_name: string) => {
     setDatasetName(dataset_name)
     setRunNumber(run_number)
   };
 
   const navigationHandler = (
-    search_by_run_number: number,
+    search_by_run_number: string,
     search_by_dataset_name: string
   ) => {
     setSearchRunNumber(search_by_run_number)

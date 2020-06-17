@@ -8,35 +8,40 @@ import { StyledSelect, OptionParagraph } from '../viewDetailsMenu/styledComponen
 import { StyledFormItem } from '../styledComponents';
 import { useChangeRouter } from '../../hooks/useChangeRouter';
 import { QueryProps } from '../../containers/display/interfaces';
+import { store } from '../../contexts/leftSideContext';
 
 const { Option } = Select;
 
 interface AllRunsWithLumiProps {
-  run: number;
+  run: string;
   lumi: number;
   dataset: string;
 }
 interface LumesectionBrowserProps {
   currentLumisection: number | string;
   setCurrentLumisection(currentLumisection: number | string): void;
-  currentRunNumber: number;
+  currentRunNumber: string;
   currentDataset: string;
   color?: string;
   query: QueryProps;
 }
 export const LumesectionBrowser = ({ query, color, currentLumisection, setCurrentLumisection, currentRunNumber, currentDataset }: LumesectionBrowserProps) => {
+  const { lumisection } = React.useContext(store)
+
   const { data, isLoading, errors } = useRequest(getLumisections({
     run_number: currentRunNumber,
     dataset_name: currentDataset, lumi: -1
   }), {}, [currentRunNumber, currentDataset])
 
   const all_runs_with_lumi = data ? data.data : []
-  const lumisections: (number | string)[] = all_runs_with_lumi.length > 0 ? all_runs_with_lumi.map((run: AllRunsWithLumiProps) => {
+  const lumisections: number[] = all_runs_with_lumi.length > 0 ? all_runs_with_lumi.map((run: AllRunsWithLumiProps) => {
     return run.lumi
   }) : []
 
-  lumisections.unshift('All')
-  const lumi = query.lumi ? query.lumi : NaN
+  lumisections.unshift(-1)
+  useChangeRouter({ lumi: lumisections[0] }, [], true)
+
+  const lumi = query.lumi ? parseInt(query.lumi) : lumisection
   const currentLumiIndex = lumisections.indexOf(lumi);
 
   return (
@@ -59,19 +64,19 @@ export const LumesectionBrowser = ({ query, color, currentLumisection, setCurren
               dropdownMatchSelectWidth={false}
               value={currentLumisection}
               onChange={(e: any) => {
-                setCurrentLumisection(e);
+                setCurrentLumisection(parseInt(e));
               }}
               showSearch={true}
             >
-              {lumisections && lumisections.map((currentLumisection: number | string) => {
+              {lumisections && lumisections.map((current_lumisection: number) => {
                 return (
-                  <Option value={lumi} key={currentLumisection.toString()} >
+                  <Option value={current_lumisection.toString()} key={current_lumisection.toString()} >
                     {isLoading ? (
                       <OptionParagraph>
                         <Spin />
                       </OptionParagraph>
                     ) : (
-                        <div>{currentLumisection}</div>
+                        <p>{current_lumisection}</p>
                       )}
                   </Option>
                 )

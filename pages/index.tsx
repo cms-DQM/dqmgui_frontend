@@ -28,7 +28,7 @@ import { workspaces } from '../workspaces/offline';
 import { ComposedSearch } from '../components/navigation/composedSearch';
 
 const navigationHandler = (
-  search_by_run_number: number,
+  search_by_run_number: string,
   search_by_dataset_name: string
 ) => {
   Router.replace({

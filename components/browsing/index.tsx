@@ -20,18 +20,19 @@ export const Browser = () => {
   );
   const router = useRouter();
   const query: QueryProps = router.query;
-  const run_number = query.run_number ? query.run_number : NaN;
+  const run_number = query.run_number ? query.run_number : '';
   const dataset_name = query.dataset_name ? query.dataset_name : '';
-  const lumi = query.lumi ? query.lumi : 'All';
+  const lumi = query.lumi ? parseInt(query.lumi) : -1;
 
   const [currentRunNumber, setCurrentRunNumber] = useState(run_number);
   const [currentDataset, setCurrentDataset] = useState<string>(dataset_name);
   const [currentLumisection, setCurrentLumisection] = useState<string | number>(lumi);
 
-  useChangeRouter({ 
-    // lumi: currentLumisection,
-     run_number: currentRunNumber, dataset_name: currentDataset }, [currentLumisection, currentRunNumber, currentDataset], true)
-  
+  useChangeRouter({
+    lumi: currentLumisection,
+    run_number: currentRunNumber, dataset_name: currentDataset
+  }, [currentLumisection, currentRunNumber, currentDataset], true)
+
   return (
     <Form>
       <WrapperDiv>
@@ -43,7 +44,7 @@ export const Browser = () => {
             currentDataset={currentDataset}
           />
         </WrapperDiv>
-        {/* <WrapperDiv>
+        <WrapperDiv>
           <LumesectionBrowser
             currentLumisection={currentLumisection}
             setCurrentLumisection={setCurrentLumisection}
@@ -52,7 +53,7 @@ export const Browser = () => {
             query={query}
             color='white'
           />
-        </WrapperDiv> */}
+        </WrapperDiv>
         <StyledFormItem
           label={
             <DropdownMenu

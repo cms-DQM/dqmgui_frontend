@@ -55,7 +55,7 @@ export const FormatParamsForAPI = (
   path?: string
 ): ParamsForApiProps => {
   return {
-    run_number: query.run_number ? query.run_number : NaN,
+    run_number: query.run_number ? query.run_number : '',
     dataset_name: query.dataset_name ? query.dataset_name : '',
     folders_path: path,
     plot_name: plotName,
