@@ -15,7 +15,7 @@ export const ComposedSearch = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
 
-  const run = query.run_number ? query.run_number : NaN
+  const run = query.run_number ? query.run_number : ''
   const [search_run_number, setSearchRunNumber] = React.useState(run);
   const [search_dataset_name, setSearchDatasetName] = React.useState(query.dataset_name);
   const [modalState, setModalState] = React.useState(false)
@@ -23,7 +23,7 @@ export const ComposedSearch = () => {
   React.useEffect(() => {
     //when modal is open, run number and dataset search fields are filled with values from query
     if (modalState) {
-      const run = query.run_number ? query.run_number : NaN
+      const run = query.run_number ? query.run_number : ''
       setSearchDatasetName(query.dataset_name)
       setSearchRunNumber(run)
     }

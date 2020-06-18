@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { Row, Col } from 'antd'
+
 import { LumesectionBrowser } from '../browsing/lumesectionBroweser'
 import Form from 'antd/lib/form/Form'
 import { StyledFormItem } from '../styledComponents'
@@ -17,12 +18,20 @@ interface SelectedDataProps {
 export const SelectedData = ({ dataset_name, run_number, form }: SelectedDataProps) => {
   const { lumisection, setLumisection } = React.useContext(store)
   const router = useRouter();
-  console.log(lumisection)
   const query: QueryProps = router.query;
+
+  const lumisectionsChangeHandler = (lumi: number) => {
+    //we set lumisection in inseContext store in order to save a it's value.
+    //When form is submitted(onFinish...)(clicked button "OK" in dialog), then 
+    //url is changed
+    setLumisection(lumi)
+  }
+
   return (
     <Form
       form={form}
       onFinish={(params) => {
+        //when OK is clicked, run number, dataset and lumi params in url is changed.
         changeRouter(getChangedQueryParams(params, query))
       }}
       fields={[{ name: 'dataset_name', value: dataset_name },
@@ -44,8 +53,7 @@ export const SelectedData = ({ dataset_name, run_number, form }: SelectedDataPro
         <Col>
           <LumesectionBrowser
             color="black"
-            query={query}
-            setCurrentLumisection={setLumisection}
+            handler={lumisectionsChangeHandler}
             currentLumisection={lumisection}
             currentDataset={dataset_name}
             currentRunNumber={run_number}

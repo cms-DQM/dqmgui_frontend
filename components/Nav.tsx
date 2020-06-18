@@ -28,7 +28,7 @@ export const Nav = ({
 }: NavProps) => {
   const [form] = Form.useForm();
   const [form_search_run_number, setFormRunNumber] = useState(
-    initial_search_run_number || NaN
+    initial_search_run_number || ''
   );
   const [form_search_dataset_name, setFormDatasetName] = useState(
     initial_search_dataset_name || ''
@@ -37,7 +37,7 @@ export const Nav = ({
   // We have to wait for changin initial_search_run_number and initial_search_dataset_name coming from query, because the first render they are undefined and therefore the initialValues doesn't grab them
   useEffect(() => {
     form.resetFields();
-    setFormRunNumber(initial_search_run_number || NaN);
+    setFormRunNumber(initial_search_run_number || '');
     setFormDatasetName(initial_search_dataset_name || '');
   }, [initial_search_run_number, initial_search_dataset_name, form]);
 
@@ -74,7 +74,7 @@ export const Nav = ({
           <StyledInput
             id="run_number"
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setFormRunNumber(+e.target.value)
+              setFormRunNumber(e.target.value)
             }
             placeholder="Enter run number"
             type="text"

@@ -34,7 +34,6 @@ export const getAvailableChoices = (
   part: string
 ): string[] => {
   // Uniq because more than one item from resultsNames[name] array could have the same resultsNames[name].attribute attribute value
-
   const available: string[] = resultsNames[name]
     ? _.uniq(resultsNames[name].map((datasetname: any) => datasetname[part]))
     : [];

@@ -21,7 +21,7 @@ import {
   NotFoundDivWrapper,
   ChartIcon,
 } from '../containers/search/styledComponents';
-import { FolderPathQuery } from '../containers/display/interfaces';
+import { FolderPathQuery, QueryProps } from '../containers/display/interfaces';
 import { useValidateQuery } from '../hooks/useValidateQuery';
 import { QueryValidationErrors } from '../components/queryValidationErrors';
 import { workspaces } from '../workspaces/offline';
@@ -40,7 +40,7 @@ const navigationHandler = (
   });
 };
 
-const serchResultsHandler = (run: number, dataset: string) => {
+const serchResultsHandler = (run: string, dataset: string) => {
   Router.replace({
     pathname: '/',
     query: {
@@ -63,21 +63,12 @@ const backToMainPage = () => {
 
 const Index: NextPage<FolderPathQuery> = () => {
   // We grab the query from the URL:
-  const { query } = useRouter();
-  const {
-    query: {
-      run_number,
-      dataset_name,
-      folder_path,
-      search_run_number,
-      search_dataset_name,
-    },
-    validation_errors,
-  } = useValidateQuery(query);
-
+  const router = useRouter();
+  const query: QueryProps = router.query;
+  
   const { results, results_grouped, searching, isLoading, errors } = useSearch(
-    search_run_number,
-    search_dataset_name
+    query.search_run_number,
+    query.search_dataset_name
   );
 
   const isDatasetAndRunNumberSelected =
@@ -110,8 +101,8 @@ const Index: NextPage<FolderPathQuery> = () => {
             ) : (
                 <>
                   <Nav
-                    initial_search_run_number={search_run_number}
-                    initial_search_dataset_name={search_dataset_name}
+                    initial_search_run_number={query.search_run_number}
+                    initial_search_dataset_name={query.search_dataset_name}
                     handler={navigationHandler}
                     type="top"
                   />
@@ -122,12 +113,12 @@ const Index: NextPage<FolderPathQuery> = () => {
         {/* {validation_errors.length > 0 ? (
           <QueryValidationErrors validation_errors={validation_errors} />
         ) : */}
-        {run_number && dataset_name ? (
+        {query.run_number && query.dataset_name ? (
           // If a user already has a run_number and dataset_name, he is not searching nor is he in the homepage, he is
           <DiplayFolders
-            run_number={run_number}
-            dataset_name={dataset_name}
-            folder_path={folder_path || ''}
+            run_number={query.run_number}
+            dataset_name={query.dataset_name}
+            folder_path={query.folder_path || ''}
           />
         ) : searching ? (
           <SearchResults
