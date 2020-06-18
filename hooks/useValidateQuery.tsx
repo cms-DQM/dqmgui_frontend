@@ -1,9 +1,9 @@
 import Router from 'next/router';
 
 interface queryI {
-  run_number?: number;
+  run_number?: string;
   dataset_name?: string;
-  search_run_number?: number;
+  search_run_number?: string;
   search_dataset_name?: string;
   folder_path?: string;
 }

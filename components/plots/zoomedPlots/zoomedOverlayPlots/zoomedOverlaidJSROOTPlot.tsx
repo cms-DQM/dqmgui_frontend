@@ -28,6 +28,18 @@ interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;
   params_for_api: ParamsForApiProps;
 }
+const drawJSROOT = async (histogramParam: string, plot_name: string, overlaidJSROOTPlot: any) => {
+  //@ts-ignore 
+  await JSROOT.cleanup(`${histogramParam}_${plot_name}`);
+
+  //@ts-ignore
+  JSROOT.draw(
+    `${histogramParam}_${plot_name}`,
+    //@ts-ignore
+    JSROOT.parse(JSON.stringify(overlaidJSROOTPlot)),
+    `${histogramParam}`
+  );
+}
 
 export const ZoomedOverlaidJSROOTPlot = ({
   selected_plot,
@@ -42,17 +54,17 @@ export const ZoomedOverlaidJSROOTPlot = ({
 
   const overlaid_plots_runs_and_datasets: any[] = params_for_api?.overlay_plot
     ? params_for_api.overlay_plot.map((plot: TripleProps) => {
-        const copy: any = { ...params_for_api };
+      const copy: any = { ...params_for_api };
 
-        if (plot.dataset_name) {
-          copy.dataset_name = plot.dataset_name;
-        }
-        copy.run_number = plot.run_number;
-        const { data } = useRequest(get_jroot_plot(copy), {}, [
-          selected_plot.name,
-        ]);
-        return data;
-      })
+      if (plot.dataset_name) {
+        copy.dataset_name = plot.dataset_name;
+      }
+      copy.run_number = plot.run_number;
+      const { data } = useRequest(get_jroot_plot(copy), {}, [
+        selected_plot.name, query.lumi
+      ]);
+      return data;
+    })
     : [];
 
   overlaid_plots_runs_and_datasets.push(data);
@@ -105,13 +117,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
       cleanDeep(overlaidJSROOTPlot.fHists.arr).length ===
       overlaidJSROOTPlot.fHists.arr.length
     ) {
-      //@ts-ignore
-      JSROOT.redraw(
-        `${histogramParam}_${selected_plot.name}`,
-        //@ts-ignore
-        JSROOT.parse(JSON.stringify(overlaidJSROOTPlot)),
-        `${histogramParam}`
-      );
+      drawJSROOT(histogramParam, selected_plot.name, overlaidJSROOTPlot)
     }
   });
 
@@ -122,7 +128,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
         width={params_for_api.width}
         is_plot_selected={true.toString()}
         nopointer={true.toString()}
-        // report={selected_plot.properties.report}
+      // report={selected_plot.properties.report}
       >
         <PlotNameCol>{selected_plot.displayedName}</PlotNameCol>
         <Column>

@@ -20,7 +20,7 @@ interface SearchResultsInterface {
   results: any[];
   results_grouped: any[];
   isLoading: boolean;
-  handler(run: number, dataset: string): any;
+  handler(run: string, dataset: string): any;
   errors?: string[];
 }
 

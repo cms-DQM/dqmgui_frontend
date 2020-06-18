@@ -24,6 +24,17 @@ interface ZoomedJSROOTPlotsProps {
   params_for_api: ParamsForApiProps;
 }
 
+
+const drawJSROOT = async (plot_name: string, data: any) => {
+  //in order to get new JSROOT plot, first of all we need to clean div with old plot
+  //@ts-ignore
+  await JSROOT.cleanup(`${plot_name}`);
+  //after cleanup we can draw a new plot
+  //@ts-ignore
+  JSROOT.draw(`${plot_name}`, JSROOT.parse(JSON.stringify(data)), 'hist');
+}
+
+
 export const ZoomedJSROOTPlot = ({
   selected_plot,
   params_for_api,
@@ -33,12 +44,15 @@ export const ZoomedJSROOTPlot = ({
 
   const { data } = useRequest(get_jroot_plot(params_for_api), {}, [
     selected_plot.name,
+    params_for_api.lumi
   ]);
 
   useEffect(() => {
-    //@ts-ignore
-    JSROOT.draw(selected_plot.name, JSROOT.parse(JSON.stringify(data)), 'hist');
-  }, [data]);
+    if (!!document.getElementById(selected_plot.name)) {
+      //@ts-ignore
+      drawJSROOT(selected_plot.name, data)
+    }
+  }, [data, params_for_api.lumi]);
 
   return (
     <StyledCol space={2}>

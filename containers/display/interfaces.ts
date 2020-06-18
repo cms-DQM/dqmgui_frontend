@@ -34,7 +34,7 @@ export interface PlotProps extends LumisectionRequestProps {
 
 export interface LumisectionRequestProps {
   dataset_name: string;
-  run_number: number | string;
+  run_number: string;
   lumi?: number | string;
 }
 
@@ -72,7 +72,7 @@ export interface CustomizeProps {
 
 export interface NavigationSearchFieldsProps {
   search_by_dataset_name: string;
-  search_by_run_number: number;
+  search_by_run_number: string;
 }
 
 export interface PlotDataProps {
@@ -84,7 +84,7 @@ export interface PlotDataProps {
 
 export interface NavigationSearchFieldsProps {
   search_by_dataset_name: string;
-  search_by_run_number: number;
+  search_by_run_number: string;
 }
 
 export interface QueryProps {

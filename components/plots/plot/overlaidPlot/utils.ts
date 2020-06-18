@@ -16,7 +16,7 @@ export const getOnSideOverlaidPlots = (params_for_api: ParamsForApiProps) => {
       copy.dataset_name = plot.dataset_name
         ? (plot.dataset_name as string)
         : params_for_api.dataset_name;
-      copy.run_number = plot.run_number as number;
+      copy.run_number = plot.run_number as string;
       onsidePlotsURLs.push(get_plot_url(copy));
     });
 

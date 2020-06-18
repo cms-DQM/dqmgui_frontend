@@ -21,14 +21,14 @@ export const get_customize_params = (params = {} as any) => {
 };
 
 export const getRunsWithLumisections = (params: ParamsForApiProps | TripleProps) => {
-  const lumisectionValue = params.lumi === 'All' ? undefined : params.lumi
+  const lumisectionValue = params.lumi === -1 ? undefined : params.lumi
   const lumisectionParameter = lumisectionValue ? `${params.run_number}:${lumisectionValue}` : params.run_number
 
   return lumisectionParameter
 }
 
 export const getRunsWithLumisectionsForOverlaidPlots = (params: TripleProps) => {
-  const lumisectionValue = params.lumi === 'All' ? undefined : params.lumi
+  const lumisectionValue = params.lumi === -1 ? undefined : params.lumi
   const lumisectionParameter = lumisectionValue ? `${params.run_number}:${lumisectionValue}` : params.run_number
 
   return lumisectionParameter

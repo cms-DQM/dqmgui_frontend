@@ -39,7 +39,7 @@ export const initialState: any = {
   openOverlayDataMenu: false,
   viewPlotsPosition: viewPositions[1].value,
   proportion: plotsProportionsOptions[0].value,
-  lumisection: 'All',
+  lumisection: -1,
 };
 
 export interface ActionProps {
@@ -91,7 +91,7 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
     const newRun = {
       id: id,
       checked: true,
-      run_number: NaN,
+      run_number: '',
       dataset_name: '',
       label: '',
     };

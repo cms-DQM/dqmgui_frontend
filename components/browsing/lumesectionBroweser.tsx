@@ -7,37 +7,49 @@ import { getLumisections } from '../../config/config';
 import { StyledSelect, OptionParagraph } from '../viewDetailsMenu/styledComponents';
 import { StyledFormItem } from '../styledComponents';
 import { useChangeRouter } from '../../hooks/useChangeRouter';
-import { QueryProps } from '../../containers/display/interfaces';
+import { QueryProps, OptionProps } from '../../containers/display/interfaces';
+import { useRouter } from 'next/router';
 
 const { Option } = Select;
 
 interface AllRunsWithLumiProps {
-  run: number;
+  run: string;
   lumi: number;
   dataset: string;
 }
 interface LumesectionBrowserProps {
-  currentLumisection: number | string;
-  setCurrentLumisection(currentLumisection: number | string): void;
-  currentRunNumber: number;
+  currentLumisection: number;
+  currentRunNumber: string;
   currentDataset: string;
+  handler(lumi: number): void;
   color?: string;
-  query: QueryProps;
 }
-export const LumesectionBrowser = ({ query, color, currentLumisection, setCurrentLumisection, currentRunNumber, currentDataset }: LumesectionBrowserProps) => {
+
+export const LumesectionBrowser = ({ color, currentLumisection, handler, currentRunNumber, currentDataset }: LumesectionBrowserProps) => {
+  //getting all run lumisections 
   const { data, isLoading, errors } = useRequest(getLumisections({
     run_number: currentRunNumber,
     dataset_name: currentDataset, lumi: -1
   }), {}, [currentRunNumber, currentDataset])
 
+  const router = useRouter();
+  const query: QueryProps = router.query;
+
   const all_runs_with_lumi = data ? data.data : []
-  const lumisections: (number | string)[] = all_runs_with_lumi.length > 0 ? all_runs_with_lumi.map((run: AllRunsWithLumiProps) => {
-    return run.lumi
+  //extracting just lumisections from data object
+  const lumisections: OptionProps[] = all_runs_with_lumi.length > 0 ? all_runs_with_lumi.map((run: AllRunsWithLumiProps) => {
+    return {label: run.lumi.toString(), value: run.lumi}
   }) : []
 
-  lumisections.unshift('All')
-  const lumi = query.lumi ? query.lumi : NaN
-  const currentLumiIndex = lumisections.indexOf(lumi);
+  //-1 - it represents ALL lumisections. If none lumisection is selected, then plots which are displaid 
+  //consist of ALL lumisections. 
+  //*TO DO** change -1 to ALL
+  lumisections.unshift({label: 'All', value: -1})
+
+  //if lumisection is not setted to url, we set lumisection to -1
+  const lumiValues = lumisections.map((lumi: OptionProps) => lumi.value)
+  useChangeRouter({ lumi: lumiValues[0] }, [], !query.lumi)
+  const currentLumiIndex = lumiValues.indexOf(currentLumisection);
 
   return (
     <Col>
@@ -49,7 +61,7 @@ export const LumesectionBrowser = ({ query, color, currentLumisection, setCurren
               icon={<CaretLeftFilled />}
               type="link"
               onClick={() => {
-                setCurrentLumisection(lumisections[currentLumiIndex - 1]);
+                handler(lumiValues[currentLumiIndex - 1]);
               }}
             />
           </Col>
@@ -59,19 +71,19 @@ export const LumesectionBrowser = ({ query, color, currentLumisection, setCurren
               dropdownMatchSelectWidth={false}
               value={currentLumisection}
               onChange={(e: any) => {
-                setCurrentLumisection(e);
+                handler(parseInt(e));
               }}
               showSearch={true}
             >
-              {lumisections && lumisections.map((currentLumisection: number | string) => {
+              {lumisections && lumisections.map((current_lumisection: OptionProps) => {
                 return (
-                  <Option value={lumi} key={currentLumisection.toString()} >
+                  <Option value={current_lumisection.value} key={current_lumisection.value.toString()} >
                     {isLoading ? (
                       <OptionParagraph>
                         <Spin />
                       </OptionParagraph>
                     ) : (
-                        <div>{currentLumisection}</div>
+                        <p>{current_lumisection.label}</p>
                       )}
                   </Option>
                 )
@@ -85,7 +97,7 @@ export const LumesectionBrowser = ({ query, color, currentLumisection, setCurren
               disabled={!lumisections[currentLumiIndex + 1]}
               type="link"
               onClick={() => {
-                setCurrentLumisection(lumisections[currentLumiIndex + 1]);
+                handler(lumiValues[currentLumiIndex + 1]);
               }}
             />
           </Col>
