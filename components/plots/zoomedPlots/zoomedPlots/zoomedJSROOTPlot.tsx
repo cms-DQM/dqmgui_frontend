@@ -48,8 +48,10 @@ export const ZoomedJSROOTPlot = ({
   ]);
 
   useEffect(() => {
-    //@ts-ignore
-    drawJSROOT(selected_plot.name, data)
+    if (!!document.getElementById(selected_plot.name)) {
+      //@ts-ignore
+      drawJSROOT(selected_plot.name, data)
+    }
   }, [data, params_for_api.lumi]);
 
   return (
