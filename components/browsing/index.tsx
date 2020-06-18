@@ -60,7 +60,7 @@ export const Browser = () => {
             currentDataset={currentDataset}
           />
         </WrapperDiv>
-        {/* <WrapperDiv>
+        <WrapperDiv>
           <LumesectionBrowser
             currentLumisection={lumi}
             currentRunNumber={currentRunNumber}
@@ -68,7 +68,7 @@ export const Browser = () => {
             handler={lumisectionsChangeHandler}
             color='white'
           />
-        </WrapperDiv> */}
+        </WrapperDiv>
         <StyledFormItem
           label={
             <DropdownMenu
