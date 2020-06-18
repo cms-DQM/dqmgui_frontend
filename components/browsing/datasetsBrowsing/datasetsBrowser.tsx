@@ -12,7 +12,7 @@ import { QueryProps } from '../../../containers/display/interfaces';
 interface DatasetsBrowserProps {
   currentDataset: string;
   query: QueryProps;
-  currentRunNumber: number | string;
+  currentRunNumber: string;
   setCurrentDataset(currentDataset: string): void;
 }
 

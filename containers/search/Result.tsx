@@ -13,7 +13,7 @@ import {
 interface SearchResultsInterface {
   dataset: string;
   value: any[];
-  handler(run: number, dataset: string): any;
+  handler(run: string, dataset: string): any;
   index: number;
 }
 
