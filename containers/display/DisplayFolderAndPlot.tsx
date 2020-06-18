@@ -2,6 +2,8 @@ import React, { FC, useState, useContext } from 'react';
 import { Row, Col, Button } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 
+import { useRouter } from 'next/router';
+
 import { useRequest } from '../../hooks/useRequest';
 import { PlotDataProps, QueryProps } from './interfaces';
 import { ZoomedPlots } from '../../components/plots/zoomedPlots';
@@ -15,7 +17,6 @@ import {
   getDirectories,
 } from './utils';
 import { SpinnerWrapper, Spinner } from '../search/styledComponents';
-import { useRouter } from 'next/router';
 import { RightSideStateProvider } from '../../contexts/rightSideContext';
 import { LeftSidePlots } from '../../components/plots/plot';
 import { Directories } from './directories';

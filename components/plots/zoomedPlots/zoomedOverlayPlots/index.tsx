@@ -28,7 +28,6 @@ export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
           selected_plot.name,
           selected_plot.path
         );
-
         if (globalState.JSROOTmode) {
           return (
             <ZoomedOverlaidJSROOTPlot

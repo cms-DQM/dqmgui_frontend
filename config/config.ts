@@ -53,7 +53,7 @@ export const get_overlaied_plots_urls = (params: ParamsForApiProps) => {
 };
 
 export const get_jroot_plot = (params: ParamsForApiProps) =>
-  `/jsrootfairy/archive/${getRunsWithLumisections(params)}/${params.dataset_name}${params.folders_path}/${params.plot_name}?jsroot=true`;
+  `/jsrootfairy/archive/${getRunsWithLumisections(params)}${params.dataset_name}${params.folders_path}/${params.plot_name}?jsroot=true`;
 
 export const getLumisections = (params: LumisectionRequestProps) => (
   `/api/v1/samples?run=${params.run_number}&dataset=${params.dataset_name}&lumi=${params.lumi}`

@@ -22,10 +22,10 @@ import {
   ChartIcon,
 } from '../containers/search/styledComponents';
 import { FolderPathQuery, QueryProps } from '../containers/display/interfaces';
-import { useValidateQuery } from '../hooks/useValidateQuery';
-import { QueryValidationErrors } from '../components/queryValidationErrors';
 import { workspaces } from '../workspaces/offline';
 import { ComposedSearch } from '../components/navigation/composedSearch';
+import { seperateRunAndLumiInSearch } from '../components/utils'
+import { changeRouter, getChangedQueryParams } from '../containers/display/utils';
 
 const navigationHandler = (
   search_by_run_number: string,
@@ -36,17 +36,6 @@ const navigationHandler = (
     query: {
       search_run_number: search_by_run_number,
       search_dataset_name: search_by_dataset_name,
-    },
-  });
-};
-
-const serchResultsHandler = (run: string, dataset: string) => {
-  Router.replace({
-    pathname: '/',
-    query: {
-      run_number: run,
-      dataset_name: dataset,
-      workspaces: workspaces[0].workspaces[2].label,
     },
   });
 };
@@ -66,6 +55,16 @@ const Index: NextPage<FolderPathQuery> = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
   
+  const serchResultsHandler = (run: string, dataset: string) => {
+    const { parsedRun, parsedLumi } = seperateRunAndLumiInSearch(run)
+    changeRouter(getChangedQueryParams({
+      lumi: parsedLumi,
+      run_number: parsedRun,
+      dataset_name: dataset,
+      workspaces: workspaces[0].workspaces[2].label
+    }, query))
+  };
+
   const { results, results_grouped, searching, isLoading, errors } = useSearch(
     query.search_run_number,
     query.search_dataset_name
@@ -129,13 +128,13 @@ const Index: NextPage<FolderPathQuery> = () => {
             errors={errors}
           />
         ) : (
-                <NotFoundDivWrapper>
-                  <NotFoundDiv noBorder>
-                    <ChartIcon />
+              <NotFoundDivWrapper>
+                <NotFoundDiv noBorder>
+                  <ChartIcon />
               Welcome to DQM GUI
             </NotFoundDiv>
-                </NotFoundDivWrapper>
-              )}
+              </NotFoundDivWrapper>
+            )}
       </StyledLayout>
     </StyledDiv>
   );
