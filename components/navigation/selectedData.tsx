@@ -50,14 +50,14 @@ export const SelectedData = ({ dataset_name, run_number, form }: SelectedDataPro
         </StyledFormItem>
       </Row>
       <Row>
-        <Col>
+        {/* <Col>
           <LumesectionBrowser
             color="black"
             handler={lumisectionsChangeHandler}
             currentLumisection={lumisection}
             currentDataset={dataset_name}
             currentRunNumber={run_number}
-          /></Col>
+          /></Col> */}
       </Row>
       <hr />
     </Form>
