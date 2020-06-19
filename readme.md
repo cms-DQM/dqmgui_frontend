@@ -127,8 +127,7 @@ On certain level of browsing subsystem you will reach plots list.
 8. ~~**When plots are overlaid on side, them have to be display in a row, not in column**~~
 
 9. ~~Overlay _overlay_ and _stack_ looks the same (?)~~
-10. 3 reuquest instead of 1 is done, ir order to get subsystems folders.
-11. Previuos request is not canceled.
+10. Previuos request is not canceled.
 ---
 
 ---
