@@ -9,7 +9,6 @@ import {
 } from '../viewDetailsMenu/styledComponents';
 import { useSearch } from '../../hooks/useSearch';
 import { QueryProps } from '../../containers/display/interfaces';
-import { changeRouter, getChangedQueryParams } from '../../containers/display/utils';
 
 const { Option } = Select;
 
@@ -30,7 +29,7 @@ const getRunNumbers = (results_grouped: any[]) => {
   return runs;
 };
 
-export const RunBrowser = ({ currentRunNumber, currentDataset, query, setCurrentRunNumber }: RunBrowserProps) => {
+export const RunBrowser = ({ currentDataset, query, setCurrentRunNumber }: RunBrowserProps) => {
   const [openSelect, setSelect] = useState(false);
 
   //seting  run field width to prev. selected run name field width,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Form from 'antd/lib/form/Form';
 
 import { WrapperDiv } from '../../containers/display/styledComponents';
@@ -60,7 +60,7 @@ export const Browser = () => {
             currentDataset={currentDataset}
           />
         </WrapperDiv>
-        {/* <WrapperDiv>
+        <WrapperDiv>
           <LumesectionBrowser
             currentLumisection={lumi}
             currentRunNumber={currentRunNumber}
@@ -68,7 +68,7 @@ export const Browser = () => {
             handler={lumisectionsChangeHandler}
             color='white'
           />
-        </WrapperDiv> */}
+        </WrapperDiv>
         <StyledFormItem
           label={
             <DropdownMenu
