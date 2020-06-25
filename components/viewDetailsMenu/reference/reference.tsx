@@ -17,7 +17,6 @@ import { CustomModal } from '../search';
 import { OverlayOptions } from './overlayOptions';
 import { OverlayRuns } from './overlayRuns';
 import FormItem from 'antd/lib/form/FormItem';
-import { useChangeRouter } from '../../../hooks/useChangeRouter';
 import { store } from '../../../contexts/leftSideContext';
 
 const isAllChecked = (triples: TripleProps[]) => {
@@ -54,8 +53,10 @@ export const Reference = () => {
       addRun(overlayTriples)
     }
   }, []);
+// useEffect(()=>{
+//   return addRun([])
 
-  useChangeRouter({ normalize: normalize }, [normalize as any], true);
+// })
   return (
     <StyledDiv>
       <CustomRow>
@@ -99,7 +100,10 @@ export const Reference = () => {
         <Col></Col>
       </CustomRow>
       <CustomModal id={selectedTriple.id} />
-      <OverlayRuns triples={triples} query={query} setTriple={setTriple} />
+      <OverlayRuns
+        overlaid_runs={triples}
+        query={query}
+        setTriple={setTriple} />
     </StyledDiv>
   );
 };

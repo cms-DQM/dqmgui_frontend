@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col, Row, Select, Spin, Button } from 'antd';
 import { CaretRightFilled, CaretLeftFilled } from '@ant-design/icons';
 
@@ -17,6 +17,7 @@ interface RunBrowserProps {
   currentDataset: string;
   query: QueryProps;
   setCurrentRunNumber(currentRunNumber: string): void;
+  withoutArrows?: boolean
 }
 
 const getRunNumbers = (results_grouped: any[]) => {
@@ -29,7 +30,7 @@ const getRunNumbers = (results_grouped: any[]) => {
   return runs;
 };
 
-export const RunBrowser = ({ currentDataset, query, setCurrentRunNumber }: RunBrowserProps) => {
+export const RunBrowser = ({ currentDataset, query, setCurrentRunNumber, withoutArrows, currentRunNumber }: RunBrowserProps) => {
   const [openSelect, setSelect] = useState(false);
 
   //seting  run field width to prev. selected run name field width,
@@ -42,21 +43,26 @@ export const RunBrowser = ({ currentDataset, query, setCurrentRunNumber }: RunBr
   const query_run_number = query.run_number ? query.run_number : ''
   const currentRunNumberIndex = runNumbers.indexOf(query_run_number);
 
+  useEffect(() => {
+    setCurrentRunNumber(currentRunNumber);
+  }, [])
+
   return (
     <Col>
       <StyledFormItem labelcolor="white" name={'dataset_name'} label="Run:">
         <Row justify="center" align="middle">
-          <Col>
-            <Button
-              disabled={!runNumbers[currentRunNumberIndex - 1]}
-              icon={<CaretLeftFilled />}
-              type="link"
-              onClick={() => {
-                setWidth(undefined);
-                setCurrentRunNumber(runNumbers[currentRunNumberIndex - 1]);
-              }}
-            />
-          </Col>
+          {!withoutArrows &&
+            <Col>
+              <Button
+                disabled={!runNumbers[currentRunNumberIndex - 1]}
+                icon={<CaretLeftFilled />}
+                type="link"
+                onClick={() => {
+                  setWidth(undefined);
+                  setCurrentRunNumber(runNumbers[currentRunNumberIndex - 1]);
+                }}
+              />
+            </Col>}
           <Col>
             <div
               ref={(refElem: HTMLDivElement) => {
@@ -67,7 +73,7 @@ export const RunBrowser = ({ currentDataset, query, setCurrentRunNumber }: RunBr
             >
               <StyledSelect
                 onClick={() => setSelect(!openSelect)}
-                value={query_run_number}
+                value={currentRunNumber}
                 onChange={(e: any) => {
                   setCurrentRunNumber(e);
                   setSelect(!openSelect);
@@ -99,17 +105,18 @@ export const RunBrowser = ({ currentDataset, query, setCurrentRunNumber }: RunBr
               </StyledSelect>
             </div>
           </Col>
-          <Col>
-            <Button
-              icon={<CaretRightFilled />}
-              disabled={!runNumbers[currentRunNumberIndex + 1]}
-              type="link"
-              onClick={() => {
-                setWidth(undefined);
-                setCurrentRunNumber(runNumbers[currentRunNumberIndex + 1]);
-              }}
-            />
-          </Col>
+          {!withoutArrows &&
+            <Col>
+              <Button
+                icon={<CaretRightFilled />}
+                disabled={!runNumbers[currentRunNumberIndex + 1]}
+                type="link"
+                onClick={() => {
+                  setWidth(undefined);
+                  setCurrentRunNumber(runNumbers[currentRunNumberIndex + 1]);
+                }}
+              />
+            </Col>}
         </Row>
       </StyledFormItem>
     </Col>

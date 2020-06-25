@@ -12,7 +12,6 @@ import { overlayOptions } from '../components/constants';
 export interface LeftSideStateProviderProps {
   children: ReactElement;
 }
-const id = uuidv4();
 
 export interface LeftSideState {
   size: SizeProps;
@@ -35,7 +34,7 @@ export const initialState: any = {
   overlayPosition: overlayOptions[0].value,
   overlay: undefined,
   overlayPlots: undefined,
-  triples: [ ],
+  triples: [],
   openOverlayDataMenu: false,
   viewPlotsPosition: viewPositions[1].value,
   proportion: plotsProportionsOptions[0].value,
@@ -85,19 +84,8 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
     setTriples(copy);
   };
 
-  const addRun = (run_from_query: TripleProps[]) => {
-    const copy: TripleProps[] = [...triples];
-    const id = uuidv4();
-    const newRun = {
-      id: id,
-      checked: true,
-      run_number: '',
-      dataset_name: '',
-      label: '',
-    };
-    copy.push(newRun);
-    const runs = run_from_query ? run_from_query : copy
-    setTriples(runs);
+  const addRun = (run_from_query?: TripleProps[]) => {
+    setTriples(run_from_query);
   };
 
   const removeRun = (id: string | number | boolean) => {

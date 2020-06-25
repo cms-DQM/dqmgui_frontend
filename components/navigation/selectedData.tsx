@@ -49,7 +49,7 @@ export const SelectedData = ({ dataset_name, run_number, form }: SelectedDataPro
           <Col style={{ fontWeight: 'bold', fontStyle: "italic" }} >{run_number}</Col>
         </StyledFormItem>
       </Row>
-      <Row>
+      {/* <Row>
         <Col>
           <LumesectionBrowser
             color="black"
@@ -58,7 +58,7 @@ export const SelectedData = ({ dataset_name, run_number, form }: SelectedDataPro
             currentDataset={dataset_name}
             currentRunNumber={run_number}
           /></Col>
-      </Row>
+      </Row> */}
       <hr />
     </Form>
   )

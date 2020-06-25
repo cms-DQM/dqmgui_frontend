@@ -1,6 +1,6 @@
 import cleanDeep from 'clean-deep';
 import { v4 as uuidv4 } from 'uuid';
-import _ from 'lodash';
+import _, { over } from 'lodash';
 
 import { TripleProps } from '../../containers/display/interfaces';
 import { DatasetPartsProps } from '../browsing/datasetsBrowsing/datasetNameBuilder';
@@ -51,3 +51,27 @@ export const getDatasetParts = (datasets: string[], part: string) => {
   );
   return _.chain(parts).groupBy(part).value();
 };
+
+export const concatArrays = (arrays: any[]) => {
+  let  concatedArray: any = []
+  arrays.forEach(array => {
+    concatedArray = concatedArray.concat(array)
+  });
+  return concatedArray
+}
+
+export const changeRunsForOverlayPropsValues = (
+  value: string | number,
+  key: string,
+  id: string | number | boolean,
+  runs: TripleProps[],
+  set_action: React.Dispatch<React.SetStateAction<TripleProps[]>>
+) => {
+  const current_line: TripleProps = runs.filter(
+    (line: TripleProps) => line.id === id
+  )[0];
+  const index_of_line: number = runs.indexOf(current_line);
+  current_line[key] = value;
+  runs[index_of_line] = current_line;
+  return set_action(runs as any)
+}
