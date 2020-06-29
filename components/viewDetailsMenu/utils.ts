@@ -71,7 +71,7 @@ export const changeRunsForOverlayPropsValues = (
     (line: TripleProps) => line.id === id
   )[0];
   const index_of_line: number = runs.indexOf(current_line);
-  current_line[key] = value;
+  current_line[key] = value; 
   runs[index_of_line] = current_line;
   return set_action(runs as any)
 }

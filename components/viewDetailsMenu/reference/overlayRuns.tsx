@@ -1,6 +1,6 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
-import { Checkbox, Row } from 'antd';
+import { Checkbox, Row, Col } from 'antd';
 import { addOverlayData } from '../../plots/plot/singlePlot/utils';
 
 import {
@@ -47,7 +47,11 @@ export const OverlayRuns = ({
   } = globalState;
 
   const [open, toggleModal] = useState(false)
-  const [runs_set_for_overlay, set_runs_set_for_overlay] = React.useState<TripleProps[]>([...overlaid_runs])
+  const [runs_set_for_overlay, set_runs_set_for_overlay] = React.useState<TripleProps[]>([])
+
+  useEffect((() => {
+    set_runs_set_for_overlay([...overlaid_runs])
+  }), [overlaid_runs])
 
   const add_runs_to_set_runs_for_overlay = (runs: TripleProps[]) => {
     const copy = [...runs_set_for_overlay]
@@ -74,8 +78,10 @@ export const OverlayRuns = ({
         set_runs_set_for_overlay={set_runs_set_for_overlay}
       />
       <Row justify="space-between">
-        {runs_set_for_overlay.map((overlaid_run: TripleProps) => (
+      <Col span={24}>
+        {runs_set_for_overlay.length > 0 && runs_set_for_overlay.map((overlaid_run: TripleProps) => (
           <FieldsWrapper key={overlaid_run.id.toString()}>
+            <Col>
             <CustomCol space="2">
               <Checkbox
                 checked={overlaid_run.checked as boolean}
@@ -90,6 +96,7 @@ export const OverlayRuns = ({
                 }}
               />
             </CustomCol>
+            </Col>
             <CustomCol space="2">
               <RunBrowser
                 currentRunNumber={overlaid_run.run_number as string}
@@ -150,6 +157,7 @@ export const OverlayRuns = ({
             </CustomCol>
           </FieldsWrapper>
         ))}
+        </Col>
       </Row>
       <Row justify="space-between">
         <CustomCol space="2">
@@ -166,6 +174,7 @@ export const OverlayRuns = ({
                   query
                 )
               );
+              addRun(filtered)
             }}
           >
             <a>Submit</a>

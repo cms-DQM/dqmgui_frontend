@@ -49,14 +49,12 @@ export const Reference = () => {
       query.overlay_data ? query.overlay_data : ''
     );
     if (overlayTriples) {
+      console.log(overlayTriples)
       //adding overlaid runs from query
       addRun(overlayTriples)
     }
   }, []);
-// useEffect(()=>{
-//   return addRun([])
 
-// })
   return (
     <StyledDiv>
       <CustomRow>
