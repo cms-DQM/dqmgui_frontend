@@ -17,7 +17,8 @@ interface RunBrowserProps {
   currentDataset: string;
   query: QueryProps;
   setCurrentRunNumber(currentRunNumber: string): void;
-  withoutArrows?: boolean
+  withoutArrows?: boolean;
+  withoutLabel?: boolean
 }
 
 const getRunNumbers = (results_grouped: any[]) => {
@@ -30,12 +31,12 @@ const getRunNumbers = (results_grouped: any[]) => {
   return runs;
 };
 
-export const RunBrowser = ({ currentDataset, query, setCurrentRunNumber, withoutArrows, currentRunNumber }: RunBrowserProps) => {
+export const RunBrowser = ({ currentDataset, query, setCurrentRunNumber, withoutArrows, currentRunNumber, withoutLabel }: RunBrowserProps) => {
   const [openSelect, setSelect] = useState(false);
 
   //seting  run field width to prev. selected run name field width,
   // because when spinner is shown, field becomes spinner width
-  const [width, setWidth] = useState<number | undefined>();
+  const [width, setWidth] = useState<string | undefined>();
 
   const { results_grouped, isLoading } = useSearch('', currentDataset);
 
@@ -45,11 +46,11 @@ export const RunBrowser = ({ currentDataset, query, setCurrentRunNumber, without
 
   useEffect(() => {
     setCurrentRunNumber(currentRunNumber);
-  }, [])
+  }, [currentRunNumber])
 
   return (
     <Col>
-      <StyledFormItem labelcolor="white" name={'dataset_name'} label="Run:">
+      <StyledFormItem labelcolor="white" name={'dataset_name'} label={`${!withoutLabel ? 'Run' : ''}`}>
         <Row justify="center" align="middle">
           {!withoutArrows &&
             <Col>
@@ -67,7 +68,7 @@ export const RunBrowser = ({ currentDataset, query, setCurrentRunNumber, without
             <div
               ref={(refElem: HTMLDivElement) => {
                 if (refElem && !openSelect) {
-                  setWidth(refElem.clientWidth);
+                  setWidth(refElem.clientWidth.toString());
                 }
               }}
             >
@@ -80,7 +81,7 @@ export const RunBrowser = ({ currentDataset, query, setCurrentRunNumber, without
                 }}
                 showSearch={true}
                 open={openSelect}
-                width={width}
+                width={`${width}px`}
               >
                 {runNumbers &&
                   runNumbers.map((run: any) => {

@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
-import { Checkbox, Row, Col } from 'antd';
+import { Checkbox, Row } from 'antd';
 import { addOverlayData } from '../../plots/plot/singlePlot/utils';
 
 import {
@@ -8,11 +8,11 @@ import {
   QueryProps,
 } from '../../../containers/display/interfaces';
 import {
-  FieldsWrapper,
   StyledSecondaryButton,
   StyledButton,
   CustomCol,
   CustomDiv,
+  CustomTd,
 } from '../../styledComponents';
 import { Field } from './field';
 import { filter_plots, filter_valid_runs, changeRunsForOverlayPropsValues } from '../utils';
@@ -47,11 +47,16 @@ export const OverlayRuns = ({
   } = globalState;
 
   const [open, toggleModal] = useState(false)
-  const [runs_set_for_overlay, set_runs_set_for_overlay] = React.useState<TripleProps[]>([])
+  const [runs_set_for_overlay, set_runs_set_for_overlay] = React.useState<TripleProps[]>([...overlaid_runs])
+  const [interim_run, set_interim_runs] = React.useState<TripleProps[]>([])
+
+  // useEffect((() => {
+  //   set_runs_set_for_overlay([...overlaid_runs])
+  // }), [overlaid_runs])
 
   useEffect((() => {
-    set_runs_set_for_overlay([...overlaid_runs])
-  }), [overlaid_runs])
+    set_runs_set_for_overlay([...interim_run])
+  }), [interim_run])
 
   const add_runs_to_set_runs_for_overlay = (runs: TripleProps[]) => {
     const copy = [...runs_set_for_overlay]
@@ -68,7 +73,7 @@ export const OverlayRuns = ({
   }
 
   return (
-    <CustomDiv>
+    <CustomDiv style={{ overflowX: 'auto' }}>
       <SetRunsModal
         open={open}
         toggleModal={toggleModal}
@@ -77,12 +82,10 @@ export const OverlayRuns = ({
         runs_set_for_overlay={runs_set_for_overlay}
         set_runs_set_for_overlay={set_runs_set_for_overlay}
       />
-      <Row justify="space-between">
-      <Col span={24}>
-        {runs_set_for_overlay.length > 0 && runs_set_for_overlay.map((overlaid_run: TripleProps) => (
-          <FieldsWrapper key={overlaid_run.id.toString()}>
-            <Col>
-            <CustomCol space="2">
+      <table>
+        {runs_set_for_overlay.map((overlaid_run: TripleProps, index: number) => (
+          <tr>
+            <CustomTd spacing={'4'}>
               <Checkbox
                 checked={overlaid_run.checked as boolean}
                 onChange={(e: any) => {
@@ -91,37 +94,40 @@ export const OverlayRuns = ({
                     'checked',
                     overlaid_run.id,
                     runs_set_for_overlay,
-                    set_runs_set_for_overlay
+                    set_interim_runs
                   );
                 }}
               />
-            </CustomCol>
-            </Col>
-            <CustomCol space="2">
+            </CustomTd>
+            <CustomTd spacing={'4'}>
+              {index + 1}.</CustomTd>
+            <CustomTd spacing={'4'}>
               <RunBrowser
                 currentRunNumber={overlaid_run.run_number as string}
                 currentDataset={overlaid_run.dataset_name as string}
                 query={query}
+                withoutLabel={true}
                 setCurrentRunNumber={(run_number) => {
                   changeRunsForOverlayPropsValues(run_number, 'run_number', overlaid_run.id, runs_set_for_overlay,
-                    set_runs_set_for_overlay)
+                    set_interim_runs)
                 }}
                 withoutArrows={true}
               />
-            </CustomCol>
-            <CustomCol space="2">
+            </CustomTd>
+            <CustomTd spacing={'4'}>
               <DatasetsBrowser
                 currentRunNumber={overlaid_run.run_number as string}
                 currentDataset={overlaid_run.dataset_name as string}
                 query={query}
+                selectorWidth={'100%'}
                 setCurrentDataset={(dataset_name) => {
                   changeRunsForOverlayPropsValues(dataset_name, 'dataset_name', overlaid_run.id, runs_set_for_overlay,
-                    set_runs_set_for_overlay)
+                    set_interim_runs)
                 }}
                 withoutArrows={true}
               />
-            </CustomCol>
-            <CustomCol space="2">
+            </CustomTd>
+            <CustomTd spacing={'4'}>
               <StyledSecondaryButton
                 onClick={() => {
                   toggleOverlayDataMenu(true);
@@ -130,8 +136,8 @@ export const OverlayRuns = ({
               >
                 Change
              </StyledSecondaryButton>
-            </CustomCol>
-            <CustomCol space="2">
+            </CustomTd>
+            <CustomTd spacing={'4'}>
               <Field
                 change_value_in_reference_table={
                   change_value_in_reference_table
@@ -143,53 +149,52 @@ export const OverlayRuns = ({
                 defaultValue={overlaid_run.label as string}
                 value={overlaid_run.label}
               />
-            </CustomCol>
-            <CustomCol space="2">
+            </CustomTd>
+            <CustomTd spacing={'4'}>
               <StyledSecondaryButton
-                onClick={async () => {
-                  await remove_runs_to_set_runs_for_overlay(overlaid_run.id)
-                  const filteredPlots = filter_plots(runs_set_for_overlay, overlaid_run.id);
-                  addRun(runs_set_for_overlay)
-                  setOverlay(filteredPlots);
+                onClick={() => {
+                  remove_runs_to_set_runs_for_overlay(overlaid_run.id as string)
                 }}
                 icon={<MinusOutlined />}
-              ></StyledSecondaryButton>
-            </CustomCol>
-          </FieldsWrapper>
+              >
+              </StyledSecondaryButton>
+            </CustomTd>
+          </tr>
         ))}
-        </Col>
-      </Row>
-      <Row justify="space-between">
-        <CustomCol space="2">
-          <StyledButton
-            htmlType="submit"
-            onClick={() => {
-              const filtered: TripleProps[] = filter_valid_runs(runs_set_for_overlay);
-              changeRouter(
-                getChangedQueryParams(
-                  {
-                    overlay: overlayPosition,
-                    overlay_data: `${addOverlayData(filtered)}`,
-                  },
-                  query
-                )
-              );
-              addRun(filtered)
-            }}
-          >
-            <a>Submit</a>
-          </StyledButton>
-        </CustomCol>
-        <CustomCol space="2">
-          <StyledSecondaryButton
-            disabled={overlaid_runs.length >= 4}
-            onClick={() => {
-              toggleModal(true)
-            }}
-            icon={<PlusOutlined />}>
-            SET RUNS
+      </table>
+      <Row justify="space-between" style={{ height: 48, padding: 8 }}>
+        <CustomDiv position='fixed' display='flex'>
+          <CustomCol space="2">
+            <StyledButton
+              htmlType="submit"
+              onClick={() => {
+                const filtered: TripleProps[] = filter_valid_runs(runs_set_for_overlay);
+                changeRouter(
+                  getChangedQueryParams(
+                    {
+                      overlay: overlayPosition,
+                      overlay_data: `${addOverlayData(filtered)}`,
+                    },
+                    query
+                  )
+                );
+                addRun(filtered)
+              }}
+            >
+              <a>Submit</a>
+            </StyledButton>
+          </CustomCol>
+          <CustomCol space="2">
+            <StyledSecondaryButton
+              disabled={overlaid_runs.length >= 4}
+              onClick={() => {
+                toggleModal(true)
+              }}
+              icon={<PlusOutlined />}>
+              SET RUNS
           </StyledSecondaryButton>
-        </CustomCol>
+          </CustomCol>
+        </CustomDiv>
       </Row>
     </CustomDiv>
   );

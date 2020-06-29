@@ -8,18 +8,20 @@ import {
 } from '../../viewDetailsMenu/styledComponents';
 import { useSearch } from '../../../hooks/useSearch';
 import { QueryProps } from '../../../containers/display/interfaces';
+import { CustomCol } from '../../styledComponents';
 
 interface DatasetsBrowserProps {
   currentDataset: string;
   query: QueryProps;
   currentRunNumber: string;
   setCurrentDataset(currentDataset: string): void;
-  withoutArrows?: boolean
+  withoutArrows?: boolean;
+  selectorWidth?: string;
 }
 
 const { Option } = Select;
 
-export const DatasetsBrowser = ({ withoutArrows, setCurrentDataset, query, currentRunNumber, currentDataset }: DatasetsBrowserProps) => {
+export const DatasetsBrowser = ({ withoutArrows, setCurrentDataset,selectorWidth, query, currentRunNumber, currentDataset }: DatasetsBrowserProps) => {
   const [openSelect, setSelect] = useState(false);
   //setting  dataset field width to prev. selected dataset name field width,
   // because when spinner is shown, field becomes spinner width
@@ -38,7 +40,7 @@ export const DatasetsBrowser = ({ withoutArrows, setCurrentDataset, query, curre
   }, [])
 
   return (
-    <Row justify="center" align="middle">
+    <Row justify="center" align="middle" style={{width: selectorWidth? selectorWidth : ''}}>
       {!withoutArrows &&
 
         <Col>
@@ -53,7 +55,7 @@ export const DatasetsBrowser = ({ withoutArrows, setCurrentDataset, query, curre
           />
         </Col>
       }
-      <Col>
+      <CustomCol width={selectorWidth}>
         <div
           ref={(refElem: HTMLDivElement) => {
             if (refElem && !openSelect) {
@@ -69,7 +71,7 @@ export const DatasetsBrowser = ({ withoutArrows, setCurrentDataset, query, curre
             dropdownMatchSelectWidth={false}
             onClick={() => setSelect(!openSelect)}
             open={openSelect}
-            width={width}
+            width={selectorWidth ? selectorWidth :`${width}px`}
             showSearch={true}
           >
             {results_grouped.map((result) => (
@@ -91,7 +93,7 @@ export const DatasetsBrowser = ({ withoutArrows, setCurrentDataset, query, curre
             ))}
           </StyledSelect>
         </div>
-      </Col>
+      </CustomCol>
       {!withoutArrows &&
         <Col>
           <Button

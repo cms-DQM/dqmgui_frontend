@@ -73,5 +73,6 @@ export const changeRunsForOverlayPropsValues = (
   const index_of_line: number = runs.indexOf(current_line);
   current_line[key] = value; 
   runs[index_of_line] = current_line;
+  console.log(current_line)
   return set_action(runs as any)
 }
