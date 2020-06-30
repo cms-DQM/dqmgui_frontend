@@ -6,6 +6,7 @@ import {
   SizeProps,
   PlotProps,
   TripleProps,
+  CustomizeProps,
 } from '../containers/display/interfaces';
 import { overlayOptions } from '../components/constants';
 
@@ -25,6 +26,10 @@ export interface LeftSideState {
   openOverlayDataMenu: boolean;
   viewPlotsPosition: boolean;
   lumisection: string | number;
+  rightSideNormalize: boolean;
+  rightSideSize: SizeProps;
+  JSROOTmode: boolean;
+  customizeProps: CustomizeProps;
 }
 
 export const initialState: any = {
@@ -39,6 +44,22 @@ export const initialState: any = {
   viewPlotsPosition: viewPositions[1].value,
   proportion: plotsProportionsOptions[0].value,
   lumisection: -1,
+  rightSideNormalize: true,
+  rightSideSize: sizes.fill.size,
+  JSROOTmode: false,
+  customizeProps: {
+    xtype: '',
+    xmin: NaN,
+    xmax: NaN,
+    ytype: '',
+    ymin: NaN,
+    ymax: NaN,
+    ztype: '',
+    zmin: NaN,
+    zmax: NaN,
+    drawopts: '',
+    withref: '',
+  },
 };
 
 export interface ActionProps {
@@ -68,6 +89,24 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
   const [viewPlotsPosition, setViewPlotsPosition] = React.useState(initialState.viewPlotsPosition);
   const [proportion, setProportion] = React.useState(initialState.proportion);
   const [lumisection, setLumisection] = React.useState(initialState.lumisection);
+
+  const [rightSideSize, setRightSideSize] = useState<number>(initialState.rightSideSize);
+  const [rightSideNormalize, setRightSideNormalize] = useState<boolean>(true);
+  const [JSROOTmode, setJSROOTmode] = useState<boolean>(false);
+  const [customize, setCustomize] = useState<CustomizeProps>({
+    xtype: '',
+    xmin: NaN,
+    xmax: NaN,
+    ytype: '',
+    ymin: NaN,
+    ymax: NaN,
+    ztype: '',
+    zmin: NaN,
+    zmax: NaN,
+    drawopts: '',
+    withref: '',
+  });
+
 
   const change_value_in_reference_table = (
     value: string | number,
@@ -123,7 +162,11 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         toggleOverlayDataMenu,
         viewPlotsPosition, setViewPlotsPosition,
         proportion, setProportion,
-        lumisection, setLumisection
+        lumisection, setLumisection,
+        rightSideSize, setRightSideSize,
+        rightSideNormalize, setRightSideNormalize,
+        JSROOTmode, setJSROOTmode,
+        customize, setCustomize
       }}
     >
       {children}

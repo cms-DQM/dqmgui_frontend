@@ -17,7 +17,6 @@ import {
   getDirectories,
 } from './utils';
 import { SpinnerWrapper, Spinner } from '../search/styledComponents';
-import { RightSideStateProvider } from '../../contexts/rightSideContext';
 import { LeftSidePlots } from '../../components/plots/plot';
 import { Directories } from './directories';
 import { NoResultsFound } from '../search/noResultsFound';
@@ -104,7 +103,6 @@ const DiplayFolder: FC<FolderProps> = ({
             selected_plots={selected_plots.length > 0}
           />)}
       </Row>
-      <RightSideStateProvider>
         <>
           <DivWrapper selectedPlots={selected_plots.length > 0} position={viewPlotsPosition}>
             <Wrapper zoomed={selected_plots.length > 0}
@@ -151,7 +149,6 @@ const DiplayFolder: FC<FolderProps> = ({
             )}
           </DivWrapper>
         </>
-      </RightSideStateProvider>
     </>
   );
 };

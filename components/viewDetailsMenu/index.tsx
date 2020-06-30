@@ -10,7 +10,6 @@ import { formTriples } from './utils';
 import { StyledCollapse } from './styledComponents';
 import { CutomFormItem, CustomDiv } from '../styledComponents';
 import { store } from '../../contexts/leftSideContext';
-import { store as rightSideContext } from '../../contexts/rightSideContext';
 
 const { Panel } = Collapse;
 
@@ -24,12 +23,7 @@ export const ViewDetailsMenu = ({ selected_plots, setCollapseHeight }: ViewDetai
   const query: QueryProps = router.query;
 
   const globalState = useContext(store);
-  const globalStateRightSide = useContext(rightSideContext);
-  const { setJSROOTmode } = globalStateRightSide
-  const rightSideSize = globalStateRightSide.size
-  const setRightSideSize = globalStateRightSide.setSize
-
-  const { size, setSize, setOverlay } = globalState;
+  const { size, setSize, setOverlay,setJSROOTmode, rightSideSize, setRightSideSize } = globalState;
 
   useEffect(() => {
     if (query) {

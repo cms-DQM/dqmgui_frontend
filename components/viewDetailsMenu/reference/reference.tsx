@@ -18,13 +18,6 @@ import { OverlayRuns } from './overlayRuns';
 import FormItem from 'antd/lib/form/FormItem';
 import { store } from '../../../contexts/leftSideContext';
 
-const isAllChecked = (triples: TripleProps[]) => {
-  const checks: any[] = triples.map((triple: TripleProps) => {
-    return triple.checked;
-  });
-  return checks.includes(false) ? false : true;
-};
-
 export const Reference = () => {
   const [selectedTriple, setTriple] = useState<TripleProps>({});
 
@@ -71,7 +64,7 @@ export const Reference = () => {
       <OverlayRuns
         overlaid_runs={triples}
         query={query}
-        setTriple={setTriple} />
+        setTriple={setTriple}/>
     </StyledDiv>
   );
 };

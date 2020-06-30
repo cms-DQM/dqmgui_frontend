@@ -81,26 +81,28 @@ export const SetRunsModal = ({ open, toggleModal, overlaid_runs, set_runs_set_fo
         </StyledButton>,
       ]}>
       <div>
-        <SelectedRunsTable>
-          <thead>
-            <SelectedRunsTr>
-              <SelectedRunsTh>Nr.</SelectedRunsTh>
-              <SelectedRunsTh>Run</SelectedRunsTh>
-              <SelectedRunsTh>Dataset name</SelectedRunsTh>
-            </SelectedRunsTr>
-          </thead>
-          <tbody>
-            {overlaid_and_selected_runs.map((run: FolderPathQuery, index: number) => {
-              return (
-                <SelectedRunsTr>
-                  <SelectedRunsTd>{index + 1}.</SelectedRunsTd>
-                  <SelectedRunsTd>{run.run_number}</SelectedRunsTd>
-                  <SelectedRunsTd>{run.dataset_name}</SelectedRunsTd>
-                </SelectedRunsTr>
-              )
-            })}
-          </tbody>
-        </SelectedRunsTable>
+        {overlaid_and_selected_runs.length > 0 &&
+          <SelectedRunsTable>
+            <thead>
+              <SelectedRunsTr>
+                <SelectedRunsTh>Nr.</SelectedRunsTh>
+                <SelectedRunsTh>Run</SelectedRunsTh>
+                <SelectedRunsTh>Dataset name</SelectedRunsTh>
+              </SelectedRunsTr>
+            </thead>
+            <tbody>
+              {overlaid_and_selected_runs.map((run: FolderPathQuery, index: number) => {
+                return (
+                  <SelectedRunsTr>
+                    <SelectedRunsTd>{index + 1}.</SelectedRunsTd>
+                    <SelectedRunsTd>{run.run_number}</SelectedRunsTd>
+                    <SelectedRunsTd>{run.dataset_name}</SelectedRunsTd>
+                  </SelectedRunsTr>
+                )
+              })}
+            </tbody>
+          </SelectedRunsTable>
+        }
         <div style={{ padding: 8 }}>
           <Nav
             handler={navigationHandler}
