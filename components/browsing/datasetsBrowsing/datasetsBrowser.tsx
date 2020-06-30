@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col, Select, Row, Spin, Button } from 'antd';
 import { CaretRightFilled, CaretLeftFilled } from '@ant-design/icons';
 
@@ -8,17 +8,20 @@ import {
 } from '../../viewDetailsMenu/styledComponents';
 import { useSearch } from '../../../hooks/useSearch';
 import { QueryProps } from '../../../containers/display/interfaces';
+import { CustomCol } from '../../styledComponents';
 
 interface DatasetsBrowserProps {
   currentDataset: string;
   query: QueryProps;
   currentRunNumber: string;
   setCurrentDataset(currentDataset: string): void;
+  withoutArrows?: boolean;
+  selectorWidth?: string;
 }
 
 const { Option } = Select;
 
-export const DatasetsBrowser = ({ setCurrentDataset, query, currentRunNumber }: DatasetsBrowserProps) => {
+export const DatasetsBrowser = ({ withoutArrows, setCurrentDataset,selectorWidth, query, currentRunNumber, currentDataset }: DatasetsBrowserProps) => {
   const [openSelect, setSelect] = useState(false);
   //setting  dataset field width to prev. selected dataset name field width,
   // because when spinner is shown, field becomes spinner width
@@ -32,20 +35,26 @@ export const DatasetsBrowser = ({ setCurrentDataset, query, currentRunNumber }: 
   const query_dataset = query.dataset_name ? query.dataset_name : ''
   const currentDatasetNameIndex = datasets.indexOf(query_dataset);
 
+  useEffect(() => {
+    setCurrentDataset(currentDataset)
+  }, [])
+
   return (
-    <Row justify="center" align="middle">
-      <Col>
-        <Button
-          disabled={!datasets[currentDatasetNameIndex - 1]}
-          type="link"
-          icon={<CaretLeftFilled />}
-          onClick={() => {
-            setCurrentDataset(datasets[currentDatasetNameIndex - 1])
-            setWidth(undefined);
-          }}
-        />
-      </Col>
-      <Col>
+    <Row justify="center" align="middle" style={{width: selectorWidth? selectorWidth : ''}}>
+      {!withoutArrows &&
+        <Col>
+          <Button
+            disabled={!datasets[currentDatasetNameIndex - 1]}
+            type="link"
+            icon={<CaretLeftFilled />}
+            onClick={() => {
+              setCurrentDataset(datasets[currentDatasetNameIndex - 1])
+              setWidth(undefined);
+            }}
+          />
+        </Col>
+      }
+      <CustomCol width={selectorWidth}>
         <div
           ref={(refElem: HTMLDivElement) => {
             if (refElem && !openSelect) {
@@ -57,11 +66,11 @@ export const DatasetsBrowser = ({ setCurrentDataset, query, currentRunNumber }: 
             onChange={(e: any) => {
               setCurrentDataset(e)
             }}
-            value={query_dataset}
+            value={currentDataset}
             dropdownMatchSelectWidth={false}
             onClick={() => setSelect(!openSelect)}
             open={openSelect}
-            width={width}
+            width={selectorWidth ? selectorWidth :`${width}px`}
             showSearch={true}
           >
             {results_grouped.map((result) => (
@@ -83,18 +92,20 @@ export const DatasetsBrowser = ({ setCurrentDataset, query, currentRunNumber }: 
             ))}
           </StyledSelect>
         </div>
-      </Col>
-      <Col>
-        <Button
-          type="link"
-          disabled={!datasets[currentDatasetNameIndex + 1]}
-          icon={<CaretRightFilled />}
-          onClick={() => {
-            setCurrentDataset(datasets[currentDatasetNameIndex + 1])
-            setWidth(undefined);
-          }}
-        />
-      </Col>
+      </CustomCol>
+      {!withoutArrows &&
+        <Col>
+          <Button
+            type="link"
+            disabled={!datasets[currentDatasetNameIndex + 1]}
+            icon={<CaretRightFilled />}
+            onClick={() => {
+              setCurrentDataset(datasets[currentDatasetNameIndex + 1])
+              setWidth(undefined);
+            }}
+          />
+        </Col>
+      }
     </Row>
   );
 };

@@ -29,26 +29,20 @@ export const LumesectionBrowser = ({ color, currentLumisection, handler, current
   //getting all run lumisections 
   const { data, isLoading, errors } = useRequest(getLumisections({
     run_number: currentRunNumber,
-    dataset_name: currentDataset, lumi: -1
+    dataset_name: currentDataset, lumi: 0
   }), {}, [currentRunNumber, currentDataset])
-
-  const router = useRouter();
-  const query: QueryProps = router.query;
 
   const all_runs_with_lumi = data ? data.data : []
   //extracting just lumisections from data object
   const lumisections: OptionProps[] = all_runs_with_lumi.length > 0 ? all_runs_with_lumi.map((run: AllRunsWithLumiProps) => {
-    return {label: run.lumi.toString(), value: run.lumi}
+    return { label: run.lumi.toString(), value: run.lumi }
   }) : []
 
-  //-1 - it represents ALL lumisections. If none lumisection is selected, then plots which are displaid 
+  //0 - it represents ALL lumisections. If none lumisection is selected, then plots which are displaid 
   //consist of ALL lumisections. 
-  //*TO DO** change -1 to ALL
-  lumisections.unshift({label: 'All', value: -1})
+  lumisections.unshift({ label: 'All', value: 0 })
 
-  //if lumisection is not setted to url, we set lumisection to -1
   const lumiValues = lumisections.map((lumi: OptionProps) => lumi.value)
-  useChangeRouter({ lumi: lumiValues[0] }, [], !query.lumi)
   const currentLumiIndex = lumiValues.indexOf(currentLumisection);
 
   return (

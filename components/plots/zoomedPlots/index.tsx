@@ -6,7 +6,6 @@ import {
 
 import { ZoomedPlots as ZoomedOverlaidPlots } from './zoomedOverlayPlots';
 import { ZoomedPlots as ZoomedPlotsWithoutOverlay } from './zoomedPlots';
-import { ViewDetailsMenu } from './viewDetails';
 import { useRouter } from 'next/router';
 import { store } from '../../../contexts/leftSideContext';
 
@@ -29,7 +28,6 @@ export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
   const overlay_plot = query.overlay_data;
   return (
     <div style={{ width: '100%', overflow: 'scroll' }} ref={rightSideRef}>
-      <ViewDetailsMenu />
       {overlay_plot ? (
         <ZoomedOverlaidPlots selected_plots={selected_plots} />
       ) : (

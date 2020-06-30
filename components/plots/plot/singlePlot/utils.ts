@@ -7,7 +7,6 @@ import {
 import cleanDeep from 'clean-deep';
 
 import { LeftSideState } from '../../../../contexts/leftSideContext';
-import { RightSideState } from '../../../../contexts/rightSideContext';
 import { formTriples } from '../../../viewDetailsMenu/utils';
 import {
   changeRouter,
@@ -49,25 +48,25 @@ export const addOverlayData = (triples: TripleProps[] | undefined) => {
 };
 
 export const FormatParamsForAPI = (
-  globalState: LeftSideState & RightSideState,
+  globalState: LeftSideState,
   query: QueryProps,
   plotName: string,
-  path?: string
+  path?: string,
+  zoomed?: boolean,
 ): ParamsForApiProps => {
   return {
     run_number: query.run_number ? query.run_number : '',
     dataset_name: query.dataset_name ? query.dataset_name : '',
     folders_path: path,
     plot_name: plotName,
-    height: globalState.size.h,
-    width: globalState.size.w,
+    height: zoomed ? globalState.rightSideSize.h :  globalState.size.h,
+    width: zoomed ? globalState.rightSideSize.w :  globalState.size.w,
     customizeProps: globalState.customizeProps,
     stats: globalState.stats,
     overlay: query.overlay,
     overlay_plot: query.overlay_data ? formTriples(query.overlay_data) : [],
     normalize: query.normalize ? query.normalize : 'False',
-    lumi: query.lumi === '-1' ? '' : query.lumi,
-
+    lumi: query.lumi,
   };
 };
 

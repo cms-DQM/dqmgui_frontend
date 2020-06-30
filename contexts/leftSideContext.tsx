@@ -6,13 +6,13 @@ import {
   SizeProps,
   PlotProps,
   TripleProps,
+  CustomizeProps,
 } from '../containers/display/interfaces';
 import { overlayOptions } from '../components/constants';
 
 export interface LeftSideStateProviderProps {
   children: ReactElement;
 }
-const id = uuidv4();
 
 export interface LeftSideState {
   size: SizeProps;
@@ -26,6 +26,10 @@ export interface LeftSideState {
   openOverlayDataMenu: boolean;
   viewPlotsPosition: boolean;
   lumisection: string | number;
+  rightSideNormalize: boolean;
+  rightSideSize: SizeProps;
+  JSROOTmode: boolean;
+  customizeProps: CustomizeProps;
 }
 
 export const initialState: any = {
@@ -35,11 +39,27 @@ export const initialState: any = {
   overlayPosition: overlayOptions[0].value,
   overlay: undefined,
   overlayPlots: undefined,
-  triples: [ ],
+  triples: [],
   openOverlayDataMenu: false,
   viewPlotsPosition: viewPositions[1].value,
   proportion: plotsProportionsOptions[0].value,
   lumisection: -1,
+  rightSideNormalize: true,
+  rightSideSize: sizes.fill.size,
+  JSROOTmode: false,
+  customizeProps: {
+    xtype: '',
+    xmin: NaN,
+    xmax: NaN,
+    ytype: '',
+    ymin: NaN,
+    ymax: NaN,
+    ztype: '',
+    zmin: NaN,
+    zmax: NaN,
+    drawopts: '',
+    withref: '',
+  },
 };
 
 export interface ActionProps {
@@ -70,6 +90,24 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
   const [proportion, setProportion] = React.useState(initialState.proportion);
   const [lumisection, setLumisection] = React.useState(initialState.lumisection);
 
+  const [rightSideSize, setRightSideSize] = useState<number>(initialState.rightSideSize);
+  const [rightSideNormalize, setRightSideNormalize] = useState<boolean>(true);
+  const [JSROOTmode, setJSROOTmode] = useState<boolean>(false);
+  const [customize, setCustomize] = useState<CustomizeProps>({
+    xtype: '',
+    xmin: NaN,
+    xmax: NaN,
+    ytype: '',
+    ymin: NaN,
+    ymax: NaN,
+    ztype: '',
+    zmin: NaN,
+    zmax: NaN,
+    drawopts: '',
+    withref: '',
+  });
+
+
   const change_value_in_reference_table = (
     value: string | number,
     key: string,
@@ -85,19 +123,8 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
     setTriples(copy);
   };
 
-  const addRun = (run_from_query: TripleProps[]) => {
-    const copy: TripleProps[] = [...triples];
-    const id = uuidv4();
-    const newRun = {
-      id: id,
-      checked: true,
-      run_number: '',
-      dataset_name: '',
-      label: '',
-    };
-    copy.push(newRun);
-    const runs = run_from_query ? run_from_query : copy
-    setTriples(runs);
+  const addRun = (run_from_query?: TripleProps[]) => {
+    setTriples(run_from_query);
   };
 
   const removeRun = (id: string | number | boolean) => {
@@ -135,7 +162,11 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         toggleOverlayDataMenu,
         viewPlotsPosition, setViewPlotsPosition,
         proportion, setProportion,
-        lumisection, setLumisection
+        lumisection, setLumisection,
+        rightSideSize, setRightSideSize,
+        rightSideNormalize, setRightSideNormalize,
+        JSROOTmode, setJSROOTmode,
+        customize, setCustomize
       }}
     >
       {children}

@@ -6,6 +6,7 @@ import { SizeProps, OptionProps } from '../containers/display/interfaces';
 interface SizeChangerProps {
   setSize(value: SizeProps): any;
   currentValue: SizeProps;
+  disabled?: boolean;
 }
 
 const formatOptions = () => {
@@ -17,13 +18,14 @@ const formatOptions = () => {
   return options;
 };
 
-export const SizeChanger = ({ setSize, currentValue }: SizeChangerProps) => {
+export const SizeChanger = ({ setSize, currentValue, disabled }: SizeChangerProps) => {
   useEffect(() => {
     return () => setSize(currentValue);
   }, []);
 
   return (
     <RadioButtonsGroup
+      disabled={disabled}
       current_value={currentValue}
       getOptionLabel={(option: OptionProps) => option.label}
       getOptionValue={(option: OptionProps) => option.value}

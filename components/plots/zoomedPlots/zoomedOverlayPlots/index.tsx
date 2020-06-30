@@ -7,7 +7,7 @@ import { ZoomedOverlaidPlot } from './zoomedOverlaidPlot';
 import { ZoomedOverlaidJSROOTPlot } from './zoomedOverlaidJSROOTPlot';
 import { ZoomedPlotsWrapper } from '../../../styledComponents';
 import { FormatParamsForAPI } from '../../plot/singlePlot/utils';
-import { store } from '../../../../contexts/rightSideContext';
+import { store } from '../../../../contexts/leftSideContext';
 import { useRouter } from 'next/router';
 
 interface ZoomedPlotsProps {
@@ -18,7 +18,6 @@ export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
   const globalState = useContext(store);
   const router = useRouter();
   const query: QueryProps = router.query;
-
   return (
     <ZoomedPlotsWrapper>
       {selected_plots.map((selected_plot: PlotDataProps) => {
@@ -26,7 +25,8 @@ export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
           globalState,
           query,
           selected_plot.name,
-          selected_plot.path
+          selected_plot.path,
+          true
         );
         if (globalState.JSROOTmode) {
           return (

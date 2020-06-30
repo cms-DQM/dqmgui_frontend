@@ -45,6 +45,12 @@ export const StyledSecondaryButton = styled(Button)`
   border-radius: 50px;
   &:hover {
     background-color: ${theme.colors.primary.light} !important;
+  };
+  &:disabled {
+    opacity: 0.5;
+  };
+  &[disabled]:hover{
+    background-color: ${theme.colors.primary.main} !important;
   }
 `;
 
@@ -156,7 +162,10 @@ export const StyledSuccessIcon = styled(CheckCircleFilled)`
 export const StyledRadio = styled(Radio) <{ color?: string }>`
   color: ${(props) => (props.color ? props.color : theme.colors.common.black)};
 `;
-export const CutomFormItem = styled(FormItem) <{ color?: string }>`
+export const CutomFormItem = styled(FormItem) <{ color?: string; width?: string; display?: string; justifycontent?: string }>`
+  width: ${(props) => props.width ? props.width : ''};
+  display: ${(props) => props.display ? props.display : ''};
+  justifycontent: ${(props) => props.justifycontent ? props.justifycontent : ''};
   .ant-form-item-label > label {
     color: ${(props) =>
     props.color ? props.color : theme.colors.common.black};
@@ -189,6 +198,7 @@ export const CustomCol = styled(Col) <{
   justifycontent?: string;
   space?: string;
   alignitems?: string;
+  width?: string;
 }>`
   display: ${(props) => (props.display ? props.display : '')};
   justify-content: ${(props) =>
@@ -197,6 +207,7 @@ export const CustomCol = styled(Col) <{
     props.space ? `calc(${theme.space.padding}*${props.space})` : ''};
   align-items: ${(props) => (props.alignitems ? props.alignitems : '')};
   height: fit-content;
+  width: ${(props) => props.width ? props.width : ''};
 `;
 export const CustomDiv = styled(Col) <{
   display?: string;
@@ -207,6 +218,7 @@ export const CustomDiv = styled(Col) <{
   width?: string;
   height?: string;
   hover?: string;
+  position?: string;
 }>`
   display: ${(props) => (props.display ? props.display : '')};
   justify-content: ${(props) =>
@@ -218,8 +230,16 @@ export const CustomDiv = styled(Col) <{
   width: ${(props) => (props.fullwidth === 'true' ? '100vw' : 'fit-content')};
   width: ${(props) => (props.width ? props.width : '')};
   height: ${(props) => (props.height ? props.height : '')};
+  position:  ${(props) => (props.position ? props.position : '')};
   &:hover {
     color: ${(props) =>
     props.hover ? theme.colors.primary.main : ''}!important;
-  }
-`;
+  };`;
+
+export const CustomTd = styled.td<{ spacing?: string }>`
+  padding: ${(props) => props.spacing ? `${props.spacing}px` : ''}
+`
+export const CustomForm = styled(Form) <{ justifycontent?: string, width?: string }>`
+  justify-content: ${(props) => props.justifycontent ? props.justifycontent : ''};
+  width: ${(props) => props.width ? props.width : ''};
+`

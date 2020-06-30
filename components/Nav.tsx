@@ -1,7 +1,7 @@
 import React, { ChangeEvent, Dispatch, useEffect, useState } from 'react';
 import { Form } from 'antd';
 
-import { StyledFormItem, StyledInput } from './styledComponents';
+import { StyledFormItem, StyledInput, CustomForm } from './styledComponents';
 import { SearchButton } from './searchButton';
 import { QuestionButton } from './helpButton';
 
@@ -51,10 +51,11 @@ export const Nav = ({
 
   return (
     <div>
-      <Form
+      <CustomForm
         form={form}
         layout={'inline'}
-        style={{ justifyContent: 'center', width: 'max-content' }}
+        justifycontent= 'center'
+        width ='max-content'
         {...layout}
         name={`search_form${type}`}
         className="fieldLabel"
@@ -100,7 +101,7 @@ export const Nav = ({
             }
           />
         </Form.Item>
-      </Form>
+      </CustomForm>
     </div>
   );
 };

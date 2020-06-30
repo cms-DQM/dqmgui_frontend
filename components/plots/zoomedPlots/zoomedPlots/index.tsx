@@ -7,7 +7,7 @@ import { ZoomedPlot } from './zoomedPlot';
 import { ZoomedJSROOTPlot } from './zoomedJSROOTPlot';
 import { ZoomedPlotsWrapper } from '../../../styledComponents';
 import { useRouter } from 'next/router';
-import { store } from '../../../../contexts/rightSideContext';
+import { store } from '../../../../contexts/leftSideContext';
 import { FormatParamsForAPI } from '../../plot/singlePlot/utils';
 
 interface ZoomedPlotsProps {
@@ -26,7 +26,8 @@ export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
           globalState,
           query,
           selected_plot.name,
-          selected_plot.path
+          selected_plot.path,
+          true
         );
 
         if (globalState.JSROOTmode) {

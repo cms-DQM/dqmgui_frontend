@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Form from 'antd/lib/form/Form';
 
 import { WrapperDiv } from '../../containers/display/styledComponents';
@@ -70,6 +70,7 @@ export const Browser = () => {
           />
         </WrapperDiv> */}
         <StyledFormItem
+        labelcolor="white"
           label={
             <DropdownMenu
               options={dataSetSelections}

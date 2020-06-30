@@ -35,11 +35,11 @@ export const FullWidthRow = styled(Row)`
 `;
 export const StyledSelect = styled(Select) <{
   selected?: string;
-  width?: number | undefined;
+  width?: string | undefined;
 }>`
   .ant-select-selector {
     border-radius: 12px !important;
-    width: ${(props) => (props.width ? `${props.width}px` : '')} !important;
+    width: ${(props) => (props.width ? `${props.width}` : '')} !important;
     font-weight: ${(props) =>
     props.selected === 'selected' ? 'bold' : 'inherit'} !important;
   }
@@ -57,3 +57,20 @@ export const OptionParagraph = styled.div`
   justify-content: center;
   width: 100%;
 `;
+
+export const SelectedRunsTable = styled.table`
+  text-align: center;
+`
+export const SelectedRunsTr = styled.tr`
+  border: 1px solid ${theme.colors.primary.main}; 
+`
+export const SelectedRunsTh = styled.th`
+  width: 30%; 
+  border-right: 1px solid ${theme.colors.primary.main};
+  padding: 4px;
+  background: ${theme.colors.primary.light};
+`
+export const SelectedRunsTd = styled.td`
+  border-right: 1px solid ${theme.colors.primary.main};
+  padding: 4px;
+`

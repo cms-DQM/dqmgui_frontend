@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { Col } from 'antd';
 
 import {
@@ -11,21 +11,12 @@ import {
   CustomRow,
   CustomCol,
 } from '../../styledComponents';
-import { formTriples } from '../utils';
 import { useRouter } from 'next/router';
 import { CustomModal } from '../search';
 import { OverlayOptions } from './overlayOptions';
 import { OverlayRuns } from './overlayRuns';
 import FormItem from 'antd/lib/form/FormItem';
-import { useChangeRouter } from '../../../hooks/useChangeRouter';
 import { store } from '../../../contexts/leftSideContext';
-
-const isAllChecked = (triples: TripleProps[]) => {
-  const checks: any[] = triples.map((triple: TripleProps) => {
-    return triple.checked;
-  });
-  return checks.includes(false) ? false : true;
-};
 
 export const Reference = () => {
   const [selectedTriple, setTriple] = useState<TripleProps>({});
@@ -34,9 +25,7 @@ export const Reference = () => {
   const {
     normalize,
     setNormalize,
-    addRun,
     triples,
-    change_value_in_reference_table,
   } = globalState;
 
   const checkedValue = normalize === 'True' ? true : false;
@@ -45,37 +34,10 @@ export const Reference = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
 
-  useEffect(() => {
-    const overlayTriples = formTriples(
-      query.overlay_data ? query.overlay_data : ''
-    );
-    if (overlayTriples) {
-      //adding overlaid runs from query
-      addRun(overlayTriples)
-    }
-  }, []);
-
-  useChangeRouter({ normalize: normalize }, [normalize as any], true);
   return (
     <StyledDiv>
       <CustomRow>
         <CustomCol space={'2'}>
-          <FormItem name="CustomizeAll">
-            <CustomCheckbox
-              checked={isAllChecked(triples)}
-              onChange={(e: any) => {
-                triples.map((triple: TripleProps) => {
-                  change_value_in_reference_table(
-                    triple.cheked ? triple.cheked : e.target.checked,
-                    'checked',
-                    triple.id
-                  );
-                });
-              }}
-            >
-              Check All
-            </CustomCheckbox>
-          </FormItem>
         </CustomCol>
         <CustomCol space={'2'}>
           <FormItem name="OverlayPosition" label="Position:">
@@ -99,7 +61,10 @@ export const Reference = () => {
         <Col></Col>
       </CustomRow>
       <CustomModal id={selectedTriple.id} />
-      <OverlayRuns triples={triples} query={query} setTriple={setTriple} />
+      <OverlayRuns
+        overlaid_runs={triples}
+        query={query}
+        setTriple={setTriple}/>
     </StyledDiv>
   );
 };

@@ -1,7 +1,6 @@
 import * as React from 'react'
-import { Col, Row, Tooltip, Button } from 'antd'
+import { Col, Row} from 'antd'
 import Form from 'antd/lib/form/Form'
-import { InfoCircleOutlined } from '@ant-design/icons';
 
 import { ViewPosition } from './viewPosition'
 import { StyledModal } from '../viewDetailsMenu/styledComponents'
@@ -9,19 +8,12 @@ import { StyledFormItem, CustomRow, StyledButton } from '../styledComponents'
 import { store } from '../../contexts/leftSideContext'
 import { PlotsProportion } from './plotsRatio'
 import { theme } from '../../styles/theme';
+import { info } from '../notifications/infoMessages'
 
 interface SettingsModalProps {
   openSettings: boolean;
   toggleSettingsModal(value: boolean): void;
   isAnyPlotSelected: boolean;
-}
-
-const info = (disabled: boolean) => {
-  if (disabled) {
-    return (<Tooltip title="At least on plot must be selected">
-      <InfoCircleOutlined />
-    </Tooltip>)
-  } return <></>
 }
 
 export const SettingsModal = ({ openSettings, toggleSettingsModal, isAnyPlotSelected }: SettingsModalProps) => {
