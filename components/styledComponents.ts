@@ -45,6 +45,12 @@ export const StyledSecondaryButton = styled(Button)`
   border-radius: 50px;
   &:hover {
     background-color: ${theme.colors.primary.light} !important;
+  };
+  &:disabled {
+    opacity: 0.5;
+  };
+  &[disabled]:hover{
+    background-color: ${theme.colors.primary.main} !important;
   }
 `;
 

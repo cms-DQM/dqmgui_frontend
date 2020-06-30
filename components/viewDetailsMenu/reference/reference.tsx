@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { Col } from 'antd';
 
 import {
@@ -11,7 +11,6 @@ import {
   CustomRow,
   CustomCol,
 } from '../../styledComponents';
-import { formTriples } from '../utils';
 import { useRouter } from 'next/router';
 import { CustomModal } from '../search';
 import { OverlayOptions } from './overlayOptions';
@@ -33,9 +32,7 @@ export const Reference = () => {
   const {
     normalize,
     setNormalize,
-    addRun,
     triples,
-    change_value_in_reference_table,
   } = globalState;
 
   const checkedValue = normalize === 'True' ? true : false;
@@ -44,37 +41,10 @@ export const Reference = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
 
-  useEffect(() => {
-    const overlayTriples = formTriples(
-      query.overlay_data ? query.overlay_data : ''
-    );
-    if (overlayTriples) {
-      console.log(overlayTriples)
-      //adding overlaid runs from query
-      addRun(overlayTriples)
-    }
-  }, []);
-
   return (
     <StyledDiv>
       <CustomRow>
         <CustomCol space={'2'}>
-          <FormItem name="CustomizeAll">
-            <CustomCheckbox
-              checked={isAllChecked(triples)}
-              onChange={(e: any) => {
-                triples.map((triple: TripleProps) => {
-                  change_value_in_reference_table(
-                    triple.cheked ? triple.cheked : e.target.checked,
-                    'checked',
-                    triple.id
-                  );
-                });
-              }}
-            >
-              Check All
-            </CustomCheckbox>
-          </FormItem>
         </CustomCol>
         <CustomCol space={'2'}>
           <FormItem name="OverlayPosition" label="Position:">

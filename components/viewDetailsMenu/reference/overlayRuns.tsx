@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
-import { Checkbox, Row } from 'antd';
+import { Checkbox, Row, Tooltip } from 'antd';
 import { addOverlayData } from '../../plots/plot/singlePlot/utils';
 
 import {
@@ -15,7 +15,7 @@ import {
   CustomTd,
 } from '../../styledComponents';
 import { Field } from './field';
-import { filter_plots, filter_valid_runs, changeRunsForOverlayPropsValues } from '../utils';
+import { filter_valid_runs, changeRunsForOverlayPropsValues, getDisabledButtonTitle } from '../utils';
 import { store } from '../../../contexts/leftSideContext';
 import {
   changeRouter,
@@ -38,21 +38,17 @@ export const OverlayRuns = ({
 }: OverlayRunsProps) => {
   const globalState = useContext(store);
   const {
-    setOverlay,
     overlayPosition,
     change_value_in_reference_table,
     addRun,
     toggleOverlayDataMenu,
     removeRun,
+    overlayPlots,
   } = globalState;
 
   const [open, toggleModal] = useState(false)
-  const [runs_set_for_overlay, set_runs_set_for_overlay] = React.useState<TripleProps[]>([...overlaid_runs])
+  const [runs_set_for_overlay, set_runs_set_for_overlay] = React.useState<TripleProps[]>(overlayPlots)
   const [interim_run, set_interim_runs] = React.useState<TripleProps[]>([])
-
-  // useEffect((() => {
-  //   set_runs_set_for_overlay([...overlaid_runs])
-  // }), [overlaid_runs])
 
   useEffect((() => {
     set_runs_set_for_overlay([...interim_run])
@@ -185,14 +181,16 @@ export const OverlayRuns = ({
             </StyledButton>
           </CustomCol>
           <CustomCol space="2">
-            <StyledSecondaryButton
-              disabled={overlaid_runs.length >= 4}
-              onClick={() => {
-                toggleModal(true)
-              }}
-              icon={<PlusOutlined />}>
-              SET RUNS
+            <Tooltip title={getDisabledButtonTitle(overlaid_runs.length >= 4 || runs_set_for_overlay.length >= 4)}>
+              <StyledSecondaryButton
+                disabled={overlaid_runs.length >= 4 || runs_set_for_overlay.length >= 4}
+                onClick={() => {
+                  toggleModal(true)
+                }}
+                icon={<PlusOutlined />}>
+                SET RUNS
           </StyledSecondaryButton>
+            </Tooltip>
           </CustomCol>
         </CustomDiv>
       </Row>

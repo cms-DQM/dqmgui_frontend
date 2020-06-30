@@ -53,7 +53,7 @@ export const getDatasetParts = (datasets: string[], part: string) => {
 };
 
 export const concatArrays = (arrays: any[]) => {
-  let  concatedArray: any = []
+  let concatedArray: any = []
   arrays.forEach(array => {
     concatedArray = concatedArray.concat(array)
   });
@@ -71,8 +71,15 @@ export const changeRunsForOverlayPropsValues = (
     (line: TripleProps) => line.id === id
   )[0];
   const index_of_line: number = runs.indexOf(current_line);
-  current_line[key] = value; 
+  current_line[key] = value;
   runs[index_of_line] = current_line;
-  console.log(current_line)
   return set_action(runs as any)
+}
+
+export const getDisabledButtonTitle = (overlaidPlotsLimisIsReached: boolean) => {
+  const title = "Maximum 4 plots could be overlaid!"
+  if (overlaidPlotsLimisIsReached) {
+    return title
+  }
+  return ''
 }
