@@ -70,6 +70,7 @@ export const Browser = () => {
           />
         </WrapperDiv> */}
         <StyledFormItem
+        labelcolor="white"
           label={
             <DropdownMenu
               options={dataSetSelections}

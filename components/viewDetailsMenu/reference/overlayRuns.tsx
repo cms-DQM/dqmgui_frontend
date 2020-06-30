@@ -47,7 +47,7 @@ export const OverlayRuns = ({
   } = globalState;
 
   const [open, toggleModal] = useState(false)
-  const [runs_set_for_overlay, set_runs_set_for_overlay] = React.useState<TripleProps[]>(overlayPlots)
+  const [runs_set_for_overlay, set_runs_set_for_overlay] = React.useState<TripleProps[]>(overlayPlots ? overlayPlots : [])
   const [interim_run, set_interim_runs] = React.useState<TripleProps[]>([])
 
   useEffect((() => {

@@ -42,7 +42,6 @@ export const DatasetsBrowser = ({ withoutArrows, setCurrentDataset,selectorWidth
   return (
     <Row justify="center" align="middle" style={{width: selectorWidth? selectorWidth : ''}}>
       {!withoutArrows &&
-
         <Col>
           <Button
             disabled={!datasets[currentDatasetNameIndex - 1]}

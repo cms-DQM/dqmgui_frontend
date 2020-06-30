@@ -162,7 +162,10 @@ export const StyledSuccessIcon = styled(CheckCircleFilled)`
 export const StyledRadio = styled(Radio) <{ color?: string }>`
   color: ${(props) => (props.color ? props.color : theme.colors.common.black)};
 `;
-export const CutomFormItem = styled(FormItem) <{ color?: string }>`
+export const CutomFormItem = styled(FormItem) <{ color?: string; width?: string; display?: string; justifycontent?: string }>`
+  width: ${(props) => props.width ? props.width : ''};
+  display: ${(props) => props.display ? props.display : ''};
+  justifycontent: ${(props) => props.justifycontent ? props.justifycontent : ''};
   .ant-form-item-label > label {
     color: ${(props) =>
     props.color ? props.color : theme.colors.common.black};

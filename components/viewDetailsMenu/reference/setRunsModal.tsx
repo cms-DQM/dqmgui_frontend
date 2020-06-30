@@ -1,8 +1,7 @@
 import * as React from 'react'
 import { v4 as uuidv4 } from 'uuid';
-import { Row, Col } from 'antd'
 
-import { StyledModal, ResultsWrapper } from '../styledComponents'
+import { StyledModal, ResultsWrapper, SelectedRunsTh, SelectedRunsTr, SelectedRunsTd, SelectedRunsTable } from '../styledComponents'
 import { StyledButton } from '../../styledComponents'
 import { theme } from '../../../styles/theme'
 import { TripleProps, FolderPathQuery } from '../../../containers/display/interfaces'
@@ -82,18 +81,27 @@ export const SetRunsModal = ({ open, toggleModal, overlaid_runs, set_runs_set_fo
         </StyledButton>,
       ]}>
       <div>
-        {overlaid_and_selected_runs.map((run: FolderPathQuery, index: number) => {
-          return (
-            <Row>
-              <Col>{index + 1}.</Col>
-              <Col>Run: </Col>
-              <Col>{run.run_number}</Col>
-              <Col>Dataset name: </Col>
-              <Col>{run.dataset_name}</Col>
-            </Row>
-          )
-        })}
-        <div>
+        <SelectedRunsTable>
+          <thead>
+            <SelectedRunsTr>
+              <SelectedRunsTh>Nr.</SelectedRunsTh>
+              <SelectedRunsTh>Run</SelectedRunsTh>
+              <SelectedRunsTh>Dataset name</SelectedRunsTh>
+            </SelectedRunsTr>
+          </thead>
+          <tbody>
+            {overlaid_and_selected_runs.map((run: FolderPathQuery, index: number) => {
+              return (
+                <SelectedRunsTr>
+                  <SelectedRunsTd>{index + 1}.</SelectedRunsTd>
+                  <SelectedRunsTd>{run.run_number}</SelectedRunsTd>
+                  <SelectedRunsTd>{run.dataset_name}</SelectedRunsTd>
+                </SelectedRunsTr>
+              )
+            })}
+          </tbody>
+        </SelectedRunsTable>
+        <div style={{ padding: 8 }}>
           <Nav
             handler={navigationHandler}
             setRunNumber={setSearchRunNumber}
