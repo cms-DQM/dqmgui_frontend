@@ -9,7 +9,7 @@ import { root_url } from '../config/config';
 
 interface ReturnRequest {
   data: any;
-  errors: any;
+  errors: any[];
   isLoading: boolean;
   cancelSource: any;
 }
