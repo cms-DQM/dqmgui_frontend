@@ -64,6 +64,7 @@ const DiplayFolder: FC<FolderProps> = ({
   const query: QueryProps = router.query;
   const selectedPlots = query.selected_plots;
   const { viewPlotsPosition, proportion } = useContext(store)
+  
   //filtering directories by selected workspace
   const { foldersByPlotSearch, plots } = useFilterFolders(
     query,
