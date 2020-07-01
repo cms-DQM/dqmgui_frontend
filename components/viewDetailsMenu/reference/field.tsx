@@ -25,7 +25,7 @@ export const Field = ({
   disabled,
   defaultValue,
   runs_set_for_overlay,
-  set_interim_runs
+  set_interim_runs,
 }: FieldProps) => {
   useEffect(() => {
     const cleanField = () => {
@@ -40,10 +40,14 @@ export const Field = ({
       <StyledInput
         disabled={disabled}
         onChange={(e: any) => {
-          changeRunsForOverlayPropsValues(e.target.value, 'label', id, runs_set_for_overlay,
-            set_interim_runs)
-        }
-        }
+          changeRunsForOverlayPropsValues(
+            e.target.value,
+            'label',
+            id,
+            runs_set_for_overlay,
+            set_interim_runs
+          );
+        }}
         value={inputValue}
         defaultValue={inputValue}
         placeholder={placeholder}

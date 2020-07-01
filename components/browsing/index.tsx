@@ -13,8 +13,10 @@ import { useRouter } from 'next/router';
 import { QueryProps } from '../../containers/display/interfaces';
 import { useChangeRouter } from '../../hooks/useChangeRouter';
 import { store } from '../../contexts/leftSideContext';
-import { changeRouter, getChangedQueryParams } from '../../containers/display/utils';
-
+import {
+  changeRouter,
+  getChangedQueryParams,
+} from '../../containers/display/utils';
 
 export const Browser = () => {
   const [datasetOption, setDatasetOption] = useState(
@@ -27,27 +29,32 @@ export const Browser = () => {
   const dataset_name = query.dataset_name ? query.dataset_name : '';
   const lumi = query.lumi ? parseInt(query.lumi) : NaN;
 
-  const { setLumisection } = React.useContext(store)
+  const { setLumisection } = React.useContext(store);
   const [currentRunNumber, setCurrentRunNumber] = useState(run_number);
   const [currentDataset, setCurrentDataset] = useState<string>(dataset_name);
 
   const lumisectionsChangeHandler = (lumi: number) => {
     //in main navigation when lumisection is changed, new value have to be set to url
-    changeRouter(getChangedQueryParams({ lumi: lumi }, query))
+    changeRouter(getChangedQueryParams({ lumi: lumi }, query));
     //setLumisection from store(using useContext) set lumisection value globally.
     //This set value is reachable for lumisection browser in free search dialog (you can see it, when search button next to browsers is clicked).
 
     //Both lumisection browser have different handers, they have to act differently according to their place:
     //IN THE MAIN NAV: lumisection browser value in the main navigation is changed, this HAVE to be set to url;
-    //FREE SEARCH DIALOG: lumisection browser value in free search dialog is changed it HASN'T to be set to url immediately, just when button 'ok' 
+    //FREE SEARCH DIALOG: lumisection browser value in free search dialog is changed it HASN'T to be set to url immediately, just when button 'ok'
     //in dialog is clicked THEN value is set to url. So, useContext let us to change lumi value globally without changing url, when wee no need that.
-     //And in this handler lumi value set to useContext store is used as initial lumi value in free search dialog. 
-    setLumisection(lumi)
-  }
+    //And in this handler lumi value set to useContext store is used as initial lumi value in free search dialog.
+    setLumisection(lumi);
+  };
 
-  useChangeRouter({
-    run_number: currentRunNumber, dataset_name: currentDataset
-  }, [currentRunNumber, currentDataset], true)
+  useChangeRouter(
+    {
+      run_number: currentRunNumber,
+      dataset_name: currentDataset,
+    },
+    [currentRunNumber, currentDataset],
+    true
+  );
 
   return (
     <Form>
@@ -70,7 +77,7 @@ export const Browser = () => {
           />
         </WrapperDiv> */}
         <StyledFormItem
-        labelcolor="white"
+          labelcolor="white"
           label={
             <DropdownMenu
               options={dataSetSelections}
@@ -89,14 +96,14 @@ export const Browser = () => {
               />
             </WrapperDiv>
           ) : (
-              <WrapperDiv>
-                <DatasetsBuilder
-                  currentRunNumber={currentRunNumber}
-                  currentDataset={currentDataset}
-                  query={query}
-                />
-              </WrapperDiv>
-            )}
+            <WrapperDiv>
+              <DatasetsBuilder
+                currentRunNumber={currentRunNumber}
+                currentDataset={currentDataset}
+                query={query}
+              />
+            </WrapperDiv>
+          )}
         </StyledFormItem>
       </WrapperDiv>
     </Form>

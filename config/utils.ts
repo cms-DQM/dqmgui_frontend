@@ -1,4 +1,7 @@
-import { ParamsForApiProps, TripleProps } from "../containers/display/interfaces";
+import {
+  ParamsForApiProps,
+  TripleProps,
+} from '../containers/display/interfaces';
 
 export const get_customize_params = (params = {} as any) => {
   const xtype = params.xtype ? `xtype=${params.xtype};` : '';
@@ -20,16 +23,24 @@ export const get_customize_params = (params = {} as any) => {
   return parameters;
 };
 
-export const getRunsWithLumisections = (params: ParamsForApiProps | TripleProps) => {
-  const lumisectionValue = params.lumi === -1 ? undefined : params.lumi
-  const lumisectionParameter = lumisectionValue ? `${params.run_number}:${lumisectionValue}` : params.run_number
+export const getRunsWithLumisections = (
+  params: ParamsForApiProps | TripleProps
+) => {
+  const lumisectionValue = params.lumi === -1 ? undefined : params.lumi;
+  const lumisectionParameter = lumisectionValue
+    ? `${params.run_number}:${lumisectionValue}`
+    : params.run_number;
 
-  return lumisectionParameter
-}
+  return lumisectionParameter;
+};
 
-export const getRunsWithLumisectionsForOverlaidPlots = (params: TripleProps) => {
-  const lumisectionValue = params.lumi === -1 ? undefined : params.lumi
-  const lumisectionParameter = lumisectionValue ? `${params.run_number}:${lumisectionValue}` : params.run_number
+export const getRunsWithLumisectionsForOverlaidPlots = (
+  params: TripleProps
+) => {
+  const lumisectionValue = params.lumi === -1 ? undefined : params.lumi;
+  const lumisectionParameter = lumisectionValue
+    ? `${params.run_number}:${lumisectionValue}`
+    : params.run_number;
 
-  return lumisectionParameter
-}
+  return lumisectionParameter;
+};

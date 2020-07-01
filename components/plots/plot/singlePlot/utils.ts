@@ -52,15 +52,15 @@ export const FormatParamsForAPI = (
   query: QueryProps,
   plotName: string,
   path?: string,
-  zoomed?: boolean,
+  zoomed?: boolean
 ): ParamsForApiProps => {
   return {
     run_number: query.run_number ? query.run_number : '',
     dataset_name: query.dataset_name ? query.dataset_name : '',
     folders_path: path,
     plot_name: plotName,
-    height: zoomed ? globalState.rightSideSize.h :  globalState.size.h,
-    width: zoomed ? globalState.rightSideSize.w :  globalState.size.w,
+    height: zoomed ? globalState.rightSideSize.h : globalState.size.h,
+    width: zoomed ? globalState.rightSideSize.w : globalState.size.w,
     customizeProps: globalState.customizeProps,
     stats: globalState.stats,
     overlay: query.overlay,

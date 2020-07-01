@@ -22,11 +22,7 @@ export const Reference = () => {
   const [selectedTriple, setTriple] = useState<TripleProps>({});
 
   const globalState = useContext(store);
-  const {
-    normalize,
-    setNormalize,
-    triples,
-  } = globalState;
+  const { normalize, setNormalize, triples } = globalState;
 
   const checkedValue = normalize === 'True' ? true : false;
   const [checked, setChecked] = useState(checkedValue);
@@ -37,8 +33,7 @@ export const Reference = () => {
   return (
     <StyledDiv>
       <CustomRow>
-        <CustomCol space={'2'}>
-        </CustomCol>
+        <CustomCol space={'2'}></CustomCol>
         <CustomCol space={'2'}>
           <FormItem name="OverlayPosition" label="Position:">
             <OverlayOptions />
@@ -64,7 +59,8 @@ export const Reference = () => {
       <OverlayRuns
         overlaid_runs={triples}
         query={query}
-        setTriple={setTriple}/>
+        setTriple={setTriple}
+      />
     </StyledDiv>
   );
 };

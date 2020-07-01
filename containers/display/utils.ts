@@ -77,14 +77,14 @@ export const doesPlotExists = (
 export const getContents = (data: any) =>
   data
     ? _.sortBy(
-      data.contents
-        ? data.contents
-        : [].filter(
-          (one_item: PlotInterface | DirectoryInterface) =>
-            !one_item.hasOwnProperty('streamerinfo')
-        ),
-      ['subdir']
-    )
+        data.contents
+          ? data.contents
+          : [].filter(
+              (one_item: PlotInterface | DirectoryInterface) =>
+                !one_item.hasOwnProperty('streamerinfo')
+            ),
+        ['subdir']
+      )
     : [];
 
 export const getDirectories = (contents: DirectoryInterface[]) =>

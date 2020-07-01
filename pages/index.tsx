@@ -24,8 +24,11 @@ import {
 import { FolderPathQuery, QueryProps } from '../containers/display/interfaces';
 import { workspaces } from '../workspaces/offline';
 import { ComposedSearch } from '../components/navigation/composedSearch';
-import { seperateRunAndLumiInSearch } from '../components/utils'
-import { changeRouter, getChangedQueryParams } from '../containers/display/utils';
+import { seperateRunAndLumiInSearch } from '../components/utils';
+import {
+  changeRouter,
+  getChangedQueryParams,
+} from '../containers/display/utils';
 
 const navigationHandler = (
   search_by_run_number: string,
@@ -54,15 +57,20 @@ const Index: NextPage<FolderPathQuery> = () => {
   // We grab the query from the URL:
   const router = useRouter();
   const query: QueryProps = router.query;
-  
+
   const serchResultsHandler = (run: string, dataset: string) => {
-    const { parsedRun, parsedLumi } = seperateRunAndLumiInSearch(run)
-    changeRouter(getChangedQueryParams({
-      lumi: parsedLumi,
-      run_number: parsedRun,
-      dataset_name: dataset,
-      workspaces: workspaces[0].workspaces[2].label
-    }, query))
+    const { parsedRun, parsedLumi } = seperateRunAndLumiInSearch(run);
+    changeRouter(
+      getChangedQueryParams(
+        {
+          lumi: parsedLumi,
+          run_number: parsedRun,
+          dataset_name: dataset,
+          workspaces: workspaces[0].workspaces[2].label,
+        },
+        query
+      )
+    );
   };
 
   const { results, results_grouped, searching, isLoading, errors } = useSearch(
@@ -73,7 +81,7 @@ const Index: NextPage<FolderPathQuery> = () => {
   const isDatasetAndRunNumberSelected =
     !!query.run_number && !!query.dataset_name;
 
-    return (
+  return (
     <StyledDiv>
       <Head>
         <script
@@ -98,15 +106,15 @@ const Index: NextPage<FolderPathQuery> = () => {
             isDatasetAndRunNumberSelected ? (
               <ComposedSearch />
             ) : (
-                <>
-                  <Nav
-                    initial_search_run_number={query.search_run_number}
-                    initial_search_dataset_name={query.search_dataset_name}
-                    handler={navigationHandler}
-                    type="top"
-                  />
-                </>
-              )
+              <>
+                <Nav
+                  initial_search_run_number={query.search_run_number}
+                  initial_search_dataset_name={query.search_dataset_name}
+                  handler={navigationHandler}
+                  type="top"
+                />
+              </>
+            )
           }
         </StyledHeader>
         {/* {validation_errors.length > 0 ? (
@@ -128,13 +136,13 @@ const Index: NextPage<FolderPathQuery> = () => {
             errors={errors}
           />
         ) : (
-              <NotFoundDivWrapper>
-                <NotFoundDiv noBorder>
-                  <ChartIcon />
+          <NotFoundDivWrapper>
+            <NotFoundDiv noBorder>
+              <ChartIcon />
               Welcome to DQM GUI
             </NotFoundDiv>
-              </NotFoundDivWrapper>
-            )}
+          </NotFoundDivWrapper>
+        )}
       </StyledLayout>
     </StyledDiv>
   );

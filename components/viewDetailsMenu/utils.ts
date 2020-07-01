@@ -10,7 +10,8 @@ export const filter_valid_runs = (triples: TripleProps[]) =>
   triples.filter((triple: TripleProps) => {
     if (triple.run_number && triple.checked) {
       return triple;
-    } return undefined
+    }
+    return undefined;
   });
 
 export const filter_plots = (triples: TripleProps[], id: any) => {
@@ -39,10 +40,10 @@ export const formTriples = (overlay_data: string | undefined) => {
       };
 
       return triple_object;
-    })
-    return triples
+    });
+    return triples;
   }
-  return undefined
+  return undefined;
 };
 
 export const getDatasetParts = (datasets: string[], part: string) => {
@@ -53,12 +54,12 @@ export const getDatasetParts = (datasets: string[], part: string) => {
 };
 
 export const concatArrays = (arrays: any[]) => {
-  let concatedArray: any = []
-  arrays.forEach(array => {
-    concatedArray = concatedArray.concat(array)
+  let concatedArray: any = [];
+  arrays.forEach((array) => {
+    concatedArray = concatedArray.concat(array);
   });
-  return concatedArray
-}
+  return concatedArray;
+};
 
 export const changeRunsForOverlayPropsValues = (
   value: string | number,
@@ -73,13 +74,15 @@ export const changeRunsForOverlayPropsValues = (
   const index_of_line: number = runs.indexOf(current_line);
   current_line[key] = value;
   runs[index_of_line] = current_line;
-  return set_action(runs as any)
-}
+  return set_action(runs as any);
+};
 
-export const getDisabledButtonTitle = (overlaidPlotsLimisIsReached: boolean) => {
-  const title = "Maximum 4 plots could be overlaid!"
+export const getDisabledButtonTitle = (
+  overlaidPlotsLimisIsReached: boolean
+) => {
+  const title = 'Maximum 4 plots could be overlaid!';
   if (overlaidPlotsLimisIsReached) {
-    return title
+    return title;
   }
-  return ''
-}
+  return '';
+};

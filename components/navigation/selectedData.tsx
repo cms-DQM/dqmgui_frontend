@@ -1,13 +1,16 @@
-import * as React from 'react'
-import { Row, Col } from 'antd'
+import * as React from 'react';
+import { Row, Col } from 'antd';
 
-import { LumesectionBrowser } from '../browsing/lumesectionBroweser'
-import Form from 'antd/lib/form/Form'
-import { StyledFormItem } from '../styledComponents'
-import { store } from '../../contexts/leftSideContext'
-import { changeRouter, getChangedQueryParams } from '../../containers/display/utils'
-import { useRouter } from 'next/router'
-import { QueryProps } from '../../containers/display/interfaces'
+import { LumesectionBrowser } from '../browsing/lumesectionBroweser';
+import Form from 'antd/lib/form/Form';
+import { StyledFormItem } from '../styledComponents';
+import { store } from '../../contexts/leftSideContext';
+import {
+  changeRouter,
+  getChangedQueryParams,
+} from '../../containers/display/utils';
+import { useRouter } from 'next/router';
+import { QueryProps } from '../../containers/display/interfaces';
 
 interface SelectedDataProps {
   dataset_name: string;
@@ -15,38 +18,48 @@ interface SelectedDataProps {
   form: any;
 }
 
-export const SelectedData = ({ dataset_name, run_number, form }: SelectedDataProps) => {
-  const { lumisection, setLumisection } = React.useContext(store)
+export const SelectedData = ({
+  dataset_name,
+  run_number,
+  form,
+}: SelectedDataProps) => {
+  const { lumisection, setLumisection } = React.useContext(store);
   const router = useRouter();
   const query: QueryProps = router.query;
 
   const lumisectionsChangeHandler = (lumi: number) => {
     //we set lumisection in inseContext store in order to save a it's value.
-    //When form is submitted(onFinish...)(clicked button "OK" in dialog), then 
+    //When form is submitted(onFinish...)(clicked button "OK" in dialog), then
     //url is changed
-    setLumisection(lumi)
-  }
+    setLumisection(lumi);
+  };
 
   return (
     <Form
       form={form}
       onFinish={(params) => {
         //when OK is clicked, run number, dataset and lumi params in url is changed.
-        changeRouter(getChangedQueryParams(params, query))
+        changeRouter(getChangedQueryParams(params, query));
       }}
-      fields={[{ name: 'dataset_name', value: dataset_name },
-      { name: 'run_number', value: run_number },
-      { name: 'lumi', value: lumisection }]}
+      fields={[
+        { name: 'dataset_name', value: dataset_name },
+        { name: 'run_number', value: run_number },
+        { name: 'lumi', value: lumisection },
+      ]}
     >
       <hr />
       <Row>
         <StyledFormItem name={'dataset_name'} label="Dataset name">
-          <Col style={{ fontWeight: 'bold', fontStyle: "italic" }}>{dataset_name}</Col>
+          <Col style={{ fontWeight: 'bold', fontStyle: 'italic' }}>
+            {dataset_name}
+          </Col>
         </StyledFormItem>
       </Row>
       <Row>
         <StyledFormItem name={'run_number'} label="Run number">
-          <Col style={{ fontWeight: 'bold', fontStyle: "italic" }} >{run_number}</Col>
+          <Col style={{ fontWeight: 'bold', fontStyle: 'italic' }}>
+            {run_number}
+          </Col>
         </StyledFormItem>
       </Row>
       {/* <Row>
@@ -61,5 +74,5 @@ export const SelectedData = ({ dataset_name, run_number, form }: SelectedDataPro
       </Row> */}
       <hr />
     </Form>
-  )
-}
+  );
+};

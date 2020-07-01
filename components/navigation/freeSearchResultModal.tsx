@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Form } from 'antd';
 
-import { StyledModal, ResultsWrapper } from '../viewDetailsMenu/styledComponents';
+import {
+  StyledModal,
+  ResultsWrapper,
+} from '../viewDetailsMenu/styledComponents';
 import SearchResults from '../../containers/search/SearchResults';
 import { useSearch } from '../../hooks/useSearch';
 import { QueryProps } from '../../containers/display/interfaces';
@@ -12,7 +15,7 @@ import { SelectedData } from './selectedData';
 import Nav from '../Nav';
 
 interface FreeSeacrhModalProps {
-  setModalState(state: boolean): void,
+  setModalState(state: boolean): void;
   modalState: boolean;
   search_run_number: undefined | string;
   search_dataset_name: string | undefined;
@@ -20,38 +23,45 @@ interface FreeSeacrhModalProps {
   setSearchRunNumber(run_number: string): void;
 }
 
-export const SearchModal = ({ setModalState, modalState, search_run_number, search_dataset_name, setSearchDatasetName, setSearchRunNumber }: FreeSeacrhModalProps) => {
+export const SearchModal = ({
+  setModalState,
+  modalState,
+  search_run_number,
+  search_dataset_name,
+  setSearchDatasetName,
+  setSearchRunNumber,
+}: FreeSeacrhModalProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
-  const dataset = query.dataset_name ? query.dataset_name : ''
+  const dataset = query.dataset_name ? query.dataset_name : '';
 
-  const [datasetName, setDatasetName] = useState(dataset)
-  const run = query.run_number ? query.run_number : ''
-  const [runNumber, setRunNumber] = useState<string>(run)
+  const [datasetName, setDatasetName] = useState(dataset);
+  const run = query.run_number ? query.run_number : '';
+  const [runNumber, setRunNumber] = useState<string>(run);
 
   useEffect(() => {
-    const run = query.run_number ? query.run_number : ''
-    const dataset = query.dataset_name ? query.dataset_name : ''
-    setDatasetName(dataset)
-    setRunNumber(run)
-  }, [query.dataset_name, query.run_number])
+    const run = query.run_number ? query.run_number : '';
+    const dataset = query.dataset_name ? query.dataset_name : '';
+    setDatasetName(dataset);
+    setRunNumber(run);
+  }, [query.dataset_name, query.run_number]);
 
   const onClosing = () => {
     setModalState(false);
   };
 
   const searchHandler = (run_number: string, dataset_name: string) => {
-    setDatasetName(dataset_name)
-    setRunNumber(run_number)
+    setDatasetName(dataset_name);
+    setRunNumber(run_number);
   };
 
   const navigationHandler = (
     search_by_run_number: string,
     search_by_dataset_name: string
   ) => {
-    setSearchRunNumber(search_by_run_number)
-    setSearchDatasetName(search_by_dataset_name)
-  }
+    setSearchRunNumber(search_by_run_number);
+    setSearchDatasetName(search_by_dataset_name);
+  };
 
   const { results, results_grouped, searching, isLoading, errors } = useSearch(
     search_run_number,
@@ -81,10 +91,10 @@ export const SearchModal = ({ setModalState, modalState, search_run_number, sear
         </StyledButton>,
         <StyledButton key="OK" onClick={onOk}>
           OK
-       </StyledButton>,
+        </StyledButton>,
       ]}
     >
-      {modalState &&
+      {modalState && (
         <>
           <Nav
             initial_search_run_number={search_run_number}
@@ -94,7 +104,11 @@ export const SearchModal = ({ setModalState, modalState, search_run_number, sear
             handler={navigationHandler}
             type="top"
           />
-          <SelectedData form={form} dataset_name={datasetName} run_number={runNumber} />
+          <SelectedData
+            form={form}
+            dataset_name={datasetName}
+            run_number={runNumber}
+          />
           {searching ? (
             <ResultsWrapper>
               <SearchResults
@@ -106,10 +120,10 @@ export const SearchModal = ({ setModalState, modalState, search_run_number, sear
               />
             </ResultsWrapper>
           ) : (
-              <ResultsWrapper />
-            )}
+            <ResultsWrapper />
+          )}
         </>
-      }
+      )}
     </StyledModal>
   );
 };

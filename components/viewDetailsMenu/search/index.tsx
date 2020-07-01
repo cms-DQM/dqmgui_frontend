@@ -66,7 +66,7 @@ export const CustomModal = ({ id }: CustomModalProps) => {
           onClick={() => onClosing()}
         >
           Close
-      </StyledButton>,
+        </StyledButton>,
       ]}
     >
       {openOverlayDataMenu && (
@@ -88,8 +88,8 @@ export const CustomModal = ({ id }: CustomModalProps) => {
               />
             </ResultsWrapper>
           ) : (
-              <ResultsWrapper />
-            )}
+            <ResultsWrapper />
+          )}
         </>
       )}
     </StyledModal>

@@ -18,7 +18,11 @@ const formatOptions = () => {
   return options;
 };
 
-export const SizeChanger = ({ setSize, currentValue, disabled }: SizeChangerProps) => {
+export const SizeChanger = ({
+  setSize,
+  currentValue,
+  disabled,
+}: SizeChangerProps) => {
   useEffect(() => {
     return () => setSize(currentValue);
   }, []);

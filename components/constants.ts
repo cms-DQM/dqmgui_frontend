@@ -97,10 +97,10 @@ export const dataSetSelections = [
 
 export const viewPositions = [
   { label: 'Horizontal', value: 'horizontal' },
-  { label: 'Vertical', value: 'vertical' }
-]
+  { label: 'Vertical', value: 'vertical' },
+];
 
 export const plotsProportionsOptions = [
   { label: '50% : 50%', value: '50%' },
-  { label:  '25% : 75%', value: '25%' }
-]
+  { label: '25% : 75%', value: '25%' },
+];

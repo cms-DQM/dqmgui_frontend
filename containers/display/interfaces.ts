@@ -127,4 +127,3 @@ export interface PlotInterface {
 export interface DirectoryInterface {
   subdir: string;
 }
-

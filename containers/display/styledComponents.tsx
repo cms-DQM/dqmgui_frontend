@@ -94,26 +94,38 @@ export const Wrapper = styled.div<{
   zoomed?: any;
   notZoomedPlot?: boolean;
   noScroll?: boolean;
-  position?:string;
-  ratio?:string;
-  proportion?:string;
+  position?: string;
+  ratio?: string;
+  proportion?: string;
 }>`
-  width: ${(props) => (props?.zoomed && props.position === viewPositions[1].value && props.notZoomedPlot ? props.notZoomedPlot && props.proportion : '100%')};
+  width: ${(props) =>
+    props?.zoomed &&
+    props.position === viewPositions[1].value &&
+    props.notZoomedPlot
+      ? props.notZoomedPlot && props.proportion
+      : '100%'};
   border-left: ${(props) =>
     props?.notZoomedPlot ? '' : `4px solid ${theme.colors.common.lightGrey}`};
   align-items: center;
   height: ${(props) => (props?.zoomed ? '100%' : 'fit-content')};
-  height: ${(props) => (props?.zoomed && props.position === viewPositions[0].value ? props.notZoomedPlot && props.proportion : '100%')};
+  height: ${(props) =>
+    props?.zoomed && props.position === viewPositions[0].value
+      ? props.notZoomedPlot && props.proportion
+      : '100%'};
   display: flex;
   flex-wrap: wrap;
   overflow: ${(props) => (props?.zoomed ? 'scroll' : '')};
   align-items: start;
   flex-flow: column;
 `;
-export const DivWrapper = styled.div<{ selectedPlots: boolean, position?: string }>`
+export const DivWrapper = styled.div<{
+  selectedPlots: boolean;
+  position?: string;
+}>`
   height: 100%;
   overflow: ${(props) => (props.selectedPlots ? 'hidden' : 'scroll')};
-  display: ${(props) => (props.position === viewPositions[0].value ? 'centents' : 'flex')};
+  display: ${(props) =>
+    props.position === viewPositions[0].value ? 'centents' : 'flex'};
 `;
 export const MinusIcon = styled(MinusCircleFilled)`
   font-size: 1.5rem;

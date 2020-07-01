@@ -22,7 +22,14 @@ export const ViewDetailsMenu = ({ selected_plots }: ViewDetailsMenuProps) => {
   const query: QueryProps = router.query;
 
   const globalState = useContext(store);
-  const { size, setSize, setOverlay,setJSROOTmode, rightSideSize, setRightSideSize } = globalState;
+  const {
+    size,
+    setSize,
+    setOverlay,
+    setJSROOTmode,
+    rightSideSize,
+    setRightSideSize,
+  } = globalState;
 
   useEffect(() => {
     if (query) {
@@ -42,16 +49,34 @@ export const ViewDetailsMenu = ({ selected_plots }: ViewDetailsMenuProps) => {
       <Panel header="Options" key="1">
         <Form>
           <CustomDiv display="flex" justifycontent="space-between" width="100%">
-            <CutomFormItem name="SizeChanger" label="Left side size" width="50%">
+            <CutomFormItem
+              name="SizeChanger"
+              label="Left side size"
+              width="50%"
+            >
               <SizeChanger currentValue={size} setSize={setSize} />
             </CutomFormItem>
-            <CutomFormItem name="SizeChanger" label="Right side size" width="50%">
-              <SizeChanger currentValue={rightSideSize} setSize={setRightSideSize} disabled={!selected_plots} />
+            <CutomFormItem
+              name="SizeChanger"
+              label="Right side size"
+              width="50%"
+            >
+              <SizeChanger
+                currentValue={rightSideSize}
+                setSize={setRightSideSize}
+                disabled={!selected_plots}
+              />
             </CutomFormItem>
           </CustomDiv>
           <hr />
-          <CustomDiv display='flex' justifycontent='flex-end' width="100%">
-            <CutomFormItem name="Jsroot" label="JSROOT" width="50%" display="flex" justifycontent='flex-end'>
+          <CustomDiv display="flex" justifycontent="flex-end" width="100%">
+            <CutomFormItem
+              name="Jsroot"
+              label="JSROOT"
+              width="50%"
+              display="flex"
+              justifycontent="flex-end"
+            >
               <Switch
                 style={{ width: 'fit-content' }}
                 checkedChildren="JSROOT enabled"

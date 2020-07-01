@@ -1,10 +1,13 @@
-import * as React from 'react'
+import * as React from 'react';
 import { Col, Select, Spin, Button, Row } from 'antd';
 import { CaretRightFilled, CaretLeftFilled } from '@ant-design/icons';
 
-import { useRequest } from '../../hooks/useRequest'
+import { useRequest } from '../../hooks/useRequest';
 import { getLumisections } from '../../config/config';
-import { StyledSelect, OptionParagraph } from '../viewDetailsMenu/styledComponents';
+import {
+  StyledSelect,
+  OptionParagraph,
+} from '../viewDetailsMenu/styledComponents';
 import { StyledFormItem } from '../styledComponents';
 import { useChangeRouter } from '../../hooks/useChangeRouter';
 import { QueryProps, OptionProps } from '../../containers/display/interfaces';
@@ -25,24 +28,38 @@ interface LumesectionBrowserProps {
   color?: string;
 }
 
-export const LumesectionBrowser = ({ color, currentLumisection, handler, currentRunNumber, currentDataset }: LumesectionBrowserProps) => {
-  //getting all run lumisections 
-  const { data, isLoading, errors } = useRequest(getLumisections({
-    run_number: currentRunNumber,
-    dataset_name: currentDataset, lumi: 0
-  }), {}, [currentRunNumber, currentDataset])
+export const LumesectionBrowser = ({
+  color,
+  currentLumisection,
+  handler,
+  currentRunNumber,
+  currentDataset,
+}: LumesectionBrowserProps) => {
+  //getting all run lumisections
+  const { data, isLoading, errors } = useRequest(
+    getLumisections({
+      run_number: currentRunNumber,
+      dataset_name: currentDataset,
+      lumi: 0,
+    }),
+    {},
+    [currentRunNumber, currentDataset]
+  );
 
-  const all_runs_with_lumi = data ? data.data : []
+  const all_runs_with_lumi = data ? data.data : [];
   //extracting just lumisections from data object
-  const lumisections: OptionProps[] = all_runs_with_lumi.length > 0 ? all_runs_with_lumi.map((run: AllRunsWithLumiProps) => {
-    return { label: run.lumi.toString(), value: run.lumi }
-  }) : []
+  const lumisections: OptionProps[] =
+    all_runs_with_lumi.length > 0
+      ? all_runs_with_lumi.map((run: AllRunsWithLumiProps) => {
+          return { label: run.lumi.toString(), value: run.lumi };
+        })
+      : [];
 
-  //0 - it represents ALL lumisections. If none lumisection is selected, then plots which are displaid 
-  //consist of ALL lumisections. 
-  lumisections.unshift({ label: 'All', value: 0 })
+  //0 - it represents ALL lumisections. If none lumisection is selected, then plots which are displaid
+  //consist of ALL lumisections.
+  lumisections.unshift({ label: 'All', value: 0 });
 
-  const lumiValues = lumisections.map((lumi: OptionProps) => lumi.value)
+  const lumiValues = lumisections.map((lumi: OptionProps) => lumi.value);
   const currentLumiIndex = lumiValues.indexOf(currentLumisection);
 
   return (
@@ -69,20 +86,23 @@ export const LumesectionBrowser = ({ color, currentLumisection, handler, current
               }}
               showSearch={true}
             >
-              {lumisections && lumisections.map((current_lumisection: OptionProps) => {
-                return (
-                  <Option value={current_lumisection.value} key={current_lumisection.value.toString()} >
-                    {isLoading ? (
-                      <OptionParagraph>
-                        <Spin />
-                      </OptionParagraph>
-                    ) : (
+              {lumisections &&
+                lumisections.map((current_lumisection: OptionProps) => {
+                  return (
+                    <Option
+                      value={current_lumisection.value}
+                      key={current_lumisection.value.toString()}
+                    >
+                      {isLoading ? (
+                        <OptionParagraph>
+                          <Spin />
+                        </OptionParagraph>
+                      ) : (
                         <p>{current_lumisection.label}</p>
                       )}
-                  </Option>
-                )
-              })
-              }
+                    </Option>
+                  );
+                })}
             </StyledSelect>
           </Col>
           <Col>
@@ -98,5 +118,5 @@ export const LumesectionBrowser = ({ color, currentLumisection, handler, current
         </Row>
       </StyledFormItem>
     </Col>
-  )
-}
+  );
+};

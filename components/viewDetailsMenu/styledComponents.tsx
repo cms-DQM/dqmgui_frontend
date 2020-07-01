@@ -23,9 +23,9 @@ export const NavWrapper = styled.div`
   width: 25vw;
 `;
 
-export const StyledModal = styled(Modal) <{ width?: string }>`
+export const StyledModal = styled(Modal)<{ width?: string }>`
   .ant-modal-content {
-    width:${(props) => props.width ? props.width : ' fit-content'};
+    width: ${(props) => (props.width ? props.width : ' fit-content')};
   }
 `;
 
@@ -33,7 +33,7 @@ export const FullWidthRow = styled(Row)`
   width: 100%;
   padding: ${theme.space.spaceBetween};
 `;
-export const StyledSelect = styled(Select) <{
+export const StyledSelect = styled(Select)<{
   selected?: string;
   width?: string | undefined;
 }>`
@@ -41,7 +41,7 @@ export const StyledSelect = styled(Select) <{
     border-radius: 12px !important;
     width: ${(props) => (props.width ? `${props.width}` : '')} !important;
     font-weight: ${(props) =>
-    props.selected === 'selected' ? 'bold' : 'inherit'} !important;
+      props.selected === 'selected' ? 'bold' : 'inherit'} !important;
   }
 `;
 
@@ -60,17 +60,17 @@ export const OptionParagraph = styled.div`
 
 export const SelectedRunsTable = styled.table`
   text-align: center;
-`
+`;
 export const SelectedRunsTr = styled.tr`
-  border: 1px solid ${theme.colors.primary.main}; 
-`
+  border: 1px solid ${theme.colors.primary.main};
+`;
 export const SelectedRunsTh = styled.th`
-  width: 30%; 
+  width: 30%;
   border-right: 1px solid ${theme.colors.primary.main};
   padding: 4px;
   background: ${theme.colors.primary.light};
-`
+`;
 export const SelectedRunsTd = styled.td`
   border-right: 1px solid ${theme.colors.primary.main};
   padding: 4px;
-`
+`;

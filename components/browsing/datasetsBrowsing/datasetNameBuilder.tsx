@@ -5,7 +5,10 @@ import { PartsBrowser } from './partBrowser';
 import { StyledSuccessIcon, StyledErrorIcon } from '../../styledComponents';
 import { useAvailbleAndNotAvailableDatasetPartsOptions } from '../../../hooks/useAvailbleAndNotAvailableDatasetPartsOptions';
 import { QueryProps } from '../../../containers/display/interfaces';
-import { getChangedQueryParams, changeRouter } from '../../../containers/display/utils';
+import {
+  getChangedQueryParams,
+  changeRouter,
+} from '../../../containers/display/utils';
 
 export interface DatasetPartsProps {
   part_0: any;
@@ -19,7 +22,11 @@ interface DatasetsBuilderProps {
   currentRunNumber: string;
 }
 
-export const DatasetsBuilder = ({ currentDataset, query, currentRunNumber }: DatasetsBuilderProps) => {
+export const DatasetsBuilder = ({
+  currentDataset,
+  query,
+  currentRunNumber,
+}: DatasetsBuilderProps) => {
   const {
     availableAndNotAvailableDatasetParts,
     setSelectedParts,
@@ -36,9 +43,11 @@ export const DatasetsBuilder = ({ currentDataset, query, currentRunNumber }: Dat
 
   useEffect(() => {
     if (doesCombinationOfSelectedDatasetPartsExists) {
-      changeRouter(getChangedQueryParams({ dataset_name: fullDatasetName }, query));
+      changeRouter(
+        getChangedQueryParams({ dataset_name: fullDatasetName }, query)
+      );
     }
-  }, [fullDatasetName])
+  }, [fullDatasetName]);
 
   return (
     <Row>
@@ -65,8 +74,8 @@ export const DatasetsBuilder = ({ currentDataset, query, currentRunNumber }: Dat
         {doesCombinationOfSelectedDatasetPartsExists ? (
           <StyledSuccessIcon />
         ) : (
-            <StyledErrorIcon />
-          )}
+          <StyledErrorIcon />
+        )}
       </Col>
     </Row>
   );

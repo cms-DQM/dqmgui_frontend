@@ -23,7 +23,6 @@ export const useSearch = (
     searching
   );
 
-  
   if (
     !searching ||
     data === null ||

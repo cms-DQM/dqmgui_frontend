@@ -1,7 +1,11 @@
 import React, { createContext, useState, ReactElement } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { sizes, viewPositions, plotsProportionsOptions } from '../components/constants';
+import {
+  sizes,
+  viewPositions,
+  plotsProportionsOptions,
+} from '../components/constants';
 import {
   SizeProps,
   PlotProps,
@@ -86,11 +90,17 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
   const [openOverlayDataMenu, toggleOverlayDataMenu] = React.useState(
     initialState.openOverlayDataMenu
   );
-  const [viewPlotsPosition, setViewPlotsPosition] = React.useState(initialState.viewPlotsPosition);
+  const [viewPlotsPosition, setViewPlotsPosition] = React.useState(
+    initialState.viewPlotsPosition
+  );
   const [proportion, setProportion] = React.useState(initialState.proportion);
-  const [lumisection, setLumisection] = React.useState(initialState.lumisection);
+  const [lumisection, setLumisection] = React.useState(
+    initialState.lumisection
+  );
 
-  const [rightSideSize, setRightSideSize] = useState<number>(initialState.rightSideSize);
+  const [rightSideSize, setRightSideSize] = useState<number>(
+    initialState.rightSideSize
+  );
   const [rightSideNormalize, setRightSideNormalize] = useState<boolean>(true);
   const [JSROOTmode, setJSROOTmode] = useState<boolean>(false);
   const [customize, setCustomize] = useState<CustomizeProps>({
@@ -106,7 +116,6 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
     drawopts: '',
     withref: '',
   });
-
 
   const change_value_in_reference_table = (
     value: string | number,
@@ -160,13 +169,20 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         triples,
         openOverlayDataMenu,
         toggleOverlayDataMenu,
-        viewPlotsPosition, setViewPlotsPosition,
-        proportion, setProportion,
-        lumisection, setLumisection,
-        rightSideSize, setRightSideSize,
-        rightSideNormalize, setRightSideNormalize,
-        JSROOTmode, setJSROOTmode,
-        customize, setCustomize
+        viewPlotsPosition,
+        setViewPlotsPosition,
+        proportion,
+        setProportion,
+        lumisection,
+        setLumisection,
+        rightSideSize,
+        setRightSideSize,
+        rightSideNormalize,
+        setRightSideNormalize,
+        JSROOTmode,
+        setJSROOTmode,
+        customize,
+        setCustomize,
       }}
     >
       {children}

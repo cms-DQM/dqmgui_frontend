@@ -2,11 +2,7 @@ import * as React from 'react';
 import { useRouter } from 'next/router';
 import { QueryProps } from './interfaces';
 import { Col } from 'antd';
-import {
-  DirecotryWrapper,
-  StyledA,
-  Icon,
-} from './styledComponents';
+import { DirecotryWrapper, StyledA, Icon } from './styledComponents';
 import {
   getFolderPathToQuery,
   changeRouter,

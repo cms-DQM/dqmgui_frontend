@@ -18,11 +18,11 @@ interface RunBrowserProps {
   query: QueryProps;
   setCurrentRunNumber(currentRunNumber: string): void;
   withoutArrows?: boolean;
-  withoutLabel?: boolean
+  withoutLabel?: boolean;
 }
 
 const getRunNumbers = (results_grouped: any[]) => {
-  const runs: (string)[] = [];
+  const runs: string[] = [];
   results_grouped.forEach((result) => {
     result.value.forEach((data: any) => {
       runs.push(data.run);
@@ -31,7 +31,14 @@ const getRunNumbers = (results_grouped: any[]) => {
   return runs;
 };
 
-export const RunBrowser = ({ currentDataset, query, setCurrentRunNumber, withoutArrows, currentRunNumber, withoutLabel }: RunBrowserProps) => {
+export const RunBrowser = ({
+  currentDataset,
+  query,
+  setCurrentRunNumber,
+  withoutArrows,
+  currentRunNumber,
+  withoutLabel,
+}: RunBrowserProps) => {
   const [openSelect, setSelect] = useState(false);
 
   //seting  run field width to prev. selected run name field width,
@@ -41,18 +48,22 @@ export const RunBrowser = ({ currentDataset, query, setCurrentRunNumber, without
   const { results_grouped, isLoading } = useSearch('', currentDataset);
 
   const runNumbers = getRunNumbers(results_grouped);
-  const query_run_number = query.run_number ? query.run_number : ''
+  const query_run_number = query.run_number ? query.run_number : '';
   const currentRunNumberIndex = runNumbers.indexOf(query_run_number);
 
   useEffect(() => {
     setCurrentRunNumber(currentRunNumber);
-  }, [currentRunNumber])
+  }, [currentRunNumber]);
 
   return (
     <Col>
-      <StyledFormItem labelcolor="white" name={'dataset_name'} label={`${!withoutLabel ? 'Run' : ''}`}>
+      <StyledFormItem
+        labelcolor="white"
+        name={'dataset_name'}
+        label={`${!withoutLabel ? 'Run' : ''}`}
+      >
         <Row justify="center" align="middle">
-          {!withoutArrows &&
+          {!withoutArrows && (
             <Col>
               <Button
                 disabled={!runNumbers[currentRunNumberIndex - 1]}
@@ -63,7 +74,8 @@ export const RunBrowser = ({ currentDataset, query, setCurrentRunNumber, without
                   setCurrentRunNumber(runNumbers[currentRunNumberIndex - 1]);
                 }}
               />
-            </Col>}
+            </Col>
+          )}
           <Col>
             <div
               ref={(refElem: HTMLDivElement) => {
@@ -98,15 +110,15 @@ export const RunBrowser = ({ currentDataset, query, setCurrentRunNumber, without
                             <Spin />
                           </OptionParagraph>
                         ) : (
-                            <div onClick={() => setWidth(undefined)}>{run}</div>
-                          )}
+                          <div onClick={() => setWidth(undefined)}>{run}</div>
+                        )}
                       </Option>
                     );
                   })}
               </StyledSelect>
             </div>
           </Col>
-          {!withoutArrows &&
+          {!withoutArrows && (
             <Col>
               <Button
                 icon={<CaretRightFilled />}
@@ -117,7 +129,8 @@ export const RunBrowser = ({ currentDataset, query, setCurrentRunNumber, without
                   setCurrentRunNumber(runNumbers[currentRunNumberIndex + 1]);
                 }}
               />
-            </Col>}
+            </Col>
+          )}
         </Row>
       </StyledFormItem>
     </Col>

@@ -1,7 +1,7 @@
-import * as React from 'react'
-import { RadioButtonsGroup } from '../radioButtonsGroup'
-import { viewPositions } from '../constants'
-import { OptionProps } from '../../containers/display/interfaces'
+import * as React from 'react';
+import { RadioButtonsGroup } from '../radioButtonsGroup';
+import { viewPositions } from '../constants';
+import { OptionProps } from '../../containers/display/interfaces';
 
 interface ViewPositionProps {
   viewPlotsPosition: string;
@@ -9,7 +9,11 @@ interface ViewPositionProps {
   disabled: boolean;
 }
 
-export const ViewPosition = ({ viewPlotsPosition, setViewPlotsPosition, disabled }: ViewPositionProps) => {
+export const ViewPosition = ({
+  viewPlotsPosition,
+  setViewPlotsPosition,
+  disabled,
+}: ViewPositionProps) => {
   return (
     <RadioButtonsGroup
       options={viewPositions}
@@ -19,6 +23,5 @@ export const ViewPosition = ({ viewPlotsPosition, setViewPlotsPosition, disabled
       action={setViewPlotsPosition}
       disabled={disabled}
     />
-
-  )
-}
+  );
+};

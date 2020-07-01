@@ -1,14 +1,14 @@
-import * as React from 'react'
-import { Col, Row} from 'antd'
-import Form from 'antd/lib/form/Form'
+import * as React from 'react';
+import { Col, Row } from 'antd';
+import Form from 'antd/lib/form/Form';
 
-import { ViewPosition } from './viewPosition'
-import { StyledModal } from '../viewDetailsMenu/styledComponents'
-import { StyledFormItem, CustomRow, StyledButton } from '../styledComponents'
-import { store } from '../../contexts/leftSideContext'
-import { PlotsProportion } from './plotsRatio'
+import { ViewPosition } from './viewPosition';
+import { StyledModal } from '../viewDetailsMenu/styledComponents';
+import { StyledFormItem, CustomRow, StyledButton } from '../styledComponents';
+import { store } from '../../contexts/leftSideContext';
+import { PlotsProportion } from './plotsRatio';
 import { theme } from '../../styles/theme';
-import { info } from '../notifications/infoMessages'
+import { info } from '../notifications/infoMessages';
 
 interface SettingsModalProps {
   openSettings: boolean;
@@ -16,9 +16,17 @@ interface SettingsModalProps {
   isAnyPlotSelected: boolean;
 }
 
-export const SettingsModal = ({ openSettings, toggleSettingsModal, isAnyPlotSelected }: SettingsModalProps) => {
-  const { viewPlotsPosition, setViewPlotsPosition,
-    proportion, setProportion } = React.useContext(store)
+export const SettingsModal = ({
+  openSettings,
+  toggleSettingsModal,
+  isAnyPlotSelected,
+}: SettingsModalProps) => {
+  const {
+    viewPlotsPosition,
+    setViewPlotsPosition,
+    proportion,
+    setProportion,
+  } = React.useContext(store);
   return (
     <StyledModal
       title="Settings"
@@ -32,7 +40,7 @@ export const SettingsModal = ({ openSettings, toggleSettingsModal, isAnyPlotSele
           onClick={() => toggleSettingsModal(false)}
         >
           Close
-      </StyledButton>
+        </StyledButton>,
       ]}
     >
       <Form>
@@ -41,9 +49,7 @@ export const SettingsModal = ({ openSettings, toggleSettingsModal, isAnyPlotSele
           label="Plots View Position"
           labelweight="bold"
         >
-          <CustomRow
-            display='flex'
-            justifycontent='space-between'>
+          <CustomRow display="flex" justifycontent="space-between">
             <Col>
               <ViewPosition
                 viewPlotsPosition={viewPlotsPosition}
@@ -51,9 +57,7 @@ export const SettingsModal = ({ openSettings, toggleSettingsModal, isAnyPlotSele
                 disabled={isAnyPlotSelected}
               />
             </Col>
-            <Col>
-              {info(isAnyPlotSelected)}
-            </Col>
+            <Col>{info(isAnyPlotSelected)}</Col>
           </CustomRow>
         </StyledFormItem>
         <StyledFormItem
@@ -69,12 +73,10 @@ export const SettingsModal = ({ openSettings, toggleSettingsModal, isAnyPlotSele
                 disabled={isAnyPlotSelected}
               />
             </Col>
-            <Col>
-              {info(isAnyPlotSelected)}
-            </Col>
+            <Col>{info(isAnyPlotSelected)}</Col>
           </Row>
         </StyledFormItem>
       </Form>
     </StyledModal>
-  )
-}
+  );
+};

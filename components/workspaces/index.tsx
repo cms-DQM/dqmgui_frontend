@@ -52,7 +52,7 @@ const Workspaces = () => {
               onClick={() => toggleWorkspaces(false)}
             >
               Close
-          </StyledButton>
+            </StyledButton>,
           ]}
         >
           <Tabs defaultActiveKey="1" type="card">

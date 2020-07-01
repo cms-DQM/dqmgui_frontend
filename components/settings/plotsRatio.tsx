@@ -1,7 +1,7 @@
-import * as React from 'react'
-import { RadioButtonsGroup } from '../radioButtonsGroup'
-import { plotsProportionsOptions } from '../constants'
-import { OptionProps } from '../../containers/display/interfaces'
+import * as React from 'react';
+import { RadioButtonsGroup } from '../radioButtonsGroup';
+import { plotsProportionsOptions } from '../constants';
+import { OptionProps } from '../../containers/display/interfaces';
 
 interface PlotsProportionProps {
   proportion: string;
@@ -9,7 +9,11 @@ interface PlotsProportionProps {
   disabled: boolean;
 }
 
-export const PlotsProportion = ({ proportion, setProportion, disabled }: PlotsProportionProps) => {
+export const PlotsProportion = ({
+  proportion,
+  setProportion,
+  disabled,
+}: PlotsProportionProps) => {
   return (
     <RadioButtonsGroup
       options={plotsProportionsOptions}
@@ -19,5 +23,5 @@ export const PlotsProportion = ({ proportion, setProportion, disabled }: PlotsPr
       disabled={disabled}
       action={setProportion}
     />
-  )
-}
+  );
+};
