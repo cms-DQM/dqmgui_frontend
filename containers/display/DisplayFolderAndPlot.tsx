@@ -56,7 +56,7 @@ const DiplayFolder: FC<FolderProps> = ({
     {},
     [folder_path]
   );
-  console.log(errors)
+
   const [openSettings, toggleSettingsModal] = useState(false)
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
   const allDirectories = getDirectories(contents);
