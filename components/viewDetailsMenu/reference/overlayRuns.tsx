@@ -39,7 +39,6 @@ export const OverlayRuns = ({
   const globalState = useContext(store);
   const {
     overlayPosition,
-    change_value_in_reference_table,
     addRun,
     toggleOverlayDataMenu,
     removeRun,
@@ -67,7 +66,6 @@ export const OverlayRuns = ({
     const filtered = copy.filter(run => run.id !== id)
     set_runs_set_for_overlay(filtered)
   }
-
   return (
     <CustomDiv style={{ overflowX: 'auto' }}>
       <SetRunsModal
@@ -135,9 +133,8 @@ export const OverlayRuns = ({
             </CustomTd>
             <CustomTd spacing={'4'}>
               <Field
-                change_value_in_reference_table={
-                  change_value_in_reference_table
-                }
+                runs_set_for_overlay={runs_set_for_overlay}
+                set_interim_runs={set_interim_runs}
                 removeRun={removeRun}
                 id={overlaid_run.id}
                 field_name="label"

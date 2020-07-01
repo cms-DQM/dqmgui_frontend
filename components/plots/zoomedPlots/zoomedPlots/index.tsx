@@ -1,4 +1,6 @@
 import React, { useContext } from 'react';
+import { useRouter } from 'next/router';
+
 import {
   PlotDataProps,
   QueryProps,
@@ -6,7 +8,6 @@ import {
 import { ZoomedPlot } from './zoomedPlot';
 import { ZoomedJSROOTPlot } from './zoomedJSROOTPlot';
 import { ZoomedPlotsWrapper } from '../../../styledComponents';
-import { useRouter } from 'next/router';
 import { store } from '../../../../contexts/leftSideContext';
 import { FormatParamsForAPI } from '../../plot/singlePlot/utils';
 
@@ -29,7 +30,6 @@ export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
           selected_plot.path,
           true
         );
-
         if (globalState.JSROOTmode) {
           return (
             <ZoomedJSROOTPlot

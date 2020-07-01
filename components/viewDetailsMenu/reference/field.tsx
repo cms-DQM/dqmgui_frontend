@@ -1,13 +1,10 @@
 import React, { ChangeEvent, useEffect } from 'react';
 
 import { StyledInput, StyledFormItem } from '../../styledComponents';
+import { changeRunsForOverlayPropsValues } from '../utils';
+import { TripleProps } from '../../../containers/display/interfaces';
 
 interface FieldProps {
-  change_value_in_reference_table(
-    value: string | number,
-    key: string,
-    id: string | number | boolean
-  ): void;
   removeRun(id: string | number | boolean): void;
   id: any;
   field_name: string;
@@ -15,10 +12,11 @@ interface FieldProps {
   placeholder?: string;
   disabled?: boolean;
   defaultValue?: string;
+  set_interim_runs: React.Dispatch<React.SetStateAction<TripleProps[]>>;
+  runs_set_for_overlay: TripleProps[];
 }
 
 export const Field = ({
-  change_value_in_reference_table,
   removeRun,
   id,
   field_name,
@@ -26,6 +24,8 @@ export const Field = ({
   placeholder,
   disabled,
   defaultValue,
+  runs_set_for_overlay,
+  set_interim_runs
 }: FieldProps) => {
   useEffect(() => {
     const cleanField = () => {
@@ -39,8 +39,10 @@ export const Field = ({
     <StyledFormItem name={`${id}_${field_name}`}>
       <StyledInput
         disabled={disabled}
-        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          change_value_in_reference_table(e.target.value, field_name, id)
+        onChange={(e: any) => {
+          changeRunsForOverlayPropsValues(e.target.value, 'label', id, runs_set_for_overlay,
+            set_interim_runs)
+        }
         }
         value={inputValue}
         defaultValue={inputValue}
