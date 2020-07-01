@@ -16,7 +16,7 @@ import {
   getContents,
   getDirectories,
 } from './utils';
-import { SpinnerWrapper, Spinner } from '../search/styledComponents';
+import { SpinnerWrapper, Spinner, StyledAlert } from '../search/styledComponents';
 import { LeftSidePlots } from '../../components/plots/plot';
 import { Directories } from './directories';
 import { NoResultsFound } from '../search/noResultsFound';
@@ -50,13 +50,13 @@ const DiplayFolder: FC<FolderProps> = ({
   const {
     data,
     isLoading,
+    errors
   } = useRequest(
     `/data/json/archive/${run_number}${dataset_name}/${folder_path}`,
     {},
     [folder_path]
   );
-  const [collapseHeight, setCollapseHeight] = useState('')
-
+  console.log(errors)
   const [openSettings, toggleSettingsModal] = useState(false)
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
   const allDirectories = getDirectories(contents);
@@ -99,56 +99,60 @@ const DiplayFolder: FC<FolderProps> = ({
       <Row style={{ width: '100%' }}>
         {doesPlotExists(contents).length > 0 && (
           <ViewDetailsMenu
-            setCollapseHeight={setCollapseHeight}
             selected_plots={selected_plots.length > 0}
           />)}
       </Row>
-        <>
-          <DivWrapper selectedPlots={selected_plots.length > 0} position={viewPlotsPosition}>
-            <Wrapper zoomed={selected_plots.length > 0}
-              notZoomedPlot={true}
-              position={viewPlotsPosition}
-              proportion={proportion}
-            >
-              {isLoading ? (
-                <SpinnerWrapper>
-                  <Spinner />
-                </SpinnerWrapper>
-              ) : (
-                  <>
-                    <CustomRow width="100%">
-                      <Directories directories={filteredFolders} />
-                    </CustomRow>
-                    <Row>
-                      {plots.map((plot: PlotDataProps | undefined) => {
-                        if (plot) {
-                          return (
-                            <div key={plot.name}>
-                              <LeftSidePlots
-                                plot={plot}
-                                selected_plots={selected_plots}
-                              />
-                            </div>
-                          );
-                        } return <></>
-                      })}
-                    </Row>
-                  </>
-                )}
-
-              {!isLoading && filteredFolders.length === 0 && plots.length === 0 && (
-                <CustomDiv fullwidth="true">
-                  <NoResultsFound />
-                </CustomDiv>
+      <>
+        <DivWrapper selectedPlots={selected_plots.length > 0} position={viewPlotsPosition}>
+          <Wrapper zoomed={selected_plots.length > 0  && errors.length === 0}
+            notZoomedPlot={true}
+            position={viewPlotsPosition}
+            proportion={proportion}
+          >
+            {isLoading ? (
+              <SpinnerWrapper>
+                <Spinner />
+              </SpinnerWrapper>
+            ) : (
+                <>
+                  {!isLoading && filteredFolders.length === 0 && plots.length === 0 && errors.length === 0 ? (
+                    <NoResultsFound />
+                  ) : !isLoading && errors.length === 0 ? (
+                    <>
+                      <CustomRow width="100%">
+                        <Directories directories={filteredFolders} />
+                      </CustomRow>
+                      <Row>
+                        {plots.map((plot: PlotDataProps | undefined) => {
+                          if (plot) {
+                            return (
+                              <div key={plot.name}>
+                                <LeftSidePlots
+                                  plot={plot}
+                                  selected_plots={selected_plots}
+                                />
+                              </div>
+                            );
+                          } return <></>
+                        })}
+                      </Row>
+                    </>) : (
+                        !isLoading &&
+                        errors.length > 0 &&
+                        errors.map((error) => (
+                          <StyledAlert key={error} message={error} type="error" showIcon />
+                        ))
+                      )}
+                </>
               )}
+          </Wrapper>
+          {selected_plots.length > 0  && errors.length === 0 && (
+            <Wrapper zoomed={selected_plots.length && errors.length === 0 } position={viewPlotsPosition}>
+              <ZoomedPlots selected_plots={selected_plots} />
             </Wrapper>
-            {selected_plots.length > 0 && (
-              <Wrapper zoomed={selected_plots.length} position={viewPlotsPosition}>
-                <ZoomedPlots selected_plots={selected_plots} />
-              </Wrapper>
-            )}
-          </DivWrapper>
-        </>
+          )}
+        </DivWrapper>
+      </>
     </>
   );
 };

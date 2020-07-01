@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Form } from 'antd';
 import { useRouter } from 'next/router';
 import { Collapse, Switch } from 'antd';
@@ -15,10 +15,9 @@ const { Panel } = Collapse;
 
 interface ViewDetailsMenuProps {
   selected_plots: boolean;
-  setCollapseHeight(height: string): void
 }
 
-export const ViewDetailsMenu = ({ selected_plots, setCollapseHeight }: ViewDetailsMenuProps) => {
+export const ViewDetailsMenu = ({ selected_plots }: ViewDetailsMenuProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
 

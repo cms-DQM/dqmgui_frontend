@@ -23,6 +23,7 @@ export const useSearch = (
     searching
   );
 
+  
   if (
     !searching ||
     data === null ||
@@ -33,7 +34,7 @@ export const useSearch = (
       results_grouped: [],
       searching,
       isLoading,
-      errors: errors,
+      errors,
     };
   }
   const { samples: results }: { samples: any[] } = data;

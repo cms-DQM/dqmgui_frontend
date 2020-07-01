@@ -73,7 +73,7 @@ const Index: NextPage<FolderPathQuery> = () => {
   const isDatasetAndRunNumberSelected =
     !!query.run_number && !!query.dataset_name;
 
-  return (
+    return (
     <StyledDiv>
       <Head>
         <script
