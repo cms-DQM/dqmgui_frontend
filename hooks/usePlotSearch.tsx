@@ -13,7 +13,7 @@ import { useDisplayedName } from './useDisplayName';
 interface usePlotSearchReturn {
   directories: (string | undefined)[];
   isLoading: boolean;
-  errors: string;
+  errors: any[];
   plots: PlotDataProps[];
 }
 
