@@ -20,12 +20,14 @@ export const useFilterFolders = (query: QueryProps, allDirectories: any[]) => {
     // if workspaces returns empty array, it means that need to return all possible folders
     const foldersFromWorkspaces =
       filteredFolders.length > 0 ? filteredFolders : allDirectories;
+      
     const folders = getFilteredDirectories(
       directories as any,
       foldersFromWorkspaces
     );
+
     setFoldersByPlotSearch(folders as any);
-  }, [directories, filteredFolders]);
+  }, [directories, filteredFolders,query.dataset_name, query.run_number ]);
 
   const isLoadingFolders = isLoading;
   return { foldersByPlotSearch, plots, isLoadingFolders };
