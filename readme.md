@@ -206,4 +206,5 @@ If you want to change position (to horizontal or vertical) of displayed plots (w
 20. ~~Customization for ONE plot~~ (09/06/2020)
 21. ~~Free and combined search~~ (11/06/2020)
 
+
 ---
