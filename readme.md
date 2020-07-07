@@ -39,12 +39,12 @@ On the left side you can see a navigation (highlighted in red), which represents
 
 ## Browsing through datasets and runs
 
-On the top left corner, there are two fields whose indicate selected dataset name and run number (highlighted red).
+When you slelect full set (dataset name and run rumber) you will se that regular search fields is replaced by dataset and run number browsers (highlighted red).
 ![Folder path](public/images/datasetAndRun.png)
 
 If you want **to change a run number**, you could do this in two ways:
 
-1. Select a new run number from the **dropdown list**, which is open when you click on a run number's field. Options in dropdown list depend on slected dataset name. It means that all runs in this list have **selected dataset**.
+1. Select a new run number from the **dropdown list**, which is open when you click on a run number's field. Options in dropdown list depend on slected dataset name. It means that all runs in this list have **selected dataset**. ![Possible_datasets](public/images/possibleDatasets.png)
 2. Use **blue arrows**. They let browsing through prev/next run numbers. If a left arrow is grey it means that the current run number is the first in the list of available run numbers, so you cannot go further. The same with a right arrow- it becomes grey when a current run number is the last in the list of available run numbers.
 
 If you want **to change a dataset name**, you could do this in three ways:
@@ -52,13 +52,62 @@ If you want **to change a dataset name**, you could do this in three ways:
 1. Select a new dataset name from the **dropdown list**, which is open when you click on a dataset field. Options in dropdown list depend on slected run number. It means that all datasets in this list have **selected run number**.
 2. Use **blue arrows**. They let browsing through prev/next dataset names. If a left arrow is grey it means that the current dataset name is the first in the list of available dataset, so you cannot go further. The same with a right arrow- it becomes grey when a current run number is the last in the list of available datasets.
 3. Use **dataset builder**. Firstly, you need to change the _dataset select mode_ to _dataset builder mode_. It could be done by clicking on "Dataset Select". You will see dropdown list with two options: "Dataset Select" and "Dataset Builder". Click on "Dataset Builder". You should see a view like this:
-   ![Folder path](public/images/datasetBuilder.png)
+   ![Possible_datasets](public/images/datasetBuilderOptions.png)
    With dataset builder, you can change all three parts of dataset name. Click on a part which you want to change, a dropdown list will be opened with all available options. They could be in two colors: green or red. **These colors depend on a part that is written in bold**. **Bolden part** is the last clicked part. Other parts depend on it. So, if the option is red, that means that this option does not compatible with the bolden part, but that does not mean that you cannot select it! If you select the red one, the thick (on the right) will be change to exit cross, and parts whose are not compatible with the last selected part become red.
    ![Invalid builder](public/images/invalidBuilder.png)
    It means that this dataset, which consists of selected dataset parts, is not existing (or in other words- is not valid). In order to make a request with a valid dataset name, you need to combine all three green parts.
 
 ---
+## Browsing through datasets and runs using free search
 
+When we are browsing thought datasets and runs using browsers/builder we are limited by available options. It is like this because the run browser shows all possible
+runs options by the selected dataset (selected dataset name is visible on dataset name browser/builder). The same situation is with dataset names options: it is possible
+to select just those which exist with a selected run. 
+
+In order to expand search possibilities, the free search is implemented. **Free search** - is the same search initial **Search**, which is not limited. In order to reach
+Free search, needs to click the search button (highlighted red).
+
+![Free_search_button](public/images/freeSearch.png)
+
+When this button is clicked, you will see search dialog. It is divided into 3 sections: 
+![Free_search_dialog](public/images/freeSearchDialog.png)
+
+1. Search fields, where you can search data by run number or dataset name (initial values are those, which already selected).
+2. Selected dataset name and run number (initial values are those, which already selected).
+3. Search results.
+
+If you want to change the selected dataset and run number, enter wanted dataset name and/or run number to search fields, click the search button. In the results section, you will see all results got by the search. Select whichever you need. You will see that the second section is changed: dataset name and run number was replaced by selected ones.
+![Free_search_dialog_results](public/images/datasetNameAndRun.png)
+
+If wanted dataset and run is visible on the second section, click on button "OK" (on the right side of dialog). After this step datset and run builders will be filled with
+selected run and dataset name.
+selectedDatasetNameFilled
+![Free_search_dialog_results_filled](public/images/selectedDatasetNameFilled.png)
+
+---
+## Worskpaces
+
+Worskpaces selection could be found on the right side of the window. Worskpaces is folders filter by selected subsystem.
+![Free_search_dialog_results_filled](public/images/workspaces.png)
+
+If you want to change workspaces, click on blue word (in this case *"Everything"*), 
+![Free_search_dialog_results_filled](public/images/workspaces.png)
+
+select wanted worskpace. 
+![Free_search_dialog_results_filled](public/images/workspaceDialog.png)
+
+---
+## Plots search
+
+Plots search field could be found on the right side of the window, next to workspaces selection. If you want to find specific plot/plots, enter its full/part of the name. You will get a folder in which this plot is. Go into that folder/folders until you reach a searched plot.
+
+For example, my current directory is "/" (it is visible in folder path on the right side, below CMS logo). In a plot search, I enter plot name which is *GoodTracksFractionVsBX_ALCARECOMuAlGlobalCosmics*. In the results, I am getting *AlCaReco* folder.
+![The_first_layer_folder_by_search](public/images/firstLayerFolder.png)
+
+Going inside util I will reach wanted plot.
+![Found_plot](public/images/foundPlot.png)
+
+---
 ## Plots
 
 On certain level of browsing subsystem you will reach plots list.
@@ -67,28 +116,19 @@ On certain level of browsing subsystem you will reach plots list.
 1. **Changing size**
 
 - If you want to change the size of these plots, you need to
-  click on "Display Options" and choose from 5 available options: _Tiny_, _Small_, _Medium_ (default), _Large_ or _Fill_.
-  ![Plots](public/images/fill.png)
+  click on "Options" and choose from 5 available options in section *Left side size* : _Tiny_, _Small_, _Medium_ (default), _Large_ or _Fill_.
+  ![Plots](public/images/fill.png).
 
 2. **Overlay plots**
+- In options component is *Reference* section. Here you can overlay plots. In order to do it, you need to click "+ SET RUNS". It will open a dialog, with the regular search: two search fields bu run number and dataset name (image below). Enter the data that you want and click the search button. Below you will see search results. Select whichever you want and your selected data (dataset name and run number) will be displayed in a table above search fields. Maximum 4 plots could be chosen for overlay, because of backend reasons.
+ ![setting_runs_for_overlay](public/images/setRunsOverlayMenu.png).
+When all wanted runs are selected click "OK". Selected runs will be added in *Reference* section. To overlay it, click *Submit* button. On the left corner of a plot, you can see a small table. It is statistics of plot, which was overlaid on the current one. You can change the label of this table, just need to fill text field with placeholder _label_ before you click _Submit_ (by default label is run number).  
 
-- In order to overlay plots, you need to click "Overlay options". There you will see a line with _run_number_ and _dataset_name_ (by default they are the same as current selected). This line reperesents plots' data whose will be overlaid with current visible plots. For example, my current select data:
+ ![set_runs_for_overlay](public/images/selectedRunsForOverlay.png).
 
-  - dataset name: /Cosmics/Commissioning2018-PromptReco-v1/DQMIO
-  - run number: 308333
-
-  I want to overlay visible plots with:
-
-  - dataset name: : /HLTPhysics/Commissioning2018-PromptReco-v1/DQMIO
-  - run number: 308335
-
-  What should I do?
-  Firstly, need click on "Change" button, it will open a dialog with two search fields. They work on the same principle as previuos discussed search (in a header). Find a dataset name which you need and select wanted run number.
-  ![Plots](public/images/overlaySearch.png)
-  After this, click "Submit" and plots will be overlaid.
-  ![Plots](public/images/overlaidPlotsList.png)
-  In the left corner of a plot, you can see a small table. It is statistics of plot, which was overlaid on the current one. You can change the label of this table, just need to fill text field with placeholder _label_ before you click _Submit_.  
-   If you want to overlay one more time just with different data, you should click plus button and it will add one more row with _run_number_ and _dataset_name_. The maximum amount of these lines is 4, because of backend reasons.
+**I want to change my selected run, what should I do?** 
+ Every selected run in *Reference* section has *Change* button. Click on it and it will open a dialog, where you can change selected run.
+  ![set_runs_for_overlay_change](public/images/changeSelectedRun.png).
 
 3. **Plots selection**
    Plot could be selected with a plus button click on the right corner of a plot. In this case, a window will be divided into two sections:
@@ -96,9 +136,18 @@ On certain level of browsing subsystem you will reach plots list.
    - On the left side will be a list of all plots.
    - On the right side will be a list of selected plots.
 
-   1. The format of **selected plots** could be changed to JSROOT format. In order to do it, you need to click _Display options_ (on the right side) and click on the switch button with note JSROOT disabled (highlighted red).
-      ![JSROOT mode](public/images/JSROOTMode.png)
-   2. If JSROOT mode is disabled, **selected plots** can be customized. In order to do it you need to click _Customize_, change parameters you want and click _Submit_. **All selected plots** will be customized by these parameters.
+Also, some options in *Options* sections will be unlocked: *Right side size* modification and  *JSROOT* mode. These options change is available when at least one plot selected because it affects just plots that are on the right side. 
+
+When plots is selected (visible on the right side of a window) and JSROOT mode is disabled, plots on the right side could be customized. Plots customization is done following these actions:
+1. Hover *More* on the right side of a plot and from drop down select *Customize*.
+2. Change wnated options.
+3. Click *OK*.
+
+![plot_customization](public/images/plotCustomization.png).
+
+If you want to change position (to horizontal or vertical) of displayed plots (when at least one plot is selected), you could click *Settings* button, which is in the right side of a window. Then you could change *Plots View Position* and *Plots View Proportions*. In proportions the first number represents left side of a window, the second - the right side.
+
+![settings](public/images/settings.png).
 
 ---
 
