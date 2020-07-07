@@ -62,7 +62,7 @@ const DiplayFolder: FC<FolderProps> = ({
   } = useRequest(
     `/data/json/archive/${run_number}${dataset_name}/${folder_path}`,
     {},
-    [folder_path]
+    [folder_path, run_number, dataset_name]
   );
 
   const [openSettings, toggleSettingsModal] = useState(false);
@@ -87,8 +87,10 @@ const DiplayFolder: FC<FolderProps> = ({
 
   return (
     <>
-      <Row
-        style={{ padding: 8, width: '100%', justifyContent: 'space-between' }}
+      <CustomRow
+        space={'8px'}
+        width='100%'
+        justifycontent='space-between'
       >
         <SettingsModal
           openSettings={openSettings}
@@ -106,12 +108,12 @@ const DiplayFolder: FC<FolderProps> = ({
             Settings
           </StyledSecondaryButton>
         </Col>
-      </Row>
-      <Row style={{ width: '100%' }}>
+      </CustomRow>
+      <CustomRow width= '100%'>
         {doesPlotExists(contents).length > 0 && (
           <ViewDetailsMenu selected_plots={selected_plots.length > 0} />
         )}
-      </Row>
+      </CustomRow>
       <>
         <DivWrapper
           selectedPlots={selected_plots.length > 0}
@@ -128,47 +130,47 @@ const DiplayFolder: FC<FolderProps> = ({
                 <Spinner />
               </SpinnerWrapper>
             ) : (
-              <>
-                {!isLoading &&
-                filteredFolders.length === 0 &&
-                plots.length === 0 &&
-                errors.length === 0 ? (
-                  <NoResultsFound />
-                ) : !isLoading && errors.length === 0 ? (
-                  <>
-                    <CustomRow width="100%">
-                      <Directories directories={filteredFolders} />
-                    </CustomRow>
-                    <Row>
-                      {plots.map((plot: PlotDataProps | undefined) => {
-                        if (plot) {
-                          return (
-                            <div key={plot.name}>
-                              <LeftSidePlots
-                                plot={plot}
-                                selected_plots={selected_plots}
-                              />
-                            </div>
-                          );
-                        }
-                        return <></>;
-                      })}
-                    </Row>
-                  </>
-                ) : (
-                  !isLoading &&
-                  errors.length > 0 &&
-                  errors.map((error) => (
-                    <StyledAlert
-                      key={error}
-                      message={error}
-                      type="error"
-                      showIcon
-                    />
-                  ))
-                )}
-              </>
-            )}
+                <>
+                  {!isLoading &&
+                    filteredFolders.length === 0 &&
+                    plots.length === 0 &&
+                    errors.length === 0 ? (
+                      <NoResultsFound />
+                    ) : !isLoading && errors.length === 0 ? (
+                      <>
+                        <CustomRow width="100%">
+                          <Directories directories={filteredFolders} />
+                        </CustomRow>
+                        <Row>
+                          {plots.map((plot: PlotDataProps | undefined) => {
+                            if (plot) {
+                              return (
+                                <div key={plot.name}>
+                                  <LeftSidePlots
+                                    plot={plot}
+                                    selected_plots={selected_plots}
+                                  />
+                                </div>
+                              );
+                            }
+                            return <></>;
+                          })}
+                        </Row>
+                      </>
+                    ) : (
+                        !isLoading &&
+                        errors.length > 0 &&
+                        errors.map((error) => (
+                          <StyledAlert
+                            key={error}
+                            message={error}
+                            type="error"
+                            showIcon
+                          />
+                        ))
+                      )}
+                </>
+              )}
           </Wrapper>
           {selected_plots.length > 0 && errors.length === 0 && (
             <Wrapper
