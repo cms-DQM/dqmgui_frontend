@@ -85,7 +85,6 @@ const DiplayFolder: FC<FolderProps> = ({
     plots
   );
 
-  console.log(foldersByPlotSearch)
   return (
     <>
       <CustomRow
