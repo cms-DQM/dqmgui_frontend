@@ -20,7 +20,9 @@ export const useFilterFolders = (query: QueryProps, allDirectories: (string | un
 
   React.useEffect(() => {
     set_folders_found_by_dataset_or_run(allDirectories)
-  }, [query.dataset_name, query.run_number])
+    //need to check is allDirectories is changed. Stringify, because allDirectories 
+    //updates to often. TODO: find out why
+  }, [query.dataset_name, query.run_number, JSON.stringify(allDirectories)])
 
   React.useEffect(() => {
     // if workspaces returns empty array, it means that need to return all possible folders

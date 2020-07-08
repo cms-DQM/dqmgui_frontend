@@ -25,7 +25,6 @@ import { LeftSidePlots } from '../../components/plots/plot';
 import { Directories } from './directories';
 import { NoResultsFound } from '../search/noResultsFound';
 import {
-  CustomDiv,
   CustomRow,
   StyledSecondaryButton,
 } from '../../components/styledComponents';
