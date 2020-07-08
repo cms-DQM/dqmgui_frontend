@@ -1,20 +1,21 @@
 import * as React from 'react';
 
-import { QueryProps } from '../containers/display/interfaces';
+import { QueryProps, PlotInterface, DirectoryInterface } from '../containers/display/interfaces';
 import { usePlotSearch } from './usePlotSearch';
 import { useFilterFoldersByWorkspaces } from './useFilterFoldersByWorkspace';
-import { getFilteredDirectories } from '../containers/display/utils';
+import { getFilteredDirectories, getDirectories } from '../containers/display/utils';
 
-export const useFilterFolders = (query: QueryProps, allDirectories: (string | undefined)[]) => {
+export const useFilterFolders = (query: QueryProps, contents: (PlotInterface & DirectoryInterface)[]) => {
   const [foldersByPlotSearch, setFoldersByPlotSearch] = React.useState<string[]>([]);
   const [folders_found_by_dataset_or_run, set_folders_found_by_dataset_or_run] = React.useState<(string | undefined)[]>([])
+  const allDirectories = getDirectories(contents);
 
   const plot_name = query.plot_search ? query.plot_search : '.*';
   const { directories, plots, isLoading, errors } = usePlotSearch(
     plot_name,
     query.run_number,
     query.dataset_name,
-    query.folder_path
+    query.folder_path,
   );
   const { filteredFolders } = useFilterFoldersByWorkspaces(query);
 

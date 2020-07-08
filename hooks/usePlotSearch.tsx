@@ -21,7 +21,7 @@ export const usePlotSearch = (
   plot_name: string,
   run_number_value?: string,
   dataset_name?: string,
-  folder_path?: string
+  folder_path?: string,
 ): usePlotSearchReturn => {
   const [directories, setDirectories] = useState<(string | undefined)[]>([]);
   const [plots, setPlots] = useState<any[]>([]);
@@ -31,7 +31,7 @@ export const usePlotSearch = (
   const { data, isLoading, errors } = useRequest(
     `/data/json/archive/${run_number_value}${dataset_name}/${folders}?search=${plot_name}`,
     {},
-    [plot_name, folders],
+    [plot_name, folders, dataset_name, run_number_value],
     true
   );
 
@@ -41,6 +41,8 @@ export const usePlotSearch = (
   useEffect(() => {
     setDirectories(getDirectories(contents));
     setPlots(formattedPlotsObject);
-  }, [data, folders, isLoading]);
+
+  }, [data, folders, isLoading, dataset_name]);
+
   return { directories, plots, isLoading, errors };
 };

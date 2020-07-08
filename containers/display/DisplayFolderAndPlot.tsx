@@ -1,7 +1,6 @@
-import React, { FC, useState, useContext, useRef } from 'react';
-import { Row, Col, Button } from 'antd';
+import React, { FC, useState, useContext } from 'react';
+import { Row, Col } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
-
 import { useRouter } from 'next/router';
 
 import { useRequest } from '../../hooks/useRequest';
@@ -66,7 +65,6 @@ const DiplayFolder: FC<FolderProps> = ({
 
   const [openSettings, toggleSettingsModal] = useState(false);
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
-  const allDirectories = getDirectories(contents);
   const router = useRouter();
   const query: QueryProps = router.query;
   const selectedPlots = query.selected_plots;
@@ -75,7 +73,7 @@ const DiplayFolder: FC<FolderProps> = ({
   //filtering directories by selected workspace
   const { foldersByPlotSearch, plots } = useFilterFolders(
     query,
-    allDirectories
+    contents
   );
 
   const filteredFolders: any[] = foldersByPlotSearch ? foldersByPlotSearch : [];
@@ -108,7 +106,7 @@ const DiplayFolder: FC<FolderProps> = ({
           </StyledSecondaryButton>
         </Col>
       </CustomRow>
-      <CustomRow width= '100%'>
+      <CustomRow width='100%'>
         {doesPlotExists(contents).length > 0 && (
           <ViewDetailsMenu selected_plots={selected_plots.length > 0} />
         )}
@@ -174,8 +172,7 @@ const DiplayFolder: FC<FolderProps> = ({
           {selected_plots.length > 0 && errors.length === 0 && (
             <Wrapper
               zoomed={selected_plots.length && errors.length === 0}
-              position={viewPlotsPosition}
-            >
+              position={viewPlotsPosition}>
               <ZoomedPlots selected_plots={selected_plots} />
             </Wrapper>
           )}
