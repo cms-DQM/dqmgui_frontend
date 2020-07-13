@@ -21,7 +21,7 @@ export const usePlotSearch = (
   plot_name: string,
   run_number_value?: string,
   dataset_name?: string,
-  folder_path?: string,
+  folder_path?: string
 ): usePlotSearchReturn => {
   const [directories, setDirectories] = useState<(string | undefined)[]>([]);
   const [plots, setPlots] = useState<any[]>([]);
@@ -41,7 +41,6 @@ export const usePlotSearch = (
   useEffect(() => {
     setDirectories(getDirectories(contents));
     setPlots(formattedPlotsObject);
-
   }, [data, folders, isLoading, dataset_name]);
 
   return { directories, plots, isLoading, errors };

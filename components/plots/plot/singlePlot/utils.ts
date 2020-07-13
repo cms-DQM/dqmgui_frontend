@@ -35,7 +35,9 @@ export const addToSelectedPlots = (
   plot: PlotDataProps
 ) => `${plotsQuery ? plotsQuery + '&' : ''}${plot.path}/${plot.name}`;
 
-export const addOverlayData = (triples: TripleProps[] | undefined|  SetStateAction<TripleProps[]>) => {
+export const addOverlayData = (
+  triples: TripleProps[] | undefined | SetStateAction<TripleProps[]>
+) => {
   const params =
     triples &&
     triples.map(

@@ -58,18 +58,19 @@ If you want **to change a dataset name**, you could do this in three ways:
    It means that this dataset, which consists of selected dataset parts, is not existing (or in other words- is not valid). In order to make a request with a valid dataset name, you need to combine all three green parts.
 
 ---
+
 ## Browsing through datasets and runs using free search
 
 When we are browsing thought datasets and runs using browsers/builder we are limited by available options. It is like this because the run browser shows all possible
 runs options by the selected dataset (selected dataset name is visible on dataset name browser/builder). The same situation is with dataset names options: it is possible
-to select just those which exist with a selected run. 
+to select just those which exist with a selected run.
 
 In order to expand search possibilities, the free search is implemented. **Free search** - is the same search initial **Search**, which is not limited. In order to reach
 Free search, needs to click the search button (highlighted red).
 
 ![Free_search_button](public/images/freeSearch.png)
 
-When this button is clicked, you will see search dialog. It is divided into 3 sections: 
+When this button is clicked, you will see search dialog. It is divided into 3 sections:
 ![Free_search_dialog](public/images/freeSearchDialog.png)
 
 1. Search fields, where you can search data by run number or dataset name (initial values are those, which already selected).
@@ -85,29 +86,32 @@ selectedDatasetNameFilled
 ![Free_search_dialog_results_filled](public/images/selectedDatasetNameFilled.png)
 
 ---
+
 ## Worskpaces
 
 Worskpaces selection could be found on the right side of the window. Worskpaces is folders filter by selected subsystem.
 ![Free_search_dialog_results_filled](public/images/workspaces.png)
 
-If you want to change workspaces, click on blue word (in this case *"Everything"*), 
+If you want to change workspaces, click on blue word (in this case _"Everything"_),
 ![Free_search_dialog_results_filled](public/images/workspaces.png)
 
-select wanted worskpace. 
+select wanted worskpace.
 ![Free_search_dialog_results_filled](public/images/workspaceDialog.png)
 
 ---
+
 ## Plots search
 
 Plots search field could be found on the right side of the window, next to workspaces selection. If you want to find specific plot/plots, enter its full/part of the name. You will get a folder in which this plot is. Go into that folder/folders until you reach a searched plot.
 
-For example, my current directory is "/" (it is visible in folder path on the right side, below CMS logo). In a plot search, I enter plot name which is *GoodTracksFractionVsBX_ALCARECOMuAlGlobalCosmics*. In the results, I am getting *AlCaReco* folder.
+For example, my current directory is "/" (it is visible in folder path on the right side, below CMS logo). In a plot search, I enter plot name which is _GoodTracksFractionVsBX_ALCARECOMuAlGlobalCosmics_. In the results, I am getting _AlCaReco_ folder.
 ![The_first_layer_folder_by_search](public/images/firstLayerFolder.png)
 
 Going inside util I will reach wanted plot.
 ![Found_plot](public/images/foundPlot.png)
 
 ---
+
 ## Plots
 
 On certain level of browsing subsystem you will reach plots list.
@@ -116,19 +120,20 @@ On certain level of browsing subsystem you will reach plots list.
 1. **Changing size**
 
 - If you want to change the size of these plots, you need to
-  click on "Options" and choose from 5 available options in section *Left side size* : _Tiny_, _Small_, _Medium_ (default), _Large_ or _Fill_.
+  click on "Options" and choose from 5 available options in section _Left side size_ : _Tiny_, _Small_, _Medium_ (default), _Large_ or _Fill_.
   ![Plots](public/images/fill.png).
 
 2. **Overlay plots**
-- In options component is *Reference* section. Here you can overlay plots. In order to do it, you need to click "+ SET RUNS". It will open a dialog, with the regular search: two search fields bu run number and dataset name (image below). Enter the data that you want and click the search button. Below you will see search results. Select whichever you want and your selected data (dataset name and run number) will be displayed in a table above search fields. Maximum 4 plots could be chosen for overlay, because of backend reasons.
- ![setting_runs_for_overlay](public/images/setRunsOverlayMenu.png).
-When all wanted runs are selected click "OK". Selected runs will be added in *Reference* section. To overlay it, click *Submit* button. On the left corner of a plot, you can see a small table. It is statistics of plot, which was overlaid on the current one. You can change the label of this table, just need to fill text field with placeholder _label_ before you click _Submit_ (by default label is run number).  
 
- ![set_runs_for_overlay](public/images/selectedRunsForOverlay.png).
+- In options component is _Reference_ section. Here you can overlay plots. In order to do it, you need to click "+ SET RUNS". It will open a dialog, with the regular search: two search fields bu run number and dataset name (image below). Enter the data that you want and click the search button. Below you will see search results. Select whichever you want and your selected data (dataset name and run number) will be displayed in a table above search fields. Maximum 4 plots could be chosen for overlay, because of backend reasons.
+  ![setting_runs_for_overlay](public/images/setRunsOverlayMenu.png).
+  When all wanted runs are selected click "OK". Selected runs will be added in _Reference_ section. To overlay it, click _Submit_ button. On the left corner of a plot, you can see a small table. It is statistics of plot, which was overlaid on the current one. You can change the label of this table, just need to fill text field with placeholder _label_ before you click _Submit_ (by default label is run number).
 
-**I want to change my selected run, what should I do?** 
- Every selected run in *Reference* section has *Change* button. Click on it and it will open a dialog, where you can change selected run.
-  ![set_runs_for_overlay_change](public/images/changeSelectedRun.png).
+![set_runs_for_overlay](public/images/selectedRunsForOverlay.png).
+
+**I want to change my selected run, what should I do?**
+Every selected run in _Reference_ section has _Change_ button. Click on it and it will open a dialog, where you can change selected run.
+![set_runs_for_overlay_change](public/images/changeSelectedRun.png).
 
 3. **Plots selection**
    Plot could be selected with a plus button click on the right corner of a plot. In this case, a window will be divided into two sections:
@@ -136,16 +141,17 @@ When all wanted runs are selected click "OK". Selected runs will be added in *Re
    - On the left side will be a list of all plots.
    - On the right side will be a list of selected plots.
 
-Also, some options in *Options* sections will be unlocked: *Right side size* modification and  *JSROOT* mode. These options change is available when at least one plot selected because it affects just plots that are on the right side. 
+Also, some options in _Options_ sections will be unlocked: _Right side size_ modification and _JSROOT_ mode. These options change is available when at least one plot selected because it affects just plots that are on the right side.
 
 When plots is selected (visible on the right side of a window) and JSROOT mode is disabled, plots on the right side could be customized. Plots customization is done following these actions:
-1. Hover *More* on the right side of a plot and from drop down select *Customize*.
+
+1. Hover _More_ on the right side of a plot and from drop down select _Customize_.
 2. Change wnated options.
-3. Click *OK*.
+3. Click _OK_.
 
 ![plot_customization](public/images/plotCustomization.png).
 
-If you want to change position (to horizontal or vertical) of displayed plots (when at least one plot is selected), you could click *Settings* button, which is in the right side of a window. Then you could change *Plots View Position* and *Plots View Proportions*. In proportions the first number represents left side of a window, the second - the right side.
+If you want to change position (to horizontal or vertical) of displayed plots (when at least one plot is selected), you could click _Settings_ button, which is in the right side of a window. Then you could change _Plots View Position_ and _Plots View Proportions_. In proportions the first number represents left side of a window, the second - the right side.
 
 ![settings](public/images/settings.png).
 
@@ -205,6 +211,5 @@ If you want to change position (to horizontal or vertical) of displayed plots (w
 19. ~~Horizontal an Vertical plot display~~ (11/06/2020)
 20. ~~Customization for ONE plot~~ (09/06/2020)
 21. ~~Free and combined search~~ (11/06/2020)
-
 
 ---

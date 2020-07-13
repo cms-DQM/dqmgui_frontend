@@ -20,7 +20,10 @@ import Nav from '../../Nav';
 import { useSearch } from '../../../hooks/useSearch';
 import SearchResults from '../../../containers/search/SearchResults';
 import { concatArrays } from '../utils';
-import { changeRouter, getChangedQueryParams } from '../../../containers/display/utils';
+import {
+  changeRouter,
+  getChangedQueryParams,
+} from '../../../containers/display/utils';
 import { addOverlayData } from '../../plots/plot/singlePlot/utils';
 import { useRouter } from 'next/router';
 
@@ -75,14 +78,10 @@ export const SetRunsModal = ({
 
   //overlaid_and_selected_runs combines list of runs which are already overlaid (triples)
   // with those which are just selected (selected_runs) in "Set Runs" dialog
-  const overlaid_and_selected_runs = concatArrays([
-    selected_runs,
-    triples,
-  ]);
+  const overlaid_and_selected_runs = concatArrays([selected_runs, triples]);
 
   const router = useRouter();
   const query: QueryProps = router.query;
-
 
   return (
     <StyledModal
@@ -167,8 +166,8 @@ export const SetRunsModal = ({
               />
             </ResultsWrapper>
           ) : (
-              <ResultsWrapper />
-            )}
+            <ResultsWrapper />
+          )}
         </div>
       </div>
     </StyledModal>

@@ -21,7 +21,10 @@ import { store } from '../../../contexts/leftSideContext';
 import { RunBrowser } from '../../browsing/runsBrowser';
 import { DatasetsBrowser } from '../../browsing/datasetsBrowsing/datasetsBrowser';
 import { SetRunsModal } from './setRunsModal';
-import { changeRouter, getChangedQueryParams } from '../../../containers/display/utils';
+import {
+  changeRouter,
+  getChangedQueryParams,
+} from '../../../containers/display/utils';
 import { addOverlayData } from '../../plots/plot/singlePlot/utils';
 
 interface OverlayRunsProps {
@@ -35,7 +38,6 @@ export const OverlayRuns = ({
   query,
   setSelectedTriple,
 }: OverlayRunsProps) => {
-
   const globalState = useContext(store);
   const {
     toggleOverlayDataMenu,
@@ -50,7 +52,7 @@ export const OverlayRuns = ({
   const remove_runs_to_set_runs_for_overlay = (id: string) => {
     const copy = [...triples];
     const filtered = copy.filter((run) => run.id !== id);
-    change_run_details(filtered)
+    change_run_details(filtered);
   };
 
   const change_run_details = async (runs: SetStateAction<TripleProps[]>) => {
@@ -62,8 +64,8 @@ export const OverlayRuns = ({
         query
       )
     );
-    setTriples(runs)
-  }
+    setTriples(runs);
+  };
 
   return (
     <CustomDiv style={{ overflowX: 'auto' }}>
@@ -76,97 +78,95 @@ export const OverlayRuns = ({
         set_runs_set_for_overlay={set_runs_set_for_overlay}
       />
       <table>
-        {triples.map(
-          (overlaid_run: TripleProps, index: number) => (
-            <tr>
-              <CustomTd spacing={'4'}>
-                <Checkbox
-                  checked={overlaid_run.checked as boolean}
-                  onChange={(e: any) => {
-                    changeRunsForOverlayPropsValues(
-                      overlaid_run.cheked
-                        ? overlaid_run.cheked
-                        : e.target.checked,
-                      'checked',
-                      overlaid_run.id,
-                      triples,
-                      change_run_details
-                    );
-                  }}
-                />
-              </CustomTd>
-              <CustomTd spacing={'4'}>{index + 1}.</CustomTd>
-              <CustomTd spacing={'4'}>
-                <RunBrowser
-                  currentRunNumber={overlaid_run.run_number as string}
-                  currentDataset={overlaid_run.dataset_name as string}
-                  query={query}
-                  withoutLabel={true}
-                  setCurrentRunNumber={(run_number) => {
-                    changeRunsForOverlayPropsValues(
-                      run_number,
-                      'run_number',
-                      overlaid_run.id,
-                      triples,
-                      change_run_details
-                    );
-                  }}
-                  withoutArrows={true}
-                />
-              </CustomTd>
-              <CustomTd spacing={'4'}>
-                <DatasetsBrowser
-                  currentRunNumber={overlaid_run.run_number as string}
-                  currentDataset={overlaid_run.dataset_name as string}
-                  query={query}
-                  selectorWidth={'100%'}
-                  setCurrentDataset={(dataset_name) => {
-                    changeRunsForOverlayPropsValues(
-                      dataset_name,
-                      'dataset_name',
-                      overlaid_run.id,
-                      triples,
-                      change_run_details
-                    );
-                  }}
-                  withoutArrows={true}
-                />
-              </CustomTd>
-              <CustomTd spacing={'4'}>
-                <StyledSecondaryButton
-                  onClick={() => {
-                    toggleOverlayDataMenu(true);
-                    setSelectedTriple(overlaid_run);
-                  }}
-                >
-                  Change
-                </StyledSecondaryButton>
-              </CustomTd>
-              <CustomTd spacing={'4'}>
-                <Field
-                  triples={triples}
-                  change_run_details={change_run_details}
-                  removeRun={remove_runs_to_set_runs_for_overlay}
-                  id={overlaid_run.id}
-                  field_name="label"
-                  placeholder="label"
-                  defaultValue={overlaid_run.label as string}
-                  value={overlaid_run.label}
-                />
-              </CustomTd>
-              <CustomTd spacing={'4'}>
-                <StyledSecondaryButton
-                  onClick={() => {
-                    remove_runs_to_set_runs_for_overlay(
-                      overlaid_run.id as string
-                    );
-                  }}
-                  icon={<MinusOutlined />}
-                ></StyledSecondaryButton>
-              </CustomTd>
-            </tr>
-          )
-        )}
+        {triples.map((overlaid_run: TripleProps, index: number) => (
+          <tr>
+            <CustomTd spacing={'4'}>
+              <Checkbox
+                checked={overlaid_run.checked as boolean}
+                onChange={(e: any) => {
+                  changeRunsForOverlayPropsValues(
+                    overlaid_run.cheked
+                      ? overlaid_run.cheked
+                      : e.target.checked,
+                    'checked',
+                    overlaid_run.id,
+                    triples,
+                    change_run_details
+                  );
+                }}
+              />
+            </CustomTd>
+            <CustomTd spacing={'4'}>{index + 1}.</CustomTd>
+            <CustomTd spacing={'4'}>
+              <RunBrowser
+                currentRunNumber={overlaid_run.run_number as string}
+                currentDataset={overlaid_run.dataset_name as string}
+                query={query}
+                withoutLabel={true}
+                setCurrentRunNumber={(run_number) => {
+                  changeRunsForOverlayPropsValues(
+                    run_number,
+                    'run_number',
+                    overlaid_run.id,
+                    triples,
+                    change_run_details
+                  );
+                }}
+                withoutArrows={true}
+              />
+            </CustomTd>
+            <CustomTd spacing={'4'}>
+              <DatasetsBrowser
+                currentRunNumber={overlaid_run.run_number as string}
+                currentDataset={overlaid_run.dataset_name as string}
+                query={query}
+                selectorWidth={'100%'}
+                setCurrentDataset={(dataset_name) => {
+                  changeRunsForOverlayPropsValues(
+                    dataset_name,
+                    'dataset_name',
+                    overlaid_run.id,
+                    triples,
+                    change_run_details
+                  );
+                }}
+                withoutArrows={true}
+              />
+            </CustomTd>
+            <CustomTd spacing={'4'}>
+              <StyledSecondaryButton
+                onClick={() => {
+                  toggleOverlayDataMenu(true);
+                  setSelectedTriple(overlaid_run);
+                }}
+              >
+                Change
+              </StyledSecondaryButton>
+            </CustomTd>
+            <CustomTd spacing={'4'}>
+              <Field
+                triples={triples}
+                change_run_details={change_run_details}
+                removeRun={remove_runs_to_set_runs_for_overlay}
+                id={overlaid_run.id}
+                field_name="label"
+                placeholder="label"
+                defaultValue={overlaid_run.label as string}
+                value={overlaid_run.label}
+              />
+            </CustomTd>
+            <CustomTd spacing={'4'}>
+              <StyledSecondaryButton
+                onClick={() => {
+                  remove_runs_to_set_runs_for_overlay(
+                    overlaid_run.id as string
+                  );
+                }}
+                icon={<MinusOutlined />}
+              ></StyledSecondaryButton>
+            </CustomTd>
+          </tr>
+        ))}
       </table>
       <Row justify="space-between" style={{ height: 48, padding: 8 }}>
         <CustomDiv position="fixed" display="flex">

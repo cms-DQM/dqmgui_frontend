@@ -50,7 +50,7 @@ export const RunBrowser = ({
   const runNumbers = getRunNumbers(results_grouped);
   const query_run_number = query.run_number ? query.run_number : '';
   const currentRunNumberIndex = runNumbers.indexOf(query_run_number);
-  
+
   return (
     <Col>
       <StyledFormItem

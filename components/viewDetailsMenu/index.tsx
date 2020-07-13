@@ -28,7 +28,7 @@ export const ViewDetailsMenu = ({ selected_plots }: ViewDetailsMenuProps) => {
     setJSROOTmode,
     rightSideSize,
     setRightSideSize,
-    setTriples
+    setTriples,
   } = globalState;
 
   useEffect(() => {
