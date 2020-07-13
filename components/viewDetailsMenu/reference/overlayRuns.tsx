@@ -55,7 +55,7 @@ export const OverlayRuns = ({
     change_run_details(filtered);
   };
 
-  const change_run_details = async (runs: SetStateAction<TripleProps[]>) => {
+  const change_run_details = async (runs:TripleProps[]) => {
     await changeRouter(
       getChangedQueryParams(
         {

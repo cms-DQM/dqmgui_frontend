@@ -12,7 +12,7 @@ interface FieldProps {
   placeholder?: string;
   disabled?: boolean;
   defaultValue?: string;
-  change_run_details: React.Dispatch<React.SetStateAction<TripleProps[]>>;
+  change_run_details: any;
   triples: TripleProps[];
 }
 

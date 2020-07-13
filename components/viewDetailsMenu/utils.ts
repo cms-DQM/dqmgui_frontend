@@ -66,7 +66,7 @@ export const changeRunsForOverlayPropsValues = (
   key: string,
   id: string | number | boolean,
   runs: TripleProps[],
-  set_action: React.Dispatch<React.SetStateAction<TripleProps[]>>
+  set_action: any
 ) => {
   const current_line: TripleProps = runs.filter(
     (line: TripleProps) => line.id === id
