@@ -12,6 +12,7 @@ import {
   changeRouter,
   getChangedQueryParams,
 } from '../../../../containers/display/utils';
+import { SetStateAction } from 'react';
 
 export const removePlotFromSelectedPlots = (
   plotsQuery: string | undefined,
@@ -34,7 +35,7 @@ export const addToSelectedPlots = (
   plot: PlotDataProps
 ) => `${plotsQuery ? plotsQuery + '&' : ''}${plot.path}/${plot.name}`;
 
-export const addOverlayData = (triples: TripleProps[] | undefined) => {
+export const addOverlayData = (triples: TripleProps[] | undefined|  SetStateAction<TripleProps[]>) => {
   const params =
     triples &&
     triples.map(

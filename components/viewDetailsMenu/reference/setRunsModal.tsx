@@ -30,14 +30,14 @@ interface SetRunsModalProps {
   overlaid_runs: TripleProps[];
   set_runs_set_for_overlay(runs: TripleProps[]): void;
   triples: TripleProps[];
-  addRun(selected_runs: TripleProps[]): void;
+  setTriples(selected_runs: TripleProps[]): void;
 }
 
 export const SetRunsModal = ({
   open,
   toggleModal,
   triples,
-  addRun,
+  setTriples,
 }: SetRunsModalProps) => {
   const [serachRunNumber, setSearchRunNumber] = React.useState('');
   const [serachDatasetName, setSearchDatasetName] = React.useState('');
@@ -49,6 +49,7 @@ export const SetRunsModal = ({
     serachDatasetName
   );
 
+  //navigationHandler is used for set run and dataset search values
   const navigationHandler = (
     search_by_run_number: string,
     search_by_dataset_name: string
@@ -57,6 +58,7 @@ export const SetRunsModal = ({
     setSearchDatasetName(search_by_dataset_name);
   };
 
+  //searchHandler is used for set run and dataset for overlay
   const searchHandler = (run_number: string, dataset_name: string) => {
     const id = uuidv4();
     const full_run: TripleProps = {
@@ -71,6 +73,8 @@ export const SetRunsModal = ({
     set_selected_runs(copy);
   };
 
+  //overlaid_and_selected_runs combines list of runs which are already overlaid (triples)
+  // with those which are just selected (selected_runs) in "Set Runs" dialog
   const overlaid_and_selected_runs = concatArrays([
     selected_runs,
     triples,
@@ -111,7 +115,7 @@ export const SetRunsModal = ({
                 query
               )
             );
-            addRun(overlaid_and_selected_runs);
+            setTriples(overlaid_and_selected_runs);
             toggleModal(false);
             set_selected_runs([]);
           }}

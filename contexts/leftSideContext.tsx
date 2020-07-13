@@ -145,16 +145,6 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
     setTriples(copy);
   };
 
-  const addRun = (run_from_query?: TripleProps[]) => {
-    setTriples(run_from_query);
-  };
-
-  const removeRun = (id: string | number | boolean) => {
-    const copy: TripleProps[] = [...triples];
-    const removed = copy.filter((run: TripleProps) => run.id !== id);
-    setTriples(removed);
-  };
-
   return (
     <Provider
       value={{
@@ -177,9 +167,8 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         plotSearchFolders,
         setPlotSearchFolders,
         change_value_in_reference_table,
-        addRun,
-        removeRun,
         triples,
+        setTriples,
         openOverlayDataMenu,
         toggleOverlayDataMenu,
         viewPlotsPosition,
@@ -197,7 +186,7 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         customize,
         setCustomize,
         runs_set_for_overlay,
-        set_runs_set_for_overlay
+        set_runs_set_for_overlay,
       }}
     >
       {children}

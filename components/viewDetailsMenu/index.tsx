@@ -28,18 +28,18 @@ export const ViewDetailsMenu = ({ selected_plots }: ViewDetailsMenuProps) => {
     setJSROOTmode,
     rightSideSize,
     setRightSideSize,
-    addRun
+    setTriples
   } = globalState;
 
   useEffect(() => {
     if (query) {
       if (query.overlay_data) {
         const formatObjects = formTriples(query.overlay_data);
-        addRun(formatObjects);
+        setTriples(formatObjects);
       }
     }
     return () => {
-      addRun([]);
+      setTriples([]);
       setJSROOTmode(false);
     };
   }, []);

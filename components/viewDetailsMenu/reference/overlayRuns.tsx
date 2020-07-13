@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, Dispatch, SetStateAction } from 'react';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { Checkbox, Row, Tooltip } from 'antd';
 
@@ -27,23 +27,22 @@ import { addOverlayData } from '../../plots/plot/singlePlot/utils';
 interface OverlayRunsProps {
   overlaid_runs: TripleProps[];
   query: QueryProps;
-  setTriple(overlaid_run: TripleProps): void;
+  setSelectedTriple(overlaid_run: TripleProps): void;
 }
 
 export const OverlayRuns = ({
   overlaid_runs,
   query,
-  setTriple,
+  setSelectedTriple,
 }: OverlayRunsProps) => {
 
   const globalState = useContext(store);
   const {
     toggleOverlayDataMenu,
-    removeRun,
     runs_set_for_overlay,
     set_runs_set_for_overlay,
-    addRun,
-    triples
+    setTriples,
+    triples,
   } = globalState;
 
   const [open, toggleModal] = useState(false);
@@ -51,20 +50,19 @@ export const OverlayRuns = ({
   const remove_runs_to_set_runs_for_overlay = (id: string) => {
     const copy = [...triples];
     const filtered = copy.filter((run) => run.id !== id);
-    console.log(filtered)
-    changeRunThoughBrowsers(filtered)
+    change_run_details(filtered)
   };
 
-  const changeRunThoughBrowsers = async (run: any) => {
+  const change_run_details = async (runs: SetStateAction<TripleProps[]>) => {
     await changeRouter(
       getChangedQueryParams(
         {
-          overlay_data: `${addOverlayData(run)}`,
+          overlay_data: `${addOverlayData(runs)}`,
         },
         query
       )
     );
-    addRun(run)
+    setTriples(runs)
   }
 
   return (
@@ -73,7 +71,7 @@ export const OverlayRuns = ({
         open={open}
         toggleModal={toggleModal}
         overlaid_runs={overlaid_runs}
-        addRun={addRun}
+        setTriples={setTriples}
         triples={triples}
         set_runs_set_for_overlay={set_runs_set_for_overlay}
       />
@@ -92,7 +90,7 @@ export const OverlayRuns = ({
                       'checked',
                       overlaid_run.id,
                       triples,
-                      changeRunThoughBrowsers
+                      change_run_details
                     );
                   }}
                 />
@@ -110,7 +108,7 @@ export const OverlayRuns = ({
                       'run_number',
                       overlaid_run.id,
                       triples,
-                      changeRunThoughBrowsers
+                      change_run_details
                     );
                   }}
                   withoutArrows={true}
@@ -128,7 +126,7 @@ export const OverlayRuns = ({
                       'dataset_name',
                       overlaid_run.id,
                       triples,
-                      changeRunThoughBrowsers
+                      change_run_details
                     );
                   }}
                   withoutArrows={true}
@@ -138,7 +136,7 @@ export const OverlayRuns = ({
                 <StyledSecondaryButton
                   onClick={() => {
                     toggleOverlayDataMenu(true);
-                    setTriple(overlaid_run);
+                    setSelectedTriple(overlaid_run);
                   }}
                 >
                   Change
@@ -146,9 +144,9 @@ export const OverlayRuns = ({
               </CustomTd>
               <CustomTd spacing={'4'}>
                 <Field
-                  runs_set_for_overlay={triples}
-                  set_interim_runs={changeRunThoughBrowsers}
-                  removeRun={removeRun}
+                  triples={triples}
+                  change_run_details={change_run_details}
+                  removeRun={remove_runs_to_set_runs_for_overlay}
                   id={overlaid_run.id}
                   field_name="label"
                   placeholder="label"
