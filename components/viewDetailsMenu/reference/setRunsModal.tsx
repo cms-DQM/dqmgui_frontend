@@ -14,28 +14,30 @@ import { theme } from '../../../styles/theme';
 import {
   TripleProps,
   FolderPathQuery,
+  QueryProps,
 } from '../../../containers/display/interfaces';
 import Nav from '../../Nav';
 import { useSearch } from '../../../hooks/useSearch';
 import SearchResults from '../../../containers/search/SearchResults';
 import { concatArrays } from '../utils';
+import { changeRouter, getChangedQueryParams } from '../../../containers/display/utils';
+import { addOverlayData } from '../../plots/plot/singlePlot/utils';
+import { useRouter } from 'next/router';
 
 interface SetRunsModalProps {
   open: boolean;
   toggleModal(open: boolean): void;
   overlaid_runs: TripleProps[];
   set_runs_set_for_overlay(runs: TripleProps[]): void;
-  runs_set_for_overlay: TripleProps[];
-  add_runs_to_set_runs_for_overlay(selected_runs: TripleProps[]): void;
+  triples: TripleProps[];
+  addRun(selected_runs: TripleProps[]): void;
 }
 
 export const SetRunsModal = ({
   open,
   toggleModal,
-  overlaid_runs,
-  set_runs_set_for_overlay,
-  runs_set_for_overlay,
-  add_runs_to_set_runs_for_overlay,
+  triples,
+  addRun,
 }: SetRunsModalProps) => {
   const [serachRunNumber, setSearchRunNumber] = React.useState('');
   const [serachDatasetName, setSearchDatasetName] = React.useState('');
@@ -71,8 +73,12 @@ export const SetRunsModal = ({
 
   const overlaid_and_selected_runs = concatArrays([
     selected_runs,
-    runs_set_for_overlay,
+    triples,
   ]);
+
+  const router = useRouter();
+  const query: QueryProps = router.query;
+
 
   return (
     <StyledModal
@@ -97,7 +103,15 @@ export const SetRunsModal = ({
         <StyledButton
           key="OK"
           onClick={() => {
-            add_runs_to_set_runs_for_overlay(overlaid_and_selected_runs);
+            changeRouter(
+              getChangedQueryParams(
+                {
+                  overlay_data: `${addOverlayData(overlaid_and_selected_runs)}`,
+                },
+                query
+              )
+            );
+            addRun(overlaid_and_selected_runs);
             toggleModal(false);
             set_selected_runs([]);
           }}
@@ -149,8 +163,8 @@ export const SetRunsModal = ({
               />
             </ResultsWrapper>
           ) : (
-            <ResultsWrapper />
-          )}
+              <ResultsWrapper />
+            )}
         </div>
       </div>
     </StyledModal>

@@ -32,6 +32,7 @@ export const DatasetsBrowser = ({
   const [openSelect, setSelect] = useState(false);
   //setting  dataset field width to prev. selected dataset name field width,
   // because when spinner is shown, field becomes spinner width
+  
   const [width, setWidth] = useState<number | undefined>();
   const { results_grouped, isLoading } = useSearch(currentRunNumber, '');
 
@@ -41,10 +42,6 @@ export const DatasetsBrowser = ({
 
   const query_dataset = query.dataset_name ? query.dataset_name : '';
   const currentDatasetNameIndex = datasets.indexOf(query_dataset);
-
-  useEffect(() => {
-    setCurrentDataset(currentDataset);
-  }, []);
 
   return (
     <Row
