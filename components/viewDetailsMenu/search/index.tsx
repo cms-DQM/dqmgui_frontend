@@ -41,7 +41,6 @@ export const CustomModal = ({ id }: CustomModalProps) => {
 
   const searchHandler = (run_number: string, dataset_name: string) => {
     change_value_in_reference_table(run_number, 'run_number', id);
-
     change_value_in_reference_table(dataset_name, 'dataset_name', id);
 
     toggleOverlayDataMenu(false);

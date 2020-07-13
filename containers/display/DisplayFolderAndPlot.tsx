@@ -1,7 +1,6 @@
-import React, { FC, useState, useContext, useRef } from 'react';
-import { Row, Col, Button } from 'antd';
+import React, { FC, useState, useContext } from 'react';
+import { Row, Col } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
-
 import { useRouter } from 'next/router';
 
 import { useRequest } from '../../hooks/useRequest';
@@ -25,7 +24,6 @@ import { LeftSidePlots } from '../../components/plots/plot';
 import { Directories } from './directories';
 import { NoResultsFound } from '../search/noResultsFound';
 import {
-  CustomDiv,
   CustomRow,
   StyledSecondaryButton,
 } from '../../components/styledComponents';
@@ -67,17 +65,13 @@ const DiplayFolder: FC<FolderProps> = ({
 
   const [openSettings, toggleSettingsModal] = useState(false);
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
-  const allDirectories = getDirectories(contents);
   const router = useRouter();
   const query: QueryProps = router.query;
   const selectedPlots = query.selected_plots;
   const { viewPlotsPosition, proportion } = useContext(store);
 
   //filtering directories by selected workspace
-  const { foldersByPlotSearch, plots } = useFilterFolders(
-    query,
-    allDirectories
-  );
+  const { foldersByPlotSearch, plots } = useFilterFolders(query, contents);
 
   const filteredFolders: any[] = foldersByPlotSearch ? foldersByPlotSearch : [];
   const selected_plots: PlotDataProps[] = getSelectedPlots(
@@ -87,11 +81,7 @@ const DiplayFolder: FC<FolderProps> = ({
 
   return (
     <>
-      <CustomRow
-        space={'8px'}
-        width='100%'
-        justifycontent='space-between'
-      >
+      <CustomRow space={'8px'} width="100%" justifycontent="space-between">
         <SettingsModal
           openSettings={openSettings}
           toggleSettingsModal={toggleSettingsModal}
@@ -109,7 +99,7 @@ const DiplayFolder: FC<FolderProps> = ({
           </StyledSecondaryButton>
         </Col>
       </CustomRow>
-      <CustomRow width= '100%'>
+      <CustomRow width="100%">
         {doesPlotExists(contents).length > 0 && (
           <ViewDetailsMenu selected_plots={selected_plots.length > 0} />
         )}
@@ -130,47 +120,47 @@ const DiplayFolder: FC<FolderProps> = ({
                 <Spinner />
               </SpinnerWrapper>
             ) : (
-                <>
-                  {!isLoading &&
-                    filteredFolders.length === 0 &&
-                    plots.length === 0 &&
-                    errors.length === 0 ? (
-                      <NoResultsFound />
-                    ) : !isLoading && errors.length === 0 ? (
-                      <>
-                        <CustomRow width="100%">
-                          <Directories directories={filteredFolders} />
-                        </CustomRow>
-                        <Row>
-                          {plots.map((plot: PlotDataProps | undefined) => {
-                            if (plot) {
-                              return (
-                                <div key={plot.name}>
-                                  <LeftSidePlots
-                                    plot={plot}
-                                    selected_plots={selected_plots}
-                                  />
-                                </div>
-                              );
-                            }
-                            return <></>;
-                          })}
-                        </Row>
-                      </>
-                    ) : (
-                        !isLoading &&
-                        errors.length > 0 &&
-                        errors.map((error) => (
-                          <StyledAlert
-                            key={error}
-                            message={error}
-                            type="error"
-                            showIcon
-                          />
-                        ))
-                      )}
-                </>
-              )}
+              <>
+                {!isLoading &&
+                filteredFolders.length === 0 &&
+                plots.length === 0 &&
+                errors.length === 0 ? (
+                  <NoResultsFound />
+                ) : !isLoading && errors.length === 0 ? (
+                  <>
+                    <CustomRow width="100%">
+                      <Directories directories={filteredFolders} />
+                    </CustomRow>
+                    <Row>
+                      {plots.map((plot: PlotDataProps | undefined) => {
+                        if (plot) {
+                          return (
+                            <div key={plot.name}>
+                              <LeftSidePlots
+                                plot={plot}
+                                selected_plots={selected_plots}
+                              />
+                            </div>
+                          );
+                        }
+                        return <></>;
+                      })}
+                    </Row>
+                  </>
+                ) : (
+                  !isLoading &&
+                  errors.length > 0 &&
+                  errors.map((error) => (
+                    <StyledAlert
+                      key={error}
+                      message={error}
+                      type="error"
+                      showIcon
+                    />
+                  ))
+                )}
+              </>
+            )}
           </Wrapper>
           {selected_plots.length > 0 && errors.length === 0 && (
             <Wrapper

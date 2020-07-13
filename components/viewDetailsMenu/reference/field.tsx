@@ -12,8 +12,8 @@ interface FieldProps {
   placeholder?: string;
   disabled?: boolean;
   defaultValue?: string;
-  set_interim_runs: React.Dispatch<React.SetStateAction<TripleProps[]>>;
-  runs_set_for_overlay: TripleProps[];
+  change_run_details: React.Dispatch<React.SetStateAction<TripleProps[]>>;
+  triples: TripleProps[];
 }
 
 export const Field = ({
@@ -24,8 +24,8 @@ export const Field = ({
   placeholder,
   disabled,
   defaultValue,
-  runs_set_for_overlay,
-  set_interim_runs,
+  triples,
+  change_run_details,
 }: FieldProps) => {
   useEffect(() => {
     const cleanField = () => {
@@ -44,8 +44,8 @@ export const Field = ({
             e.target.value,
             'label',
             id,
-            runs_set_for_overlay,
-            set_interim_runs
+            triples,
+            change_run_details
           );
         }}
         value={inputValue}

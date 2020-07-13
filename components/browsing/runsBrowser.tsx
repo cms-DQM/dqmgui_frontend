@@ -51,10 +51,6 @@ export const RunBrowser = ({
   const query_run_number = query.run_number ? query.run_number : '';
   const currentRunNumberIndex = runNumbers.indexOf(query_run_number);
 
-  useEffect(() => {
-    setCurrentRunNumber(currentRunNumber);
-  }, [currentRunNumber]);
-
   return (
     <Col>
       <StyledFormItem

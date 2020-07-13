@@ -112,7 +112,6 @@ export const Wrapper = styled.div<{
     props?.zoomed && props.position === viewPositions[0].value
       ? props.notZoomedPlot && props.proportion
       : '100%'};
-  display: flex;
   flex-wrap: wrap;
   overflow: ${(props) => (props?.zoomed ? 'scroll' : '')};
   align-items: start;

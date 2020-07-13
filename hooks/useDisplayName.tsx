@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import cleanDeep from 'clean-deep';
 
 import { PlotInterface } from '../containers/display/DisplayFolderAndPlot';
 import { getNameAndDirectoriesFromDir } from '../containers/display/utils';
-import { PlotDataProps } from '../containers/display/interfaces';
+import { PlotDataProps, QueryProps } from '../containers/display/interfaces';
+import { useRouter } from 'next/router';
 
 export const useDisplayedName = (contents: any, data: any) => {
   const [plotContent, setPlotContent] = useState<PlotDataProps[]>([]);
+  const router = useRouter();
+  const query: QueryProps = router.query;
 
   useEffect(() => {
     const plotsData: any = cleanDeep(
@@ -27,7 +30,7 @@ export const useDisplayedName = (contents: any, data: any) => {
     );
     const result = plotsData ? plotsData : [];
     setPlotContent(result);
-  }, [data]);
+  }, [data, query.dataset_name, query.run_number]);
 
   return plotContent;
 };

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Col } from 'antd';
 
 import {
@@ -19,7 +19,7 @@ import FormItem from 'antd/lib/form/FormItem';
 import { store } from '../../../contexts/leftSideContext';
 
 export const Reference = () => {
-  const [selectedTriple, setTriple] = useState<TripleProps>({});
+  const [selectedTriple, setSelectedTriple] = useState<TripleProps>({});
 
   const globalState = useContext(store);
   const { normalize, setNormalize, triples } = globalState;
@@ -59,7 +59,7 @@ export const Reference = () => {
       <OverlayRuns
         overlaid_runs={triples}
         query={query}
-        setTriple={setTriple}
+        setSelectedTriple={setSelectedTriple}
       />
     </StyledDiv>
   );

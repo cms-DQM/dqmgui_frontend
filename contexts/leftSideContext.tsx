@@ -42,7 +42,7 @@ export const initialState: any = {
   stats: true,
   overlayPosition: overlayOptions[0].value,
   overlay: undefined,
-  overlayPlots: undefined,
+  overlayPlots: [],
   triples: [],
   openOverlayDataMenu: false,
   viewPlotsPosition: viewPositions[1].value,
@@ -117,29 +117,32 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
     withref: '',
   });
 
+  const [runs_set_for_overlay, set_runs_set_for_overlay] = React.useState<
+    TripleProps[]
+  >(triples ? triples : []);
+
   const change_value_in_reference_table = (
     value: string | number,
     key: string,
     id: string | number | boolean
   ) => {
     const copy = [...triples];
-    const current_line: TripleProps = copy.filter(
+    //triples are those runs which are already overlaid.
+    //runs_set_for_overlay are runs which are sekected for overlay,
+    //but not overlaid yet.
+    let current_line: TripleProps = triples.filter(
       (line: TripleProps) => line.id === id
     )[0];
+    if (!current_line) {
+      current_line = runs_set_for_overlay.filter(
+        (line: TripleProps) => line.id === id
+      )[0];
+    }
+
     const index_of_line: number = copy.indexOf(current_line);
     current_line[key] = value;
     copy[index_of_line] = current_line;
     setTriples(copy);
-  };
-
-  const addRun = (run_from_query?: TripleProps[]) => {
-    setTriples(run_from_query);
-  };
-
-  const removeRun = (id: string | number | boolean) => {
-    const copy: TripleProps[] = [...triples];
-    const removed = copy.filter((run: TripleProps) => run.id !== id);
-    setTriples(removed);
   };
 
   return (
@@ -164,9 +167,8 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         plotSearchFolders,
         setPlotSearchFolders,
         change_value_in_reference_table,
-        addRun,
-        removeRun,
         triples,
+        setTriples,
         openOverlayDataMenu,
         toggleOverlayDataMenu,
         viewPlotsPosition,
@@ -183,6 +185,8 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         setJSROOTmode,
         customize,
         setCustomize,
+        runs_set_for_overlay,
+        set_runs_set_for_overlay,
       }}
     >
       {children}

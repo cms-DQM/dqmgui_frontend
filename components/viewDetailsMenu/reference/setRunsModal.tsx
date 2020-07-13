@@ -14,28 +14,33 @@ import { theme } from '../../../styles/theme';
 import {
   TripleProps,
   FolderPathQuery,
+  QueryProps,
 } from '../../../containers/display/interfaces';
 import Nav from '../../Nav';
 import { useSearch } from '../../../hooks/useSearch';
 import SearchResults from '../../../containers/search/SearchResults';
 import { concatArrays } from '../utils';
+import {
+  changeRouter,
+  getChangedQueryParams,
+} from '../../../containers/display/utils';
+import { addOverlayData } from '../../plots/plot/singlePlot/utils';
+import { useRouter } from 'next/router';
 
 interface SetRunsModalProps {
   open: boolean;
   toggleModal(open: boolean): void;
   overlaid_runs: TripleProps[];
   set_runs_set_for_overlay(runs: TripleProps[]): void;
-  runs_set_for_overlay: TripleProps[];
-  add_runs_to_set_runs_for_overlay(selected_runs: TripleProps[]): void;
+  triples: TripleProps[];
+  setTriples(selected_runs: TripleProps[]): void;
 }
 
 export const SetRunsModal = ({
   open,
   toggleModal,
-  overlaid_runs,
-  set_runs_set_for_overlay,
-  runs_set_for_overlay,
-  add_runs_to_set_runs_for_overlay,
+  triples,
+  setTriples,
 }: SetRunsModalProps) => {
   const [serachRunNumber, setSearchRunNumber] = React.useState('');
   const [serachDatasetName, setSearchDatasetName] = React.useState('');
@@ -47,6 +52,7 @@ export const SetRunsModal = ({
     serachDatasetName
   );
 
+  //navigationHandler is used for set run and dataset search values
   const navigationHandler = (
     search_by_run_number: string,
     search_by_dataset_name: string
@@ -55,6 +61,7 @@ export const SetRunsModal = ({
     setSearchDatasetName(search_by_dataset_name);
   };
 
+  //searchHandler is used for set run and dataset for overlay
   const searchHandler = (run_number: string, dataset_name: string) => {
     const id = uuidv4();
     const full_run: TripleProps = {
@@ -69,10 +76,12 @@ export const SetRunsModal = ({
     set_selected_runs(copy);
   };
 
-  const overlaid_and_selected_runs = concatArrays([
-    selected_runs,
-    runs_set_for_overlay,
-  ]);
+  //overlaid_and_selected_runs combines list of runs which are already overlaid (triples)
+  // with those which are just selected (selected_runs) in "Set Runs" dialog
+  const overlaid_and_selected_runs = concatArrays([selected_runs, triples]);
+
+  const router = useRouter();
+  const query: QueryProps = router.query;
 
   return (
     <StyledModal
@@ -97,7 +106,15 @@ export const SetRunsModal = ({
         <StyledButton
           key="OK"
           onClick={() => {
-            add_runs_to_set_runs_for_overlay(overlaid_and_selected_runs);
+            changeRouter(
+              getChangedQueryParams(
+                {
+                  overlay_data: `${addOverlayData(overlaid_and_selected_runs)}`,
+                },
+                query
+              )
+            );
+            setTriples(overlaid_and_selected_runs);
             toggleModal(false);
             set_selected_runs([]);
           }}
