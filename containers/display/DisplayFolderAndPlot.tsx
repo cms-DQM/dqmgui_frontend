@@ -78,7 +78,6 @@ const DiplayFolder: FC<FolderProps> = ({
     selectedPlots,
     plots
   );
-
   return (
     <>
       <CustomRow space={'8px'} width="100%" justifycontent="space-between">

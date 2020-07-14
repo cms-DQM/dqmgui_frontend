@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Router, { useRouter } from 'next/router';
+import qs from 'qs';
 
 import { QueryProps } from '../containers/display/interfaces';
 import { ParsedUrlQueryInput } from 'querystring';
@@ -14,11 +15,15 @@ export const useChangeRouter = (
   const query: QueryProps = router.query;
 
   const parameters = getChangedQueryParams(params, query);
+  const queryString = qs.stringify(parameters, {
+  });
+  
   React.useEffect(() => {
     if (condition) {
       Router.replace({
         pathname: '/',
         query: parameters,
+        path: decodeURIComponent(queryString)
       });
     }
   }, watchers);

@@ -1,5 +1,6 @@
 import cleanDeep from 'clean-deep';
 import _ from 'lodash';
+import qs from 'qs';
 
 import {
   PlotDataProps,
@@ -77,14 +78,14 @@ export const doesPlotExists = (
 export const getContents = (data: any) =>
   data
     ? _.sortBy(
-        data.contents
-          ? data.contents
-          : [].filter(
-              (one_item: PlotInterface | DirectoryInterface) =>
-                !one_item.hasOwnProperty('streamerinfo')
-            ),
-        ['subdir']
-      )
+      data.contents
+        ? data.contents
+        : [].filter(
+          (one_item: PlotInterface | DirectoryInterface) =>
+            !one_item.hasOwnProperty('streamerinfo')
+        ),
+      ['subdir']
+    )
     : [];
 
 export const getDirectories = (contents: DirectoryInterface[]) =>
@@ -126,7 +127,7 @@ export const getChangedQueryParams = (
 ) => {
   params.dataset_name = params.dataset_name
     ? params.dataset_name
-    : query.dataset_name;
+    : decodeURIComponent(query.dataset_name as string);
 
   params.run_number = params.run_number ? params.run_number : query.run_number;
 
@@ -161,13 +162,19 @@ export const getChangedQueryParams = (
 
   params.lumi = params.lumi ? params.lumi : query.lumi;
 
-  return params;
+  //cleaning url: if workspace is not set (it means it's empty string), it shouldn't be visible in url
+  const cleaned_parameters = cleanDeep(params)
+
+  return cleaned_parameters;
 };
 
 export const changeRouter = (parameters: ParsedUrlQueryInput) => {
+  const queryString = qs.stringify(parameters, {
+  });
   Router.replace({
     pathname: '/',
     query: parameters,
+    path: decodeURIComponent(queryString)
   });
 };
 
