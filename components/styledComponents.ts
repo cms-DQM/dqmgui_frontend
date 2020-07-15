@@ -135,6 +135,7 @@ export const StyledDiv = styled.div`
 export const ZoomedPlotsWrapper = styled.div`
   display: flex;
   width: 100%;
+  height: 100%;
   flex-direction: row;
   flex-wrap: wrap;
   padding: calc(${theme.space.spaceBetween}*2);

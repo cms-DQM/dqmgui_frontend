@@ -1,3 +1,5 @@
+import qs from 'qs';
+
 import { QueryProps } from '../../containers/display/interfaces';
 import Router from 'next/router';
 
@@ -7,11 +9,7 @@ export const setWorkspaceToQuery = (query: QueryProps, workspace: string) => {
     query: {
       run_number: query.run_number,
       dataset_name: query.dataset_name,
-      folder_path: '',
       workspace: workspace,
-      overlay: '',
-      overlay_data: '',
-      selected_plots: '',
     },
   });
 };

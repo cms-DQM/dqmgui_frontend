@@ -1,8 +1,4 @@
 import React from 'react';
-import {
-  OptionProps,
-  CustomizeProps,
-} from '../../containers/display/interfaces';
 import { Col, Select, Form } from 'antd';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import cleanDeep from 'clean-deep';
@@ -18,6 +14,10 @@ import FormItem from 'antd/lib/form/FormItem';
 import { Info } from '../info';
 import { mostPopularCommands } from './drawOptions';
 import { Store } from 'antd/lib/form/interface';
+import {
+  OptionProps,
+  CustomizeProps,
+} from '../../containers/display/interfaces';
 
 const { Option } = Select;
 

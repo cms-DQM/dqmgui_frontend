@@ -21,7 +21,7 @@ export const FolderPath = ({ folder_path }: FolderPathProps) => {
 
   return (
     <>
-      <StyledBreadcrumb separator=">">
+      <StyledBreadcrumb separator="/">
         <Breadcrumb.Item
           onClick={() => {
             changeFolderPathByBreadcrumb({
@@ -30,7 +30,7 @@ export const FolderPath = ({ folder_path }: FolderPathProps) => {
             });
           }}
         >
-          <a>/</a>
+          <a>Top</a>
         </Breadcrumb.Item>
         {filteredFolders.map((folder: string) => {
           return (

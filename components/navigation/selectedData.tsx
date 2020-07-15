@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Row, Col } from 'antd';
 
+import { functions_config } from '../../config/config';
 import { LumesectionBrowser } from '../browsing/lumesectionBroweser';
 import Form from 'antd/lib/form/Form';
 import { StyledFormItem } from '../styledComponents';
@@ -63,16 +64,19 @@ export const SelectedData = ({
           </Col>
         </StyledFormItem>
       </Row>
-      {/* <Row>
-        <Col>
-          <LumesectionBrowser
-            color="black"
-            handler={lumisectionsChangeHandler}
-            currentLumisection={lumisection}
-            currentDataset={dataset_name}
-            currentRunNumber={run_number}
-          /></Col>
-      </Row> */}
+      {functions_config.lumisections_on && (
+        <Row>
+          <Col>
+            <LumesectionBrowser
+              color="black"
+              handler={lumisectionsChangeHandler}
+              currentLumisection={lumisection}
+              currentDataset={dataset_name}
+              currentRunNumber={run_number}
+            />
+          </Col>
+        </Row>
+      )}
       <hr />
     </Form>
   );

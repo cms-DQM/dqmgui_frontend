@@ -1,6 +1,6 @@
 import cleanDeep from 'clean-deep';
 import { v4 as uuidv4 } from 'uuid';
-import _, { over } from 'lodash';
+import _ from 'lodash';
 
 import { TripleProps } from '../../containers/display/interfaces';
 import { DatasetPartsProps } from '../browsing/datasetsBrowsing/datasetNameBuilder';

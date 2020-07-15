@@ -9,9 +9,7 @@ import {
   OptionParagraph,
 } from '../viewDetailsMenu/styledComponents';
 import { StyledFormItem } from '../styledComponents';
-import { useChangeRouter } from '../../hooks/useChangeRouter';
-import { QueryProps, OptionProps } from '../../containers/display/interfaces';
-import { useRouter } from 'next/router';
+import { OptionProps } from '../../containers/display/interfaces';
 
 const { Option } = Select;
 

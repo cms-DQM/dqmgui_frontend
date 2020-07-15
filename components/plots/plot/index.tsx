@@ -24,9 +24,10 @@ export const LeftSidePlots = ({ plot, selected_plots }: LeftSidePlotsProps) => {
   const params_for_api = FormatParamsForAPI(
     globalState,
     query,
-    plot.name,
+    encodeURI(plot.name),
     plot.path
   );
+
   return (
     <>
       {query.overlay_data ? (

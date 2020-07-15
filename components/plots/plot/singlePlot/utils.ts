@@ -35,9 +35,7 @@ export const addToSelectedPlots = (
   plot: PlotDataProps
 ) => `${plotsQuery ? plotsQuery + '&' : ''}${plot.path}/${plot.name}`;
 
-export const addOverlayData = (
-  triples: TripleProps[] | undefined 
-) => {
+export const addOverlayData = (triples: TripleProps[] | undefined) => {
   const params =
     triples &&
     triples.map(
@@ -57,7 +55,7 @@ export const FormatParamsForAPI = (
   path?: string,
   zoomed?: boolean
 ): ParamsForApiProps => {
-  return {
+  const cleaned_parameters: any = cleanDeep({
     run_number: query.run_number ? query.run_number : '',
     dataset_name: query.dataset_name ? query.dataset_name : '',
     folders_path: path,
@@ -70,7 +68,9 @@ export const FormatParamsForAPI = (
     overlay_plot: query.overlay_data ? formTriples(query.overlay_data) : [],
     normalize: query.normalize ? query.normalize : 'False',
     lumi: query.lumi,
-  };
+  });
+
+  return cleaned_parameters;
 };
 
 export const addPlotToRightSide = (query: QueryProps, plot: PlotDataProps) =>

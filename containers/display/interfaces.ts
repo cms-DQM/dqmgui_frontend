@@ -24,8 +24,8 @@ export interface PlotProps extends LumisectionRequestProps {
   plot_name?: string;
   folders_path?: string;
   overlay_plot?: TripleProps[];
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   overlay?: string;
   stats?: boolean;
   normalize?: string;
