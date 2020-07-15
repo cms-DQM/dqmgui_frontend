@@ -57,7 +57,7 @@ export const OverlaidPlotImage = ({
       <StyledCol space={2}>
         <StyledPlotRow
           minheight={params_for_api.height}
-          width={params_for_api.width}
+          width={params_for_api.width?.toString()}
           is_plot_selected={isPlotSelected.toString()}
           // report={plot.properties.report}
         >

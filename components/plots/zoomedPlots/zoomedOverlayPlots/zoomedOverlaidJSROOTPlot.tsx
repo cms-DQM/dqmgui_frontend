@@ -128,7 +128,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
     <StyledCol space={2}>
       <StyledPlotRow
         minheight={params_for_api.height}
-        width={params_for_api.width}
+        width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}
         nopointer={true.toString()}
         // report={selected_plot.properties.report}

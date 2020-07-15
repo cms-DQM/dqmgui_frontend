@@ -24,7 +24,7 @@ export const DirecotryWrapper = styled.div`
 export const StyledA = styled.a`
   word-break: break-all;
 `;
-export const StyledCol = styled(Col)<{ space?: number }>`
+export const StyledCol = styled(Col) <{ space?: number }>`
   padding: ${(props) =>
     props.space ? `calc(${theme.space.spaceBetween}*${props.space})` : ''};
   width: fit-content;
@@ -45,7 +45,7 @@ export const StyledRowImages = styled(Row)`
   justify-content: center;
 `;
 
-export const StyledPlotRow = styled(Row)<{
+export const StyledPlotRow = styled(Row) <{
   width?: string;
   minheight?: number;
   is_plot_selected?: string;
@@ -103,10 +103,10 @@ export const Wrapper = styled.div<{
     props?.any_selected_plots && props?.position === viewPositions[1].value
       ? '100%'
       : !props?.any_selected_plots && props?.position === viewPositions[1].value
-      ? '100%'
-      : props?.any_selected_plots && props?.position === viewPositions[0].value
-      ? `${props.proportion}`
-      : 'fit-content'};
+        ? '100%'
+        : props?.any_selected_plots && props?.position === viewPositions[0].value
+          ? `${props.proportion}`
+          : 'fit-content'};
   align-items: center;
   flex-wrap: wrap;
   align-items: start;
@@ -132,7 +132,7 @@ export const ZoomedPlotsWrapper = styled.div<{
     props?.position === viewPositions[1].value
       ? '100%'
       : props?.position === viewPositions[0].value &&
-        `calc(100% - ${props.proportion})`};
+      `calc(100% - ${props.proportion})`};
   flex-wrap: wrap;
   overflow: ${(props) => (props?.any_selected_plots ? 'scroll' : '')};
   align-items: start;
@@ -169,12 +169,12 @@ export const WrapperDiv = styled.div`
   display: flex;
 `;
 
-export const ImageDiv = styled.div<{ width: number; height: number }>`
+export const ImageDiv = styled.div<{ width?: number; height?: number, id?:any }>`
   width: ${(props) => (props.width ? props.width : '')}px;
   height: ${(props) => (props.height ? props.height : '')}px;
 `;
 
-export const Image = styled.img<{ width: number; height: number }>`
+export const Image = styled.img<{ width?: number; height?: number, src?: any }>`
   width: ${(props) => props.width}px;
   height: ${(props) => props.height}px;
 `;
