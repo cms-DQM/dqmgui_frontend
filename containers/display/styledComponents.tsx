@@ -24,7 +24,7 @@ export const DirecotryWrapper = styled.div`
 export const StyledA = styled.a`
   word-break: break-all;
 `;
-export const StyledCol = styled(Col)<{ space?: number }>`
+export const StyledCol = styled(Col) <{ space?: number }>`
   padding: ${(props) =>
     props.space ? `calc(${theme.space.spaceBetween}*${props.space})` : ''};
   width: fit-content;
@@ -45,7 +45,7 @@ export const StyledRowImages = styled(Row)`
   justify-content: center;
 `;
 
-export const StyledPlotRow = styled(Row)<{
+export const StyledPlotRow = styled(Row) <{
   width?: string;
   minheight?: number;
   is_plot_selected?: string;
@@ -91,32 +91,47 @@ export const Column = styled(Col)`
     ${theme.space.spaceBetween} ${theme.space.spaceBetween};
 `;
 export const Wrapper = styled.div<{
-  zoomed?: any;
-  notZoomedPlot?: boolean;
-  noScroll?: boolean;
+  any_selected_plots?: any;
   position?: string;
-  ratio?: string;
   proportion?: string;
 }>`
   width: ${(props) =>
-    props?.zoomed &&
-    props.position === viewPositions[1].value &&
-    props.notZoomedPlot
-      ? props.notZoomedPlot && props.proportion
+    props?.any_selected_plots &&
+      props.position === viewPositions[1].value ?
+      props.proportion
       : '100%'};
-  border-left: ${(props) =>
-    props?.notZoomedPlot ? '' : `4px solid ${theme.colors.common.lightGrey}`};
+  height: ${(props) => (props?.any_selected_plots && props?.position === viewPositions[1].value ?
+    '100%' :
+    !props?.any_selected_plots && props?.position === viewPositions[1].value ? '100%' :
+      props?.any_selected_plots && props?.position === viewPositions[0].value ? `${props.proportion}` : 'fit-content')};
   align-items: center;
-  height: ${(props) => (props?.zoomed ? '100%' : 'fit-content')};
-  height: ${(props) =>
-    props?.zoomed && props.position === viewPositions[0].value
-      ? props.notZoomedPlot && props.proportion
-      : '100%'};
   flex-wrap: wrap;
-  overflow: ${(props) => (props?.zoomed ? 'scroll' : '')};
   align-items: start;
   flex-flow: column;
+  overflow: auto;
 `;
+
+export const ZoomedPlotsWrapper = styled.div<{
+  any_selected_plots?: any;
+  position?: string;
+  proportion?: string;
+}>`
+  width: ${(props) =>
+    props?.any_selected_plots && props?.position === viewPositions[1].value ?
+      `calc(100% - ${props.proportion})` : '100%'} ;
+  border-left: 4px solid ${theme.colors.common.lightGrey};
+  border-top: ${(props) => (props?.position === viewPositions[1].value && ` 4px solid ${theme.colors.common.lightGrey}`)};
+  align-items: center;
+  height: ${(props) => (
+    props?.position === viewPositions[1].value ? '100%' :
+      props?.position === viewPositions[0].value && `calc(100% - ${props.proportion})`)};
+  flex-wrap: wrap;
+  overflow: ${(props) => (props?.any_selected_plots ? 'scroll' : '')};
+  align-items: start;
+  flex-flow: column;
+  overflow: auto;
+`;
+
 export const DivWrapper = styled.div<{
   selectedPlots: boolean;
   position?: string;

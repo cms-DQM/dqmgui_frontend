@@ -17,7 +17,7 @@ const { Search } = Input;
 
 import { theme } from '../styles/theme';
 
-export const StyledButton = styled(Button)<{
+export const StyledButton = styled(Button) <{
   background?: string;
   color?: string;
 }>`
@@ -72,13 +72,13 @@ export const StyledQuestionTag = styled(Tag)`
   border-radius: 100px;
 `;
 
-export const StyledFormItem = styled(Form.Item)<{
+export const StyledFormItem = styled(Form.Item) <{
   labelcolor?: string;
   labelweight?: string;
 }>`
   .ant-form-item-label > label {
     color: ${(props) =>
-      props.labelcolor ? props.labelcolor : theme.colors.common.black};
+    props.labelcolor ? props.labelcolor : theme.colors.common.black};
     font-weight: ${(props) => (props.labelweight ? props.labelweight : '')};
     padding-right: ${theme.space.spaceBetween};
     width: fit-content;
@@ -90,13 +90,13 @@ export const StyledFormItem = styled(Form.Item)<{
   }
 `;
 
-export const StyledInput = styled(Input)<{ fullWidth?: boolean }>`
+export const StyledInput = styled(Input) <{ fullWidth?: boolean }>`
   border-radius: 12px;
   width: fit-content;
   width: ${(props) => (props.fullWidth ? '100%' : '')};
 `;
 
-export const StyledSearch = styled(Search)<{ fullWidth?: boolean }>`
+export const StyledSearch = styled(Search) <{ fullWidth?: boolean }>`
   border-radius: 12px;
   width: fit-content;
   width: ${(props) => (props.fullWidth ? '100%' : '')};
@@ -135,6 +135,7 @@ export const StyledDiv = styled.div`
 export const ZoomedPlotsWrapper = styled.div`
   display: flex;
   width: 100%;
+  height: 100%;
   flex-direction: row;
   flex-wrap: wrap;
   padding: calc(${theme.space.spaceBetween}*2);
@@ -161,10 +162,10 @@ export const StyledSuccessIcon = styled(CheckCircleFilled)`
   padding-left: 8px;
   color: ${theme.colors.notification.success};
 `;
-export const StyledRadio = styled(Radio)<{ color?: string }>`
+export const StyledRadio = styled(Radio) <{ color?: string }>`
   color: ${(props) => (props.color ? props.color : theme.colors.common.black)};
 `;
-export const CutomFormItem = styled(FormItem)<{
+export const CutomFormItem = styled(FormItem) <{
   color?: string;
   width?: string;
   display?: string;
@@ -176,17 +177,17 @@ export const CutomFormItem = styled(FormItem)<{
     props.justifycontent ? props.justifycontent : ''};
   .ant-form-item-label > label {
     color: ${(props) =>
-      props.color ? props.color : theme.colors.common.black};
+    props.color ? props.color : theme.colors.common.black};
   }
 `;
 
-export const CustomCheckbox = styled(Checkbox)<{ color?: string }>`
+export const CustomCheckbox = styled(Checkbox) <{ color?: string }>`
   color: ${(props) => (props.color ? props.color : theme.colors.common.black)};
 `;
 export const CustomParagraph = styled.p<{ color?: string }>`
   color: ${(props) => (props.color ? props.color : theme.colors.common.black)};
 `;
-export const CustomRow = styled(Row)<{
+export const CustomRow = styled(Row) <{
   width?: string;
   display?: string;
   justifycontent?: string;
@@ -201,7 +202,7 @@ export const CustomRow = styled(Row)<{
   width: ${(props) => (props.width ? props.width : '')};
 `;
 
-export const CustomCol = styled(Col)<{
+export const CustomCol = styled(Col) <{
   display?: string;
   justifycontent?: string;
   space?: string;
@@ -217,7 +218,7 @@ export const CustomCol = styled(Col)<{
   height: fit-content;
   width: ${(props) => (props.width ? props.width : '')};
 `;
-export const CustomDiv = styled(Col)<{
+export const CustomDiv = styled(Col) <{
   display?: string;
   justifycontent?: string;
   space?: string;
@@ -241,14 +242,14 @@ export const CustomDiv = styled(Col)<{
   position: ${(props) => (props.position ? props.position : '')};
   &:hover {
     color: ${(props) =>
-      props.hover ? theme.colors.primary.main : ''}!important;
+    props.hover ? theme.colors.primary.main : ''}!important;
   }
 `;
 
 export const CustomTd = styled.td<{ spacing?: string }>`
   padding: ${(props) => (props.spacing ? `${props.spacing}px` : '')};
 `;
-export const CustomForm = styled(Form)<{
+export const CustomForm = styled(Form) <{
   justifycontent?: string;
   width?: string;
 }>`
