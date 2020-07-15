@@ -27,7 +27,7 @@ export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
 
   const overlay_plot = query.overlay_data;
   return (
-    <div style={{ width: '100%', overflow: 'scroll' }} ref={rightSideRef}>
+    <div style={{ width: '100%' }} ref={rightSideRef}>
       {overlay_plot ? (
         <ZoomedOverlaidPlots selected_plots={selected_plots} />
       ) : (
