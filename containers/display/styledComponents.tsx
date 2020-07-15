@@ -46,7 +46,7 @@ export const StyledRowImages = styled(Row)`
 `;
 
 export const StyledPlotRow = styled(Row)<{
-  width: number;
+  width?: string;
   minheight?: number;
   is_plot_selected?: string;
   nopointer?: string;
