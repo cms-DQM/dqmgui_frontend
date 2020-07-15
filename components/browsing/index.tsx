@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Form from 'antd/lib/form/Form';
 
-import { functions_config } from '../../config/config'
+import { functions_config } from '../../config/config';
 import { WrapperDiv } from '../../containers/display/styledComponents';
 import { DatasetsBrowser } from './datasetsBrowsing/datasetsBrowser';
 import { DatasetsBuilder } from './datasetsBrowsing/datasetNameBuilder';
@@ -69,14 +69,15 @@ export const Browser = () => {
           />
         </WrapperDiv>
         <WrapperDiv>
-          {functions_config.lumisections_on &&
+          {functions_config.lumisections_on && (
             <LumesectionBrowser
               currentLumisection={lumi}
               currentRunNumber={currentRunNumber}
               currentDataset={currentDataset}
               handler={lumisectionsChangeHandler}
-              color='white'
-            />}
+              color="white"
+            />
+          )}
         </WrapperDiv>
         <StyledFormItem
           labelcolor="white"
@@ -98,14 +99,14 @@ export const Browser = () => {
               />
             </WrapperDiv>
           ) : (
-              <WrapperDiv>
-                <DatasetsBuilder
-                  currentRunNumber={currentRunNumber}
-                  currentDataset={currentDataset}
-                  query={query}
-                />
-              </WrapperDiv>
-            )}
+            <WrapperDiv>
+              <DatasetsBuilder
+                currentRunNumber={currentRunNumber}
+                currentDataset={currentDataset}
+                query={query}
+              />
+            </WrapperDiv>
+          )}
         </StyledFormItem>
       </WrapperDiv>
     </Form>

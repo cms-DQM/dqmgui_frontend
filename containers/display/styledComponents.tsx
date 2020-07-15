@@ -24,7 +24,7 @@ export const DirecotryWrapper = styled.div`
 export const StyledA = styled.a`
   word-break: break-all;
 `;
-export const StyledCol = styled(Col) <{ space?: number }>`
+export const StyledCol = styled(Col)<{ space?: number }>`
   padding: ${(props) =>
     props.space ? `calc(${theme.space.spaceBetween}*${props.space})` : ''};
   width: fit-content;
@@ -45,7 +45,7 @@ export const StyledRowImages = styled(Row)`
   justify-content: center;
 `;
 
-export const StyledPlotRow = styled(Row) <{
+export const StyledPlotRow = styled(Row)<{
   width?: string;
   minheight?: number;
   is_plot_selected?: string;
@@ -96,14 +96,17 @@ export const Wrapper = styled.div<{
   proportion?: string;
 }>`
   width: ${(props) =>
-    props?.any_selected_plots &&
-      props.position === viewPositions[1].value ?
-      props.proportion
+    props?.any_selected_plots && props.position === viewPositions[1].value
+      ? props.proportion
       : '100%'};
-  height: ${(props) => (props?.any_selected_plots && props?.position === viewPositions[1].value ?
-    '100%' :
-    !props?.any_selected_plots && props?.position === viewPositions[1].value ? '100%' :
-      props?.any_selected_plots && props?.position === viewPositions[0].value ? `${props.proportion}` : 'fit-content')};
+  height: ${(props) =>
+    props?.any_selected_plots && props?.position === viewPositions[1].value
+      ? '100%'
+      : !props?.any_selected_plots && props?.position === viewPositions[1].value
+      ? '100%'
+      : props?.any_selected_plots && props?.position === viewPositions[0].value
+      ? `${props.proportion}`
+      : 'fit-content'};
   align-items: center;
   flex-wrap: wrap;
   align-items: start;
@@ -117,14 +120,19 @@ export const ZoomedPlotsWrapper = styled.div<{
   proportion?: string;
 }>`
   width: ${(props) =>
-    props?.any_selected_plots && props?.position === viewPositions[1].value ?
-      `calc(100% - ${props.proportion})` : '100%'} ;
+    props?.any_selected_plots && props?.position === viewPositions[1].value
+      ? `calc(100% - ${props.proportion})`
+      : '100%'};
   border-left: 4px solid ${theme.colors.common.lightGrey};
-  border-top: ${(props) => (props?.position === viewPositions[1].value && ` 4px solid ${theme.colors.common.lightGrey}`)};
+  border-top: ${(props) =>
+    props?.position === viewPositions[1].value &&
+    ` 4px solid ${theme.colors.common.lightGrey}`};
   align-items: center;
-  height: ${(props) => (
-    props?.position === viewPositions[1].value ? '100%' :
-      props?.position === viewPositions[0].value && `calc(100% - ${props.proportion})`)};
+  height: ${(props) =>
+    props?.position === viewPositions[1].value
+      ? '100%'
+      : props?.position === viewPositions[0].value &&
+        `calc(100% - ${props.proportion})`};
   flex-wrap: wrap;
   overflow: ${(props) => (props?.any_selected_plots ? 'scroll' : '')};
   align-items: start;

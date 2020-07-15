@@ -15,15 +15,14 @@ export const useChangeRouter = (
   const query: QueryProps = router.query;
 
   const parameters = getChangedQueryParams(params, query);
-  const queryString = qs.stringify(parameters, {
-  });
-  
+  const queryString = qs.stringify(parameters, {});
+
   React.useEffect(() => {
     if (condition) {
       Router.replace({
         pathname: '/',
         query: parameters,
-        path: decodeURIComponent(queryString)
+        path: decodeURIComponent(queryString),
       });
     }
   }, watchers);

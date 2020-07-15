@@ -109,19 +109,35 @@ const mounsWorkspace = [
 const cttpsWorspace = [
   {
     label: 'TrackingStrip',
-    foldersPath: ['CTPPS/TrackingStrip', 'CTPPS/common', 'CTPPS/TrackingStrip/Layouts'],
+    foldersPath: [
+      'CTPPS/TrackingStrip',
+      'CTPPS/common',
+      'CTPPS/TrackingStrip/Layouts',
+    ],
   },
   {
     label: 'TrackingPixel',
-    foldersPath: ['CTPPS/TrackingPixel', 'CTPPS/common', 'CTPPS/TrackingPixel/Layouts'],
+    foldersPath: [
+      'CTPPS/TrackingPixel',
+      'CTPPS/common',
+      'CTPPS/TrackingPixel/Layouts',
+    ],
   },
   {
     label: 'TimingDiamond',
-    foldersPath: ['CTPPS/TimingDiamond', 'CTPPS/common', 'CTPPS/TimingDiamond/Layouts'],
+    foldersPath: [
+      'CTPPS/TimingDiamond',
+      'CTPPS/common',
+      'CTPPS/TimingDiamond/Layouts',
+    ],
   },
   {
     label: 'TimingFastSilicon',
-    foldersPath: ['CTPPS/TimingFastSilicon', 'CTPPS/common', 'CTPPS/TimingFastSilicon/Layouts'],
+    foldersPath: [
+      'CTPPS/TimingFastSilicon',
+      'CTPPS/common',
+      'CTPPS/TimingFastSilicon/Layouts',
+    ],
   },
 ];
 

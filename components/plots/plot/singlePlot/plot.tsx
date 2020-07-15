@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import qs from 'qs'
+import qs from 'qs';
 
 import { root_url } from '../../../../config/config';
 import { get_plot_url } from '../../../../config/config';
