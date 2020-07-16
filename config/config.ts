@@ -16,7 +16,12 @@ const config: any = {
 
 export const functions_config: any = {
   lumisections_on: false,
-  online_mode: false,
+  modes: {
+    online_mode: false,
+    offline_mode: false,
+    dev_mode: false,
+    relVal_mode: false,
+  },
 };
 
 export const root_url = config[process.env.NODE_ENV || 'development'].root_url;
@@ -24,11 +29,11 @@ export const root_url = config[process.env.NODE_ENV || 'development'].root_url;
 export const get_plot_url = (params: ParamsForApiProps) => {
   return `/plotfairy/archive/${getRunsWithLumisections(params)}${
     params.dataset_name
-  }${params.folders_path}/${params.plot_name as string}?${get_customize_params(
-    params.customizeProps
-  )}${params.stats ? '' : 'showstats=0;'}${
+    }${params.folders_path}/${params.plot_name as string}?${get_customize_params(
+      params.customizeProps
+    )}${params.stats ? '' : 'showstats=0;'}${
     params.errorBars ? 'showerrbars=1;' : ''
-  };w=${params.width};h=${params.height}`;
+    };w=${params.width};h=${params.height}`;
 };
 
 export const get_plot_with_overlay = (params: ParamsForApiProps) => {
@@ -36,11 +41,11 @@ export const get_plot_with_overlay = (params: ParamsForApiProps) => {
     params.customizeProps
   )}ref=${params.overlay};obj=archive/${getRunsWithLumisections(params)}${
     params.dataset_name
-  }${params.folders_path}/${encodeURIComponent(params.plot_name as string)}${
+    }${params.folders_path}/${encodeURIComponent(params.plot_name as string)}${
     params.joined_overlaied_plots_urls
-  };${params.stats ? '' : 'showstats=0;'}${
+    };${params.stats ? '' : 'showstats=0;'}${
     params.errorBars ? 'showerrbars=1;' : ''
-  }norm=${params.normalize};w=${params.width};h=${params.height}`;
+    }norm=${params.normalize};w=${params.width};h=${params.height}`;
 };
 
 export const get_overlaied_plots_urls = (params: ParamsForApiProps) => {
@@ -64,7 +69,7 @@ export const get_overlaied_plots_urls = (params: ParamsForApiProps) => {
 
 export const get_jroot_plot = (params: ParamsForApiProps) =>
   `/jsrootfairy/archive/${getRunsWithLumisections(params)}${
-    params.dataset_name
+  params.dataset_name
   }${params.folders_path}/${encodeURIComponent(
     params.plot_name as string
   )}?jsroot=true`;
