@@ -27,7 +27,6 @@ interface FreeSeacrhModalProps {
 }
 
 const open_a_new_tab = (query: string) => {
-  console.log(query)
   window.open(query, "_blank")
 }
 

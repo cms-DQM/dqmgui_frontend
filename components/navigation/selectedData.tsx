@@ -12,18 +12,31 @@ import {
 } from '../../containers/display/utils';
 import { useRouter } from 'next/router';
 import { QueryProps } from '../../containers/display/interfaces';
+import { RadioButtonsGroup } from '../radioButtonsGroup';
+import { OptionProps } from 'antd/lib/mentions';
 
 interface SelectedDataProps {
   dataset_name: string;
   run_number: string;
   form: any;
+  toggleRunInNewTab(open: boolean): void;
 }
+
+const open_in_a_new_tab_options = [{
+  value: true,
+  label: 'Yes'
+},
+{
+  value: false,
+  label: 'No'
+}]
 
 export const SelectedData = ({
   //router ok
   dataset_name,
   run_number,
   form,
+  toggleRunInNewTab,
 }: SelectedDataProps) => {
   const { lumisection, setLumisection } = React.useContext(store);
   const router = useRouter();
@@ -77,6 +90,20 @@ export const SelectedData = ({
           </Col>
         </Row>
       )}
+      <hr />
+      <Row>
+        <StyledFormItem name={'open_in_a_new_a_tab'} label="Open in a new tab?">
+          <RadioButtonsGroup
+            options={open_in_a_new_tab_options}
+            getOptionLabel={(option: OptionProps) => option.label}
+            getOptionValue={(option: OptionProps) => option.value}
+            current_value={false}
+            action={(value: boolean) => {
+              toggleRunInNewTab(value);
+            }}
+          />
+        </StyledFormItem>
+      </Row>
       <hr />
     </Form>
   );
