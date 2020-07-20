@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { MinusCircleOutlined, SettingOutlined } from '@ant-design/icons';
+import { FullscreenOutlined, SettingOutlined } from '@ant-design/icons';
 import { Store } from 'antd/lib/form/interface';
 
 import { get_plot_url, root_url } from '../../../../config/config';
@@ -22,6 +22,7 @@ import {
 import { removePlotFromRightSide } from '../../plot/singlePlot/utils';
 import { Customization } from '../../../customization';
 import { ZoomedPlotMenu } from '../menu';
+import { Plot_portal } from '../../../../containers/display/portal';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -36,14 +37,28 @@ export const ZoomedPlot = ({
     Partial<Store> & CustomizeProps
   >();
   const [openCustomization, toggleCustomizationMenu] = useState(false);
+  const [isPortalWindowOpen, setIsPortalWindowOpen] = React.useState(false)
 
   params_for_api.customizeProps = customizationParams;
   const plot_url = get_plot_url(params_for_api);
   const source = `${root_url}${plot_url}`;
+
+  const copy_of_params = {...params_for_api}
+  copy_of_params.height = window.innerHeight
+  copy_of_params.width = Math.round(window.innerHeight * 1.33)
+  const zoomed_plot_url = get_plot_url(copy_of_params);
+  const zoomed_source = `${root_url}${zoomed_plot_url}`;
+  
   const router = useRouter();
   const query: QueryProps = router.query;
 
   const zoomedPlotMenuOptions = [
+    {
+      label: 'Open in a new tab',
+      value: 'open_in_a_new_tab',
+      action: () => setIsPortalWindowOpen(true),
+      icon: <FullscreenOutlined />,
+    },
     {
       label: 'Customize',
       value: 'Customize',
@@ -54,6 +69,29 @@ export const ZoomedPlot = ({
 
   return (
     <StyledCol space={2}>
+      <Plot_portal isPortalWindowOpen={isPortalWindowOpen}
+        setIsPortalWindowOpen={setIsPortalWindowOpen}
+      >
+        <StyledPlotRow
+          minheight={copy_of_params.height}
+          width={copy_of_params.width?.toString()}
+          is_plot_selected={true.toString()}
+          nopointer={true.toString()}
+        >
+          <PlotNameCol>{selected_plot.name}</PlotNameCol>
+          <ImageDiv
+            id={selected_plot.name}
+            width={copy_of_params.width}
+            height={copy_of_params.height}
+          >
+            <Image
+              src={zoomed_source}
+              width={copy_of_params.width}
+              height={copy_of_params.height}
+            />
+          </ImageDiv>
+        </StyledPlotRow>
+      </Plot_portal>
       <Customization
         plot_name={selected_plot.name}
         open={openCustomization}

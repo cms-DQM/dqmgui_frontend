@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Store } from 'antd/lib/form/interface';
-import { MinusCircleOutlined, SettingOutlined } from '@ant-design/icons';
+import { MinusCircleOutlined, SettingOutlined, FullscreenOutlined } from '@ant-design/icons';
 
 import { get_overlaied_plots_urls } from '../../../../config/config';
 import {
@@ -40,12 +40,12 @@ export const ZoomedOverlaidPlot = ({
   params_for_api.customizeProps = customizationParams;
 
   const zoomedPlotMenuOptions = [
-    // {
-    //   label: 'Remove',
-    //   value: 'Remove',
-    //   action: () => removePlotFromRightSide(query, selected_plot),
-    //   icon: <MinusCircleOutlined />,
-    // },
+    {
+      label: 'Open in a new tab',
+      value: 'open_in_a_new_tab',
+      action: () =>{},
+      icon: <FullscreenOutlined />,
+    },
     {
       label: 'Customize',
       value: 'Customize',
