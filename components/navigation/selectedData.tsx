@@ -20,6 +20,7 @@ interface SelectedDataProps {
   run_number: string;
   form: any;
   toggleRunInNewTab(open: boolean): void;
+  openRunInNewTab: boolean;
 }
 
 const open_in_a_new_tab_options = [{
@@ -37,6 +38,7 @@ export const SelectedData = ({
   run_number,
   form,
   toggleRunInNewTab,
+  openRunInNewTab,
 }: SelectedDataProps) => {
   const { lumisection, setLumisection } = React.useContext(store);
   const router = useRouter();
@@ -97,7 +99,7 @@ export const SelectedData = ({
             options={open_in_a_new_tab_options}
             getOptionLabel={(option: OptionProps) => option.label}
             getOptionValue={(option: OptionProps) => option.value}
-            current_value={false}
+            current_value={openRunInNewTab}
             action={(value: boolean) => {
               toggleRunInNewTab(value);
             }}

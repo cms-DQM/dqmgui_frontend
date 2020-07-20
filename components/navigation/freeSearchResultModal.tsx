@@ -128,6 +128,7 @@ export const SearchModal = ({
             dataset_name={datasetName}
             run_number={runNumber}
             toggleRunInNewTab={toggleRunInNewTab}
+            openRunInNewTab={openRunInNewTab}
           />
           {searching ? (
             <ResultsWrapper>
