@@ -4,16 +4,17 @@ import PlotPortal from './portal';
 interface Plot_portal_props {
   isPortalWindowOpen: boolean;
   setIsPortalWindowOpen(open: boolean): void;
-  children: any
+  children: any;
+  title: string;
 }
 
-export const Plot_portal = ({ isPortalWindowOpen, setIsPortalWindowOpen, children }: Plot_portal_props) => {
+export const Plot_portal = ({ isPortalWindowOpen, setIsPortalWindowOpen, children, title }: Plot_portal_props) => {
   const [containerEl] = React.useState(document.createElement('div'));
 
   return (
     <>
       {isPortalWindowOpen &&
-        <PlotPortal setIsPortalWindowOpen={setIsPortalWindowOpen}>
+        <PlotPortal setIsPortalWindowOpen={setIsPortalWindowOpen} title={title}>
           <div>
             {children}
         </div>

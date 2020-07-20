@@ -76,6 +76,7 @@ export const ZoomedOverlaidPlot = ({
       <Plot_portal
         isPortalWindowOpen={isPortalWindowOpen}
         setIsPortalWindowOpen={setIsPortalWindowOpen}
+        title={selected_plot.displayedName}
       >
         <StyledPlotRow
           minheight={copy_of_params.height}

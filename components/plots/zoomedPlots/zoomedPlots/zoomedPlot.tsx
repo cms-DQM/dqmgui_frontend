@@ -43,12 +43,12 @@ export const ZoomedPlot = ({
   const plot_url = get_plot_url(params_for_api);
   const source = `${root_url}${plot_url}`;
 
-  const copy_of_params = {...params_for_api}
+  const copy_of_params = { ...params_for_api }
   copy_of_params.height = window.innerHeight
   copy_of_params.width = Math.round(window.innerHeight * 1.33)
   const zoomed_plot_url = get_plot_url(copy_of_params);
   const zoomed_source = `${root_url}${zoomed_plot_url}`;
-  
+
   const router = useRouter();
   const query: QueryProps = router.query;
 
@@ -69,8 +69,10 @@ export const ZoomedPlot = ({
 
   return (
     <StyledCol space={2}>
-      <Plot_portal isPortalWindowOpen={isPortalWindowOpen}
+      <Plot_portal
+        isPortalWindowOpen={isPortalWindowOpen}
         setIsPortalWindowOpen={setIsPortalWindowOpen}
+        title={selected_plot.displayedName}
       >
         <StyledPlotRow
           minheight={copy_of_params.height}

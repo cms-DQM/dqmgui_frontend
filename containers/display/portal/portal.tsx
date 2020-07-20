@@ -3,12 +3,13 @@ import ReactDOM from "react-dom";
 
 interface PlotPortalProps {
   setIsPortalWindowOpen(open: boolean): void;
-  children: ReactElement
+  children: ReactElement;
+  title: string;
 }
 
-const PlotPortal = ({ setIsPortalWindowOpen, children }: PlotPortalProps) => {
+const PlotPortal = ({ setIsPortalWindowOpen, children, title }: PlotPortalProps) => {
   const [containerEl] = useState(document.createElement("div"));
-  let externalWindow: null | Window = null;
+  let externalWindow: any | Window = null;
 
   useEffect(
     () => {
@@ -16,6 +17,7 @@ const PlotPortal = ({ setIsPortalWindowOpen, children }: PlotPortalProps) => {
         "",
         "",
       );
+      externalWindow.document.title = title;
 
       externalWindow?.document.body.appendChild(containerEl);
       externalWindow?.addEventListener("beforeunload", () => {
