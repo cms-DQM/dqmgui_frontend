@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import qs from 'qs';
 import { useRouter } from 'next/router';
 import { Form } from 'antd';
 
@@ -13,6 +14,8 @@ import { StyledButton } from '../styledComponents';
 import { theme } from '../../styles/theme';
 import { SelectedData } from './selectedData';
 import Nav from '../Nav';
+import { getChangedQueryParams } from '../../containers/display/utils';
+import { root_url } from '../../config/config';
 
 interface FreeSeacrhModalProps {
   setModalState(state: boolean): void;
@@ -21,6 +24,10 @@ interface FreeSeacrhModalProps {
   search_dataset_name: string | undefined;
   setSearchDatasetName(dataset_name: any): void;
   setSearchRunNumber(run_number: string): void;
+}
+
+const open_a_new_tab = (query: string) => {
+  window.open(query, "_blank")
 }
 
 export const SearchModal = ({
@@ -36,6 +43,7 @@ export const SearchModal = ({
   const dataset = query.dataset_name ? query.dataset_name : '';
 
   const [datasetName, setDatasetName] = useState(dataset);
+  const [openRunInNewTab, toggleRunInNewTab] = useState(false);
   const run = query.run_number ? query.run_number : '';
   const [runNumber, setRunNumber] = useState<string>(run);
 
@@ -69,7 +77,18 @@ export const SearchModal = ({
   );
 
   const onOk = async () => {
-    await form.submit();
+    if (openRunInNewTab) {
+      const params = form.getFieldsValue()
+      const new_tab_query_params = qs.stringify(getChangedQueryParams(params, query))
+      //root url is ends with first '?'. I can't use just root url from config.config, because
+      //in dev env it use localhost:8081/dqm/dev (this is old backend url from where I'm getting data),
+      //but I need localhost:3000
+      const current_root = window.location.href.split('/?')[0]
+      open_a_new_tab(`${current_root}/?${new_tab_query_params}`)
+    }
+    else {
+      await form.submit();
+    }
     onClosing();
   };
 
@@ -108,6 +127,7 @@ export const SearchModal = ({
             form={form}
             dataset_name={datasetName}
             run_number={runNumber}
+            toggleRunInNewTab={toggleRunInNewTab}
           />
           {searching ? (
             <ResultsWrapper>
@@ -120,8 +140,8 @@ export const SearchModal = ({
               />
             </ResultsWrapper>
           ) : (
-            <ResultsWrapper />
-          )}
+              <ResultsWrapper />
+            )}
         </>
       )}
     </StyledModal>

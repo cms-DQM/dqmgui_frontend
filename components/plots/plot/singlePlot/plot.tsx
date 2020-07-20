@@ -1,6 +1,6 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import qs from 'qs';
+import { cloneDeep } from 'lodash'
 
 import { root_url } from '../../../../config/config';
 import { get_plot_url } from '../../../../config/config';
@@ -37,13 +37,14 @@ export const Plot = ({
   params_for_api,
   imageRefScrollDown,
 }: PlotProps) => {
+
   const router = useRouter();
   const query: QueryProps = router.query;
 
   const plot_url = get_plot_url(params_for_api);
   const source = `${root_url}${plot_url}`;
-
   const imageRef = useRef(null);
+  
   useEffect(() => {
     const scrollPlot = () => {
       scroll(imageRef);
@@ -61,19 +62,19 @@ export const Plot = ({
           minheight={params_for_api.height}
           width={params_for_api.width?.toString()}
           is_plot_selected={isPlotSelected.toString()}
-          // report={plot.properties.report}
+        // report={plot.properties.report}
         >
           <PlotNameCol>{plot.displayedName}</PlotNameCol>
           <Column>
             {isPlotSelected ? (
               <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
             ) : (
-              <PlusIcon
-                onClick={() => {
-                  addPlotToRightSide(query, plot);
-                }}
-              />
-            )}
+                <PlusIcon
+                  onClick={() => {
+                    addPlotToRightSide(query, plot);
+                  }}
+                />
+              )}
           </Column>
           <div
             onClick={async () => {

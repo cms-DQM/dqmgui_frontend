@@ -86,9 +86,10 @@ export const PlotNameCol = styled(Col)`
   color: ${theme.colors.common.black};
   padding: ${theme.space.spaceBetween};
 `;
-export const Column = styled(Col)`
+export const Column = styled(Col) <{ display?: string }>`
   padding: ${theme.space.spaceBetween} calc(${theme.space.spaceBetween}*2)
     ${theme.space.spaceBetween} ${theme.space.spaceBetween};
+  display: ${(props) => props.display ? props.display : ''};
 `;
 export const Wrapper = styled.div<{
   any_selected_plots?: any;
@@ -125,7 +126,7 @@ export const ZoomedPlotsWrapper = styled.div<{
       : '100%'};
   border-left: 4px solid ${theme.colors.common.lightGrey};
   border-top: ${(props) =>
-    props?.position === viewPositions[1].value &&
+    props?.position === viewPositions[0].value &&
     ` 4px solid ${theme.colors.common.lightGrey}`};
   align-items: center;
   height: ${(props) =>
@@ -145,7 +146,7 @@ export const DivWrapper = styled.div<{
   position?: string;
 }>`
   height: 100%;
-  overflow: ${(props) => (props.selectedPlots ? 'hidden' : 'scroll')};
+  overflow: ${(props) => (props.selectedPlots ? 'hidden' : 'hidden')};
   display: ${(props) =>
     props.position === viewPositions[0].value ? 'centents' : 'flex'};
 `;
@@ -169,7 +170,7 @@ export const WrapperDiv = styled.div`
   display: flex;
 `;
 
-export const ImageDiv = styled.div<{ width?: number; height?: number, id?:any }>`
+export const ImageDiv = styled.div<{ width?: number; height?: number, id?: any }>`
   width: ${(props) => (props.width ? props.width : '')}px;
   height: ${(props) => (props.height ? props.height : '')}px;
 `;
