@@ -17,6 +17,7 @@ import {
   Column,
   ImageDiv,
   Image,
+  MinusIcon,
 } from '../../../../containers/display/styledComponents';
 import { removePlotFromRightSide } from '../../plot/singlePlot/utils';
 import { Customization } from '../../../customization';
@@ -44,12 +45,6 @@ export const ZoomedPlot = ({
 
   const zoomedPlotMenuOptions = [
     {
-      label: 'Remove',
-      value: 'Remove',
-      action: () => removePlotFromRightSide(query, selected_plot),
-      icon: <MinusCircleOutlined />,
-    },
-    {
       label: 'Customize',
       value: 'Customize',
       action: () => toggleCustomizationMenu(true),
@@ -72,8 +67,11 @@ export const ZoomedPlot = ({
         nopointer={true.toString()}
       >
         <PlotNameCol>{selected_plot.name}</PlotNameCol>
-        <Column>
+        <Column display="flex">
           <ZoomedPlotMenu options={zoomedPlotMenuOptions} />
+          <MinusIcon
+            onClick={() => removePlotFromRightSide(query, selected_plot)}
+          />
         </Column>
         <ImageDiv
           id={selected_plot.name}
