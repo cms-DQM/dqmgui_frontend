@@ -10,6 +10,7 @@ import {
 } from '../viewDetailsMenu/styledComponents';
 import { StyledFormItem } from '../styledComponents';
 import { OptionProps } from '../../containers/display/interfaces';
+import { set } from 'lodash';
 
 const { Option } = Select;
 
@@ -33,33 +34,41 @@ export const LumesectionBrowser = ({
   currentRunNumber,
   currentDataset,
 }: LumesectionBrowserProps) => {
+  //0 - it represents ALL lumisections. If none lumisection is selected, then plots which are displaid
+  //consist of ALL lumisections.
+  const [lumisections, setLumisections] = React.useState([{ label: 'All', value: 0 }])
+
   //getting all run lumisections
   const { data, isLoading, errors } = useRequest(
     getLumisections({
       run_number: currentRunNumber,
       dataset_name: currentDataset,
-      lumi: 0,
+      lumi: -1,
     }),
     {},
     [currentRunNumber, currentDataset]
   );
-
   const all_runs_with_lumi = data ? data.data : [];
-  //extracting just lumisections from data object
-  const lumisections: OptionProps[] =
-    all_runs_with_lumi.length > 0
-      ? all_runs_with_lumi.map((run: AllRunsWithLumiProps) => {
+
+  React.useEffect(() => {
+    //extracting just lumisections from data object
+    const lumisections_from_api: OptionProps[] =
+      all_runs_with_lumi.length > 0
+        ? all_runs_with_lumi.map((run: AllRunsWithLumiProps) => {
           return { label: run.lumi.toString(), value: run.lumi };
         })
-      : [];
-
-  //0 - it represents ALL lumisections. If none lumisection is selected, then plots which are displaid
-  //consist of ALL lumisections.
-  lumisections.unshift({ label: 'All', value: 0 });
+        : [];
+    const copy = [...lumisections]
+    const allLumis = copy.concat(lumisections_from_api)
+    setLumisections(allLumis)
+  }, [all_runs_with_lumi])
 
   const lumiValues = lumisections.map((lumi: OptionProps) => lumi.value);
-  const currentLumiIndex = lumiValues.indexOf(currentLumisection);
 
+  //0 lumisection is not exists, it added as representation of ALL lumisections. If none of lumesctions is selected
+  //it means that should be displaid plots which constist of ALL lumiections. 
+  //The same situation when run doesn't have lumis at all. It means that it displays plots of ALL Lumis
+  const currentLumiIndex = lumiValues.indexOf(currentLumisection) === -1 ? 0 :  lumiValues.indexOf(currentLumisection);
   return (
     <Col>
       <StyledFormItem labelcolor={color} name={'lumi'} label="Lumi">
@@ -78,7 +87,7 @@ export const LumesectionBrowser = ({
           <Col>
             <StyledSelect
               dropdownMatchSelectWidth={false}
-              value={currentLumisection}
+              value={lumiValues[currentLumiIndex]}
               onChange={(e: any) => {
                 handler(parseInt(e));
               }}
@@ -96,8 +105,8 @@ export const LumesectionBrowser = ({
                           <Spin />
                         </OptionParagraph>
                       ) : (
-                        <p>{current_lumisection.label}</p>
-                      )}
+                          <p>{current_lumisection.label}</p>
+                        )}
                     </Option>
                   );
                 })}

@@ -160,7 +160,7 @@ export const getChangedQueryParams = (
 
   params.normalize = params.normalize ? params.normalize : query.normalize;
 
-  params.lumi = params.lumi ? params.lumi : query.lumi;
+  params.lumi = params.lumi || params.lumi === 0 ? params.lumi : query.lumi;
 
   //cleaning url: if workspace is not set (it means it's empty string), it shouldn't be visible in url
   const cleaned_parameters = cleanDeep(params);

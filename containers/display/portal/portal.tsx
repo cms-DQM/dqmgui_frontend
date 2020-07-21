@@ -23,9 +23,7 @@ const PlotPortal = ({ setIsPortalWindowOpen, children, title }: PlotPortalProps)
       externalWindow?.addEventListener("beforeunload", () => {
         setIsPortalWindowOpen(false);
       });
-      console.log("Created Popup Window");
       return function cleanup() {
-        console.log("Cleaned up Popup Window");
         externalWindow?.close();
         externalWindow = null;
       };
