@@ -24,6 +24,7 @@ export const useDisplayedName = (contents: any, data: any) => {
             displayedName: content.obj,
             name: name,
             path: content.path && '/' + directories,
+            layout: content.layout
           };
         }
       })

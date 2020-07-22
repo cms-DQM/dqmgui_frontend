@@ -122,8 +122,13 @@ export interface PlotInterface {
   path: string;
   content: any;
   properties: any;
+  layout?: string;
 }
 
 export interface DirectoryInterface {
   subdir: string;
+}
+
+export interface PlotsGroupedByLayoutsInterface {
+  [layout: string]: PlotDataProps[]
 }

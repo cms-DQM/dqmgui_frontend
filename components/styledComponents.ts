@@ -17,7 +17,7 @@ const { Search } = Input;
 
 import { theme } from '../styles/theme';
 
-export const StyledButton = styled(Button)<{
+export const StyledButton = styled(Button) <{
   background?: string;
   color?: string;
 }>`
@@ -72,13 +72,13 @@ export const StyledQuestionTag = styled(Tag)`
   border-radius: 100px;
 `;
 
-export const StyledFormItem = styled(Form.Item)<{
+export const StyledFormItem = styled(Form.Item) <{
   labelcolor?: string;
   labelweight?: string;
 }>`
   .ant-form-item-label > label {
     color: ${(props) =>
-      props.labelcolor ? props.labelcolor : theme.colors.common.black};
+    props.labelcolor ? props.labelcolor : theme.colors.common.black};
     font-weight: ${(props) => (props.labelweight ? props.labelweight : '')};
     padding-right: ${theme.space.spaceBetween};
     width: fit-content;
@@ -90,13 +90,13 @@ export const StyledFormItem = styled(Form.Item)<{
   }
 `;
 
-export const StyledInput = styled(Input)<{ fullWidth?: boolean }>`
+export const StyledInput = styled(Input) <{ fullWidth?: boolean }>`
   border-radius: 12px;
   width: fit-content;
   width: ${(props) => (props.fullWidth ? '100%' : '')};
 `;
 
-export const StyledSearch = styled(Search)<{ fullWidth?: boolean }>`
+export const StyledSearch = styled(Search) <{ fullWidth?: boolean }>`
   border-radius: 12px;
   width: fit-content;
   width: ${(props) => (props.fullWidth ? '100%' : '')};
@@ -162,10 +162,10 @@ export const StyledSuccessIcon = styled(CheckCircleFilled)`
   padding-left: 8px;
   color: ${theme.colors.notification.success};
 `;
-export const StyledRadio = styled(Radio)<{ color?: string }>`
+export const StyledRadio = styled(Radio) <{ color?: string }>`
   color: ${(props) => (props.color ? props.color : theme.colors.common.black)};
 `;
-export const CutomFormItem = styled(FormItem)<{
+export const CutomFormItem = styled(FormItem) <{
   color?: string;
   width?: string;
   display?: string;
@@ -177,37 +177,47 @@ export const CutomFormItem = styled(FormItem)<{
     props.justifycontent ? props.justifycontent : ''};
   .ant-form-item-label > label {
     color: ${(props) =>
-      props.color ? props.color : theme.colors.common.black};
+    props.color ? props.color : theme.colors.common.black};
   }
 `;
 
-export const CustomCheckbox = styled(Checkbox)<{ color?: string }>`
+export const CustomCheckbox = styled(Checkbox) <{ color?: string }>`
   color: ${(props) => (props.color ? props.color : theme.colors.common.black)};
 `;
 export const CustomParagraph = styled.p<{ color?: string }>`
   color: ${(props) => (props.color ? props.color : theme.colors.common.black)};
 `;
-export const CustomRow = styled(Row)<{
+export const CustomRow = styled(Row) <{
   width?: string;
   display?: string;
   justifycontent?: string;
   space?: string;
   alignitems?: string;
+  borderTop?: string;
+  borderBottom?: string;
+  background?: string;
+  cursor?: string;
 }>`
   display: ${(props) => (props.display ? props.display : '')};
+  cursor: ${(props) => (props.cursor ? props.cursor : '')};
   justify-content: ${(props) =>
     props.justifycontent ? props.justifycontent : ''};
-  padding: ${(props) => (props.space ? theme.space.padding : '')};
+  padding: ${(props) => (props.space ? `calc(${theme.space.padding} * ${props.space})` : '')};
   align-items: ${(props) => (props.alignitems ? props.alignitems : '')};
   width: ${(props) => (props.width ? props.width : '')};
+  border-bottom: ${(props) => (props.borderBottom ? props.borderBottom : '')};
+  border-top: ${(props) => (props.borderTop ? props.borderTop : '')};
+  background: ${(props) => (props.background ? props.background : '')};
 `;
 
-export const CustomCol = styled(Col)<{
+export const CustomCol = styled(Col) <{
   display?: string;
   justifycontent?: string;
   space?: string;
   alignitems?: string;
   width?: string;
+  color?: string;
+  texttransform?:string
 }>`
   display: ${(props) => (props.display ? props.display : '')};
   justify-content: ${(props) =>
@@ -217,8 +227,10 @@ export const CustomCol = styled(Col)<{
   align-items: ${(props) => (props.alignitems ? props.alignitems : '')};
   height: fit-content;
   width: ${(props) => (props.width ? props.width : '')};
+  color: ${(props) => props.color ? props.color : ''};
+  text-transform: ${(props) => props.texttransform ? props.texttransform : ''};
 `;
-export const CustomDiv = styled(Col)<{
+export const CustomDiv = styled(Col) <{
   display?: string;
   justifycontent?: string;
   space?: string;
@@ -228,8 +240,10 @@ export const CustomDiv = styled(Col)<{
   height?: string;
   hover?: string;
   position?: string;
+  color?:string;
 }>`
   display: ${(props) => (props.display ? props.display : '')};
+  color: ${(props) => (props.color ? props.color : '')};
   justify-content: ${(props) =>
     props.justifycontent ? props.justifycontent : ''};
   padding-right: ${(props) =>
@@ -242,14 +256,14 @@ export const CustomDiv = styled(Col)<{
   position: ${(props) => (props.position ? props.position : '')};
   &:hover {
     color: ${(props) =>
-      props.hover ? theme.colors.primary.main : ''}!important;
+    props.hover ? theme.colors.primary.main : ''}!important;
   }
 `;
 
 export const CustomTd = styled.td<{ spacing?: string }>`
   padding: ${(props) => (props.spacing ? `${props.spacing}px` : '')};
 `;
-export const CustomForm = styled(Form)<{
+export const CustomForm = styled(Form) <{
   justifycontent?: string;
   width?: string;
 }>`
