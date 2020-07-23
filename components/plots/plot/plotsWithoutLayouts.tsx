@@ -1,7 +1,5 @@
-import React, { useContext } from 'react';
-import { useRouter } from 'next/router';
+import React from 'react';
 
-import { store } from '../../../contexts/leftSideContext';
 import {
   QueryProps,
   PlotDataProps,
@@ -15,15 +13,13 @@ import { OverlaidPlot } from './overlaidPlot';
 interface LeftSidePlotsProps {
   plots: PlotDataProps[];
   selected_plots: any;
-  plots_grouped_by_layouts?: PlotsGroupedByLayoutsInterface
+  plots_grouped_by_layouts?: PlotsGroupedByLayoutsInterface;
+  query: QueryProps;
+  imageRefScrollDown: any;
+  globalState:any;
 }
 
-export const PlotsWithoutLayouts = ({ plots, selected_plots }: LeftSidePlotsProps) => {
-  const globalState = useContext(store);
-  const router = useRouter();
-  const query: QueryProps = router.query;
-  const { imageRefScrollDown } = globalState;
-
+export const PlotsWithoutLayouts = ({ plots, selected_plots, globalState, imageRefScrollDown, query }: LeftSidePlotsProps) => {
   return (
     <>
       {plots.map((plot: PlotDataProps) => {

@@ -15,7 +15,7 @@ const config: any = {
 };
 
 export const functions_config: any = {
-  lumisections_on: false,
+  lumisections_on: true,
   layouts: true,
   modes: {
     online_mode: false,

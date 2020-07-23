@@ -15,16 +15,14 @@ import { theme } from '../../../styles/theme';
 interface PlotsWithLayoutPorps {
   plots_grouped_by_layouts: PlotsGroupedByLayoutsInterface
   selected_plots: any;
+  query: QueryProps;
+  imageRefScrollDown: any;
+  globalState: any;
 }
 
-export const PlotsWithLayout = ({ plots_grouped_by_layouts, selected_plots }: PlotsWithLayoutPorps) => {
+export const PlotsWithLayout = ({ plots_grouped_by_layouts, selected_plots, globalState, imageRefScrollDown, query }: PlotsWithLayoutPorps) => {
   const [shrinkLayouts, setShrinkedLayouts] = React.useState<string[]>([])
   const layouts_names = Object.keys(plots_grouped_by_layouts)
-  const globalState = React.useContext(store);
-
-  const router = useRouter();
-  const query: QueryProps = router.query;
-  const { imageRefScrollDown } = globalState;
 
   return (
     <>
