@@ -11,9 +11,7 @@ import { QueryProps } from '../../../containers/display/interfaces';
 import { CustomCol } from '../../styledComponents';
 
 interface DatasetsBrowserProps {
-  currentDataset: string;
   query: QueryProps;
-  currentRunNumber: string;
   setCurrentDataset(currentDataset: string): void;
   withoutArrows?: boolean;
   selectorWidth?: string;
@@ -26,22 +24,24 @@ export const DatasetsBrowser = ({
   setCurrentDataset,
   selectorWidth,
   query,
-  currentRunNumber,
-  currentDataset,
 }: DatasetsBrowserProps) => {
   const [openSelect, setSelect] = useState(false);
   //setting  dataset field width to prev. selected dataset name field width,
   // because when spinner is shown, field becomes spinner width
 
-  const [width, setWidth] = useState<number | undefined>();
-  const { results_grouped, isLoading } = useSearch(currentRunNumber, '');
+  const [width, setWidth] = useState<number>();
+  const [currentDatasetNameIndex, setCurrentDatasetNameIndex] = useState<number>(0);
+
+  const { results_grouped, isLoading } = useSearch(query.run_number, '');
 
   const datasets = results_grouped.map((result) => {
     return result.dataset;
   });
 
-  const query_dataset = query.dataset_name ? query.dataset_name : '';
-  const currentDatasetNameIndex = datasets.indexOf(query_dataset);
+  useEffect(() => {
+    const query_dataset = query.dataset_name ? query.dataset_name : ''
+    setCurrentDatasetNameIndex(datasets.indexOf(query_dataset))
+  }, [query.dataset_name, query.run_number, datasets])
 
   return (
     <Row
@@ -74,7 +74,7 @@ export const DatasetsBrowser = ({
             onChange={(e: any) => {
               setCurrentDataset(e);
             }}
-            value={currentDataset}
+            value={datasets[currentDatasetNameIndex]}
             dropdownMatchSelectWidth={false}
             onClick={() => setSelect(!openSelect)}
             open={openSelect}
@@ -94,8 +94,8 @@ export const DatasetsBrowser = ({
                     <Spin />
                   </OptionParagraph>
                 ) : (
-                  <p onClick={() => setWidth(undefined)}>{result.dataset}</p>
-                )}
+                    <p onClick={() => setWidth(undefined)}>{result.dataset}</p>
+                  )}
               </Option>
             ))}
           </StyledSelect>

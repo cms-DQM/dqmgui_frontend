@@ -1,5 +1,5 @@
 import React, { FC, useState, useContext } from 'react';
-import { Row, Col } from 'antd';
+import { Row, Col, Tooltip } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import { chain } from 'lodash';
@@ -15,6 +15,8 @@ import {
   doesPlotExists,
   getContents,
   getDirectories,
+  changeRouter,
+  getChangedQueryParams,
 } from './utils';
 import {
   SpinnerWrapper,
@@ -27,10 +29,12 @@ import { NoResultsFound } from '../search/noResultsFound';
 import {
   CustomRow,
   StyledSecondaryButton,
+  CustomCol,
 } from '../../components/styledComponents';
 import { useFilterFolders } from '../../hooks/useFilterFolders';
 import { SettingsModal } from '../../components/settings';
 import { store } from '../../contexts/leftSideContext';
+import { SetRunsToShortcutModal } from '../../components/shortcuts/modal';
 
 interface DirectoryInterface {
   subdir: string;
@@ -66,9 +70,19 @@ const DiplayFolder: FC<FolderProps> = ({
   );
 
   const [openSettings, toggleSettingsModal] = useState(false);
+  const [openAddRunsToShortcut, toggleAddRunsToShortcut] = useState(false);
+
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
+
   const router = useRouter();
   const query: QueryProps = router.query;
+
+  const current_run = { run_number: query.run_number, dataset_name: query.dataset_name }
+  //@ts-ignore
+  const old_selected_runs_for_shurtcut = JSON.parse(localStorage.getItem('shortcuts')) || [current_run];
+  const [runs_in_shortcut, set_runs_in_shortcut] = React.useState(old_selected_runs_for_shurtcut)
+  localStorage.setItem('shortcuts', JSON.stringify(runs_in_shortcut));
+
   const selectedPlots = query.selected_plots;
   const { viewPlotsPosition, proportion } = useContext(store);
 
@@ -84,6 +98,7 @@ const DiplayFolder: FC<FolderProps> = ({
     selectedPlots,
     plots
   );
+
   return (
     <>
       <CustomRow space={'2'} width="100%" justifycontent="space-between">
@@ -91,6 +106,12 @@ const DiplayFolder: FC<FolderProps> = ({
           openSettings={openSettings}
           toggleSettingsModal={toggleSettingsModal}
           isAnyPlotSelected={selected_plots.length === 0}
+        />
+        <SetRunsToShortcutModal
+          runs_in_shortcut={runs_in_shortcut}
+          set_runs_in_shortcut={set_runs_in_shortcut}
+          openAddRunsToShortcut={openAddRunsToShortcut}
+          toggleAddRunsToShortcut={toggleAddRunsToShortcut}
         />
         <Col style={{ padding: 8 }}>
           <FolderPath folder_path={folder_path} />
@@ -103,6 +124,37 @@ const DiplayFolder: FC<FolderProps> = ({
             Settings
           </StyledSecondaryButton>
         </Col>
+        <CustomRow width="100%" justifycontent="space-between">
+          <CustomCol display='flex'>
+            {runs_in_shortcut.map((run: any) => (
+              <CustomCol width= 'fit-content' space={'1'}>
+                <Tooltip placement="topLeft" title={run.dataset_name}>
+                  <StyledSecondaryButton
+                    onClick={() => {
+                      changeRouter(
+                        getChangedQueryParams(
+                          {
+                            dataset_name: run.dataset_name,
+                            run_number: run.run_number,
+                          },
+                          query
+                        )
+                      );
+                    }}>
+                    {run.run_number}
+                  </StyledSecondaryButton>
+                </Tooltip>
+              </CustomCol>
+            ))}
+          </CustomCol>
+            <Col>
+              <StyledSecondaryButton
+                onClick={() => toggleAddRunsToShortcut(true)}
+              >
+                Add run
+            </StyledSecondaryButton>
+            </Col>
+        </CustomRow>
       </CustomRow>
       <CustomRow width="100%">
         {doesPlotExists(contents).length > 0 && (

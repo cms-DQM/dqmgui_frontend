@@ -63,9 +63,7 @@ export const Browser = () => {
         <WrapperDiv>
           <RunBrowser
             query={query}
-            currentRunNumber={currentRunNumber}
             setCurrentRunNumber={setCurrentRunNumber}
-            currentDataset={currentDataset}
           />
         </WrapperDiv>
         <WrapperDiv>
@@ -92,8 +90,6 @@ export const Browser = () => {
           {datasetOption === dataSetSelections[0].value ? (
             <WrapperDiv>
               <DatasetsBrowser
-                currentRunNumber={currentRunNumber}
-                currentDataset={currentDataset}
                 setCurrentDataset={setCurrentDataset}
                 query={query}
               />

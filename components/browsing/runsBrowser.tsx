@@ -13,8 +13,6 @@ import { QueryProps } from '../../containers/display/interfaces';
 const { Option } = Select;
 
 interface RunBrowserProps {
-  currentRunNumber: string;
-  currentDataset: string;
   query: QueryProps;
   setCurrentRunNumber(currentRunNumber: string): void;
   withoutArrows?: boolean;
@@ -32,11 +30,9 @@ const getRunNumbers = (results_grouped: any[]) => {
 };
 
 export const RunBrowser = ({
-  currentDataset,
   query,
   setCurrentRunNumber,
   withoutArrows,
-  currentRunNumber,
   withoutLabel,
 }: RunBrowserProps) => {
   const [openSelect, setSelect] = useState(false);
@@ -44,12 +40,18 @@ export const RunBrowser = ({
   //seting  run field width to prev. selected run name field width,
   // because when spinner is shown, field becomes spinner width
   const [width, setWidth] = useState<string | undefined>();
+  const [currentRunNumberIndex, setCurrentRunNumberIndex] = useState<number>(0);
 
-  const { results_grouped, isLoading } = useSearch('', currentDataset);
+  const { results_grouped, isLoading } = useSearch('', query.dataset_name);
 
   const runNumbers = getRunNumbers(results_grouped);
   const query_run_number = query.run_number ? query.run_number : '';
-  const currentRunNumberIndex = runNumbers.indexOf(query_run_number);
+
+  useEffect(() => {
+    const query_run_number = query.run_number ? query.run_number : ''
+    setCurrentRunNumberIndex(runNumbers.indexOf(query_run_number))
+  }, [query.dataset_name, query.run_number, runNumbers])
+
 
   return (
     <Col>
@@ -82,7 +84,7 @@ export const RunBrowser = ({
             >
               <StyledSelect
                 onClick={() => setSelect(!openSelect)}
-                value={currentRunNumber}
+                value={runNumbers[currentRunNumberIndex]}
                 onChange={(e: any) => {
                   setCurrentRunNumber(e);
                   setSelect(!openSelect);
@@ -106,8 +108,8 @@ export const RunBrowser = ({
                             <Spin />
                           </OptionParagraph>
                         ) : (
-                          <div onClick={() => setWidth(undefined)}>{run}</div>
-                        )}
+                            <div onClick={() => setWidth(undefined)}>{run}</div>
+                          )}
                       </Option>
                     );
                   })}
