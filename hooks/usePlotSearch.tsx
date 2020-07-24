@@ -7,7 +7,7 @@ import {
 } from '../containers/display/interfaces';
 import { useState, useEffect } from 'react';
 import { removeFirstSlash } from '../components/workspaces/utils';
-import { PlotInterface } from '../containers/display/DisplayFolderAndPlot';
+import { PlotInterface } from '../containers/display/content';
 import { useDisplayedName } from './useDisplayName';
 
 interface usePlotSearchReturn {

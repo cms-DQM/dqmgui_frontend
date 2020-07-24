@@ -51,6 +51,7 @@ export const initialState: any = {
   rightSideNormalize: true,
   rightSideSize: sizes.fill.size,
   JSROOTmode: false,
+  shortcuts: [],
   customizeProps: {
     xtype: '',
     xmin: NaN,
@@ -145,6 +146,14 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
     setTriples(copy);
   };
 
+  const [shortcuts, set_shortcuts] = React.useState(initialState.shortcuts);
+
+  const deleteFromShortcut = (id: string) => {
+    const copy = [...shortcuts]
+    const filtered = shortcuts.filter((run: { id: string, run_number: string, dataset_name: string }) => run.id !== id)
+    set_shortcuts(filtered)
+  }
+
   return (
     <Provider
       value={{
@@ -187,6 +196,7 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         setCustomize,
         runs_set_for_overlay,
         set_runs_set_for_overlay,
+        shortcuts, deleteFromShortcut,
       }}
     >
       {children}

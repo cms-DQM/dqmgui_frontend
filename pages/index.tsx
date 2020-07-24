@@ -6,7 +6,7 @@ import { Tooltip } from 'antd';
 
 import Nav from '../components/Nav';
 import SearchResults from '../containers/search/SearchResults';
-import DiplayFolders from '../containers/display/DisplayFolderAndPlot';
+import DiplayFolders from '../containers/display/content';
 import { useSearch } from '../hooks/useSearch';
 import {
   StyledHeader,

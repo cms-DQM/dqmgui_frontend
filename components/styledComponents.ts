@@ -38,8 +38,8 @@ export const StyledButton = styled(Button) <{
     props.color ? props.color : ` ${theme.colors.common.white}`} !important;
 `;
 
-export const StyledSecondaryButton = styled(Button)`
-  background-color: ${theme.colors.primary.main} !important;
+export const StyledSecondaryButton = styled(Button)<{background?: string, color?: string}>`
+  background-color: ${(props) => props.background ? `${props.background} !important` : `${theme.colors.primary.main} !important`};
   border-style: none !important;
   color: ${theme.colors.common.white} !important;
   border-radius: 50px;

@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-
-import { useRouter } from 'next/router';
 import { TripleProps, QueryProps, FolderPathQuery } from '../../containers/display/interfaces';
 import { useSearch } from '../../hooks/useSearch';
 import { concatArrays } from '../viewDetailsMenu/utils';
@@ -22,6 +20,7 @@ interface SetRunsToShortcutModalProps {
   set_runs_in_shortcut: React.Dispatch<React.SetStateAction<{
     run_number: string | undefined;
     dataset_name: string | undefined;
+    id: string,
   }[]>>
 }
 
@@ -33,8 +32,6 @@ export const SetRunsToShortcutModal = ({
 }: SetRunsToShortcutModalProps) => {
   const [serachRunNumber, setSearchRunNumber] = React.useState('');
   const [serachDatasetName, setSearchDatasetName] = React.useState('');
-  const router = useRouter();
-  const query: QueryProps = router.query;
 
   const [selected_runs, set_selected_runs] = React.useState<TripleProps[]>([]);
 

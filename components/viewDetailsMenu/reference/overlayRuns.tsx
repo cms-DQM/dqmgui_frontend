@@ -99,8 +99,6 @@ export const OverlayRuns = ({
             <CustomTd spacing={'4'}>{index + 1}.</CustomTd>
             <CustomTd spacing={'4'}>
               <RunBrowser
-                currentRunNumber={overlaid_run.run_number as string}
-                currentDataset={overlaid_run.dataset_name as string}
                 query={query}
                 withoutLabel={true}
                 setCurrentRunNumber={(run_number) => {
@@ -117,8 +115,6 @@ export const OverlayRuns = ({
             </CustomTd>
             <CustomTd spacing={'4'}>
               <DatasetsBrowser
-                currentRunNumber={overlaid_run.run_number as string}
-                currentDataset={overlaid_run.dataset_name as string}
                 query={query}
                 selectorWidth={'100%'}
                 setCurrentDataset={(dataset_name) => {

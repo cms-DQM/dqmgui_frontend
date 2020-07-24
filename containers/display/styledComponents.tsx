@@ -93,8 +93,8 @@ export const Column = styled(Col) <{ display?: string }>`
 `;
 export const Wrapper = styled.div<{
   any_selected_plots?: any;
-  position?: string;
-  proportion?: string;
+  position?: any;
+  proportion?: any;
 }>`
   width: ${(props) =>
     props?.any_selected_plots && props.position === viewPositions[1].value

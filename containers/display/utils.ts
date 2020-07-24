@@ -78,14 +78,14 @@ export const doesPlotExists = (
 export const getContents = (data: any) =>
   data
     ? _.sortBy(
-        data.contents
-          ? data.contents
-          : [].filter(
-              (one_item: PlotInterface | DirectoryInterface) =>
-                !one_item.hasOwnProperty('streamerinfo')
-            ),
-        ['subdir']
-      )
+      data.contents
+        ? data.contents
+        : [].filter(
+          (one_item: PlotInterface | DirectoryInterface) =>
+            !one_item.hasOwnProperty('streamerinfo')
+        ),
+      ['subdir']
+    )
     : [];
 
 export const getDirectories = (contents: DirectoryInterface[]) =>
@@ -185,3 +185,7 @@ export const getNameAndDirectoriesFromDir = (content: PlotInterface) => {
 
   return { name, directories };
 };
+
+export const is_run_selected_already = (run: { run_number: string, dataset_name: string }, query: QueryProps) => {
+  return run.run_number === query.run_number && run.dataset_name === query.dataset_name
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { SearchOutlined, BarChartOutlined } from '@ant-design/icons';
-import { Spin, Row, Col, Alert } from 'antd';
+import { Spin, Row, Col, Alert, Tag } from 'antd';
 
 import styled from 'styled-components';
 import { theme } from '../../styles/theme';
@@ -118,3 +118,13 @@ export const StyledAlert = styled(Alert)`
   width: 100vw;
   height: fit-content;
 `;
+
+
+export const StyledTag = styled(Tag)<{background?: string, color?: string}>`
+  border-radius: 12px;
+  color: ${(props)=> props.color ? props.color : ''};
+  background: ${(props)=> props.background ? props.background : ''} !important;
+  .anticon svg{
+    color: ${(props)=> props.color ? props.color : ''};
+  }
+`
