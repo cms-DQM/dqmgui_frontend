@@ -241,12 +241,18 @@ export const CustomDiv = styled(Col) <{
   hover?: string;
   position?: string;
   color?:string;
+  borderradius?:string;
+  border?:string;
+  background?:string;
+  paddingright?:string;
+  fontsize?: string;
+  pointer?: string;
 }>`
   display: ${(props) => (props.display ? props.display : '')};
   color: ${(props) => (props.color ? props.color : '')};
   justify-content: ${(props) =>
     props.justifycontent ? props.justifycontent : ''};
-  padding-right: ${(props) =>
+  padding ${(props) =>
     props.space ? `calc(${theme.space.padding}*${props.space})` : ''};
   align-items: ${(props) => (props.alignitems ? props.alignitems : '')};
   height: fit-content;
@@ -257,7 +263,13 @@ export const CustomDiv = styled(Col) <{
   &:hover {
     color: ${(props) =>
     props.hover ? theme.colors.primary.main : ''}!important;
-  }
+  };
+  border-radius: ${(props) => props.borderradius ? props.borderradius :'' };
+  border: ${(props) => props.border ? props.border :'' };
+  background: ${(props) => props.background ? props.background :'' };
+  font-size: ${(props) => props.fontsize ? props.fontsize :'' };
+  padding-right: ${(props) => props.paddingright ? props.paddingright : ''};
+  cursor: ${(props) => props.pointer ? 'pointer' :'' };
 `;
 
 export const CustomTd = styled.td<{ spacing?: string }>`

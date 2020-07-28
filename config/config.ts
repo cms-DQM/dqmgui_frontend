@@ -7,7 +7,7 @@ import { get_customize_params, getRunsWithLumisections } from './utils';
 
 const config: any = {
   development: {
-    root_url: 'http://localhost:8081/dqm/dev',
+    root_url: 'http://localhost:8081',
   },
   production: {
     root_url: 'https://dqm-gui.web.cern.ch/api/dqm/offline',
@@ -15,8 +15,8 @@ const config: any = {
 };
 
 export const functions_config: any = {
-  lumisections_on: false,
-  layouts: false,
+  lumisections_on: true,
+  layouts: true,
   modes: {
     online_mode: false,
     offline_mode: false,

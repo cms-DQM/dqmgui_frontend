@@ -10,7 +10,6 @@ import {
 } from '../viewDetailsMenu/styledComponents';
 import { StyledFormItem } from '../styledComponents';
 import { OptionProps } from '../../containers/display/interfaces';
-import { set } from 'lodash';
 
 const { Option } = Select;
 

@@ -150,7 +150,7 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
 
   const deleteFromShortcut = (id: string) => {
     const copy = [...shortcuts]
-    const filtered = shortcuts.filter((run: { id: string, run_number: string, dataset_name: string }) => run.id !== id)
+    const filtered = copy.filter((run: { id: string, run_number: string, dataset_name: string }) => run.id !== id)
     set_shortcuts(filtered)
   }
 

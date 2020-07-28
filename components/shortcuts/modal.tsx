@@ -58,9 +58,7 @@ export const SetRunsToShortcutModal = ({
       dataset_name: dataset_name,
     };
     const copy = [...selected_runs];
-    if (copy.length <= 4) {
       copy.push(full_run);
-    }
     set_selected_runs(copy);
   };
 
