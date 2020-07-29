@@ -77,3 +77,5 @@ export const get_jroot_plot = (params: ParamsForApiProps) =>
 
 export const getLumisections = (params: LumisectionRequestProps) =>
   `/api/v1/samples?run=${params.run_number}&dataset=${params.dataset_name}&lumi=${params.lumi}`;
+
+export const get_the_latest_runs = () => `/api/v1/latest_runs`

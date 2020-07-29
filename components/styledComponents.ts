@@ -197,6 +197,7 @@ export const CustomRow = styled(Row) <{
   borderBottom?: string;
   background?: string;
   cursor?: string;
+  gridtemplatecolumns?: string;
 }>`
   display: ${(props) => (props.display ? props.display : '')};
   cursor: ${(props) => (props.cursor ? props.cursor : '')};
@@ -208,6 +209,7 @@ export const CustomRow = styled(Row) <{
   border-bottom: ${(props) => (props.borderBottom ? props.borderBottom : '')};
   border-top: ${(props) => (props.borderTop ? props.borderTop : '')};
   background: ${(props) => (props.background ? props.background : '')};
+  grid-template-columns: ${(props) => (props.gridtemplatecolumns ? props.gridtemplatecolumns : '')};
 `;
 
 export const CustomCol = styled(Col) <{
@@ -217,7 +219,10 @@ export const CustomCol = styled(Col) <{
   alignitems?: string;
   width?: string;
   color?: string;
-  texttransform?:string
+  texttransform?:string;
+  gridtemplatecolumns?: string;
+  gridgap?: string;
+  justifyself? :string;
 }>`
   display: ${(props) => (props.display ? props.display : '')};
   justify-content: ${(props) =>
@@ -229,6 +234,9 @@ export const CustomCol = styled(Col) <{
   width: ${(props) => (props.width ? props.width : '')};
   color: ${(props) => props.color ? props.color : ''};
   text-transform: ${(props) => props.texttransform ? props.texttransform : ''};
+  grid-template-columns: ${(props) => (props.gridtemplatecolumns ? props.gridtemplatecolumns : '')};
+  grid-gap: ${(props) => (props.gridgap) ? (props.gridgap) : '' };
+  justify-self: ${(props) => props.justifyself ? props.justifyself : '' };
 `;
 export const CustomDiv = styled(Col) <{
   display?: string;
@@ -283,3 +291,14 @@ export const CustomForm = styled(Form) <{
     props.justifycontent ? props.justifycontent : ''};
   width: ${(props) => (props.width ? props.width : '')};
 `;
+export const ShortcutTagDiv = styled.div<{background?:string}>`
+  border-radius: 12px;
+  padding: 4px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:0.8rem;
+  pointer:true;
+  background: ${(props) => props.background ==="true" ? theme.colors.secondary.main : theme.colors.primary.main};
+  color: ${theme.colors.common.white};
+`

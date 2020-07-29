@@ -17,7 +17,7 @@ export const useSearch = (
   const run_number_value = run_number ? run_number : '';
 
   const { data, isLoading, errors } = useRequest(
-    `/data/json/samples?match=${dataset_name}&run=${run_number_value}`,
+    `/data/json/samples?match=${dataset_name ? dataset_name : ''}&run=${run_number_value ? run_number_value : ''}`,
     {},
     [run_number, dataset_name],
     searching

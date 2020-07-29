@@ -3,10 +3,8 @@ import { Tooltip, Col, Button } from 'antd';
 import { CloseOutlined } from '@ant-design/icons';
 
 import { QueryProps } from '../../containers/display/interfaces';
-import { StyledTag } from '../../containers/search/styledComponents';
 import { is_run_selected_already, changeRouter, getChangedQueryParams } from '../../containers/display/utils';
-import { theme } from '../../styles/theme';
-import { CustomCol, CustomRow, StyledSecondaryButton, CustomDiv } from '../styledComponents';
+import { CustomCol, CustomRow, StyledSecondaryButton, CustomDiv, ShortcutTagDiv } from '../styledComponents';
 import { SetRunsToShortcutModal } from './modal';
 
 interface Shortcut_tags_props {
@@ -18,7 +16,7 @@ export const Shortucts = ({ query }: Shortcut_tags_props) => {
 
   const current_run = { run_number: query.run_number, dataset_name: query.dataset_name, id: '1' }
   //@ts-ignore
-  const old_selected_runs_for_shurtcut = JSON.parse(localStorage.getItem('shortcuts')) || [current_run];
+  const old_selected_runs_for_shurtcut = JSON.parse(localStorage.getItem('shortcuts')) && JSON.parse(localStorage.getItem('shortcuts')).length > 0 ? JSON.parse(localStorage.getItem('shortcuts')) : [current_run];
   const [runs_in_shortcut, set_runs_in_shortcut] = React.useState(old_selected_runs_for_shurtcut)
 
   const deleteFromShortcuts = (id: string) => {
@@ -26,6 +24,7 @@ export const Shortucts = ({ query }: Shortcut_tags_props) => {
     const filtered = copy.filter((run: any) => run.id !== id)
     set_runs_in_shortcut(filtered)
   }
+
   React.useEffect(() => {
     localStorage.setItem("shortcuts", JSON.stringify(runs_in_shortcut))
   }, [runs_in_shortcut])
@@ -46,12 +45,11 @@ export const Shortucts = ({ query }: Shortcut_tags_props) => {
   }, [query.run_number, query.dataset_name])
 
   return (
-    <CustomRow width="100%" justifycontent="space-between"
-      style={{
-        display: "grid",
-        justifyContent: "space-between",
-        gridTemplateColumns: "repeat(auto-fit, minmax(80px, 1fr))",
-      }}
+    <CustomRow
+      width="100%"
+      justifycontent="space-between"
+      gridtemplatecolumns="repeat(auto-fit, minmax(80px, 1fr))"
+      display="grid"
     >
       <SetRunsToShortcutModal
         runs_in_shortcut={runs_in_shortcut}
@@ -60,30 +58,20 @@ export const Shortucts = ({ query }: Shortcut_tags_props) => {
         toggleAddRunsToShortcut={toggleAddRunsToShortcut}
       />
       <CustomCol
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(80px, 1fr))",
-          gridGap: "8px",
-          width: 'fit-content'
-        }}
+        display="grid"
+        gridtemplatecolumns="repeat(auto-fit, minmax(80px, 1fr))"
+        gridgap="8px"
+        width='fit-content'
       >
         {runs_in_shortcut.map((run: any) => (
-          <CustomCol width='fit-content' space={'1'}
-            style={{
-              justifySelf: "center"
-            }}
+          <CustomCol
+            width='fit-content'
+            space={'1'}
+            justifyself="center"
           >
             <Tooltip placement="topLeft" title={run.dataset_name}>
-              <CustomDiv
-                borderradius="12px"
-                space="1"
-                display="flex"
-                justifycontent="center"
-                alignitems="center"
-                fontsize="0.8rem"
-                pointer="true"
-                background={is_run_selected_already(run, query) ? theme.colors.secondary.main : theme.colors.primary.main}
-                color={theme.colors.common.white}
+              <ShortcutTagDiv
+                background={is_run_selected_already(run, query).toString()}
                 onClick={() => {
                   changeRouter(
                     getChangedQueryParams(
@@ -102,10 +90,10 @@ export const Shortucts = ({ query }: Shortcut_tags_props) => {
                 <Button
                   size="small"
                   type="link"
-
                   onClick={() => deleteFromShortcuts(run.id)}
-                  icon={is_run_selected_already(run, query) ? '' : <CloseOutlined />} />
-              </CustomDiv>
+                  disabled={is_run_selected_already(run, query)}
+                  icon={<CloseOutlined />} />
+              </ShortcutTagDiv>
             </Tooltip>
           </CustomCol>
         ))}

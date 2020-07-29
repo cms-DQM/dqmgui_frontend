@@ -42,7 +42,7 @@ export const StyledTableRow = styled.tr<{
   cursor: pointer;
   &:hover {
     background-color: ${(props) =>
-      props?.noHover ? '' : `${theme.colors.thirdy.light}`};
+    props?.noHover ? '' : `${theme.colors.thirdy.light}`};
     color: ${(props) => (props?.noHover ? '' : `${theme.colors.common.white}`)};
   }
   font-weight: ${(props) =>
@@ -105,11 +105,18 @@ export const TableBody = styled.tbody`
   overflow: scroll;
   overflow-x: hidden;
 `;
-export const RunWrapper = styled.div`
+export const RunWrapper = styled.div<{ hover?: string }>`
   background: ${theme.colors.secondary.main};
   border-radius: 5px;
   padding: ${theme.space.padding};
-`;
+  align-items: cernter;
+  display: flex;
+  justify-content: center;
+  &:hover {
+    background-color: ${(props) =>
+    props?.hover && `${theme.colors.secondary.dark}`} ;
+  };`;
+
 export const StyledA = styled.a`
   color: ${theme.colors.common.white} !important;
 `;
@@ -119,12 +126,23 @@ export const StyledAlert = styled(Alert)`
   height: fit-content;
 `;
 
-
-export const StyledTag = styled(Tag)<{background?: string, color?: string}>`
-  border-radius: 12px;
-  color: ${(props)=> props.color ? props.color : ''};
-  background: ${(props)=> props.background ? props.background : ''} !important;
-  .anticon svg{
-    color: ${(props)=> props.color ? props.color : ''};
-  }
+export const LatestRunsWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-gap: 8px;
+  padding-top: 8px;
+  margin-top: 8px;
+  border-top: 2px solid;
+`
+export const LatestRunsTtitle = styled.div`
+  display: flex;
+  justify-content: center;
+  margin: 4;
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  text-decoration: overline;
+  font-weight: 300;
+`
+export const LatestRunsSection = styled.div`
+  margin: 64px;
 `

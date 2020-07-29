@@ -29,6 +29,10 @@ import {
   changeRouter,
   getChangedQueryParams,
 } from '../containers/display/utils';
+import { useRequest } from '../hooks/useRequest';
+import { get_the_latest_runs } from '../config/config';
+import { theme } from '../styles/theme';
+import { LatestRuns } from '../components/latestRuns';
 
 const navigationHandler = (
   search_by_run_number: string,
@@ -106,20 +110,17 @@ const Index: NextPage<FolderPathQuery> = () => {
             isDatasetAndRunNumberSelected ? (
               <ComposedSearch />
             ) : (
-              <>
-                <Nav
-                  initial_search_run_number={query.search_run_number}
-                  initial_search_dataset_name={query.search_dataset_name}
-                  handler={navigationHandler}
-                  type="top"
-                />
-              </>
-            )
+                <>
+                  <Nav
+                    initial_search_run_number={query.search_run_number}
+                    initial_search_dataset_name={query.search_dataset_name}
+                    handler={navigationHandler}
+                    type="top"
+                  />
+                </>
+              )
           }
         </StyledHeader>
-        {/* {validation_errors.length > 0 ? (
-          <QueryValidationErrors validation_errors={validation_errors} />
-        ) : */}
         {query.run_number && query.dataset_name ? (
           // If a user already has a run_number and dataset_name, he is not searching nor is he in the homepage, he is
           <DiplayFolders
@@ -136,15 +137,10 @@ const Index: NextPage<FolderPathQuery> = () => {
             errors={errors}
           />
         ) : (
-          <NotFoundDivWrapper>
-            <NotFoundDiv noBorder>
-              <ChartIcon />
-              Welcome to DQM GUI
-            </NotFoundDiv>
-          </NotFoundDivWrapper>
-        )}
+             <LatestRuns />
+            )}
       </StyledLayout>
-    </StyledDiv>
+    </StyledDiv >
   );
 };
 
