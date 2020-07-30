@@ -53,7 +53,7 @@ export const FormatParamsForAPI = (
   query: QueryProps,
   plotName: string,
   path?: string,
-  zoomed?: boolean
+  zoomed?: boolean,
 ): ParamsForApiProps => {
   const cleaned_parameters: any = cleanDeep({
     run_number: query.run_number ? query.run_number : '',

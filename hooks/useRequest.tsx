@@ -25,7 +25,7 @@ export const useRequest = (
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const cancelSource = useRef<CancelTokenSource | null>(null);
-  const [errors, setEerrors] = useState<string[]>([]);
+  const [errors, setErrors] = useState<string[]>([]);
 
   useEffect(() => {
     if (cancelSource) {
@@ -52,10 +52,10 @@ export const useRequest = (
         setIsLoading(false);
       } catch (error) {
         setIsLoading(false);
-        setEerrors([error.toString()]);
+        setErrors([error.toString()]);
         if (axios.isCancel(error)) {
           setIsLoading(false);
-          setEerrors(['Request Timeout']);
+          setErrors(['Request Timeout']);
         }
         cancelSource.current?.cancel();
       }
@@ -63,6 +63,7 @@ export const useRequest = (
     if (should_we_fetch) {
       fetchData();
     }
+    return(() => setErrors([]))
   }, watchers);
   return { data, isLoading, errors, cancelSource };
 };

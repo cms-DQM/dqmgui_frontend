@@ -17,7 +17,7 @@ export const LatestRuns = () => {
           <Spinner />
         </SpinnerWrapper>
       ) :
-        latest_runs.length === 0 && !isLoading && errors.length === 0 ? (
+      latest_runs && latest_runs.length === 0 && !isLoading && errors.length === 0 ? (
           <NoResultsFound />) : (
             <LatestRunsWrapper>
               {latest_runs.map((run: number) => (

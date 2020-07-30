@@ -4,6 +4,7 @@ import { SettingOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import { chain } from 'lodash';
 
+import { functions_config, get_folders_and_plots_old_api, get_folders_and_plots_new_api } from '../../config/config'
 import { useRequest } from '../../hooks/useRequest';
 import { PlotDataProps, QueryProps } from './interfaces';
 import { ZoomedPlots } from '../../components/plots/zoomedPlots';
@@ -14,6 +15,7 @@ import {
   getSelectedPlots,
   doesPlotExists,
   getContents,
+  choose_api,
 } from './utils';
 import {
   CustomRow,
@@ -48,14 +50,27 @@ const Content: FC<FolderProps> = ({
   run_number,
   dataset_name,
 }) => {
+  const current_time = new Date().getTime();
+  const [not_older_than, set_not_older_than] = useState(current_time)
+
+  const params = { run_number: run_number, dataset_name: dataset_name, folders_path: folder_path, notOlderThan: not_older_than }
+  const current_api = choose_api(params)
+
+  React.useEffect(() => {
+    if (functions_config.modes.online_mode) {
+      const interval = setInterval(() => { set_not_older_than(new Date().getTime()) }, 10000)
+      return () => clearInterval(interval)
+    }
+  }, []) //should be like this
+
   const {
     data,
     isLoading,
     errors,
   } = useRequest(
-    `/data/json/archive/${run_number}${dataset_name}/${folder_path}`,
+    current_api,
     {},
-    [folder_path, run_number, dataset_name]
+    [folder_path, run_number, dataset_name, not_older_than]
   );
 
   const [openSettings, toggleSettingsModal] = useState(false);
@@ -97,7 +112,7 @@ const Content: FC<FolderProps> = ({
             Settings
           </StyledSecondaryButton>
         </Col>
-        <Shortucts query={query} />
+        {/* <Shortucts query={query} /> */}
       </CustomRow>
       <CustomRow width="100%">
         {doesPlotExists(contents).length > 0 && (

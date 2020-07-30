@@ -36,6 +36,7 @@ export interface LumisectionRequestProps {
   dataset_name: string;
   run_number: string;
   lumi?: number | string;
+  notOlderThan?: number;
 }
 
 export interface ParamsForApiProps extends PlotProps {

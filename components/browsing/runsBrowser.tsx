@@ -45,13 +45,11 @@ export const RunBrowser = ({
   const { results_grouped, isLoading } = useSearch('', query.dataset_name);
 
   const runNumbers = getRunNumbers(results_grouped);
-  const query_run_number = query.run_number ? query.run_number : '';
 
   useEffect(() => {
     const query_run_number = query.run_number ? query.run_number : ''
     setCurrentRunNumberIndex(runNumbers.indexOf(query_run_number))
   }, [query.dataset_name, query.run_number, runNumbers])
-
 
   return (
     <Col>
@@ -84,6 +82,7 @@ export const RunBrowser = ({
             >
               <StyledSelect
                 onClick={() => setSelect(!openSelect)}
+                // value={query.run_number}
                 value={runNumbers[currentRunNumberIndex]}
                 onChange={(e: any) => {
                   setCurrentRunNumber(e);
@@ -91,7 +90,7 @@ export const RunBrowser = ({
                 }}
                 showSearch={true}
                 open={openSelect}
-                width={`${width}px`}
+                // style={{width: `${width}px`}}
               >
                 {runNumbers &&
                   runNumbers.map((run: any) => {

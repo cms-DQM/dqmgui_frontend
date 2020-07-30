@@ -67,13 +67,14 @@ export const Browser = () => {
           />
         </WrapperDiv>
         <WrapperDiv>
-          {functions_config.lumisections_on && (
+          {functions_config.new_back_end.lumisections_on && (
             <LumesectionBrowser
               currentLumisection={lumi}
               currentRunNumber={currentRunNumber}
               currentDataset={currentDataset}
               handler={lumisectionsChangeHandler}
               color="white"
+              query={query}
             />
           )}
         </WrapperDiv>

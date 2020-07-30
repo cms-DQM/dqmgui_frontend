@@ -13,11 +13,16 @@ interface Shortcut_tags_props {
 
 export const Shortucts = ({ query }: Shortcut_tags_props) => {
   const [openAddRunsToShortcut, toggleAddRunsToShortcut] = React.useState(false);
-
-  const current_run = { run_number: query.run_number, dataset_name: query.dataset_name, id: '1' }
+  const [current_run, set_current_run] = React.useState({ run_number: query.run_number, dataset_name: query.dataset_name, id: '1' })
   //@ts-ignore
   const old_selected_runs_for_shurtcut = JSON.parse(localStorage.getItem('shortcuts')) && JSON.parse(localStorage.getItem('shortcuts')).length > 0 ? JSON.parse(localStorage.getItem('shortcuts')) : [current_run];
   const [runs_in_shortcut, set_runs_in_shortcut] = React.useState(old_selected_runs_for_shurtcut)
+
+  // //following which run is currently selected. When we are changing run number/dataset name through browsers, we wat to have the same run with dataset in
+  // //currrenlty selected shortcut tag, i.e, when data in browsers are changed, the same data have to be in selected shortcut, because SELECTED SHORTCUT and BROWSERS reflects
+  // //run which is currently displaid. 
+  const initial_index = runs_in_shortcut.indexOf(runs_in_shortcut.find((run: { run_number: string, dataset_name: string, id: string }) => is_run_selected_already(run, query)))
+  const [current_index, set_current_index] = React.useState(initial_index);
 
   const deleteFromShortcuts = (id: string) => {
     const copy = [...runs_in_shortcut]
@@ -30,19 +35,12 @@ export const Shortucts = ({ query }: Shortcut_tags_props) => {
   }, [runs_in_shortcut])
 
   React.useEffect(() => {
-    localStorage.setItem("shortcuts", JSON.stringify([current_run]))
-  }, [])
-
-  React.useEffect(() => {
     const copy = [...runs_in_shortcut]
-    const current_run_index = copy.indexOf(copy.find((run: { run_number: string, dataset_name: string, id: string }) => is_run_selected_already(run, query)))
-    //when you're changing current run using browsers, current tag info(run number and dataset name) also must be changed
-    copy[current_run_index].run_number = query.run_number
-    copy[current_run_index].dataset_name = query.dataset_name
+    copy[current_index].run_number = query.run_number
+    copy[current_index].dataset_name = query.dataset_name
     set_runs_in_shortcut(copy)
-    return () => (localStorage.setItem("shortcuts", JSON.stringify([]))
-    )
-  }, [query.run_number, query.dataset_name])
+  }, [query.dataset_name, query.run_number])
+
 
   return (
     <CustomRow
@@ -63,7 +61,7 @@ export const Shortucts = ({ query }: Shortcut_tags_props) => {
         gridgap="8px"
         width='fit-content'
       >
-        {runs_in_shortcut.map((run: any) => (
+        {runs_in_shortcut.map((run: any, index: number) => (
           <CustomCol
             width='fit-content'
             space={'1'}
@@ -73,6 +71,7 @@ export const Shortucts = ({ query }: Shortcut_tags_props) => {
               <ShortcutTagDiv
                 background={is_run_selected_already(run, query).toString()}
                 onClick={() => {
+                  set_current_index(index)
                   changeRouter(
                     getChangedQueryParams(
                       {

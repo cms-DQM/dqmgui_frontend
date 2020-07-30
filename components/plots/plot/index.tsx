@@ -27,7 +27,7 @@ export const LeftSidePlots = ({ plots, selected_plots, plots_grouped_by_layouts 
   const current_folder = folders[folders.length-1]
   return (
     <>
-      {functions_config.layouts && current_folder === "Layouts" ?
+      {functions_config.new_back_end.layouts && current_folder === "Layouts" ?
         <PlotsWithLayout
           plots_grouped_by_layouts={plots_grouped_by_layouts_checked}
           selected_plots={selected_plots}

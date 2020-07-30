@@ -79,7 +79,7 @@ export const SelectedData = ({
           </Col>
         </StyledFormItem>
       </Row>
-      {functions_config.lumisections_on && (
+      {functions_config.new_back_end.lumisections_on && (
         <Row>
           <Col>
             <LumesectionBrowser

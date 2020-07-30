@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
+import { functions_config } from '../../../config/config';
 import {
   QueryProps,
   PlotDataProps,
@@ -16,10 +17,11 @@ interface LeftSidePlotsProps {
   plots_grouped_by_layouts?: PlotsGroupedByLayoutsInterface;
   query: QueryProps;
   imageRefScrollDown: any;
-  globalState:any;
+  globalState: any;
 }
 
 export const PlotsWithoutLayouts = ({ plots, selected_plots, globalState, imageRefScrollDown, query }: LeftSidePlotsProps) => {
+
   return (
     <>
       {plots.map((plot: PlotDataProps) => {

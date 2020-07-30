@@ -30,7 +30,7 @@ import {
   getChangedQueryParams,
 } from '../containers/display/utils';
 import { useRequest } from '../hooks/useRequest';
-import { get_the_latest_runs } from '../config/config';
+import { get_the_latest_runs, functions_config } from '../config/config';
 import { theme } from '../styles/theme';
 import { LatestRuns } from '../components/latestRuns';
 
@@ -136,9 +136,16 @@ const Index: NextPage<FolderPathQuery> = () => {
             handler={serchResultsHandler}
             errors={errors}
           />
-        ) : (
-             <LatestRuns />
-            )}
+        ) : (functions_config.new_back_end.latest_runs ?
+          <LatestRuns />
+          : (
+            <NotFoundDivWrapper>
+              <NotFoundDiv noBorder>
+                <ChartIcon />
+                  Welcome to DQM GUI
+                </NotFoundDiv>
+            </NotFoundDivWrapper>
+          ))}
       </StyledLayout>
     </StyledDiv >
   );

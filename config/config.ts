@@ -15,10 +15,14 @@ const config: any = {
 };
 
 export const functions_config: any = {
-  lumisections_on: true,
-  layouts: true,
+  new_back_end: {
+    new_back_end: true,
+    lumisections_on: true,
+    layouts: true,
+    latest_runs: true,
+  },
   modes: {
-    online_mode: false,
+    online_mode: true,
     offline_mode: false,
     dev_mode: false,
     relVal_mode: false,
@@ -26,6 +30,17 @@ export const functions_config: any = {
 };
 
 export const root_url = config[process.env.NODE_ENV || 'development'].root_url;
+
+export const get_folders_and_plots_new_api = (params: ParamsForApiProps) =>{
+  return `/api/v1/archive/${getRunsWithLumisections(params)}${params.dataset_name}/${params.folders_path}`
+}
+export const get_folders_and_plots_new_api_with_live_mode = (params: ParamsForApiProps) =>{
+  return `/api/v1/archive/${getRunsWithLumisections(params)}${params.dataset_name}/${params.folders_path}?notOlderThan=${params.notOlderThan}`
+}
+
+export const get_folders_and_plots_old_api = (params: ParamsForApiProps) =>{
+  return  `/data/json/archive/${params.run_number}${params.dataset_name}/${params.folders_path}`
+}
 
 export const get_plot_url = (params: ParamsForApiProps) => {
   return `/plotfairy/archive/${getRunsWithLumisections(params)}${
@@ -76,6 +91,7 @@ export const get_jroot_plot = (params: ParamsForApiProps) =>
   )}?jsroot=true`;
 
 export const getLumisections = (params: LumisectionRequestProps) =>
-  `/api/v1/samples?run=${params.run_number}&dataset=${params.dataset_name}&lumi=${params.lumi}`;
+  `/api/v1/samples?run=${params.run_number}&dataset=${params.dataset_name}&lumi=${params.lumi
+  }${functions_config.modes.online_mode && params.notOlderThan ? `&notOlderThan=${params.notOlderThan}` : ''}`;
 
 export const get_the_latest_runs = () => `/api/v1/latest_runs`
