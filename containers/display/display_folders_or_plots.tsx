@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Row } from 'antd'
 
+import { functions_config } from '../../config/config'
 import { Wrapper } from './styledComponents'
 import { SpinnerWrapper, Spinner, StyledAlert } from '../search/styledComponents'
 import { NoResultsFound } from '../search/noResultsFound'
@@ -29,7 +30,7 @@ export const DisplayFordersOrPlots = ({
   errors,
   filteredFolders }: ContentProps) => {
 
-    return (
+  return (
     <Wrapper
       any_selected_plots={selected_plots.length > 0 && errors.length === 0}
       position={viewPlotsPosition}
@@ -41,11 +42,12 @@ export const DisplayFordersOrPlots = ({
       ) : (
           <>
             {!isLoading &&
+            //  !functions_config.modes.online_mode &&
               filteredFolders.length === 0 &&
               plots.length === 0 &&
               errors.length === 0 ? (
                 <NoResultsFound />
-              ) : !isLoading && errors.length === 0 ? (
+              ) : errors.length === 0 ? (
                 <>
                   <CustomRow width="100%">
                     <Directories directories={filteredFolders} />
@@ -69,9 +71,11 @@ export const DisplayFordersOrPlots = ({
                       showIcon
                     />
                   ))
-                )}
+                )
+            }
           </>
-        )}
+        )
+      }
     </Wrapper>
   )
 }

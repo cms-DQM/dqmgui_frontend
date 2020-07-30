@@ -58,7 +58,12 @@ const Content: FC<FolderProps> = ({
 
   React.useEffect(() => {
     if (functions_config.modes.online_mode) {
-      const interval = setInterval(() => { set_not_older_than(new Date().getTime()) }, 10000)
+      const interval = setInterval(() => { set_not_older_than(()=>{
+        // 1 sek is 1000 milisec. we dividing by 10000 and multiply by 10, because we need to
+        // have rounded sec. for exmaple: if it is 13, we need to have 10, or 26, we need to have 20 and etc.
+        const secounds = Math.round(new Date().getTime()/10000) * 10 
+        return secounds
+      }) }, 10000)
       return () => clearInterval(interval)
     }
   }, []) //should be like this
