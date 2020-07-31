@@ -15,7 +15,6 @@ interface ReturnRequest {
 }
 
 //for traching, which req. should be canceled
-
 export const useRequest = (
   url: string,
   options: AxiosRequestConfig = {},

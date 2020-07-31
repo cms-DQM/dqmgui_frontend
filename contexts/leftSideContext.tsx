@@ -34,7 +34,7 @@ export interface LeftSideState {
   rightSideSize: SizeProps;
   JSROOTmode: boolean;
   customizeProps: CustomizeProps;
-  isDataLoading: boolean;
+  updated_by_not_older_than: boolean;
 }
 
 export const initialState: any = {
@@ -66,7 +66,7 @@ export const initialState: any = {
     drawopts: '',
     withref: '',
   },
-  isDataLoading: false,
+  updated_by_not_older_than: false,
 };
 
 export interface ActionProps {
@@ -148,7 +148,7 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
     setTriples(copy);
   };
 
-const [isDataLoading, setIsDataLoading] = useState(initialState.isDataLoading)
+const [updated_by_not_older_than, set_updated_by_not_older_than] = useState(initialState.updated_by_not_older_than)
 
   return (
     <Provider
@@ -192,7 +192,7 @@ const [isDataLoading, setIsDataLoading] = useState(initialState.isDataLoading)
         setCustomize,
         runs_set_for_overlay,
         set_runs_set_for_overlay,
-        isDataLoading, setIsDataLoading
+        updated_by_not_older_than, set_updated_by_not_older_than
       }}
     >
       {children}

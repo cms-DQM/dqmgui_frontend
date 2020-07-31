@@ -72,14 +72,14 @@ export const ZoomedOverlaidPlot = ({
   const zoomed_plot_url = get_plot_source(copy_of_params);
   const zoomed_source = `${zoomed_plot_url}`;
 
-  const { isDataLoading } = React.useContext(store);
+  const { updated_by_not_older_than } = React.useContext(store);
 
-  const [blink, set_blink] = React.useState(isDataLoading)
+  const [blink, set_blink] = React.useState(updated_by_not_older_than)
   React.useEffect(() => {
     //timeouts in order to get longer and more visible animation
     setTimeout(() => { set_blink(true) }, 0)
     setTimeout(() => { set_blink(false) }, 2000)
-  }, [isDataLoading])
+  }, [updated_by_not_older_than])
 
   return (
     <StyledCol space={2}>

@@ -97,7 +97,7 @@ const Content: FC<FolderProps> = ({
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
 
   const selectedPlots = query.selected_plots;
-  const { viewPlotsPosition, proportion, setIsDataLoading } = useContext(store);
+  const { viewPlotsPosition, proportion, set_updated_by_not_older_than } = useContext(store);
   //filtering directories by selected workspace
   const { foldersByPlotSearch, plots } = useFilterFolders(query, contents);
 
@@ -112,7 +112,7 @@ const Content: FC<FolderProps> = ({
   );
 
   useEffect(() => {
-    setIsDataLoading(not_older_than)
+    set_updated_by_not_older_than(not_older_than)
   }, [not_older_than])
 
   return (
