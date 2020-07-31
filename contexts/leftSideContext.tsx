@@ -34,6 +34,7 @@ export interface LeftSideState {
   rightSideSize: SizeProps;
   JSROOTmode: boolean;
   customizeProps: CustomizeProps;
+  isDataLoading: boolean;
 }
 
 export const initialState: any = {
@@ -65,6 +66,7 @@ export const initialState: any = {
     drawopts: '',
     withref: '',
   },
+  isDataLoading: false,
 };
 
 export interface ActionProps {
@@ -146,13 +148,7 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
     setTriples(copy);
   };
 
-  const [shortcuts, set_shortcuts] = React.useState(initialState.shortcuts);
-
-  const deleteFromShortcut = (id: string) => {
-    const copy = [...shortcuts]
-    const filtered = copy.filter((run: { id: string, run_number: string, dataset_name: string }) => run.id !== id)
-    set_shortcuts(filtered)
-  }
+const [isDataLoading, setIsDataLoading] = useState(initialState.isDataLoading)
 
   return (
     <Provider
@@ -196,7 +192,7 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         setCustomize,
         runs_set_for_overlay,
         set_runs_set_for_overlay,
-        shortcuts, deleteFromShortcut,
+        isDataLoading, setIsDataLoading
       }}
     >
       {children}

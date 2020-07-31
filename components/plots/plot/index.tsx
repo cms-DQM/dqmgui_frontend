@@ -14,10 +14,10 @@ import { PlotsWithoutLayouts } from './plotsWithoutLayouts';
 interface LeftSidePlotsProps {
   plots: PlotDataProps[];
   selected_plots: any;
-  plots_grouped_by_layouts?: PlotsGroupedByLayoutsInterface
+  plots_grouped_by_layouts?: PlotsGroupedByLayoutsInterface;
 }
 
-export const LeftSidePlots = ({ plots, selected_plots, plots_grouped_by_layouts }: LeftSidePlotsProps) => {
+export const LeftSidePlots = ({ plots, selected_plots, plots_grouped_by_layouts, isLoading }: LeftSidePlotsProps) => {
   const plots_grouped_by_layouts_checked = plots_grouped_by_layouts ? plots_grouped_by_layouts : {}
   const globalState = useContext(store);
   const router = useRouter();

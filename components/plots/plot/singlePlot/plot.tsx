@@ -23,6 +23,7 @@ import {
   scroll,
   scrollToBottom,
 } from './utils';
+import { store } from '../../../../contexts/leftSideContext';
 
 interface PlotProps {
   plot: PlotDataProps;
@@ -44,7 +45,16 @@ export const Plot = ({
   const plot_url = get_plot_url(params_for_api);
   const source = `${root_url}${plot_url}`;
   const imageRef = useRef(null);
-  
+
+  const { isDataLoading } = React.useContext(store);
+
+  const [blink, set_blink] = React.useState(isDataLoading)
+  React.useEffect(() => {
+    //timeouts in order to get longer and more visible animation
+    setTimeout(() => { set_blink(true) }, 0)
+    setTimeout(() => { set_blink(false) }, 2000)
+  }, [isDataLoading])
+
   useEffect(() => {
     const scrollPlot = () => {
       scroll(imageRef);
@@ -59,6 +69,7 @@ export const Plot = ({
     <div ref={imageRef}>
       <StyledCol space={2}>
         <StyledPlotRow
+          isLoading={blink.toString()}
           minheight={params_for_api.height}
           width={params_for_api.width?.toString()}
           is_plot_selected={isPlotSelected.toString()}

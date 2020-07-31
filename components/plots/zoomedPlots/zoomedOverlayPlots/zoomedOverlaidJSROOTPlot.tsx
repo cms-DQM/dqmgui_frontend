@@ -21,6 +21,7 @@ import {
 } from '../../../../containers/display/styledComponents';
 import { removePlotFromRightSide } from '../../plot/singlePlot/utils';
 import { Button } from 'antd';
+import { store } from '../../../../contexts/leftSideContext';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;
@@ -56,18 +57,18 @@ export const ZoomedOverlaidJSROOTPlot = ({
 
   const overlaid_plots_runs_and_datasets: any[] = params_for_api?.overlay_plot
     ? params_for_api.overlay_plot.map((plot: TripleProps) => {
-        const copy: any = { ...params_for_api };
+      const copy: any = { ...params_for_api };
 
-        if (plot.dataset_name) {
-          copy.dataset_name = plot.dataset_name;
-        }
-        copy.run_number = plot.run_number;
-        const { data } = useRequest(get_jroot_plot(copy), {}, [
-          selected_plot.name,
-          query.lumi,
-        ]);
-        return data;
-      })
+      if (plot.dataset_name) {
+        copy.dataset_name = plot.dataset_name;
+      }
+      copy.run_number = plot.run_number;
+      const { data } = useRequest(get_jroot_plot(copy), {}, [
+        selected_plot.name,
+        query.lumi,
+      ]);
+      return data;
+    })
     : [];
 
   overlaid_plots_runs_and_datasets.push(data);
@@ -124,14 +125,24 @@ export const ZoomedOverlaidJSROOTPlot = ({
     }
   });
 
+  const { isDataLoading } = React.useContext(store);
+
+  const [blink, set_blink] = React.useState(isDataLoading)
+  React.useEffect(() => {
+    //timeouts in order to get longer and more visible animation
+    setTimeout(() => { set_blink(true) }, 0)
+    setTimeout(() => { set_blink(false) }, 2000)
+  }, [isDataLoading])
+
   return (
     <StyledCol space={2}>
       <StyledPlotRow
+        isLoading={blink.toString()}
         minheight={params_for_api.height}
         width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}
         nopointer={true.toString()}
-        // report={selected_plot.properties.report}
+      // report={selected_plot.properties.report}
       >
         <PlotNameCol>{selected_plot.displayedName}</PlotNameCol>
         <Column>

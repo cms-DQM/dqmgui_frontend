@@ -18,6 +18,7 @@ import {
 } from '../../../../containers/display/styledComponents';
 import { removePlotFromRightSide } from '../../plot/singlePlot/utils';
 import { Button } from 'antd';
+import { store } from '../../../../contexts/leftSideContext';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;
@@ -52,9 +53,19 @@ export const ZoomedJSROOTPlot = ({
     }
   }, [data, params_for_api.lumi]);
 
+  const { isDataLoading } = React.useContext(store);
+
+  const [blink, set_blink] = React.useState(isDataLoading)
+  React.useEffect(() => {
+    //timeouts in order to get longer and more visible animation
+    setTimeout(() => { set_blink(true) }, 0)
+    setTimeout(() => { set_blink(false) }, 2000)
+  }, [isDataLoading])
+
   return (
     <StyledCol space={2}>
       <StyledPlotRow
+        isLoading={blink.toString()}
         minheight={params_for_api.height}
         width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}

@@ -23,6 +23,7 @@ import {
   scroll,
   scrollToBottom,
 } from '../singlePlot/utils';
+import { store } from '../../../../contexts/leftSideContext';
 
 interface OnSideOverlaidPlotsProps {
   params_for_api: ParamsForApiProps;
@@ -44,6 +45,15 @@ export const OnSideOverlaidPlots = ({
   const query: QueryProps = router.query;
   const imageRef = useRef(null);
 
+  const { isDataLoading } = React.useContext(store);
+
+  const [blink, set_blink] = React.useState(isDataLoading)
+  React.useEffect(() => {
+    //timeouts in order to get longer and more visible animation
+    setTimeout(() => { set_blink(true) }, 0)
+    setTimeout(() => { set_blink(false) }, 2000)
+  }, [isDataLoading])
+
   return (
     <OnSidePlotsWrapper>
       {onsidePlotsURLs.map((url: string) => {
@@ -52,10 +62,11 @@ export const OnSideOverlaidPlots = ({
           <div ref={imageRef}>
             <StyledCol space={2} key={url}>
               <StyledPlotRow
+                isLoading={blink.toString()}
                 minheight={params_for_api.height}
                 width={params_for_api.width?.toString()}
                 is_plot_selected={isPlotSelected.toString()}
-                // report={plot.properties.report}
+              // report={plot.properties.report}
               >
                 <PlotNameCol>{plot.displayedName}</PlotNameCol>
                 <Column>
@@ -64,14 +75,14 @@ export const OnSideOverlaidPlots = ({
                       onClick={() => removePlotFromRightSide(query, plot)}
                     />
                   ) : (
-                    <PlusIcon
-                      onClick={async () => {
-                        await addPlotToRightSide(query, plot);
-                        scroll(imageRef);
-                        scrollToBottom(imageRefScrollDown);
-                      }}
-                    />
-                  )}
+                      <PlusIcon
+                        onClick={async () => {
+                          await addPlotToRightSide(query, plot);
+                          scroll(imageRef);
+                          scrollToBottom(imageRefScrollDown);
+                        }}
+                      />
+                    )}
                 </Column>
                 <div
                   onClick={async () => {

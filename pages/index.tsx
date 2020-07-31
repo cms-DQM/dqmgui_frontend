@@ -29,9 +29,7 @@ import {
   changeRouter,
   getChangedQueryParams,
 } from '../containers/display/utils';
-import { useRequest } from '../hooks/useRequest';
-import { get_the_latest_runs, functions_config } from '../config/config';
-import { theme } from '../styles/theme';
+import { functions_config } from '../config/config';
 import { LatestRuns } from '../components/latestRuns';
 
 const navigationHandler = (

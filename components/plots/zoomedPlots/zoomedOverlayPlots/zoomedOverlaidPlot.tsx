@@ -24,6 +24,7 @@ import { removePlotFromRightSide } from '../../plot/singlePlot/utils';
 import { ZoomedPlotMenu } from '../menu';
 import { Customization } from '../../../customization';
 import { Plot_portal } from '../../../../containers/display/portal';
+import { store } from '../../../../contexts/leftSideContext';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -65,11 +66,20 @@ export const ZoomedOverlaidPlot = ({
 
   const source = get_plot_source(params_for_api);
 
-  const copy_of_params = {...params_for_api}
+  const copy_of_params = { ...params_for_api }
   copy_of_params.height = window.innerHeight
   copy_of_params.width = Math.round(window.innerHeight * 1.33)
   const zoomed_plot_url = get_plot_source(copy_of_params);
   const zoomed_source = `${zoomed_plot_url}`;
+
+  const { isDataLoading } = React.useContext(store);
+
+  const [blink, set_blink] = React.useState(isDataLoading)
+  React.useEffect(() => {
+    //timeouts in order to get longer and more visible animation
+    setTimeout(() => { set_blink(true) }, 0)
+    setTimeout(() => { set_blink(false) }, 2000)
+  }, [isDataLoading])
 
   return (
     <StyledCol space={2}>
@@ -79,6 +89,7 @@ export const ZoomedOverlaidPlot = ({
         title={selected_plot.displayedName}
       >
         <StyledPlotRow
+          isLoading={blink.toString()}
           minheight={copy_of_params.height}
           width={copy_of_params.width?.toString()}
           is_plot_selected={true.toString()}
@@ -106,6 +117,7 @@ export const ZoomedOverlaidPlot = ({
         setCustomizationParams={setCustomizationParams}
       />
       <StyledPlotRow
+        isLoading={blink.toString()}
         minheight={params_for_api.height}
         width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}

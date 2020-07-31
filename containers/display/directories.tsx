@@ -9,6 +9,7 @@ import {
   getChangedQueryParams,
 } from './utils';
 import { CustomDiv } from '../../components/styledComponents';
+import { store } from '../../contexts/leftSideContext';
 
 interface FoldersFilter {
   directories: (string | undefined)[];
@@ -17,6 +18,14 @@ interface FoldersFilter {
 export const Directories = ({ directories }: FoldersFilter) => {
   const router = useRouter();
   const query: QueryProps = router.query;
+  const { isDataLoading } = React.useContext(store);
+
+  const [blink, set_blink] = React.useState(isDataLoading)
+  React.useEffect(() => {
+    //timeouts in order to get longer and more visible animation
+    setTimeout(() => { set_blink(true) }, 0)
+    setTimeout(() => { set_blink(false) }, 2000)
+  }, [isDataLoading])
 
   return (
     <>
@@ -41,7 +50,9 @@ export const Directories = ({ directories }: FoldersFilter) => {
                 )
               }
             >
-              <Icon />
+              <Icon
+                isLoading={blink.toString()}
+              />
               <StyledA>{directory_name}</StyledA>
             </CustomDiv>
           </DirecotryWrapper>

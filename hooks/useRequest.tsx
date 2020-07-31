@@ -12,6 +12,7 @@ interface ReturnRequest {
   errors: any[];
   isLoading: boolean;
   cancelSource: any;
+  not_older_than_loading?:boolean;
 }
 
 //for traching, which req. should be canceled
@@ -20,18 +21,24 @@ export const useRequest = (
   url: string,
   options: AxiosRequestConfig = {},
   watchers: any[] = [],
-  should_we_fetch: boolean = true
+  should_we_fetch: boolean = true,
+  not_older_than?: number,
 ): ReturnRequest => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const cancelSource = useRef<CancelTokenSource | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
+  const [not_older_than_loading, set_not_older_than_loading] = useState(false)
 
   useEffect(() => {
     if (cancelSource) {
       cancelSource.current?.cancel();
     }
   }, []);
+
+  useEffect(() => {
+    set_not_older_than_loading(isLoading)
+  }, [not_older_than])
 
   useEffect(() => {
     const CancelToken = axios.CancelToken;
@@ -63,7 +70,7 @@ export const useRequest = (
     if (should_we_fetch) {
       fetchData();
     }
-    return(() => setErrors([]))
+    return (() => setErrors([]))
   }, watchers);
-  return { data, isLoading, errors, cancelSource };
+  return { data, isLoading, errors, cancelSource, not_older_than_loading };
 };

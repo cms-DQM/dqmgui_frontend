@@ -58,10 +58,21 @@ export const OverlaidPlotImage = ({
 
   const imageRef = useRef(null);
 
+  const { isDataLoading } = React.useContext(store);
+
+  const [blink, set_blink] = React.useState(isDataLoading)
+  React.useEffect(() => {
+    //timeouts in order to get longer and more visible animation
+    setTimeout(() => { set_blink(true) }, 0)
+    setTimeout(() => { set_blink(false) }, 2000)
+  }, [isDataLoading])
+
+
   return (
     <div ref={imageRef}>
       <StyledCol space={2}>
         <StyledPlotRow
+          isLoading={blink.toString()}
           minheight={params_for_api.height}
           width={params_for_api.width?.toString()}
           is_plot_selected={isPlotSelected.toString()}

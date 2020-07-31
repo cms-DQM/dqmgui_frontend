@@ -1,4 +1,4 @@
-import React, { FC, useState, useContext } from 'react';
+import React, { FC, useState, useContext, useEffect } from 'react';
 import { Col } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
@@ -13,7 +13,6 @@ import { DivWrapper, ZoomedPlotsWrapper } from './styledComponents';
 import { FolderPath } from './folderPath';
 import {
   getSelectedPlots,
-  doesPlotExists,
   getContents,
   choose_api,
 } from './utils';
@@ -58,24 +57,29 @@ const Content: FC<FolderProps> = ({
 
   React.useEffect(() => {
     if (functions_config.modes.online_mode) {
-      const interval = setInterval(() => { set_not_older_than(()=>{
-        // 1 sek is 1000 milisec. we dividing by 10000 and multiply by 10, because we need to
-        // have rounded sec. for exmaple: if it is 13, we need to have 10, or 26, we need to have 20 and etc.
-        const secounds = Math.round(new Date().getTime()/10000) * 10 
-        return secounds
-      }) }, 10000)
+      const interval = setInterval(() => {
+        set_not_older_than(() => {
+          // 1 sek is 1000 milisec. we dividing by 10000 and multiply by 10, because we need to
+          // have rounded sec. for exmaple: if it is 13, we need to have 10, or 26, we need to have 20 and etc.
+          const secounds = Math.round(new Date().getTime() / 10000) * 10
+          return secounds
+        })
+      }, 10000)
       return () => clearInterval(interval)
     }
-  }, []) //should be like this
+  }, [])
 
   const {
     data,
     isLoading,
     errors,
+    not_older_than_loading,
   } = useRequest(
     current_api,
     {},
-    [folder_path, run_number, dataset_name, not_older_than]
+    [folder_path, run_number, dataset_name, not_older_than],
+    undefined,
+    not_older_than,
   );
 
   const [openSettings, toggleSettingsModal] = useState(false);
@@ -85,7 +89,7 @@ const Content: FC<FolderProps> = ({
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
 
   const selectedPlots = query.selected_plots;
-  const { viewPlotsPosition, proportion } = useContext(store);
+  const { viewPlotsPosition, proportion, setIsDataLoading } = useContext(store);
   //filtering directories by selected workspace
   const { foldersByPlotSearch, plots } = useFilterFolders(query, contents);
 
@@ -99,6 +103,10 @@ const Content: FC<FolderProps> = ({
     plots
   );
 
+  useEffect(() => {
+    setIsDataLoading(isLoading)
+  }, [isLoading])
+  
   return (
     <>
       <CustomRow space={'2'} width="100%" justifycontent="space-between">
@@ -120,7 +128,7 @@ const Content: FC<FolderProps> = ({
         {/* <Shortucts query={query} /> */}
       </CustomRow>
       <CustomRow width="100%">
-        {doesPlotExists(contents).length > 0 && (
+        {plots.length > 0 && (
           <ViewDetailsMenu selected_plots={selected_plots.length > 0} />
         )}
       </CustomRow>
@@ -133,6 +141,7 @@ const Content: FC<FolderProps> = ({
             plots={plots}
             selected_plots={selected_plots}
             plots_grouped_by_layouts={plots_grouped_by_layouts}
+            not_older_than_loading={not_older_than_loading}
             isLoading={isLoading}
             viewPlotsPosition={viewPlotsPosition}
             proportion={proportion}

@@ -42,13 +42,6 @@ export const LumesectionBrowser = ({
   const current_time = new Date().getTime();
   const [not_older_than, set_not_older_than] = React.useState(current_time)
 
-  React.useEffect(() => {
-    if (functions_config.modes.online_mode) {
-      const interval = setInterval(() => { set_not_older_than(new Date().getTime()) }, 10000)
-      return () => clearInterval(interval)
-    }
-  }, []) //should be like this
-
   //getting all run lumisections
   const { data, isLoading, errors } = useRequest(
     getLumisections({

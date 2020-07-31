@@ -23,6 +23,7 @@ import { removePlotFromRightSide } from '../../plot/singlePlot/utils';
 import { Customization } from '../../../customization';
 import { ZoomedPlotMenu } from '../menu';
 import { Plot_portal } from '../../../../containers/display/portal';
+import { store } from '../../../../contexts/leftSideContext';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -67,6 +68,15 @@ export const ZoomedPlot = ({
     },
   ];
 
+  const { isDataLoading } = React.useContext(store);
+
+  const [blink, set_blink] = React.useState(isDataLoading)
+  React.useEffect(() => {
+    //timeouts in order to get longer and more visible animation
+    setTimeout(() => { set_blink(true) }, 0)
+    setTimeout(() => { set_blink(false) }, 2000)
+  }, [isDataLoading])
+
   return (
     <StyledCol space={2}>
       <Plot_portal
@@ -75,6 +85,7 @@ export const ZoomedPlot = ({
         title={selected_plot.displayedName}
       >
         <StyledPlotRow
+          isLoading={blink.toString()}
           minheight={copy_of_params.height}
           width={copy_of_params.width?.toString()}
           is_plot_selected={true.toString()}
@@ -101,6 +112,7 @@ export const ZoomedPlot = ({
         setCustomizationParams={setCustomizationParams}
       />
       <StyledPlotRow
+        isLoading={blink.toString()}
         minheight={params_for_api.height}
         width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}

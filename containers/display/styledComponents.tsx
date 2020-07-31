@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import {
   FolderFilled,
   MinusCircleFilled,
@@ -10,10 +10,34 @@ import { theme } from '../../styles/theme';
 import { PlotPropertiesReportProps } from './interfaces';
 import { viewPositions } from '../../components/constants';
 
-export const Icon = styled(FolderFilled)`
+const keyframe_for_updates_folder = keyframes`
+  0% {
+    color: ${theme.colors.primary.main};
+  }
+  50% {
+    color: ${theme.colors.secondary.main};
+  }
+  100% {
+    color: ${theme.colors.primary.main};
+  }
+`
+const keyframe_for_updates_plots = keyframes`
+  0% {
+    background: ${theme.colors.secondary.main};
+    color:  ${theme.colors.common.white};
+  }
+  100% {
+    background: ${theme.colors.secondary.main};
+  }
+`
+
+export const Icon = styled(FolderFilled) <{ isLoading?: string }>`
   font-size: 2rem;
   cursor: pointer;
   padding-right: calc(${theme.space.spaceBetween}*2);
+  animation-name: ${(props) => props.isLoading == 'true' ? keyframe_for_updates_folder : ''};
+  animation-iteration-count: 1;
+  animation-duration: 1s;
 `;
 export const DirecotryWrapper = styled.div`
   padding: ${theme.space.spaceBetween};
@@ -50,6 +74,7 @@ export const StyledPlotRow = styled(Row) <{
   minheight?: number;
   is_plot_selected?: string;
   nopointer?: string;
+  isLoading?: string;
   report?: PlotPropertiesReportProps;
 }>`
   display: flex;
@@ -79,6 +104,9 @@ export const StyledPlotRow = styled(Row) <{
     return '';
   }};
   cursor: ${(props) => (props?.nopointer ? '' : 'pointer')};
+  animation-name: ${(props) => props.isLoading == 'true' ? keyframe_for_updates_plots : ''};
+  animation-iteration-count: 1;
+  animation-duration: 1s;
 `;
 export const PlotNameCol = styled(Col)`
   width: 70%;

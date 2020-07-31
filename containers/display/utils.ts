@@ -68,17 +68,10 @@ export const getFolderPathToQuery = (
     : `/${currentSelected}`;
 };
 
-export const doesPlotExists = (
-  contents: (PlotInterface & DirectoryInterface)[]
-) =>
-  contents.filter((one_item: PlotInterface | DirectoryInterface) =>
-    one_item.hasOwnProperty('obj')
-  );
-
 // what is streamerinfo? (coming from api, we don't know what it is, so we filtered it out)
 // getContent also sorting data that directories should be displayed firstly, just after them- plots images.
-export const getContents = (data: any) =>
-  data
+export const getContents = (data: any) => {
+  return (data
     ? _.sortBy(
       data.contents
         ? data.contents
@@ -88,7 +81,8 @@ export const getContents = (data: any) =>
         ),
       ['subdir']
     )
-    : [];
+    : [])
+}
 
 export const getDirectories = (contents: DirectoryInterface[]) =>
   cleanDeep(contents.map((content: DirectoryInterface) => content.subdir));
