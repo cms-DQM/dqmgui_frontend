@@ -24,7 +24,6 @@ interface LumesectionBrowserProps {
   currentDataset: string;
   handler(lumi: number): void;
   color?: string;
-  query: QueryProps;
 }
 
 export const LumesectionBrowser = ({
@@ -33,7 +32,6 @@ export const LumesectionBrowser = ({
   handler,
   currentRunNumber,
   currentDataset,
-  query,
 }: LumesectionBrowserProps) => {
   //0 - it represents ALL lumisections. If none lumisection is selected, then plots which are displaid
   //consist of ALL lumisections.

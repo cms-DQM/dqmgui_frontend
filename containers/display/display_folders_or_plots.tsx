@@ -8,7 +8,8 @@ import { NoResultsFound } from '../search/noResultsFound'
 import { CustomRow } from '../../components/styledComponents'
 import { Directories } from './directories'
 import { LeftSidePlots } from '../../components/plots/plot'
-import { PlotDataProps, PlotsGroupedByLayoutsInterface, OptionProps } from './interfaces'
+import { PlotDataProps, PlotsGroupedByLayoutsInterface, OptionProps, QueryProps } from './interfaces'
+import { store } from '../../contexts/leftSideContext'
 
 interface ContentProps {
   plots: PlotDataProps[];
@@ -19,7 +20,8 @@ interface ContentProps {
   proportion: OptionProps;
   errors: string[];
   filteredFolders: any[];
-  not_older_than_loading?: boolean;
+  query: QueryProps;
+  isLoadingByOdlerThanUpdate: boolean;
 };
 
 export const DisplayFordersOrPlots = ({
@@ -29,24 +31,20 @@ export const DisplayFordersOrPlots = ({
   isLoading, viewPlotsPosition,
   proportion,
   errors,
-  not_older_than_loading,
-  filteredFolders }: ContentProps) => {
-
-  const loader_showing = () => {
-
-  }
+  filteredFolders ,
+  isLoadingByOdlerThanUpdate}: ContentProps) => {
 
   return (
     <Wrapper
       any_selected_plots={selected_plots.length > 0 && errors.length === 0}
       position={viewPlotsPosition}
       proportion={proportion}>
-      {/* {isLoading && !functions_config.modes.online_mode ? (
+      {isLoading ? (
         <SpinnerWrapper>
           <Spinner />
         </SpinnerWrapper>
       ) : (
-          <> */}
+          <>
       {!isLoading &&
         filteredFolders.length === 0 &&
         plots.length === 0 &&
@@ -79,9 +77,9 @@ export const DisplayFordersOrPlots = ({
             ))
           )
       }
-      {/* </>
-        )
-      } */}
+      </>
+         )
+      } 
     </Wrapper>
   )
 }

@@ -74,7 +74,6 @@ export const Browser = () => {
               currentDataset={currentDataset}
               handler={lumisectionsChangeHandler}
               color="white"
-              query={query}
             />
           )}
         </WrapperDiv>

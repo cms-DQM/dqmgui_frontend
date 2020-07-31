@@ -25,6 +25,7 @@ import { SettingsModal } from '../../components/settings';
 import { store } from '../../contexts/leftSideContext';
 import { Shortucts } from '../../components/shortcuts/shortcut_tag';
 import { DisplayFordersOrPlots } from './display_folders_or_plots'
+import { useNewer } from '../../hooks/useNewer';
 
 interface DirectoryInterface {
   subdir: string;
@@ -55,8 +56,26 @@ const Content: FC<FolderProps> = ({
   const params = { run_number: run_number, dataset_name: dataset_name, folders_path: folder_path, notOlderThan: not_older_than }
   const current_api = choose_api(params)
 
+  const data_het_by_not_older_than_update = useRequest(
+    current_api,
+    {},
+    [not_older_than],
+  );
+
+  const data_het_by_folder_run_dataset_update = useRequest(
+    current_api,
+    {},
+    [folder_path, run_number, dataset_name],
+  );
+
+  const data = useNewer(data_het_by_folder_run_dataset_update.data, data_het_by_not_older_than_update.data)
+  const errors = useNewer(data_het_by_folder_run_dataset_update.errors, data_het_by_not_older_than_update.errors)
+  const isLoading = data_het_by_folder_run_dataset_update.isLoading
+  const isLoadingByOdlerThanUpdate = data_het_by_folder_run_dataset_update.isLoading
+
+
   React.useEffect(() => {
-    if (functions_config.modes.online_mode) {
+    if (functions_config.modes.online_mode && errors.length === 0) {
       const interval = setInterval(() => {
         set_not_older_than(() => {
           // 1 sek is 1000 milisec. we dividing by 10000 and multiply by 10, because we need to
@@ -65,22 +84,11 @@ const Content: FC<FolderProps> = ({
           return secounds
         })
       }, 10000)
-      return () => clearInterval(interval)
+      if (errors.length > 0) {
+        clearInterval(interval)
+      }
     }
   }, [])
-
-  const {
-    data,
-    isLoading,
-    errors,
-    not_older_than_loading,
-  } = useRequest(
-    current_api,
-    {},
-    [folder_path, run_number, dataset_name, not_older_than],
-    undefined,
-    not_older_than,
-  );
 
   const [openSettings, toggleSettingsModal] = useState(false);
   const router = useRouter();
@@ -104,9 +112,9 @@ const Content: FC<FolderProps> = ({
   );
 
   useEffect(() => {
-    setIsDataLoading(isLoading)
-  }, [isLoading])
-  
+    setIsDataLoading(not_older_than)
+  }, [not_older_than])
+
   return (
     <>
       <CustomRow space={'2'} width="100%" justifycontent="space-between">
@@ -141,12 +149,13 @@ const Content: FC<FolderProps> = ({
             plots={plots}
             selected_plots={selected_plots}
             plots_grouped_by_layouts={plots_grouped_by_layouts}
-            not_older_than_loading={not_older_than_loading}
             isLoading={isLoading}
+            isLoadingByOdlerThanUpdate={isLoadingByOdlerThanUpdate}
             viewPlotsPosition={viewPlotsPosition}
             proportion={proportion}
             errors={errors}
             filteredFolders={filteredFolders}
+            query={query}
           />
           {selected_plots.length > 0 && errors.length === 0 && (
             <ZoomedPlotsWrapper

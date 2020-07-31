@@ -12,7 +12,6 @@ interface ReturnRequest {
   errors: any[];
   isLoading: boolean;
   cancelSource: any;
-  not_older_than_loading?:boolean;
 }
 
 //for traching, which req. should be canceled
@@ -21,14 +20,12 @@ export const useRequest = (
   url: string,
   options: AxiosRequestConfig = {},
   watchers: any[] = [],
-  should_we_fetch: boolean = true,
-  not_older_than?: number,
+  should_we_fetch: boolean = true
 ): ReturnRequest => {
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const cancelSource = useRef<CancelTokenSource | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
-  const [not_older_than_loading, set_not_older_than_loading] = useState(false)
 
   useEffect(() => {
     if (cancelSource) {
@@ -37,15 +34,11 @@ export const useRequest = (
   }, []);
 
   useEffect(() => {
-    set_not_older_than_loading(isLoading)
-  }, [not_older_than])
-
-  useEffect(() => {
     const CancelToken = axios.CancelToken;
     cancelSource.current = CancelToken.source();
 
     const fetchData = async () => {
-      setIsLoading(true);
+      await setIsLoading(true);
       try {
         setTimeout(cancelSource.current?.cancel, 180000);
         const response: AxiosResponse = await axios.request({
@@ -70,7 +63,7 @@ export const useRequest = (
     if (should_we_fetch) {
       fetchData();
     }
-    return (() => setErrors([]))
+    return(() => setErrors([]))
   }, watchers);
-  return { data, isLoading, errors, cancelSource, not_older_than_loading };
+  return { data, isLoading, errors, cancelSource };
 };
