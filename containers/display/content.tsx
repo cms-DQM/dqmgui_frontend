@@ -83,8 +83,6 @@ const Content: FC<FolderProps> = ({
     data_het_by_not_older_than_update.errors
   );
   const isLoading = data_het_by_folder_run_dataset_update.isLoading;
-  const isLoadingByOdlerThanUpdate =
-    data_het_by_folder_run_dataset_update.isLoading;
 
   const [openSettings, toggleSettingsModal] = useState(false);
   const router = useRouter();
@@ -140,7 +138,6 @@ const Content: FC<FolderProps> = ({
             selected_plots={selected_plots}
             plots_grouped_by_layouts={plots_grouped_by_layouts}
             isLoading={isLoading}
-            isLoadingByOdlerThanUpdate={isLoadingByOdlerThanUpdate}
             viewPlotsPosition={viewPlotsPosition}
             proportion={proportion}
             errors={errors}

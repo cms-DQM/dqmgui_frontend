@@ -1,8 +1,12 @@
+import { useContext } from 'react';
+
 import { useRequest } from './useRequest';
 import _ from 'lodash';
+import { choose_api_for_run_search } from '../containers/display/utils';
+import { store } from '../contexts/leftSideContext';
+import { get_runs_by_search } from './selector';
 
 interface ReturnSearch {
-  results: any[];
   results_grouped: any[];
   searching: boolean;
   isLoading: boolean;
@@ -15,39 +19,39 @@ export const useSearch = (
 ): ReturnSearch => {
   const searching = !!(run_number || dataset_name);
   const run_number_value = run_number ? run_number : '';
+  const dataset_name_value = dataset_name ? dataset_name : '';
+
+  const { updated_by_not_older_than } = useContext(store);
+
+  const current_api = choose_api_for_run_search({
+    dataset_name: dataset_name_value,
+    run_number: run_number_value,
+    notOlderThan: updated_by_not_older_than,
+    lumi: '',
+  });
 
   const { data, isLoading, errors } = useRequest(
-    `/data/json/samples?match=${dataset_name ? dataset_name : ''}&run=${
-      run_number_value ? run_number_value : ''
-    }`,
+    current_api,
     {},
-    [run_number, dataset_name],
+    [run_number, dataset_name, updated_by_not_older_than],
     searching
   );
 
-  if (
-    !searching ||
-    data === null ||
-    (data && data.samples && data.samples.length === 0)
-  ) {
+  const data_get_by_api = get_runs_by_search(data);
+
+  if (!searching || data === null || data_get_by_api.lenght === 0) {
     return {
-      results: [],
       results_grouped: [],
       searching,
       isLoading,
       errors,
     };
   }
-  const { samples: results }: { samples: any[] } = data;
-  const parsed_results = results
-    ? results.reduce((prev, { items }) => [...prev, ...items], [])
-    : [];
 
-  const results_grouped = _.chain(parsed_results)
+  const results_grouped = _.chain(data_get_by_api)
     .sortBy('dataset')
     .groupBy('dataset')
     .map((value, key) => ({ dataset: key, value }))
     .value();
-
-  return { results, results_grouped, searching, isLoading, errors };
+  return { results_grouped, searching, isLoading, errors };
 };

@@ -23,7 +23,7 @@ const getRunNumbers = (results_grouped: any[]) => {
   const runs: string[] = [];
   results_grouped.forEach((result) => {
     result.value.forEach((data: any) => {
-      runs.push(data.run);
+      runs.push(data.run.toString());
     });
   });
   return runs;

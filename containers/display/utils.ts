@@ -17,6 +17,9 @@ import {
   get_folders_and_plots_old_api,
   get_folders_and_plots_new_api,
   get_folders_and_plots_new_api_with_live_mode,
+  get_run_list_by_search_new_api,
+  get_run_list_by_search_old_api,
+  get_run_list_by_search_new_api_with_no_older_than,
 } from '../../config/config';
 
 export const getFolderPath = (folders: string[], clickedFolder: string) => {
@@ -203,5 +206,15 @@ export const choose_api = (params: ParamsForApiProps) => {
     : functions_config.modes.online_mode
     ? get_folders_and_plots_new_api_with_live_mode(params)
     : get_folders_and_plots_new_api(params);
+  return current_api;
+};
+
+export const choose_api_for_run_search = (params: ParamsForApiProps) => {
+  const current_api = !functions_config.new_back_end.new_back_end
+    ? get_run_list_by_search_old_api(params)
+    : functions_config.modes.online_mode
+    ? get_run_list_by_search_new_api_with_no_older_than(params)
+    : get_run_list_by_search_new_api(params);
+
   return current_api;
 };

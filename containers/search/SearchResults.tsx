@@ -17,7 +17,6 @@ import {
 import { NoResultsFound } from './noResultsFound';
 
 interface SearchResultsInterface {
-  results: any[];
   results_grouped: any[];
   isLoading: boolean;
   handler(run: string, dataset: string): any;

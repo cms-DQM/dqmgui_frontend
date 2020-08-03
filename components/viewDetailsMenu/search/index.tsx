@@ -47,7 +47,7 @@ export const CustomModal = ({ id }: CustomModalProps) => {
     clear();
   };
 
-  const { results, results_grouped, searching, isLoading, errors } = useSearch(
+  const { results_grouped, searching, isLoading, errors } = useSearch(
     search_run_number,
     search_dataset_name
   );
@@ -81,7 +81,6 @@ export const CustomModal = ({ id }: CustomModalProps) => {
               <SearchResults
                 handler={searchHandler}
                 isLoading={isLoading}
-                results={results}
                 results_grouped={results_grouped}
                 errors={errors}
               />

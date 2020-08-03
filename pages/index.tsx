@@ -62,7 +62,9 @@ const Index: NextPage<FolderPathQuery> = () => {
   const query: QueryProps = router.query;
 
   const serchResultsHandler = (run: string, dataset: string) => {
-    const { parsedRun, parsedLumi } = seperateRunAndLumiInSearch(run);
+    const { parsedRun, parsedLumi } = seperateRunAndLumiInSearch(
+      run.toString()
+    );
     changeRouter(
       getChangedQueryParams(
         {
@@ -76,7 +78,7 @@ const Index: NextPage<FolderPathQuery> = () => {
     );
   };
 
-  const { results, results_grouped, searching, isLoading, errors } = useSearch(
+  const { results_grouped, searching, isLoading, errors } = useSearch(
     query.search_run_number,
     query.search_dataset_name
   );
@@ -99,7 +101,7 @@ const Index: NextPage<FolderPathQuery> = () => {
           return secounds;
         });
       }, 10000);
-      return () => clearInterval(interval);
+      // return () => clearInterval(interval);
     }
   }, []);
 
@@ -153,7 +155,6 @@ const Index: NextPage<FolderPathQuery> = () => {
         ) : searching ? (
           <SearchResults
             isLoading={isLoading}
-            results={results}
             results_grouped={results_grouped}
             handler={serchResultsHandler}
             errors={errors}

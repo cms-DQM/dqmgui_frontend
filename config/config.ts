@@ -16,10 +16,10 @@ const config: any = {
 
 export const functions_config: any = {
   new_back_end: {
-    new_back_end: false,
-    lumisections_on: false,
-    layouts: false,
-    latest_runs: false,
+    new_back_end: true,
+    lumisections_on: true,
+    layouts: true,
+    latest_runs: true,
   },
   modes: {
     online_mode: false,
@@ -48,6 +48,17 @@ export const get_folders_and_plots_old_api = (params: ParamsForApiProps) => {
   return `/data/json/archive/${params.run_number}${params.dataset_name}/${params.folders_path}`;
 };
 
+export const get_run_list_by_search_old_api = (params: ParamsForApiProps) => {
+  return `/data/json/samples?match=${params.dataset_name}&run=${params.run_number}`;
+};
+export const get_run_list_by_search_new_api = (params: ParamsForApiProps) => {
+  return `/api/v1/samples?run=${params.run_number}&lumi=${params.lumi}&dataset=${params.dataset_name}`;
+};
+export const get_run_list_by_search_new_api_with_no_older_than = (
+  params: ParamsForApiProps
+) => {
+  return `/api/v1/samples?run=${params.run_number}&lumi=${params.lumi}&dataset=${params.dataset_name}&${params.notOlderThan}}`;
+};
 export const get_plot_url = (params: ParamsForApiProps) => {
   return `/plotfairy/archive/${getRunsWithLumisections(params)}${
     params.dataset_name
