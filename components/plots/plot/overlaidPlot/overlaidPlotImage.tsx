@@ -1,7 +1,7 @@
 import React, { useRef, useContext } from 'react';
 import { useRouter } from 'next/router';
 
-import { root_url } from '../../../../config/config';
+import { root_url, functions_config } from '../../../../config/config';
 import {
   get_plot_with_overlay,
   get_overlaied_plots_urls,
@@ -73,6 +73,7 @@ export const OverlaidPlotImage = ({
       <StyledCol space={2}>
         <StyledPlotRow
           isLoading={blink.toString()}
+          animation={functions_config.modes.online_mode.toString()}
           minheight={params_for_api.height}
           width={params_for_api.width?.toString()}
           is_plot_selected={isPlotSelected.toString()}

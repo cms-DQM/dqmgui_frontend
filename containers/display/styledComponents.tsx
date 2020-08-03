@@ -31,11 +31,11 @@ const keyframe_for_updates_plots = keyframes`
   }
 `
 
-export const Icon = styled(FolderFilled) <{ isLoading?: string }>`
+export const Icon = styled(FolderFilled) <{ isLoading?: string, animation?: string }>`
   font-size: 2rem;
   cursor: pointer;
   padding-right: calc(${theme.space.spaceBetween}*2);
-  animation-name: ${(props) => props.isLoading == 'true' ? keyframe_for_updates_folder : ''};
+  animation-name: ${(props) => props.isLoading === 'true' && props.animation === 'true' ? keyframe_for_updates_folder : ''};
   animation-iteration-count: 1;
   animation-duration: 1s;
 `;
@@ -76,6 +76,7 @@ export const StyledPlotRow = styled(Row) <{
   nopointer?: string;
   isLoading?: string;
   report?: PlotPropertiesReportProps;
+  animation?: string 
 }>`
   display: flex;
   justify-content: space-between;
@@ -104,7 +105,7 @@ export const StyledPlotRow = styled(Row) <{
     return '';
   }};
   cursor: ${(props) => (props?.nopointer ? '' : 'pointer')};
-  animation-name: ${(props) => props.isLoading == 'true' ? keyframe_for_updates_plots : ''};
+  animation-name: ${(props) => props.isLoading === 'true' &&  props.animation === 'true' ? keyframe_for_updates_plots : ''};
   animation-iteration-count: 1;
   animation-duration: 1s;
 `;

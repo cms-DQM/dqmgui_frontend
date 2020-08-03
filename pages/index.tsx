@@ -99,9 +99,7 @@ const Index: NextPage<FolderPathQuery> = () => {
           return secounds
         })
       }, 10000)
-      // if (errors.length > 0) {
-      //   clearInterval(interval)
-      // }
+      return () => clearInterval(interval)
     }
   }, [])
 

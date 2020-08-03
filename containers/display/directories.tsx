@@ -10,6 +10,7 @@ import {
 } from './utils';
 import { CustomDiv } from '../../components/styledComponents';
 import { store } from '../../contexts/leftSideContext';
+import { functions_config } from '../../config/config';
 
 interface FoldersFilter {
   directories: (string | undefined)[];
@@ -52,6 +53,7 @@ export const Directories = ({ directories }: FoldersFilter) => {
             >
               <Icon
                 isLoading={blink.toString()}
+                animation={functions_config.modes.online_mode.toString()}
               />
               <StyledA>{directory_name}</StyledA>
             </CustomDiv>

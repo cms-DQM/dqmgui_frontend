@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { FullscreenOutlined, SettingOutlined } from '@ant-design/icons';
 import { Store } from 'antd/lib/form/interface';
 
-import { get_plot_url, root_url } from '../../../../config/config';
+import { get_plot_url, root_url, functions_config } from '../../../../config/config';
 import {
   ParamsForApiProps,
   PlotDataProps,
@@ -86,6 +86,7 @@ export const ZoomedPlot = ({
       >
         <StyledPlotRow
           isLoading={blink.toString()}
+          animation={functions_config.modes.online_mode.toString()}
           minheight={copy_of_params.height}
           width={copy_of_params.width?.toString()}
           is_plot_selected={true.toString()}
@@ -113,6 +114,7 @@ export const ZoomedPlot = ({
       />
       <StyledPlotRow
         isLoading={blink.toString()}
+        animation={functions_config.modes.online_mode.toString()}
         minheight={params_for_api.height}
         width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}

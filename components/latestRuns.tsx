@@ -7,6 +7,7 @@ import { SpinnerWrapper, Spinner, StyledCol, RunWrapper, StyledA, LatestRunsWrap
 import { NoResultsFound } from '../containers/search/noResultsFound';
 import { store } from '../contexts/leftSideContext';
 import { useNewer } from '../hooks/useNewer';
+import {functions_config} from '../config/config'
 
 export const LatestRuns = () => {
   const { updated_by_not_older_than } = React.useContext(store);
@@ -40,6 +41,7 @@ export const LatestRuns = () => {
                 <StyledCol key={run.toString()}>
                   <RunWrapper
                     isLoading={blink.toString()}
+                    animation={functions_config.modes.online_mode.toString()}
                     hover="true"
                     onClick={() =>
                       changeRouter(

@@ -2,7 +2,7 @@ import React from 'react';
 import cleanDeep from 'clean-deep';
 import { useRouter } from 'next/router';
 
-import { get_jroot_plot } from '../../../../config/config';
+import { get_jroot_plot, functions_config } from '../../../../config/config';
 import {
   ParamsForApiProps,
   TripleProps,
@@ -137,6 +137,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
     <StyledCol space={2}>
       <StyledPlotRow
         isLoading={blink.toString()}
+        animation={functions_config.modes.online_mode.toString()}
         minheight={params_for_api.height}
         width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}

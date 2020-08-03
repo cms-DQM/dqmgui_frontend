@@ -117,14 +117,14 @@ export const TableBody = styled.tbody`
   overflow: scroll;
   overflow-x: hidden;
 `;
-export const RunWrapper = styled.div<{ hover?: string, isLoading?: string }>`
+export const RunWrapper = styled.div<{ hover?: string, isLoading?: string, animation?: string }>`
   background: ${theme.colors.secondary.main};
   border-radius: 5px;
   padding: ${theme.space.padding};
   align-items: cernter;
   display: flex;
   justify-content: center;
-  animation-name: ${(props) => props.isLoading == 'true' ? keyframe_for_updated_last_runs : ''};
+  animation-name: ${(props) => props.isLoading === 'true'  && props.animation === 'true' ? keyframe_for_updated_last_runs : ''};
   animation-iteration-count: 1;
   animation-duration: 1s;
   &:hover {
