@@ -15,7 +15,7 @@ const keyframe_for_updated_last_runs = keyframes`
   100% {
     background: ${theme.colors.secondary.main};
   }
-`
+`;
 
 export const StyledWrapper = styled.div<{ overflowx?: string }>`
   height: 100%;
@@ -54,7 +54,7 @@ export const StyledTableRow = styled.tr<{
   cursor: pointer;
   &:hover {
     background-color: ${(props) =>
-    props?.noHover ? '' : `${theme.colors.thirdy.light}`};
+      props?.noHover ? '' : `${theme.colors.thirdy.light}`};
     color: ${(props) => (props?.noHover ? '' : `${theme.colors.common.white}`)};
   }
   font-weight: ${(props) =>
@@ -117,20 +117,28 @@ export const TableBody = styled.tbody`
   overflow: scroll;
   overflow-x: hidden;
 `;
-export const RunWrapper = styled.div<{ hover?: string, isLoading?: string, animation?: string }>`
+export const RunWrapper = styled.div<{
+  hover?: string;
+  isLoading?: string;
+  animation?: string;
+}>`
   background: ${theme.colors.secondary.main};
   border-radius: 5px;
   padding: ${theme.space.padding};
   align-items: cernter;
   display: flex;
   justify-content: center;
-  animation-name: ${(props) => props.isLoading === 'true'  && props.animation === 'true' ? keyframe_for_updated_last_runs : ''};
+  animation-name: ${(props) =>
+    props.isLoading === 'true' && props.animation === 'true'
+      ? keyframe_for_updated_last_runs
+      : ''};
   animation-iteration-count: 1;
   animation-duration: 1s;
   &:hover {
     background-color: ${(props) =>
-    props?.hover && `${theme.colors.secondary.dark}`};
-  };`;
+      props?.hover && `${theme.colors.secondary.dark}`};
+  }
+`;
 
 export const StyledA = styled.a`
   color: ${theme.colors.common.white} !important;
@@ -148,7 +156,7 @@ export const LatestRunsWrapper = styled.div`
   padding-top: 8px;
   margin-top: 8px;
   border-top: 2px solid;
-`
+`;
 export const LatestRunsTtitle = styled.div`
   display: flex;
   justify-content: center;
@@ -157,7 +165,7 @@ export const LatestRunsTtitle = styled.div`
   font-size: 1.5rem;
   text-decoration: overline;
   font-weight: 300;
-`
+`;
 export const LatestRunsSection = styled.div`
   margin: 64px;
-`
+`;

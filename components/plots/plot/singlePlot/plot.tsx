@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { cloneDeep } from 'lodash'
+import { cloneDeep } from 'lodash';
 
 import { root_url, functions_config } from '../../../../config/config';
 import { get_plot_url } from '../../../../config/config';
@@ -38,7 +38,6 @@ export const Plot = ({
   params_for_api,
   imageRefScrollDown,
 }: PlotProps) => {
-
   const router = useRouter();
   const query: QueryProps = router.query;
 
@@ -48,12 +47,16 @@ export const Plot = ({
 
   const { updated_by_not_older_than } = React.useContext(store);
 
-  const [blink, set_blink] = React.useState(updated_by_not_older_than)
+  const [blink, set_blink] = React.useState(updated_by_not_older_than);
   React.useEffect(() => {
     //timeouts in order to get longer and more visible animation
-    setTimeout(() => { set_blink(true) }, 0)
-    setTimeout(() => { set_blink(false) }, 2000)
-  }, [updated_by_not_older_than])
+    setTimeout(() => {
+      set_blink(true);
+    }, 0);
+    setTimeout(() => {
+      set_blink(false);
+    }, 2000);
+  }, [updated_by_not_older_than]);
 
   useEffect(() => {
     const scrollPlot = () => {
@@ -74,19 +77,19 @@ export const Plot = ({
           minheight={params_for_api.height}
           width={params_for_api.width?.toString()}
           is_plot_selected={isPlotSelected.toString()}
-        // report={plot.properties.report}
+          // report={plot.properties.report}
         >
           <PlotNameCol>{plot.displayedName}</PlotNameCol>
           <Column>
             {isPlotSelected ? (
               <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
             ) : (
-                <PlusIcon
-                  onClick={() => {
-                    addPlotToRightSide(query, plot);
-                  }}
-                />
-              )}
+              <PlusIcon
+                onClick={() => {
+                  addPlotToRightSide(query, plot);
+                }}
+              />
+            )}
           </Column>
           <div
             onClick={async () => {

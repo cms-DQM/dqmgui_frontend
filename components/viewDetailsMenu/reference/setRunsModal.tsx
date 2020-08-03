@@ -168,8 +168,8 @@ export const SetRunsModal = ({
               />
             </ResultsWrapper>
           ) : (
-              <ResultsWrapper />
-            )}
+            <ResultsWrapper />
+          )}
         </div>
       </div>
     </StyledModal>

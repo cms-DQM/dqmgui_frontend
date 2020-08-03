@@ -1,27 +1,37 @@
-import * as React from 'react'
+import * as React from 'react';
 import { MinusOutlined } from '@ant-design/icons';
 
-import { TripleProps, QueryProps } from '../../../containers/display/interfaces';
+import {
+  TripleProps,
+  QueryProps,
+} from '../../../containers/display/interfaces';
 import { CustomTd, StyledSecondaryButton } from '../../styledComponents';
 import { Checkbox } from 'antd';
-import {
-  changeRunsForOverlayPropsValues,
-} from '../utils';
+import { changeRunsForOverlayPropsValues } from '../utils';
 import { RunBrowser } from '../../browsing/runsBrowser';
 import { DatasetsBrowser } from '../../browsing/datasetsBrowsing/datasetsBrowser';
-import { changeRouter, getChangedQueryParams } from '../../../containers/display/utils';
+import {
+  changeRouter,
+  getChangedQueryParams,
+} from '../../../containers/display/utils';
 import { addOverlayData } from '../../plots/plot/singlePlot/utils';
 import { Field } from './field';
 
 interface TableOfSelectedRunForOverlayProps {
   triples: TripleProps[];
   query: QueryProps;
-  setTriples(triples: TripleProps[]): void
+  setTriples(triples: TripleProps[]): void;
   toggleOverlayDataMenu(value: boolean): void;
   setSelectedTriple(overlaid_run: TripleProps): void;
 }
 
-export const TableOfSelectedRunForOverlay = ({ triples, query, setTriples, toggleOverlayDataMenu, setSelectedTriple }: TableOfSelectedRunForOverlayProps) => {
+export const TableOfSelectedRunForOverlay = ({
+  triples,
+  query,
+  setTriples,
+  toggleOverlayDataMenu,
+  setSelectedTriple,
+}: TableOfSelectedRunForOverlayProps) => {
   const remove_runs_to_set_runs_for_overlay = (id: string) => {
     const copy = [...triples];
     const filtered = copy.filter((run) => run.id !== id);
@@ -49,9 +59,7 @@ export const TableOfSelectedRunForOverlay = ({ triples, query, setTriples, toggl
               checked={overlaid_run.checked as boolean}
               onChange={(e: any) => {
                 changeRunsForOverlayPropsValues(
-                  overlaid_run.cheked
-                    ? overlaid_run.cheked
-                    : e.target.checked,
+                  overlaid_run.cheked ? overlaid_run.cheked : e.target.checked,
                   'checked',
                   overlaid_run.id,
                   triples,
@@ -101,7 +109,7 @@ export const TableOfSelectedRunForOverlay = ({ triples, query, setTriples, toggl
               }}
             >
               Change
-              </StyledSecondaryButton>
+            </StyledSecondaryButton>
           </CustomTd>
           <CustomTd spacing={'4'}>
             <Field
@@ -118,9 +126,7 @@ export const TableOfSelectedRunForOverlay = ({ triples, query, setTriples, toggl
           <CustomTd spacing={'4'}>
             <StyledSecondaryButton
               onClick={() => {
-                remove_runs_to_set_runs_for_overlay(
-                  overlaid_run.id as string
-                );
+                remove_runs_to_set_runs_for_overlay(overlaid_run.id as string);
               }}
               icon={<MinusOutlined />}
             ></StyledSecondaryButton>
@@ -128,5 +134,5 @@ export const TableOfSelectedRunForOverlay = ({ triples, query, setTriples, toggl
         </tr>
       ))}
     </table>
-  )
-}
+  );
+};

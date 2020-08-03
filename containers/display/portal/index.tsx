@@ -8,18 +8,21 @@ interface Plot_portal_props {
   title: string;
 }
 
-export const Plot_portal = ({ isPortalWindowOpen, setIsPortalWindowOpen, children, title }: Plot_portal_props) => {
+export const Plot_portal = ({
+  isPortalWindowOpen,
+  setIsPortalWindowOpen,
+  children,
+  title,
+}: Plot_portal_props) => {
   const [containerEl] = React.useState(document.createElement('div'));
 
   return (
     <>
-      {isPortalWindowOpen &&
+      {isPortalWindowOpen && (
         <PlotPortal setIsPortalWindowOpen={setIsPortalWindowOpen} title={title}>
-          <div>
-            {children}
-        </div>
+          <div>{children}</div>
         </PlotPortal>
-      }
+      )}
     </>
-  )
-}
+  );
+};

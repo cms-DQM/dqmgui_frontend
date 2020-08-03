@@ -20,8 +20,13 @@ interface LeftSidePlotsProps {
   globalState: any;
 }
 
-export const PlotsWithoutLayouts = ({ plots, selected_plots, globalState, imageRefScrollDown, query }: LeftSidePlotsProps) => {
-
+export const PlotsWithoutLayouts = ({
+  plots,
+  selected_plots,
+  globalState,
+  imageRefScrollDown,
+  query,
+}: LeftSidePlotsProps) => {
   return (
     <>
       {plots.map((plot: PlotDataProps) => {
@@ -43,14 +48,14 @@ export const PlotsWithoutLayouts = ({ plots, selected_plots, globalState, imageR
                   isPlotSelected={isPlotSelected(selected_plots, plot.name)}
                 />
               ) : (
-                  <Plot
-                    plot={plot}
-                    imageRefScrollDown={imageRefScrollDown}
-                    params_for_api={params_for_api}
-                    key={plot.name}
-                    isPlotSelected={isPlotSelected(selected_plots, plot.name)}
-                  />
-                )}
+                <Plot
+                  plot={plot}
+                  imageRefScrollDown={imageRefScrollDown}
+                  params_for_api={params_for_api}
+                  key={plot.name}
+                  isPlotSelected={isPlotSelected(selected_plots, plot.name)}
+                />
+              )}
             </div>
           );
         }

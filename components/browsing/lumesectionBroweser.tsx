@@ -35,10 +35,12 @@ export const LumesectionBrowser = ({
 }: LumesectionBrowserProps) => {
   //0 - it represents ALL lumisections. If none lumisection is selected, then plots which are displaid
   //consist of ALL lumisections.
-  const [lumisections, setLumisections] = React.useState([{ label: 'All', value: 0 }])
+  const [lumisections, setLumisections] = React.useState([
+    { label: 'All', value: 0 },
+  ]);
 
   const current_time = new Date().getTime();
-  const [not_older_than, set_not_older_than] = React.useState(current_time)
+  const [not_older_than, set_not_older_than] = React.useState(current_time);
 
   //getting all run lumisections
   const { data, isLoading, errors } = useRequest(
@@ -46,7 +48,7 @@ export const LumesectionBrowser = ({
       run_number: currentRunNumber,
       dataset_name: currentDataset,
       lumi: -1,
-      notOlderThan: not_older_than
+      notOlderThan: not_older_than,
     }),
     {},
     [currentRunNumber, currentDataset, not_older_than]
@@ -58,20 +60,23 @@ export const LumesectionBrowser = ({
     const lumisections_from_api: OptionProps[] =
       all_runs_with_lumi.length > 0
         ? all_runs_with_lumi.map((run: AllRunsWithLumiProps) => {
-          return { label: run.lumi.toString(), value: run.lumi };
-        })
+            return { label: run.lumi.toString(), value: run.lumi };
+          })
         : [];
-    const copy = [...lumisections]
-    const allLumis = copy.concat(lumisections_from_api)
-    setLumisections(allLumis)
-  }, [all_runs_with_lumi])
+    const copy = [...lumisections];
+    const allLumis = copy.concat(lumisections_from_api);
+    setLumisections(allLumis);
+  }, [all_runs_with_lumi]);
 
   const lumiValues = lumisections.map((lumi: OptionProps) => lumi.value);
 
   //0 lumisection is not exists, it added as representation of ALL lumisections. If none of lumesctions is selected
-  //it means that should be displaid plots which constist of ALL lumiections. 
+  //it means that should be displaid plots which constist of ALL lumiections.
   //The same situation when run doesn't have lumis at all. It means that it displays plots of ALL Lumis
-  const currentLumiIndex = lumiValues.indexOf(currentLumisection) === -1 ? 0 : lumiValues.indexOf(currentLumisection);
+  const currentLumiIndex =
+    lumiValues.indexOf(currentLumisection) === -1
+      ? 0
+      : lumiValues.indexOf(currentLumisection);
   return (
     <Col>
       <StyledFormItem labelcolor={color} name={'lumi'} label="Lumi">
@@ -108,8 +113,8 @@ export const LumesectionBrowser = ({
                           <Spin />
                         </OptionParagraph>
                       ) : (
-                          <p>{current_lumisection.label}</p>
-                        )}
+                        <p>{current_lumisection.label}</p>
+                      )}
                     </Option>
                   );
                 })}

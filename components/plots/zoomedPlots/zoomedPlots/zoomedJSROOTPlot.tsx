@@ -55,12 +55,16 @@ export const ZoomedJSROOTPlot = ({
     }
   }, [data, params_for_api.lumi, updated_by_not_older_than]);
 
-  const [blink, set_blink] = React.useState(updated_by_not_older_than)
+  const [blink, set_blink] = React.useState(updated_by_not_older_than);
   React.useEffect(() => {
     //timeouts in order to get longer and more visible animation
-    setTimeout(() => { set_blink(true) }, 0)
-    setTimeout(() => { set_blink(false) }, 2000)
-  }, [updated_by_not_older_than])
+    setTimeout(() => {
+      set_blink(true);
+    }, 0);
+    setTimeout(() => {
+      set_blink(false);
+    }, 2000);
+  }, [updated_by_not_older_than]);
 
   return (
     <StyledCol space={2}>

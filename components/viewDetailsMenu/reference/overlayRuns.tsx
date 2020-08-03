@@ -11,9 +11,7 @@ import {
   CustomCol,
   CustomDiv,
 } from '../../styledComponents';
-import {
-  getDisabledButtonTitle,
-} from '../utils';
+import { getDisabledButtonTitle } from '../utils';
 import { store } from '../../../contexts/leftSideContext';
 import { SetRunsModal } from './setRunsModal';
 import { TableOfSelectedRunForOverlay } from './tableOfSelectedRunForOverlay';

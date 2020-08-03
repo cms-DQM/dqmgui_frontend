@@ -61,10 +61,7 @@ export const Browser = () => {
     <Form>
       <WrapperDiv>
         <WrapperDiv>
-          <RunBrowser
-            query={query}
-            setCurrentRunNumber={setCurrentRunNumber}
-          />
+          <RunBrowser query={query} setCurrentRunNumber={setCurrentRunNumber} />
         </WrapperDiv>
         <WrapperDiv>
           {functions_config.new_back_end.lumisections_on && (

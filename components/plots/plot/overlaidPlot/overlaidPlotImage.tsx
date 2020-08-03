@@ -44,7 +44,7 @@ export const OverlaidPlotImage = ({
   const { normalize } = globalState;
 
   params_for_api.plot_name = plot.name;
-  params_for_api.normalize = normalize
+  params_for_api.normalize = normalize;
 
   const overlaid_plots_urls = get_overlaied_plots_urls(params_for_api);
   const joined_overlaid_plots_urls = overlaid_plots_urls.join('');
@@ -60,13 +60,16 @@ export const OverlaidPlotImage = ({
 
   const { updated_by_not_older_than } = React.useContext(store);
 
-  const [blink, set_blink] = React.useState(updated_by_not_older_than)
+  const [blink, set_blink] = React.useState(updated_by_not_older_than);
   React.useEffect(() => {
     //timeouts in order to get longer and more visible animation
-    setTimeout(() => { set_blink(true) }, 0)
-    setTimeout(() => { set_blink(false) }, 2000)
-  }, [updated_by_not_older_than])
-
+    setTimeout(() => {
+      set_blink(true);
+    }, 0);
+    setTimeout(() => {
+      set_blink(false);
+    }, 2000);
+  }, [updated_by_not_older_than]);
 
   return (
     <div ref={imageRef}>
@@ -77,21 +80,21 @@ export const OverlaidPlotImage = ({
           minheight={params_for_api.height}
           width={params_for_api.width?.toString()}
           is_plot_selected={isPlotSelected.toString()}
-        // report={plot.properties.report}
+          // report={plot.properties.report}
         >
           <PlotNameCol>{plot.displayedName}</PlotNameCol>
           <Column>
             {isPlotSelected ? (
               <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
             ) : (
-                <PlusIcon
-                  onClick={async () => {
-                    await addPlotToRightSide(query, plot);
-                    scroll(imageRef);
-                    scrollToBottom(imageRefScrollDown);
-                  }}
-                />
-              )}
+              <PlusIcon
+                onClick={async () => {
+                  await addPlotToRightSide(query, plot);
+                  scroll(imageRef);
+                  scrollToBottom(imageRefScrollDown);
+                }}
+              />
+            )}
           </Column>
           <div
             onClick={async () => {

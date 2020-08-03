@@ -30,7 +30,9 @@ export const DatasetsBrowser = ({
   // because when spinner is shown, field becomes spinner width
 
   const [width, setWidth] = useState<number>();
-  const [currentDatasetNameIndex, setCurrentDatasetNameIndex] = useState<number>(0);
+  const [currentDatasetNameIndex, setCurrentDatasetNameIndex] = useState<
+    number
+  >(0);
 
   const { results_grouped, isLoading } = useSearch(query.run_number, '');
 
@@ -39,9 +41,9 @@ export const DatasetsBrowser = ({
   });
 
   useEffect(() => {
-    const query_dataset = query.dataset_name ? query.dataset_name : ''
-    setCurrentDatasetNameIndex(datasets.indexOf(query_dataset))
-  }, [query.dataset_name, query.run_number, datasets])
+    const query_dataset = query.dataset_name ? query.dataset_name : '';
+    setCurrentDatasetNameIndex(datasets.indexOf(query_dataset));
+  }, [query.dataset_name, query.run_number, datasets]);
 
   return (
     <Row
@@ -76,7 +78,6 @@ export const DatasetsBrowser = ({
             }}
             // value={query.dataset_name}
             value={datasets[currentDatasetNameIndex]}
-
             dropdownMatchSelectWidth={false}
             onClick={() => setSelect(!openSelect)}
             open={openSelect}
@@ -96,8 +97,8 @@ export const DatasetsBrowser = ({
                     <Spin />
                   </OptionParagraph>
                 ) : (
-                    <p onClick={() => setWidth(undefined)}>{result.dataset}</p>
-                  )}
+                  <p onClick={() => setWidth(undefined)}>{result.dataset}</p>
+                )}
               </Option>
             ))}
           </StyledSelect>

@@ -53,7 +53,7 @@ export const FormatParamsForAPI = (
   query: QueryProps,
   plotName: string,
   path?: string,
-  zoomed?: boolean,
+  zoomed?: boolean
 ): ParamsForApiProps => {
   const cleaned_parameters: any = cleanDeep({
     run_number: query.run_number ? query.run_number : '',
@@ -116,14 +116,15 @@ export const scrollToBottom = (imageRef: any) => {
 };
 
 export const shrink_or_expand = (name: string, layouts_sections: string[]) => {
-  const copy = [...layouts_sections]
+  const copy = [...layouts_sections];
 
   if (layouts_sections.includes(name)) {
-    const filtered_names = copy.filter((name_form_names: string) => name !== name_form_names)
-    return filtered_names
+    const filtered_names = copy.filter(
+      (name_form_names: string) => name !== name_form_names
+    );
+    return filtered_names;
+  } else {
+    copy.push(name);
+    return copy;
   }
-  else {
-    copy.push(name)
-    return copy
-  }
-}
+};

@@ -57,18 +57,18 @@ export const ZoomedOverlaidJSROOTPlot = ({
 
   const overlaid_plots_runs_and_datasets: any[] = params_for_api?.overlay_plot
     ? params_for_api.overlay_plot.map((plot: TripleProps) => {
-      const copy: any = { ...params_for_api };
+        const copy: any = { ...params_for_api };
 
-      if (plot.dataset_name) {
-        copy.dataset_name = plot.dataset_name;
-      }
-      copy.run_number = plot.run_number;
-      const { data } = useRequest(get_jroot_plot(copy), {}, [
-        selected_plot.name,
-        query.lumi,
-      ]);
-      return data;
-    })
+        if (plot.dataset_name) {
+          copy.dataset_name = plot.dataset_name;
+        }
+        copy.run_number = plot.run_number;
+        const { data } = useRequest(get_jroot_plot(copy), {}, [
+          selected_plot.name,
+          query.lumi,
+        ]);
+        return data;
+      })
     : [];
 
   overlaid_plots_runs_and_datasets.push(data);
@@ -124,14 +124,25 @@ export const ZoomedOverlaidJSROOTPlot = ({
     ) {
       drawJSROOT(histogramParam, selected_plot.name, overlaidJSROOTPlot);
     }
-  },[updated_by_not_older_than, data,  params_for_api.lumi, params_for_api.overlay_plot, params_for_api.dataset_name, params_for_api.run_number]);
+  }, [
+    updated_by_not_older_than,
+    data,
+    params_for_api.lumi,
+    params_for_api.overlay_plot,
+    params_for_api.dataset_name,
+    params_for_api.run_number,
+  ]);
 
-  const [blink, set_blink] = React.useState(updated_by_not_older_than)
+  const [blink, set_blink] = React.useState(updated_by_not_older_than);
   React.useEffect(() => {
     //timeouts in order to get longer and more visible animation
-    setTimeout(() => { set_blink(true) }, 0)
-    setTimeout(() => { set_blink(false) }, 2000)
-  }, [updated_by_not_older_than])
+    setTimeout(() => {
+      set_blink(true);
+    }, 0);
+    setTimeout(() => {
+      set_blink(false);
+    }, 2000);
+  }, [updated_by_not_older_than]);
 
   return (
     <StyledCol space={2}>
@@ -142,7 +153,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
         width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}
         nopointer={true.toString()}
-      // report={selected_plot.properties.report}
+        // report={selected_plot.properties.report}
       >
         <PlotNameCol>{selected_plot.displayedName}</PlotNameCol>
         <Column>

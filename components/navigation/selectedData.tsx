@@ -23,14 +23,16 @@ interface SelectedDataProps {
   openRunInNewTab: boolean;
 }
 
-const open_in_a_new_tab_options = [{
-  value: true,
-  label: 'Yes'
-},
-{
-  value: false,
-  label: 'No'
-}]
+const open_in_a_new_tab_options = [
+  {
+    value: true,
+    label: 'Yes',
+  },
+  {
+    value: false,
+    label: 'No',
+  },
+];
 
 export const SelectedData = ({
   //router ok

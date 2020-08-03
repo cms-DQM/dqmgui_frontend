@@ -62,7 +62,7 @@ export const useRequest = (
     if (should_we_fetch) {
       fetchData();
     }
-    return(() => setErrors([]))
+    return () => setErrors([]);
   }, watchers);
   return { data, isLoading, errors, cancelSource };
 };

@@ -87,7 +87,7 @@ const Index: NextPage<FolderPathQuery> = () => {
   const { set_updated_by_not_older_than } = React.useContext(store);
 
   const current_time = new Date().getTime();
-  const [not_older_than, set_not_older_than] = React.useState(current_time)
+  const [not_older_than, set_not_older_than] = React.useState(current_time);
 
   React.useEffect(() => {
     if (functions_config.modes.online_mode && errors.length === 0) {
@@ -95,17 +95,17 @@ const Index: NextPage<FolderPathQuery> = () => {
         set_not_older_than(() => {
           // 1 sek is 1000 milisec. we dividing by 10000 and multiply by 10, because we need to
           // have rounded sec. for exmaple: if it is 13, we need to have 10, or 26, we need to have 20 and etc.
-          const secounds = Math.round(new Date().getTime() / 10000) * 10
-          return secounds
-        })
-      }, 10000)
-      return () => clearInterval(interval)
+          const secounds = Math.round(new Date().getTime() / 10000) * 10;
+          return secounds;
+        });
+      }, 10000);
+      return () => clearInterval(interval);
     }
-  }, [])
+  }, []);
 
   React.useEffect(() => {
-    set_updated_by_not_older_than(not_older_than)
-  }, [not_older_than])
+    set_updated_by_not_older_than(not_older_than);
+  }, [not_older_than]);
 
   return (
     <StyledDiv>
@@ -132,15 +132,15 @@ const Index: NextPage<FolderPathQuery> = () => {
             isDatasetAndRunNumberSelected ? (
               <ComposedSearch />
             ) : (
-                <>
-                  <Nav
-                    initial_search_run_number={query.search_run_number}
-                    initial_search_dataset_name={query.search_dataset_name}
-                    handler={navigationHandler}
-                    type="top"
-                  />
-                </>
-              )
+              <>
+                <Nav
+                  initial_search_run_number={query.search_run_number}
+                  initial_search_dataset_name={query.search_dataset_name}
+                  handler={navigationHandler}
+                  type="top"
+                />
+              </>
+            )
           }
         </StyledHeader>
         {query.run_number && query.dataset_name ? (
@@ -158,18 +158,18 @@ const Index: NextPage<FolderPathQuery> = () => {
             handler={serchResultsHandler}
             errors={errors}
           />
-        ) : (functions_config.new_back_end.latest_runs ?
+        ) : functions_config.new_back_end.latest_runs ? (
           <LatestRuns />
-          : (
-            <NotFoundDivWrapper>
-              <NotFoundDiv noBorder>
-                <ChartIcon />
-                  Welcome to DQM GUI
-                </NotFoundDiv>
-            </NotFoundDivWrapper>
-          ))}
+        ) : (
+          <NotFoundDivWrapper>
+            <NotFoundDiv noBorder>
+              <ChartIcon />
+              Welcome to DQM GUI
+            </NotFoundDiv>
+          </NotFoundDivWrapper>
+        )}
       </StyledLayout>
-    </StyledDiv >
+    </StyledDiv>
   );
 };
 

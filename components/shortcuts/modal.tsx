@@ -1,10 +1,21 @@
 import * as React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import { TripleProps, QueryProps, FolderPathQuery } from '../../containers/display/interfaces';
+import {
+  TripleProps,
+  QueryProps,
+  FolderPathQuery,
+} from '../../containers/display/interfaces';
 import { useSearch } from '../../hooks/useSearch';
 import { concatArrays } from '../viewDetailsMenu/utils';
-import { StyledModal, SelectedRunsTable, SelectedRunsTr, SelectedRunsTh, SelectedRunsTd, ResultsWrapper } from '../viewDetailsMenu/styledComponents';
+import {
+  StyledModal,
+  SelectedRunsTable,
+  SelectedRunsTr,
+  SelectedRunsTh,
+  SelectedRunsTd,
+  ResultsWrapper,
+} from '../viewDetailsMenu/styledComponents';
 import { StyledButton } from '../styledComponents';
 import { theme } from '../../styles/theme';
 import Nav from '../Nav';
@@ -17,18 +28,22 @@ interface SetRunsToShortcutModalProps {
     run_number: string | undefined;
     dataset_name: string | undefined;
   }[];
-  set_runs_in_shortcut: React.Dispatch<React.SetStateAction<{
-    run_number: string | undefined;
-    dataset_name: string | undefined;
-    id: string,
-  }[]>>
+  set_runs_in_shortcut: React.Dispatch<
+    React.SetStateAction<
+      {
+        run_number: string | undefined;
+        dataset_name: string | undefined;
+        id: string;
+      }[]
+    >
+  >;
 }
 
 export const SetRunsToShortcutModal = ({
   openAddRunsToShortcut,
   toggleAddRunsToShortcut,
   runs_in_shortcut,
-  set_runs_in_shortcut
+  set_runs_in_shortcut,
 }: SetRunsToShortcutModalProps) => {
   const [serachRunNumber, setSearchRunNumber] = React.useState('');
   const [serachDatasetName, setSearchDatasetName] = React.useState('');
@@ -58,13 +73,16 @@ export const SetRunsToShortcutModal = ({
       dataset_name: dataset_name,
     };
     const copy = [...selected_runs];
-      copy.push(full_run);
+    copy.push(full_run);
     set_selected_runs(copy);
   };
 
   //runs_which_are_now_in_shortcut_and_selected_now combines list of runs which are already added to shortcut
   // with those which are just selected (selected_runs) in "Add runs to shortcut" modal(dialog)
-  const runs_which_are_now_in_shortcut_and_selected_now = concatArrays([selected_runs, runs_in_shortcut]);
+  const runs_which_are_now_in_shortcut_and_selected_now = concatArrays([
+    selected_runs,
+    runs_in_shortcut,
+  ]);
 
   return (
     <StyledModal
@@ -89,7 +107,9 @@ export const SetRunsToShortcutModal = ({
         <StyledButton
           key="OK"
           onClick={() => {
-            set_runs_in_shortcut(runs_which_are_now_in_shortcut_and_selected_now);
+            set_runs_in_shortcut(
+              runs_which_are_now_in_shortcut_and_selected_now
+            );
             toggleAddRunsToShortcut(false);
             set_selected_runs([]);
           }}
@@ -141,8 +161,8 @@ export const SetRunsToShortcutModal = ({
               />
             </ResultsWrapper>
           ) : (
-              <ResultsWrapper />
-            )}
+            <ResultsWrapper />
+          )}
         </div>
       </div>
     </StyledModal>

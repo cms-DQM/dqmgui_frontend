@@ -47,9 +47,9 @@ export const RunBrowser = ({
   const runNumbers = getRunNumbers(results_grouped);
 
   useEffect(() => {
-    const query_run_number = query.run_number ? query.run_number : ''
-    setCurrentRunNumberIndex(runNumbers.indexOf(query_run_number))
-  }, [query.dataset_name, query.run_number, runNumbers])
+    const query_run_number = query.run_number ? query.run_number : '';
+    setCurrentRunNumberIndex(runNumbers.indexOf(query_run_number));
+  }, [query.dataset_name, query.run_number, runNumbers]);
 
   return (
     <Col>
@@ -107,8 +107,8 @@ export const RunBrowser = ({
                             <Spin />
                           </OptionParagraph>
                         ) : (
-                            <div onClick={() => setWidth(undefined)}>{run}</div>
-                          )}
+                          <div onClick={() => setWidth(undefined)}>{run}</div>
+                        )}
                       </Option>
                     );
                   })}

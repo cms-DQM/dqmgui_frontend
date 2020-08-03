@@ -148,7 +148,9 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
     setTriples(copy);
   };
 
-const [updated_by_not_older_than, set_updated_by_not_older_than] = useState(initialState.updated_by_not_older_than)
+  const [updated_by_not_older_than, set_updated_by_not_older_than] = useState(
+    initialState.updated_by_not_older_than
+  );
 
   return (
     <Provider
@@ -192,7 +194,8 @@ const [updated_by_not_older_than, set_updated_by_not_older_than] = useState(init
         setCustomize,
         runs_set_for_overlay,
         set_runs_set_for_overlay,
-        updated_by_not_older_than, set_updated_by_not_older_than
+        updated_by_not_older_than,
+        set_updated_by_not_older_than,
       }}
     >
       {children}
