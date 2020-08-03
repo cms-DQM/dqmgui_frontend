@@ -50,16 +50,15 @@ const Content: FC<FolderProps> = ({
   run_number,
   dataset_name,
 }) => {
-  const current_time = new Date().getTime();
-  const [not_older_than, set_not_older_than] = useState(current_time)
+  const { viewPlotsPosition, proportion, updated_by_not_older_than } = useContext(store);
 
-  const params = { run_number: run_number, dataset_name: dataset_name, folders_path: folder_path, notOlderThan: not_older_than }
+  const params = { run_number: run_number, dataset_name: dataset_name, folders_path: folder_path, notOlderThan: updated_by_not_older_than }
   const current_api = choose_api(params)
 
   const data_het_by_not_older_than_update = useRequest(
     current_api,
     {},
-    [not_older_than],
+    [updated_by_not_older_than],
   );
 
   const data_het_by_folder_run_dataset_update = useRequest(
@@ -73,23 +72,6 @@ const Content: FC<FolderProps> = ({
   const isLoading = data_het_by_folder_run_dataset_update.isLoading
   const isLoadingByOdlerThanUpdate = data_het_by_folder_run_dataset_update.isLoading
 
-
-  React.useEffect(() => {
-    if (functions_config.modes.online_mode && errors.length === 0) {
-      const interval = setInterval(() => {
-        set_not_older_than(() => {
-          // 1 sek is 1000 milisec. we dividing by 10000 and multiply by 10, because we need to
-          // have rounded sec. for exmaple: if it is 13, we need to have 10, or 26, we need to have 20 and etc.
-          const secounds = Math.round(new Date().getTime() / 10000) * 10
-          return secounds
-        })
-      }, 10000)
-      if (errors.length > 0) {
-        clearInterval(interval)
-      }
-    }
-  }, [])
-
   const [openSettings, toggleSettingsModal] = useState(false);
   const router = useRouter();
   const query: QueryProps = router.query;
@@ -97,7 +79,6 @@ const Content: FC<FolderProps> = ({
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
 
   const selectedPlots = query.selected_plots;
-  const { viewPlotsPosition, proportion, set_updated_by_not_older_than } = useContext(store);
   //filtering directories by selected workspace
   const { foldersByPlotSearch, plots } = useFilterFolders(query, contents);
 
@@ -110,10 +91,6 @@ const Content: FC<FolderProps> = ({
     selectedPlots,
     plots
   );
-
-  useEffect(() => {
-    set_updated_by_not_older_than(not_older_than)
-  }, [not_older_than])
 
   return (
     <>

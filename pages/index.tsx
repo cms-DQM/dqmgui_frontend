@@ -31,6 +31,7 @@ import {
 } from '../containers/display/utils';
 import { functions_config } from '../config/config';
 import { LatestRuns } from '../components/latestRuns';
+import { store } from '../contexts/leftSideContext';
 
 const navigationHandler = (
   search_by_run_number: string,
@@ -82,6 +83,31 @@ const Index: NextPage<FolderPathQuery> = () => {
 
   const isDatasetAndRunNumberSelected =
     !!query.run_number && !!query.dataset_name;
+
+  const { set_updated_by_not_older_than } = React.useContext(store);
+
+  const current_time = new Date().getTime();
+  const [not_older_than, set_not_older_than] = React.useState(current_time)
+
+  React.useEffect(() => {
+    if (functions_config.modes.online_mode && errors.length === 0) {
+      const interval = setInterval(() => {
+        set_not_older_than(() => {
+          // 1 sek is 1000 milisec. we dividing by 10000 and multiply by 10, because we need to
+          // have rounded sec. for exmaple: if it is 13, we need to have 10, or 26, we need to have 20 and etc.
+          const secounds = Math.round(new Date().getTime() / 10000) * 10
+          return secounds
+        })
+      }, 10000)
+      // if (errors.length > 0) {
+      //   clearInterval(interval)
+      // }
+    }
+  }, [])
+
+  React.useEffect(() => {
+    set_updated_by_not_older_than(not_older_than)
+  }, [not_older_than])
 
   return (
     <StyledDiv>

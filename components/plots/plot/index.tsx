@@ -17,7 +17,7 @@ interface LeftSidePlotsProps {
   plots_grouped_by_layouts?: PlotsGroupedByLayoutsInterface;
 }
 
-export const LeftSidePlots = ({ plots, selected_plots, plots_grouped_by_layouts, isLoading }: LeftSidePlotsProps) => {
+export const LeftSidePlots = ({ plots, selected_plots, plots_grouped_by_layouts }: LeftSidePlotsProps) => {
   const plots_grouped_by_layouts_checked = plots_grouped_by_layouts ? plots_grouped_by_layouts : {}
   const globalState = useContext(store);
   const router = useRouter();

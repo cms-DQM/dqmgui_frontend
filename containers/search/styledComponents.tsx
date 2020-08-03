@@ -2,8 +2,20 @@ import React from 'react';
 import { SearchOutlined, BarChartOutlined } from '@ant-design/icons';
 import { Spin, Row, Col, Alert, Tag } from 'antd';
 
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { theme } from '../../styles/theme';
+
+const keyframe_for_updated_last_runs = keyframes`
+  0% {
+    background: ${theme.colors.secondary.main};
+  }
+  50% {
+    background: ${theme.colors.primary.main};
+  }
+  100% {
+    background: ${theme.colors.secondary.main};
+  }
+`
 
 export const StyledWrapper = styled.div<{ overflowx?: string }>`
   height: 100%;
@@ -105,16 +117,19 @@ export const TableBody = styled.tbody`
   overflow: scroll;
   overflow-x: hidden;
 `;
-export const RunWrapper = styled.div<{ hover?: string }>`
+export const RunWrapper = styled.div<{ hover?: string, isLoading?: string }>`
   background: ${theme.colors.secondary.main};
   border-radius: 5px;
   padding: ${theme.space.padding};
   align-items: cernter;
   display: flex;
   justify-content: center;
+  animation-name: ${(props) => props.isLoading == 'true' ? keyframe_for_updated_last_runs : ''};
+  animation-iteration-count: 1;
+  animation-duration: 1s;
   &:hover {
     background-color: ${(props) =>
-    props?.hover && `${theme.colors.secondary.dark}`} ;
+    props?.hover && `${theme.colors.secondary.dark}`};
   };`;
 
 export const StyledA = styled.a`
