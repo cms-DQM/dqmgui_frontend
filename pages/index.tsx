@@ -62,7 +62,9 @@ const Index: NextPage<FolderPathQuery> = () => {
   const query: QueryProps = router.query;
 
   const serchResultsHandler = (run: string, dataset: string) => {
-    const { parsedRun, parsedLumi } = seperateRunAndLumiInSearch(run.toString());
+    const { parsedRun, parsedLumi } = seperateRunAndLumiInSearch(
+      run.toString()
+    );
     changeRouter(
       getChangedQueryParams(
         {

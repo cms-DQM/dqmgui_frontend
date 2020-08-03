@@ -63,18 +63,19 @@ export const LatestRuns = () => {
         <NoResultsFound />
       ) : (
         <LatestRunsWrapper>
-          {latest_runs && latest_runs.map((run: number) => (
-            <StyledCol key={run.toString()}>
-              <RunWrapper
-                isLoading={blink.toString()}
-                animation={functions_config.modes.online_mode.toString()}
-                hover="true"
-                onClick={() => changeRouter({ search_run_number: run })}
-              >
-                <StyledA>{run}</StyledA>
-              </RunWrapper>
-            </StyledCol>
-          ))}
+          {latest_runs &&
+            latest_runs.map((run: number) => (
+              <StyledCol key={run.toString()}>
+                <RunWrapper
+                  isLoading={blink.toString()}
+                  animation={functions_config.modes.online_mode.toString()}
+                  hover="true"
+                  onClick={() => changeRouter({ search_run_number: run })}
+                >
+                  <StyledA>{run}</StyledA>
+                </RunWrapper>
+              </StyledCol>
+            ))}
         </LatestRunsWrapper>
       )}
     </LatestRunsSection>

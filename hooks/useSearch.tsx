@@ -23,7 +23,12 @@ export const useSearch = (
 
   const { updated_by_not_older_than } = useContext(store);
 
-  const current_api = choose_api_for_run_search({ dataset_name: dataset_name_value, run_number: run_number_value, notOlderThan: updated_by_not_older_than, lumi: '' });
+  const current_api = choose_api_for_run_search({
+    dataset_name: dataset_name_value,
+    run_number: run_number_value,
+    notOlderThan: updated_by_not_older_than,
+    lumi: '',
+  });
 
   const { data, isLoading, errors } = useRequest(
     current_api,
@@ -32,12 +37,9 @@ export const useSearch = (
     searching
   );
 
-  const data_get_by_api = get_runs_by_search(data)
+  const data_get_by_api = get_runs_by_search(data);
 
-  if (
-    !searching ||
-    data === null || data_get_by_api.lenght === 0
-  ) {
+  if (!searching || data === null || data_get_by_api.lenght === 0) {
     return {
       results_grouped: [],
       searching,
@@ -46,7 +48,7 @@ export const useSearch = (
     };
   }
 
-    const results_grouped = _.chain(data_get_by_api)
+  const results_grouped = _.chain(data_get_by_api)
     .sortBy('dataset')
     .groupBy('dataset')
     .map((value, key) => ({ dataset: key, value }))

@@ -34,10 +34,10 @@ export const Shortucts = ({ query }: Shortcut_tags_props) => {
   const old_selected_runs_for_shurtcut =
     //@ts-ignore
     JSON.parse(localStorage.getItem('shortcuts')) &&
-      //@ts-ignore
-      JSON.parse(localStorage.getItem('shortcuts')).length > 0
-      //@ts-ignore
-      ? JSON.parse(localStorage.getItem('shortcuts'))
+    //@ts-ignore
+    JSON.parse(localStorage.getItem('shortcuts')).length > 0
+      ? //@ts-ignore
+        JSON.parse(localStorage.getItem('shortcuts'))
       : [current_run];
   const [runs_in_shortcut, set_runs_in_shortcut] = React.useState(
     old_selected_runs_for_shurtcut
