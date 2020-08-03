@@ -36,6 +36,7 @@ export interface LumisectionRequestProps {
   dataset_name: string;
   run_number: string;
   lumi?: number | string;
+  notOlderThan?: number;
 }
 
 export interface ParamsForApiProps extends PlotProps {
@@ -122,8 +123,13 @@ export interface PlotInterface {
   path: string;
   content: any;
   properties: any;
+  layout?: string;
 }
 
 export interface DirectoryInterface {
   subdir: string;
+}
+
+export interface PlotsGroupedByLayoutsInterface {
+  [layout: string]: PlotDataProps[];
 }

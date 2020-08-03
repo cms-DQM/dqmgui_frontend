@@ -40,7 +40,7 @@ export const Browser = () => {
     //setLumisection from store(using useContext) set lumisection value globally.
     //This set value is reachable for lumisection browser in free search dialog (you can see it, when search button next to browsers is clicked).
 
-    //Both lumisection browser have different handers, they have to act differently according to their place:
+    //Both lumisection browser have different handlers, they have to act differently according to their place:
     //IN THE MAIN NAV: lumisection browser value in the main navigation is changed, this HAVE to be set to url;
     //FREE SEARCH DIALOG: lumisection browser value in free search dialog is changed it HASN'T to be set to url immediately, just when button 'ok'
     //in dialog is clicked THEN value is set to url. So, useContext let us to change lumi value globally without changing url, when wee no need that.
@@ -61,15 +61,10 @@ export const Browser = () => {
     <Form>
       <WrapperDiv>
         <WrapperDiv>
-          <RunBrowser
-            query={query}
-            currentRunNumber={currentRunNumber}
-            setCurrentRunNumber={setCurrentRunNumber}
-            currentDataset={currentDataset}
-          />
+          <RunBrowser query={query} setCurrentRunNumber={setCurrentRunNumber} />
         </WrapperDiv>
         <WrapperDiv>
-          {functions_config.lumisections_on && (
+          {functions_config.new_back_end.lumisections_on && (
             <LumesectionBrowser
               currentLumisection={lumi}
               currentRunNumber={currentRunNumber}
@@ -92,8 +87,6 @@ export const Browser = () => {
           {datasetOption === dataSetSelections[0].value ? (
             <WrapperDiv>
               <DatasetsBrowser
-                currentRunNumber={currentRunNumber}
-                currentDataset={currentDataset}
                 setCurrentDataset={setCurrentDataset}
                 query={query}
               />

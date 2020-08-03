@@ -34,6 +34,7 @@ export interface LeftSideState {
   rightSideSize: SizeProps;
   JSROOTmode: boolean;
   customizeProps: CustomizeProps;
+  updated_by_not_older_than: boolean;
 }
 
 export const initialState: any = {
@@ -51,6 +52,7 @@ export const initialState: any = {
   rightSideNormalize: true,
   rightSideSize: sizes.fill.size,
   JSROOTmode: false,
+  shortcuts: [],
   customizeProps: {
     xtype: '',
     xmin: NaN,
@@ -64,6 +66,7 @@ export const initialState: any = {
     drawopts: '',
     withref: '',
   },
+  updated_by_not_older_than: false,
 };
 
 export interface ActionProps {
@@ -145,6 +148,10 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
     setTriples(copy);
   };
 
+  const [updated_by_not_older_than, set_updated_by_not_older_than] = useState(
+    initialState.updated_by_not_older_than
+  );
+
   return (
     <Provider
       value={{
@@ -187,6 +194,8 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         setCustomize,
         runs_set_for_overlay,
         set_runs_set_for_overlay,
+        updated_by_not_older_than,
+        set_updated_by_not_older_than,
       }}
     >
       {children}

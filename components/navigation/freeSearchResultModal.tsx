@@ -27,8 +27,8 @@ interface FreeSeacrhModalProps {
 }
 
 const open_a_new_tab = (query: string) => {
-  window.open(query, "_blank")
-}
+  window.open(query, '_blank');
+};
 
 export const SearchModal = ({
   setModalState,
@@ -78,15 +78,16 @@ export const SearchModal = ({
 
   const onOk = async () => {
     if (openRunInNewTab) {
-      const params = form.getFieldsValue()
-      const new_tab_query_params = qs.stringify(getChangedQueryParams(params, query))
+      const params = form.getFieldsValue();
+      const new_tab_query_params = qs.stringify(
+        getChangedQueryParams(params, query)
+      );
       //root url is ends with first '?'. I can't use just root url from config.config, because
       //in dev env it use localhost:8081/dqm/dev (this is old backend url from where I'm getting data),
       //but I need localhost:3000
-      const current_root = window.location.href.split('/?')[0]
-      open_a_new_tab(`${current_root}/?${new_tab_query_params}`)
-    }
-    else {
+      const current_root = window.location.href.split('/?')[0];
+      open_a_new_tab(`${current_root}/?${new_tab_query_params}`);
+    } else {
       await form.submit();
     }
     onClosing();
@@ -141,8 +142,8 @@ export const SearchModal = ({
               />
             </ResultsWrapper>
           ) : (
-              <ResultsWrapper />
-            )}
+            <ResultsWrapper />
+          )}
         </>
       )}
     </StyledModal>

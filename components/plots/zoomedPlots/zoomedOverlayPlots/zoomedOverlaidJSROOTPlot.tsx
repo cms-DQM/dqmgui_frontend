@@ -2,7 +2,7 @@ import React from 'react';
 import cleanDeep from 'clean-deep';
 import { useRouter } from 'next/router';
 
-import { get_jroot_plot } from '../../../../config/config';
+import { get_jroot_plot, functions_config } from '../../../../config/config';
 import {
   ParamsForApiProps,
   TripleProps,
@@ -21,6 +21,7 @@ import {
 } from '../../../../containers/display/styledComponents';
 import { removePlotFromRightSide } from '../../plot/singlePlot/utils';
 import { Button } from 'antd';
+import { store } from '../../../../contexts/leftSideContext';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;
@@ -110,6 +111,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
       histogram4
     );
   }
+  const { updated_by_not_older_than } = React.useContext(store);
 
   const histogramParam = params_for_api.normalize ? 'hist' : 'nostack';
   //make sure that no null histograms are passed to draw func.
@@ -122,11 +124,31 @@ export const ZoomedOverlaidJSROOTPlot = ({
     ) {
       drawJSROOT(histogramParam, selected_plot.name, overlaidJSROOTPlot);
     }
-  });
+  }, [
+    updated_by_not_older_than,
+    data,
+    params_for_api.lumi,
+    params_for_api.overlay_plot,
+    params_for_api.dataset_name,
+    params_for_api.run_number,
+  ]);
+
+  const [blink, set_blink] = React.useState(updated_by_not_older_than);
+  React.useEffect(() => {
+    //timeouts in order to get longer and more visible animation
+    setTimeout(() => {
+      set_blink(true);
+    }, 0);
+    setTimeout(() => {
+      set_blink(false);
+    }, 2000);
+  }, [updated_by_not_older_than]);
 
   return (
     <StyledCol space={2}>
       <StyledPlotRow
+        isLoading={blink.toString()}
+        animation={functions_config.modes.online_mode.toString()}
         minheight={params_for_api.height}
         width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}

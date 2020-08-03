@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import {
   FolderFilled,
   MinusCircleFilled,
@@ -10,10 +10,40 @@ import { theme } from '../../styles/theme';
 import { PlotPropertiesReportProps } from './interfaces';
 import { viewPositions } from '../../components/constants';
 
-export const Icon = styled(FolderFilled)`
+const keyframe_for_updates_folder = keyframes`
+  0% {
+    color: ${theme.colors.primary.main};
+  }
+  50% {
+    color: ${theme.colors.secondary.main};
+  }
+  100% {
+    color: ${theme.colors.primary.main};
+  }
+`;
+const keyframe_for_updates_plots = keyframes`
+  0% {
+    background: ${theme.colors.secondary.main};
+    color:  ${theme.colors.common.white};
+  }
+  100% {
+    background: ${theme.colors.secondary.main};
+  }
+`;
+
+export const Icon = styled(FolderFilled)<{
+  isLoading?: string;
+  animation?: string;
+}>`
   font-size: 2rem;
   cursor: pointer;
   padding-right: calc(${theme.space.spaceBetween}*2);
+  animation-name: ${(props) =>
+    props.isLoading === 'true' && props.animation === 'true'
+      ? keyframe_for_updates_folder
+      : ''};
+  animation-iteration-count: 1;
+  animation-duration: 1s;
 `;
 export const DirecotryWrapper = styled.div`
   padding: ${theme.space.spaceBetween};
@@ -24,7 +54,7 @@ export const DirecotryWrapper = styled.div`
 export const StyledA = styled.a`
   word-break: break-all;
 `;
-export const StyledCol = styled(Col) <{ space?: number }>`
+export const StyledCol = styled(Col)<{ space?: number }>`
   padding: ${(props) =>
     props.space ? `calc(${theme.space.spaceBetween}*${props.space})` : ''};
   width: fit-content;
@@ -45,12 +75,14 @@ export const StyledRowImages = styled(Row)`
   justify-content: center;
 `;
 
-export const StyledPlotRow = styled(Row) <{
+export const StyledPlotRow = styled(Row)<{
   width?: string;
   minheight?: number;
   is_plot_selected?: string;
   nopointer?: string;
+  isLoading?: string;
   report?: PlotPropertiesReportProps;
+  animation?: string;
 }>`
   display: flex;
   justify-content: space-between;
@@ -79,6 +111,12 @@ export const StyledPlotRow = styled(Row) <{
     return '';
   }};
   cursor: ${(props) => (props?.nopointer ? '' : 'pointer')};
+  animation-name: ${(props) =>
+    props.isLoading === 'true' && props.animation === 'true'
+      ? keyframe_for_updates_plots
+      : ''};
+  animation-iteration-count: 1;
+  animation-duration: 1s;
 `;
 export const PlotNameCol = styled(Col)`
   width: 70%;
@@ -86,15 +124,15 @@ export const PlotNameCol = styled(Col)`
   color: ${theme.colors.common.black};
   padding: ${theme.space.spaceBetween};
 `;
-export const Column = styled(Col) <{ display?: string }>`
+export const Column = styled(Col)<{ display?: string }>`
   padding: ${theme.space.spaceBetween} calc(${theme.space.spaceBetween}*2)
     ${theme.space.spaceBetween} ${theme.space.spaceBetween};
-  display: ${(props) => props.display ? props.display : ''};
+  display: ${(props) => (props.display ? props.display : '')};
 `;
 export const Wrapper = styled.div<{
   any_selected_plots?: any;
-  position?: string;
-  proportion?: string;
+  position?: any;
+  proportion?: any;
 }>`
   width: ${(props) =>
     props?.any_selected_plots && props.position === viewPositions[1].value
@@ -104,10 +142,10 @@ export const Wrapper = styled.div<{
     props?.any_selected_plots && props?.position === viewPositions[1].value
       ? '100%'
       : !props?.any_selected_plots && props?.position === viewPositions[1].value
-        ? '100%'
-        : props?.any_selected_plots && props?.position === viewPositions[0].value
-          ? `${props.proportion}`
-          : 'fit-content'};
+      ? '100%'
+      : props?.any_selected_plots && props?.position === viewPositions[0].value
+      ? `${props.proportion}`
+      : 'fit-content'};
   align-items: center;
   flex-wrap: wrap;
   align-items: start;
@@ -133,7 +171,7 @@ export const ZoomedPlotsWrapper = styled.div<{
     props?.position === viewPositions[1].value
       ? '100%'
       : props?.position === viewPositions[0].value &&
-      `calc(100% - ${props.proportion})`};
+        `calc(100% - ${props.proportion})`};
   flex-wrap: wrap;
   overflow: ${(props) => (props?.any_selected_plots ? 'scroll' : '')};
   align-items: start;
@@ -170,12 +208,16 @@ export const WrapperDiv = styled.div`
   display: flex;
 `;
 
-export const ImageDiv = styled.div<{ width?: number; height?: number, id?: any }>`
+export const ImageDiv = styled.div<{
+  width?: number;
+  height?: number;
+  id?: any;
+}>`
   width: ${(props) => (props.width ? props.width : '')}px;
   height: ${(props) => (props.height ? props.height : '')}px;
 `;
 
-export const Image = styled.img<{ width?: number; height?: number, src?: any }>`
+export const Image = styled.img<{ width?: number; height?: number; src?: any }>`
   width: ${(props) => props.width}px;
   height: ${(props) => props.height}px;
 `;

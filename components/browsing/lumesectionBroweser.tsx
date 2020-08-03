@@ -3,13 +3,13 @@ import { Col, Select, Spin, Button, Row } from 'antd';
 import { CaretRightFilled, CaretLeftFilled } from '@ant-design/icons';
 
 import { useRequest } from '../../hooks/useRequest';
-import { getLumisections } from '../../config/config';
+import { getLumisections, functions_config } from '../../config/config';
 import {
   StyledSelect,
   OptionParagraph,
 } from '../viewDetailsMenu/styledComponents';
 import { StyledFormItem } from '../styledComponents';
-import { OptionProps } from '../../containers/display/interfaces';
+import { OptionProps, QueryProps } from '../../containers/display/interfaces';
 
 const { Option } = Select;
 
@@ -33,33 +33,50 @@ export const LumesectionBrowser = ({
   currentRunNumber,
   currentDataset,
 }: LumesectionBrowserProps) => {
+  //0 - it represents ALL lumisections. If none lumisection is selected, then plots which are displaid
+  //consist of ALL lumisections.
+  const [lumisections, setLumisections] = React.useState([
+    { label: 'All', value: 0 },
+  ]);
+
+  const current_time = new Date().getTime();
+  const [not_older_than, set_not_older_than] = React.useState(current_time);
+
   //getting all run lumisections
   const { data, isLoading, errors } = useRequest(
     getLumisections({
       run_number: currentRunNumber,
       dataset_name: currentDataset,
-      lumi: 0,
+      lumi: -1,
+      notOlderThan: not_older_than,
     }),
     {},
-    [currentRunNumber, currentDataset]
+    [currentRunNumber, currentDataset, not_older_than]
   );
-
   const all_runs_with_lumi = data ? data.data : [];
-  //extracting just lumisections from data object
-  const lumisections: OptionProps[] =
-    all_runs_with_lumi.length > 0
-      ? all_runs_with_lumi.map((run: AllRunsWithLumiProps) => {
-          return { label: run.lumi.toString(), value: run.lumi };
-        })
-      : [];
 
-  //0 - it represents ALL lumisections. If none lumisection is selected, then plots which are displaid
-  //consist of ALL lumisections.
-  lumisections.unshift({ label: 'All', value: 0 });
+  React.useEffect(() => {
+    //extracting just lumisections from data object
+    const lumisections_from_api: OptionProps[] =
+      all_runs_with_lumi.length > 0
+        ? all_runs_with_lumi.map((run: AllRunsWithLumiProps) => {
+            return { label: run.lumi.toString(), value: run.lumi };
+          })
+        : [];
+    const copy = [...lumisections];
+    const allLumis = copy.concat(lumisections_from_api);
+    setLumisections(allLumis);
+  }, [all_runs_with_lumi]);
 
   const lumiValues = lumisections.map((lumi: OptionProps) => lumi.value);
-  const currentLumiIndex = lumiValues.indexOf(currentLumisection);
 
+  //0 lumisection is not exists, it added as representation of ALL lumisections. If none of lumesctions is selected
+  //it means that should be displaid plots which constist of ALL lumiections.
+  //The same situation when run doesn't have lumis at all. It means that it displays plots of ALL Lumis
+  const currentLumiIndex =
+    lumiValues.indexOf(currentLumisection) === -1
+      ? 0
+      : lumiValues.indexOf(currentLumisection);
   return (
     <Col>
       <StyledFormItem labelcolor={color} name={'lumi'} label="Lumi">
@@ -78,7 +95,7 @@ export const LumesectionBrowser = ({
           <Col>
             <StyledSelect
               dropdownMatchSelectWidth={false}
-              value={currentLumisection}
+              value={lumiValues[currentLumiIndex]}
               onChange={(e: any) => {
                 handler(parseInt(e));
               }}

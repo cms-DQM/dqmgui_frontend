@@ -38,8 +38,14 @@ export const StyledButton = styled(Button)<{
     props.color ? props.color : ` ${theme.colors.common.white}`} !important;
 `;
 
-export const StyledSecondaryButton = styled(Button)`
-  background-color: ${theme.colors.primary.main} !important;
+export const StyledSecondaryButton = styled(Button)<{
+  background?: string;
+  color?: string;
+}>`
+  background-color: ${(props) =>
+    props.background
+      ? `${props.background} !important`
+      : `${theme.colors.primary.main} !important`};
   border-style: none !important;
   color: ${theme.colors.common.white} !important;
   border-radius: 50px;
@@ -193,13 +199,25 @@ export const CustomRow = styled(Row)<{
   justifycontent?: string;
   space?: string;
   alignitems?: string;
+  borderTop?: string;
+  borderBottom?: string;
+  background?: string;
+  cursor?: string;
+  gridtemplatecolumns?: string;
 }>`
   display: ${(props) => (props.display ? props.display : '')};
+  cursor: ${(props) => (props.cursor ? props.cursor : '')};
   justify-content: ${(props) =>
     props.justifycontent ? props.justifycontent : ''};
-  padding: ${(props) => (props.space ? theme.space.padding : '')};
+  padding: ${(props) =>
+    props.space ? `calc(${theme.space.padding} * ${props.space})` : ''};
   align-items: ${(props) => (props.alignitems ? props.alignitems : '')};
   width: ${(props) => (props.width ? props.width : '')};
+  border-bottom: ${(props) => (props.borderBottom ? props.borderBottom : '')};
+  border-top: ${(props) => (props.borderTop ? props.borderTop : '')};
+  background: ${(props) => (props.background ? props.background : '')};
+  grid-template-columns: ${(props) =>
+    props.gridtemplatecolumns ? props.gridtemplatecolumns : ''};
 `;
 
 export const CustomCol = styled(Col)<{
@@ -208,6 +226,11 @@ export const CustomCol = styled(Col)<{
   space?: string;
   alignitems?: string;
   width?: string;
+  color?: string;
+  texttransform?: string;
+  gridtemplatecolumns?: string;
+  gridgap?: string;
+  justifyself?: string;
 }>`
   display: ${(props) => (props.display ? props.display : '')};
   justify-content: ${(props) =>
@@ -217,6 +240,13 @@ export const CustomCol = styled(Col)<{
   align-items: ${(props) => (props.alignitems ? props.alignitems : '')};
   height: fit-content;
   width: ${(props) => (props.width ? props.width : '')};
+  color: ${(props) => (props.color ? props.color : '')};
+  text-transform: ${(props) =>
+    props.texttransform ? props.texttransform : ''};
+  grid-template-columns: ${(props) =>
+    props.gridtemplatecolumns ? props.gridtemplatecolumns : ''};
+  grid-gap: ${(props) => (props.gridgap ? props.gridgap : '')};
+  justify-self: ${(props) => (props.justifyself ? props.justifyself : '')};
 `;
 export const CustomDiv = styled(Col)<{
   display?: string;
@@ -228,11 +258,19 @@ export const CustomDiv = styled(Col)<{
   height?: string;
   hover?: string;
   position?: string;
+  color?: string;
+  borderradius?: string;
+  border?: string;
+  background?: string;
+  paddingright?: string;
+  fontsize?: string;
+  pointer?: string;
 }>`
   display: ${(props) => (props.display ? props.display : '')};
+  color: ${(props) => (props.color ? props.color : '')};
   justify-content: ${(props) =>
     props.justifycontent ? props.justifycontent : ''};
-  padding-right: ${(props) =>
+  padding ${(props) =>
     props.space ? `calc(${theme.space.padding}*${props.space})` : ''};
   align-items: ${(props) => (props.alignitems ? props.alignitems : '')};
   height: fit-content;
@@ -243,7 +281,13 @@ export const CustomDiv = styled(Col)<{
   &:hover {
     color: ${(props) =>
       props.hover ? theme.colors.primary.main : ''}!important;
-  }
+  };
+  border-radius: ${(props) => (props.borderradius ? props.borderradius : '')};
+  border: ${(props) => (props.border ? props.border : '')};
+  background: ${(props) => (props.background ? props.background : '')};
+  font-size: ${(props) => (props.fontsize ? props.fontsize : '')};
+  padding-right: ${(props) => (props.paddingright ? props.paddingright : '')};
+  cursor: ${(props) => (props.pointer ? 'pointer' : '')};
 `;
 
 export const CustomTd = styled.td<{ spacing?: string }>`
@@ -256,4 +300,18 @@ export const CustomForm = styled(Form)<{
   justify-content: ${(props) =>
     props.justifycontent ? props.justifycontent : ''};
   width: ${(props) => (props.width ? props.width : '')};
+`;
+export const ShortcutTagDiv = styled.div<{ background?: string }>`
+  border-radius: 12px;
+  padding: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+  pointer: true;
+  background: ${(props) =>
+    props.background === 'true'
+      ? theme.colors.secondary.main
+      : theme.colors.primary.main};
+  color: ${theme.colors.common.white};
 `;

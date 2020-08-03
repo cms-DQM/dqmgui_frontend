@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useRouter } from 'next/router';
 
-import { root_url } from '../../../../config/config';
+import { root_url, functions_config } from '../../../../config/config';
 import {
   ParamsForApiProps,
   PlotDataProps,
@@ -23,6 +23,7 @@ import {
   scroll,
   scrollToBottom,
 } from '../singlePlot/utils';
+import { store } from '../../../../contexts/leftSideContext';
 
 interface OnSideOverlaidPlotsProps {
   params_for_api: ParamsForApiProps;
@@ -44,6 +45,19 @@ export const OnSideOverlaidPlots = ({
   const query: QueryProps = router.query;
   const imageRef = useRef(null);
 
+  const { updated_by_not_older_than } = React.useContext(store);
+
+  const [blink, set_blink] = React.useState(updated_by_not_older_than);
+  React.useEffect(() => {
+    //timeouts in order to get longer and more visible animation
+    setTimeout(() => {
+      set_blink(true);
+    }, 0);
+    setTimeout(() => {
+      set_blink(false);
+    }, 2000);
+  }, [updated_by_not_older_than]);
+
   return (
     <OnSidePlotsWrapper>
       {onsidePlotsURLs.map((url: string) => {
@@ -52,6 +66,8 @@ export const OnSideOverlaidPlots = ({
           <div ref={imageRef}>
             <StyledCol space={2} key={url}>
               <StyledPlotRow
+                isLoading={blink.toString()}
+                animation={functions_config.modes.online_mode.toString()}
                 minheight={params_for_api.height}
                 width={params_for_api.width?.toString()}
                 is_plot_selected={isPlotSelected.toString()}

@@ -2,6 +2,7 @@ import {
   ParamsForApiProps,
   TripleProps,
 } from '../containers/display/interfaces';
+import { functions_config } from './config';
 
 export const get_customize_params = (params = {} as any) => {
   const xtype = params.xtype ? `xtype=${params.xtype};` : '';
@@ -26,7 +27,10 @@ export const get_customize_params = (params = {} as any) => {
 export const getRunsWithLumisections = (
   params: ParamsForApiProps | TripleProps
 ) => {
-  const lumisectionValue = params.lumi === -1 ? undefined : params.lumi;
+  const lumisectionValue =
+    params.lumi === -1 || !functions_config.new_back_end.lumisections_on
+      ? undefined
+      : params.lumi;
   const lumisectionParameter = lumisectionValue
     ? `${params.run_number}:${lumisectionValue}`
     : params.run_number;

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-import { get_jroot_plot } from '../../../../config/config';
+import { get_jroot_plot, functions_config } from '../../../../config/config';
 import {
   ParamsForApiProps,
   PlotDataProps,
@@ -18,6 +18,7 @@ import {
 } from '../../../../containers/display/styledComponents';
 import { removePlotFromRightSide } from '../../plot/singlePlot/utils';
 import { Button } from 'antd';
+import { store } from '../../../../contexts/leftSideContext';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;
@@ -45,16 +46,31 @@ export const ZoomedJSROOTPlot = ({
     params_for_api.lumi,
   ]);
 
+  const { updated_by_not_older_than } = React.useContext(store);
+
   useEffect(() => {
     if (!!document.getElementById(selected_plot.name)) {
       //@ts-ignore
       drawJSROOT(selected_plot.name, data);
     }
-  }, [data, params_for_api.lumi]);
+  }, [data, params_for_api.lumi, updated_by_not_older_than]);
+
+  const [blink, set_blink] = React.useState(updated_by_not_older_than);
+  React.useEffect(() => {
+    //timeouts in order to get longer and more visible animation
+    setTimeout(() => {
+      set_blink(true);
+    }, 0);
+    setTimeout(() => {
+      set_blink(false);
+    }, 2000);
+  }, [updated_by_not_older_than]);
 
   return (
     <StyledCol space={2}>
       <StyledPlotRow
+        isLoading={blink.toString()}
+        animation={functions_config.modes.online_mode.toString()}
         minheight={params_for_api.height}
         width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}

@@ -2,46 +2,49 @@ import * as React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import {
-  StyledModal,
-  ResultsWrapper,
-  SelectedRunsTh,
-  SelectedRunsTr,
-  SelectedRunsTd,
-  SelectedRunsTable,
-} from '../styledComponents';
-import { StyledButton } from '../../styledComponents';
-import { theme } from '../../../styles/theme';
-import {
   TripleProps,
-  FolderPathQuery,
   QueryProps,
-} from '../../../containers/display/interfaces';
-import Nav from '../../Nav';
-import { useSearch } from '../../../hooks/useSearch';
-import SearchResults from '../../../containers/search/SearchResults';
-import { concatArrays } from '../utils';
+  FolderPathQuery,
+} from '../../containers/display/interfaces';
+import { useSearch } from '../../hooks/useSearch';
+import { concatArrays } from '../viewDetailsMenu/utils';
 import {
-  changeRouter,
-  getChangedQueryParams,
-} from '../../../containers/display/utils';
-import { addOverlayData } from '../../plots/plot/singlePlot/utils';
-import { useRouter } from 'next/router';
+  StyledModal,
+  SelectedRunsTable,
+  SelectedRunsTr,
+  SelectedRunsTh,
+  SelectedRunsTd,
+  ResultsWrapper,
+} from '../viewDetailsMenu/styledComponents';
+import { StyledButton } from '../styledComponents';
+import { theme } from '../../styles/theme';
+import Nav from '../Nav';
+import SearchResults from '../../containers/search/SearchResults';
 
-interface SetRunsModalProps {
-  open: boolean;
-  toggleModal(open: boolean): void;
-  overlaid_runs: TripleProps[];
-  set_runs_set_for_overlay(runs: TripleProps[]): void;
-  triples: TripleProps[];
-  setTriples(selected_runs: TripleProps[]): void;
+interface SetRunsToShortcutModalProps {
+  openAddRunsToShortcut: boolean;
+  toggleAddRunsToShortcut(open: boolean): void;
+  runs_in_shortcut: {
+    run_number: string | undefined;
+    dataset_name: string | undefined;
+  }[];
+  set_runs_in_shortcut: React.Dispatch<
+    React.SetStateAction<
+      {
+        run_number: string | undefined;
+        dataset_name: string | undefined;
+        id: string;
+      }[]
+    >
+  >;
 }
 
-export const SetRunsModal = ({
-  open,
-  toggleModal,
-  triples,
-  setTriples,
-}: SetRunsModalProps) => {
+export const SetRunsToShortcutModal = ({
+  openAddRunsToShortcut,
+  toggleAddRunsToShortcut,
+  runs_in_shortcut,
+  set_runs_in_shortcut,
+}: SetRunsToShortcutModalProps) => {
   const [serachRunNumber, setSearchRunNumber] = React.useState('');
   const [serachDatasetName, setSearchDatasetName] = React.useState('');
 
@@ -68,29 +71,25 @@ export const SetRunsModal = ({
       id: id,
       run_number: run_number,
       dataset_name: dataset_name,
-      checked: true,
-      label: '',
     };
     const copy = [...selected_runs];
-    if (copy.length <= 4) {
-      copy.push(full_run);
-    }
+    copy.push(full_run);
     set_selected_runs(copy);
   };
 
-  //overlaid_and_selected_runs combines list of runs which are already overlaid (triples)
-  // with those which are just selected (selected_runs) in "Set Runs" dialog
-  const overlaid_and_selected_runs = concatArrays([selected_runs, triples]);
-
-  const router = useRouter();
-  const query: QueryProps = router.query;
+  //runs_which_are_now_in_shortcut_and_selected_now combines list of runs which are already added to shortcut
+  // with those which are just selected (selected_runs) in "Add runs to shortcut" modal(dialog)
+  const runs_which_are_now_in_shortcut_and_selected_now = concatArrays([
+    selected_runs,
+    runs_in_shortcut,
+  ]);
 
   return (
     <StyledModal
-      title="Set Runs"
-      visible={open}
+      title="Add runs to shortcut"
+      visible={openAddRunsToShortcut}
       onCancel={() => {
-        toggleModal(false);
+        toggleAddRunsToShortcut(false);
         set_selected_runs([]);
       }}
       footer={[
@@ -99,7 +98,7 @@ export const SetRunsModal = ({
           background="white"
           key="Close"
           onClick={() => {
-            toggleModal(false);
+            toggleAddRunsToShortcut(false);
             set_selected_runs([]);
           }}
         >
@@ -108,16 +107,10 @@ export const SetRunsModal = ({
         <StyledButton
           key="OK"
           onClick={() => {
-            changeRouter(
-              getChangedQueryParams(
-                {
-                  overlay_data: `${addOverlayData(overlaid_and_selected_runs)}`,
-                },
-                query
-              )
+            set_runs_in_shortcut(
+              runs_which_are_now_in_shortcut_and_selected_now
             );
-            setTriples(overlaid_and_selected_runs);
-            toggleModal(false);
+            toggleAddRunsToShortcut(false);
             set_selected_runs([]);
           }}
         >
@@ -126,7 +119,7 @@ export const SetRunsModal = ({
       ]}
     >
       <div>
-        {overlaid_and_selected_runs.length > 0 && (
+        {runs_which_are_now_in_shortcut_and_selected_now.length > 0 && (
           <SelectedRunsTable>
             <thead>
               <SelectedRunsTr>
@@ -136,7 +129,7 @@ export const SetRunsModal = ({
               </SelectedRunsTr>
             </thead>
             <tbody>
-              {overlaid_and_selected_runs.map(
+              {runs_which_are_now_in_shortcut_and_selected_now.map(
                 (run: FolderPathQuery, index: number) => {
                   return (
                     <SelectedRunsTr>

@@ -49,7 +49,6 @@ export function useValidateQuery(
       pathname: '/',
       query: {
         search_run_number: run_number,
-        search_dataset_name: '',
       },
     });
   }
@@ -58,7 +57,6 @@ export function useValidateQuery(
       pathname: '/',
       query: {
         search_dataset_name: dataset_name,
-        search_run_number: '',
       },
     });
   }

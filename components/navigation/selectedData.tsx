@@ -23,14 +23,16 @@ interface SelectedDataProps {
   openRunInNewTab: boolean;
 }
 
-const open_in_a_new_tab_options = [{
-  value: true,
-  label: 'Yes'
-},
-{
-  value: false,
-  label: 'No'
-}]
+const open_in_a_new_tab_options = [
+  {
+    value: true,
+    label: 'Yes',
+  },
+  {
+    value: false,
+    label: 'No',
+  },
+];
 
 export const SelectedData = ({
   //router ok
@@ -79,7 +81,7 @@ export const SelectedData = ({
           </Col>
         </StyledFormItem>
       </Row>
-      {functions_config.lumisections_on && (
+      {functions_config.new_back_end.lumisections_on && (
         <Row>
           <Col>
             <LumesectionBrowser

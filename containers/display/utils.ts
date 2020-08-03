@@ -7,10 +7,17 @@ import {
   PlotInterface,
   DirectoryInterface,
   QueryProps,
+  ParamsForApiProps,
 } from './interfaces';
 import Router from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import { removeFirstSlash } from '../../components/workspaces/utils';
+import {
+  functions_config,
+  get_folders_and_plots_old_api,
+  get_folders_and_plots_new_api,
+  get_folders_and_plots_new_api_with_live_mode,
+} from '../../config/config';
 
 export const getFolderPath = (folders: string[], clickedFolder: string) => {
   const folderIndex = folders.indexOf(clickedFolder);
@@ -66,17 +73,10 @@ export const getFolderPathToQuery = (
     : `/${currentSelected}`;
 };
 
-export const doesPlotExists = (
-  contents: (PlotInterface & DirectoryInterface)[]
-) =>
-  contents.filter((one_item: PlotInterface | DirectoryInterface) =>
-    one_item.hasOwnProperty('obj')
-  );
-
 // what is streamerinfo? (coming from api, we don't know what it is, so we filtered it out)
 // getContent also sorting data that directories should be displayed firstly, just after them- plots images.
-export const getContents = (data: any) =>
-  data
+export const getContents = (data: any) => {
+  return data
     ? _.sortBy(
         data.contents
           ? data.contents
@@ -87,6 +87,7 @@ export const getContents = (data: any) =>
         ['subdir']
       )
     : [];
+};
 
 export const getDirectories = (contents: DirectoryInterface[]) =>
   cleanDeep(contents.map((content: DirectoryInterface) => content.subdir));
@@ -160,7 +161,7 @@ export const getChangedQueryParams = (
 
   params.normalize = params.normalize ? params.normalize : query.normalize;
 
-  params.lumi = params.lumi ? params.lumi : query.lumi;
+  params.lumi = params.lumi || params.lumi === 0 ? params.lumi : query.lumi;
 
   //cleaning url: if workspace is not set (it means it's empty string), it shouldn't be visible in url
   const cleaned_parameters = cleanDeep(params);
@@ -184,4 +185,23 @@ export const getNameAndDirectoriesFromDir = (content: PlotInterface) => {
   const directories = partsOfDir.join('/');
 
   return { name, directories };
+};
+
+export const is_run_selected_already = (
+  run: { run_number: string; dataset_name: string },
+  query: QueryProps
+) => {
+  return (
+    run.run_number === query.run_number &&
+    run.dataset_name === query.dataset_name
+  );
+};
+
+export const choose_api = (params: ParamsForApiProps) => {
+  const current_api = !functions_config.new_back_end.new_back_end
+    ? get_folders_and_plots_old_api(params)
+    : functions_config.modes.online_mode
+    ? get_folders_and_plots_new_api_with_live_mode(params)
+    : get_folders_and_plots_new_api(params);
+  return current_api;
 };

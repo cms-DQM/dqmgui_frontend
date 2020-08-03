@@ -1,8 +1,8 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { cloneDeep } from 'lodash'
+import { cloneDeep } from 'lodash';
 
-import { root_url } from '../../../../config/config';
+import { root_url, functions_config } from '../../../../config/config';
 import { get_plot_url } from '../../../../config/config';
 import {
   PlotDataProps,
@@ -23,6 +23,7 @@ import {
   scroll,
   scrollToBottom,
 } from './utils';
+import { store } from '../../../../contexts/leftSideContext';
 
 interface PlotProps {
   plot: PlotDataProps;
@@ -37,14 +38,26 @@ export const Plot = ({
   params_for_api,
   imageRefScrollDown,
 }: PlotProps) => {
-
   const router = useRouter();
   const query: QueryProps = router.query;
 
   const plot_url = get_plot_url(params_for_api);
   const source = `${root_url}${plot_url}`;
   const imageRef = useRef(null);
-  
+
+  const { updated_by_not_older_than } = React.useContext(store);
+
+  const [blink, set_blink] = React.useState(updated_by_not_older_than);
+  React.useEffect(() => {
+    //timeouts in order to get longer and more visible animation
+    setTimeout(() => {
+      set_blink(true);
+    }, 0);
+    setTimeout(() => {
+      set_blink(false);
+    }, 2000);
+  }, [updated_by_not_older_than]);
+
   useEffect(() => {
     const scrollPlot = () => {
       scroll(imageRef);
@@ -59,22 +72,24 @@ export const Plot = ({
     <div ref={imageRef}>
       <StyledCol space={2}>
         <StyledPlotRow
+          isLoading={blink.toString()}
+          animation={functions_config.modes.online_mode.toString()}
           minheight={params_for_api.height}
           width={params_for_api.width?.toString()}
           is_plot_selected={isPlotSelected.toString()}
-        // report={plot.properties.report}
+          // report={plot.properties.report}
         >
           <PlotNameCol>{plot.displayedName}</PlotNameCol>
           <Column>
             {isPlotSelected ? (
               <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
             ) : (
-                <PlusIcon
-                  onClick={() => {
-                    addPlotToRightSide(query, plot);
-                  }}
-                />
-              )}
+              <PlusIcon
+                onClick={() => {
+                  addPlotToRightSide(query, plot);
+                }}
+              />
+            )}
           </Column>
           <div
             onClick={async () => {

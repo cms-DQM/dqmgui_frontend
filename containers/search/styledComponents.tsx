@@ -1,9 +1,21 @@
 import React from 'react';
 import { SearchOutlined, BarChartOutlined } from '@ant-design/icons';
-import { Spin, Row, Col, Alert } from 'antd';
+import { Spin, Row, Col, Alert, Tag } from 'antd';
 
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { theme } from '../../styles/theme';
+
+const keyframe_for_updated_last_runs = keyframes`
+  0% {
+    background: ${theme.colors.secondary.main};
+  }
+  50% {
+    background: ${theme.colors.primary.main};
+  }
+  100% {
+    background: ${theme.colors.secondary.main};
+  }
+`;
 
 export const StyledWrapper = styled.div<{ overflowx?: string }>`
   height: 100%;
@@ -105,11 +117,29 @@ export const TableBody = styled.tbody`
   overflow: scroll;
   overflow-x: hidden;
 `;
-export const RunWrapper = styled.div`
+export const RunWrapper = styled.div<{
+  hover?: string;
+  isLoading?: string;
+  animation?: string;
+}>`
   background: ${theme.colors.secondary.main};
   border-radius: 5px;
   padding: ${theme.space.padding};
+  align-items: cernter;
+  display: flex;
+  justify-content: center;
+  animation-name: ${(props) =>
+    props.isLoading === 'true' && props.animation === 'true'
+      ? keyframe_for_updated_last_runs
+      : ''};
+  animation-iteration-count: 1;
+  animation-duration: 1s;
+  &:hover {
+    background-color: ${(props) =>
+      props?.hover && `${theme.colors.secondary.dark}`};
+  }
 `;
+
 export const StyledA = styled.a`
   color: ${theme.colors.common.white} !important;
 `;
@@ -117,4 +147,25 @@ export const StyledA = styled.a`
 export const StyledAlert = styled(Alert)`
   width: 100vw;
   height: fit-content;
+`;
+
+export const LatestRunsWrapper = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  grid-gap: 8px;
+  padding-top: 8px;
+  margin-top: 8px;
+  border-top: 2px solid;
+`;
+export const LatestRunsTtitle = styled.div`
+  display: flex;
+  justify-content: center;
+  margin: 4;
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  text-decoration: overline;
+  font-weight: 300;
+`;
+export const LatestRunsSection = styled.div`
+  margin: 64px;
 `;

@@ -16,5 +16,10 @@
     "experimentalDecorators": true
   },
   "exclude": ["node_modules"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "containers/display/portal/portal.js"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "containers/display/portal/portal.js"
+  ]
 }
