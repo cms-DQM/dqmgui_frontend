@@ -64,12 +64,12 @@ export const Shortucts = ({ query }: Shortcut_tags_props) => {
     localStorage.setItem('shortcuts', JSON.stringify(runs_in_shortcut));
   }, [runs_in_shortcut]);
 
-  React.useEffect(() => {
-    const copy = [...runs_in_shortcut];
-    copy[current_index].run_number = query.run_number;
-    copy[current_index].dataset_name = query.dataset_name;
-    set_runs_in_shortcut(copy);
-  }, [query.dataset_name, query.run_number]);
+  // React.useEffect(() => {
+  //   const copy = [...runs_in_shortcut];
+  //   copy[current_index].run_number = query.run_number;
+  //   copy[current_index].dataset_name = query.dataset_name;
+  //   set_runs_in_shortcut(copy);
+  // }, [query.dataset_name, query.run_number]);
 
   return (
     <CustomRow

@@ -18,7 +18,6 @@ import {
   OptionProps,
   QueryProps,
 } from './interfaces';
-import { store } from '../../contexts/leftSideContext';
 
 interface ContentProps {
   plots: PlotDataProps[];
@@ -30,7 +29,6 @@ interface ContentProps {
   errors: string[];
   filteredFolders: any[];
   query: QueryProps;
-  isLoadingByOdlerThanUpdate: boolean;
 }
 
 export const DisplayFordersOrPlots = ({
@@ -42,7 +40,6 @@ export const DisplayFordersOrPlots = ({
   proportion,
   errors,
   filteredFolders,
-  isLoadingByOdlerThanUpdate,
 }: ContentProps) => {
   return (
     <Wrapper

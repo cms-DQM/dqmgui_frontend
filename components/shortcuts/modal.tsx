@@ -50,7 +50,7 @@ export const SetRunsToShortcutModal = ({
 
   const [selected_runs, set_selected_runs] = React.useState<TripleProps[]>([]);
 
-  const { results, results_grouped, searching, isLoading, errors } = useSearch(
+  const { results_grouped, searching, isLoading, errors } = useSearch(
     serachRunNumber,
     serachDatasetName
   );
@@ -155,7 +155,6 @@ export const SetRunsToShortcutModal = ({
               <SearchResults
                 handler={searchHandler}
                 isLoading={isLoading}
-                results={results}
                 results_grouped={results_grouped}
                 errors={errors}
               />
