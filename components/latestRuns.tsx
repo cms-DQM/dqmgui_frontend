@@ -40,11 +40,11 @@ export const LatestRuns = () => {
 
   const data = useNewer(
     data_get_by_mounted.data,
-    updated_by_not_older_than.data
+    data_get_by_not_older_than_update.data
   );
   const errors = useNewer(
     data_get_by_mounted.errors,
-    updated_by_not_older_than.errors
+    data_get_by_not_older_than_update.errors
   );
   const isLoading = data_get_by_mounted.isLoading;
   const latest_runs = data ? data.runs : [];
