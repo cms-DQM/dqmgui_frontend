@@ -46,14 +46,14 @@ export const ZoomedJSROOTPlot = ({
     params_for_api.lumi,
   ]);
 
+  const { updated_by_not_older_than } = React.useContext(store);
+
   useEffect(() => {
     if (!!document.getElementById(selected_plot.name)) {
       //@ts-ignore
       drawJSROOT(selected_plot.name, data);
     }
-  }, [data, params_for_api.lumi]);
-
-  const { updated_by_not_older_than } = React.useContext(store);
+  }, [data, params_for_api.lumi, updated_by_not_older_than]);
 
   const [blink, set_blink] = React.useState(updated_by_not_older_than)
   React.useEffect(() => {

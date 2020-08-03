@@ -111,6 +111,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
       histogram4
     );
   }
+  const { updated_by_not_older_than } = React.useContext(store);
 
   const histogramParam = params_for_api.normalize ? 'hist' : 'nostack';
   //make sure that no null histograms are passed to draw func.
@@ -123,9 +124,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
     ) {
       drawJSROOT(histogramParam, selected_plot.name, overlaidJSROOTPlot);
     }
-  });
-
-  const { updated_by_not_older_than } = React.useContext(store);
+  },[updated_by_not_older_than, data,  params_for_api.lumi, params_for_api.overlay_plot, params_for_api.dataset_name, params_for_api.run_number]);
 
   const [blink, set_blink] = React.useState(updated_by_not_older_than)
   React.useEffect(() => {
