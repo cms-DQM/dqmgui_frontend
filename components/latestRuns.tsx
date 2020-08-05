@@ -12,6 +12,7 @@ import {
   LatestRunsWrapper,
   LatestRunsTtitle,
   LatestRunsSection,
+  StyledAlert,
 } from '../containers/search/styledComponents';
 import { NoResultsFound } from '../containers/search/noResultsFound';
 import { store } from '../contexts/leftSideContext';
@@ -50,34 +51,44 @@ export const LatestRuns = () => {
   const latest_runs = data && data.runs;
 
   return (
-    <LatestRunsSection>
-      <LatestRunsTtitle>The latest runs</LatestRunsTtitle>
-      {isLoading ? (
-        <SpinnerWrapper>
-          <Spinner />
-        </SpinnerWrapper>
-      ) : latest_runs &&
-        latest_runs.length === 0 &&
+    <>
+      {
         !isLoading &&
-        errors.length === 0 ? (
-        <NoResultsFound />
-      ) : (
-        <LatestRunsWrapper>
-          {latest_runs &&
-            latest_runs.map((run: number) => (
-              <StyledCol key={run.toString()}>
-                <RunWrapper
-                  isLoading={blink.toString()}
-                  animation={functions_config.modes.online_mode.toString()}
-                  hover="true"
-                  onClick={() => changeRouter({ search_run_number: run })}
-                >
-                  <StyledA>{run}</StyledA>
-                </RunWrapper>
-              </StyledCol>
-            ))}
-        </LatestRunsWrapper>
-      )}
-    </LatestRunsSection>
+          errors.length > 0 ?
+          errors.map((error: string) => (
+            <StyledAlert key={error} message={error} type="error" showIcon />
+          )
+          ) :
+          <LatestRunsSection>
+            <LatestRunsTtitle>The latest runs</LatestRunsTtitle>
+            {isLoading ? (
+              <SpinnerWrapper>
+                <Spinner />
+              </SpinnerWrapper>
+            ) : latest_runs &&
+              latest_runs.length === 0 &&
+              !isLoading &&
+              errors.length === 0 ? (
+                  <NoResultsFound />
+                ) : (
+                  <LatestRunsWrapper>
+                    {latest_runs &&
+                      latest_runs.map((run: number) => (
+                        <StyledCol key={run.toString()}>
+                          <RunWrapper
+                            isLoading={blink.toString()}
+                            animation={functions_config.modes.online_mode.toString()}
+                            hover="true"
+                            onClick={() => changeRouter({ search_run_number: run })}
+                          >
+                            <StyledA>{run}</StyledA>
+                          </RunWrapper>
+                        </StyledCol>
+                      ))}
+                  </LatestRunsWrapper>
+                )}
+          </LatestRunsSection>
+      }
+    </>
   );
 };

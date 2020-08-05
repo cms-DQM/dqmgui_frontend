@@ -16,10 +16,10 @@ const config: any = {
 
 export const functions_config: any = {
   new_back_end: {
-    new_back_end: false,
-    lumisections_on: false,
-    layouts: false,
-    latest_runs: false,
+    new_back_end: true,
+    lumisections_on: true,
+    layouts: true,
+    latest_runs: true,
   },
   modes: {
     online_mode: false,
