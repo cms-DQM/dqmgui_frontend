@@ -43,6 +43,7 @@ export interface ParamsForApiProps extends PlotProps {
   joined_overlaied_plots_urls?: string;
   overlay?: string;
   customizeProps?: CustomizeProps;
+  plot_search?:string;
 }
 
 export interface DisplayFolderOrPlotComponentProps {
@@ -119,7 +120,8 @@ export interface PlotPropertiesReportProps {
 }
 
 export interface PlotInterface {
-  obj: string;
+  obj?: string;
+  name?: string;
   path: string;
   content: any;
   properties: any;

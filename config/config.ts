@@ -22,7 +22,7 @@ export const functions_config: any = {
     latest_runs: true,
   },
   modes: {
-    online_mode: false,
+    online_mode: true,
     offline_mode: false,
     dev_mode: false,
     relVal_mode: false,
@@ -32,6 +32,11 @@ export const functions_config: any = {
 export const root_url = config[process.env.NODE_ENV || 'development'].root_url;
 
 export const get_folders_and_plots_new_api = (params: ParamsForApiProps) => {
+  if(params.plot_search){
+    return `/api/v1/archive/${getRunsWithLumisections(params)}${
+      params.dataset_name
+    }/${params.folders_path}?search=${params.plot_search}`;
+  }
   return `/api/v1/archive/${getRunsWithLumisections(params)}${
     params.dataset_name
   }/${params.folders_path}`;
@@ -39,12 +44,20 @@ export const get_folders_and_plots_new_api = (params: ParamsForApiProps) => {
 export const get_folders_and_plots_new_api_with_live_mode = (
   params: ParamsForApiProps
 ) => {
+  if(params.plot_search){
+    return `/api/v1/archive/${getRunsWithLumisections(params)}${
+      params.dataset_name
+    }/${params.folders_path}?search=${params.plot_search}&notOlderThan=${params.notOlderThan}`;
+  }
   return `/api/v1/archive/${getRunsWithLumisections(params)}${
     params.dataset_name
   }/${params.folders_path}?notOlderThan=${params.notOlderThan}`;
 };
 
 export const get_folders_and_plots_old_api = (params: ParamsForApiProps) => {
+  if(params.plot_search){
+    return `/data/json/archive/${params.run_number}${params.dataset_name}/${params.folders_path}?search=${params.plot_search}`;
+  }
   return `/data/json/archive/${params.run_number}${params.dataset_name}/${params.folders_path}`;
 };
 
@@ -57,7 +70,7 @@ export const get_run_list_by_search_new_api = (params: ParamsForApiProps) => {
 export const get_run_list_by_search_new_api_with_no_older_than = (
   params: ParamsForApiProps
 ) => {
-  return `/api/v1/samples?run=${params.run_number}&lumi=${params.lumi}&dataset=${params.dataset_name}&${params.notOlderThan}}`;
+  return `/api/v1/samples?run=${params.run_number}&lumi=${params.lumi}&dataset=${params.dataset_name}&notOlderThan=${params.notOlderThan}`;
 };
 export const get_plot_url = (params: ParamsForApiProps) => {
   return `/plotfairy/archive/${getRunsWithLumisections(params)}${

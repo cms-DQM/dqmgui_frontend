@@ -21,7 +21,7 @@ export const useDisplayedName = (contents: any, data: any) => {
           // displayedName and name could be different, because "Layouts" overwrite the plot name in their own way
           // but user visible plot name should be stay the same as was (not overwritten)
           return {
-            displayedName: content.obj,
+            displayedName: content.obj ? content.obj : content.name,
             name: name,
             path: content.path && '/' + directories,
             layout: content.layout,

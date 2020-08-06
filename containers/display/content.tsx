@@ -32,7 +32,8 @@ interface DirectoryInterface {
 }
 
 export interface PlotInterface {
-  obj: string;
+  obj?: string;
+  name?:string;
   path: string;
   content: any;
   properties: any;
@@ -56,43 +57,22 @@ const Content: FC<FolderProps> = ({
     updated_by_not_older_than,
   } = useContext(store);
 
+  const router = useRouter();
+  const query: QueryProps = router.query;
+
   const params = {
     run_number: run_number,
     dataset_name: dataset_name,
     folders_path: folder_path,
     notOlderThan: updated_by_not_older_than,
+    plot_search: query.plot_search
   };
-  const current_api = choose_api(params);
-
-  const data_het_by_not_older_than_update = useRequest(current_api, {}, [
-    updated_by_not_older_than,
-  ]);
-
-  const data_het_by_folder_run_dataset_update = useRequest(current_api, {}, [
-    folder_path,
-    run_number,
-    dataset_name,
-  ]);
-
-  const data = useNewer(
-    data_het_by_folder_run_dataset_update.data,
-    data_het_by_not_older_than_update.data
-  );
-  const errors = useNewer(
-    data_het_by_folder_run_dataset_update.errors,
-    data_het_by_not_older_than_update.errors
-  );
-  const isLoading = data_het_by_folder_run_dataset_update.isLoading;
 
   const [openSettings, toggleSettingsModal] = useState(false);
-  const router = useRouter();
-  const query: QueryProps = router.query;
-
-  const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
 
   const selectedPlots = query.selected_plots;
   //filtering directories by selected workspace
-  const { foldersByPlotSearch, plots } = useFilterFolders(query, contents);
+  const { foldersByPlotSearch, plots, isLoading, errors } = useFilterFolders(query, params, updated_by_not_older_than);
 
   const plots_grouped_by_layouts = chain(plots).groupBy('layout').value();
 
