@@ -19,7 +19,7 @@ import { functions_config } from '../config/config';
 
 export const useFilterFolders = (
   query: QueryProps,
-  params:any,
+  params: any,
   updated_by_not_older_than: any
 ) => {
   const [foldersByPlotSearch, setFoldersByPlotSearch] = React.useState<
@@ -31,6 +31,7 @@ export const useFilterFolders = (
   ] = React.useState<(string | undefined)[]>([]);
   const [directories, setDirectories] = React.useState<(string | undefined)[]>([]);
   const [plots, setPlots] = React.useState<any[]>([]);
+  const [isLoading, setLoading] = React.useState(false)
 
   const current_api = choose_api(params);
 
@@ -55,11 +56,6 @@ export const useFilterFolders = (
     data_get_by_folder_run_dataset_update.errors,
     data_get_by_not_older_than_update.errors
   );
-
-  //isLoading got by dataset name, run and folder path change calls spinner.
-  // we don't want to have a spinner when data is updating on notOlderThan 
-  //param change (i.e. every 10 sec.)
-  const isLoading = data_get_by_folder_run_dataset_update.isLoading;
 
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
   const allDirectories = getDirectories(contents);
@@ -90,6 +86,19 @@ export const useFilterFolders = (
       directories as any,
       foldersFromWorkspaces
     );
+    //isLoading got by dataset name, run and folder path change calls spinner.
+    // we don't want to have a spinner when data is updating on notOlderThan 
+    //param change (i.e. every 10 sec.)
+    const isLoading = data_get_by_folder_run_dataset_update.isLoading;
+
+    //need to setLoading in this useEffect, because we want to see spinner
+    // until all folders and plots will be filtered accroding to a plot search or workspace.
+
+    // if we use just const isLoading = data_get_by_folder_run_dataset_update.isLoading;
+    // then we see spinner just until useRequest will be finished. It means, that when spinner won't
+    // be visible anymore, for some seconds we will see previuos content of folder and just
+    // afet it the real content offolder will be shown.
+    setLoading(isLoading)
 
     setFoldersByPlotSearch(folders as any);
   }, [directories, filteredFolders, folders_found_by_dataset_or_run]);
