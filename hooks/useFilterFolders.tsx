@@ -32,7 +32,6 @@ export const useFilterFolders = (
   const [directories, setDirectories] = React.useState<(string | undefined)[]>([]);
   const [plots, setPlots] = React.useState<any[]>([]);
 
-  console.log(params)
   const current_api = choose_api(params);
 
   const data_get_by_not_older_than_update = useRequest(current_api, {}, [
