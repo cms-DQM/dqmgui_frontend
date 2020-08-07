@@ -77,11 +77,19 @@ export interface NavigationSearchFieldsProps {
   search_by_run_number: string;
 }
 
+export interface QTestResultsProps {
+  alarm: number;
+  error: number;
+  warn: number; 
+  other: number; 
+}
+
 export interface PlotDataProps {
   displayedName: string;
   name: string;
   path: string;
   properties?: PlotPropertiesProps;
+  qtestresults: QTestResultsProps;
 }
 
 export interface NavigationSearchFieldsProps {

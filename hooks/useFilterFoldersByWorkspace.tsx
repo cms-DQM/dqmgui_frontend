@@ -1,7 +1,7 @@
 import * as React from 'react';
 import _ from 'lodash';
 
-import { QueryProps } from '../containers/display/interfaces';
+import { QueryProps, DirectoryInterface } from '../containers/display/interfaces';
 import { removeFirstSlash } from '../components/workspaces/utils';
 import { workspaces } from '../workspaces/offline';
 import { store } from '../contexts/leftSideContext';
@@ -11,7 +11,7 @@ export const useFilterFoldersByWorkspaces = (
   watchers?: any[]
 ) => {
   const [availableFolders, setAvailableFolders] = React.useState<string[]>([]);
-  const [filteredFolders, setFilteredFolders] = React.useState<string[]>([]);
+  const [filteredFolders, setFilteredFolders] = React.useState<DirectoryInterface[]>([]);
 
   const filteredInnerFolders: string[] = [];
 
@@ -38,7 +38,10 @@ export const useFilterFoldersByWorkspaces = (
           return firstLayer;
         })
       );
-      setFilteredFolders(firstLayerFolders);
+      const folders_object = firstLayerFolders.map((folder: string) => {
+        return ({ subdir: folder })
+      })
+      setFilteredFolders(folders_object);
     } else if (!!workspace && !!folderPathFromQuery) {
       availableFolders.forEach((foldersPath: string) => {
         const folderPathFromQueryWithoutFirstSlash = removeFirstSlash(
@@ -68,7 +71,11 @@ export const useFilterFoldersByWorkspaces = (
           }
         }
       });
-      setFilteredFolders(filteredInnerFolders);
+      const folders_object = filteredInnerFolders.map((folder: string) => {
+        //need to have the same format as directories got from api or by plot search
+        return ({ subdir: folder })
+      })
+      setFilteredFolders(folders_object);
     }
   }, [folderPathFromQuery, availableFolders, plot_search]);
 

@@ -28,8 +28,8 @@ export const useFilterFolders = (
   const [
     folders_found_by_dataset_or_run,
     set_folders_found_by_dataset_or_run,
-  ] = React.useState<(string | undefined)[]>([]);
-  const [directories, setDirectories] = React.useState<(string | undefined)[]>([]);
+  ] = React.useState<(DirectoryInterface)[]>([]);
+  const [directories, setDirectories] = React.useState<(DirectoryInterface)[]>([]);
   const [plots, setPlots] = React.useState<any[]>([]);
   const [isLoading, setLoading] = React.useState(false)
 
@@ -84,8 +84,9 @@ export const useFilterFolders = (
 
     const folders = getFilteredDirectories(
       directories as any,
-      foldersFromWorkspaces
+      foldersFromWorkspaces as any
     );
+
     //isLoading got by dataset name, run and folder path change calls spinner.
     // we don't want to have a spinner when data is updating on notOlderThan 
     //param change (i.e. every 10 sec.)

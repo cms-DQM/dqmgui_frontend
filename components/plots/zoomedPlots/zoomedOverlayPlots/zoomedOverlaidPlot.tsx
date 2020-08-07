@@ -107,9 +107,9 @@ export const ZoomedOverlaidPlot = ({
           width={copy_of_params.width?.toString()}
           is_plot_selected={true.toString()}
           nopointer={true.toString()}
-          // report={selected_plot.properties.report}
         >
-          <PlotNameCol>{selected_plot.displayedName}</PlotNameCol>
+          <PlotNameCol
+          >{selected_plot.displayedName}</PlotNameCol>
           <ImageDiv
             id={selected_plot.name}
             width={copy_of_params.width}
@@ -136,9 +136,9 @@ export const ZoomedOverlaidPlot = ({
         width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}
         nopointer={true.toString()}
-        // report={selected_plot.properties.report}
       >
-        <PlotNameCol>{selected_plot.displayedName}</PlotNameCol>
+        <PlotNameCol
+        >{selected_plot.displayedName}</PlotNameCol>
         <Column display="flex">
           <ZoomedPlotMenu options={zoomedPlotMenuOptions} />
           <MinusIcon

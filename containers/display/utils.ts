@@ -101,8 +101,14 @@ export const getContents = (data: any) => {
     : [];
 };
 
-export const getDirectories = (contents: DirectoryInterface[]) =>
-  cleanDeep(contents.map((content: DirectoryInterface) => content.subdir));
+export const getDirectories: any = (contents: DirectoryInterface[]) =>{
+ return cleanDeep(contents.map((content: DirectoryInterface) => {
+    if (functions_config.new_back_end.new_back_end) {
+      return { subdir: content.subdir, me_count: content.me_count }
+    }
+    return { subdir: content.subdir }
+  }))
+};
 
 export const getFormatedPlotsObject = (contents: PlotInterface[]) =>
   cleanDeep(
@@ -116,15 +122,16 @@ export const getFormatedPlotsObject = (contents: PlotInterface[]) =>
   ).sort();
 
 export const getFilteredDirectories = (
-  plot_search_folders: string[],
-  workspace_folders: (string | undefined)[]
+  plot_search_folders: DirectoryInterface[],
+  workspace_folders: (DirectoryInterface | undefined)[]
 ) => {
   //if workspaceFolders array from context is not empty we taking intersection between all directories and workspaceFolders
   // workspace folders are fileterd folders array by selected workspace
   if (workspace_folders.length > 0) {
+    const names_of_folders = plot_search_folders.map((folder: DirectoryInterface) => folder.subdir)
     //@ts-ignore
-    const filteredDirectories = workspace_folders.filter((directory: string) =>
-      plot_search_folders.includes(directory)
+    const filteredDirectories = workspace_folders.filter((directory: DirectoryInterface) =>
+      names_of_folders.includes(directory.subdir)
     );
     return filteredDirectories;
   }

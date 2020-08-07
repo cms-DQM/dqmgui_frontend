@@ -5,6 +5,7 @@ import { PlotInterface } from '../containers/display/content';
 import { getNameAndDirectoriesFromDir } from '../containers/display/utils';
 import { PlotDataProps, QueryProps } from '../containers/display/interfaces';
 import { useRouter } from 'next/router';
+import { functions_config } from '../config/config';
 
 export const useDisplayedName = (contents: any, data: any) => {
   const [plotContent, setPlotContent] = useState<PlotDataProps[]>([]);
@@ -25,6 +26,7 @@ export const useDisplayedName = (contents: any, data: any) => {
             name: name,
             path: content.path && '/' + directories,
             layout: content.layout,
+            qtestresults: functions_config.new_back_end.new_back_end ? content.qtestresults : content.properties.report
           };
         }
       })

@@ -77,19 +77,18 @@ export const Plot = ({
           minheight={params_for_api.height}
           width={params_for_api.width?.toString()}
           is_plot_selected={isPlotSelected.toString()}
-          // report={plot.properties.report}
         >
-          <PlotNameCol>{plot.displayedName}</PlotNameCol>
+          <PlotNameCol error={(plot.qtestresults.error === 300).toString()}>{plot.displayedName}</PlotNameCol>
           <Column>
             {isPlotSelected ? (
               <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
             ) : (
-              <PlusIcon
-                onClick={() => {
-                  addPlotToRightSide(query, plot);
-                }}
-              />
-            )}
+                <PlusIcon
+                  onClick={() => {
+                    addPlotToRightSide(query, plot);
+                  }}
+                />
+              )}
           </Column>
           <div
             onClick={async () => {

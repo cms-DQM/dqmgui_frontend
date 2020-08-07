@@ -100,7 +100,7 @@ export const ZoomedPlot = ({
           is_plot_selected={true.toString()}
           nopointer={true.toString()}
         >
-          <PlotNameCol>{selected_plot.name}</PlotNameCol>
+          <PlotNameCol>{selected_plot.displayedName}</PlotNameCol>
           <ImageDiv
             id={selected_plot.name}
             width={copy_of_params.width}
@@ -128,7 +128,8 @@ export const ZoomedPlot = ({
         is_plot_selected={true.toString()}
         nopointer={true.toString()}
       >
-        <PlotNameCol>{selected_plot.name}</PlotNameCol>
+        <PlotNameCol
+        >{selected_plot.displayedName}</PlotNameCol>
         <Column display="flex">
           <ZoomedPlotMenu options={zoomedPlotMenuOptions} />
           <MinusIcon

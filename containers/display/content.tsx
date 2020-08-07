@@ -32,6 +32,8 @@ export interface PlotInterface {
   content: any;
   properties: any;
   layout?: string;
+  report?: any;
+  qtestresults?: any;
 }
 
 interface FolderProps {
