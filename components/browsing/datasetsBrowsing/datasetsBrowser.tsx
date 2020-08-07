@@ -76,12 +76,11 @@ export const DatasetsBrowser = ({
             onChange={(e: any) => {
               setCurrentDataset(e);
             }}
-            // value={query.dataset_name}
             value={datasets[currentDatasetNameIndex]}
             dropdownMatchSelectWidth={false}
             onClick={() => setSelect(!openSelect)}
             open={openSelect}
-            // width={selectorWidth ? selectorWidth : `${width}px`}
+            width={selectorWidth ? selectorWidth : `${width}px`}
             showSearch={true}
           >
             {results_grouped.map((result) => (

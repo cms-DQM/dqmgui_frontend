@@ -1,21 +1,16 @@
-import React, { FC, useState, useContext, useEffect } from 'react';
+import React, { FC, useState, useContext } from 'react';
 import { Col } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import { chain } from 'lodash';
 
-import {
-  functions_config,
-  get_folders_and_plots_old_api,
-  get_folders_and_plots_new_api,
-} from '../../config/config';
 import { useRequest } from '../../hooks/useRequest';
 import { PlotDataProps, QueryProps } from './interfaces';
 import { ZoomedPlots } from '../../components/plots/zoomedPlots';
 import { ViewDetailsMenu } from '../../components/viewDetailsMenu';
 import { DivWrapper, ZoomedPlotsWrapper } from './styledComponents';
 import { FolderPath } from './folderPath';
-import { getSelectedPlots, getContents, choose_api } from './utils';
+import { getSelectedPlots } from './utils';
 import {
   CustomRow,
   StyledSecondaryButton,
@@ -25,7 +20,6 @@ import { SettingsModal } from '../../components/settings';
 import { store } from '../../contexts/leftSideContext';
 import { Shortucts } from '../../components/shortcuts/shortcut_tag';
 import { DisplayFordersOrPlots } from './display_folders_or_plots';
-import { useNewer } from '../../hooks/useNewer';
 
 interface DirectoryInterface {
   subdir: string;

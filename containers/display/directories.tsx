@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
 import { QueryProps } from './interfaces';
-import { Col } from 'antd';
+import { Col, Badge } from 'antd';
+
 import { DirecotryWrapper, StyledA, Icon } from './styledComponents';
 import {
   getFolderPathToQuery,
@@ -14,6 +15,20 @@ import { functions_config } from '../../config/config';
 
 interface FoldersFilter {
   directories: (string | undefined)[];
+}
+
+interface MeCountProps {
+  me_count: number;
+  children: React.ReactElement
+}
+
+const MeCount = ({ me_count, children }: MeCountProps) => {
+  if (functions_config.new_back_end.new_back_end) {
+    return (<Badge count={me_count} className="site-badge-count-4">
+      {children}
+    </Badge>)
+  }
+  return children
 }
 
 export const Directories = ({ directories }: FoldersFilter) => {
@@ -55,10 +70,12 @@ export const Directories = ({ directories }: FoldersFilter) => {
                 )
               }
             >
-              <Icon
-                isLoading={blink.toString()}
-                animation={functions_config.modes.online_mode.toString()}
-              />
+              <MeCount me_count={5}>
+                <Icon
+                  isLoading={blink.toString()}
+                  animation={functions_config.modes.online_mode.toString()}
+                />
+              </MeCount>
               <StyledA>{directory_name}</StyledA>
             </CustomDiv>
           </DirecotryWrapper>

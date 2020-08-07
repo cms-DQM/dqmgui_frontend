@@ -17,6 +17,7 @@ interface RunBrowserProps {
   setCurrentRunNumber(currentRunNumber: string): void;
   withoutArrows?: boolean;
   withoutLabel?: boolean;
+  selectorWidth?: string;
 }
 
 const getRunNumbers = (results_grouped: any[]) => {
@@ -34,6 +35,7 @@ export const RunBrowser = ({
   setCurrentRunNumber,
   withoutArrows,
   withoutLabel,
+  selectorWidth,
 }: RunBrowserProps) => {
   const [openSelect, setSelect] = useState(false);
 
@@ -82,7 +84,6 @@ export const RunBrowser = ({
             >
               <StyledSelect
                 onClick={() => setSelect(!openSelect)}
-                // value={query.run_number}
                 value={runNumbers[currentRunNumberIndex]}
                 onChange={(e: any) => {
                   setCurrentRunNumber(e);
@@ -90,7 +91,7 @@ export const RunBrowser = ({
                 }}
                 showSearch={true}
                 open={openSelect}
-                // style={{width: `${width}px`}}
+                width={selectorWidth ? selectorWidth : `${width}px`}
               >
                 {runNumbers &&
                   runNumbers.map((run: any) => {

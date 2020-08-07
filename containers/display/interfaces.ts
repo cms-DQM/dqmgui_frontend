@@ -130,6 +130,7 @@ export interface PlotInterface {
 
 export interface DirectoryInterface {
   subdir: string;
+  me_count?:number;
 }
 
 export interface PlotsGroupedByLayoutsInterface {
