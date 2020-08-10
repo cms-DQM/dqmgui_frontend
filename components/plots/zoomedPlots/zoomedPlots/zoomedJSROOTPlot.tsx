@@ -16,7 +16,7 @@ import {
   Column,
   ImageDiv,
 } from '../../../../containers/display/styledComponents';
-import { removePlotFromRightSide } from '../../plot/singlePlot/utils';
+import { removePlotFromRightSide, get_plot_error } from '../../plot/singlePlot/utils';
 import { Button } from 'antd';
 import { store } from '../../../../contexts/leftSideContext';
 
@@ -77,6 +77,7 @@ export const ZoomedJSROOTPlot = ({
         nopointer={true.toString()}
       >
         <PlotNameCol
+          error={get_plot_error(selected_plot).toString()}
         >{selected_plot.displayedName}</PlotNameCol>
         <Column>
           <Button

@@ -58,10 +58,13 @@ export const getSelectedPlots = (
     const displayedName =
       plot.length > 0 && plot[0].displayedName ? plot[0].displayedName : '';
 
+    const qresults = plot[0] && plot[0].qresults 
+
     const plotObject: PlotDataProps = {
       name: name ? name : '',
       path: directories,
       displayedName: displayedName,
+      qresults: qresults,
     };
     return plotObject;
   });
@@ -101,8 +104,8 @@ export const getContents = (data: any) => {
     : [];
 };
 
-export const getDirectories: any = (contents: DirectoryInterface[]) =>{
- return cleanDeep(contents.map((content: DirectoryInterface) => {
+export const getDirectories: any = (contents: DirectoryInterface[]) => {
+  return cleanDeep(contents.map((content: DirectoryInterface) => {
     if (functions_config.new_back_end.new_back_end) {
       return { subdir: content.subdir, me_count: content.me_count }
     }

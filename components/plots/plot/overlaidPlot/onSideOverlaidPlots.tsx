@@ -22,6 +22,7 @@ import {
   removePlotFromRightSide,
   scroll,
   scrollToBottom,
+  get_plot_error,
 } from '../singlePlot/utils';
 import { store } from '../../../../contexts/leftSideContext';
 
@@ -74,7 +75,7 @@ export const OnSideOverlaidPlots = ({
               // report={plot.properties.report}
               >
                 <PlotNameCol
-                  error={(plot.qtestresults.error === 300).toString()}
+                  error={get_plot_error(plot).toString()}
                 >{plot.displayedName}</PlotNameCol>
                 <Column>
                   {isPlotSelected ? (

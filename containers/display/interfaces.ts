@@ -89,7 +89,8 @@ export interface PlotDataProps {
   name: string;
   path: string;
   properties?: PlotPropertiesProps;
-  qtestresults: QTestResultsProps;
+  qresults?: any[];
+  qtstatuses?: any[];
 }
 
 export interface NavigationSearchFieldsProps {

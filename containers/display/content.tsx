@@ -21,10 +21,6 @@ import { store } from '../../contexts/leftSideContext';
 import { Shortucts } from '../../components/shortcuts/shortcut_tag';
 import { DisplayFordersOrPlots } from './display_folders_or_plots';
 
-interface DirectoryInterface {
-  subdir: string;
-}
-
 export interface PlotInterface {
   obj?: string;
   name?:string;
@@ -33,7 +29,8 @@ export interface PlotInterface {
   properties: any;
   layout?: string;
   report?: any;
-  qtestresults?: any;
+  qresults?: [];
+  qtstatuses?: [];
 }
 
 interface FolderProps {

@@ -13,7 +13,7 @@ export const useDisplayedName = (contents: any, data: any) => {
   const query: QueryProps = router.query;
 
   useEffect(() => {
-    const plotsData: any = cleanDeep(
+    const plotsData: any = (
       contents.map((content: PlotInterface) => {
         if (content.path) {
           const { name, directories } = getNameAndDirectoriesFromDir(content);
@@ -26,11 +26,12 @@ export const useDisplayedName = (contents: any, data: any) => {
             name: name,
             path: content.path && '/' + directories,
             layout: content.layout,
-            qtestresults: functions_config.new_back_end.new_back_end ? content.qtestresults : content.properties.report
+            qresults: functions_config.new_back_end.new_back_end ? content.qtstatuses : content.qresults,
           };
         }
       })
     );
+
     const result = plotsData ? plotsData : [];
     setPlotContent(result);
   }, [data, query.dataset_name, query.run_number]);

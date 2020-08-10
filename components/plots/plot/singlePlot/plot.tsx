@@ -22,6 +22,7 @@ import {
   removePlotFromRightSide,
   scroll,
   scrollToBottom,
+  get_plot_error,
 } from './utils';
 import { store } from '../../../../contexts/leftSideContext';
 
@@ -78,7 +79,10 @@ export const Plot = ({
           width={params_for_api.width?.toString()}
           is_plot_selected={isPlotSelected.toString()}
         >
-          <PlotNameCol error={(plot.qtestresults.error === 300).toString()}>{plot.displayedName}</PlotNameCol>
+          <PlotNameCol 
+          error={get_plot_error(plot).toString()}
+          >
+            {plot.displayedName}</PlotNameCol>
           <Column>
             {isPlotSelected ? (
               <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
