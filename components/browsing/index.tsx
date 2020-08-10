@@ -61,9 +61,7 @@ export const Browser = () => {
     <Form>
       <WrapperDiv>
         <WrapperDiv>
-          <RunBrowser
-            query={query}
-            setCurrentRunNumber={setCurrentRunNumber} />
+          <RunBrowser query={query} setCurrentRunNumber={setCurrentRunNumber} />
         </WrapperDiv>
         <WrapperDiv>
           {functions_config.new_back_end.lumisections_on && (
@@ -94,14 +92,14 @@ export const Browser = () => {
               />
             </WrapperDiv>
           ) : (
-              <WrapperDiv>
-                <DatasetsBuilder
-                  currentRunNumber={currentRunNumber}
-                  currentDataset={currentDataset}
-                  query={query}
-                />
-              </WrapperDiv>
-            )}
+            <WrapperDiv>
+              <DatasetsBuilder
+                currentRunNumber={currentRunNumber}
+                currentDataset={currentDataset}
+                query={query}
+              />
+            </WrapperDiv>
+          )}
         </StyledFormItem>
       </WrapperDiv>
     </Form>

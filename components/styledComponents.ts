@@ -8,7 +8,7 @@ import {
   Checkbox,
   Radio,
   Col,
-  Badge
+  Badge,
 } from 'antd';
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import styled from 'styled-components';
@@ -323,4 +323,4 @@ export const CutomBadge = styled(Badge)`
   color: #999;
   box-shadow: 0 0 0 1px #d9d9d9 inset;'
 }
-`
+`;

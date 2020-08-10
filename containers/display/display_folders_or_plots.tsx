@@ -41,7 +41,6 @@ export const DisplayFordersOrPlots = ({
   errors,
   filteredFolders,
 }: ContentProps) => {
-
   return (
     <Wrapper
       any_selected_plots={selected_plots.length > 0 && errors.length === 0}

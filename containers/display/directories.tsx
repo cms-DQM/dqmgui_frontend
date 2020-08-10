@@ -14,23 +14,20 @@ import { store } from '../../contexts/leftSideContext';
 import { functions_config } from '../../config/config';
 
 interface FoldersFilter {
-  directories: (DirectoryInterface)[];
+  directories: DirectoryInterface[];
 }
 
 interface MeCountProps {
   me_count: number;
-  children: React.ReactElement
+  children: React.ReactElement;
 }
 
 const MeCount = ({ me_count, children }: MeCountProps) => {
   if (functions_config.new_back_end.new_back_end) {
-    return (<CutomBadge
-      count={me_count}>
-      {children}
-    </CutomBadge>)
+    return <CutomBadge count={me_count}>{children}</CutomBadge>;
   }
-  return children
-}
+  return children;
+};
 
 export const Directories = ({ directories }: FoldersFilter) => {
   const router = useRouter();
@@ -71,8 +68,7 @@ export const Directories = ({ directories }: FoldersFilter) => {
                 )
               }
             >
-              <MeCount
-                me_count={directory.me_count ? directory.me_count : 0}>
+              <MeCount me_count={directory.me_count ? directory.me_count : 0}>
                 <Icon
                   isLoading={blink.toString()}
                   animation={functions_config.modes.online_mode.toString()}

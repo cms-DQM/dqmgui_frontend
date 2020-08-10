@@ -82,21 +82,21 @@ export const OverlaidPlotImage = ({
           width={params_for_api.width?.toString()}
           is_plot_selected={isPlotSelected.toString()}
         >
-          <PlotNameCol
-            error={get_plot_error(plot).toString()}
-          >{plot.displayedName}</PlotNameCol>
+          <PlotNameCol error={get_plot_error(plot).toString()}>
+            {plot.displayedName}
+          </PlotNameCol>
           <Column>
             {isPlotSelected ? (
               <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
             ) : (
-                <PlusIcon
-                  onClick={async () => {
-                    await addPlotToRightSide(query, plot);
-                    scroll(imageRef);
-                    scrollToBottom(imageRefScrollDown);
-                  }}
-                />
-              )}
+              <PlusIcon
+                onClick={async () => {
+                  await addPlotToRightSide(query, plot);
+                  scroll(imageRef);
+                  scrollToBottom(imageRefScrollDown);
+                }}
+              />
+            )}
           </Column>
           <div
             onClick={async () => {

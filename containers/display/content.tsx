@@ -23,7 +23,7 @@ import { DisplayFordersOrPlots } from './display_folders_or_plots';
 
 export interface PlotInterface {
   obj?: string;
-  name?:string;
+  name?: string;
   path: string;
   content: any;
   properties: any;
@@ -58,14 +58,18 @@ const Content: FC<FolderProps> = ({
     dataset_name: dataset_name,
     folders_path: folder_path,
     notOlderThan: updated_by_not_older_than,
-    plot_search: query.plot_search
+    plot_search: query.plot_search,
   };
 
   const [openSettings, toggleSettingsModal] = useState(false);
 
   const selectedPlots = query.selected_plots;
   //filtering directories by selected workspace
-  const { foldersByPlotSearch, plots, isLoading, errors } = useFilterFolders(query, params, updated_by_not_older_than);
+  const { foldersByPlotSearch, plots, isLoading, errors } = useFilterFolders(
+    query,
+    params,
+    updated_by_not_older_than
+  );
 
   const plots_grouped_by_layouts = chain(plots).groupBy('layout').value();
 

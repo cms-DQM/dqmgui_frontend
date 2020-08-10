@@ -32,7 +32,7 @@ export const functions_config: any = {
 export const root_url = config[process.env.NODE_ENV || 'development'].root_url;
 
 export const get_folders_and_plots_new_api = (params: ParamsForApiProps) => {
-  if(params.plot_search){
+  if (params.plot_search) {
     return `/api/v1/archive/${getRunsWithLumisections(params)}${
       params.dataset_name
     }/${params.folders_path}?search=${params.plot_search}`;
@@ -44,10 +44,12 @@ export const get_folders_and_plots_new_api = (params: ParamsForApiProps) => {
 export const get_folders_and_plots_new_api_with_live_mode = (
   params: ParamsForApiProps
 ) => {
-  if(params.plot_search){
+  if (params.plot_search) {
     return `/api/v1/archive/${getRunsWithLumisections(params)}${
       params.dataset_name
-    }/${params.folders_path}?search=${params.plot_search}&notOlderThan=${params.notOlderThan}`;
+    }/${params.folders_path}?search=${params.plot_search}&notOlderThan=${
+      params.notOlderThan
+    }`;
   }
   return `/api/v1/archive/${getRunsWithLumisections(params)}${
     params.dataset_name
@@ -55,7 +57,7 @@ export const get_folders_and_plots_new_api_with_live_mode = (
 };
 
 export const get_folders_and_plots_old_api = (params: ParamsForApiProps) => {
-  if(params.plot_search){
+  if (params.plot_search) {
     return `/data/json/archive/${params.run_number}${params.dataset_name}/${params.folders_path}?search=${params.plot_search}`;
   }
   return `/data/json/archive/${params.run_number}${params.dataset_name}/${params.folders_path}`;

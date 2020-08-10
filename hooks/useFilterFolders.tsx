@@ -29,22 +29,27 @@ export const useFilterFolders = (
   const [
     folders_found_by_dataset_or_run,
     set_folders_found_by_dataset_or_run,
-  ] = React.useState<(DirectoryInterface)[]>([]);
-  const [directories, setDirectories] = React.useState<(DirectoryInterface)[]>([]);
+  ] = React.useState<DirectoryInterface[]>([]);
+  const [directories, setDirectories] = React.useState<DirectoryInterface[]>(
+    []
+  );
   const [plots, setPlots] = React.useState<any[]>([]);
-  const [isLoading, setLoading] = React.useState(false)
+  const [isLoading, setLoading] = React.useState(false);
 
   const current_api = choose_api(params);
 
-  const data_get_by_not_older_than_update = useRequest(current_api, {}, [
-    updated_by_not_older_than,
-  ], functions_config.modes.online_mode);
+  const data_get_by_not_older_than_update = useRequest(
+    current_api,
+    {},
+    [updated_by_not_older_than],
+    functions_config.modes.online_mode
+  );
 
   const data_get_by_folder_run_dataset_update = useRequest(current_api, {}, [
     query.folder_path,
     query.run_number,
     query.dataset_name,
-    query.plot_search
+    query.plot_search,
   ]);
 
   // with useNewer hook we distinguish witch data is newer: got by
@@ -66,7 +71,13 @@ export const useFilterFolders = (
   React.useEffect(() => {
     setDirectories(getDirectories(contents));
     setPlots(cleanDeep(formattedPlotsObject));
-  }, [data, query.folder_path, isLoading, query.dataset_name, formattedPlotsObject]);
+  }, [
+    data,
+    query.folder_path,
+    isLoading,
+    query.dataset_name,
+    formattedPlotsObject,
+  ]);
 
   const { filteredFolders } = useFilterFoldersByWorkspaces(query);
 
@@ -89,7 +100,7 @@ export const useFilterFolders = (
     );
 
     //isLoading got by dataset name, run and folder path change calls spinner.
-    // we don't want to have a spinner when data is updating on notOlderThan 
+    // we don't want to have a spinner when data is updating on notOlderThan
     //param change (i.e. every 10 sec.)
     const isLoading = data_get_by_folder_run_dataset_update.isLoading;
 
@@ -100,7 +111,7 @@ export const useFilterFolders = (
     // then we see spinner just until useRequest will be finished. It means, that when spinner won't
     // be visible anymore, for some seconds we will see previuos content of folder and just
     // afet it the real content offolder will be shown.
-    setLoading(isLoading)
+    setLoading(isLoading);
 
     setFoldersByPlotSearch(folders as any);
   }, [directories, filteredFolders, folders_found_by_dataset_or_run]);

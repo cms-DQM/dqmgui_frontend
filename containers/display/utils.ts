@@ -58,7 +58,7 @@ export const getSelectedPlots = (
     const displayedName =
       plot.length > 0 && plot[0].displayedName ? plot[0].displayedName : '';
 
-    const qresults = plot[0] && plot[0].qresults 
+    const qresults = plot[0] && plot[0].qresults;
 
     const plotObject: PlotDataProps = {
       name: name ? name : '',
@@ -83,34 +83,30 @@ export const getFolderPathToQuery = (
 // getContent also sorting data that directories should be displayed firstly, just after them- plots images.
 export const getContents = (data: any) => {
   if (functions_config.new_back_end.new_back_end) {
-    return data
-      ? _.sortBy(
-        data.data
-          ? data.data
-          : [],
+    return data ? _.sortBy(data.data ? data.data : [], ['subdir']) : [];
+  }
+  return data
+    ? _.sortBy(
+        data.contents
+          ? data.contents
+          : [].filter(
+              (one_item: PlotInterface | DirectoryInterface) =>
+                !one_item.hasOwnProperty('streamerinfo')
+            ),
         ['subdir']
       )
-      : [];
-  } return data
-    ? _.sortBy(
-      data.contents
-        ? data.contents
-        : [].filter(
-          (one_item: PlotInterface | DirectoryInterface) =>
-            !one_item.hasOwnProperty('streamerinfo')
-        ),
-      ['subdir']
-    )
     : [];
 };
 
 export const getDirectories: any = (contents: DirectoryInterface[]) => {
-  return cleanDeep(contents.map((content: DirectoryInterface) => {
-    if (functions_config.new_back_end.new_back_end) {
-      return { subdir: content.subdir, me_count: content.me_count }
-    }
-    return { subdir: content.subdir }
-  }))
+  return cleanDeep(
+    contents.map((content: DirectoryInterface) => {
+      if (functions_config.new_back_end.new_back_end) {
+        return { subdir: content.subdir, me_count: content.me_count };
+      }
+      return { subdir: content.subdir };
+    })
+  );
 };
 
 export const getFormatedPlotsObject = (contents: PlotInterface[]) =>
@@ -131,10 +127,13 @@ export const getFilteredDirectories = (
   //if workspaceFolders array from context is not empty we taking intersection between all directories and workspaceFolders
   // workspace folders are fileterd folders array by selected workspace
   if (workspace_folders.length > 0) {
-    const names_of_folders = plot_search_folders.map((folder: DirectoryInterface) => folder.subdir)
+    const names_of_folders = plot_search_folders.map(
+      (folder: DirectoryInterface) => folder.subdir
+    );
     //@ts-ignore
-    const filteredDirectories = workspace_folders.filter((directory: DirectoryInterface) =>
-      names_of_folders.includes(directory.subdir)
+    const filteredDirectories = workspace_folders.filter(
+      (directory: DirectoryInterface) =>
+        names_of_folders.includes(directory.subdir)
     );
     return filteredDirectories;
   }
@@ -223,8 +222,8 @@ export const choose_api = (params: ParamsForApiProps) => {
   const current_api = !functions_config.new_back_end.new_back_end
     ? get_folders_and_plots_old_api(params)
     : functions_config.modes.online_mode
-      ? get_folders_and_plots_new_api_with_live_mode(params)
-      : get_folders_and_plots_new_api(params);
+    ? get_folders_and_plots_new_api_with_live_mode(params)
+    : get_folders_and_plots_new_api(params);
   return current_api;
 };
 
@@ -232,8 +231,8 @@ export const choose_api_for_run_search = (params: ParamsForApiProps) => {
   const current_api = !functions_config.new_back_end.new_back_end
     ? get_run_list_by_search_old_api(params)
     : functions_config.modes.online_mode
-      ? get_run_list_by_search_new_api_with_no_older_than(params)
-      : get_run_list_by_search_new_api(params);
+    ? get_run_list_by_search_new_api_with_no_older_than(params)
+    : get_run_list_by_search_new_api(params);
 
   return current_api;
 };

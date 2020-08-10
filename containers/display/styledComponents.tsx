@@ -118,11 +118,14 @@ export const StyledPlotRow = styled(Row)<{
   animation-iteration-count: 1;
   animation-duration: 1s;
 `;
-export const PlotNameCol = styled(Col)<{error?: string}>`
+export const PlotNameCol = styled(Col)<{ error?: string }>`
   width: 70%;
   word-break: break-all;
-  color: ${(props) => (props.error ==="true" ? theme.colors.notification.error : theme.colors.common.black)};
-  font-weight:${(props) => (props.error ==="true" ? 'bold' : '')};
+  color: ${(props) =>
+    props.error === 'true'
+      ? theme.colors.notification.error
+      : theme.colors.common.black};
+  font-weight: ${(props) => (props.error === 'true' ? 'bold' : '')};
   padding: ${theme.space.spaceBetween};
 `;
 export const Column = styled(Col)<{ display?: string }>`
