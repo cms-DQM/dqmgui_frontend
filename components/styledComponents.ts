@@ -8,6 +8,7 @@ import {
   Checkbox,
   Radio,
   Col,
+  Badge
 } from 'antd';
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import styled from 'styled-components';
@@ -315,3 +316,11 @@ export const ShortcutTagDiv = styled.div<{ background?: string }>`
       : theme.colors.primary.main};
   color: ${theme.colors.common.white};
 `;
+
+export const CutomBadge = styled(Badge)`
+.ant-badge-count {
+  background-color: #fff;
+  color: #999;
+  box-shadow: 0 0 0 1px #d9d9d9 inset;'
+}
+`

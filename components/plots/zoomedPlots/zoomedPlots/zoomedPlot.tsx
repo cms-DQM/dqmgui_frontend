@@ -23,7 +23,7 @@ import {
   Image,
   MinusIcon,
 } from '../../../../containers/display/styledComponents';
-import { removePlotFromRightSide } from '../../plot/singlePlot/utils';
+import { removePlotFromRightSide, get_plot_error } from '../../plot/singlePlot/utils';
 import { Customization } from '../../../customization';
 import { ZoomedPlotMenu } from '../menu';
 import { Plot_portal } from '../../../../containers/display/portal';
@@ -100,7 +100,9 @@ export const ZoomedPlot = ({
           is_plot_selected={true.toString()}
           nopointer={true.toString()}
         >
-          <PlotNameCol>{selected_plot.name}</PlotNameCol>
+          <PlotNameCol
+            error={get_plot_error(selected_plot).toString()}
+          >{selected_plot.displayedName}</PlotNameCol>
           <ImageDiv
             id={selected_plot.name}
             width={copy_of_params.width}
@@ -128,7 +130,9 @@ export const ZoomedPlot = ({
         is_plot_selected={true.toString()}
         nopointer={true.toString()}
       >
-        <PlotNameCol>{selected_plot.name}</PlotNameCol>
+        <PlotNameCol
+          error={get_plot_error(selected_plot).toString()}
+        >{selected_plot.displayedName}</PlotNameCol>
         <Column display="flex">
           <ZoomedPlotMenu options={zoomedPlotMenuOptions} />
           <MinusIcon

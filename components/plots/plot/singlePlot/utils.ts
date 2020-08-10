@@ -3,6 +3,7 @@ import {
   TripleProps,
   QueryProps,
   ParamsForApiProps,
+  PlotPropertiesProps,
 } from '../../../../containers/display/interfaces';
 import cleanDeep from 'clean-deep';
 
@@ -13,6 +14,7 @@ import {
   getChangedQueryParams,
 } from '../../../../containers/display/utils';
 import { SetStateAction } from 'react';
+import { functions_config } from '../../../../config/config';
 
 export const removePlotFromSelectedPlots = (
   plotsQuery: string | undefined,
@@ -41,7 +43,7 @@ export const addOverlayData = (triples: TripleProps[] | undefined) => {
     triples.map(
       (triple: TripleProps) =>
         `${triple.run_number}${triple.dataset_name}/${
-          triple.label ? triple.label : triple.run_number
+        triple.label ? triple.label : triple.run_number
         }`
     );
   const query = params?.join('&');
@@ -128,3 +130,23 @@ export const shrink_or_expand = (name: string, layouts_sections: string[]) => {
     return copy;
   }
 };
+
+export const get_plot_error = (plot: PlotDataProps) => {
+  let found = false
+  if (functions_config.new_back_end.new_back_end) {
+    return plot.qresults && plot.qresults.find(status => status === 300) ? true : false
+  }
+  plot.qresults && plot.qresults.forEach((qtest) => {
+    if (qtest.hasOwnProperty('status')) {
+      const status = qtest.status
+      if (status === 300) {
+        found = true
+        return true
+      }
+    }
+  })
+  if (!found) {
+    return found
+  }
+  return found
+}

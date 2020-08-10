@@ -1,19 +1,35 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
-import { QueryProps } from './interfaces';
+import { QueryProps, DirectoryInterface } from './interfaces';
 import { Col } from 'antd';
+
 import { DirecotryWrapper, StyledA, Icon } from './styledComponents';
 import {
   getFolderPathToQuery,
   changeRouter,
   getChangedQueryParams,
 } from './utils';
-import { CustomDiv } from '../../components/styledComponents';
+import { CustomDiv, CutomBadge } from '../../components/styledComponents';
 import { store } from '../../contexts/leftSideContext';
 import { functions_config } from '../../config/config';
 
 interface FoldersFilter {
-  directories: (string | undefined)[];
+  directories: (DirectoryInterface)[];
+}
+
+interface MeCountProps {
+  me_count: number;
+  children: React.ReactElement
+}
+
+const MeCount = ({ me_count, children }: MeCountProps) => {
+  if (functions_config.new_back_end.new_back_end) {
+    return (<CutomBadge
+      count={me_count}>
+      {children}
+    </CutomBadge>)
+  }
+  return children
 }
 
 export const Directories = ({ directories }: FoldersFilter) => {
@@ -31,15 +47,15 @@ export const Directories = ({ directories }: FoldersFilter) => {
       set_blink(false);
     }, 2000);
   }, [updated_by_not_older_than]);
-
   return (
     <>
-      {directories.map((directory_name: any) => (
-        <Col span={4} key={directory_name}>
+      {directories.map((directory: DirectoryInterface) => (
+        <Col span={4} key={directory.subdir}>
           <DirecotryWrapper>
             <CustomDiv
               hover="true"
               display="flex"
+              space="1"
               alignitems="center"
               onClick={() =>
                 changeRouter(
@@ -47,7 +63,7 @@ export const Directories = ({ directories }: FoldersFilter) => {
                     {
                       folder_path: getFolderPathToQuery(
                         query.folder_path,
-                        directory_name
+                        directory.subdir
                       ),
                     },
                     query
@@ -55,11 +71,14 @@ export const Directories = ({ directories }: FoldersFilter) => {
                 )
               }
             >
-              <Icon
-                isLoading={blink.toString()}
-                animation={functions_config.modes.online_mode.toString()}
-              />
-              <StyledA>{directory_name}</StyledA>
+              <MeCount
+                me_count={directory.me_count ? directory.me_count : 0}>
+                <Icon
+                  isLoading={blink.toString()}
+                  animation={functions_config.modes.online_mode.toString()}
+                />
+              </MeCount>
+              <StyledA>{directory.subdir}</StyledA>
             </CustomDiv>
           </DirecotryWrapper>
         </Col>

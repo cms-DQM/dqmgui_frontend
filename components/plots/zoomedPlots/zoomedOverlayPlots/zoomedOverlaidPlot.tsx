@@ -28,7 +28,7 @@ import {
   Image,
   MinusIcon,
 } from '../../../../containers/display/styledComponents';
-import { removePlotFromRightSide } from '../../plot/singlePlot/utils';
+import { removePlotFromRightSide, get_plot_error } from '../../plot/singlePlot/utils';
 import { ZoomedPlotMenu } from '../menu';
 import { Customization } from '../../../customization';
 import { Plot_portal } from '../../../../containers/display/portal';
@@ -107,9 +107,10 @@ export const ZoomedOverlaidPlot = ({
           width={copy_of_params.width?.toString()}
           is_plot_selected={true.toString()}
           nopointer={true.toString()}
-          // report={selected_plot.properties.report}
         >
-          <PlotNameCol>{selected_plot.displayedName}</PlotNameCol>
+          <PlotNameCol
+            error={get_plot_error(selected_plot).toString()}
+          >{selected_plot.displayedName}</PlotNameCol>
           <ImageDiv
             id={selected_plot.name}
             width={copy_of_params.width}
@@ -136,9 +137,10 @@ export const ZoomedOverlaidPlot = ({
         width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}
         nopointer={true.toString()}
-        // report={selected_plot.properties.report}
       >
-        <PlotNameCol>{selected_plot.displayedName}</PlotNameCol>
+        <PlotNameCol
+          error={get_plot_error(selected_plot).toString()}
+        >{selected_plot.displayedName}</PlotNameCol>
         <Column display="flex">
           <ZoomedPlotMenu options={zoomedPlotMenuOptions} />
           <MinusIcon

@@ -23,7 +23,6 @@ interface DatasetsBuilderProps {
 }
 
 export const DatasetsBuilder = ({
-  //router ok
   currentDataset,
   query,
   currentRunNumber,

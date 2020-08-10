@@ -19,7 +19,7 @@ import {
   MinusIcon,
   ImageDiv,
 } from '../../../../containers/display/styledComponents';
-import { removePlotFromRightSide } from '../../plot/singlePlot/utils';
+import { removePlotFromRightSide, get_plot_error } from '../../plot/singlePlot/utils';
 import { Button } from 'antd';
 import { store } from '../../../../contexts/leftSideContext';
 
@@ -57,18 +57,18 @@ export const ZoomedOverlaidJSROOTPlot = ({
 
   const overlaid_plots_runs_and_datasets: any[] = params_for_api?.overlay_plot
     ? params_for_api.overlay_plot.map((plot: TripleProps) => {
-        const copy: any = { ...params_for_api };
+      const copy: any = { ...params_for_api };
 
-        if (plot.dataset_name) {
-          copy.dataset_name = plot.dataset_name;
-        }
-        copy.run_number = plot.run_number;
-        const { data } = useRequest(get_jroot_plot(copy), {}, [
-          selected_plot.name,
-          query.lumi,
-        ]);
-        return data;
-      })
+      if (plot.dataset_name) {
+        copy.dataset_name = plot.dataset_name;
+      }
+      copy.run_number = plot.run_number;
+      const { data } = useRequest(get_jroot_plot(copy), {}, [
+        selected_plot.name,
+        query.lumi,
+      ]);
+      return data;
+    })
     : [];
 
   overlaid_plots_runs_and_datasets.push(data);
@@ -153,9 +153,11 @@ export const ZoomedOverlaidJSROOTPlot = ({
         width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}
         nopointer={true.toString()}
-        // report={selected_plot.properties.report}
+      // report={selected_plot.properties.report}
       >
-        <PlotNameCol>{selected_plot.displayedName}</PlotNameCol>
+        <PlotNameCol
+        error={get_plot_error(selected_plot).toString()}
+        >{selected_plot.displayedName}</PlotNameCol>
         <Column>
           <Button
             type="link"

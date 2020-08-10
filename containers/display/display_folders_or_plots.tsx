@@ -41,6 +41,7 @@ export const DisplayFordersOrPlots = ({
   errors,
   filteredFolders,
 }: ContentProps) => {
+
   return (
     <Wrapper
       any_selected_plots={selected_plots.length > 0 && errors.length === 0}
@@ -60,7 +61,7 @@ export const DisplayFordersOrPlots = ({
             <NoResultsFound />
           ) : errors.length === 0 ? (
             <>
-              <CustomRow width="100%">
+              <CustomRow width="100%" space={'2'}>
                 <Directories directories={filteredFolders} />
               </CustomRow>
               <Row>

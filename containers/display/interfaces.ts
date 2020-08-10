@@ -43,6 +43,7 @@ export interface ParamsForApiProps extends PlotProps {
   joined_overlaied_plots_urls?: string;
   overlay?: string;
   customizeProps?: CustomizeProps;
+  plot_search?:string;
 }
 
 export interface DisplayFolderOrPlotComponentProps {
@@ -76,11 +77,20 @@ export interface NavigationSearchFieldsProps {
   search_by_run_number: string;
 }
 
+export interface QTestResultsProps {
+  alarm: number;
+  error: number;
+  warn: number; 
+  other: number; 
+}
+
 export interface PlotDataProps {
   displayedName: string;
   name: string;
   path: string;
   properties?: PlotPropertiesProps;
+  qresults?: any[];
+  qtstatuses?: any[];
 }
 
 export interface NavigationSearchFieldsProps {
@@ -119,7 +129,8 @@ export interface PlotPropertiesReportProps {
 }
 
 export interface PlotInterface {
-  obj: string;
+  obj?: string;
+  name?: string;
   path: string;
   content: any;
   properties: any;
@@ -128,6 +139,7 @@ export interface PlotInterface {
 
 export interface DirectoryInterface {
   subdir: string;
+  me_count?:number;
 }
 
 export interface PlotsGroupedByLayoutsInterface {

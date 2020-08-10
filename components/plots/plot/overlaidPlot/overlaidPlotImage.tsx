@@ -24,6 +24,7 @@ import {
   removePlotFromRightSide,
   addPlotToRightSide,
   scrollToBottom,
+  get_plot_error,
 } from '../singlePlot/utils';
 import { store } from '../../../../contexts/leftSideContext';
 
@@ -80,21 +81,22 @@ export const OverlaidPlotImage = ({
           minheight={params_for_api.height}
           width={params_for_api.width?.toString()}
           is_plot_selected={isPlotSelected.toString()}
-          // report={plot.properties.report}
         >
-          <PlotNameCol>{plot.displayedName}</PlotNameCol>
+          <PlotNameCol
+            error={get_plot_error(plot).toString()}
+          >{plot.displayedName}</PlotNameCol>
           <Column>
             {isPlotSelected ? (
               <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
             ) : (
-              <PlusIcon
-                onClick={async () => {
-                  await addPlotToRightSide(query, plot);
-                  scroll(imageRef);
-                  scrollToBottom(imageRefScrollDown);
-                }}
-              />
-            )}
+                <PlusIcon
+                  onClick={async () => {
+                    await addPlotToRightSide(query, plot);
+                    scroll(imageRef);
+                    scrollToBottom(imageRefScrollDown);
+                  }}
+                />
+              )}
           </Column>
           <div
             onClick={async () => {
