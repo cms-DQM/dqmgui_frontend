@@ -16,6 +16,7 @@ import { useNewer } from './useNewer';
 import { useRequest } from './useRequest';
 import { useDisplayedName } from './useDisplayName';
 import { functions_config } from '../config/config';
+import cleanDeep from 'clean-deep';
 
 export const useFilterFolders = (
   query: QueryProps,
@@ -64,7 +65,7 @@ export const useFilterFolders = (
 
   React.useEffect(() => {
     setDirectories(getDirectories(contents));
-    setPlots(formattedPlotsObject);
+    setPlots(cleanDeep(formattedPlotsObject));
   }, [data, query.folder_path, isLoading, query.dataset_name, formattedPlotsObject]);
 
   const { filteredFolders } = useFilterFoldersByWorkspaces(query);

@@ -31,25 +31,28 @@ export const LeftSidePlots = ({
   const { imageRefScrollDown } = globalState;
   const folders = query.folder_path ? query.folder_path?.split('/') : [];
   const current_folder = folders[folders.length - 1];
-  return (
-    <>
-      {functions_config.new_back_end.layouts && current_folder === 'Layouts' ? (
-        <PlotsWithLayout
-          plots_grouped_by_layouts={plots_grouped_by_layouts_checked}
-          selected_plots={selected_plots}
-          query={query}
-          imageRefScrollDown={imageRefScrollDown}
-          globalState={globalState}
-        />
-      ) : (
-        <PlotsWithoutLayouts
-          plots={plots}
-          selected_plots={selected_plots}
-          query={query}
-          imageRefScrollDown={imageRefScrollDown}
-          globalState={globalState}
-        />
-      )}
-    </>
-  );
+  
+  if (plots.length > 0) {
+    return (
+      <>
+        {functions_config.new_back_end.layouts && current_folder === 'Layouts' ? (
+          <PlotsWithLayout
+            plots_grouped_by_layouts={plots_grouped_by_layouts_checked}
+            selected_plots={selected_plots}
+            query={query}
+            imageRefScrollDown={imageRefScrollDown}
+            globalState={globalState}
+          />
+        ) : (
+            <PlotsWithoutLayouts
+              plots={plots}
+              selected_plots={selected_plots}
+              query={query}
+              imageRefScrollDown={imageRefScrollDown}
+              globalState={globalState}
+            />
+          )}
+      </>
+    );
+  } return <></>
 };
