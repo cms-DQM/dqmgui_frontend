@@ -18,7 +18,7 @@ export const functions_config: any = {
   new_back_end: {
     new_back_end: false,
     lumisections_on: false,
-    layouts: true,
+    layouts: false,
     latest_runs: false,
   },
   modes: {
