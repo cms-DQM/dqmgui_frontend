@@ -32,6 +32,7 @@ import {
 import { functions_config } from '../config/config';
 import { LatestRuns } from '../components/latestRuns';
 import { store } from '../contexts/leftSideContext';
+import { RunInfo } from '../components/runInfo';
 
 const navigationHandler = (
   search_by_run_number: string,
@@ -132,17 +133,20 @@ const Index: NextPage<FolderPathQuery> = () => {
             //Instead, run and dataset browser is is displayed.
             //Regular search fields are displayed just in the main page.
             isDatasetAndRunNumberSelected ? (
-              <ComposedSearch />
-            ) : (
               <>
-                <Nav
-                  initial_search_run_number={query.search_run_number}
-                  initial_search_dataset_name={query.search_dataset_name}
-                  handler={navigationHandler}
-                  type="top"
-                />
+                <RunInfo query={query} />
+                <ComposedSearch />
               </>
-            )
+            ) : (
+                <>
+                  <Nav
+                    initial_search_run_number={query.search_run_number}
+                    initial_search_dataset_name={query.search_dataset_name}
+                    handler={navigationHandler}
+                    type="top"
+                  />
+                </>
+              )
           }
         </StyledHeader>
         {query.run_number && query.dataset_name ? (
@@ -162,13 +166,13 @@ const Index: NextPage<FolderPathQuery> = () => {
         ) : functions_config.new_back_end.latest_runs ? (
           <LatestRuns />
         ) : (
-          <NotFoundDivWrapper>
-            <NotFoundDiv noBorder>
-              <ChartIcon />
+                <NotFoundDivWrapper>
+                  <NotFoundDiv noBorder>
+                    <ChartIcon />
               Welcome to DQM GUI
             </NotFoundDiv>
-          </NotFoundDivWrapper>
-        )}
+                </NotFoundDivWrapper>
+              )}
       </StyledLayout>
     </StyledDiv>
   );

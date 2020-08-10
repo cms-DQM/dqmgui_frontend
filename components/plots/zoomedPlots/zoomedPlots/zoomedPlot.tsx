@@ -31,6 +31,7 @@ import { Customization } from '../../../customization';
 import { ZoomedPlotMenu } from '../menu';
 import { Plot_portal } from '../../../../containers/display/portal';
 import { store } from '../../../../contexts/leftSideContext';
+import { useRequest } from '../../../../hooks/useRequest';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -88,6 +89,8 @@ export const ZoomedPlot = ({
     }, 2000);
   }, [updated_by_not_older_than]);
 
+const {data, isLoading, errors, cancelSource } = useRequest(source)
+console.log(isLoading)
   return (
     <StyledCol space={2}>
       <Plot_portal
