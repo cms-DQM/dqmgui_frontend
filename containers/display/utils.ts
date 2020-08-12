@@ -192,7 +192,7 @@ export const getChangedQueryParams = (
 
 export const changeRouter = (parameters: ParsedUrlQueryInput) => {
   const queryString = qs.stringify(parameters, {});
-  Router.replace({
+  Router.push({
     pathname: '/',
     query: parameters,
     path: decodeURIComponent(queryString),
