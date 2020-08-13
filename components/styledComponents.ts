@@ -232,6 +232,7 @@ export const CustomCol = styled(Col)<{
   gridtemplatecolumns?: string;
   gridgap?: string;
   justifyself?: string;
+  bold?: string;
 }>`
   display: ${(props) => (props.display ? props.display : '')};
   justify-content: ${(props) =>
@@ -248,6 +249,7 @@ export const CustomCol = styled(Col)<{
     props.gridtemplatecolumns ? props.gridtemplatecolumns : ''};
   grid-gap: ${(props) => (props.gridgap ? props.gridgap : '')};
   justify-self: ${(props) => (props.justifyself ? props.justifyself : '')};
+  font-weight: ${(props) => (props.bold === 'true' ? 'bold' : '')};
 `;
 export const CustomDiv = styled(Col)<{
   display?: string;

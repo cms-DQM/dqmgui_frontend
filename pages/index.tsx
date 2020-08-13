@@ -32,6 +32,7 @@ import {
 import { functions_config } from '../config/config';
 import { LatestRuns } from '../components/latestRuns';
 import { store } from '../contexts/leftSideContext';
+import { RunInfo } from '../components/runInfo';
 
 const navigationHandler = (
   search_by_run_number: string,
@@ -95,7 +96,7 @@ const Index: NextPage<FolderPathQuery> = () => {
     if (functions_config.modes.online_mode && errors.length === 0) {
       const interval = setInterval(() => {
         set_not_older_than(() => {
-          // 1 sek is 1000 milisec. we dividing by 10000 and multiply by 10, because we need to
+          // 1 sec is 1000 milisec. we dividing by 10000 and multiply by 10, because we need to
           // have rounded sec. for exmaple: if it is 13, we need to have 10, or 26, we need to have 20 and etc.
           const secounds = Math.round(new Date().getTime() / 10000) * 10;
           return secounds;
@@ -132,7 +133,10 @@ const Index: NextPage<FolderPathQuery> = () => {
             //Instead, run and dataset browser is is displayed.
             //Regular search fields are displayed just in the main page.
             isDatasetAndRunNumberSelected ? (
-              <ComposedSearch />
+              <>
+                <RunInfo query={query} />
+                <ComposedSearch />
+              </>
             ) : (
               <>
                 <Nav

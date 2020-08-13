@@ -51,7 +51,6 @@ export const useFilterFolders = (
     query.dataset_name,
     query.plot_search,
   ]);
-
   // with useNewer hook we distinguish witch data is newer: got by
   // notOlderThan param change or by dataset, run number, folder path change.
   const data = useNewer(
@@ -114,7 +113,7 @@ export const useFilterFolders = (
     setLoading(isLoading);
 
     setFoldersByPlotSearch(folders as any);
-  }, [directories, filteredFolders, folders_found_by_dataset_or_run]);
+  }, [directories, filteredFolders, folders_found_by_dataset_or_run, errors]);
 
   return { foldersByPlotSearch, plots, isLoading, errors };
 };

@@ -4,7 +4,6 @@ import { SettingOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import { chain } from 'lodash';
 
-import { useRequest } from '../../hooks/useRequest';
 import { PlotDataProps, QueryProps } from './interfaces';
 import { ZoomedPlots } from '../../components/plots/zoomedPlots';
 import { ViewDetailsMenu } from '../../components/viewDetailsMenu';

@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from 'react';
+import React, { useRef, useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { root_url, functions_config } from '../../../../config/config';
@@ -27,6 +27,9 @@ import {
   get_plot_error,
 } from '../singlePlot/utils';
 import { store } from '../../../../contexts/leftSideContext';
+import { CustomDiv } from '../../../styledComponents';
+import { Spinner } from '../../../../containers/search/styledComponents';
+import { ErrorMessage } from '../../errorMessage';
 
 interface OverlaidPlotImageProps {
   params_for_api: ParamsForApiProps;
@@ -43,6 +46,8 @@ export const OverlaidPlotImage = ({
 }: OverlaidPlotImageProps) => {
   const globalState = useContext(store);
   const { normalize } = globalState;
+  const [imageLoading, setImageLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
 
   params_for_api.plot_name = plot.name;
   params_for_api.normalize = normalize;
@@ -98,16 +103,34 @@ export const OverlaidPlotImage = ({
               />
             )}
           </Column>
-          <div
-            onClick={async () => {
-              isPlotSelected
-                ? await removePlotFromRightSide(query, plot)
-                : await addPlotToRightSide(query, plot);
-              scroll(imageRef);
-            }}
-          >
-            <img alt={plot.name} src={source} />
-          </div>
+          {imageError ? (
+            <ErrorMessage />
+          ) : (
+            <div
+              onClick={async () => {
+                isPlotSelected
+                  ? await removePlotFromRightSide(query, plot)
+                  : await addPlotToRightSide(query, plot);
+                scroll(imageRef);
+              }}
+            >
+              <img
+                onLoad={() => setImageLoading(false)}
+                className="lozad"
+                alt={plot.name}
+                data-src={source}
+                onError={() => {
+                  setImageError(true);
+                  setImageLoading(false);
+                }}
+              />
+            </div>
+          )}
+          {imageLoading && (
+            <CustomDiv display="flex" justifycontent="center" width="100%">
+              <Spinner />
+            </CustomDiv>
+          )}
         </StyledPlotRow>
       </StyledCol>
     </div>

@@ -19,7 +19,7 @@ export const useChangeRouter = (
 
   React.useEffect(() => {
     if (condition) {
-      Router.replace({
+      Router.push({
         pathname: '/',
         query: parameters,
         path: decodeURIComponent(queryString),

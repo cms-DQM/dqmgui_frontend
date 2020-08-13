@@ -4,7 +4,7 @@ import { QueryProps } from '../../containers/display/interfaces';
 import Router from 'next/router';
 
 export const setWorkspaceToQuery = (query: QueryProps, workspace: string) => {
-  return Router.replace({
+  return Router.push({
     pathname: '/',
     query: {
       run_number: query.run_number,
