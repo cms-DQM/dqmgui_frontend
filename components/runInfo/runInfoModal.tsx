@@ -11,11 +11,13 @@ interface RunInfoModalProps {
   toggleModal(value: boolean): void;
   query: QueryProps;
   open: boolean;
-
 }
 
-export const RunInfoModal = ({ query, toggleModal, open }: RunInfoModalProps) => {
-
+export const RunInfoModal = ({
+  query,
+  toggleModal,
+  open,
+}: RunInfoModalProps) => {
   return (
     <StyledModal
       title={`Run ${query.run_number} information`}
@@ -33,10 +35,10 @@ export const RunInfoModal = ({ query, toggleModal, open }: RunInfoModalProps) =>
       ]}
     >
       <div>
-        {
-          run_info.map((info) => <RunInfoItem info={info} query={query} />)
-        }
+        {run_info.map((info) => (
+          <RunInfoItem info={info} query={query} />
+        ))}
       </div>
     </StyledModal>
-  )
-}
+  );
+};

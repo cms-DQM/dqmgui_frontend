@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import { cloneDeep } from 'lodash';
+import lozad from 'lozad';
 
 import { root_url, functions_config } from '../../../../config/config';
 import { get_plot_url } from '../../../../config/config';
@@ -25,6 +25,9 @@ import {
   get_plot_error,
 } from './utils';
 import { store } from '../../../../contexts/leftSideContext';
+import { Spinner } from '../../../../containers/search/styledComponents';
+import { CustomDiv } from '../../../styledComponents';
+import { ErrorMessage } from '../../errorMessage';
 
 interface PlotProps {
   plot: PlotDataProps;
@@ -41,6 +44,8 @@ export const Plot = ({
 }: PlotProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
+  const [imageLoading, setImageLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
 
   const plot_url = get_plot_url(params_for_api);
   const source = `${root_url}${plot_url}`;
@@ -69,6 +74,10 @@ export const Plot = ({
     }
   }, [isPlotSelected, query.selected_plots]);
 
+  //lazy loading for plots
+  const observer = lozad();
+  observer.observe();
+
   return (
     <div ref={imageRef}>
       <StyledCol space={2}>
@@ -93,16 +102,36 @@ export const Plot = ({
               />
             )}
           </Column>
-          <div
-            onClick={async () => {
-              isPlotSelected
-                ? await removePlotFromRightSide(query, plot)
-                : await addPlotToRightSide(query, plot);
-              scroll(imageRef);
-            }}
-          >
-            <img alt={plot.name} src={source} />
-          </div>
+          {imageError ? (
+            <ErrorMessage />
+          ) : (
+            <div
+              onClick={async () => {
+                isPlotSelected
+                  ? await removePlotFromRightSide(query, plot)
+                  : await addPlotToRightSide(query, plot);
+                scroll(imageRef);
+              }}
+            >
+              {!imageError && (
+                <img
+                  onLoad={() => setImageLoading(false)}
+                  className="lozad"
+                  alt={plot.name}
+                  data-src={source}
+                  onError={() => {
+                    setImageError(true);
+                    setImageLoading(false);
+                  }}
+                />
+              )}
+            </div>
+          )}
+          {imageLoading && (
+            <CustomDiv display="flex" justifycontent="center" width="100%">
+              <Spinner />
+            </CustomDiv>
+          )}
         </StyledPlotRow>
       </StyledCol>
     </div>

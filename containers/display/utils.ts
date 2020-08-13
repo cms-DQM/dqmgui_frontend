@@ -133,7 +133,7 @@ export const getFilteredDirectories = (
     //@ts-ignore
     const filteredDirectories = workspace_folders.filter(
       (directory: DirectoryInterface | undefined) =>
-      directory && names_of_folders.includes(directory.subdir)
+        directory && names_of_folders.includes(directory.subdir)
     );
     return filteredDirectories;
   }

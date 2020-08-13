@@ -89,8 +89,8 @@ export const ZoomedPlot = ({
     }, 2000);
   }, [updated_by_not_older_than]);
 
-const {data, isLoading, errors, cancelSource } = useRequest(source)
-console.log(isLoading)
+  const { data, isLoading, errors, cancelSource } = useRequest(source);
+
   return (
     <StyledCol space={2}>
       <Plot_portal

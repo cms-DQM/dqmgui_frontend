@@ -41,9 +41,8 @@ export const useFilterFolders = (
   const data_get_by_not_older_than_update = useRequest(
     current_api,
     {},
-    [updated_by_not_older_than
-    ],
-    functions_config.modes.online_mode,
+    [updated_by_not_older_than],
+    functions_config.modes.online_mode
   );
 
   const data_get_by_folder_run_dataset_update = useRequest(current_api, {}, [

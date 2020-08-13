@@ -46,7 +46,6 @@ export const useRequest = (
           cancelToken: cancelSource.current?.token,
           ...options,
         });
-        console.log(response)
         const { data } = response;
         setData(data);
         setIsLoading(false);

@@ -117,10 +117,22 @@ export const run_info = [
   { value: 'processID', label: 'Process ID: ' },
   { value: 'processLatency', label: 'Process Latency: ' },
   { value: 'processName', label: 'Process Name: ' },
-  { value: 'processStartTimeStamp', label: 'Process Start Time, UTC time: ', type: 'time' },
-  { value: 'processTimeStamp', label: 'Process Time, UTC time: ', type: 'time' },
+  {
+    value: 'processStartTimeStamp',
+    label: 'Process Start Time, UTC time: ',
+    type: 'time',
+  },
+  {
+    value: 'processTimeStamp',
+    label: 'Process Time, UTC time: ',
+    type: 'time',
+  },
   { value: 'processedEvents', label: 'Processed Events: ' },
   { value: 'reportSummary', label: 'Report Summary: ' },
-  { value: 'runStartTimeStamp', label: 'Run started, UTC time: ', type: 'time' },
-  { value: 'workingDir', label: 'Working directory: ' }
-]
+  {
+    value: 'runStartTimeStamp',
+    label: 'Run started, UTC time: ',
+    type: 'time',
+  },
+  { value: 'workingDir', label: 'Working directory: ' },
+];

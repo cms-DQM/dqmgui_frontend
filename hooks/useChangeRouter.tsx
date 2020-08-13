@@ -18,7 +18,6 @@ export const useChangeRouter = (
   const queryString = qs.stringify(parameters, {});
 
   React.useEffect(() => {
-    console.log(router)
     if (condition) {
       Router.push({
         pathname: '/',

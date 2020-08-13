@@ -132,4 +132,3 @@ export const getLumisections = (params: LumisectionRequestProps) =>
   }`;
 
 export const get_the_latest_runs = () => `/api/v1/latest_runs`;
-
