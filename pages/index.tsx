@@ -138,15 +138,15 @@ const Index: NextPage<FolderPathQuery> = () => {
                 <ComposedSearch />
               </>
             ) : (
-                <>
-                  <Nav
-                    initial_search_run_number={query.search_run_number}
-                    initial_search_dataset_name={query.search_dataset_name}
-                    handler={navigationHandler}
-                    type="top"
-                  />
-                </>
-              )
+              <>
+                <Nav
+                  initial_search_run_number={query.search_run_number}
+                  initial_search_dataset_name={query.search_dataset_name}
+                  handler={navigationHandler}
+                  type="top"
+                />
+              </>
+            )
           }
         </StyledHeader>
         {query.run_number && query.dataset_name ? (
@@ -166,13 +166,13 @@ const Index: NextPage<FolderPathQuery> = () => {
         ) : functions_config.new_back_end.latest_runs ? (
           <LatestRuns />
         ) : (
-                <NotFoundDivWrapper>
-                  <NotFoundDiv noBorder>
-                    <ChartIcon />
+          <NotFoundDivWrapper>
+            <NotFoundDiv noBorder>
+              <ChartIcon />
               Welcome to DQM GUI
             </NotFoundDiv>
-                </NotFoundDivWrapper>
-              )}
+          </NotFoundDivWrapper>
+        )}
       </StyledLayout>
     </StyledDiv>
   );

@@ -82,7 +82,7 @@ export const OnSideOverlaidPlots = ({
                 minheight={params_for_api.height}
                 width={params_for_api.width?.toString()}
                 is_plot_selected={isPlotSelected.toString()}
-              // report={plot.properties.report}
+                // report={plot.properties.report}
               >
                 <PlotNameCol error={get_plot_error(plot).toString()}>
                   {plot.displayedName}
@@ -93,39 +93,44 @@ export const OnSideOverlaidPlots = ({
                       onClick={() => removePlotFromRightSide(query, plot)}
                     />
                   ) : (
-                      <PlusIcon
-                        onClick={async () => {
-                          await addPlotToRightSide(query, plot);
-                          scroll(imageRef);
-                          scrollToBottom(imageRefScrollDown);
-                        }}
-                      />
-                    )}
+                    <PlusIcon
+                      onClick={async () => {
+                        await addPlotToRightSide(query, plot);
+                        scroll(imageRef);
+                        scrollToBottom(imageRefScrollDown);
+                      }}
+                    />
+                  )}
                 </Column>
                 {imageError ? (
                   <ErrorMessage />
                 ) : (
-                    <div
-                      onClick={async () => {
-                        isPlotSelected
-                          ? await removePlotFromRightSide(query, plot)
-                          : await addPlotToRightSide(query, plot);
-                        scroll(imageRef);
+                  <div
+                    onClick={async () => {
+                      isPlotSelected
+                        ? await removePlotFromRightSide(query, plot)
+                        : await addPlotToRightSide(query, plot);
+                      scroll(imageRef);
+                    }}
+                  >
+                    <img
+                      onLoad={() => setImageLoading(false)}
+                      className="lozad"
+                      alt={plot.name}
+                      data-src={sourceForOnePlot}
+                      onError={() => {
+                        setImageError(true);
+                        setImageLoading(false);
                       }}
-                    >
-                      <img
-                        onLoad={() => setImageLoading(false)}
-                        className="lozad"
-                        alt={plot.name}
-                        data-src={sourceForOnePlot}
-                        onError={() => {
-                          setImageError(true);
-                          setImageLoading(false);
-                        }} />
-                    </div>
-                  )}
+                    />
+                  </div>
+                )}
                 {imageLoading && (
-                  <CustomDiv display="flex" justifycontent="center" width="100%">
+                  <CustomDiv
+                    display="flex"
+                    justifycontent="center"
+                    width="100%"
+                  >
                     <Spinner />
                   </CustomDiv>
                 )}

@@ -49,7 +49,6 @@ export const OverlaidPlotImage = ({
   const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
 
-
   params_for_api.plot_name = plot.name;
   params_for_api.normalize = normalize;
 
@@ -95,38 +94,38 @@ export const OverlaidPlotImage = ({
             {isPlotSelected ? (
               <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
             ) : (
-                <PlusIcon
-                  onClick={async () => {
-                    await addPlotToRightSide(query, plot);
-                    scroll(imageRef);
-                    scrollToBottom(imageRefScrollDown);
-                  }}
-                />
-              )}
+              <PlusIcon
+                onClick={async () => {
+                  await addPlotToRightSide(query, plot);
+                  scroll(imageRef);
+                  scrollToBottom(imageRefScrollDown);
+                }}
+              />
+            )}
           </Column>
           {imageError ? (
             <ErrorMessage />
           ) : (
-              <div
-                onClick={async () => {
-                  isPlotSelected
-                    ? await removePlotFromRightSide(query, plot)
-                    : await addPlotToRightSide(query, plot);
-                  scroll(imageRef);
+            <div
+              onClick={async () => {
+                isPlotSelected
+                  ? await removePlotFromRightSide(query, plot)
+                  : await addPlotToRightSide(query, plot);
+                scroll(imageRef);
+              }}
+            >
+              <img
+                onLoad={() => setImageLoading(false)}
+                className="lozad"
+                alt={plot.name}
+                data-src={source}
+                onError={() => {
+                  setImageError(true);
+                  setImageLoading(false);
                 }}
-              >
-                <img
-                  onLoad={() => setImageLoading(false)}
-                  className="lozad"
-                  alt={plot.name}
-                  data-src={source}
-                  onError={() => {
-                    setImageError(true);
-                    setImageLoading(false);
-                  }}
-                />
-              </div>
-            )}
+              />
+            </div>
+          )}
           {imageLoading && (
             <CustomDiv display="flex" justifycontent="center" width="100%">
               <Spinner />
