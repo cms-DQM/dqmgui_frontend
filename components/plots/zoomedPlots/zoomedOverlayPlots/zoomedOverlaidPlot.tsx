@@ -36,6 +36,9 @@ import { ZoomedPlotMenu } from '../menu';
 import { Customization } from '../../../customization';
 import { Plot_portal } from '../../../../containers/display/portal';
 import { store } from '../../../../contexts/leftSideContext';
+import { Spinner } from '../../../../containers/search/styledComponents';
+import { CustomDiv } from '../../../styledComponents';
+import { ErrorMessage } from '../../errorMessage';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -51,6 +54,8 @@ export const ZoomedOverlaidPlot = ({
   >();
   const [openCustomization, toggleCustomizationMenu] = useState(false);
   params_for_api.customizeProps = customizationParams;
+  const [imageLoading, setImageLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
   const [isPortalWindowOpen, setIsPortalWindowOpen] = React.useState(false);
 
   const zoomedPlotMenuOptions = [
@@ -150,17 +155,34 @@ export const ZoomedOverlaidPlot = ({
             onClick={() => removePlotFromRightSide(query, selected_plot)}
           />
         </Column>
-        <ImageDiv
-          id={selected_plot.name}
-          width={params_for_api.width}
-          height={params_for_api.height}
-        >
-          <Image
-            src={source}
+        {imageError ? (
+          <ErrorMessage />
+        ) : (
+          <ImageDiv
+            id={selected_plot.name}
             width={params_for_api.width}
             height={params_for_api.height}
-          />
-        </ImageDiv>
+          >
+            {!imageError && !imageLoading && (
+              <Image
+                onLoad={() => setImageLoading(false)}
+                alt={selected_plot.name}
+                src={source}
+                onError={() => {
+                  setImageError(true);
+                  setImageLoading(false);
+                }}
+                width={params_for_api.width}
+                height={params_for_api.height}
+              />
+            )}
+            {imageLoading && (
+              <CustomDiv display="flex" justifycontent="center" width="100%">
+                <Spinner />
+              </CustomDiv>
+            )}
+          </ImageDiv>
+        )}
       </StyledPlotRow>
     </StyledCol>
   );

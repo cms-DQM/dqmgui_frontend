@@ -216,9 +216,13 @@ export const ImageDiv = styled.div<{
   width?: number;
   height?: number;
   id?: any;
+  alignitems?: string;
+  display?: string;
 }>`
   width: ${(props) => (props.width ? props.width : '')}px;
   height: ${(props) => (props.height ? props.height : '')}px;
+  align-items: ${(props) => (props.alignitems ? props.alignitems : '')};
+  display: ${(props) => (props.display ? props.display : '')};
 `;
 
 export const Image = styled.img<{ width?: number; height?: number; src?: any }>`

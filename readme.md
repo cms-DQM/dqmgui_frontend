@@ -214,5 +214,4 @@ If you want to change position (to horizontal or vertical) of displayed plots (w
 22. ~~Display run information~~
 23. ~~Plots loading indication~~
 
-
 ---

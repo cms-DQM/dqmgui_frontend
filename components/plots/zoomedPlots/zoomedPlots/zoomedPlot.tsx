@@ -32,6 +32,9 @@ import { ZoomedPlotMenu } from '../menu';
 import { Plot_portal } from '../../../../containers/display/portal';
 import { store } from '../../../../contexts/leftSideContext';
 import { useRequest } from '../../../../hooks/useRequest';
+import { ErrorMessage } from '../../errorMessage';
+import { CustomDiv } from '../../../styledComponents';
+import { Spinner } from '../../../../containers/search/styledComponents';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -47,6 +50,8 @@ export const ZoomedPlot = ({
   >();
   const [openCustomization, toggleCustomizationMenu] = useState(false);
   const [isPortalWindowOpen, setIsPortalWindowOpen] = React.useState(false);
+  const [imageLoading, setImageLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
 
   params_for_api.customizeProps = customizationParams;
   const plot_url = get_plot_url(params_for_api);
@@ -89,10 +94,9 @@ export const ZoomedPlot = ({
     }, 2000);
   }, [updated_by_not_older_than]);
 
-  const { data, isLoading, errors, cancelSource } = useRequest(source);
-
   return (
     <StyledCol space={2}>
+      {/* Plot opened in a new tab */}
       <Plot_portal
         isPortalWindowOpen={isPortalWindowOpen}
         setIsPortalWindowOpen={setIsPortalWindowOpen}
@@ -121,6 +125,7 @@ export const ZoomedPlot = ({
             />
           </ImageDiv>
         </StyledPlotRow>
+        {/* Plot opened in a new tab */}
       </Plot_portal>
       <Customization
         plot_name={selected_plot.name}
@@ -145,17 +150,36 @@ export const ZoomedPlot = ({
             onClick={() => removePlotFromRightSide(query, selected_plot)}
           />
         </Column>
-        <ImageDiv
-          id={selected_plot.name}
-          width={params_for_api.width}
-          height={params_for_api.height}
-        >
-          <Image
-            src={source}
+        {imageError ? (
+          <ErrorMessage />
+        ) : (
+          <ImageDiv
+            alignitems="center"
+            id={selected_plot.name}
             width={params_for_api.width}
             height={params_for_api.height}
-          />
-        </ImageDiv>
+            display="flex"
+          >
+            {!imageError && (
+              <Image
+                onLoad={() => setImageLoading(false)}
+                alt={selected_plot.name}
+                src={source}
+                onError={() => {
+                  setImageError(true);
+                  setImageLoading(false);
+                }}
+                width={params_for_api.width}
+                height={params_for_api.height}
+              />
+            )}
+            {imageLoading && (
+              <CustomDiv display="flex" justifycontent="center" width="100%">
+                <Spinner />
+              </CustomDiv>
+            )}
+          </ImageDiv>
+        )}
       </StyledPlotRow>
     </StyledCol>
   );

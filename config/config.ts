@@ -8,9 +8,11 @@ import { get_customize_params, getRunsWithLumisections } from './utils';
 const config: any = {
   development: {
     root_url: 'http://localhost:8081/dqm/dev',
+    title: 'Development',
   },
   production: {
     root_url: 'https://dqm-gui.web.cern.ch/api/dqm/offline',
+    title: 'Offline',
   },
 };
 
@@ -30,6 +32,8 @@ export const functions_config: any = {
 };
 
 export const root_url = config[process.env.NODE_ENV || 'development'].root_url;
+export const service_title =
+  config[process.env.NODE_ENV || 'development'].title;
 
 export const get_folders_and_plots_new_api = (params: ParamsForApiProps) => {
   if (params.plot_search) {

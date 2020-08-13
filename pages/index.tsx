@@ -29,7 +29,7 @@ import {
   changeRouter,
   getChangedQueryParams,
 } from '../containers/display/utils';
-import { functions_config } from '../config/config';
+import { functions_config, service_title } from '../config/config';
 import { LatestRuns } from '../components/latestRuns';
 import { store } from '../contexts/leftSideContext';
 import { RunInfo } from '../components/runInfo';

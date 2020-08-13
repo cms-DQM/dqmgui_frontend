@@ -82,7 +82,6 @@ export const OnSideOverlaidPlots = ({
                 minheight={params_for_api.height}
                 width={params_for_api.width?.toString()}
                 is_plot_selected={isPlotSelected.toString()}
-                // report={plot.properties.report}
               >
                 <PlotNameCol error={get_plot_error(plot).toString()}>
                   {plot.displayedName}
