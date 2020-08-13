@@ -194,22 +194,25 @@ If you want to change position (to horizontal or vertical) of displayed plots (w
 2. ~~Workspaces~~(05/06/2020)
 3. ~~Zoomed plots linkability~~
 4. ~~Browsing by dataset name and run number~~
-5. Services
+5. ~~Services~~
 6. Downloading of ROOT files
-7. Display qtest results (colored plots)
+7. ~~Display qtest results (colored plots)~~
 8. Display server name
 9. Integrate P5 alarm manager
 10. ~~On plot selection (when screen divided to two sides), need to scroll down until selected plot (on the left side list)~~.(30/05/2020)
 11. ~~Fit dataset name in select field.~~
 12. ~~Change style: need to save some space~~.(22/05/2020)
 13. ~~Add clickability on arrows of run number and dataset name browser fields.~~
-14. Data search for overlay could be done in one window for all 4 runs.
+14. ~~Data search for overlay could be done in one window for all 4 runs.~~
 15. Add the most popular options explanation to customize.
 16. ~~Make sure that options, which could be change on a right and left side (when at least one plot is selected), would be around the same.~~ (10/06/2020)
-17. Layouts
+17. ~~Layouts~~
 18. ~~Plots per Lumi~~(18/06/2020)
 19. ~~Horizontal an Vertical plot display~~ (11/06/2020)
 20. ~~Customization for ONE plot~~ (09/06/2020)
 21. ~~Free and combined search~~ (11/06/2020)
+22. ~~Display run information~~
+23. ~~Plots loading indication~~
+
 
 ---
