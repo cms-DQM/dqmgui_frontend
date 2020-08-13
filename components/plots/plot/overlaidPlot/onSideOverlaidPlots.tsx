@@ -1,5 +1,6 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useRouter } from 'next/router';
+import lozad from 'lozad';
 
 import { root_url, functions_config } from '../../../../config/config';
 import {
@@ -25,6 +26,9 @@ import {
   get_plot_error,
 } from '../singlePlot/utils';
 import { store } from '../../../../contexts/leftSideContext';
+import { ErrorMessage } from '../../errorMessage';
+import { CustomDiv } from '../../../styledComponents';
+import { Spinner } from '../../../../containers/search/styledComponents';
 
 interface OnSideOverlaidPlotsProps {
   params_for_api: ParamsForApiProps;
@@ -41,6 +45,8 @@ export const OnSideOverlaidPlots = ({
 }: OnSideOverlaidPlotsProps) => {
   params_for_api.plot_name = plot.name;
   const onsidePlotsURLs: string[] = getOnSideOverlaidPlots(params_for_api);
+  const [imageLoading, setImageLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
 
   const router = useRouter();
   const query: QueryProps = router.query;
@@ -59,6 +65,10 @@ export const OnSideOverlaidPlots = ({
     }, 2000);
   }, [updated_by_not_older_than]);
 
+  //lazy loading for plots
+  const observer = lozad();
+  observer.observe();
+
   return (
     <OnSidePlotsWrapper>
       {onsidePlotsURLs.map((url: string) => {
@@ -72,7 +82,7 @@ export const OnSideOverlaidPlots = ({
                 minheight={params_for_api.height}
                 width={params_for_api.width?.toString()}
                 is_plot_selected={isPlotSelected.toString()}
-                // report={plot.properties.report}
+              // report={plot.properties.report}
               >
                 <PlotNameCol error={get_plot_error(plot).toString()}>
                   {plot.displayedName}
@@ -83,25 +93,42 @@ export const OnSideOverlaidPlots = ({
                       onClick={() => removePlotFromRightSide(query, plot)}
                     />
                   ) : (
-                    <PlusIcon
-                      onClick={async () => {
-                        await addPlotToRightSide(query, plot);
-                        scroll(imageRef);
-                        scrollToBottom(imageRefScrollDown);
-                      }}
-                    />
-                  )}
+                      <PlusIcon
+                        onClick={async () => {
+                          await addPlotToRightSide(query, plot);
+                          scroll(imageRef);
+                          scrollToBottom(imageRefScrollDown);
+                        }}
+                      />
+                    )}
                 </Column>
-                <div
-                  onClick={async () => {
-                    isPlotSelected
-                      ? await removePlotFromRightSide(query, plot)
-                      : await addPlotToRightSide(query, plot);
-                    scroll(imageRef);
-                  }}
-                >
-                  <img alt={plot.name} src={sourceForOnePlot} />
-                </div>
+                {imageError ? (
+                  <ErrorMessage />
+                ) : (
+                    <div
+                      onClick={async () => {
+                        isPlotSelected
+                          ? await removePlotFromRightSide(query, plot)
+                          : await addPlotToRightSide(query, plot);
+                        scroll(imageRef);
+                      }}
+                    >
+                      <img
+                        onLoad={() => setImageLoading(false)}
+                        className="lozad"
+                        alt={plot.name}
+                        data-src={sourceForOnePlot}
+                        onError={() => {
+                          setImageError(true);
+                          setImageLoading(false);
+                        }} />
+                    </div>
+                  )}
+                {imageLoading && (
+                  <CustomDiv display="flex" justifycontent="center" width="100%">
+                    <Spinner />
+                  </CustomDiv>
+                )}
               </StyledPlotRow>
             </StyledCol>
           </div>

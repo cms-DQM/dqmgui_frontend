@@ -96,7 +96,7 @@ const Index: NextPage<FolderPathQuery> = () => {
     if (functions_config.modes.online_mode && errors.length === 0) {
       const interval = setInterval(() => {
         set_not_older_than(() => {
-          // 1 sek is 1000 milisec. we dividing by 10000 and multiply by 10, because we need to
+          // 1 sec is 1000 milisec. we dividing by 10000 and multiply by 10, because we need to
           // have rounded sec. for exmaple: if it is 13, we need to have 10, or 26, we need to have 20 and etc.
           const secounds = Math.round(new Date().getTime() / 10000) * 10;
           return secounds;
@@ -138,15 +138,15 @@ const Index: NextPage<FolderPathQuery> = () => {
                 <ComposedSearch />
               </>
             ) : (
-              <>
-                <Nav
-                  initial_search_run_number={query.search_run_number}
-                  initial_search_dataset_name={query.search_dataset_name}
-                  handler={navigationHandler}
-                  type="top"
-                />
-              </>
-            )
+                <>
+                  <Nav
+                    initial_search_run_number={query.search_run_number}
+                    initial_search_dataset_name={query.search_dataset_name}
+                    handler={navigationHandler}
+                    type="top"
+                  />
+                </>
+              )
           }
         </StyledHeader>
         {query.run_number && query.dataset_name ? (
@@ -166,13 +166,13 @@ const Index: NextPage<FolderPathQuery> = () => {
         ) : functions_config.new_back_end.latest_runs ? (
           <LatestRuns />
         ) : (
-          <NotFoundDivWrapper>
-            <NotFoundDiv noBorder>
-              <ChartIcon />
+                <NotFoundDivWrapper>
+                  <NotFoundDiv noBorder>
+                    <ChartIcon />
               Welcome to DQM GUI
             </NotFoundDiv>
-          </NotFoundDivWrapper>
-        )}
+                </NotFoundDivWrapper>
+              )}
       </StyledLayout>
     </StyledDiv>
   );
