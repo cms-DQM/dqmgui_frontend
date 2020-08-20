@@ -7,3 +7,9 @@ const nextConfig = {
 };
 
 module.exports = withPlugins([[bundleAnalyzer]], nextConfig);
+module.exports = {
+  env: {
+    NEW_BACK_END: process.env.NEW_BACK_END,
+    MODE: process.env.MODE,
+  },
+};

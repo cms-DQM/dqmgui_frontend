@@ -73,7 +73,7 @@ export const ZoomedJSROOTPlot = ({
     <StyledCol space={2}>
       <StyledPlotRow
         isLoading={blink.toString()}
-        animation={functions_config.modes.online_mode.toString()}
+        animation={(functions_config.mode === 'ONLINE').toString()}
         minheight={params_for_api.height}
         width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}

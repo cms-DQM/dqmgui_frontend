@@ -46,11 +46,7 @@ export const DatasetsBrowser = ({
   }, [query.dataset_name, query.run_number, datasets]);
 
   return (
-    <Row
-      justify="center"
-      align="middle"
-      style={{ width: selectorWidth ? selectorWidth : '' }}
-    >
+    <Row justify="center" align="middle">
       {!withoutArrows && (
         <Col>
           <Button
@@ -80,7 +76,7 @@ export const DatasetsBrowser = ({
             dropdownMatchSelectWidth={false}
             onClick={() => setSelect(!openSelect)}
             open={openSelect}
-            width={selectorWidth ? selectorWidth : `${width}px`}
+            // width={`${width}px`}
             showSearch={true}
           >
             {results_grouped.map((result) => (

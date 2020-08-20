@@ -13,6 +13,7 @@ import {
 import { CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
 import styled from 'styled-components';
 import { QuestionOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined } from '@ant-design/icons';
 
 const { Search } = Input;
 
@@ -325,4 +326,16 @@ export const CutomBadge = styled(Badge)`
   color: #999;
   box-shadow: 0 0 0 1px #d9d9d9 inset;'
 }
+`;
+
+export const SelectedDataCol = styled(Col)`
+  font-weight: bold;
+  font-style: italic;
+`;
+export const RunInfoIcon = styled(InfoCircleOutlined)`
+  color: white;
+  padding: 4px;
+  cursor: pointer;
+  background: ${theme.colors.secondary.main};
+  border-radius: 25px;
 `;

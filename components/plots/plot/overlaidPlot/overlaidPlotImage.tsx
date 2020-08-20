@@ -1,5 +1,6 @@
 import React, { useRef, useContext, useState } from 'react';
 import { useRouter } from 'next/router';
+import lozad from 'lozad';
 
 import { root_url, functions_config } from '../../../../config/config';
 import {
@@ -77,12 +78,16 @@ export const OverlaidPlotImage = ({
     }, 2000);
   }, [updated_by_not_older_than]);
 
+  //lazy loading for plots
+  const observer = lozad();
+  observer.observe();
+
   return (
     <div ref={imageRef}>
       <StyledCol space={2}>
         <StyledPlotRow
           isLoading={blink.toString()}
-          animation={functions_config.modes.online_mode.toString()}
+          animation={(functions_config.mode === 'ONLINE').toString()}
           minheight={params_for_api.height}
           width={params_for_api.width?.toString()}
           is_plot_selected={isPlotSelected.toString()}

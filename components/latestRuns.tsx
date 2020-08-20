@@ -75,7 +75,9 @@ export const LatestRuns = () => {
                   <StyledCol key={run.toString()}>
                     <RunWrapper
                       isLoading={blink.toString()}
-                      animation={functions_config.modes.online_mode.toString()}
+                      animation={(
+                        functions_config.mode === 'ONLINE'
+                      ).toString()}
                       hover="true"
                       onClick={() => changeRouter({ search_run_number: run })}
                     >

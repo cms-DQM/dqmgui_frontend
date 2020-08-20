@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Store } from 'antd/lib/form/interface';
+import lozad from 'lozad';
 import {
   MinusCircleOutlined,
   SettingOutlined,
@@ -101,6 +102,10 @@ export const ZoomedOverlaidPlot = ({
     }, 2000);
   }, [updated_by_not_older_than]);
 
+  //lazy loading for plots
+  const observer = lozad();
+  observer.observe();
+
   return (
     <StyledCol space={2}>
       <Plot_portal
@@ -110,7 +115,7 @@ export const ZoomedOverlaidPlot = ({
       >
         <StyledPlotRow
           isLoading={blink.toString()}
-          animation={functions_config.modes.online_mode.toString()}
+          animation={(functions_config.mode === 'ONLINE').toString()}
           minheight={copy_of_params.height}
           width={copy_of_params.width?.toString()}
           is_plot_selected={true.toString()}
@@ -140,7 +145,7 @@ export const ZoomedOverlaidPlot = ({
       />
       <StyledPlotRow
         isLoading={blink.toString()}
-        animation={functions_config.modes.online_mode.toString()}
+        animation={(functions_config.mode === 'ONLINE').toString()}
         minheight={params_for_api.height}
         width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}
@@ -163,11 +168,12 @@ export const ZoomedOverlaidPlot = ({
             width={params_for_api.width}
             height={params_for_api.height}
           >
-            {!imageError && !imageLoading && (
+            {!imageError && (
               <Image
                 onLoad={() => setImageLoading(false)}
+                className="lozad"
                 alt={selected_plot.name}
-                src={source}
+                data-src={source}
                 onError={() => {
                   setImageError(true);
                   setImageLoading(false);

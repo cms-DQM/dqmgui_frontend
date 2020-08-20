@@ -93,7 +93,7 @@ const Index: NextPage<FolderPathQuery> = () => {
   const [not_older_than, set_not_older_than] = React.useState(current_time);
 
   React.useEffect(() => {
-    if (functions_config.modes.online_mode && errors.length === 0) {
+    if (functions_config.mode === 'ONLINE' && errors.length === 0) {
       const interval = setInterval(() => {
         set_not_older_than(() => {
           // 1 sec is 1000 milisec. we dividing by 10000 and multiply by 10, because we need to

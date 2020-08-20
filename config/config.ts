@@ -7,7 +7,7 @@ import { get_customize_params, getRunsWithLumisections } from './utils';
 
 const config: any = {
   development: {
-    root_url: 'http://localhost:8081/dqm/dev',
+    root_url: 'http://localhost:8081',
     title: 'Development',
   },
   production: {
@@ -18,17 +18,12 @@ const config: any = {
 
 export const functions_config: any = {
   new_back_end: {
-    new_back_end: false,
-    lumisections_on: false,
-    layouts: false,
-    latest_runs: false,
+    new_back_end: process.env.NEW_BACK_END || false,
+    lumisections_on: process.env.NEW_BACK_END || false,
+    layouts: process.env.NEW_BACK_END || false,
+    latest_runs: process.env.NEW_BACK_END || false,
   },
-  modes: {
-    online_mode: false,
-    offline_mode: false,
-    dev_mode: false,
-    relVal_mode: false,
-  },
+  mode: process.env.MODE || 'OFFLINE',
 };
 
 export const root_url = config[process.env.NODE_ENV || 'development'].root_url;
@@ -130,7 +125,7 @@ export const getLumisections = (params: LumisectionRequestProps) =>
   `/api/v1/samples?run=${params.run_number}&dataset=${
     params.dataset_name
   }&lumi=${params.lumi}${
-    functions_config.modes.online_mode && params.notOlderThan
+    functions_config.mode === 'ONLINE' && params.notOlderThan
       ? `&notOlderThan=${params.notOlderThan}`
       : ''
   }`;

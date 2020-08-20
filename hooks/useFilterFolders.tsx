@@ -42,7 +42,7 @@ export const useFilterFolders = (
     current_api,
     {},
     [updated_by_not_older_than],
-    functions_config.modes.online_mode
+    functions_config.mode.onlineode
   );
 
   const data_get_by_folder_run_dataset_update = useRequest(current_api, {}, [
