@@ -91,7 +91,6 @@ export const RunBrowser = ({
                 }}
                 showSearch={true}
                 open={openSelect}
-                width={selectorWidth ? selectorWidth : `${width}px`}
               >
                 {runNumbers &&
                   runNumbers.map((run: any) => {

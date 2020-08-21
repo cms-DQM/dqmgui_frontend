@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Store } from 'antd/lib/form/interface';
+import lozad from 'lozad';
 import {
   MinusCircleOutlined,
   SettingOutlined,
@@ -35,10 +36,10 @@ import {
 import { ZoomedPlotMenu } from '../menu';
 import { Customization } from '../../../customization';
 import { Plot_portal } from '../../../../containers/display/portal';
-import { store } from '../../../../contexts/leftSideContext';
 import { Spinner } from '../../../../containers/search/styledComponents';
 import { CustomDiv } from '../../../styledComponents';
 import { ErrorMessage } from '../../errorMessage';
+import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -88,18 +89,11 @@ export const ZoomedOverlaidPlot = ({
   const zoomed_plot_url = get_plot_source(copy_of_params);
   const zoomed_source = `${zoomed_plot_url}`;
 
-  const { updated_by_not_older_than } = React.useContext(store);
+  const { blink } = useBlinkOnUpdate();
 
-  const [blink, set_blink] = React.useState(updated_by_not_older_than);
-  React.useEffect(() => {
-    //timeouts in order to get longer and more visible animation
-    setTimeout(() => {
-      set_blink(true);
-    }, 0);
-    setTimeout(() => {
-      set_blink(false);
-    }, 2000);
-  }, [updated_by_not_older_than]);
+  //lazy loading for plots
+  const observer = lozad();
+  observer.observe();
 
   return (
     <StyledCol space={2}>
@@ -110,7 +104,7 @@ export const ZoomedOverlaidPlot = ({
       >
         <StyledPlotRow
           isLoading={blink.toString()}
-          animation={functions_config.modes.online_mode.toString()}
+          animation={(functions_config.mode === 'ONLINE').toString()}
           minheight={copy_of_params.height}
           width={copy_of_params.width?.toString()}
           is_plot_selected={true.toString()}
@@ -140,7 +134,7 @@ export const ZoomedOverlaidPlot = ({
       />
       <StyledPlotRow
         isLoading={blink.toString()}
-        animation={functions_config.modes.online_mode.toString()}
+        animation={(functions_config.mode === 'ONLINE').toString()}
         minheight={params_for_api.height}
         width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}
@@ -163,11 +157,12 @@ export const ZoomedOverlaidPlot = ({
             width={params_for_api.width}
             height={params_for_api.height}
           >
-            {!imageError && !imageLoading && (
+            {!imageError && (
               <Image
                 onLoad={() => setImageLoading(false)}
+                className="lozad"
                 alt={selected_plot.name}
-                src={source}
+                data-src={source}
                 onError={() => {
                   setImageError(true);
                   setImageLoading(false);

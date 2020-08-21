@@ -29,6 +29,7 @@ import { store } from '../../../../contexts/leftSideContext';
 import { ErrorMessage } from '../../errorMessage';
 import { CustomDiv } from '../../../styledComponents';
 import { Spinner } from '../../../../containers/search/styledComponents';
+import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 
 interface OnSideOverlaidPlotsProps {
   params_for_api: ParamsForApiProps;
@@ -52,18 +53,7 @@ export const OnSideOverlaidPlots = ({
   const query: QueryProps = router.query;
   const imageRef = useRef(null);
 
-  const { updated_by_not_older_than } = React.useContext(store);
-
-  const [blink, set_blink] = React.useState(updated_by_not_older_than);
-  React.useEffect(() => {
-    //timeouts in order to get longer and more visible animation
-    setTimeout(() => {
-      set_blink(true);
-    }, 0);
-    setTimeout(() => {
-      set_blink(false);
-    }, 2000);
-  }, [updated_by_not_older_than]);
+  const { blink } = useBlinkOnUpdate();
 
   //lazy loading for plots
   const observer = lozad();
@@ -78,7 +68,7 @@ export const OnSideOverlaidPlots = ({
             <StyledCol space={2} key={url}>
               <StyledPlotRow
                 isLoading={blink.toString()}
-                animation={functions_config.modes.online_mode.toString()}
+                animation={(functions_config.mode === 'ONLINE').toString()}
                 minheight={params_for_api.height}
                 width={params_for_api.width?.toString()}
                 is_plot_selected={isPlotSelected.toString()}

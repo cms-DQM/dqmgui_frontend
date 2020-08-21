@@ -1,5 +1,6 @@
 import React, { useRef, useContext, useState } from 'react';
 import { useRouter } from 'next/router';
+import lozad from 'lozad';
 
 import { root_url, functions_config } from '../../../../config/config';
 import {
@@ -30,6 +31,7 @@ import { store } from '../../../../contexts/leftSideContext';
 import { CustomDiv } from '../../../styledComponents';
 import { Spinner } from '../../../../containers/search/styledComponents';
 import { ErrorMessage } from '../../errorMessage';
+import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 
 interface OverlaidPlotImageProps {
   params_for_api: ParamsForApiProps;
@@ -63,26 +65,18 @@ export const OverlaidPlotImage = ({
   const query: QueryProps = router.query;
 
   const imageRef = useRef(null);
+  const { blink } = useBlinkOnUpdate();
 
-  const { updated_by_not_older_than } = React.useContext(store);
-
-  const [blink, set_blink] = React.useState(updated_by_not_older_than);
-  React.useEffect(() => {
-    //timeouts in order to get longer and more visible animation
-    setTimeout(() => {
-      set_blink(true);
-    }, 0);
-    setTimeout(() => {
-      set_blink(false);
-    }, 2000);
-  }, [updated_by_not_older_than]);
+  //lazy loading for plots
+  const observer = lozad();
+  observer.observe();
 
   return (
     <div ref={imageRef}>
       <StyledCol space={2}>
         <StyledPlotRow
           isLoading={blink.toString()}
-          animation={functions_config.modes.online_mode.toString()}
+          animation={(functions_config.mode === 'ONLINE').toString()}
           minheight={params_for_api.height}
           width={params_for_api.width?.toString()}
           is_plot_selected={isPlotSelected.toString()}

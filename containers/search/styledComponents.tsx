@@ -61,7 +61,7 @@ export const StyledTableRow = styled.tr<{
     props?.expanded && props.expanded === true ? 'bold' : ''};
 `;
 export const StyledTableDatasetColumn = styled.td`
-  width: 80%;
+  width: 70%;
   padding: 8px;
 `;
 export const StyledTableRunColumn = styled.td`

@@ -18,6 +18,7 @@ import { NoResultsFound } from '../containers/search/noResultsFound';
 import { store } from '../contexts/leftSideContext';
 import { useNewer } from '../hooks/useNewer';
 import { functions_config } from '../config/config';
+import { useBlinkOnUpdate } from '../hooks/useBlinkOnUpdate';
 
 export const LatestRuns = () => {
   const { updated_by_not_older_than } = React.useContext(store);
@@ -28,16 +29,7 @@ export const LatestRuns = () => {
     [updated_by_not_older_than]
   );
 
-  const [blink, set_blink] = React.useState(updated_by_not_older_than);
-  React.useEffect(() => {
-    //timeouts in order to get longer and more visible animation
-    setTimeout(() => {
-      set_blink(true);
-    }, 0);
-    setTimeout(() => {
-      set_blink(false);
-    }, 2000);
-  }, [updated_by_not_older_than]);
+  const { blink } = useBlinkOnUpdate();
 
   const data = useNewer(
     data_get_by_mounted.data,
@@ -75,7 +67,9 @@ export const LatestRuns = () => {
                   <StyledCol key={run.toString()}>
                     <RunWrapper
                       isLoading={blink.toString()}
-                      animation={functions_config.modes.online_mode.toString()}
+                      animation={(
+                        functions_config.mode === 'ONLINE'
+                      ).toString()}
                       hover="true"
                       onClick={() => changeRouter({ search_run_number: run })}
                     >

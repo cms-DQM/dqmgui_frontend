@@ -24,10 +24,10 @@ import {
   scrollToBottom,
   get_plot_error,
 } from './utils';
-import { store } from '../../../../contexts/leftSideContext';
 import { Spinner } from '../../../../containers/search/styledComponents';
 import { CustomDiv } from '../../../styledComponents';
 import { ErrorMessage } from '../../errorMessage';
+import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 
 interface PlotProps {
   plot: PlotDataProps;
@@ -51,18 +51,7 @@ export const Plot = ({
   const source = `${root_url}${plot_url}`;
   const imageRef = useRef(null);
 
-  const { updated_by_not_older_than } = React.useContext(store);
-
-  const [blink, set_blink] = React.useState(updated_by_not_older_than);
-  React.useEffect(() => {
-    //timeouts in order to get longer and more visible animation
-    setTimeout(() => {
-      set_blink(true);
-    }, 0);
-    setTimeout(() => {
-      set_blink(false);
-    }, 2000);
-  }, [updated_by_not_older_than]);
+  const { blink } = useBlinkOnUpdate();
 
   useEffect(() => {
     const scrollPlot = () => {
@@ -83,7 +72,7 @@ export const Plot = ({
       <StyledCol space={2}>
         <StyledPlotRow
           isLoading={blink.toString()}
-          animation={functions_config.modes.online_mode.toString()}
+          animation={(functions_config.mode === 'ONLINE').toString()}
           minheight={params_for_api.height}
           width={params_for_api.width?.toString()}
           is_plot_selected={isPlotSelected.toString()}

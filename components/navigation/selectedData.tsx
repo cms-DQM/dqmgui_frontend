@@ -4,7 +4,7 @@ import { Row, Col } from 'antd';
 import { functions_config } from '../../config/config';
 import { LumesectionBrowser } from '../browsing/lumesectionBroweser';
 import Form from 'antd/lib/form/Form';
-import { StyledFormItem } from '../styledComponents';
+import { StyledFormItem, SelectedDataCol } from '../styledComponents';
 import { store } from '../../contexts/leftSideContext';
 import {
   changeRouter,
@@ -69,16 +69,12 @@ export const SelectedData = ({
       <hr />
       <Row>
         <StyledFormItem name={'dataset_name'} label="Dataset name">
-          <Col style={{ fontWeight: 'bold', fontStyle: 'italic' }}>
-            {dataset_name}
-          </Col>
+          <SelectedDataCol>{dataset_name}</SelectedDataCol>
         </StyledFormItem>
       </Row>
       <Row>
         <StyledFormItem name={'run_number'} label="Run number">
-          <Col style={{ fontWeight: 'bold', fontStyle: 'italic' }}>
-            {run_number}
-          </Col>
+          <SelectedDataCol>{run_number}</SelectedDataCol>
         </StyledFormItem>
       </Row>
       {functions_config.new_back_end.lumisections_on && (
