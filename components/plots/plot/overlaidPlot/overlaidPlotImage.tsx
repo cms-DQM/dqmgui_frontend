@@ -65,8 +65,8 @@ export const OverlaidPlotImage = ({
   const query: QueryProps = router.query;
 
   const imageRef = useRef(null);
-  const { blink } = useBlinkOnUpdate()
-  
+  const { blink } = useBlinkOnUpdate();
+
   //lazy loading for plots
   const observer = lozad();
   observer.observe();

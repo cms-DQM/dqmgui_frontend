@@ -48,7 +48,7 @@ const Index: NextPage<FolderPathQuery> = () => {
             query={query}
           />
         </StyledHeader>
-       <ContentSwitching />
+        <ContentSwitching />
       </StyledLayout>
     </StyledDiv>
   );

@@ -14,7 +14,6 @@ export const Plot_portal = ({
   children,
   title,
 }: Plot_portal_props) => {
-
   return (
     <>
       {isPortalWindowOpen && (

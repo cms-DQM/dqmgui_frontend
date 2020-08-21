@@ -11,7 +11,10 @@ import {
   StyledA,
 } from './styledComponents';
 import { Button, Row, Col } from 'antd';
-import { StyledSecondaryButton, CustomCol } from '../../components/styledComponents';
+import {
+  StyledSecondaryButton,
+  CustomCol,
+} from '../../components/styledComponents';
 
 interface SearchResultsInterface {
   dataset: string;
@@ -29,10 +32,7 @@ const Result: FC<SearchResultsInterface> = ({
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <StyledTableRow
-      expanded={expanded}
-      index={index}
-    >
+    <StyledTableRow expanded={expanded} index={index}>
       <StyledTableDatasetColumn>
         <div>
           {dataset}
@@ -53,11 +53,12 @@ const Result: FC<SearchResultsInterface> = ({
         </div>
       </StyledTableDatasetColumn>
       <StyledTableRunColumn>
-        <StyledSecondaryButton
-          onClick={() => setExpanded(!expanded)}>
+        <StyledSecondaryButton onClick={() => setExpanded(!expanded)}>
           <Row>
             <CustomCol space="1">{value.length}</CustomCol>
-            <CustomCol space="1">{expanded ? <UpCircleOutlined /> : <DownCircleOutlined />}</CustomCol>
+            <CustomCol space="1">
+              {expanded ? <UpCircleOutlined /> : <DownCircleOutlined />}
+            </CustomCol>
           </Row>
         </StyledSecondaryButton>
       </StyledTableRunColumn>

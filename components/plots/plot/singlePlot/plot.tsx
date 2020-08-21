@@ -51,7 +51,7 @@ export const Plot = ({
   const source = `${root_url}${plot_url}`;
   const imageRef = useRef(null);
 
-  const { blink } = useBlinkOnUpdate()
+  const { blink } = useBlinkOnUpdate();
 
   useEffect(() => {
     const scrollPlot = () => {

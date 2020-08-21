@@ -137,7 +137,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
     params_for_api.run_number,
   ]);
 
-  const { blink } = useBlinkOnUpdate()
+  const { blink } = useBlinkOnUpdate();
 
   return (
     <StyledCol space={2}>

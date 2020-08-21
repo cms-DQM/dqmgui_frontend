@@ -32,7 +32,7 @@ const MeCount = ({ me_count, children }: MeCountProps) => {
 export const Directories = ({ directories }: FoldersFilter) => {
   const router = useRouter();
   const query: QueryProps = router.query;
-  const { blink } = useBlinkOnUpdate()
+  const { blink } = useBlinkOnUpdate();
 
   return (
     <>

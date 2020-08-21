@@ -29,7 +29,7 @@ export const LatestRuns = () => {
     [updated_by_not_older_than]
   );
 
-  const { blink } = useBlinkOnUpdate()
+  const { blink } = useBlinkOnUpdate();
 
   const data = useNewer(
     data_get_by_mounted.data,

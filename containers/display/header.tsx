@@ -1,17 +1,20 @@
-import * as React from 'react'
+import * as React from 'react';
 
-import { navigationHandler } from '../../utils/pages'
-import { RunInfo } from '../../components/runInfo'
-import { ComposedSearch } from '../../components/navigation/composedSearch'
-import Nav from '../../components/Nav'
-import { QueryProps } from './interfaces'
+import { navigationHandler } from '../../utils/pages';
+import { RunInfo } from '../../components/runInfo';
+import { ComposedSearch } from '../../components/navigation/composedSearch';
+import Nav from '../../components/Nav';
+import { QueryProps } from './interfaces';
 
 interface HeaderProps {
   isDatasetAndRunNumberSelected: boolean;
-  query: QueryProps
+  query: QueryProps;
 }
 
-export const Header = ({ isDatasetAndRunNumberSelected, query }: HeaderProps) => {
+export const Header = ({
+  isDatasetAndRunNumberSelected,
+  query,
+}: HeaderProps) => {
   return (
     <>
       {
@@ -24,16 +27,16 @@ export const Header = ({ isDatasetAndRunNumberSelected, query }: HeaderProps) =>
             <ComposedSearch />
           </>
         ) : (
-            <>
-              <Nav
-                initial_search_run_number={query.search_run_number}
-                initial_search_dataset_name={query.search_dataset_name}
-                handler={navigationHandler}
-                type="top"
-              />
-            </>
-          )
+          <>
+            <Nav
+              initial_search_run_number={query.search_run_number}
+              initial_search_dataset_name={query.search_dataset_name}
+              handler={navigationHandler}
+              type="top"
+            />
+          </>
+        )
       }
     </>
-  )
-}
+  );
+};

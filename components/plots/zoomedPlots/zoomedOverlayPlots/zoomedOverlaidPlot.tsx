@@ -89,7 +89,7 @@ export const ZoomedOverlaidPlot = ({
   const zoomed_plot_url = get_plot_source(copy_of_params);
   const zoomed_source = `${zoomed_plot_url}`;
 
-  const { blink } = useBlinkOnUpdate()
+  const { blink } = useBlinkOnUpdate();
 
   //lazy loading for plots
   const observer = lozad();

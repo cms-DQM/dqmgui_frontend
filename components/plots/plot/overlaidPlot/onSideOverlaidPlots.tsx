@@ -52,8 +52,8 @@ export const OnSideOverlaidPlots = ({
   const router = useRouter();
   const query: QueryProps = router.query;
   const imageRef = useRef(null);
-  
-  const { blink } = useBlinkOnUpdate()
+
+  const { blink } = useBlinkOnUpdate();
 
   //lazy loading for plots
   const observer = lozad();

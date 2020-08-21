@@ -59,7 +59,7 @@ export const ZoomedJSROOTPlot = ({
     }
   }, [data, params_for_api.lumi, updated_by_not_older_than]);
 
-  const { blink } = useBlinkOnUpdate()
+  const { blink } = useBlinkOnUpdate();
 
   return (
     <StyledCol space={2}>

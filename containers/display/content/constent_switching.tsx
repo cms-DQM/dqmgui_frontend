@@ -1,11 +1,15 @@
-import * as React from 'react'
+import * as React from 'react';
 import { useRouter } from 'next/router';
 
 import { QueryProps } from '../interfaces';
 import FoldersAndPlots from './folders_and_plots_content';
 import { useSearch } from '../../../hooks/useSearch';
 import SearchResults from '../../search/SearchResults';
-import { NotFoundDivWrapper, ChartIcon, NotFoundDiv } from '../../search/styledComponents';
+import {
+  NotFoundDivWrapper,
+  ChartIcon,
+  NotFoundDiv,
+} from '../../search/styledComponents';
 import { seperateRunAndLumiInSearch } from '../../../components/utils';
 import { changeRouter, getChangedQueryParams } from '../utils';
 import { workspaces } from '../../../workspaces/offline';
@@ -62,30 +66,32 @@ export const ContentSwitching = () => {
     );
   };
 
-
   if (query.dataset_name && query.run_number) {
-    return <FoldersAndPlots
-      run_number={query.run_number || ''}
-      dataset_name={query.dataset_name || ''}
-      folder_path={query.folder_path || ''}
-    />
+    return (
+      <FoldersAndPlots
+        run_number={query.run_number || ''}
+        dataset_name={query.dataset_name || ''}
+        folder_path={query.folder_path || ''}
+      />
+    );
+  } else if (searching) {
+    return (
+      <SearchResults
+        isLoading={isLoading}
+        results_grouped={results_grouped}
+        handler={serchResultsHandler}
+        errors={errors}
+      />
+    );
+  } else if (functions_config.new_back_end.latest_runs) {
+    return <LatestRuns />;
   }
-  else if (searching) {
-    return <SearchResults
-      isLoading={isLoading}
-      results_grouped={results_grouped}
-      handler={serchResultsHandler}
-      errors={errors}
-    />
-  }
-  else if (functions_config.new_back_end.latest_runs) {
-    return (<LatestRuns />)
-  }
-  return <NotFoundDivWrapper>
-    <NotFoundDiv noBorder>
-      <ChartIcon />
-             Welcome to DQM GUI
-           </NotFoundDiv>
-  </NotFoundDivWrapper>
-
-}
+  return (
+    <NotFoundDivWrapper>
+      <NotFoundDiv noBorder>
+        <ChartIcon />
+        Welcome to DQM GUI
+      </NotFoundDiv>
+    </NotFoundDivWrapper>
+  );
+};
