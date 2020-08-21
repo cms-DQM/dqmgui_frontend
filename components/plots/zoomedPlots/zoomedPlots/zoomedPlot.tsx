@@ -31,10 +31,10 @@ import {
 import { Customization } from '../../../customization';
 import { ZoomedPlotMenu } from '../menu';
 import { Plot_portal } from '../../../../containers/display/portal';
-import { store } from '../../../../contexts/leftSideContext';
 import { ErrorMessage } from '../../errorMessage';
 import { CustomDiv } from '../../../styledComponents';
 import { Spinner } from '../../../../containers/search/styledComponents';
+import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -81,18 +81,7 @@ export const ZoomedPlot = ({
     },
   ];
 
-  const { updated_by_not_older_than } = React.useContext(store);
-
-  const [blink, set_blink] = React.useState(updated_by_not_older_than);
-  React.useEffect(() => {
-    //timeouts in order to get longer and more visible animation
-    setTimeout(() => {
-      set_blink(true);
-    }, 0);
-    setTimeout(() => {
-      set_blink(false);
-    }, 2000);
-  }, [updated_by_not_older_than]);
+  const { blink } = useBlinkOnUpdate()
 
   //lazy loading for plots
   const observer = lozad();
@@ -129,8 +118,8 @@ export const ZoomedPlot = ({
             />
           </ImageDiv>
         </StyledPlotRow>
-        {/* Plot opened in a new tab */}
       </Plot_portal>
+      {/* Plot opened in a new tab */}
       <Customization
         plot_name={selected_plot.name}
         open={openCustomization}
@@ -157,34 +146,34 @@ export const ZoomedPlot = ({
         {imageError ? (
           <ErrorMessage />
         ) : (
-          <ImageDiv
-            alignitems="center"
-            id={selected_plot.name}
-            width={params_for_api.width}
-            height={params_for_api.height}
-            display="flex"
-          >
-            {!imageError && (
-              <Image
-                onLoad={() => setImageLoading(false)}
-                alt={selected_plot.name}
-                data-src={source}
-                className="lozad"
-                onError={() => {
-                  setImageError(true);
-                  setImageLoading(false);
-                }}
-                width={params_for_api.width}
-                height={params_for_api.height}
-              />
-            )}
-            {imageLoading && (
-              <CustomDiv display="flex" justifycontent="center" width="100%">
-                <Spinner />
-              </CustomDiv>
-            )}
-          </ImageDiv>
-        )}
+            <ImageDiv
+              alignitems="center"
+              id={selected_plot.name}
+              width={params_for_api.width}
+              height={params_for_api.height}
+              display="flex"
+            >
+              {!imageError && (
+                <Image
+                  onLoad={() => setImageLoading(false)}
+                  alt={selected_plot.name}
+                  data-src={source}
+                  className="lozad"
+                  onError={() => {
+                    setImageError(true);
+                    setImageLoading(false);
+                  }}
+                  width={params_for_api.width}
+                  height={params_for_api.height}
+                />
+              )}
+              {imageLoading && (
+                <CustomDiv display="flex" justifycontent="center" width="100%">
+                  <Spinner />
+                </CustomDiv>
+              )}
+            </ImageDiv>
+          )}
       </StyledPlotRow>
     </StyledCol>
   );

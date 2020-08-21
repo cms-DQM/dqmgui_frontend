@@ -25,6 +25,7 @@ import {
 } from '../../plot/singlePlot/utils';
 import { Button } from 'antd';
 import { store } from '../../../../contexts/leftSideContext';
+import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;
@@ -136,16 +137,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
     params_for_api.run_number,
   ]);
 
-  const [blink, set_blink] = React.useState(updated_by_not_older_than);
-  React.useEffect(() => {
-    //timeouts in order to get longer and more visible animation
-    setTimeout(() => {
-      set_blink(true);
-    }, 0);
-    setTimeout(() => {
-      set_blink(false);
-    }, 2000);
-  }, [updated_by_not_older_than]);
+  const { blink } = useBlinkOnUpdate()
 
   return (
     <StyledCol space={2}>

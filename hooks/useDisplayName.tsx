@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
-import cleanDeep from 'clean-deep';
 
-import { PlotInterface } from '../containers/display/content';
+import { PlotInterface } from '../containers/display/content/folders_and_plots_content';
 import { getNameAndDirectoriesFromDir } from '../containers/display/utils';
 import { PlotDataProps, QueryProps } from '../containers/display/interfaces';
 import { useRouter } from 'next/router';

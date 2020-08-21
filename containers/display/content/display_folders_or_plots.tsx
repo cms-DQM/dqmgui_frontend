@@ -1,23 +1,22 @@
 import * as React from 'react';
 import { Row } from 'antd';
 
-import { functions_config } from '../../config/config';
-import { Wrapper } from './styledComponents';
+import { Wrapper } from '../styledComponents';
 import {
   SpinnerWrapper,
   Spinner,
   StyledAlert,
-} from '../search/styledComponents';
-import { NoResultsFound } from '../search/noResultsFound';
-import { CustomRow } from '../../components/styledComponents';
+} from '../../search/styledComponents';
+import { NoResultsFound } from '../../search/noResultsFound';
+import { CustomRow } from '../../../components/styledComponents';
 import { Directories } from './directories';
-import { LeftSidePlots } from '../../components/plots/plot';
+import { LeftSidePlots } from '../../../components/plots/plot';
 import {
   PlotDataProps,
   PlotsGroupedByLayoutsInterface,
   OptionProps,
   QueryProps,
-} from './interfaces';
+} from '../interfaces';
 
 interface ContentProps {
   plots: PlotDataProps[];

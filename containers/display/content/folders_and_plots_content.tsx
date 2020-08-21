@@ -4,20 +4,19 @@ import { SettingOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import { chain } from 'lodash';
 
-import { PlotDataProps, QueryProps } from './interfaces';
-import { ZoomedPlots } from '../../components/plots/zoomedPlots';
-import { ViewDetailsMenu } from '../../components/viewDetailsMenu';
-import { DivWrapper, ZoomedPlotsWrapper } from './styledComponents';
+import { PlotDataProps, QueryProps } from '../interfaces';
+import { ZoomedPlots } from '../../../components/plots/zoomedPlots';
+import { ViewDetailsMenu } from '../../../components/viewDetailsMenu';
+import { DivWrapper, ZoomedPlotsWrapper } from '../styledComponents';
 import { FolderPath } from './folderPath';
-import { getSelectedPlots } from './utils';
+import { getSelectedPlots } from '../utils';
 import {
   CustomRow,
   StyledSecondaryButton,
-} from '../../components/styledComponents';
-import { useFilterFolders } from '../../hooks/useFilterFolders';
-import { SettingsModal } from '../../components/settings';
-import { store } from '../../contexts/leftSideContext';
-import { Shortucts } from '../../components/shortcuts/shortcut_tag';
+} from '../../../components/styledComponents';
+import { useFilterFolders } from '../../../hooks/useFilterFolders';
+import { SettingsModal } from '../../../components/settings';
+import { store } from '../../../contexts/leftSideContext';
 import { DisplayFordersOrPlots } from './display_folders_or_plots';
 
 export interface PlotInterface {
@@ -97,7 +96,6 @@ const Content: FC<FolderProps> = ({
             Settings
           </StyledSecondaryButton>
         </Col>
-        {/* <Shortucts query={query} /> */}
       </CustomRow>
       <CustomRow width="100%">
         {plots.length > 0 && (

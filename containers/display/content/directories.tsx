@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
-import { QueryProps, DirectoryInterface } from './interfaces';
+import { QueryProps, DirectoryInterface } from '../interfaces';
 import { Col } from 'antd';
 
-import { DirecotryWrapper, StyledA, Icon } from './styledComponents';
+import { DirecotryWrapper, StyledA, Icon } from '../styledComponents';
 import {
   getFolderPathToQuery,
   changeRouter,
   getChangedQueryParams,
-} from './utils';
-import { CustomDiv, CutomBadge } from '../../components/styledComponents';
-import { store } from '../../contexts/leftSideContext';
-import { functions_config } from '../../config/config';
+} from '../utils';
+import { CustomDiv, CutomBadge } from '../../../components/styledComponents';
+import { functions_config } from '../../../config/config';
+import { useBlinkOnUpdate } from '../../../hooks/useBlinkOnUpdate';
 
 interface FoldersFilter {
   directories: DirectoryInterface[];
@@ -32,18 +32,8 @@ const MeCount = ({ me_count, children }: MeCountProps) => {
 export const Directories = ({ directories }: FoldersFilter) => {
   const router = useRouter();
   const query: QueryProps = router.query;
-  const { updated_by_not_older_than } = React.useContext(store);
+  const { blink } = useBlinkOnUpdate()
 
-  const [blink, set_blink] = React.useState(updated_by_not_older_than);
-  React.useEffect(() => {
-    //timeouts in order to get longer and more visible animation
-    setTimeout(() => {
-      set_blink(true);
-    }, 0);
-    setTimeout(() => {
-      set_blink(false);
-    }, 2000);
-  }, [updated_by_not_older_than]);
   return (
     <>
       {directories.map((directory: DirectoryInterface) => (

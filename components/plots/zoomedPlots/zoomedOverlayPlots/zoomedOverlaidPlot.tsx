@@ -36,10 +36,10 @@ import {
 import { ZoomedPlotMenu } from '../menu';
 import { Customization } from '../../../customization';
 import { Plot_portal } from '../../../../containers/display/portal';
-import { store } from '../../../../contexts/leftSideContext';
 import { Spinner } from '../../../../containers/search/styledComponents';
 import { CustomDiv } from '../../../styledComponents';
 import { ErrorMessage } from '../../errorMessage';
+import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -89,18 +89,7 @@ export const ZoomedOverlaidPlot = ({
   const zoomed_plot_url = get_plot_source(copy_of_params);
   const zoomed_source = `${zoomed_plot_url}`;
 
-  const { updated_by_not_older_than } = React.useContext(store);
-
-  const [blink, set_blink] = React.useState(updated_by_not_older_than);
-  React.useEffect(() => {
-    //timeouts in order to get longer and more visible animation
-    setTimeout(() => {
-      set_blink(true);
-    }, 0);
-    setTimeout(() => {
-      set_blink(false);
-    }, 2000);
-  }, [updated_by_not_older_than]);
+  const { blink } = useBlinkOnUpdate()
 
   //lazy loading for plots
   const observer = lozad();

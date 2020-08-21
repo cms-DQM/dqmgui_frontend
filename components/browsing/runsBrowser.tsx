@@ -91,7 +91,6 @@ export const RunBrowser = ({
                 }}
                 showSearch={true}
                 open={openSelect}
-                // width={isLoading ? `${width}px` : ''}
               >
                 {runNumbers &&
                   runNumbers.map((run: any) => {
@@ -108,8 +107,8 @@ export const RunBrowser = ({
                             <Spin />
                           </OptionParagraph>
                         ) : (
-                          <div onClick={() => setWidth(undefined)}>{run}</div>
-                        )}
+                            <div onClick={() => setWidth(undefined)}>{run}</div>
+                          )}
                       </Option>
                     );
                   })}

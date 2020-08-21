@@ -1,4 +1,5 @@
 import React, { FC, useState } from 'react';
+import { DownCircleOutlined, UpCircleOutlined } from '@ant-design/icons';
 
 import {
   RunsRows,
@@ -9,6 +10,8 @@ import {
   RunWrapper,
   StyledA,
 } from './styledComponents';
+import { Button, Row, Col } from 'antd';
+import { StyledSecondaryButton, CustomCol } from '../../components/styledComponents';
 
 interface SearchResultsInterface {
   dataset: string;
@@ -28,7 +31,6 @@ const Result: FC<SearchResultsInterface> = ({
   return (
     <StyledTableRow
       expanded={expanded}
-      onClick={() => setExpanded(!expanded)}
       index={index}
     >
       <StyledTableDatasetColumn>
@@ -50,7 +52,15 @@ const Result: FC<SearchResultsInterface> = ({
           )}
         </div>
       </StyledTableDatasetColumn>
-      <StyledTableRunColumn>{value.length}</StyledTableRunColumn>
+      <StyledTableRunColumn>
+        <StyledSecondaryButton
+          onClick={() => setExpanded(!expanded)}>
+          <Row>
+            <CustomCol space="1">{value.length}</CustomCol>
+            <CustomCol space="1">{expanded ? <UpCircleOutlined /> : <DownCircleOutlined />}</CustomCol>
+          </Row>
+        </StyledSecondaryButton>
+      </StyledTableRunColumn>
     </StyledTableRow>
   );
 };

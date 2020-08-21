@@ -1,10 +1,9 @@
 import React from 'react';
 import { Breadcrumb } from 'antd';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
 
-import { getFolderPath, changeRouter, getChangedQueryParams } from './utils';
-import { StyledBreadcrumb } from './styledComponents';
+import { getFolderPath, changeRouter, getChangedQueryParams } from '../utils';
+import { StyledBreadcrumb } from '../styledComponents';
 import { ParsedUrlQueryInput } from 'querystring';
 
 interface FolderPathProps {
