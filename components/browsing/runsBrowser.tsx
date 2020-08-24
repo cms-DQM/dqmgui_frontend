@@ -20,33 +20,19 @@ interface RunBrowserProps {
   selectorWidth?: string;
 }
 
-const getRunNumbers = (results_grouped: any[]) => {
-  const runs: string[] = [];
-  results_grouped.forEach((result) => {
-    result.value.forEach((data: any) => {
-      runs.push(data.run.toString());
-    });
-  });
-  return runs;
-};
-
 export const RunBrowser = ({
   query,
   setCurrentRunNumber,
   withoutArrows,
   withoutLabel,
-  selectorWidth,
 }: RunBrowserProps) => {
   const [openSelect, setSelect] = useState(false);
 
-  //seting  run field width to prev. selected run name field width,
-  // because when spinner is shown, field becomes spinner width
-  const [width, setWidth] = useState<string | undefined>();
   const [currentRunNumberIndex, setCurrentRunNumberIndex] = useState<number>(0);
 
   const { results_grouped, isLoading } = useSearch('', query.dataset_name);
 
-  const runNumbers = getRunNumbers(results_grouped);
+  const runNumbers = results_grouped[0] ? results_grouped[0].runs : []
 
   useEffect(() => {
     const query_run_number = query.run_number ? query.run_number : '';
@@ -68,52 +54,41 @@ export const RunBrowser = ({
                 icon={<CaretLeftFilled />}
                 type="link"
                 onClick={() => {
-                  setWidth(undefined);
                   setCurrentRunNumber(runNumbers[currentRunNumberIndex - 1]);
                 }}
               />
             </Col>
           )}
           <Col>
-            <div
-              ref={(refElem: HTMLDivElement) => {
-                if (refElem && !openSelect) {
-                  setWidth(refElem.clientWidth.toString());
-                }
+            <StyledSelect
+              onClick={() => setSelect(!openSelect)}
+              value={runNumbers[currentRunNumberIndex]}
+              onChange={(e: any) => {
+                setCurrentRunNumber(e);
+                setSelect(!openSelect);
               }}
+              showSearch={true}
+              open={openSelect}
             >
-              <StyledSelect
-                onClick={() => setSelect(!openSelect)}
-                value={runNumbers[currentRunNumberIndex]}
-                onChange={(e: any) => {
-                  setCurrentRunNumber(e);
-                  setSelect(!openSelect);
-                }}
-                showSearch={true}
-                open={openSelect}
-              >
-                {runNumbers &&
-                  runNumbers.map((run: any) => {
-                    return (
-                      <Option
-                        onClick={() => {
-                          setSelect(false);
-                        }}
-                        value={run}
-                        key={run.toString()}
-                      >
-                        {isLoading ? (
-                          <OptionParagraph>
-                            <Spin />
-                          </OptionParagraph>
-                        ) : (
-                          <div onClick={() => setWidth(undefined)}>{run}</div>
-                        )}
-                      </Option>
-                    );
-                  })}
-              </StyledSelect>
-            </div>
+              {runNumbers &&
+                runNumbers.map((run: any) => {
+                  return (
+                    <Option
+                      onClick={() => {
+                        setSelect(false);
+                      }}
+                      value={run}
+                      key={run.toString()}
+                    >
+                      {isLoading && (
+                        <OptionParagraph>
+                          <Spin />
+                        </OptionParagraph>
+                      )}
+                    </Option>
+                  );
+                })}
+            </StyledSelect>
           </Col>
           {!withoutArrows && (
             <Col>
@@ -122,7 +97,6 @@ export const RunBrowser = ({
                 disabled={!runNumbers[currentRunNumberIndex + 1]}
                 type="link"
                 onClick={() => {
-                  setWidth(undefined);
                   setCurrentRunNumber(runNumbers[currentRunNumberIndex + 1]);
                 }}
               />
