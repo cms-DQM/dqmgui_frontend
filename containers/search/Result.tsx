@@ -18,7 +18,7 @@ import {
 
 interface SearchResultsInterface {
   dataset: string;
-  value: any[];
+  runs: string[];
   handler(run: string, dataset: string): any;
   index: number;
 }
@@ -26,7 +26,7 @@ interface SearchResultsInterface {
 const Result: FC<SearchResultsInterface> = ({
   index,
   dataset,
-  value,
+  runs,
   handler,
 }) => {
   const [expanded, setExpanded] = useState(false);
@@ -38,7 +38,7 @@ const Result: FC<SearchResultsInterface> = ({
           {dataset}
           {expanded && (
             <RunsRows>
-              {value.map(({ run }: any) => (
+              {runs.map(run => (
                 <StyledCol key={run}>
                   <RunWrapper
                     onClick={() => handler(run, dataset)}
@@ -55,7 +55,7 @@ const Result: FC<SearchResultsInterface> = ({
       <StyledTableRunColumn>
         <StyledSecondaryButton onClick={() => setExpanded(!expanded)}>
           <Row>
-            <CustomCol space="1">{value.length}</CustomCol>
+            <CustomCol space="1">{runs.length}</CustomCol>
             <CustomCol space="1">
               {expanded ? <UpCircleOutlined /> : <DownCircleOutlined />}
             </CustomCol>

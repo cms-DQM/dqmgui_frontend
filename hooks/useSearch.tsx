@@ -51,7 +51,12 @@ export const useSearch = (
   const results_grouped = _.chain(data_get_by_api)
     .sortBy('dataset')
     .groupBy('dataset')
-    .map((value, key) => ({ dataset: key, value }))
+    .map((value, key) => {
+      const runs = value.map((set: any) => set.run)
+      runs.sort((a, b) => a - b)
+      return { dataset: key, runs: runs }
+    })
     .value();
+
   return { results_grouped, searching, isLoading, errors };
 };

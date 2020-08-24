@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "NEW_BACK_END=true next",
+    "dev": "NEW_BACK_END=false next",
     "build": "next build",
     "start": "next start",
     "static_export_old_back_end": "next build && next export",
