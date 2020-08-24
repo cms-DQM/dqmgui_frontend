@@ -7,7 +7,7 @@ import { get_customize_params, getRunsWithLumisections } from './utils';
 
 const config: any = {
   development: {
-    root_url: 'http://localhost:8081/dqm/dev',
+    root_url: 'http://localhost:8081',
     title: 'Development',
   },
   production: {
@@ -16,13 +16,17 @@ const config: any = {
   },
 };
 
-const env_variable = process.env.NEW_BACK_END === 'true'
+const new_env_variable = process.env.NEW_BACK_END === 'true'
+const layout_env_variable = process.env.LAYOUTS === 'true'
+const latest_runs_env_variable = process.env.LATEST_RUNS === 'true'
+const lumis_env_variable = process.env.LUMIS === 'true'
+
 export const functions_config: any = {
   new_back_end: {
-    new_back_end: env_variable || false,
-    lumisections_on: env_variable || false,
-    layouts: env_variable || false,
-    latest_runs: env_variable || false,
+    new_back_end: new_env_variable || false,
+    lumisections_on: lumis_env_variable && new_env_variable  || false,
+    layouts: layout_env_variable && new_env_variable || false,
+    latest_runs: latest_runs_env_variable && new_env_variable  || false,
   },
   mode: process.env.MODE || 'OFFLINE',
 };
