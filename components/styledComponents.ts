@@ -305,20 +305,6 @@ export const CustomForm = styled(Form)<{
     props.justifycontent ? props.justifycontent : ''};
   width: ${(props) => (props.width ? props.width : '')};
 `;
-export const ShortcutTagDiv = styled.div<{ background?: string }>`
-  border-radius: 12px;
-  padding: 4px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 0.8rem;
-  pointer: true;
-  background: ${(props) =>
-    props.background === 'true'
-      ? theme.colors.secondary.main
-      : theme.colors.primary.main};
-  color: ${theme.colors.common.white};
-`;
 
 export const CutomBadge = styled(Badge)`
 .ant-badge-count {
