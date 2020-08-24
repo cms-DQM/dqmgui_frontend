@@ -5,7 +5,7 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 export const info = (disabled: boolean) => {
   if (disabled) {
     return (
-      <Tooltip title="At least on plot must be selected">
+      <Tooltip title="At least one plot must be selected">
         <InfoCircleOutlined />
       </Tooltip>
     );
