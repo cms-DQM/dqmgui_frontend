@@ -325,3 +325,14 @@ export const RunInfoIcon = styled(InfoCircleOutlined)`
   background: ${theme.colors.secondary.main};
   border-radius: 25px;
 `;
+
+export const LiveButton = styled(Button)`
+  border-radius: 5px;
+  background: ${theme.colors.notification.success};
+  color: ${theme.colors.common.white};
+  text-transform: uppercase;
+  &:hover{
+    background: ${theme.colors.notification.darkSuccess};
+    color: ${theme.colors.common.white};
+  }
+`

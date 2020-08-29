@@ -23,6 +23,7 @@ export const theme = {
     notification: {
       error: '#d01f1f',
       success: '#41c12d',
+      darkSuccess: '#3eb02c',
       warning: '#f08e13',
     },
   },
