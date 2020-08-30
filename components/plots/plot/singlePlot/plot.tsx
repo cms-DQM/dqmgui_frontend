@@ -123,7 +123,7 @@ export const Plot = ({
                 }
               </div>
             )}
-          {blink && (
+          {imageLoading && (
             <CustomDiv display="flex" justifycontent="center" width="100%">
               <Spinner />
             </CustomDiv>
