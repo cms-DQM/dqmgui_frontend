@@ -24,9 +24,9 @@ import { CustomDiv } from './styledComponents';
 
 export const LatestRuns = () => {
   const { updated_by_not_older_than } = React.useContext(store);
-  const data_get_by_mounted = useRequest(get_the_latest_runs(), {}, []);
+  const data_get_by_mount = useRequest(get_the_latest_runs(updated_by_not_older_than), {}, []);
   const data_get_by_not_older_than_update = useRequest(
-    get_the_latest_runs(),
+    get_the_latest_runs(updated_by_not_older_than),
     {},
     [updated_by_not_older_than]
   );
@@ -34,15 +34,15 @@ export const LatestRuns = () => {
   const { blink } = useBlinkOnUpdate();
 
   const data = useNewer(
-    data_get_by_mounted.data,
+    data_get_by_mount.data,
     data_get_by_not_older_than_update.data
   );
   const errors = useNewer(
-    data_get_by_mounted.errors,
+    data_get_by_mount.errors,
     data_get_by_not_older_than_update.errors
   );
-  const isLoading = data_get_by_mounted.isLoading;
-  const latest_runs = data && data.runs;
+  const isLoading = data_get_by_mount.isLoading;
+  const latest_runs = data && data.runs.sort((a: number, b: number) => a - b);
 
   return (
     <>
@@ -79,8 +79,7 @@ export const LatestRuns = () => {
                               functions_config.mode === 'ONLINE'
                             ).toString()}
                             hover="true"
-                            onClick={() => changeRouter({ search_run_number: run })}
-                          >
+                            onClick={() => changeRouter({ search_run_number: run })}>
                             <StyledA>{run}</StyledA>
                           </RunWrapper>
                         </StyledCol>

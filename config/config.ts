@@ -135,4 +135,4 @@ export const getLumisections = (params: LumisectionRequestProps) =>
       : ''
   }`;
 
-export const get_the_latest_runs = () => `/api/v1/latest_runs`;
+export const get_the_latest_runs = (notOlderThan: string) => `/api/v1/latest_runs?notOlderThan=${notOlderThan}`;

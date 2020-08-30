@@ -14,32 +14,10 @@ import { seperateRunAndLumiInSearch } from '../../../components/utils';
 import { changeRouter, getChangedQueryParams } from '../utils';
 import { workspaces } from '../../../workspaces/offline';
 import { functions_config } from '../../../config/config';
-import { store } from '../../../contexts/leftSideContext';
 import { LatestRuns } from '../../../components/latestRuns';
+import { useUpdateLiveMode } from '../../../hooks/useUpdateInLiveMode';
 
 export const ContentSwitching = () => {
-  const { set_updated_by_not_older_than } = React.useContext(store);
-  const current_time = new Date().getTime();
-  const [not_older_than, set_not_older_than] = React.useState(current_time);
-
-  //content update if mode is ONLINE
-  React.useEffect(() => {
-    if (functions_config.mode === 'ONLINE' && errors.length === 0) {
-      const interval = setInterval(() => {
-        set_not_older_than(() => {
-          // 1 sec is 1000 milisec. we dividing by 10000 and multiply by 10, because we need to
-          // have rounded sec. for exmaple: if it is 13, we need to have 10, or 26, we need to have 20 and etc.
-          const seconds = Math.round(new Date().getTime() / 10000) * 10;
-          return seconds;
-        });
-      }, 10000);
-    }
-  }, []);
-
-  React.useEffect(() => {
-    set_updated_by_not_older_than(not_older_than);
-  }, [not_older_than]);
-
   const router = useRouter();
   const query: QueryProps = router.query;
 
@@ -47,6 +25,7 @@ export const ContentSwitching = () => {
     query.search_run_number,
     query.search_dataset_name
   );
+  useUpdateLiveMode(errors);
 
   //serchResultsHandler when you selecting run, dataset from search results
   const serchResultsHandler = (run: string, dataset: string) => {
