@@ -22,7 +22,6 @@ export const useUpdateLiveMode = (errors: any[]) => {
   const live_mode = query.run_number === "0" && query.dataset_name === "/Global/Online/ALL" && online_mode && errors.length === 0
   //not_older_than seconds should be reachtable globaly 
   const { set_updated_by_not_older_than } = React.useContext(store);
-  console.log(!latest_runs_list , !live_mode , data_is_selected)
   React.useEffect(() => {
     const interval = setInterval(() => {
       if (latest_runs_list || live_mode) {
