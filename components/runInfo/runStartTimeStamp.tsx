@@ -8,6 +8,7 @@ import { store } from '../../contexts/leftSideContext';
 import { FormatParamsForAPI } from '../plots/plot/singlePlot/utils';
 import { CustomCol, CustomRow } from '../styledComponents';
 import { Spinner } from '../../containers/search/styledComponents';
+import { useBlinkOnUpdate } from '../../hooks/useBlinkOnUpdate';
 
 interface InfoProps {
   value: string;
@@ -29,6 +30,7 @@ export const RunInfoItem = ({ query, info }: RunInfoProps) => {
     info.value,
     '/HLT/EventInfo'
   );
+  
   const { data, isLoading } = useRequest(get_jroot_plot(params_for_api), {}, [
     query.dataset_name,
     query.run_number,

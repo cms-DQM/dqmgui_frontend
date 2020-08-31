@@ -45,17 +45,12 @@ export const useUpdateLiveMode = () => {
         });
       }
     }, 10000);
+
     if (!latest_runs_list && !live_mode && data_is_selected) {
       clearInterval(interval);
     }
-  }, [
-    query.dataset_name,
-    query.run_number,
-    query.search_dataset_name,
-    query.search_run_number,
-    query.folder_path,
-  ]);
 
+  }, [live_mode, latest_runs_list, query.folder_path, online_mode])
   React.useEffect(() => {
     set_updated_by_not_older_than(not_older_than);
   }, [not_older_than]);

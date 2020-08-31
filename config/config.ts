@@ -124,7 +124,7 @@ export const get_jroot_plot = (params: ParamsForApiProps) =>
     params.dataset_name
   }${params.folders_path}/${encodeURIComponent(
     params.plot_name as string
-  )}?jsroot=true`;
+  )}?jsroot=true;notOlderThan=${params.notOlderThan}`;
 
 export const getLumisections = (params: LumisectionRequestProps) =>
   `/api/v1/samples?run=${params.run_number}&dataset=${
