@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { QueryProps } from '../containers/display/interfaces';
 import { store } from '../contexts/leftSideContext';
 
-export const useUpdateLiveMode = (errors: any[]) => {
+export const useUpdateLiveMode = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
   const current_time = new Date().getTime();
@@ -37,7 +37,7 @@ export const useUpdateLiveMode = (errors: any[]) => {
     if (!latest_runs_list && !live_mode && data_is_selected) {
       clearInterval(interval)
     }
-  }, []);
+  }, [ query.dataset_name, query.run_number, query.search_dataset_name, query.search_run_number, query.folder_path]);
 
   React.useEffect(() => {
     set_updated_by_not_older_than(not_older_than)

@@ -25,7 +25,7 @@ export const ContentSwitching = () => {
     query.search_run_number,
     query.search_dataset_name
   );
-  useUpdateLiveMode(errors);
+  useUpdateLiveMode();
 
   //serchResultsHandler when you selecting run, dataset from search results
   const serchResultsHandler = (run: string, dataset: string) => {
