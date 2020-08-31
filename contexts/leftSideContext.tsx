@@ -34,7 +34,7 @@ export interface LeftSideState {
   rightSideSize: SizeProps;
   JSROOTmode: boolean;
   customizeProps: CustomizeProps;
-  updated_by_not_older_than: boolean;
+  updated_by_not_older_than: number;
 }
 
 export const initialState: any = {
@@ -66,7 +66,7 @@ export const initialState: any = {
     drawopts: '',
     withref: '',
   },
-  updated_by_not_older_than: false,
+  updated_by_not_older_than: NaN,
 };
 
 export interface ActionProps {
