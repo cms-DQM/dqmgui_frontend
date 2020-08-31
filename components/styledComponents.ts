@@ -331,8 +331,8 @@ export const LiveButton = styled(Button)`
   background: ${theme.colors.notification.success};
   color: ${theme.colors.common.white};
   text-transform: uppercase;
-  &:hover{
+  &:hover {
     background: ${theme.colors.notification.darkSuccess};
     color: ${theme.colors.common.white};
   }
-`
+`;

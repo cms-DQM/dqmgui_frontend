@@ -48,10 +48,12 @@ export const Plot = ({
   const [imageError, setImageError] = useState(false);
 
   const plot_url = get_plot_url(params_for_api);
-  const source = `${root_url}${plot_url}`;
   const imageRef = useRef(null);
 
-  const { blink } = useBlinkOnUpdate();
+  const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
+  const [source, setSource] = useState(
+    `${root_url}${plot_url};notOlderThan=${updated_by_not_older_than}`
+  );
 
   useEffect(() => {
     const scrollPlot = () => {
@@ -62,6 +64,13 @@ export const Plot = ({
       scrollPlot();
     }
   }, [isPlotSelected, query.selected_plots]);
+
+  useEffect(() => {
+    setSource(
+      `${root_url}${plot_url};notOlderThan=${updated_by_not_older_than}`
+    );
+    setImageLoading(blink);
+  }, [blink]);
 
   //lazy loading for plots
   const observer = lozad();
@@ -104,6 +113,7 @@ export const Plot = ({
             >
               {!imageError && (
                 <img
+                  key={source}
                   onLoad={() => setImageLoading(false)}
                   className="lozad"
                   alt={plot.name}

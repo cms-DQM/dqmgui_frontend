@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { store } from '../contexts/leftSideContext';
 
 export const useBlinkOnUpdate = () => {
@@ -14,5 +15,5 @@ export const useBlinkOnUpdate = () => {
       set_blink(false);
     }, 2000);
   }, [updated_by_not_older_than]);
-  return { blink };
+  return { blink, updated_by_not_older_than };
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { FullscreenOutlined, SettingOutlined } from '@ant-design/icons';
 import { Store } from 'antd/lib/form/interface';
@@ -55,7 +55,6 @@ export const ZoomedPlot = ({
 
   params_for_api.customizeProps = customizationParams;
   const plot_url = get_plot_url(params_for_api);
-  const source = `${root_url}${plot_url}`;
 
   const copy_of_params = { ...params_for_api };
   copy_of_params.height = window.innerHeight;
@@ -81,7 +80,17 @@ export const ZoomedPlot = ({
     },
   ];
 
-  const { blink } = useBlinkOnUpdate();
+  const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
+  const [source, setSource] = useState(
+    `${root_url}${plot_url};notOlderThan=${updated_by_not_older_than}`
+  );
+
+  React.useEffect(() => {
+    setSource(
+      `${root_url}${plot_url};notOlderThan=${updated_by_not_older_than}`
+    );
+    setImageLoading(blink);
+  }, [blink]);
 
   //lazy loading for plots
   const observer = lozad();
@@ -155,6 +164,7 @@ export const ZoomedPlot = ({
           >
             {!imageError && (
               <Image
+                key={source}
                 onLoad={() => setImageLoading(false)}
                 alt={selected_plot.name}
                 data-src={source}

@@ -52,9 +52,9 @@ export const useSearch = (
     .sortBy('dataset')
     .groupBy('dataset')
     .map((value, key) => {
-      const runs = value.map((set: any) => set.run)
-      runs.sort((a, b) => a - b)
-      return { dataset: key, runs: runs }
+      const runs = value.map((set: any) => set.run);
+      runs.sort((a, b) => a - b);
+      return { dataset: key, runs: runs };
     })
     .value();
 

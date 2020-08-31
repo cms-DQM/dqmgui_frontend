@@ -38,7 +38,7 @@ const Result: FC<SearchResultsInterface> = ({
           {dataset}
           {expanded && (
             <RunsRows>
-              {runs.map(run => (
+              {runs.map((run) => (
                 <StyledCol key={run}>
                   <RunWrapper
                     onClick={() => handler(run, dataset)}

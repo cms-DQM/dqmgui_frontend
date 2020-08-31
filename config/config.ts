@@ -16,17 +16,17 @@ const config: any = {
   },
 };
 
-const new_env_variable = process.env.NEW_BACK_END === 'true'
-const layout_env_variable = process.env.LAYOUTS === 'true'
-const latest_runs_env_variable = process.env.LATEST_RUNS === 'true'
-const lumis_env_variable = process.env.LUMIS === 'true'
+const new_env_variable = process.env.NEW_BACK_END === 'true';
+const layout_env_variable = process.env.LAYOUTS === 'true';
+const latest_runs_env_variable = process.env.LATEST_RUNS === 'true';
+const lumis_env_variable = process.env.LUMIS === 'true';
 
 export const functions_config: any = {
   new_back_end: {
     new_back_end: new_env_variable || false,
-    lumisections_on: lumis_env_variable && new_env_variable  || false,
-    layouts: layout_env_variable && new_env_variable || false,
-    latest_runs: latest_runs_env_variable && new_env_variable  || false,
+    lumisections_on: (lumis_env_variable && new_env_variable) || false,
+    layouts: (layout_env_variable && new_env_variable) || false,
+    latest_runs: (latest_runs_env_variable && new_env_variable) || false,
   },
   mode: process.env.MODE || 'OFFLINE',
 };
@@ -135,4 +135,5 @@ export const getLumisections = (params: LumisectionRequestProps) =>
       : ''
   }`;
 
-export const get_the_latest_runs = () => `/api/v1/latest_runs`;
+export const get_the_latest_runs = (notOlderThan: string) =>
+  `/api/v1/latest_runs?notOlderThan=${notOlderThan}`;
