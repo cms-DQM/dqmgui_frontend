@@ -135,5 +135,7 @@ export const getLumisections = (params: LumisectionRequestProps) =>
       : ''
   }`;
 
-export const get_the_latest_runs = (notOlderThan: string) =>
-  `/api/v1/latest_runs?notOlderThan=${notOlderThan}`;
+export const get_the_latest_runs = (notOlderThan: number) =>{
+  return   `/api/v1/latest_runs?notOlderThan=${notOlderThan}`;
+}
+

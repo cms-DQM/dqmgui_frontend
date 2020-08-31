@@ -21,14 +21,17 @@ import { functions_config } from '../config/config';
 import { useBlinkOnUpdate } from '../hooks/useBlinkOnUpdate';
 import { LiveModeButton } from './liveModeButton';
 import { CustomDiv } from './styledComponents';
+import cleanDeep from 'clean-deep';
 
 export const LatestRuns = () => {
   const { updated_by_not_older_than } = React.useContext(store);
+
   const data_get_by_mount = useRequest(
     get_the_latest_runs(updated_by_not_older_than),
     {},
     []
   );
+
   const data_get_by_not_older_than_update = useRequest(
     get_the_latest_runs(updated_by_not_older_than),
     {},

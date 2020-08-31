@@ -51,6 +51,7 @@ export const useUpdateLiveMode = () => {
     }
 
   }, [live_mode, latest_runs_list, query.folder_path, online_mode])
+
   React.useEffect(() => {
     set_updated_by_not_older_than(not_older_than);
   }, [not_older_than]);

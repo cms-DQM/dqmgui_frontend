@@ -66,7 +66,8 @@ export const initialState: any = {
     drawopts: '',
     withref: '',
   },
-  updated_by_not_older_than: NaN,
+  updated_by_not_older_than: Math.round(new Date().getTime() / 10000) * 10
+  ,
 };
 
 export interface ActionProps {
