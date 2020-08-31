@@ -51,7 +51,9 @@ export const Plot = ({
   const imageRef = useRef(null);
 
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
-  const [source, setSource] = useState(`${root_url}${plot_url};notOlderThan=${updated_by_not_older_than}`)
+  const [source, setSource] = useState(
+    `${root_url}${plot_url};notOlderThan=${updated_by_not_older_than}`
+  );
 
   useEffect(() => {
     const scrollPlot = () => {
@@ -64,9 +66,11 @@ export const Plot = ({
   }, [isPlotSelected, query.selected_plots]);
 
   useEffect(() => {
-    setSource(`${root_url}${plot_url};notOlderThan=${updated_by_not_older_than}`)
-    setImageLoading(blink)
-  }, [blink])
+    setSource(
+      `${root_url}${plot_url};notOlderThan=${updated_by_not_older_than}`
+    );
+    setImageLoading(blink);
+  }, [blink]);
 
   //lazy loading for plots
   const observer = lozad();
@@ -89,40 +93,39 @@ export const Plot = ({
             {isPlotSelected ? (
               <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
             ) : (
-                <PlusIcon
-                  onClick={() => {
-                    addPlotToRightSide(query, plot);
-                  }}
-                />
-              )}
+              <PlusIcon
+                onClick={() => {
+                  addPlotToRightSide(query, plot);
+                }}
+              />
+            )}
           </Column>
           {imageError ? (
             <ErrorMessage />
           ) : (
-              <div
-                onClick={async () => {
-                  isPlotSelected
-                    ? await removePlotFromRightSide(query, plot)
-                    : await addPlotToRightSide(query, plot);
-                  scroll(imageRef);
-                }}
-              >
-                {!imageError && (
-                  <img
-                    key={source}
-                    onLoad={() => setImageLoading(false)}
-                    className="lozad"
-                    alt={plot.name}
-                    data-src={source}
-                    onError={() => {
-                      setImageError(true);
-                      setImageLoading(false);
-                    }}
-                  />
-                )
-                }
-              </div>
-            )}
+            <div
+              onClick={async () => {
+                isPlotSelected
+                  ? await removePlotFromRightSide(query, plot)
+                  : await addPlotToRightSide(query, plot);
+                scroll(imageRef);
+              }}
+            >
+              {!imageError && (
+                <img
+                  key={source}
+                  onLoad={() => setImageLoading(false)}
+                  className="lozad"
+                  alt={plot.name}
+                  data-src={source}
+                  onError={() => {
+                    setImageError(true);
+                    setImageLoading(false);
+                  }}
+                />
+              )}
+            </div>
+          )}
           {imageLoading && (
             <CustomDiv display="flex" justifycontent="center" width="100%">
               <Spinner />

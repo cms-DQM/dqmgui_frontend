@@ -35,7 +35,9 @@ export const RunBrowser = ({
 
   const { results_grouped, isLoading } = useSearch('', query.dataset_name);
 
-  const runNumbers = results_grouped[0] ? results_grouped[0].runs.map((run: number) => run.toString()) : []
+  const runNumbers = results_grouped[0]
+    ? results_grouped[0].runs.map((run: number) => run.toString())
+    : [];
 
   useEffect(() => {
     const query_run_number = query.run_number ? query.run_number : '';

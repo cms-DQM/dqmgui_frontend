@@ -32,26 +32,28 @@ export const ComposedSearch = () => {
     }
   }, [modalState]);
 
-  const set_on_live_mode = query.run_number === "0" && query.dataset_name === "/Global/Online/ALL"
+  const set_on_live_mode =
+    query.run_number === '0' && query.dataset_name === '/Global/Online/ALL';
 
   return (
     <CustomRow
       width="100%"
       display="flex"
       justifycontent="space-between"
-      alignitems="center">
-      {set_on_live_mode ?
+      alignitems="center"
+    >
+      {set_on_live_mode ? (
         <CustomCol
           width="50%"
           justifycontent="flex-end"
           display="flex"
           texttransform="uppercase"
-          color={theme.colors.common.white}>
+          color={theme.colors.common.white}
+        >
           Live Mode
-        </CustomCol> :
-        <CustomCol
-          display="flex"
-          alignitems="center">
+        </CustomCol>
+      ) : (
+        <CustomCol display="flex" alignitems="center">
           <SearchModal
             modalState={modalState}
             setModalState={setModalState}
@@ -64,7 +66,8 @@ export const ComposedSearch = () => {
             <Browser />
             <SearchButton onClick={() => setModalState(true)} />
           </CustomRow>
-        </CustomCol>}
+        </CustomCol>
+      )}
       <WrapperDiv>
         <Col>
           <Workspaces />

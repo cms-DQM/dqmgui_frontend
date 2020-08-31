@@ -81,12 +81,16 @@ export const ZoomedPlot = ({
   ];
 
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
-  const [source, setSource] = useState(`${root_url}${plot_url};notOlderThan=${updated_by_not_older_than}`)
+  const [source, setSource] = useState(
+    `${root_url}${plot_url};notOlderThan=${updated_by_not_older_than}`
+  );
 
   React.useEffect(() => {
-    setSource(`${root_url}${plot_url};notOlderThan=${updated_by_not_older_than}`)
-    setImageLoading(blink)
-  }, [blink])
+    setSource(
+      `${root_url}${plot_url};notOlderThan=${updated_by_not_older_than}`
+    );
+    setImageLoading(blink);
+  }, [blink]);
 
   //lazy loading for plots
   const observer = lozad();
@@ -151,35 +155,35 @@ export const ZoomedPlot = ({
         {imageError ? (
           <ErrorMessage />
         ) : (
-            <ImageDiv
-              alignitems="center"
-              id={selected_plot.name}
-              width={params_for_api.width}
-              height={params_for_api.height}
-              display="flex"
-            >
-              {!imageError && (
-                <Image
-                  key={source}
-                  onLoad={() => setImageLoading(false)}
-                  alt={selected_plot.name}
-                  data-src={source}
-                  className="lozad"
-                  onError={() => {
-                    setImageError(true);
-                    setImageLoading(false);
-                  }}
-                  width={params_for_api.width}
-                  height={params_for_api.height}
-                />
-              )}
-              {imageLoading && (
-                <CustomDiv display="flex" justifycontent="center" width="100%">
-                  <Spinner />
-                </CustomDiv>
-              )}
-            </ImageDiv>
-          )}
+          <ImageDiv
+            alignitems="center"
+            id={selected_plot.name}
+            width={params_for_api.width}
+            height={params_for_api.height}
+            display="flex"
+          >
+            {!imageError && (
+              <Image
+                key={source}
+                onLoad={() => setImageLoading(false)}
+                alt={selected_plot.name}
+                data-src={source}
+                className="lozad"
+                onError={() => {
+                  setImageError(true);
+                  setImageLoading(false);
+                }}
+                width={params_for_api.width}
+                height={params_for_api.height}
+              />
+            )}
+            {imageLoading && (
+              <CustomDiv display="flex" justifycontent="center" width="100%">
+                <Spinner />
+              </CustomDiv>
+            )}
+          </ImageDiv>
+        )}
       </StyledPlotRow>
     </StyledCol>
   );

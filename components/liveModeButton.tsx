@@ -1,9 +1,9 @@
 import * as React from 'react';
 
 import { LiveButton } from './styledComponents';
-import  Router  from 'next/router';
+import Router from 'next/router';
 
-const liveModeHandler = (liveModeRun: string, liveModeDataset: string) =>{
+const liveModeHandler = (liveModeRun: string, liveModeDataset: string) => {
   Router.push({
     pathname: '/',
     query: {
@@ -11,17 +11,19 @@ const liveModeHandler = (liveModeRun: string, liveModeDataset: string) =>{
       dataset_name: liveModeDataset,
     },
   });
-}
+};
 
 export const LiveModeButton = () => {
-  const liveModeDataset = "/Global/Online/ALL"
-  const liveModeRun = "0"
+  const liveModeDataset = '/Global/Online/ALL';
+  const liveModeRun = '0';
 
   return (
     <LiveButton
-      onClick={() => { liveModeHandler(liveModeRun, liveModeDataset) }}
+      onClick={() => {
+        liveModeHandler(liveModeRun, liveModeDataset);
+      }}
     >
       Live Mode
     </LiveButton>
-  )
-}
+  );
+};
