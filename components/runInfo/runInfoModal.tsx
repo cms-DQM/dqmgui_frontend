@@ -33,12 +33,12 @@ export const RunInfoModal = ({
           Close
         </StyledButton>,
       ]}
-    >
+    >{open &&
       <div>
         {run_info.map((info) => (
           <RunInfoItem info={info} query={query} />
         ))}
-      </div>
+      </div>}
     </StyledModal>
   );
 };
