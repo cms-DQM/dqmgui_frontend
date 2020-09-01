@@ -20,15 +20,16 @@ import { useUpdateLiveMode } from '../../../hooks/useUpdateInLiveMode';
 export const ContentSwitching = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
+  const { set_update } = useUpdateLiveMode();
 
   const { results_grouped, searching, isLoading, errors } = useSearch(
     query.search_run_number,
     query.search_dataset_name
   );
-  useUpdateLiveMode();
-
   //serchResultsHandler when you selecting run, dataset from search results
   const serchResultsHandler = (run: string, dataset: string) => {
+    set_update(false)
+
     const { parsedRun, parsedLumi } = seperateRunAndLumiInSearch(
       run.toString()
     );

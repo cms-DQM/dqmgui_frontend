@@ -7,8 +7,6 @@ import { get_jroot_plot } from '../../config/config';
 import { store } from '../../contexts/leftSideContext';
 import { FormatParamsForAPI } from '../plots/plot/singlePlot/utils';
 import { CustomCol, CustomRow } from '../styledComponents';
-import { Spinner } from '../../containers/search/styledComponents';
-import { useBlinkOnUpdate } from '../../hooks/useBlinkOnUpdate';
 
 interface InfoProps {
   value: string;

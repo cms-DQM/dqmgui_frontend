@@ -70,7 +70,7 @@ export const Plot = ({
       `${root_url}${plot_url};notOlderThan=${updated_by_not_older_than}`
     );
     setImageLoading(blink);
-  }, [blink]);
+  }, [updated_by_not_older_than]);
 
   //lazy loading for plots
   const observer = lozad();

@@ -124,6 +124,7 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
   const [runs_set_for_overlay, set_runs_set_for_overlay] = React.useState<
     TripleProps[]
   >(triples ? triples : []);
+  const [update, set_update] = useState<boolean>(false);
 
   const change_value_in_reference_table = (
     value: string | number,
@@ -197,6 +198,8 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         set_runs_set_for_overlay,
         updated_by_not_older_than,
         set_updated_by_not_older_than,
+        update,
+        set_update
       }}
     >
       {children}
