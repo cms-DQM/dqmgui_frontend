@@ -213,5 +213,5 @@ If you want to change position (to horizontal or vertical) of displayed plots (w
 21. ~~Free and combined search~~ (11/06/2020)
 22. ~~Display run information~~
 23. ~~Plots loading indication~~
-
+24. DO SUMMARY WORKSAPCE!!!!
 ---
