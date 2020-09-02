@@ -46,14 +46,30 @@ export const Plot = ({
   const query: QueryProps = router.query;
   const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
+  const [new_root_url, set_new_root_url] = useState(root_url)
 
   const plot_url = get_plot_url(params_for_api);
   const imageRef = useRef(null);
 
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
   const [source, setSource] = useState(
-    `${root_url}${plot_url};notOlderThan=${updated_by_not_older_than}`
+    `${new_root_url}${plot_url};notOlderThan=${updated_by_not_older_than}`
   );
+
+  useEffect(() => {
+    async () => {
+      try {
+        const resp = await fetch('config.json');
+        const json = await resp.json();
+        const root_url = json.root_url
+        set_new_root_url(root_url)
+
+      }
+      catch (error) {
+        set_new_root_url(root_url)
+      }
+    }
+  }, [])
 
   useEffect(() => {
     const scrollPlot = () => {

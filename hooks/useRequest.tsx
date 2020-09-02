@@ -25,6 +25,7 @@ export const useRequest = (
   const [isLoading, setIsLoading] = useState(false);
   const cancelSource = useRef<CancelTokenSource | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
+  const [new_root_url, set_new_root_url] = useState(root_url)
 
   useEffect(() => {
     if (cancelSource) {
@@ -36,12 +37,24 @@ export const useRequest = (
     const CancelToken = axios.CancelToken;
     cancelSource.current = CancelToken.source();
 
+    const fetchUrl = async () => {
+      try {
+        const resp = await fetch('config.json');
+        const json = await resp.json();
+        const root_url = json.root_url
+        set_new_root_url(root_url)
+      } catch (error) {
+        set_new_root_url(root_url)
+      }
+    }
+
     const fetchData = async () => {
       await setIsLoading(true);
+      await fetchUrl()
       try {
         setTimeout(cancelSource.current?.cancel, 180000);
         const response: AxiosResponse = await axios.request({
-          url: `${root_url}${url}`,
+          url: `${new_root_url}${url}`,
           method: options.method || 'get',
           cancelToken: cancelSource.current?.token,
           ...options,

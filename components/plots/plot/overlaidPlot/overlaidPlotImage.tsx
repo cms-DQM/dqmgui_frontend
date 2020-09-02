@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useState } from 'react';
+import React, { useRef, useContext, useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import lozad from 'lozad';
 
@@ -50,6 +50,7 @@ export const OverlaidPlotImage = ({
   const { normalize } = globalState;
   const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
+  const [new_root_url, set_new_root_url] = useState(root_url)
 
   params_for_api.plot_name = plot.name;
   params_for_api.normalize = normalize;
@@ -59,7 +60,7 @@ export const OverlaidPlotImage = ({
   params_for_api.joined_overlaied_plots_urls = joined_overlaid_plots_urls;
 
   const plot_with_overlay = get_plot_with_overlay(params_for_api);
-  const source = `${root_url}${plot_with_overlay}`;
+  const source = `${new_root_url}${plot_with_overlay}`;
 
   const router = useRouter();
   const query: QueryProps = router.query;
@@ -70,6 +71,21 @@ export const OverlaidPlotImage = ({
   //lazy loading for plots
   const observer = lozad();
   observer.observe();
+
+  useEffect(() => {
+    async () => {
+      try {
+        const resp = await fetch('config.json');
+        const json = await resp.json();
+        const root_url = json.root_url
+        set_new_root_url(root_url)
+
+      }
+      catch (error) {
+        set_new_root_url(root_url)
+      }
+    }
+  }, [])
 
   return (
     <div ref={imageRef}>
