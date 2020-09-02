@@ -17,7 +17,7 @@ export const useUpdateLiveMode = () => {
       set_not_older_than(() => {
         // 1 sec is 1000 milisec. we dividing by 10000 and multiply by 10, because we need to
         // have rounded sec. for exmaple: if it is 13, we need to have 10, or 26, we need to have 20 and etc.
-        const seconds = Math.round(new Date().getTime() / 10000) * 10;
+        const seconds = Math.round(new Date().getTime() / 10000) * 20;
         return seconds;
       });
     }, 10000)
