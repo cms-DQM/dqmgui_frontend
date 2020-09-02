@@ -20,7 +20,7 @@ export const useUpdateLiveMode = () => {
         const seconds = Math.round(new Date().getTime() / 10000) * 20;
         return seconds;
       });
-    }, 10000)
+    }, 20000)
     return interval
   };
 
