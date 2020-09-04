@@ -8,13 +8,6 @@ const nextConfig = {
 
 module.exports = withPlugins([[bundleAnalyzer]], nextConfig);
 module.exports = {
-  // async rewrites() {
-  //   return [
-  //     {
-  //       source: '/dqm/online-new',
-  //       destination: '/',
-  //     },
-  //   ]},
   env: {
     NEW_BACK_END: process.env.NEW_BACK_END,
     LUMIS: process.env.LUMIS,
@@ -23,6 +16,3 @@ module.exports = {
     MODE: process.env.MODE,
   },
 };
-module.exports = {
-  basePath: '/dqm/online-new/',
-}

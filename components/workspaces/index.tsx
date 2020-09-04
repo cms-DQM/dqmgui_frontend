@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { Tabs, Button } from 'antd';
 
-import { workspaces } from '../../workspaces/offline';
+import { workspaces as offlineWorskpace} from '../../workspaces/offline';
+import { workspaces as onlineWorkspace} from '../../workspaces/online';
 import { StyledModal } from '../viewDetailsMenu/styledComponents';
 import Form from 'antd/lib/form/Form';
 import { StyledFormItem, StyledButton } from '../styledComponents';
@@ -10,6 +11,7 @@ import { setWorkspaceToQuery } from './utils';
 import { QueryProps } from '../../containers/display/interfaces';
 import { useChangeRouter } from '../../hooks/useChangeRouter';
 import { theme } from '../../styles/theme';
+import { functions_config } from '../../config/config';
 
 const { TabPane } = Tabs;
 
@@ -18,6 +20,7 @@ interface WorspaceProps {
   workspaces: any;
 }
 const Workspaces = () => {
+  const workspaces = functions_config.mode === "ONLINE" ? onlineWorkspace : offlineWorskpace
   const router = useRouter();
   const query: QueryProps = router.query;
   const workspaceOption = query.workspace

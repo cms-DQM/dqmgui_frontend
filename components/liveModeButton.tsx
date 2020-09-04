@@ -10,6 +10,7 @@ const liveModeHandler = (liveModeRun: string, liveModeDataset: string) => {
     query: {
       run_number: liveModeRun,
       dataset_name: liveModeDataset,
+      folder_path: "Summary"
     },
   });
 };
