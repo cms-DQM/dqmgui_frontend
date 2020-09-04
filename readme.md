@@ -214,4 +214,9 @@ If you want to change position (to horizontal or vertical) of displayed plots (w
 22. ~~Display run information~~
 23. ~~Plots loading indication~~
 24. DO SUMMARY WORKSAPCE!!!!
+25. Overlay plots -selected runs in the overlay options are not the same which are selected by search
+26. The main Run information in live mode, must be visible in a header (live mode)
+27. Shift folder is empty (why?)
+28. Chnage workspaces according mode
+29. Styles file import
 ---
