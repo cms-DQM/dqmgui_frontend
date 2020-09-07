@@ -35,7 +35,7 @@ export const RunInfoModal = ({
     query.dataset_name,
     query.run_number,
   ]);
-  const run = get_label({ value: 'iRun' }, data)
+  const run = get_label({ value: 'iRun', label: 'Run' }, data)
   return (
     <StyledModal
       title={`Run ${run} information`}
