@@ -168,8 +168,11 @@ It leads the user to live mode, where the dataset is /Global/Online/ALL and run 
 ![summary](public/images/summary.PNG)
 4.Live mode updates could be stopped by clicking the “pause” button.
  When updates are stopped the “pause” button changes to the “play” button and “LIVE MODE” is colored red. 
+ 
 ![live_mode_on](public/images/live_mode_on.PNG)
+
 ![live_mode_off](public/images/live_mode_off.png)
+
 5. If the user is in a live mode, every plot, which he sees is updated every 20 sec.
 Updated is indicated by plot background color change (from light blue to dark purple) and a spinner.
 ![loading_plot](public/images/loading_plot.PNG)
