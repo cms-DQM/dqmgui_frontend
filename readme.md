@@ -175,6 +175,8 @@ It leads the user to live mode, where the dataset is /Global/Online/ALL and run 
 
 5. If the user is in a live mode, every plot, which he sees is updated every 20 sec.
 Updated is indicated by plot background color change (from light blue to dark purple) and a spinner.
+
+
 ![loading_plot](public/images/loading_plot.PNG)
 
 ---
