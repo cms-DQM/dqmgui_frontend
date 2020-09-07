@@ -6,6 +6,11 @@ import { theme } from '../../styles/theme';
 import { QueryProps } from '../../containers/display/interfaces';
 import { RunInfoItem } from './runStartTimeStamp';
 import { run_info } from '../constants';
+import { FormatParamsForAPI } from '../plots/plot/singlePlot/utils';
+import { store } from '../../contexts/leftSideContext';
+import { useRequest } from '../../hooks/useRequest';
+import { get_jroot_plot } from '../../config/config';
+import { get_label } from '../utils';
 
 interface RunInfoModalProps {
   toggleModal(value: boolean): void;
@@ -18,9 +23,22 @@ export const RunInfoModal = ({
   toggleModal,
   open,
 }: RunInfoModalProps) => {
+  const globalState = React.useContext(store);
+  const params_for_api = FormatParamsForAPI(
+    globalState,
+    query,
+    'iRun',
+    '/HLT/EventInfo'
+  );
+
+  const { data, isLoading } = useRequest(get_jroot_plot(params_for_api), {}, [
+    query.dataset_name,
+    query.run_number,
+  ]);
+  const run = get_label({ value: 'iRun' }, data)
   return (
     <StyledModal
-      title={`Run ${query.run_number} information`}
+      title={`Run ${run} information`}
       visible={open}
       onCancel={() => toggleModal(false)}
       footer={[
