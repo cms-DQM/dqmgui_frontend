@@ -165,10 +165,10 @@ Online mode is reactable via link https://cmsweb-testbed.cern.ch/dqm/online-new.
 It leads the user to live mode, where the dataset is /Global/Online/ALL and run number 0.
 ![live_mode_button](public/images/live_mode_button.png)
 3. After this move, you will be led to Summary workspace folder, where all plots, which are proccesing during current run.
-![summary](public/images/summary.png)
+![summary](public/images/summary.PNG)
 4.Live mode updates could be stopped by clicking the “pause” button.
  When updates are stopped the “pause” button changes to the “play” button and “LIVE MODE” is colored red. 
-![live_mode_on](public/images/live_mode_on.png)
+![live_mode_on](public/images/live_mode_on.PNG)
 ![live_mode_off](public/images/live_mode_off.png)
 5. If the user is in a live mode, every plot, which he sees is updated every 20 sec.
 Updated is indicated by plot background color change (from light blue to dark purple) and a spinner.
