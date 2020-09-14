@@ -145,3 +145,9 @@ export interface DirectoryInterface {
 export interface PlotsGroupedByLayoutsInterface {
   [layout: string]: PlotDataProps[];
 }
+
+export interface InfoProps {
+  value: string;
+  label: string;
+  type?: string;
+}

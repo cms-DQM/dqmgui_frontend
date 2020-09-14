@@ -178,9 +178,11 @@ export const CutomFormItem = styled(FormItem)<{
   width?: string;
   display?: string;
   justifycontent?: string;
+  space?:string;
 }>`
   width: ${(props) => (props.width ? props.width : '')};
   display: ${(props) => (props.display ? props.display : '')};
+  padding: ${(props) => (props.space ? props.space : '')}px;
   justifycontent: ${(props) =>
     props.justifycontent ? props.justifycontent : ''};
   .ant-form-item-label > label {
@@ -300,10 +302,12 @@ export const CustomTd = styled.td<{ spacing?: string }>`
 export const CustomForm = styled(Form)<{
   justifycontent?: string;
   width?: string;
+  display?:string;
 }>`
   justify-content: ${(props) =>
     props.justifycontent ? props.justifycontent : ''};
   width: ${(props) => (props.width ? props.width : '')};
+  display: ${(props) => (props.display ? props.display : '')};
 `;
 
 export const CutomBadge = styled(Badge)`

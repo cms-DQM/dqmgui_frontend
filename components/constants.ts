@@ -105,15 +105,11 @@ export const plotsProportionsOptions = [
   { label: '25% : 75%', value: '25%' },
 ];
 
-export const run_info = [
+export const additional_run_info = [
   { value: 'CMSSW_Version', label: 'CMSSW version: ' },
   { value: 'CertificationSummary', label: 'CertificationSummary: ' },
-  { value: 'eventTimeStamp', label: 'Event time, UTC time: ', type: 'time' },
   { value: 'hostName', label: 'Host name: ' },
   { value: 'iEvent', label: 'Event #: ' },
-  { value: 'iLumiSection', label: 'LS #: ' },
-  { value: 'iRun', label: 'Run: ' },
-  { value: 'processEventRate', label: 'Event #: ' },
   { value: 'processID', label: 'Process ID: ' },
   { value: 'processLatency', label: 'Process Latency: ' },
   { value: 'processName', label: 'Process Name: ' },
@@ -136,3 +132,12 @@ export const run_info = [
   },
   { value: 'workingDir', label: 'Working directory: ' },
 ];
+
+export const main_run_info = [
+  { value: 'iRun', label: 'Run: ' },
+  { value: 'iLumiSection', label: 'LS #: ' },
+  { value: 'processEventRate', label: 'Event #: ' },
+  { value: 'eventTimeStamp', label: 'Event time, UTC time: ', type: 'time' },
+]
+
+export const run_info = main_run_info.concat(additional_run_info)
