@@ -11,7 +11,7 @@ const config: any = {
     title: 'Development',
   },
   production: {
-    root_url: './',
+    root_url: '.',
     title: 'Offline',
   },
 };

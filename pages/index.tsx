@@ -39,7 +39,7 @@ const Index: NextPage<FolderPathQuery> = () => {
           <Tooltip title="Back to main page" placement="bottomLeft">
             <StyledLogoDiv>
               <StyledLogoWrapper onClick={() => backToMainPage()}>
-                <StyledLogo src="/images/CMSlogo_white_red_nolabel_1024_May2014.png" />
+                <StyledLogo src="./images/CMSlogo_white_red_nolabel_1024_May2014.png" />
               </StyledLogoWrapper>
             </StyledLogoDiv>
           </Tooltip>
