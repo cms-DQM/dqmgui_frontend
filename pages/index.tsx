@@ -25,13 +25,13 @@ const Index: NextPage<FolderPathQuery> = () => {
   const isDatasetAndRunNumberSelected =
     !!query.run_number && !!query.dataset_name;
 
-  return (
+    return (
     <StyledDiv>
       <Head>
         <script
           crossOrigin="anonymous"
           type="text/javascript"
-          src="/jsroot-5.8.0/scripts/JSRootCore.js?2d&hist&more2d"
+          src="./jsroot-5.8.0/scripts/JSRootCore.js?2d&hist&more2d"
         ></script>
       </Head>
       <StyledLayout>

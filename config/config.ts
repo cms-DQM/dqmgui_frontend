@@ -11,7 +11,7 @@ const config: any = {
     title: 'Development',
   },
   production: {
-    root_url: 'https://dqm-gui.web.cern.ch/api/dqm/offline',
+    root_url: './',
     title: 'Offline',
   },
 };
@@ -32,6 +32,7 @@ export const functions_config: any = {
 };
 
 export const root_url = config[process.env.NODE_ENV || 'development'].root_url;
+
 export const service_title =
   config[process.env.NODE_ENV || 'development'].title;
 
