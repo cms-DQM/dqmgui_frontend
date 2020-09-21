@@ -15,7 +15,6 @@ import { theme } from '../../styles/theme';
 import { SelectedData } from './selectedData';
 import Nav from '../Nav';
 import { getChangedQueryParams } from '../../containers/display/utils';
-import { root_url } from '../../config/config';
 
 interface FreeSeacrhModalProps {
   setModalState(state: boolean): void;

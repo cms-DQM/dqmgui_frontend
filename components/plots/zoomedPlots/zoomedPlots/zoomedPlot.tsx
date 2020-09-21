@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { FullscreenOutlined, SettingOutlined } from '@ant-design/icons';
 import { Store } from 'antd/lib/form/interface';
@@ -6,8 +6,6 @@ import lozad from 'lozad';
 
 import {
   get_plot_url,
-  root_url,
-  functions_config,
 } from '../../../../config/config';
 import {
   ParamsForApiProps,
@@ -35,6 +33,7 @@ import { ErrorMessage } from '../../errorMessage';
 import { CustomDiv } from '../../../styledComponents';
 import { Spinner } from '../../../../containers/search/styledComponents';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
+import { store } from '../../../../contexts/leftSideContext';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -52,6 +51,9 @@ export const ZoomedPlot = ({
   const [isPortalWindowOpen, setIsPortalWindowOpen] = React.useState(false);
   const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
+
+  const { configuration } = useContext(store)
+  const { root_url, mode } = configuration
 
   params_for_api.customizeProps = customizationParams;
   const plot_url = get_plot_url(params_for_api);
@@ -106,7 +108,7 @@ export const ZoomedPlot = ({
       >
         <StyledPlotRow
           isLoading={blink.toString()}
-          animation={(functions_config.mode === 'ONLINE').toString()}
+          animation={(mode === 'ONLINE').toString()}
           minheight={copy_of_params.height}
           width={copy_of_params.width?.toString()}
           is_plot_selected={true.toString()}
@@ -137,7 +139,7 @@ export const ZoomedPlot = ({
       />
       <StyledPlotRow
         isLoading={blink.toString()}
-        animation={(functions_config.mode === 'ONLINE').toString()}
+        animation={(mode === 'ONLINE').toString()}
         minheight={params_for_api.height}
         width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}

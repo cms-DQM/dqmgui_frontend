@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Store } from 'antd/lib/form/interface';
 import lozad from 'lozad';
@@ -10,8 +10,6 @@ import {
 
 import {
   get_overlaied_plots_urls,
-  root_url,
-  functions_config,
 } from '../../../../config/config';
 import {
   ParamsForApiProps,
@@ -40,6 +38,7 @@ import { Spinner } from '../../../../containers/search/styledComponents';
 import { CustomDiv } from '../../../styledComponents';
 import { ErrorMessage } from '../../errorMessage';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
+import { store } from '../../../../contexts/leftSideContext';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -58,6 +57,9 @@ export const ZoomedOverlaidPlot = ({
   const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
   const [isPortalWindowOpen, setIsPortalWindowOpen] = React.useState(false);
+
+  const { configuration } = useContext(store)
+  const { mode, root_url } = configuration
 
   const zoomedPlotMenuOptions = [
     {
@@ -81,12 +83,12 @@ export const ZoomedOverlaidPlot = ({
   const joined_overlaid_plots_urls = overlaid_plots_urls.join('');
   params_for_api.joined_overlaied_plots_urls = joined_overlaid_plots_urls;
 
-  const source = get_plot_source(params_for_api);
+  const source = get_plot_source(root_url, params_for_api);
 
   const copy_of_params = { ...params_for_api };
   copy_of_params.height = window.innerHeight;
   copy_of_params.width = Math.round(window.innerHeight * 1.33);
-  const zoomed_plot_url = get_plot_source(copy_of_params);
+  const zoomed_plot_url = get_plot_source(root_url, copy_of_params);
   const zoomed_source = `${zoomed_plot_url}`;
 
   const { blink } = useBlinkOnUpdate();
@@ -104,7 +106,7 @@ export const ZoomedOverlaidPlot = ({
       >
         <StyledPlotRow
           isLoading={blink.toString()}
-          animation={(functions_config.mode === 'ONLINE').toString()}
+          animation={(mode === 'ONLINE').toString()}
           minheight={copy_of_params.height}
           width={copy_of_params.width?.toString()}
           is_plot_selected={true.toString()}
@@ -134,7 +136,7 @@ export const ZoomedOverlaidPlot = ({
       />
       <StyledPlotRow
         isLoading={blink.toString()}
-        animation={(functions_config.mode === 'ONLINE').toString()}
+        animation={(mode === 'ONLINE').toString()}
         minheight={params_for_api.height}
         width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}

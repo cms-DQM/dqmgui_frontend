@@ -1,8 +1,7 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
 import lozad from 'lozad';
 
-import { root_url, functions_config } from '../../../../config/config';
 import { get_plot_url } from '../../../../config/config';
 import {
   PlotDataProps,
@@ -28,6 +27,7 @@ import { Spinner } from '../../../../containers/search/styledComponents';
 import { CustomDiv } from '../../../styledComponents';
 import { ErrorMessage } from '../../errorMessage';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
+import { store } from '../../../../contexts/leftSideContext';
 
 interface PlotProps {
   plot: PlotDataProps;
@@ -51,6 +51,9 @@ export const Plot = ({
   const imageRef = useRef(null);
 
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
+  const { configuration } = useContext(store)
+  const { root_url, mode } = configuration
+
   const [source, setSource] = useState(
     `${root_url}${plot_url};notOlderThan=${updated_by_not_older_than}`
   );
@@ -81,7 +84,7 @@ export const Plot = ({
       <StyledCol space={2}>
         <StyledPlotRow
           isLoading={blink.toString()}
-          animation={(functions_config.mode === 'ONLINE').toString()}
+          animation={(mode === 'ONLINE').toString()}
           minheight={params_for_api.height}
           width={params_for_api.width?.toString()}
           is_plot_selected={isPlotSelected.toString()}
@@ -93,39 +96,39 @@ export const Plot = ({
             {isPlotSelected ? (
               <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
             ) : (
-              <PlusIcon
-                onClick={() => {
-                  addPlotToRightSide(query, plot);
-                }}
-              />
-            )}
+                <PlusIcon
+                  onClick={() => {
+                    addPlotToRightSide(query, plot);
+                  }}
+                />
+              )}
           </Column>
           {imageError ? (
             <ErrorMessage />
           ) : (
-            <div
-              onClick={async () => {
-                isPlotSelected
-                  ? await removePlotFromRightSide(query, plot)
-                  : await addPlotToRightSide(query, plot);
-                scroll(imageRef);
-              }}
-            >
-              {!imageError && (
-                <img
-                  key={source}
-                  onLoad={() => setImageLoading(false)}
-                  className="lozad"
-                  alt={plot.name}
-                  data-src={source}
-                  onError={() => {
-                    setImageError(true);
-                    setImageLoading(false);
-                  }}
-                />
-              )}
-            </div>
-          )}
+              <div
+                onClick={async () => {
+                  isPlotSelected
+                    ? await removePlotFromRightSide(query, plot)
+                    : await addPlotToRightSide(query, plot);
+                  scroll(imageRef);
+                }}
+              >
+                {!imageError && (
+                  <img
+                    key={source}
+                    onLoad={() => setImageLoading(false)}
+                    className="lozad"
+                    alt={plot.name}
+                    data-src={source}
+                    onError={() => {
+                      setImageError(true);
+                      setImageLoading(false);
+                    }}
+                  />
+                )}
+              </div>
+            )}
           {imageLoading && (
             <CustomDiv display="flex" justifycontent="center" width="100%">
               <Spinner />

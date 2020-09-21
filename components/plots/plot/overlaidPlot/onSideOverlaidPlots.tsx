@@ -1,8 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import lozad from 'lozad';
 
-import { root_url, functions_config } from '../../../../config/config';
 import {
   ParamsForApiProps,
   PlotDataProps,
@@ -49,6 +48,9 @@ export const OnSideOverlaidPlots = ({
   const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
 
+  const { configuration } = useContext(store)
+  const { root_url, mode } = configuration
+
   const router = useRouter();
   const query: QueryProps = router.query;
   const imageRef = useRef(null);
@@ -68,7 +70,7 @@ export const OnSideOverlaidPlots = ({
             <StyledCol space={2} key={url}>
               <StyledPlotRow
                 isLoading={blink.toString()}
-                animation={(functions_config.mode === 'ONLINE').toString()}
+                animation={(mode === 'ONLINE').toString()}
                 minheight={params_for_api.height}
                 width={params_for_api.width?.toString()}
                 is_plot_selected={isPlotSelected.toString()}
@@ -82,38 +84,38 @@ export const OnSideOverlaidPlots = ({
                       onClick={() => removePlotFromRightSide(query, plot)}
                     />
                   ) : (
-                    <PlusIcon
-                      onClick={async () => {
-                        await addPlotToRightSide(query, plot);
-                        scroll(imageRef);
-                        scrollToBottom(imageRefScrollDown);
-                      }}
-                    />
-                  )}
+                      <PlusIcon
+                        onClick={async () => {
+                          await addPlotToRightSide(query, plot);
+                          scroll(imageRef);
+                          scrollToBottom(imageRefScrollDown);
+                        }}
+                      />
+                    )}
                 </Column>
                 {imageError ? (
                   <ErrorMessage />
                 ) : (
-                  <div
-                    onClick={async () => {
-                      isPlotSelected
-                        ? await removePlotFromRightSide(query, plot)
-                        : await addPlotToRightSide(query, plot);
-                      scroll(imageRef);
-                    }}
-                  >
-                    <img
-                      onLoad={() => setImageLoading(false)}
-                      className="lozad"
-                      alt={plot.name}
-                      data-src={sourceForOnePlot}
-                      onError={() => {
-                        setImageError(true);
-                        setImageLoading(false);
+                    <div
+                      onClick={async () => {
+                        isPlotSelected
+                          ? await removePlotFromRightSide(query, plot)
+                          : await addPlotToRightSide(query, plot);
+                        scroll(imageRef);
                       }}
-                    />
-                  </div>
-                )}
+                    >
+                      <img
+                        onLoad={() => setImageLoading(false)}
+                        className="lozad"
+                        alt={plot.name}
+                        data-src={sourceForOnePlot}
+                        onError={() => {
+                          setImageError(true);
+                          setImageLoading(false);
+                        }}
+                      />
+                    </div>
+                  )}
                 {imageLoading && (
                   <CustomDiv
                     display="flex"

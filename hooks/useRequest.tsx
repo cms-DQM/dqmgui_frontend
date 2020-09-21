@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext } from 'react';
 import axios, {
   AxiosRequestConfig,
   AxiosResponse,
   CancelTokenSource,
 } from 'axios';
 
-import { root_url } from '../config/config';
+import { store } from '../contexts/leftSideContext';
 
 interface ReturnRequest {
   data: any;
@@ -25,6 +25,9 @@ export const useRequest = (
   const [isLoading, setIsLoading] = useState(false);
   const cancelSource = useRef<CancelTokenSource | null>(null);
   const [errors, setErrors] = useState<string[]>([]);
+
+  const { configuration } = useContext(store)
+  const { root_url } = configuration
 
   useEffect(() => {
     if (cancelSource) {
