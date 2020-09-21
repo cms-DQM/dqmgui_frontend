@@ -15,6 +15,8 @@ interface DatasetsBrowserProps {
   setCurrentDataset(currentDataset: string): void;
   withoutArrows?: boolean;
   selectorWidth?: string;
+  current_dataset_name?: string;
+  current_run_number?: string;
 }
 
 const { Option } = Select;
@@ -24,24 +26,22 @@ export const DatasetsBrowser = ({
   setCurrentDataset,
   selectorWidth,
   query,
+  current_dataset_name,
+  current_run_number,
 }: DatasetsBrowserProps) => {
   const [openSelect, setSelect] = useState(false);
-  //setting  dataset field width to prev. selected dataset name field width,
-  // because when spinner is shown, field becomes spinner width
-
-  const [width, setWidth] = useState<number>();
   const [currentDatasetNameIndex, setCurrentDatasetNameIndex] = useState<
     number
   >(0);
-
-  const { results_grouped, isLoading } = useSearch(query.run_number, '');
+  const run_number = current_run_number ? current_run_number : query.run_number;
+  const { results_grouped, isLoading } = useSearch(run_number, '');
 
   const datasets = results_grouped.map((result) => {
     return result.dataset;
   });
 
   useEffect(() => {
-    const query_dataset = query.dataset_name ? query.dataset_name : '';
+    const query_dataset = current_dataset_name ? current_dataset_name : query.dataset_name;
     setCurrentDatasetNameIndex(datasets.indexOf(query_dataset));
   }, [query.dataset_name, query.run_number, datasets]);
 
@@ -55,19 +55,12 @@ export const DatasetsBrowser = ({
             icon={<CaretLeftFilled />}
             onClick={() => {
               setCurrentDataset(datasets[currentDatasetNameIndex - 1]);
-              setWidth(undefined);
             }}
           />
         </Col>
       )}
       <CustomCol width={selectorWidth}>
-        <div
-          ref={(refElem: HTMLDivElement) => {
-            if (refElem && !openSelect) {
-              setWidth(refElem.clientWidth);
-            }
-          }}
-        >
+        <div>
           <StyledSelect
             onChange={(e: any) => {
               setCurrentDataset(e);
@@ -76,7 +69,6 @@ export const DatasetsBrowser = ({
             dropdownMatchSelectWidth={false}
             onClick={() => setSelect(!openSelect)}
             open={openSelect}
-            // width={`${width}px`}
             showSearch={true}
           >
             {results_grouped.map((result) => (
@@ -92,8 +84,8 @@ export const DatasetsBrowser = ({
                     <Spin />
                   </OptionParagraph>
                 ) : (
-                  <p onClick={() => setWidth(undefined)}>{result.dataset}</p>
-                )}
+                    <p>{result.dataset}</p>
+                  )}
               </Option>
             ))}
           </StyledSelect>
@@ -107,7 +99,6 @@ export const DatasetsBrowser = ({
             icon={<CaretRightFilled />}
             onClick={() => {
               setCurrentDataset(datasets[currentDatasetNameIndex + 1]);
-              setWidth(undefined);
             }}
           />
         </Col>

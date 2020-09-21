@@ -69,29 +69,29 @@ export const PlotsWithLayout = ({
                     {shrinkLayouts.includes(name) ? (
                       <UpOutlined />
                     ) : (
-                      <DownOutlined />
-                    )}
+                        <DownOutlined />
+                      )}
                   </CustomDiv>
                 </CustomCol>
               ) : (
-                <CustomCol
-                  width="100%"
-                  texttransform="uppercase"
-                  display="flex"
-                  justifycontent="space-between"
-                  alignitems="center"
-                  color={`${theme.colors.common.white}`}
-                >
-                  <p>{name} (Plots without layout name)</p>
-                  <CustomDiv color={`${theme.colors.common.white}`}>
-                    {shrinkLayouts.includes(name) ? (
-                      <UpOutlined />
-                    ) : (
-                      <DownOutlined />
-                    )}
-                  </CustomDiv>
-                </CustomCol>
-              )}
+                  <CustomCol
+                    width="100%"
+                    texttransform="uppercase"
+                    display="flex"
+                    justifycontent="space-between"
+                    alignitems="center"
+                    color={`${theme.colors.common.white}`}
+                  >
+                    <p>{name} (Plots without layout name)</p>
+                    <CustomDiv color={`${theme.colors.common.white}`}>
+                      {shrinkLayouts.includes(name) ? (
+                        <UpOutlined />
+                      ) : (
+                          <DownOutlined />
+                        )}
+                    </CustomDiv>
+                  </CustomCol>
+                )}
             </CustomRow>
             <Row>
               {!shrinkLayouts.includes(name) && (
@@ -118,17 +118,17 @@ export const PlotsWithLayout = ({
                               )}
                             />
                           ) : (
-                            <Plot
-                              plot={plot}
-                              imageRefScrollDown={imageRefScrollDown}
-                              params_for_api={params_for_api}
-                              key={plot.name}
-                              isPlotSelected={isPlotSelected(
-                                selected_plots,
-                                plot.name
-                              )}
-                            />
-                          )}
+                              <Plot
+                                plot={plot}
+                                imageRefScrollDown={imageRefScrollDown}
+                                params_for_api={params_for_api}
+                                key={plot.name}
+                                isPlotSelected={isPlotSelected(
+                                  selected_plots,
+                                  plot.name
+                                )}
+                              />
+                            )}
                         </div>
                       );
                     }

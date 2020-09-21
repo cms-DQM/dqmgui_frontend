@@ -42,8 +42,7 @@ export const addOverlayData = (triples: TripleProps[] | undefined) => {
     triples &&
     triples.map(
       (triple: TripleProps) =>
-        `${triple.run_number}${triple.dataset_name}/${
-          triple.label ? triple.label : triple.run_number
+        `${triple.run_number}${triple.dataset_name}/${triple.label ? triple.label : triple.run_number
         }`
     );
   const query = params?.join('&');
@@ -154,3 +153,10 @@ export const get_plot_error = (plot: PlotDataProps) => {
   }
   return found;
 };
+
+export const find_biggest_plot_height = (heights: number[]) => {
+  var max = heights.reduce((a, b) => {
+    return Math.max(a, b);
+  });
+  return max
+}

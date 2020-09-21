@@ -86,7 +86,7 @@ export const StyledPlotRow = styled(Row)<{
 }>`
   display: flex;
   justify-content: space-between;
-  width: ${(props) => props?.width && props.width}px;
+  width: ${(props) => props?.width && props.width};
   min-height: ${(props) => props?.minheight && props.minheight}px;
   background-color: ${(props) => {
     if (props?.is_plot_selected === 'true') {

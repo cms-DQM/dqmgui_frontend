@@ -72,7 +72,6 @@ export const StyledTableRunColumn = styled.td`
 `;
 export const StyledTable = styled.table`
   border: 1px solid ${theme.colors.primary.main};
-  width: 70%;
   margin-top: calc(${theme.space.spaceBetween}*2);
 `;
 export const RunsRows = styled(Row)`
