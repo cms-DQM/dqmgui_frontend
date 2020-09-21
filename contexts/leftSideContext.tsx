@@ -13,6 +13,7 @@ import {
   CustomizeProps,
 } from '../containers/display/interfaces';
 import { overlayOptions } from '../components/constants';
+import { ConfigurationProps } from './interfaces';
 
 export interface LeftSideStateProviderProps {
   children: ReactElement;
@@ -35,6 +36,7 @@ export interface LeftSideState {
   JSROOTmode: boolean;
   customizeProps: CustomizeProps;
   updated_by_not_older_than: number;
+  configuration: ConfigurationProps;
 }
 
 export const initialState: any = {
@@ -66,8 +68,8 @@ export const initialState: any = {
     drawopts: '',
     withref: '',
   },
-  updated_by_not_older_than: Math.round(new Date().getTime() / 10000) * 10
-  ,
+  updated_by_not_older_than: Math.round(new Date().getTime() / 10000) * 10,
+  configuration: {},
 };
 
 export interface ActionProps {
@@ -154,6 +156,7 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
     initialState.updated_by_not_older_than
   );
 
+  const [configuration, setConfiguration] = useState<ConfigurationProps>(initialState.configuration)
   return (
     <Provider
       value={{
@@ -199,7 +202,8 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         updated_by_not_older_than,
         set_updated_by_not_older_than,
         update,
-        set_update
+        set_update,
+        configuration, setConfiguration
       }}
     >
       {children}
