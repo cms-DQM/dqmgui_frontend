@@ -15,8 +15,8 @@ import {
 import { useNewer } from './useNewer';
 import { useRequest } from './useRequest';
 import { useDisplayedName } from './useDisplayName';
-import { functions_config } from '../config/config';
 import cleanDeep from 'clean-deep';
+import { store } from '../contexts/leftSideContext';
 
 export const useFilterFolders = (
   query: QueryProps,
@@ -35,14 +35,15 @@ export const useFilterFolders = (
   );
   const [plots, setPlots] = React.useState<any[]>([]);
   const [isLoading, setLoading] = React.useState(false);
-
+  const { configuration } = React.useContext(store);
+  const { mode } = configuration
   const current_api = choose_api(params);
 
   const data_get_by_not_older_than_update = useRequest(
     current_api,
     {},
     [updated_by_not_older_than],
-    functions_config.mode.onlineode
+    mode
   );
 
   const data_get_by_folder_run_dataset_update = useRequest(current_api, {}, [

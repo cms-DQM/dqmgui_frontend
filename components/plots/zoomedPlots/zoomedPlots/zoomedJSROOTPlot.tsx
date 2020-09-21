@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-import { get_jroot_plot, functions_config } from '../../../../config/config';
+import { get_jroot_plot } from '../../../../config/config';
 import {
   ParamsForApiProps,
   PlotDataProps,
@@ -45,6 +45,10 @@ export const ZoomedJSROOTPlot = ({
   const router = useRouter();
   const query: QueryProps = router.query;
 
+  const { configuration } = React.useContext(store);
+  const { mode, functions_config } = configuration
+  const { new_back_end } = functions_config
+
   const { data } = useRequest(get_jroot_plot(params_for_api), {}, [
     selected_plot.name,
     params_for_api.lumi,
@@ -65,13 +69,13 @@ export const ZoomedJSROOTPlot = ({
     <StyledCol space={2}>
       <StyledPlotRow
         isLoading={blink.toString()}
-        animation={(functions_config.mode === 'ONLINE').toString()}
+        animation={(mode === 'ONLINE').toString()}
         minheight={params_for_api.height}
         width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}
         nopointer={true.toString()}
       >
-        <PlotNameCol error={get_plot_error(selected_plot).toString()}>
+        <PlotNameCol error={get_plot_error(selected_plot, new_back_end).toString()}>
           {selected_plot.displayedName}
         </PlotNameCol>
         <Column>

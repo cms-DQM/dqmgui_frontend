@@ -13,15 +13,18 @@ import {
 import { seperateRunAndLumiInSearch } from '../../../components/utils';
 import { changeRouter, getChangedQueryParams } from '../utils';
 import { workspaces } from '../../../workspaces/offline';
-import { functions_config } from '../../../config/config';
 import { LatestRuns } from '../../../components/latestRuns';
 import { useUpdateLiveMode } from '../../../hooks/useUpdateInLiveMode';
+import { store } from '../../../contexts/leftSideContext';
 
 export const ContentSwitching = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
   const { set_update } = useUpdateLiveMode();
 
+  const { configuration } = React.useContext(store);
+  const { functions_config } = configuration
+  const { latest_runs } = configuration
   const { results_grouped, searching, isLoading, errors } = useSearch(
     query.search_run_number,
     query.search_dataset_name
@@ -63,7 +66,7 @@ export const ContentSwitching = () => {
         errors={errors}
       />
     );
-  } else if (functions_config.new_back_end.latest_runs) {
+  } else if (latest_runs) {
     return <LatestRuns />;
   }
   return (

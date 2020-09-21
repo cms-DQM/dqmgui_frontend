@@ -49,7 +49,7 @@ export const OnSideOverlaidPlots = ({
   const [imageError, setImageError] = useState(false);
 
   const { configuration } = useContext(store)
-  const { root_url, mode } = configuration
+  const { root_url, mode, new_back_end } = configuration
 
   const router = useRouter();
   const query: QueryProps = router.query;
@@ -75,7 +75,7 @@ export const OnSideOverlaidPlots = ({
                 width={params_for_api.width?.toString()}
                 is_plot_selected={isPlotSelected.toString()}
               >
-                <PlotNameCol error={get_plot_error(plot).toString()}>
+                <PlotNameCol error={get_plot_error(plot, new_back_end).toString()}>
                   {plot.displayedName}
                 </PlotNameCol>
                 <Column>

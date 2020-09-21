@@ -17,7 +17,6 @@ import {
 import { NoResultsFound } from '../containers/search/noResultsFound';
 import { store } from '../contexts/leftSideContext';
 import { useNewer } from '../hooks/useNewer';
-import { functions_config } from '../config/config';
 import { useBlinkOnUpdate } from '../hooks/useBlinkOnUpdate';
 import { LiveModeButton } from './liveModeButton';
 import { CustomDiv } from './styledComponents';
@@ -57,6 +56,9 @@ export const LatestRuns = () => {
     set_update(true)
   }, [])
 
+  const { configuration } = React.useContext(store)
+  const { mode } = configuration
+
   return (
     <>
       {!isLoading && errors.length > 0 ? (
@@ -86,12 +88,13 @@ export const LatestRuns = () => {
                           <RunWrapper
                             isLoading={blink.toString()}
                             animation={(
-                              functions_config.mode === 'ONLINE'
+                              mode === 'ONLINE'
                             ).toString()}
                             hover="true"
                             onClick={() => {
                               set_update(false)
-                              changeRouter({ search_run_number: run })}}
+                              changeRouter({ search_run_number: run })
+                            }}
                           >
                             <StyledA>{run}</StyledA>
                           </RunWrapper>

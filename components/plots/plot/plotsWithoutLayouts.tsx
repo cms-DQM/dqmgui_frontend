@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-import { functions_config } from '../../../config/config';
 import {
   QueryProps,
   PlotDataProps,

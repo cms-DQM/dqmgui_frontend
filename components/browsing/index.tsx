@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Form from 'antd/lib/form/Form';
 
-import { functions_config } from '../../config/config';
 import { WrapperDiv } from '../../containers/display/styledComponents';
 import { DatasetsBrowser } from './datasetsBrowsing/datasetsBrowser';
 import { DatasetsBuilder } from './datasetsBrowsing/datasetNameBuilder';
@@ -30,7 +29,9 @@ export const Browser = () => {
   const dataset_name = query.dataset_name ? query.dataset_name : '';
   const lumi = query.lumi ? parseInt(query.lumi) : NaN;
 
-  const { setLumisection } = React.useContext(store);
+  const { setLumisection, configuration } = React.useContext(store);
+  const { functions_config } = configuration
+  const { lumisections_on } = configuration
   const [currentRunNumber, setCurrentRunNumber] = useState(run_number);
   const [currentDataset, setCurrentDataset] = useState<string>(dataset_name);
 
@@ -64,7 +65,7 @@ export const Browser = () => {
           <RunBrowser query={query} setCurrentRunNumber={setCurrentRunNumber} />
         </WrapperDiv>
         <WrapperDiv>
-          {functions_config.new_back_end.lumisections_on && (
+          {lumisections_on && (
             <LumesectionBrowser
               currentLumisection={lumi}
               currentRunNumber={currentRunNumber}
@@ -92,14 +93,14 @@ export const Browser = () => {
               />
             </WrapperDiv>
           ) : (
-            <WrapperDiv>
-              <DatasetsBuilder
-                currentRunNumber={currentRunNumber}
-                currentDataset={currentDataset}
-                query={query}
-              />
-            </WrapperDiv>
-          )}
+              <WrapperDiv>
+                <DatasetsBuilder
+                  currentRunNumber={currentRunNumber}
+                  currentDataset={currentDataset}
+                  query={query}
+                />
+              </WrapperDiv>
+            )}
         </StyledFormItem>
       </WrapperDiv>
     </Form>

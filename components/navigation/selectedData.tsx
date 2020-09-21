@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Row, Col } from 'antd';
 
-import { functions_config } from '../../config/config';
 import { LumesectionBrowser } from '../browsing/lumesectionBroweser';
 import Form from 'antd/lib/form/Form';
 import { StyledFormItem, SelectedDataCol } from '../styledComponents';
@@ -42,7 +41,9 @@ export const SelectedData = ({
   toggleRunInNewTab,
   openRunInNewTab,
 }: SelectedDataProps) => {
-  const { lumisection, setLumisection } = React.useContext(store);
+  const { lumisection, setLumisection, configuration } = React.useContext(store);
+  const { functions_config } = configuration
+  const { lumisections_on } = functions_config
   const router = useRouter();
   const query: QueryProps = router.query;
 
@@ -77,7 +78,7 @@ export const SelectedData = ({
           <SelectedDataCol>{run_number}</SelectedDataCol>
         </StyledFormItem>
       </Row>
-      {functions_config.new_back_end.lumisections_on && (
+      {lumisections_on && (
         <Row>
           <Col>
             <LumesectionBrowser

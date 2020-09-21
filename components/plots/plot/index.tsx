@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { useRouter } from 'next/router';
 
-import { functions_config } from '../../../config/config';
 import { store } from '../../../contexts/leftSideContext';
 import {
   QueryProps,
@@ -32,10 +31,13 @@ export const LeftSidePlots = ({
   const folders = query.folder_path ? query.folder_path?.split('/') : [];
   const current_folder = folders[folders.length - 1];
 
+  const { configuration } = React.useContext(store)
+  const { functions_config } = configuration
+
   if (plots.length > 0) {
     return (
       <>
-        {functions_config.new_back_end.layouts &&
+        {functions_config.layouts &&
         current_folder === 'Layouts' ? (
           <PlotsWithLayout
             plots_grouped_by_layouts={plots_grouped_by_layouts_checked}

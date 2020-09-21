@@ -10,8 +10,8 @@ import {
   getChangedQueryParams,
 } from '../utils';
 import { CustomDiv, CutomBadge } from '../../../components/styledComponents';
-import { functions_config } from '../../../config/config';
 import { useBlinkOnUpdate } from '../../../hooks/useBlinkOnUpdate';
+import { store } from '../../../contexts/leftSideContext';
 
 interface FoldersFilter {
   directories: DirectoryInterface[];
@@ -20,10 +20,11 @@ interface FoldersFilter {
 interface MeCountProps {
   me_count: number;
   children: React.ReactElement;
+  new_back_end: boolean;
 }
 
-const MeCount = ({ me_count, children }: MeCountProps) => {
-  if (functions_config.new_back_end.new_back_end) {
+const MeCount = ({ me_count, children, new_back_end }: MeCountProps) => {
+  if (new_back_end) {
     return <CutomBadge count={me_count}>{children}</CutomBadge>;
   }
   return children;
@@ -34,6 +35,9 @@ export const Directories = ({ directories }: FoldersFilter) => {
   const query: QueryProps = router.query;
   const { blink } = useBlinkOnUpdate();
 
+  const { configuration } = React.useContext(store);
+  const { functions_config } = configuration
+  
   return (
     <>
       {directories.map((directory: DirectoryInterface) => (
@@ -58,7 +62,7 @@ export const Directories = ({ directories }: FoldersFilter) => {
                 )
               }
             >
-              <MeCount me_count={directory.me_count ? directory.me_count : 0}>
+              <MeCount me_count={directory.me_count ? directory.me_count : 0} new_back_end={functions_config.new_back_end}>
                 <Icon
                   isLoading={blink.toString()}
                   animation={(functions_config.mode === 'ONLINE').toString()}

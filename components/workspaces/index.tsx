@@ -11,7 +11,7 @@ import { setWorkspaceToQuery } from './utils';
 import { QueryProps } from '../../containers/display/interfaces';
 import { useChangeRouter } from '../../hooks/useChangeRouter';
 import { theme } from '../../styles/theme';
-import { functions_config } from '../../config/config';
+import { store } from '../../contexts/leftSideContext';
 
 const { TabPane } = Tabs;
 
@@ -20,7 +20,10 @@ interface WorspaceProps {
   workspaces: any;
 }
 const Workspaces = () => {
-  const workspaces = functions_config.mode === "ONLINE" ? onlineWorkspace : offlineWorskpace
+  const { configuration } = React.useContext(store);
+  const { mode } = configuration
+
+  const workspaces = mode === "ONLINE" ? onlineWorkspace : offlineWorskpace
   const router = useRouter();
   const query: QueryProps = router.query;
   const workspaceOption = query.workspace

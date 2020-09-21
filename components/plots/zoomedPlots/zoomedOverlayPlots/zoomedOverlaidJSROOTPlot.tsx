@@ -2,7 +2,7 @@ import React from 'react';
 import cleanDeep from 'clean-deep';
 import { useRouter } from 'next/router';
 
-import { get_jroot_plot, functions_config } from '../../../../config/config';
+import { get_jroot_plot } from '../../../../config/config';
 import {
   ParamsForApiProps,
   TripleProps,
@@ -36,6 +36,7 @@ const drawJSROOT = async (
   plot_name: string,
   overlaidJSROOTPlot: any
 ) => {
+
   //@ts-ignore
   await JSROOT.cleanup(`${histogramParam}_${plot_name}`);
 
@@ -54,6 +55,9 @@ export const ZoomedOverlaidJSROOTPlot = ({
 }: ZoomedJSROOTPlotsProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
+  const { configuration } = React.useContext(store);
+  const { mode, functions_config } = configuration
+  const { new_back_end } = functions_config
 
   const { data } = useRequest(get_jroot_plot(params_for_api), {}, [
     selected_plot.name,
@@ -61,18 +65,18 @@ export const ZoomedOverlaidJSROOTPlot = ({
 
   const overlaid_plots_runs_and_datasets: any[] = params_for_api?.overlay_plot
     ? params_for_api.overlay_plot.map((plot: TripleProps) => {
-        const copy: any = { ...params_for_api };
+      const copy: any = { ...params_for_api };
 
-        if (plot.dataset_name) {
-          copy.dataset_name = plot.dataset_name;
-        }
-        copy.run_number = plot.run_number;
-        const { data } = useRequest(get_jroot_plot(copy), {}, [
-          selected_plot.name,
-          query.lumi,
-        ]);
-        return data;
-      })
+      if (plot.dataset_name) {
+        copy.dataset_name = plot.dataset_name;
+      }
+      copy.run_number = plot.run_number;
+      const { data } = useRequest(get_jroot_plot(copy), {}, [
+        selected_plot.name,
+        query.lumi,
+      ]);
+      return data;
+    })
     : [];
 
   overlaid_plots_runs_and_datasets.push(data);
@@ -143,14 +147,14 @@ export const ZoomedOverlaidJSROOTPlot = ({
     <StyledCol space={2}>
       <StyledPlotRow
         isLoading={blink.toString()}
-        animation={(functions_config.mode === 'ONLINE').toString()}
+        animation={(mode === 'ONLINE').toString()}
         minheight={params_for_api.height}
         width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}
         nopointer={true.toString()}
-        // report={selected_plot.properties.report}
+      // report={selected_plot.properties.report}
       >
-        <PlotNameCol error={get_plot_error(selected_plot).toString()}>
+        <PlotNameCol error={get_plot_error(selected_plot, new_back_end).toString()}>
           {selected_plot.displayedName}
         </PlotNameCol>
         <Column>

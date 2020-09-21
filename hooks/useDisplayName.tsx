@@ -1,15 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useContext } from 'react';
 
 import { PlotInterface } from '../containers/display/content/folders_and_plots_content';
 import { getNameAndDirectoriesFromDir } from '../containers/display/utils';
 import { PlotDataProps, QueryProps } from '../containers/display/interfaces';
 import { useRouter } from 'next/router';
-import { functions_config } from '../config/config';
+import { store } from '../contexts/leftSideContext';
 
 export const useDisplayedName = (contents: any, data: any) => {
   const [plotContent, setPlotContent] = useState<PlotDataProps[]>([]);
   const router = useRouter();
   const query: QueryProps = router.query;
+  const {  configuration } = useContext(store);
+  const { functions_config } = configuration
 
   useEffect(() => {
     const plotsData: any = contents.map((content: PlotInterface) => {
@@ -24,7 +26,7 @@ export const useDisplayedName = (contents: any, data: any) => {
           name: name,
           path: content.path && '/' + directories,
           layout: content.layout,
-          qresults: functions_config.new_back_end.new_back_end
+          qresults: functions_config.new_back_end
             ? content.qtstatuses
             : content.qresults,
         };

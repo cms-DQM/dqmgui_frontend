@@ -3,7 +3,6 @@ import {
   TripleProps,
   QueryProps,
   ParamsForApiProps,
-  PlotPropertiesProps,
 } from '../../../../containers/display/interfaces';
 import cleanDeep from 'clean-deep';
 
@@ -13,8 +12,6 @@ import {
   changeRouter,
   getChangedQueryParams,
 } from '../../../../containers/display/utils';
-import { SetStateAction } from 'react';
-import { functions_config } from '../../../../config/config';
 
 export const removePlotFromSelectedPlots = (
   plotsQuery: string | undefined,
@@ -131,9 +128,9 @@ export const shrink_or_expand = (name: string, layouts_sections: string[]) => {
   }
 };
 
-export const get_plot_error = (plot: PlotDataProps) => {
+export const get_plot_error = (plot: PlotDataProps, new_back_end: boolean) => {
   let found = false;
-  if (functions_config.new_back_end.new_back_end) {
+  if (new_back_end) {
     return plot.qresults && plot.qresults.find((status) => status === 300)
       ? true
       : false;
