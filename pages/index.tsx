@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -16,8 +16,11 @@ import { FolderPathQuery, QueryProps } from '../containers/display/interfaces';
 import { backToMainPage } from '../utils/pages';
 import { Header } from '../containers/display/header';
 import { ContentSwitching } from '../containers/display/content/constent_switching';
+import { useFecthConfiguration } from '../hooks/useFetchCinfiguration';
 
 const Index: NextPage<FolderPathQuery> = () => {
+  //fetching configuration
+  useFecthConfiguration()
   // We grab the query from the URL:
   const router = useRouter();
   const query: QueryProps = router.query;
@@ -25,7 +28,7 @@ const Index: NextPage<FolderPathQuery> = () => {
   const isDatasetAndRunNumberSelected =
     !!query.run_number && !!query.dataset_name;
 
-    return (
+  return (
     <StyledDiv>
       <Head>
         <script
