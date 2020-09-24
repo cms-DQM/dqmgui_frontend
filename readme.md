@@ -244,4 +244,8 @@ Updated is indicated by plot background color change (from light blue to dark pu
 28. Chnage workspaces according mode
 29. Styles file import
 30. Ovelay plots with different names, but having same runs and dataset.
+31. There is some plots, where api returns error 500 and root adds warning (*adc_per_OnloineBlock_PXForward*)
+32. When plot is not uploaded GUI doesn't try to upload it again
+33. Not to make a new req, when old is not finished yet.
+34. Event numbers: check pricessedEvents and iEvent
 ---
