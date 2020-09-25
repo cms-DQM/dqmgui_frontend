@@ -3,7 +3,7 @@ import { Spin } from 'antd';
 
 import { useRequest } from '../../hooks/useRequest';
 import { QueryProps } from '../../containers/display/interfaces';
-import { get_jroot_plot } from '../../config/config';
+import { get_jroot_plot } from '../../config/apis/get_plots_urls';
 import { store } from '../../contexts/leftSideContext';
 import { FormatParamsForAPI } from '../plots/plot/singlePlot/utils';
 import { CustomCol, CustomRow } from '../styledComponents';
@@ -29,6 +29,9 @@ export const RunInfoItem = ({ query, info }: RunInfoProps) => {
     '/HLT/EventInfo'
   );
   
+  const { configuration } = globalState
+  const { functions_config } = configuration
+  params_for_api.functions_config = functions_config
   const { data, isLoading } = useRequest(get_jroot_plot(params_for_api), {}, [
     query.dataset_name,
     query.run_number,

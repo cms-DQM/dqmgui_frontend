@@ -6,6 +6,7 @@ import axios, {
 } from 'axios';
 
 import { store } from '../contexts/leftSideContext';
+import { useFecthConfiguration } from './useFetchCinfiguration';
 
 interface ReturnRequest {
   data: any;
@@ -28,6 +29,7 @@ export const useRequest = (
 
   const { configuration } = useContext(store)
   const { root_url } = configuration
+  const { loading } = useFecthConfiguration()
 
   useEffect(() => {
     if (cancelSource) {
@@ -62,7 +64,7 @@ export const useRequest = (
         cancelSource.current?.cancel();
       }
     };
-    if (should_we_fetch) {
+    if (should_we_fetch && !loading) {
       fetchData();
     }
     return () => setErrors([]);

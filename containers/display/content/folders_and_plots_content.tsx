@@ -118,7 +118,7 @@ const Content: FC<FolderProps> = ({
             filteredFolders={filteredFolders}
             query={query}
           />
-          {selected_plots.length > 0 && errors.length === 0 && (
+          {/* {selected_plots.length > 0 && errors.length === 0 && (
             <ZoomedPlotsWrapper
               any_selected_plots={selected_plots.length && errors.length === 0}
               proportion={proportion}
@@ -126,7 +126,7 @@ const Content: FC<FolderProps> = ({
             >
               <ZoomedPlots selected_plots={selected_plots} />
             </ZoomedPlotsWrapper>
-          )}
+          )} */}
         </DivWrapper>
       </>
     </>

@@ -3,13 +3,13 @@ import { Col, Select, Spin, Button, Row } from 'antd';
 import { CaretRightFilled, CaretLeftFilled } from '@ant-design/icons';
 
 import { useRequest } from '../../hooks/useRequest';
-import { getLumisections } from '../../config/config';
 import {
   StyledSelect,
   OptionParagraph,
 } from '../viewDetailsMenu/styledComponents';
 import { StyledFormItem } from '../styledComponents';
 import { OptionProps, QueryProps } from '../../containers/display/interfaces';
+import { getLumisections } from '../../config/apis/get_lumisections';
 
 const { Option } = Select;
 

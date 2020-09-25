@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { useRequest } from '../../hooks/useRequest';
 import { QueryProps } from '../../containers/display/interfaces';
-import { get_jroot_plot } from '../../config/config';
+import { get_jroot_plot } from '../../config/apis/get_plots_urls';
 import { store } from '../../contexts/leftSideContext';
 import { FormatParamsForAPI } from '../plots/plot/singlePlot/utils';
 import { CustomCol, CustomRow } from '../styledComponents';
@@ -20,7 +20,9 @@ export const Events = ({ query }: EventsProps) => {
     'iEvent',
     '/HLT/EventInfo'
   );
-
+  const { configuration } = globalState
+  const { functions_config } = configuration
+  params_for_api.functions_config = functions_config
   const { data } = useRequest(get_jroot_plot(params_for_api));
   const events_amount = data ? data.fString : '0';
   return (

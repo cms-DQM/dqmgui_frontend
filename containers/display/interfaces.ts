@@ -1,3 +1,5 @@
+import { ConfigurationProps } from "../../contexts/interfaces";
+
 export interface TripleProps {
   [key: string]: string | number | boolean;
 }
@@ -37,6 +39,7 @@ export interface LumisectionRequestProps {
   run_number: string;
   lumi?: number | string;
   notOlderThan?: number;
+  functions_config?: any;
 }
 
 export interface ParamsForApiProps extends PlotProps {
@@ -44,6 +47,8 @@ export interface ParamsForApiProps extends PlotProps {
   overlay?: string;
   customizeProps?: CustomizeProps;
   plot_search?: string;
+  functions_config?: any;
+  mode?: string;
 }
 
 export interface DisplayFolderOrPlotComponentProps {

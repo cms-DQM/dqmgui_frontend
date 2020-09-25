@@ -1,7 +1,5 @@
-import { functions_config } from '../config/config';
-
-export const get_runs_by_search = (data: any) => {
-  if (functions_config.new_back_end.new_back_end) {
+export const get_runs_by_search = (data: any, new_back_end: boolean) => {
+  if (new_back_end) {
     return data && data.data;
   } else if (data) {
     const { samples: results }: { samples: any[] } = data;

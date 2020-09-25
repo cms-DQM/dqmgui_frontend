@@ -6,6 +6,7 @@ import { Reset } from 'styled-reset';
 
 import { theme } from '../styles/theme';
 import { LeftSideStateProvider } from '../contexts/leftSideContext';
+import { useFecthConfiguration } from '../hooks/useFetchCinfiguration';
 
 const GlobalStyles = createGlobalStyle`
   html {

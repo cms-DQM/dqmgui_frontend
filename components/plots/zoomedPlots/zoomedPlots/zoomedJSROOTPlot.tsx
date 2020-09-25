@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-import { get_jroot_plot } from '../../../../config/config';
 import {
   ParamsForApiProps,
   PlotDataProps,
@@ -23,6 +22,7 @@ import {
 import { Button } from 'antd';
 import { store } from '../../../../contexts/leftSideContext';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
+import { get_jroot_plot } from '../../../../config/apis/get_plots_urls';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;
@@ -48,7 +48,7 @@ export const ZoomedJSROOTPlot = ({
   const { configuration } = React.useContext(store);
   const { mode, functions_config } = configuration
   const { new_back_end } = functions_config
-
+  params_for_api.functions_config=functions_config
   const { data } = useRequest(get_jroot_plot(params_for_api), {}, [
     selected_plot.name,
     params_for_api.lumi,

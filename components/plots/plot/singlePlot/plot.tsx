@@ -2,7 +2,6 @@ import React, { useRef, useEffect, useState, useContext } from 'react';
 import { useRouter } from 'next/router';
 import lozad from 'lozad';
 
-import { get_plot_url } from '../../../../config/config';
 import {
   PlotDataProps,
   QueryProps,
@@ -28,6 +27,7 @@ import { CustomDiv } from '../../../styledComponents';
 import { ErrorMessage } from '../../errorMessage';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 import { store } from '../../../../contexts/leftSideContext';
+import { get_plot_url } from '../../../../config/apis/get_plots_urls';
 
 interface PlotProps {
   plot: PlotDataProps;
@@ -47,12 +47,14 @@ export const Plot = ({
   const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
 
+  const { configuration } = useContext(store)
+  const { root_url, mode, functions_config } = configuration
+  
+  params_for_api.functions_config = functions_config
   const plot_url = get_plot_url(params_for_api);
   const imageRef = useRef(null);
 
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
-  const { configuration } = useContext(store)
-  const { root_url, mode } = configuration
 
   const [source, setSource] = useState(
     `${root_url}${plot_url};notOlderThan=${updated_by_not_older_than}`
@@ -89,7 +91,7 @@ export const Plot = ({
           width={params_for_api.width?.toString()}
           is_plot_selected={isPlotSelected.toString()}
         >
-          <PlotNameCol error={get_plot_error(plot).toString()}>
+          <PlotNameCol error={get_plot_error(plot, functions_config.new_back_end).toString()}>
             {plot.displayedName}
           </PlotNameCol>
           <Column>

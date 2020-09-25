@@ -3,10 +3,6 @@ import { useRouter } from 'next/router';
 import lozad from 'lozad';
 
 import {
-  get_plot_with_overlay,
-  get_overlaied_plots_urls,
-} from '../../../../config/config';
-import {
   ParamsForApiProps,
   PlotDataProps,
   QueryProps,
@@ -31,6 +27,7 @@ import { CustomDiv } from '../../../styledComponents';
 import { Spinner } from '../../../../containers/search/styledComponents';
 import { ErrorMessage } from '../../errorMessage';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
+import { get_overlaied_plots_urls, get_plot_with_overlay } from '../../../../config/apis/get_plots_urls';
 
 interface OverlaidPlotImageProps {
   params_for_api: ParamsForApiProps;
@@ -48,14 +45,14 @@ export const OverlaidPlotImage = ({
 
   const globalState = useContext(store);
   const { normalize, configuration } = globalState;
-  const { root_url, mode } = configuration
+  const { root_url, mode, functions_config } = configuration
 
   const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
 
   params_for_api.plot_name = plot.name;
   params_for_api.normalize = normalize;
-
+  params_for_api.functions_config = functions_config
   const overlaid_plots_urls = get_overlaied_plots_urls(params_for_api);
   const joined_overlaid_plots_urls = overlaid_plots_urls.join('');
   params_for_api.joined_overlaied_plots_urls = joined_overlaid_plots_urls;
@@ -84,7 +81,7 @@ export const OverlaidPlotImage = ({
           width={params_for_api.width?.toString()}
           is_plot_selected={isPlotSelected.toString()}
         >
-          <PlotNameCol error={get_plot_error(plot).toString()}>
+          <PlotNameCol error={get_plot_error(plot, functions_config.new_back_end).toString()}>
             {plot.displayedName}
           </PlotNameCol>
           <Column>

@@ -8,15 +8,14 @@ import {
 import { useFilterFoldersByWorkspaces } from './useFilterFoldersByWorkspace';
 import {
   getFilteredDirectories,
-  getDirectories,
-  choose_api,
-  getContents,
 } from '../containers/display/utils';
 import { useNewer } from './useNewer';
 import { useRequest } from './useRequest';
 import { useDisplayedName } from './useDisplayName';
 import cleanDeep from 'clean-deep';
 import { store } from '../contexts/leftSideContext';
+import { choose_api } from '../config/apis/utils/choose_api';
+import { getContents, getDirectories } from '../config/apis/utils/directories_and_plots';
 
 export const useFilterFolders = (
   query: QueryProps,
@@ -36,7 +35,9 @@ export const useFilterFolders = (
   const [plots, setPlots] = React.useState<any[]>([]);
   const [isLoading, setLoading] = React.useState(false);
   const { configuration } = React.useContext(store);
-  const { mode } = configuration
+  const { mode, functions_config } = configuration
+  params.mode = mode
+  params.functions_config = functions_config
   const current_api = choose_api(params);
 
   const data_get_by_not_older_than_update = useRequest(
@@ -63,13 +64,13 @@ export const useFilterFolders = (
     data_get_by_not_older_than_update.errors
   );
 
-  const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
+  const contents: (PlotInterface & DirectoryInterface)[] = getContents(data, functions_config);
   const allDirectories = getDirectories(contents);
 
   const formattedPlotsObject = useDisplayedName(contents, data);
 
   React.useEffect(() => {
-    setDirectories(getDirectories(contents));
+    setDirectories(getDirectories(contents, functions_config));
     setPlots(cleanDeep(formattedPlotsObject));
   }, [
     data,

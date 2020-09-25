@@ -23,7 +23,6 @@ export const ContentSwitching = () => {
   const { set_update } = useUpdateLiveMode();
 
   const { configuration } = React.useContext(store);
-  const { functions_config } = configuration
   const { latest_runs } = configuration
   const { results_grouped, searching, isLoading, errors } = useSearch(
     query.search_run_number,

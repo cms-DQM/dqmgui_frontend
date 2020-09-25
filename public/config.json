@@ -1,6 +1,6 @@
 {
   "development": {
-    "root_url": "http://localhost:8081/dqm/dev",
+    "root_url": "http://localhost:8081",
     "title": "Development",
     "functions_config": {
       "new_back_end": "false",

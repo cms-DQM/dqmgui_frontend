@@ -62,13 +62,13 @@ export const DisplayFordersOrPlots = ({
               <CustomRow width="100%" space={'2'}>
                 <Directories directories={filteredFolders} />
               </CustomRow>
-              <Row>
+              {/* <Row>
                 <LeftSidePlots
                   plots={plots}
                   selected_plots={selected_plots}
                   plots_grouped_by_layouts={plots_grouped_by_layouts}
                 />
-              </Row>
+              </Row> */}
             </>
           ) : (
             !isLoading &&

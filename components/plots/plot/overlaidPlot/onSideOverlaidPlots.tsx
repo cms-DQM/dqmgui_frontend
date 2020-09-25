@@ -16,7 +16,6 @@ import {
   MinusIcon,
   OnSidePlotsWrapper,
 } from '../../../../containers/display/styledComponents';
-import { getOnSideOverlaidPlots } from './utils';
 import {
   addPlotToRightSide,
   removePlotFromRightSide,
@@ -29,6 +28,7 @@ import { ErrorMessage } from '../../errorMessage';
 import { CustomDiv } from '../../../styledComponents';
 import { Spinner } from '../../../../containers/search/styledComponents';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
+import { getOnSideOverlaidPlots } from '../../../../config/apis/utils/plots';
 
 interface OnSideOverlaidPlotsProps {
   params_for_api: ParamsForApiProps;
@@ -43,13 +43,14 @@ export const OnSideOverlaidPlots = ({
   isPlotSelected,
   imageRefScrollDown,
 }: OnSideOverlaidPlotsProps) => {
+  const { configuration } = useContext(store)
+  const { root_url, mode, new_back_end , functions_config} = configuration
+  
   params_for_api.plot_name = plot.name;
+  params_for_api.functions_config = functions_config
   const onsidePlotsURLs: string[] = getOnSideOverlaidPlots(params_for_api);
   const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
-
-  const { configuration } = useContext(store)
-  const { root_url, mode, new_back_end } = configuration
 
   const router = useRouter();
   const query: QueryProps = router.query;

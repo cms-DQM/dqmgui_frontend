@@ -5,9 +5,6 @@ import { Store } from 'antd/lib/form/interface';
 import lozad from 'lozad';
 
 import {
-  get_plot_url,
-} from '../../../../config/config';
-import {
   ParamsForApiProps,
   PlotDataProps,
   QueryProps,
@@ -34,6 +31,7 @@ import { CustomDiv } from '../../../styledComponents';
 import { Spinner } from '../../../../containers/search/styledComponents';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 import { store } from '../../../../contexts/leftSideContext';
+import { get_plot_url } from '../../../../config/apis/get_plots_urls';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -53,9 +51,10 @@ export const ZoomedPlot = ({
   const [imageError, setImageError] = useState(false);
 
   const { configuration } = useContext(store)
-  const { root_url, mode } = configuration
+  const { root_url, mode, functions_config } = configuration
 
   params_for_api.customizeProps = customizationParams;
+  params_for_api.functions_config = functions_config
   const plot_url = get_plot_url(params_for_api);
 
   const copy_of_params = { ...params_for_api };
@@ -114,7 +113,7 @@ export const ZoomedPlot = ({
           is_plot_selected={true.toString()}
           nopointer={true.toString()}
         >
-          <PlotNameCol error={get_plot_error(selected_plot).toString()}>
+          <PlotNameCol error={get_plot_error(selected_plot, functions_config.new_back_end).toString()}>
             {selected_plot.displayedName}
           </PlotNameCol>
           <ImageDiv
@@ -145,7 +144,7 @@ export const ZoomedPlot = ({
         is_plot_selected={true.toString()}
         nopointer={true.toString()}
       >
-        <PlotNameCol error={get_plot_error(selected_plot).toString()}>
+        <PlotNameCol error={get_plot_error(selected_plot, functions_config.new_back_end).toString()}>
           {selected_plot.displayedName}
         </PlotNameCol>
         <Column display="flex">
@@ -157,35 +156,35 @@ export const ZoomedPlot = ({
         {imageError ? (
           <ErrorMessage />
         ) : (
-          <ImageDiv
-            alignitems="center"
-            id={selected_plot.name}
-            width={params_for_api.width}
-            height={params_for_api.height}
-            display="flex"
-          >
-            {!imageError && (
-              <Image
-                key={source}
-                onLoad={() => setImageLoading(false)}
-                alt={selected_plot.name}
-                data-src={source}
-                className="lozad"
-                onError={() => {
-                  setImageError(true);
-                  setImageLoading(false);
-                }}
-                width={params_for_api.width}
-                height={params_for_api.height}
-              />
-            )}
-            {imageLoading && (
-              <CustomDiv display="flex" justifycontent="center" width="100%">
-                <Spinner />
-              </CustomDiv>
-            )}
-          </ImageDiv>
-        )}
+            <ImageDiv
+              alignitems="center"
+              id={selected_plot.name}
+              width={params_for_api.width}
+              height={params_for_api.height}
+              display="flex"
+            >
+              {!imageError && (
+                <Image
+                  key={source}
+                  onLoad={() => setImageLoading(false)}
+                  alt={selected_plot.name}
+                  data-src={source}
+                  className="lozad"
+                  onError={() => {
+                    setImageError(true);
+                    setImageLoading(false);
+                  }}
+                  width={params_for_api.width}
+                  height={params_for_api.height}
+                />
+              )}
+              {imageLoading && (
+                <CustomDiv display="flex" justifycontent="center" width="100%">
+                  <Spinner />
+                </CustomDiv>
+              )}
+            </ImageDiv>
+          )}
       </StyledPlotRow>
     </StyledCol>
   );

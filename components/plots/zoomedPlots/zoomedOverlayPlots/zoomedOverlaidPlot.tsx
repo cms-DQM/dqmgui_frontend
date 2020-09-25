@@ -3,21 +3,16 @@ import { useRouter } from 'next/router';
 import { Store } from 'antd/lib/form/interface';
 import lozad from 'lozad';
 import {
-  MinusCircleOutlined,
   SettingOutlined,
   FullscreenOutlined,
 } from '@ant-design/icons';
 
-import {
-  get_overlaied_plots_urls,
-} from '../../../../config/config';
 import {
   ParamsForApiProps,
   PlotDataProps,
   QueryProps,
   CustomizeProps,
 } from '../../../../containers/display/interfaces';
-import { get_plot_source } from './utils';
 import {
   StyledPlotRow,
   PlotNameCol,
@@ -39,6 +34,8 @@ import { CustomDiv } from '../../../styledComponents';
 import { ErrorMessage } from '../../errorMessage';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 import { store } from '../../../../contexts/leftSideContext';
+import { get_overlaied_plots_urls } from '../../../../config/apis/get_plots_urls';
+import { get_plot_source } from '../../../../config/apis/utils/plots';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -59,7 +56,7 @@ export const ZoomedOverlaidPlot = ({
   const [isPortalWindowOpen, setIsPortalWindowOpen] = React.useState(false);
 
   const { configuration } = useContext(store)
-  const { mode, root_url } = configuration
+  const { mode, root_url, functions_config } = configuration
 
   const zoomedPlotMenuOptions = [
     {
@@ -82,7 +79,7 @@ export const ZoomedOverlaidPlot = ({
   const overlaid_plots_urls = get_overlaied_plots_urls(params_for_api);
   const joined_overlaid_plots_urls = overlaid_plots_urls.join('');
   params_for_api.joined_overlaied_plots_urls = joined_overlaid_plots_urls;
-
+  params_for_api.functions_config =functions_config
   const source = get_plot_source(root_url, params_for_api);
 
   const copy_of_params = { ...params_for_api };
@@ -112,7 +109,7 @@ export const ZoomedOverlaidPlot = ({
           is_plot_selected={true.toString()}
           nopointer={true.toString()}
         >
-          <PlotNameCol error={get_plot_error(selected_plot).toString()}>
+          <PlotNameCol error={get_plot_error(selected_plot, functions_config.new_back_end).toString()}>
             {selected_plot.displayedName}
           </PlotNameCol>
           <ImageDiv
@@ -142,7 +139,7 @@ export const ZoomedOverlaidPlot = ({
         is_plot_selected={true.toString()}
         nopointer={true.toString()}
       >
-        <PlotNameCol error={get_plot_error(selected_plot).toString()}>
+        <PlotNameCol error={get_plot_error(selected_plot, functions_config.new_back_end).toString()}>
           {selected_plot.displayedName}
         </PlotNameCol>
         <Column display="flex">

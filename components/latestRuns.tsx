@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import { useRequest } from '../hooks/useRequest';
-import { get_the_latest_runs } from '../config/config';
 import { changeRouter } from '../containers/display/utils';
 import {
   SpinnerWrapper,
@@ -21,6 +20,7 @@ import { useBlinkOnUpdate } from '../hooks/useBlinkOnUpdate';
 import { LiveModeButton } from './liveModeButton';
 import { CustomDiv } from './styledComponents';
 import { useUpdateLiveMode } from '../hooks/useUpdateInLiveMode';
+import { get_the_latest_runs } from '../config/apis/get_latest_runs';
 
 export const LatestRuns = () => {
   const { updated_by_not_older_than } = React.useContext(store);

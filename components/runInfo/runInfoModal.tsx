@@ -9,7 +9,7 @@ import { run_info } from '../constants';
 import { FormatParamsForAPI } from '../plots/plot/singlePlot/utils';
 import { store } from '../../contexts/leftSideContext';
 import { useRequest } from '../../hooks/useRequest';
-import { get_jroot_plot } from '../../config/config';
+import { get_jroot_plot } from '../../config/apis/get_plots_urls';
 import { get_label } from '../utils';
 
 interface RunInfoModalProps {
@@ -31,7 +31,10 @@ export const RunInfoModal = ({
     '/HLT/EventInfo'
   );
 
-  const { data, isLoading } = useRequest(get_jroot_plot(params_for_api), {}, [
+  const { configuration } = globalState
+  const { functions_config } = configuration
+  params_for_api.functions_config = functions_config
+  const { data } = useRequest(get_jroot_plot(params_for_api), {}, [
     query.dataset_name,
     query.run_number,
   ]);

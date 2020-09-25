@@ -10,8 +10,8 @@ import { store } from '../../contexts/leftSideContext';
 import { QueryProps, InfoProps } from '../../containers/display/interfaces';
 import { main_run_info } from '../constants'
 import { useRequest } from '../../hooks/useRequest';
-import { get_jroot_plot } from '../../config/config';
 import { get_label } from '../utils';
+import { get_jroot_plot } from '../../config/apis/get_plots_urls';
 const { Title } = Typography;
 
 interface LiveModeHeaderProps {
@@ -21,6 +21,8 @@ interface LiveModeHeaderProps {
 export const LiveModeHeader = ({ query }: LiveModeHeaderProps) => {
   const { update, set_update } = useUpdateLiveMode();
   const globalState = React.useContext(store);
+  const { functions_config } = globalState
+
   return (
     <>
       <CustomForm display="flex">
@@ -32,7 +34,7 @@ export const LiveModeHeader = ({ query }: LiveModeHeaderProps) => {
               info.value,
               '/HLT/EventInfo'
             );
-
+            params_for_api.functions_config = functions_config
             const { data, isLoading } = useRequest(get_jroot_plot(params_for_api), {}, [
               query.dataset_name,
               query.run_number,

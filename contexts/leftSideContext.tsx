@@ -69,7 +69,17 @@ export const initialState: any = {
     withref: '',
   },
   updated_by_not_older_than: Math.round(new Date().getTime() / 10000) * 10,
-  configuration: {},
+  configuration: {
+    root_url: 'http://localhost:8081',
+    title: "Development",
+    functions_config: {
+      new_back_end: false,
+      lumisections_on: false,
+      layouts: false,
+      latest_runs: false
+    },
+    mode: 'OFFLINE'
+  },
 };
 
 export interface ActionProps {

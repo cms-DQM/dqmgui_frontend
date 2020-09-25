@@ -2,7 +2,6 @@ import React from 'react';
 import cleanDeep from 'clean-deep';
 import { useRouter } from 'next/router';
 
-import { get_jroot_plot } from '../../../../config/config';
 import {
   ParamsForApiProps,
   TripleProps,
@@ -26,6 +25,7 @@ import {
 import { Button } from 'antd';
 import { store } from '../../../../contexts/leftSideContext';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
+import { get_jroot_plot } from '../../../../config/apis/get_plots_urls';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;
@@ -58,7 +58,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
   const { configuration } = React.useContext(store);
   const { mode, functions_config } = configuration
   const { new_back_end } = functions_config
-
+  params_for_api.functions_config = functions_config
   const { data } = useRequest(get_jroot_plot(params_for_api), {}, [
     selected_plot.name,
   ]);

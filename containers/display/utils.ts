@@ -7,20 +7,12 @@ import {
   PlotInterface,
   DirectoryInterface,
   QueryProps,
-  ParamsForApiProps,
 } from './interfaces';
 import Router from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
 import { removeFirstSlash } from '../../components/workspaces/utils';
-import {
-  functions_config,
-  get_folders_and_plots_old_api,
-  get_folders_and_plots_new_api,
-  get_folders_and_plots_new_api_with_live_mode,
-  get_run_list_by_search_new_api,
-  get_run_list_by_search_old_api,
-  get_run_list_by_search_new_api_with_no_older_than,
-} from '../../config/config';
+
+
 
 export const getFolderPath = (folders: string[], clickedFolder: string) => {
   const folderIndex = folders.indexOf(clickedFolder);
@@ -79,35 +71,6 @@ export const getFolderPathToQuery = (
     : `/${currentSelected}`;
 };
 
-// what is streamerinfo? (coming from api, we don't know what it is, so we filtered it out)
-// getContent also sorting data that directories should be displayed firstly, just after them- plots images.
-export const getContents = (data: any) => {
-  if (functions_config.new_back_end.new_back_end) {
-    return data ? _.sortBy(data.data ? data.data : [], ['subdir']) : [];
-  }
-  return data
-    ? _.sortBy(
-        data.contents
-          ? data.contents
-          : [].filter(
-              (one_item: PlotInterface | DirectoryInterface) =>
-                !one_item.hasOwnProperty('streamerinfo')
-            ),
-        ['subdir']
-      )
-    : [];
-};
-
-export const getDirectories: any = (contents: DirectoryInterface[]) => {
-  return cleanDeep(
-    contents.map((content: DirectoryInterface) => {
-      if (functions_config.new_back_end.new_back_end) {
-        return { subdir: content.subdir, me_count: content.me_count };
-      }
-      return { subdir: content.subdir };
-    })
-  );
-};
 
 export const getFormatedPlotsObject = (contents: PlotInterface[]) =>
   cleanDeep(
@@ -216,23 +179,4 @@ export const is_run_selected_already = (
     run.run_number === query.run_number &&
     run.dataset_name === query.dataset_name
   );
-};
-
-export const choose_api = (params: ParamsForApiProps) => {
-  const current_api = !functions_config.new_back_end.new_back_end
-    ? get_folders_and_plots_old_api(params)
-    : functions_config.mode === 'ONLINE'
-    ? get_folders_and_plots_new_api_with_live_mode(params)
-    : get_folders_and_plots_new_api(params);
-  return current_api;
-};
-
-export const choose_api_for_run_search = (params: ParamsForApiProps) => {
-  const current_api = !functions_config.new_back_end.new_back_end
-    ? get_run_list_by_search_old_api(params)
-    : functions_config.mode === 'ONLINE'
-    ? get_run_list_by_search_new_api_with_no_older_than(params)
-    : get_run_list_by_search_new_api(params);
-
-  return current_api;
 };
