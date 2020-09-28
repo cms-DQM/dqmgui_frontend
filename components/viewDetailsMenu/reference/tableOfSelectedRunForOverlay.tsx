@@ -53,7 +53,6 @@ export const TableOfSelectedRunForOverlay = ({
   return (
     <table>
       {triples.map((overlaid_run: TripleProps, index: number) => {
-        console.log(overlaid_run.run_number)
         return(
         <tr>
           <CustomTd spacing={'4'}>

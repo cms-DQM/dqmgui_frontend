@@ -19,3 +19,10 @@ export const get_label = (info: InfoProps, data?: any) => {
     return value ? value : 'No information';
   }
 };
+
+
+export const getPathName = () => {
+  const isBrowser = () => typeof window !== "undefined"
+  const pathName = isBrowser() && window.location.pathname || '/'
+  return pathName
+}

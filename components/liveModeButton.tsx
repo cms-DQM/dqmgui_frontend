@@ -3,9 +3,11 @@ import * as React from 'react';
 import { LiveButton } from './styledComponents';
 import Router from 'next/router';
 import { useUpdateLiveMode } from '../hooks/useUpdateInLiveMode';
+import { getPathName } from './utils';
 
 const liveModeHandler = (liveModeRun: string, liveModeDataset: string) => {
   Router.push({
+    pathname: getPathName(),
     query: {
       run_number: liveModeRun,
       dataset_name: liveModeDataset,
