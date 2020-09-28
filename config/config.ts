@@ -7,11 +7,11 @@ import { get_customize_params, getRunsWithLumisections } from './utils';
 
 const config: any = {
   development: {
-    root_url: 'http://localhost:8081/dqm/dev',
+    root_url: 'http://localhost:8081',
     title: 'Development',
   },
   production: {
-    root_url: '.',
+    root_url: './',
     title: 'Offline',
   },
 };
@@ -136,7 +136,6 @@ export const getLumisections = (params: LumisectionRequestProps) =>
       : ''
   }`;
 
-export const get_the_latest_runs = (notOlderThan: number) =>{
-  return   `/api/v1/latest_runs?notOlderThan=${notOlderThan}`;
-}
-
+export const get_the_latest_runs = (notOlderThan: number) => {
+  return `/api/v1/latest_runs?notOlderThan=${notOlderThan}`;
+};

@@ -66,8 +66,7 @@ export const initialState: any = {
     drawopts: '',
     withref: '',
   },
-  updated_by_not_older_than: Math.round(new Date().getTime() / 10000) * 10
-  ,
+  updated_by_not_older_than: Math.round(new Date().getTime() / 10000) * 10,
 };
 
 export interface ActionProps {
@@ -199,7 +198,7 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         updated_by_not_older_than,
         set_updated_by_not_older_than,
         update,
-        set_update
+        set_update,
       }}
     >
       {children}

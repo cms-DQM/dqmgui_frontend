@@ -6,11 +6,10 @@ import { useUpdateLiveMode } from '../hooks/useUpdateInLiveMode';
 
 const liveModeHandler = (liveModeRun: string, liveModeDataset: string) => {
   Router.push({
-    pathname: '/',
     query: {
       run_number: liveModeRun,
       dataset_name: liveModeDataset,
-      folder_path: "Summary"
+      folder_path: 'Summary',
     },
   });
 };
@@ -24,7 +23,7 @@ export const LiveModeButton = () => {
     <LiveButton
       onClick={() => {
         liveModeHandler(liveModeRun, liveModeDataset);
-        () => set_update(true)
+        () => set_update(true);
       }}
     >
       Live Mode

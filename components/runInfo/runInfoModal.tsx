@@ -35,7 +35,7 @@ export const RunInfoModal = ({
     query.dataset_name,
     query.run_number,
   ]);
-  const run = get_label({ value: 'iRun', label: 'Run' }, data)
+  const run = get_label({ value: 'iRun', label: 'Run' }, data);
   return (
     <StyledModal
       title={`Run ${run} information`}
@@ -51,12 +51,14 @@ export const RunInfoModal = ({
           Close
         </StyledButton>,
       ]}
-    >{open &&
-      <div>
-        {run_info.map((info) => (
-          <RunInfoItem info={info} query={query} />
-        ))}
-      </div>}
+    >
+      {open && (
+        <div>
+          {run_info.map((info) => (
+            <RunInfoItem info={info} query={query} />
+          ))}
+        </div>
+      )}
     </StyledModal>
   );
 };

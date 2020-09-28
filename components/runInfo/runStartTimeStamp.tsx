@@ -28,7 +28,7 @@ export const RunInfoItem = ({ query, info }: RunInfoProps) => {
     info.value,
     '/HLT/EventInfo'
   );
-  
+
   const { data, isLoading } = useRequest(get_jroot_plot(params_for_api), {}, [
     query.dataset_name,
     query.run_number,

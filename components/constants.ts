@@ -138,6 +138,6 @@ export const main_run_info = [
   { value: 'iLumiSection', label: 'LS #: ' },
   { value: 'processEventRate', label: 'Event #: ' },
   { value: 'eventTimeStamp', label: 'Event time, UTC time: ', type: 'time' },
-]
+];
 
-export const run_info = main_run_info.concat(additional_run_info)
+export const run_info = main_run_info.concat(additional_run_info);

@@ -1,8 +1,8 @@
-import * as React from 'react'
+import * as React from 'react';
 import { useRouter } from 'next/router';
 
-import { CustomCol, CustomRow } from '../styledComponents'
-import { SearchModal } from './freeSearchResultModal'
+import { CustomCol, CustomRow } from '../styledComponents';
+import { SearchModal } from './freeSearchResultModal';
 import { QueryProps } from '../../containers/display/interfaces';
 import { Browser } from '../browsing';
 import { SearchButton } from '../searchButton';
@@ -43,6 +43,5 @@ export const ArchiveModeHeader = () => {
         <SearchButton onClick={() => setModalState(true)} />
       </CustomRow>
     </CustomCol>
-
-  )
-}
+  );
+};

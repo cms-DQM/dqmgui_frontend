@@ -154,28 +154,28 @@ When plots is selected (visible on the right side of a window) and JSROOT mode i
 If you want to change position (to horizontal or vertical) of displayed plots (when at least one plot is selected), you could click _Settings_ button, which is in the right side of a window. Then you could change _Plots View Position_ and _Plots View Proportions_. In proportions the first number represents left side of a window, the second - the right side.
 
 ![settings](public/images/settings.png).
+
 # Online mode
 
 Online mode is reactable via link https://cmsweb-testbed.cern.ch/dqm/online-new.
 
 1. The main page of GUI shows a list of 100 latest runs. This list is updated every 20 seconds.
-![latest_runs](public/images/latest_runs_list_doc.png)
+   ![latest_runs](public/images/latest_runs_list_doc.png)
 
-2. On the right corner of the initial page you could see a green button “Live mode”. 
-It leads the user to live mode, where the dataset is /Global/Online/ALL and run number 0.
-![live_mode_button](public/images/live_mode_button.png)
+2. On the right corner of the initial page you could see a green button “Live mode”.
+   It leads the user to live mode, where the dataset is /Global/Online/ALL and run number 0.
+   ![live_mode_button](public/images/live_mode_button.png)
 3. After this move, you will be led to Summary workspace folder, where all plots, which are proccesing during current run.
-![summary](public/images/summary.PNG)
-4.Live mode updates could be stopped by clicking the “pause” button.
- When updates are stopped the “pause” button changes to the “play” button and “LIVE MODE” is colored red. 
- 
+   ![summary](public/images/summary.PNG)
+   4.Live mode updates could be stopped by clicking the “pause” button.
+   When updates are stopped the “pause” button changes to the “play” button and “LIVE MODE” is colored red.
+
 ![live_mode_on](public/images/live_mode_on.PNG)
 
 ![live_mode_off](public/images/live_mode_off.png)
 
 5. If the user is in a live mode, every plot, which he sees is updated every 20 sec.
-Updated is indicated by plot background color change (from light blue to dark purple) and a spinner.
-
+   Updated is indicated by plot background color change (from light blue to dark purple) and a spinner.
 
 ![loading_plot](public/images/loading_plot.PNG)
 
@@ -244,8 +244,9 @@ Updated is indicated by plot background color change (from light blue to dark pu
 28. Chnage workspaces according mode
 29. Styles file import
 30. Ovelay plots with different names, but having same runs and dataset.
-31. There is some plots, where api returns error 500 and root adds warning (*adc_per_OnloineBlock_PXForward*)
+31. There is some plots, where api returns error 500 and root adds warning (_adc_per_OnloineBlock_PXForward_)
 32. When plot is not uploaded GUI doesn't try to upload it again
 33. Not to make a new req, when old is not finished yet.
 34. Event numbers: check pricessedEvents and iEvent
+
 ---

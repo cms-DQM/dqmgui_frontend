@@ -8,7 +8,11 @@ export const useUpdateLiveMode = () => {
   const current_time = new Date().getTime();
 
   const [not_older_than, set_not_older_than] = React.useState(current_time);
-  const { set_updated_by_not_older_than, update, set_update } = React.useContext(store);
+  const {
+    set_updated_by_not_older_than,
+    update,
+    set_update,
+  } = React.useContext(store);
   const router = useRouter();
   const query: QueryProps = router.query;
 
@@ -20,17 +24,24 @@ export const useUpdateLiveMode = () => {
         const seconds = Math.round(new Date().getTime() / 10000) * 20;
         return seconds;
       });
-    }, 20000)
-    return interval
+    }, 20000);
+    return interval;
   };
 
   React.useEffect(() => {
-    const interval = create_an_interval()
+    const interval = create_an_interval();
 
     if (!update) {
       clearInterval(interval);
     }
-  }, [update, query.run_number, query.dataset_name, query.folder_path, query.search_dataset_name, query.search_run_number])
+  }, [
+    update,
+    query.run_number,
+    query.dataset_name,
+    query.folder_path,
+    query.search_dataset_name,
+    query.search_run_number,
+  ]);
 
   React.useEffect(() => {
     if (update) {

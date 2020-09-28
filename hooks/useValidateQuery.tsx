@@ -46,7 +46,6 @@ export function useValidateQuery(
   // If user provided a run_number but no dataset_name (or the other way around, we assume he is searching for it):
   if (run_number && typeof dataset_name === 'undefined') {
     Router.replace({
-      pathname: '/',
       query: {
         search_run_number: run_number,
       },
@@ -54,7 +53,6 @@ export function useValidateQuery(
   }
   if (dataset_name && typeof run_number === 'undefined') {
     Router.replace({
-      pathname: '/',
       query: {
         search_dataset_name: dataset_name,
       },

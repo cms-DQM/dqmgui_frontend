@@ -1,4 +1,4 @@
-import {InfoProps} from '../containers/display/interfaces'
+import { InfoProps } from '../containers/display/interfaces';
 
 export const seperateRunAndLumiInSearch = (runAndLumi: string) => {
   const runAndLumiArray = runAndLumi.split(':');

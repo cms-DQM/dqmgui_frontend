@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Tabs, Button } from 'antd';
 
-import { workspaces as offlineWorskpace} from '../../workspaces/offline';
-import { workspaces as onlineWorkspace} from '../../workspaces/online';
+import { workspaces as offlineWorskpace } from '../../workspaces/offline';
+import { workspaces as onlineWorkspace } from '../../workspaces/online';
 import { StyledModal } from '../viewDetailsMenu/styledComponents';
 import Form from 'antd/lib/form/Form';
 import { StyledFormItem, StyledButton } from '../styledComponents';
@@ -20,7 +20,8 @@ interface WorspaceProps {
   workspaces: any;
 }
 const Workspaces = () => {
-  const workspaces = functions_config.mode === "ONLINE" ? onlineWorkspace : offlineWorskpace
+  const workspaces =
+    functions_config.mode === 'ONLINE' ? onlineWorkspace : offlineWorskpace;
   const router = useRouter();
   const query: QueryProps = router.query;
   const workspaceOption = query.workspace

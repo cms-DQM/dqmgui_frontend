@@ -26,10 +26,9 @@ export const ComposedSearch = () => {
     >
       {set_on_live_mode ? (
         <LiveModeHeader query={query} />
-
       ) : (
-          <ArchiveModeHeader />
-        )}
+        <ArchiveModeHeader />
+      )}
       <WrapperDiv>
         <Col>
           <Workspaces />

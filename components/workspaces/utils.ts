@@ -5,7 +5,6 @@ import Router from 'next/router';
 
 export const setWorkspaceToQuery = (query: QueryProps, workspace: string) => {
   return Router.push({
-    pathname: '/',
     query: {
       run_number: query.run_number,
       dataset_name: query.dataset_name,

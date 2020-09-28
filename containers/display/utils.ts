@@ -193,7 +193,7 @@ export const getChangedQueryParams = (
 export const changeRouter = (parameters: ParsedUrlQueryInput) => {
   const queryString = qs.stringify(parameters, {});
   Router.push({
-    pathname: '/',
+    //pathname: process.env.BASE_PATH,
     query: parameters,
     path: decodeURIComponent(queryString),
   });

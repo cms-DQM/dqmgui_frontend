@@ -15,5 +15,5 @@ module.exports = {
     LATEST_RUNS: process.env.LATEST_RUNS,
     MODE: process.env.MODE,
   },
-  assetPrefix: './'
+  assetPrefix: './',
 };
