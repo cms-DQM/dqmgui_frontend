@@ -7,7 +7,7 @@ import { get_customize_params, getRunsWithLumisections } from './utils';
 
 const config: any = {
   development: {
-    root_url: 'http://localhost:8081/dqm/dev',
+    root_url: 'http://localhost:8081',
     title: 'Development',
   },
   production: {
@@ -15,7 +15,7 @@ const config: any = {
     title: 'Offline',
   },
 };
-
+console.log(process.env.NODE_ENV )
 const new_env_variable = process.env.NEW_BACK_END === 'true';
 const layout_env_variable = process.env.LAYOUTS === 'true';
 const latest_runs_env_variable = process.env.LATEST_RUNS === 'true';
