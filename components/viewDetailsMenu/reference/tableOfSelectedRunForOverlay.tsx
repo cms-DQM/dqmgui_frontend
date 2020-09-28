@@ -52,7 +52,9 @@ export const TableOfSelectedRunForOverlay = ({
 
   return (
     <table>
-      {triples.map((overlaid_run: TripleProps, index: number) => (
+      {triples.map((overlaid_run: TripleProps, index: number) => {
+        console.log(overlaid_run.run_number)
+        return(
         <tr>
           <CustomTd spacing={'4'}>
             <Checkbox
@@ -79,9 +81,12 @@ export const TableOfSelectedRunForOverlay = ({
                   'run_number',
                   overlaid_run.id,
                   triples,
+                  //change_run_details changes overlay_data parameters: add, changes overlay runs
                   change_run_details
                 );
               }}
+              current_run_number={overlaid_run.run_number as string}
+              current_dataset_name={overlaid_run.dataset_name as string}
               withoutArrows={true}
             />
           </CustomTd>
@@ -95,10 +100,13 @@ export const TableOfSelectedRunForOverlay = ({
                   'dataset_name',
                   overlaid_run.id,
                   triples,
+                  //change_run_details changes overlay_data parameters: add, changes overlay runs
                   change_run_details
                 );
               }}
               withoutArrows={true}
+              current_dataset_name={overlaid_run.dataset_name as string}
+              current_run_number={overlaid_run.run_number as string}
             />
           </CustomTd>
           <CustomTd spacing={'4'}>
@@ -132,7 +140,7 @@ export const TableOfSelectedRunForOverlay = ({
             ></StyledSecondaryButton>
           </CustomTd>
         </tr>
-      ))}
+      )})}
     </table>
   );
 };

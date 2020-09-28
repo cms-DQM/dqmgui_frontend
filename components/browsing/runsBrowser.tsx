@@ -18,6 +18,8 @@ interface RunBrowserProps {
   withoutArrows?: boolean;
   withoutLabel?: boolean;
   selectorWidth?: string;
+  current_run_number?: string;
+  current_dataset_name?: string;
 }
 
 export const RunBrowser = ({
@@ -25,24 +27,23 @@ export const RunBrowser = ({
   setCurrentRunNumber,
   withoutArrows,
   withoutLabel,
+  current_run_number,
+  current_dataset_name,
 }: RunBrowserProps) => {
   const [openSelect, setSelect] = useState(false);
 
-  //seting  run field width to prev. selected run name field width,
-  // because when spinner is shown, field becomes spinner width
-  const [width, setWidth] = useState<string | undefined>();
   const [currentRunNumberIndex, setCurrentRunNumberIndex] = useState<number>(0);
-
-  const { results_grouped, isLoading } = useSearch('', query.dataset_name);
+  const dataset_name = current_dataset_name ? current_dataset_name : query.dataset_name;
+  const { results_grouped, isLoading } = useSearch('', dataset_name);
 
   const runNumbers = results_grouped[0]
     ? results_grouped[0].runs.map((run: number) => run.toString())
     : [];
 
   useEffect(() => {
-    const query_run_number = query.run_number ? query.run_number : '';
+    const query_run_number = current_run_number ? current_run_number.toString() : query.run_number;
     setCurrentRunNumberIndex(runNumbers.indexOf(query_run_number));
-  }, [query.dataset_name, query.run_number, runNumbers]);
+  }, [runNumbers, isLoading]);
 
   return (
     <Col>
@@ -59,20 +60,13 @@ export const RunBrowser = ({
                 icon={<CaretLeftFilled />}
                 type="link"
                 onClick={() => {
-                  setWidth(undefined);
                   setCurrentRunNumber(runNumbers[currentRunNumberIndex - 1]);
                 }}
               />
             </Col>
           )}
           <Col>
-            <div
-              ref={(refElem: HTMLDivElement) => {
-                if (refElem && !openSelect) {
-                  setWidth(refElem.clientWidth.toString());
-                }
-              }}
-            >
+            <div>
               <StyledSelect
                 onClick={() => setSelect(!openSelect)}
                 value={runNumbers[currentRunNumberIndex]}
@@ -98,8 +92,8 @@ export const RunBrowser = ({
                             <Spin />
                           </OptionParagraph>
                         ) : (
-                          <div onClick={() => setWidth(undefined)}>{run}</div>
-                        )}
+                            <div>{run}</div>
+                          )}
                       </Option>
                     );
                   })}
@@ -113,7 +107,6 @@ export const RunBrowser = ({
                 disabled={!runNumbers[currentRunNumberIndex + 1]}
                 type="link"
                 onClick={() => {
-                  setWidth(undefined);
                   setCurrentRunNumber(runNumbers[currentRunNumberIndex + 1]);
                 }}
               />
