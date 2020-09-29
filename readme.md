@@ -237,8 +237,8 @@ Online mode is reactable via link https://cmsweb-testbed.cern.ch/dqm/online-new.
 21. ~~Free and combined search~~ (11/06/2020)
 22. ~~Display run information~~
 23. ~~Plots loading indication~~
-24. DO SUMMARY WORKSAPCE!!!!
-25. Overlay plots -selected runs in the overlay options are not the same which are selected by search
+24.  ~~DO SUMMARY WORKSAPCE!!!! ~~
+25.  ~~Overlay plots -selected runs in the overlay options are not the same which are selected by search ~~
 26. The main Run information in live mode, must be visible in a header (live mode)
 27. Shift folder is empty (why?)
 28. Chnage workspaces according mode
@@ -248,5 +248,6 @@ Online mode is reactable via link https://cmsweb-testbed.cern.ch/dqm/online-new.
 32. When plot is not uploaded GUI doesn't try to upload it again
 33. Not to make a new req, when old is not finished yet.
 34. Event numbers: check pricessedEvents and iEvent
-
+35. Notification, when is no current run (0, Global....)
+36. Bug: user can't delete ar run from overlay runs list
 ---
