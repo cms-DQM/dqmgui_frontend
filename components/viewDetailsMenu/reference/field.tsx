@@ -27,12 +27,6 @@ export const Field = ({
   triples,
   change_run_details,
 }: FieldProps) => {
-  useEffect(() => {
-    const cleanField = () => {
-      removeRun(id);
-    };
-    return cleanField;
-  }, []);
 
   const inputValue = value ? value : defaultValue;
   return (

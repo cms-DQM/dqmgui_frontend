@@ -12,15 +12,12 @@ import {
   CustomCol,
 } from '../../styledComponents';
 import { useRouter } from 'next/router';
-import { CustomModal } from '../search';
 import { OverlayOptions } from './overlayOptions';
 import { OverlayRuns } from './overlayRuns';
 import FormItem from 'antd/lib/form/FormItem';
 import { store } from '../../../contexts/leftSideContext';
 
 export const Reference = () => {
-  const [selectedTriple, setSelectedTriple] = useState<TripleProps>({});
-
   const globalState = useContext(store);
   const { normalize, setNormalize, triples } = globalState;
 
@@ -55,11 +52,9 @@ export const Reference = () => {
         </CustomCol>
         <Col></Col>
       </CustomRow>
-      <CustomModal id={selectedTriple.id} />
       <OverlayRuns
         overlaid_runs={triples}
         query={query}
-        setSelectedTriple={setSelectedTriple}
       />
     </StyledDiv>
   );

@@ -14,7 +14,7 @@ import { seperateRunAndLumiInSearch } from '../../../components/utils';
 import { changeRouter, getChangedQueryParams } from '../utils';
 import { workspaces } from '../../../workspaces/offline';
 import { functions_config } from '../../../config/config';
-import { LatestRuns } from '../../../components/latestRuns';
+import { LatestRuns } from '../../../components/initialPage/latestRuns';
 import { useUpdateLiveMode } from '../../../hooks/useUpdateInLiveMode';
 
 export const ContentSwitching = () => {

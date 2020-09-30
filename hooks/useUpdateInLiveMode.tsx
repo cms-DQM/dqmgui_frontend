@@ -30,7 +30,6 @@ export const useUpdateLiveMode = () => {
 
   React.useEffect(() => {
     const interval = create_an_interval();
-
     if (!update) {
       clearInterval(interval);
     }

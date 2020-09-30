@@ -10,8 +10,6 @@ import {
 import { FormatParamsForAPI, shrink_or_expand } from './singlePlot/utils';
 import { OverlaidPlot } from './overlaidPlot';
 import { Plot } from './singlePlot/plot';
-import { store } from '../../../contexts/leftSideContext';
-import { useRouter } from 'next/router';
 import { isPlotSelected } from '../../../containers/display/utils';
 import { CustomRow, CustomCol, CustomDiv } from '../../styledComponents';
 import { theme } from '../../../styles/theme';
