@@ -17,7 +17,7 @@ interface TableOfSelectedRunForOverlayProps {
   query: QueryProps;
   setTriples(triples: TripleProps[]): void;
   change_run_details(triples: TripleProps[]): void;
-  remove_runs_to_set_runs_for_overlay(id:string): void;
+  remove_runs_to_set_runs_for_overlay(id: string): void;
 }
 
 export const TableOfSelectedRunForOverlay = ({
@@ -86,7 +86,7 @@ export const TableOfSelectedRunForOverlay = ({
               />
             </CustomTd>
             <CustomTd spacing={'4'}>
-              {/* <Field
+              <Field
                 triples={triples}
                 change_run_details={change_run_details}
                 removeRun={remove_runs_to_set_runs_for_overlay}
@@ -95,7 +95,7 @@ export const TableOfSelectedRunForOverlay = ({
                 placeholder="label"
                 defaultValue={overlaid_run.label as string}
                 value={overlaid_run.label}
-              /> */}
+              />
             </CustomTd>
             <CustomTd spacing={'4'}>
               <StyledSecondaryButton
@@ -103,7 +103,8 @@ export const TableOfSelectedRunForOverlay = ({
                   remove_runs_to_set_runs_for_overlay(overlaid_run.id as string);
                 }}
                 icon={<MinusOutlined />}
-              ></StyledSecondaryButton>
+              >
+              </StyledSecondaryButton>
             </CustomTd>
           </tr>
         )

@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import lozad from 'lozad';
 
 import { root_url, functions_config } from '../../../../config/config';
 import { get_plot_url } from '../../../../config/config';
@@ -72,10 +71,6 @@ export const Plot = ({
     setImageLoading(blink);
   }, [updated_by_not_older_than]);
 
-  //lazy loading for plots
-  const observer = lozad();
-  observer.observe();
-
   return (
     <div ref={imageRef}>
       <StyledCol space={2}>
@@ -115,9 +110,8 @@ export const Plot = ({
                 <img
                   key={source}
                   onLoad={() => setImageLoading(false)}
-                  className="lozad"
                   alt={plot.name}
-                  data-src={source}
+                 src={source}
                   onError={() => {
                     setImageError(true);
                     setImageLoading(false);

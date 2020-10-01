@@ -52,7 +52,6 @@ export const OverlayRuns = ({
 
   const remove_runs_to_set_runs_for_overlay = async (id: string) => {
     const copy = [...triples]
-
     const index = copy.findIndex((run) => {
       return run.id === id;
     })

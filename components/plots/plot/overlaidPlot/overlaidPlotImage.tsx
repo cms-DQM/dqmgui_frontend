@@ -1,6 +1,5 @@
 import React, { useRef, useContext, useState } from 'react';
 import { useRouter } from 'next/router';
-import lozad from 'lozad';
 
 import { root_url, functions_config } from '../../../../config/config';
 import {
@@ -67,10 +66,6 @@ export const OverlaidPlotImage = ({
   const imageRef = useRef(null);
   const { blink } = useBlinkOnUpdate();
 
-  //lazy loading for plots
-  const observer = lozad();
-  observer.observe();
-
   return (
     <div ref={imageRef}>
       <StyledCol space={2}>
@@ -88,38 +83,37 @@ export const OverlaidPlotImage = ({
             {isPlotSelected ? (
               <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
             ) : (
-              <PlusIcon
-                onClick={async () => {
-                  await addPlotToRightSide(query, plot);
-                  scroll(imageRef);
-                  scrollToBottom(imageRefScrollDown);
-                }}
-              />
-            )}
+                <PlusIcon
+                  onClick={async () => {
+                    await addPlotToRightSide(query, plot);
+                    scroll(imageRef);
+                    scrollToBottom(imageRefScrollDown);
+                  }}
+                />
+              )}
           </Column>
           {imageError ? (
             <ErrorMessage />
           ) : (
-            <div
-              onClick={async () => {
-                isPlotSelected
-                  ? await removePlotFromRightSide(query, plot)
-                  : await addPlotToRightSide(query, plot);
-                scroll(imageRef);
-              }}
-            >
-              <img
-                onLoad={() => setImageLoading(false)}
-                className="lozad"
-                alt={plot.name}
-                data-src={source}
-                onError={() => {
-                  setImageError(true);
-                  setImageLoading(false);
+              <div
+                onClick={async () => {
+                  isPlotSelected
+                    ? await removePlotFromRightSide(query, plot)
+                    : await addPlotToRightSide(query, plot);
+                  scroll(imageRef);
                 }}
-              />
-            </div>
-          )}
+              >
+                <img
+                  onLoad={() => setImageLoading(false)}
+                  alt={plot.name}
+                  src={source}
+                  onError={() => {
+                    setImageError(true);
+                    setImageLoading(false);
+                  }}
+                />
+              </div>
+            )}
           {imageLoading && (
             <CustomDiv display="flex" justifycontent="center" width="100%">
               <Spinner />

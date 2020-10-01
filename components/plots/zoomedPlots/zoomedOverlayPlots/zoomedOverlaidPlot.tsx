@@ -91,10 +91,6 @@ export const ZoomedOverlaidPlot = ({
 
   const { blink } = useBlinkOnUpdate();
 
-  //lazy loading for plots
-  const observer = lozad();
-  observer.observe();
-
   return (
     <StyledCol space={2}>
       <Plot_portal
@@ -160,9 +156,8 @@ export const ZoomedOverlaidPlot = ({
             {!imageError && (
               <Image
                 onLoad={() => setImageLoading(false)}
-                className="lozad"
                 alt={selected_plot.name}
-                data-src={source}
+               src={source}
                 onError={() => {
                   setImageError(true);
                   setImageLoading(false);

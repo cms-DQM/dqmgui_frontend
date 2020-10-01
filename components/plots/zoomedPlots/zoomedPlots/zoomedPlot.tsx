@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { FullscreenOutlined, SettingOutlined } from '@ant-design/icons';
 import { Store } from 'antd/lib/form/interface';
-import lozad from 'lozad';
 
 import {
   get_plot_url,
@@ -92,10 +91,6 @@ export const ZoomedPlot = ({
     setImageLoading(blink);
   }, [blink]);
 
-  //lazy loading for plots
-  const observer = lozad();
-  observer.observe();
-
   return (
     <StyledCol space={2}>
       {/* Plot opened in a new tab */}
@@ -155,35 +150,34 @@ export const ZoomedPlot = ({
         {imageError ? (
           <ErrorMessage />
         ) : (
-          <ImageDiv
-            alignitems="center"
-            id={selected_plot.name}
-            width={params_for_api.width}
-            height={params_for_api.height}
-            display="flex"
-          >
-            {!imageError && (
-              <Image
-                key={source}
-                onLoad={() => setImageLoading(false)}
-                alt={selected_plot.name}
-                data-src={source}
-                className="lozad"
-                onError={() => {
-                  setImageError(true);
-                  setImageLoading(false);
-                }}
-                width={params_for_api.width}
-                height={params_for_api.height}
-              />
-            )}
-            {imageLoading && (
-              <CustomDiv display="flex" justifycontent="center" width="100%">
-                <Spinner />
-              </CustomDiv>
-            )}
-          </ImageDiv>
-        )}
+            <ImageDiv
+              alignitems="center"
+              id={selected_plot.name}
+              width={params_for_api.width}
+              height={params_for_api.height}
+              display="flex"
+            >
+              {!imageError && (
+                <Image
+                  key={source}
+                  onLoad={() => setImageLoading(false)}
+                  alt={selected_plot.name}
+                  src={source}
+                  onError={() => {
+                    setImageError(true);
+                    setImageLoading(false);
+                  }}
+                  width={params_for_api.width}
+                  height={params_for_api.height}
+                />
+              )}
+              {imageLoading && (
+                <CustomDiv display="flex" justifycontent="center" width="100%">
+                  <Spinner />
+                </CustomDiv>
+              )}
+            </ImageDiv>
+          )}
       </StyledPlotRow>
     </StyledCol>
   );
