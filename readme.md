@@ -241,13 +241,13 @@ Online mode is reactable via link https://cmsweb-testbed.cern.ch/dqm/online-new.
 25.  ~~Overlay plots -selected runs in the overlay options are not the same which are selected by search~~
 26. The main Run information in live mode, must be visible in a header (live mode)
 27. Shift folder is empty (why?)
-28. Chnage workspaces according mode
-29. Styles file import
-30. Ovelay plots with different names, but having same runs and dataset.
+28. Change workspaces according mode
+29. ~~Styles file import~~
+30. ~~Ovelay plots with different names, but having same runs and dataset.~~
 31. There is some plots, where api returns error 500 and root adds warning (_adc_per_OnloineBlock_PXForward_)
 32. When plot is not uploaded GUI doesn't try to upload it again
 33. Not to make a new req, when old is not finished yet.
 34. Event numbers: check pricessedEvents and iEvent
 35. Notification, when is no current run (0, Global....)
-36. Bug: user can't delete ar run from overlay runs list
+36. ~~Bug: user can't delete ar run from overlay runs list~~
 ---
