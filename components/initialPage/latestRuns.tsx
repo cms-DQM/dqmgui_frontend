@@ -18,11 +18,11 @@ import { NoResultsFound } from '../../containers/search/noResultsFound';
 import { store } from '../../contexts/leftSideContext';
 import { useNewer } from '../../hooks/useNewer';
 import { functions_config } from '../../config/config';
-import { useBlinkOnUpdate } from '../../hooks/useBlinkOnUpdate';
 import { LiveModeButton } from '../liveModeButton';
 import { CustomDiv } from '../styledComponents';
-import { useUpdateLiveMode } from '../../hooks/useUpdateInLiveMode';
 import { LatestRunsList } from './latestRunsList';
+import { useBlinkOnUpdate } from '../../hooks/useBlinkOnUpdate';
+import { useUpdateLiveMode } from '../../hooks/useUpdateInLiveMode';
 
 export const LatestRuns = () => {
   const { updated_by_not_older_than } = React.useContext(store);

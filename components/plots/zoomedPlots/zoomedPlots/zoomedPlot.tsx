@@ -20,7 +20,6 @@ import {
   StyledPlotRow,
   Column,
   ImageDiv,
-  Image,
   MinusIcon,
 } from '../../../../containers/display/styledComponents';
 import {
@@ -34,6 +33,7 @@ import { ErrorMessage } from '../../errorMessage';
 import { CustomDiv } from '../../../styledComponents';
 import { Spinner } from '../../../../containers/search/styledComponents';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
+import { PlotImage } from '../../plot/plotImage';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -58,8 +58,8 @@ export const ZoomedPlot = ({
   const copy_of_params = { ...params_for_api };
   copy_of_params.height = window.innerHeight;
   copy_of_params.width = Math.round(window.innerHeight * 1.33);
+
   const zoomed_plot_url = get_plot_url(copy_of_params);
-  const zoomed_source = `${root_url}${zoomed_plot_url}`;
 
   const router = useRouter();
   const query: QueryProps = router.query;
@@ -80,16 +80,6 @@ export const ZoomedPlot = ({
   ];
 
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
-  const [source, setSource] = useState(
-    `${root_url}${plot_url};notOlderThan=${updated_by_not_older_than}`
-  );
-
-  React.useEffect(() => {
-    setSource(
-      `${root_url}${plot_url};notOlderThan=${updated_by_not_older_than}`
-    );
-    setImageLoading(blink);
-  }, [blink]);
 
   return (
     <StyledCol space={2}>
@@ -115,10 +105,14 @@ export const ZoomedPlot = ({
             width={copy_of_params.width}
             height={copy_of_params.height}
           >
-            <Image
-              src={zoomed_source}
-              width={copy_of_params.width}
-              height={copy_of_params.height}
+            <PlotImage
+              blink={blink}
+              params_for_api={copy_of_params}
+              plot={selected_plot}
+              plotURL={zoomed_plot_url}
+              setImageError={setImageError}
+              setImageLoading={setImageLoading}
+              updated_by_not_older_than={updated_by_not_older_than}
             />
           </ImageDiv>
         </StyledPlotRow>
@@ -158,17 +152,14 @@ export const ZoomedPlot = ({
               display="flex"
             >
               {!imageError && (
-                <Image
-                  key={source}
-                  onLoad={() => setImageLoading(false)}
-                  alt={selected_plot.name}
-                  src={source}
-                  onError={() => {
-                    setImageError(true);
-                    setImageLoading(false);
-                  }}
-                  width={params_for_api.width}
-                  height={params_for_api.height}
+                <PlotImage
+                  blink={blink}
+                  params_for_api={params_for_api}
+                  plot={selected_plot}
+                  plotURL={plot_url}
+                  setImageError={setImageError}
+                  setImageLoading={setImageLoading}
+                  updated_by_not_older_than={updated_by_not_older_than}
                 />
               )}
               {imageLoading && (

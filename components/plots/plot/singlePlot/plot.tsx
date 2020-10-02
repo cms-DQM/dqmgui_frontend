@@ -1,8 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
-import { root_url, functions_config } from '../../../../config/config';
-import { get_plot_url } from '../../../../config/config';
+import { functions_config, get_plot_url } from '../../../../config/config';
 import {
   PlotDataProps,
   QueryProps,
@@ -27,6 +26,7 @@ import { Spinner } from '../../../../containers/search/styledComponents';
 import { CustomDiv } from '../../../styledComponents';
 import { ErrorMessage } from '../../errorMessage';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
+import { PlotImage } from '../plotImage';
 
 interface PlotProps {
   plot: PlotDataProps;
@@ -46,14 +46,10 @@ export const Plot = ({
   const [imageLoading, setImageLoading] = useState(true);
   const [imageError, setImageError] = useState(false);
 
-  const plot_url = get_plot_url(params_for_api);
   const imageRef = useRef(null);
 
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
-  const [source, setSource] = useState(
-    `${root_url}${plot_url};notOlderThan=${updated_by_not_older_than}`
-  );
-
+  const url = get_plot_url(params_for_api);
   useEffect(() => {
     const scrollPlot = () => {
       scroll(imageRef);
@@ -64,12 +60,6 @@ export const Plot = ({
     }
   }, [isPlotSelected, query.selected_plots]);
 
-  useEffect(() => {
-    setSource(
-      `${root_url}${plot_url};notOlderThan=${updated_by_not_older_than}`
-    );
-    setImageLoading(blink);
-  }, [updated_by_not_older_than]);
 
   return (
     <div ref={imageRef}>
@@ -88,38 +78,37 @@ export const Plot = ({
             {isPlotSelected ? (
               <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
             ) : (
-              <PlusIcon
-                onClick={() => {
-                  addPlotToRightSide(query, plot);
-                }}
-              />
-            )}
+                <PlusIcon
+                  onClick={() => {
+                    addPlotToRightSide(query, plot);
+                  }}
+                />
+              )}
           </Column>
           {imageError ? (
             <ErrorMessage />
           ) : (
-            <div
-              onClick={async () => {
-                isPlotSelected
-                  ? await removePlotFromRightSide(query, plot)
-                  : await addPlotToRightSide(query, plot);
-                scroll(imageRef);
-              }}
-            >
-              {!imageError && (
-                <img
-                  key={source}
-                  onLoad={() => setImageLoading(false)}
-                  alt={plot.name}
-                 src={source}
-                  onError={() => {
-                    setImageError(true);
-                    setImageLoading(false);
-                  }}
-                />
-              )}
-            </div>
-          )}
+              <div
+                onClick={async () => {
+                  isPlotSelected
+                    ? await removePlotFromRightSide(query, plot)
+                    : await addPlotToRightSide(query, plot);
+                  scroll(imageRef);
+                }}
+              >
+                {!imageError && (
+                  <PlotImage
+                    blink={blink}
+                    params_for_api={params_for_api}
+                    plot={plot}
+                    plotURL={url}
+                    setImageError={setImageError}
+                    setImageLoading={setImageLoading}
+                    updated_by_not_older_than={updated_by_not_older_than}
+                  />
+                )}
+              </div>
+            )}
           {imageLoading && (
             <CustomDiv display="flex" justifycontent="center" width="100%">
               <Spinner />

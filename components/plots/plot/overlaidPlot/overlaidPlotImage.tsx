@@ -31,6 +31,7 @@ import { CustomDiv } from '../../../styledComponents';
 import { Spinner } from '../../../../containers/search/styledComponents';
 import { ErrorMessage } from '../../errorMessage';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
+import { PlotImage } from '../plotImage';
 
 interface OverlaidPlotImageProps {
   params_for_api: ParamsForApiProps;
@@ -56,15 +57,13 @@ export const OverlaidPlotImage = ({
   const overlaid_plots_urls = get_overlaied_plots_urls(params_for_api);
   const joined_overlaid_plots_urls = overlaid_plots_urls.join('');
   params_for_api.joined_overlaied_plots_urls = joined_overlaid_plots_urls;
-
   const plot_with_overlay = get_plot_with_overlay(params_for_api);
-  const source = `${root_url}${plot_with_overlay}`;
 
   const router = useRouter();
   const query: QueryProps = router.query;
 
   const imageRef = useRef(null);
-  const { blink } = useBlinkOnUpdate();
+  const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
 
   return (
     <div ref={imageRef}>
@@ -103,14 +102,14 @@ export const OverlaidPlotImage = ({
                   scroll(imageRef);
                 }}
               >
-                <img
-                  onLoad={() => setImageLoading(false)}
-                  alt={plot.name}
-                  src={source}
-                  onError={() => {
-                    setImageError(true);
-                    setImageLoading(false);
-                  }}
+                <PlotImage
+                  blink={blink}
+                  params_for_api={params_for_api}
+                  plot={plot}
+                  plotURL={plot_with_overlay}
+                  setImageError={setImageError}
+                  setImageLoading={setImageLoading}
+                  updated_by_not_older_than={updated_by_not_older_than}
                 />
               </div>
             )}

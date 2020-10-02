@@ -28,6 +28,7 @@ import { ErrorMessage } from '../../errorMessage';
 import { CustomDiv } from '../../../styledComponents';
 import { Spinner } from '../../../../containers/search/styledComponents';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
+import { PlotImage } from '../plotImage';
 
 interface OnSideOverlaidPlotsProps {
   params_for_api: ParamsForApiProps;
@@ -51,12 +52,11 @@ export const OnSideOverlaidPlots = ({
   const query: QueryProps = router.query;
   const imageRef = useRef(null);
 
-  const { blink } = useBlinkOnUpdate();
+  const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
 
   return (
     <OnSidePlotsWrapper>
       {onsidePlotsURLs.map((url: string) => {
-        const sourceForOnePlot = `${root_url}${url}`;
         return (
           <div ref={imageRef}>
             <StyledCol space={2} key={url}>
@@ -96,14 +96,14 @@ export const OnSideOverlaidPlots = ({
                         scroll(imageRef);
                       }}
                     >
-                      <img
-                        onLoad={() => setImageLoading(false)}
-                        alt={plot.name}
-                        src={sourceForOnePlot}
-                        onError={() => {
-                          setImageError(true);
-                          setImageLoading(false);
-                        }}
+                      <PlotImage
+                        blink={blink}
+                        params_for_api={params_for_api}
+                        plot={plot}
+                        plotURL={url}
+                        setImageError={setImageError}
+                        setImageLoading={setImageLoading}
+                        updated_by_not_older_than={updated_by_not_older_than}
                       />
                     </div>
                   )}
