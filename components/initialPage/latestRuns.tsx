@@ -2,14 +2,9 @@ import * as React from 'react';
 
 import { useRequest } from '../../hooks/useRequest';
 import { get_the_latest_runs } from '../../config/config';
-import { changeRouter } from '../../containers/display/utils';
 import {
   SpinnerWrapper,
   Spinner,
-  StyledCol,
-  RunWrapper,
-  StyledA,
-  LatestRunsWrapper,
   LatestRunsTtitle,
   LatestRunsSection,
   StyledAlert,
@@ -21,8 +16,6 @@ import { functions_config } from '../../config/config';
 import { LiveModeButton } from '../liveModeButton';
 import { CustomDiv } from '../styledComponents';
 import { LatestRunsList } from './latestRunsList';
-import { useBlinkOnUpdate } from '../../hooks/useBlinkOnUpdate';
-import { useUpdateLiveMode } from '../../hooks/useUpdateInLiveMode';
 
 export const LatestRuns = () => {
   const { updated_by_not_older_than } = React.useContext(store);

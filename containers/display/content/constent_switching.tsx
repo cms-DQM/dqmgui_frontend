@@ -63,7 +63,11 @@ export const ContentSwitching = () => {
         errors={errors}
       />
     );
-  } else if (functions_config.new_back_end.latest_runs) {
+  }
+  // !query.dataset_name && !query.run_number because I don't want 
+  // to see latest runs list, when I'm loading folders or plots
+  //  folders and  plots are visible, when dataset_name and run_number is set
+  else if (functions_config.new_back_end.latest_runs && !query.dataset_name && !query.run_number) {
     return <LatestRuns />;
   }
   return (

@@ -24,7 +24,6 @@ import {
 } from './utils';
 import { Spinner } from '../../../../containers/search/styledComponents';
 import { CustomDiv } from '../../../styledComponents';
-import { ErrorMessage } from '../../errorMessage';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 import { PlotImage } from '../plotImage';
 
@@ -44,7 +43,6 @@ export const Plot = ({
   const router = useRouter();
   const query: QueryProps = router.query;
   const [imageLoading, setImageLoading] = useState(true);
-  const [imageError, setImageError] = useState(false);
 
   const imageRef = useRef(null);
 
@@ -59,7 +57,6 @@ export const Plot = ({
       scrollPlot();
     }
   }, [isPlotSelected, query.selected_plots]);
-
 
   return (
     <div ref={imageRef}>
@@ -85,30 +82,17 @@ export const Plot = ({
                 />
               )}
           </Column>
-          {imageError ? (
-            <ErrorMessage />
-          ) : (
-              <div
-                onClick={async () => {
-                  isPlotSelected
-                    ? await removePlotFromRightSide(query, plot)
-                    : await addPlotToRightSide(query, plot);
-                  scroll(imageRef);
-                }}
-              >
-                {!imageError && (
-                  <PlotImage
-                    blink={blink}
-                    params_for_api={params_for_api}
-                    plot={plot}
-                    plotURL={url}
-                    setImageError={setImageError}
-                    setImageLoading={setImageLoading}
-                    updated_by_not_older_than={updated_by_not_older_than}
-                  />
-                )}
-              </div>
-            )}
+          <PlotImage
+            blink={blink}
+            params_for_api={params_for_api}
+            plot={plot}
+            plotURL={url}
+            setImageLoading={setImageLoading}
+            updated_by_not_older_than={updated_by_not_older_than}
+            imageRef={imageRef}
+            isPlotSelected={isPlotSelected}
+            query={query}
+          />
           {imageLoading && (
             <CustomDiv display="flex" justifycontent="center" width="100%">
               <Spinner />
