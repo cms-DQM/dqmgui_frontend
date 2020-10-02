@@ -26,3 +26,12 @@ export const getPathName = () => {
   const pathName = isBrowser() && window.location.pathname || '/'
   return pathName
 }
+export const makeid = () => {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+
+  for (var i = 0; i < 5; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
+}

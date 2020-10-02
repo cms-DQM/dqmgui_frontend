@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from 'react';
 import { Col } from 'antd';
 
 import {
-  TripleProps,
   QueryProps,
 } from '../../../containers/display/interfaces';
 import {
@@ -27,6 +26,11 @@ export const Reference = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
 
+  useEffect(() => {
+    const normalizeValue = checked ? 'True' : 'False';
+    setNormalize(normalizeValue);
+  }, [checked])
+  
   return (
     <StyledDiv>
       <CustomRow>
@@ -39,12 +43,10 @@ export const Reference = () => {
         <CustomCol space={'2'}>
           <FormItem>
             <CustomCheckbox
-              onClick={(e: any) => {
-                setChecked(e.target.checked);
-                const normalizeValue = e.target.checked ? 'True' : 'False';
-                setNormalize(normalizeValue);
+              onClick={async (e: any) => {
+                await setChecked(e.target.checked);
               }}
-              checked={normalize === 'True' ? true : false}
+              checked={checked}
             >
               Normalize
             </CustomCheckbox>

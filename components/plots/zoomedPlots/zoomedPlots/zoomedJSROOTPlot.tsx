@@ -27,24 +27,28 @@ import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;
   params_for_api: ParamsForApiProps;
+  id:string
 }
 
-const drawJSROOT = async (plot_name: string, data: any) => {
+const drawJSROOT = async (id: string, data: any) => {
   //in order to get new JSROOT plot, first of all we need to clean div with old plot
-  //@ts-ignore
-  await JSROOT.cleanup(`${plot_name}`);
-  //after cleanup we can draw a new plot
-  //@ts-ignore
-  JSROOT.draw(`${plot_name}`, JSROOT.parse(JSON.stringify(data)), 'hist');
+  if (!!document.getElementById(id)) {
+    //@ts-ignore
+    await JSROOT.cleanup(id);
+    //after cleanup we can draw a new plot
+    //@ts-ignore
+    JSROOT.draw(id, JSROOT.parse(JSON.stringify(data)), 'hist');
+  }
 };
 
 export const ZoomedJSROOTPlot = ({
   selected_plot,
   params_for_api,
+  id,
 }: ZoomedJSROOTPlotsProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
-
+  // const id = makeid()
   const { data } = useRequest(get_jroot_plot(params_for_api), {}, [
     selected_plot.name,
     params_for_api.lumi,
@@ -53,9 +57,9 @@ export const ZoomedJSROOTPlot = ({
   const { updated_by_not_older_than } = React.useContext(store);
 
   useEffect(() => {
-    if (!!document.getElementById(selected_plot.name)) {
+    if (!!document.getElementById(`${id}`)) {
       //@ts-ignore
-      drawJSROOT(selected_plot.name, data);
+      drawJSROOT(`${id}`, data);
     }
   }, [data, params_for_api.lumi, updated_by_not_older_than]);
 
@@ -81,11 +85,11 @@ export const ZoomedJSROOTPlot = ({
             icon={<MinusIcon />}
           />
         </Column>
-        <ImageDiv
-          id={selected_plot.name}
-          width={params_for_api.width}
-          height={params_for_api.height}
-        />
+          <ImageDiv
+            id={`${id}`}
+            width={params_for_api.width}
+            height={params_for_api.height}
+          />
       </StyledPlotRow>
     </StyledCol>
   );

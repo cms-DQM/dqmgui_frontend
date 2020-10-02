@@ -117,7 +117,7 @@ export const ZoomedOverlaidPlot = ({
               params_for_api={copy_of_params}
               plot={selected_plot}
               plotURL={zoomed_plot_url}
-              setImageError={setImageError}
+              query={query}
               setImageLoading={setImageLoading}
               updated_by_not_older_than={updated_by_not_older_than}
             />
@@ -161,7 +161,7 @@ export const ZoomedOverlaidPlot = ({
                   params_for_api={params_for_api}
                   plot={selected_plot}
                   plotURL={source}
-                  setImageError={setImageError}
+                  query={query}
                   setImageLoading={setImageLoading}
                   updated_by_not_older_than={updated_by_not_older_than}
                 />

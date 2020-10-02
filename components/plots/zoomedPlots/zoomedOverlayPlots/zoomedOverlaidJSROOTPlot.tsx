@@ -30,18 +30,18 @@ import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;
   params_for_api: ParamsForApiProps;
+  id:string;
 }
 const drawJSROOT = async (
   histogramParam: string,
-  plot_name: string,
+  id: string,
   overlaidJSROOTPlot: any
 ) => {
   //@ts-ignore
-  await JSROOT.cleanup(`${histogramParam}_${plot_name}`);
-
+  await JSROOT.cleanup(`${histogramParam}${id}`);
   //@ts-ignore
   JSROOT.draw(
-    `${histogramParam}_${plot_name}`,
+    `${histogramParam}${id}`,
     //@ts-ignore
     JSROOT.parse(JSON.stringify(overlaidJSROOTPlot)),
     `${histogramParam}`
@@ -51,6 +51,7 @@ const drawJSROOT = async (
 export const ZoomedOverlaidJSROOTPlot = ({
   selected_plot,
   params_for_api,
+  id,
 }: ZoomedJSROOTPlotsProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
@@ -122,11 +123,12 @@ export const ZoomedOverlaidJSROOTPlot = ({
   //on first, second reneder overlaidJSROOTPlot.fHists.arr is [null, null]
   //@ts-ignore
   useEffect(() => {
+
     if (
       cleanDeep(overlaidJSROOTPlot.fHists.arr).length ===
       overlaidJSROOTPlot.fHists.arr.length
     ) {
-      drawJSROOT(histogramParam, selected_plot.name, overlaidJSROOTPlot);
+      drawJSROOT(histogramParam, id, overlaidJSROOTPlot);
     }
   }, [
     updated_by_not_older_than,
@@ -135,10 +137,9 @@ export const ZoomedOverlaidJSROOTPlot = ({
     params_for_api.overlay_plot,
     params_for_api.dataset_name,
     params_for_api.run_number,
+    params_for_api.normalize
   ]);
-
   const { blink } = useBlinkOnUpdate();
-
   return (
     <StyledCol space={2}>
       <StyledPlotRow
@@ -162,13 +163,13 @@ export const ZoomedOverlaidJSROOTPlot = ({
         </Column>
         <ImageDiv
           style={{ display: params_for_api.normalize ? '' : 'none' }}
-          id={`hist_${selected_plot.name}`}
+          id={`hist${id}`}
           width={params_for_api.width}
           height={params_for_api.height}
         />
         <ImageDiv
           style={{ display: params_for_api.normalize ? 'none' : '' }}
-          id={`nostack_${selected_plot.name}`}
+          id={`nostack${id}`}
           width={params_for_api.width}
           height={params_for_api.height}
         />

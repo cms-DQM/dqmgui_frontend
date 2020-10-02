@@ -50,7 +50,6 @@ export const ZoomedPlot = ({
   const [openCustomization, toggleCustomizationMenu] = useState(false);
   const [isPortalWindowOpen, setIsPortalWindowOpen] = React.useState(false);
   const [imageLoading, setImageLoading] = useState(true);
-  const [imageError, setImageError] = useState(false);
 
   params_for_api.customizeProps = customizationParams;
   const plot_url = get_plot_url(params_for_api);
@@ -110,7 +109,7 @@ export const ZoomedPlot = ({
               params_for_api={copy_of_params}
               plot={selected_plot}
               plotURL={zoomed_plot_url}
-              setImageError={setImageError}
+              query={query}
               setImageLoading={setImageLoading}
               updated_by_not_older_than={updated_by_not_older_than}
             />
@@ -141,34 +140,28 @@ export const ZoomedPlot = ({
             onClick={() => removePlotFromRightSide(query, selected_plot)}
           />
         </Column>
-        {imageError ? (
-          <ErrorMessage />
-        ) : (
-            <ImageDiv
-              alignitems="center"
-              id={selected_plot.name}
-              width={params_for_api.width}
-              height={params_for_api.height}
-              display="flex"
-            >
-              {!imageError && (
-                <PlotImage
-                  blink={blink}
-                  params_for_api={params_for_api}
-                  plot={selected_plot}
-                  plotURL={plot_url}
-                  setImageError={setImageError}
-                  setImageLoading={setImageLoading}
-                  updated_by_not_older_than={updated_by_not_older_than}
-                />
-              )}
-              {imageLoading && (
-                <CustomDiv display="flex" justifycontent="center" width="100%">
-                  <Spinner />
-                </CustomDiv>
-              )}
-            </ImageDiv>
+        <ImageDiv
+          alignitems="center"
+          id={selected_plot.name}
+          width={params_for_api.width}
+          height={params_for_api.height}
+          display="flex"
+        >
+          <PlotImage
+            blink={blink}
+            params_for_api={params_for_api}
+            plot={selected_plot}
+            plotURL={plot_url}
+            query={query}
+            setImageLoading={setImageLoading}
+            updated_by_not_older_than={updated_by_not_older_than}
+          />
+          {imageLoading && (
+            <CustomDiv display="flex" justifycontent="center" width="100%">
+              <Spinner />
+            </CustomDiv>
           )}
+        </ImageDiv>
       </StyledPlotRow>
     </StyledCol>
   );

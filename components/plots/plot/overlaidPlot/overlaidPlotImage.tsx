@@ -29,7 +29,6 @@ import {
 import { store } from '../../../../contexts/leftSideContext';
 import { CustomDiv } from '../../../styledComponents';
 import { Spinner } from '../../../../containers/search/styledComponents';
-import { ErrorMessage } from '../../errorMessage';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 import { PlotImage } from '../plotImage';
 
@@ -49,7 +48,6 @@ export const OverlaidPlotImage = ({
   const globalState = useContext(store);
   const { normalize } = globalState;
   const [imageLoading, setImageLoading] = useState(true);
-  const [imageError, setImageError] = useState(false);
 
   params_for_api.plot_name = plot.name;
   params_for_api.normalize = normalize;
@@ -91,28 +89,17 @@ export const OverlaidPlotImage = ({
                 />
               )}
           </Column>
-          {imageError ? (
-            <ErrorMessage />
-          ) : (
-              <div
-                onClick={async () => {
-                  isPlotSelected
-                    ? await removePlotFromRightSide(query, plot)
-                    : await addPlotToRightSide(query, plot);
-                  scroll(imageRef);
-                }}
-              >
-                <PlotImage
-                  blink={blink}
-                  params_for_api={params_for_api}
-                  plot={plot}
-                  plotURL={plot_with_overlay}
-                  setImageError={setImageError}
-                  setImageLoading={setImageLoading}
-                  updated_by_not_older_than={updated_by_not_older_than}
-                />
-              </div>
-            )}
+          <PlotImage
+            blink={blink}
+            params_for_api={params_for_api}
+            plot={plot}
+            plotURL={plot_with_overlay}
+            imageRef={imageRef}
+            isPlotSelected={isPlotSelected}
+            query={query}
+            setImageLoading={setImageLoading}
+            updated_by_not_older_than={updated_by_not_older_than}
+          />
           {imageLoading && (
             <CustomDiv display="flex" justifycontent="center" width="100%">
               <Spinner />

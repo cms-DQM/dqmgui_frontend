@@ -13,9 +13,9 @@ interface PlotImageProps {
   setImageLoading: any;
   plot: any;
   plotURL: string;
-  isPlotSelected: boolean;
+  isPlotSelected?: boolean;
   query: QueryProps;
-  imageRef: any;
+  imageRef?: any;
 }
 
 export const PlotImage = ({ imageRef, query, isPlotSelected, params_for_api, plotURL, updated_by_not_older_than, blink, setImageLoading, plot }: PlotImageProps) => {
@@ -36,7 +36,8 @@ export const PlotImage = ({ imageRef, query, isPlotSelected, params_for_api, plo
     params_for_api.run_number,
     params_for_api.dataset_name,
     params_for_api.lumi,
-    new_image_url
+    new_image_url,
+    params_for_api.normalize
   ]);
 
   const old_image_display = show_old_img ? '' : 'none'
@@ -49,47 +50,49 @@ export const PlotImage = ({ imageRef, query, isPlotSelected, params_for_api, plo
       ) : (
           <div
             onClick={async () => {
-              isPlotSelected
-                ? await removePlotFromRightSide(query, plot)
-                : await addPlotToRightSide(query, plot);
-              scroll(imageRef);
+              if (imageRef) {
+                isPlotSelected
+                  ? await removePlotFromRightSide(query, plot)
+                  : await addPlotToRightSide(query, plot);
+                scroll(imageRef);
+              }
             }}
           >
             {/* {!imageError && ( */}
-              <>
-                <Image
-                  style={{ display: new_image_display }}
-                  onLoad={() => {
-                    setImageLoading(false)
-                    set_old_image_url(new_image_url)
-                    set_show_old_img(false)
-                  }}
-                  alt={plot.name}
-                  src={new_image_url}
-                  onError={(error) => {
-                    setImageError(true);
-                    setImageLoading(false)
-                  }}
-                  width={params_for_api.width}
-                  height={params_for_api.height}
-                />
-                {/*When images is updating, we getting blinking effect. 
+            <>
+              <Image
+                style={{ display: new_image_display }}
+                onLoad={() => {
+                  setImageLoading(false)
+                  set_old_image_url(new_image_url)
+                  set_show_old_img(false)
+                }}
+                alt={plot.name}
+                src={new_image_url}
+                onError={(error) => {
+                  setImageError(true);
+                  setImageLoading(false)
+                }}
+                width={params_for_api.width}
+                height={params_for_api.height}
+              />
+              {/*When images is updating, we getting blinking effect. 
                 We trying to avoid it with showing old image instead of nothing (when a new image is just requesting)
                 Old image is an image which is 20 sec older then the new requested one.
                 */}
-                <Image
-                  style={{ display: old_image_display }}
-                  alt={plot.name}
-                  src={old_image_url}
-                  onError={(error) => {
-                    setImageError(true);
-                    setImageLoading(false)
-                  }}
-                  width={params_for_api.width}
-                  height={params_for_api.height}
-                />
-              </>
-           {/* )} */}
+              <Image
+                style={{ display: old_image_display }}
+                alt={plot.name}
+                src={old_image_url}
+                onError={(error) => {
+                  setImageError(true);
+                  setImageLoading(false)
+                }}
+                width={params_for_api.width}
+                height={params_for_api.height}
+              />
+            </>
+            {/* )} */}
           </div>
         )}
 

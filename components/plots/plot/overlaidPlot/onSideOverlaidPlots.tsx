@@ -85,28 +85,17 @@ export const OnSideOverlaidPlots = ({
                       />
                     )}
                 </Column>
-                {imageError ? (
-                  <ErrorMessage />
-                ) : (
-                    <div
-                      onClick={async () => {
-                        isPlotSelected
-                          ? await removePlotFromRightSide(query, plot)
-                          : await addPlotToRightSide(query, plot);
-                        scroll(imageRef);
-                      }}
-                    >
-                      <PlotImage
-                        blink={blink}
-                        params_for_api={params_for_api}
-                        plot={plot}
-                        plotURL={url}
-                        setImageError={setImageError}
-                        setImageLoading={setImageLoading}
-                        updated_by_not_older_than={updated_by_not_older_than}
-                      />
-                    </div>
-                  )}
+                <PlotImage
+                  imageRef={imageRef}
+                  isPlotSelected={isPlotSelected}
+                  query={query}
+                  blink={blink}
+                  params_for_api={params_for_api}
+                  plot={plot}
+                  plotURL={url}
+                  setImageLoading={setImageLoading}
+                  updated_by_not_older_than={updated_by_not_older_than}
+                />
                 {imageLoading && (
                   <CustomDiv
                     display="flex"
