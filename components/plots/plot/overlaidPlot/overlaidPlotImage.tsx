@@ -1,6 +1,5 @@
 import React, { useRef, useContext, useState } from 'react';
 import { useRouter } from 'next/router';
-import lozad from 'lozad';
 
 import { root_url, functions_config } from '../../../../config/config';
 import {
@@ -30,8 +29,8 @@ import {
 import { store } from '../../../../contexts/leftSideContext';
 import { CustomDiv } from '../../../styledComponents';
 import { Spinner } from '../../../../containers/search/styledComponents';
-import { ErrorMessage } from '../../errorMessage';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
+import { PlotImage } from '../plotImage';
 
 interface OverlaidPlotImageProps {
   params_for_api: ParamsForApiProps;
@@ -49,7 +48,6 @@ export const OverlaidPlotImage = ({
   const globalState = useContext(store);
   const { normalize } = globalState;
   const [imageLoading, setImageLoading] = useState(true);
-  const [imageError, setImageError] = useState(false);
 
   params_for_api.plot_name = plot.name;
   params_for_api.normalize = normalize;
@@ -57,19 +55,13 @@ export const OverlaidPlotImage = ({
   const overlaid_plots_urls = get_overlaied_plots_urls(params_for_api);
   const joined_overlaid_plots_urls = overlaid_plots_urls.join('');
   params_for_api.joined_overlaied_plots_urls = joined_overlaid_plots_urls;
-
   const plot_with_overlay = get_plot_with_overlay(params_for_api);
-  const source = `${root_url}${plot_with_overlay}`;
 
   const router = useRouter();
   const query: QueryProps = router.query;
 
   const imageRef = useRef(null);
-  const { blink } = useBlinkOnUpdate();
-
-  //lazy loading for plots
-  const observer = lozad();
-  observer.observe();
+  const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
 
   return (
     <div ref={imageRef}>
@@ -97,29 +89,17 @@ export const OverlaidPlotImage = ({
               />
             )}
           </Column>
-          {imageError ? (
-            <ErrorMessage />
-          ) : (
-            <div
-              onClick={async () => {
-                isPlotSelected
-                  ? await removePlotFromRightSide(query, plot)
-                  : await addPlotToRightSide(query, plot);
-                scroll(imageRef);
-              }}
-            >
-              <img
-                onLoad={() => setImageLoading(false)}
-                className="lozad"
-                alt={plot.name}
-                data-src={source}
-                onError={() => {
-                  setImageError(true);
-                  setImageLoading(false);
-                }}
-              />
-            </div>
-          )}
+          <PlotImage
+            blink={blink}
+            params_for_api={params_for_api}
+            plot={plot}
+            plotURL={plot_with_overlay}
+            imageRef={imageRef}
+            isPlotSelected={isPlotSelected}
+            query={query}
+            setImageLoading={setImageLoading}
+            updated_by_not_older_than={updated_by_not_older_than}
+          />
           {imageLoading && (
             <CustomDiv display="flex" justifycontent="center" width="100%">
               <Spinner />

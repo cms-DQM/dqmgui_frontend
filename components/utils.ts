@@ -20,9 +20,17 @@ export const get_label = (info: InfoProps, data?: any) => {
   }
 };
 
-
 export const getPathName = () => {
-  const isBrowser = () => typeof window !== "undefined"
-  const pathName = isBrowser() && window.location.pathname || '/'
-  return pathName
-}
+  const isBrowser = () => typeof window !== 'undefined';
+  const pathName = (isBrowser() && window.location.pathname) || '/';
+  return pathName;
+};
+export const makeid = () => {
+  var text = '';
+  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
+  for (var i = 0; i < 5; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
+};

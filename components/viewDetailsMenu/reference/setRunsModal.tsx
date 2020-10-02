@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { MinusOutlined } from '@ant-design/icons';
 
 import {
   StyledModal,
@@ -9,7 +10,7 @@ import {
   SelectedRunsTd,
   SelectedRunsTable,
 } from '../styledComponents';
-import { StyledButton } from '../../styledComponents';
+import { StyledButton, StyledSecondaryButton } from '../../styledComponents';
 import { theme } from '../../../styles/theme';
 import {
   TripleProps,
@@ -78,6 +79,18 @@ export const SetRunsModal = ({
     set_selected_runs(copy);
   };
 
+  const deleteRunFromSelectedList = (id: string) => {
+    const copy = [...selected_runs];
+    const index = copy.findIndex((run) => {
+      return run.id === id;
+    });
+
+    if (index !== -1) {
+      copy.splice(index, 1);
+      set_selected_runs(copy);
+    }
+  };
+
   //overlaid_and_selected_runs combines list of runs which are already overlaid (triples)
   // with those which are just selected (selected_runs) in "Set Runs" dialog
   const overlaid_and_selected_runs = concatArrays([selected_runs, triples]);
@@ -133,6 +146,7 @@ export const SetRunsModal = ({
                 <SelectedRunsTh>Nr.</SelectedRunsTh>
                 <SelectedRunsTh>Run</SelectedRunsTh>
                 <SelectedRunsTh>Dataset name</SelectedRunsTh>
+                <SelectedRunsTh>Action</SelectedRunsTh>
               </SelectedRunsTr>
             </thead>
             <tbody>
@@ -143,6 +157,14 @@ export const SetRunsModal = ({
                       <SelectedRunsTd>{index + 1}.</SelectedRunsTd>
                       <SelectedRunsTd>{run.run_number}</SelectedRunsTd>
                       <SelectedRunsTd>{run.dataset_name}</SelectedRunsTd>
+                      <SelectedRunsTd>
+                        <StyledSecondaryButton
+                          onClick={() => {
+                            deleteRunFromSelectedList(run.id as string);
+                          }}
+                          icon={<MinusOutlined />}
+                        ></StyledSecondaryButton>
+                      </SelectedRunsTd>
                     </SelectedRunsTr>
                   );
                 }

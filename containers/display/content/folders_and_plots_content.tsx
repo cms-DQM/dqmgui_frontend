@@ -98,9 +98,7 @@ const Content: FC<FolderProps> = ({
         </Col>
       </CustomRow>
       <CustomRow width="100%">
-        {plots.length > 0 && (
-          <ViewDetailsMenu selected_plots={selected_plots.length > 0} />
-        )}
+        <ViewDetailsMenu selected_plots={selected_plots.length > 0} />
       </CustomRow>
       <>
         <DivWrapper

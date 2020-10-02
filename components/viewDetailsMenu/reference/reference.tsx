@@ -1,10 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Col } from 'antd';
 
-import {
-  TripleProps,
-  QueryProps,
-} from '../../../containers/display/interfaces';
+import { QueryProps } from '../../../containers/display/interfaces';
 import {
   StyledDiv,
   CustomCheckbox,
@@ -12,15 +9,12 @@ import {
   CustomCol,
 } from '../../styledComponents';
 import { useRouter } from 'next/router';
-import { CustomModal } from '../search';
 import { OverlayOptions } from './overlayOptions';
 import { OverlayRuns } from './overlayRuns';
 import FormItem from 'antd/lib/form/FormItem';
 import { store } from '../../../contexts/leftSideContext';
 
 export const Reference = () => {
-  const [selectedTriple, setSelectedTriple] = useState<TripleProps>({});
-
   const globalState = useContext(store);
   const { normalize, setNormalize, triples } = globalState;
 
@@ -29,6 +23,11 @@ export const Reference = () => {
 
   const router = useRouter();
   const query: QueryProps = router.query;
+
+  useEffect(() => {
+    const normalizeValue = checked ? 'True' : 'False';
+    setNormalize(normalizeValue);
+  }, [checked]);
 
   return (
     <StyledDiv>
@@ -42,12 +41,10 @@ export const Reference = () => {
         <CustomCol space={'2'}>
           <FormItem>
             <CustomCheckbox
-              onClick={(e: any) => {
-                setChecked(e.target.checked);
-                const normalizeValue = e.target.checked ? 'True' : 'False';
-                setNormalize(normalizeValue);
+              onClick={async (e: any) => {
+                await setChecked(e.target.checked);
               }}
-              checked={normalize === 'True' ? true : false}
+              checked={checked}
             >
               Normalize
             </CustomCheckbox>
@@ -55,12 +52,7 @@ export const Reference = () => {
         </CustomCol>
         <Col></Col>
       </CustomRow>
-      <CustomModal id={selectedTriple.id} />
-      <OverlayRuns
-        overlaid_runs={triples}
-        query={query}
-        setSelectedTriple={setSelectedTriple}
-      />
+      <OverlayRuns overlaid_runs={triples} query={query} />
     </StyledDiv>
   );
 };

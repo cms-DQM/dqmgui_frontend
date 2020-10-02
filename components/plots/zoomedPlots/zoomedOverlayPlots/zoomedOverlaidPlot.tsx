@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Store } from 'antd/lib/form/interface';
-import lozad from 'lozad';
-import {
-  MinusCircleOutlined,
-  SettingOutlined,
-  FullscreenOutlined,
-} from '@ant-design/icons';
+import { SettingOutlined, FullscreenOutlined } from '@ant-design/icons';
 
 import {
   get_overlaied_plots_urls,
@@ -40,6 +35,7 @@ import { Spinner } from '../../../../containers/search/styledComponents';
 import { CustomDiv } from '../../../styledComponents';
 import { ErrorMessage } from '../../errorMessage';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
+import { PlotImage } from '../../plot/plotImage';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -87,13 +83,8 @@ export const ZoomedOverlaidPlot = ({
   copy_of_params.height = window.innerHeight;
   copy_of_params.width = Math.round(window.innerHeight * 1.33);
   const zoomed_plot_url = get_plot_source(copy_of_params);
-  const zoomed_source = `${zoomed_plot_url}`;
 
-  const { blink } = useBlinkOnUpdate();
-
-  //lazy loading for plots
-  const observer = lozad();
-  observer.observe();
+  const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
 
   return (
     <StyledCol space={2}>
@@ -118,10 +109,14 @@ export const ZoomedOverlaidPlot = ({
             width={copy_of_params.width}
             height={copy_of_params.height}
           >
-            <Image
-              src={zoomed_source}
-              width={copy_of_params.width}
-              height={copy_of_params.height}
+            <PlotImage
+              blink={blink}
+              params_for_api={copy_of_params}
+              plot={selected_plot}
+              plotURL={zoomed_plot_url}
+              query={query}
+              setImageLoading={setImageLoading}
+              updated_by_not_older_than={updated_by_not_older_than}
             />
           </ImageDiv>
         </StyledPlotRow>
@@ -158,17 +153,14 @@ export const ZoomedOverlaidPlot = ({
             height={params_for_api.height}
           >
             {!imageError && (
-              <Image
-                onLoad={() => setImageLoading(false)}
-                className="lozad"
-                alt={selected_plot.name}
-                data-src={source}
-                onError={() => {
-                  setImageError(true);
-                  setImageLoading(false);
-                }}
-                width={params_for_api.width}
-                height={params_for_api.height}
+              <PlotImage
+                blink={blink}
+                params_for_api={params_for_api}
+                plot={selected_plot}
+                plotURL={source}
+                query={query}
+                setImageLoading={setImageLoading}
+                updated_by_not_older_than={updated_by_not_older_than}
               />
             )}
             {imageLoading && (

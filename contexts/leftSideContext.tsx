@@ -30,7 +30,6 @@ export interface LeftSideState {
   openOverlayDataMenu: boolean;
   viewPlotsPosition: boolean;
   lumisection: string | number;
-  rightSideNormalize: boolean;
   rightSideSize: SizeProps;
   JSROOTmode: boolean;
   customizeProps: CustomizeProps;
@@ -49,7 +48,6 @@ export const initialState: any = {
   viewPlotsPosition: viewPositions[1].value,
   proportion: plotsProportionsOptions[0].value,
   lumisection: -1,
-  rightSideNormalize: true,
   rightSideSize: sizes.fill.size,
   JSROOTmode: false,
   shortcuts: [],
@@ -104,7 +102,6 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
   const [rightSideSize, setRightSideSize] = useState<number>(
     initialState.rightSideSize
   );
-  const [rightSideNormalize, setRightSideNormalize] = useState<boolean>(true);
   const [JSROOTmode, setJSROOTmode] = useState<boolean>(false);
   const [customize, setCustomize] = useState<CustomizeProps>({
     xtype: '',
@@ -187,8 +184,6 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         setLumisection,
         rightSideSize,
         setRightSideSize,
-        rightSideNormalize,
-        setRightSideNormalize,
         JSROOTmode,
         setJSROOTmode,
         customize,

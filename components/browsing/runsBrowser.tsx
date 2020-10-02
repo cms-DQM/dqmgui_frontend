@@ -33,7 +33,9 @@ export const RunBrowser = ({
   const [openSelect, setSelect] = useState(false);
 
   const [currentRunNumberIndex, setCurrentRunNumberIndex] = useState<number>(0);
-  const dataset_name = current_dataset_name ? current_dataset_name : query.dataset_name;
+  const dataset_name = current_dataset_name
+    ? current_dataset_name
+    : query.dataset_name;
   const { results_grouped, isLoading } = useSearch('', dataset_name);
 
   const runNumbers = results_grouped[0]
@@ -41,7 +43,9 @@ export const RunBrowser = ({
     : [];
 
   useEffect(() => {
-    const query_run_number = current_run_number ? current_run_number.toString() : query.run_number;
+    const query_run_number = current_run_number
+      ? current_run_number.toString()
+      : query.run_number;
     setCurrentRunNumberIndex(runNumbers.indexOf(query_run_number));
   }, [runNumbers, isLoading]);
 
@@ -92,8 +96,8 @@ export const RunBrowser = ({
                             <Spin />
                           </OptionParagraph>
                         ) : (
-                            <div>{run}</div>
-                          )}
+                          <div>{run}</div>
+                        )}
                       </Option>
                     );
                   })}

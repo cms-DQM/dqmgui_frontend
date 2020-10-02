@@ -41,7 +41,9 @@ export const DatasetsBrowser = ({
   });
 
   useEffect(() => {
-    const query_dataset = current_dataset_name ? current_dataset_name : query.dataset_name;
+    const query_dataset = current_dataset_name
+      ? current_dataset_name
+      : query.dataset_name;
     setCurrentDatasetNameIndex(datasets.indexOf(query_dataset));
   }, [isLoading, datasets]);
 
@@ -84,8 +86,8 @@ export const DatasetsBrowser = ({
                     <Spin />
                   </OptionParagraph>
                 ) : (
-                    <p>{result.dataset}</p>
-                  )}
+                  <p>{result.dataset}</p>
+                )}
               </Option>
             ))}
           </StyledSelect>

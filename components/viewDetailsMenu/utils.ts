@@ -43,7 +43,7 @@ export const formTriples = (overlay_data: string | undefined) => {
     });
     return triples;
   }
-  return undefined;
+  return [];
 };
 
 export const getDatasetParts = (datasets: string[], part: string) => {

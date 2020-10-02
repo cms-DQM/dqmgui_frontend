@@ -26,6 +26,7 @@ export const ViewDetailsMenu = ({ selected_plots }: ViewDetailsMenuProps) => {
     size,
     setSize,
     setJSROOTmode,
+    JSROOTmode,
     rightSideSize,
     setRightSideSize,
     setTriples,
@@ -82,6 +83,7 @@ export const ViewDetailsMenu = ({ selected_plots }: ViewDetailsMenuProps) => {
                 checkedChildren="JSROOT enabled"
                 unCheckedChildren="JSROOT disabled"
                 disabled={!selected_plots}
+                checked={JSROOTmode}
                 onChange={(e) => {
                   setJSROOTmode(e);
                 }}
