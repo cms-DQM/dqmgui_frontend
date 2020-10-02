@@ -83,13 +83,13 @@ export const SetRunsModal = ({
     const copy = [...selected_runs];
     const index = copy.findIndex((run) => {
       return run.id === id;
-    })
+    });
 
     if (index !== -1) {
       copy.splice(index, 1);
       set_selected_runs(copy);
-    };
-  }
+    }
+  };
 
   //overlaid_and_selected_runs combines list of runs which are already overlaid (triples)
   // with those which are just selected (selected_runs) in "Set Runs" dialog
@@ -163,8 +163,7 @@ export const SetRunsModal = ({
                             deleteRunFromSelectedList(run.id as string);
                           }}
                           icon={<MinusOutlined />}
-                        >
-                        </StyledSecondaryButton>
+                        ></StyledSecondaryButton>
                       </SelectedRunsTd>
                     </SelectedRunsTr>
                   );
@@ -190,8 +189,8 @@ export const SetRunsModal = ({
               />
             </ResultsWrapper>
           ) : (
-              <ResultsWrapper />
-            )}
+            <ResultsWrapper />
+          )}
         </div>
       </div>
     </StyledModal>

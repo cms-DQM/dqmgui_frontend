@@ -26,7 +26,6 @@ export const TableOfSelectedRunForOverlay = ({
   change_run_details,
   remove_runs_to_set_runs_for_overlay,
 }: TableOfSelectedRunForOverlayProps) => {
-
   return (
     <table>
       {triples.map((overlaid_run: TripleProps, index: number) => {
@@ -37,7 +36,9 @@ export const TableOfSelectedRunForOverlay = ({
                 checked={overlaid_run.checked as boolean}
                 onChange={(e: any) => {
                   changeRunsForOverlayPropsValues(
-                    overlaid_run.cheked ? overlaid_run.cheked : e.target.checked,
+                    overlaid_run.cheked
+                      ? overlaid_run.cheked
+                      : e.target.checked,
                     'checked',
                     overlaid_run.id,
                     triples,
@@ -100,14 +101,15 @@ export const TableOfSelectedRunForOverlay = ({
             <CustomTd spacing={'4'}>
               <StyledSecondaryButton
                 onClick={() => {
-                  remove_runs_to_set_runs_for_overlay(overlaid_run.id as string);
+                  remove_runs_to_set_runs_for_overlay(
+                    overlaid_run.id as string
+                  );
                 }}
                 icon={<MinusOutlined />}
-              >
-              </StyledSecondaryButton>
+              ></StyledSecondaryButton>
             </CustomTd>
           </tr>
-        )
+        );
       })}
     </table>
   );

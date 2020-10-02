@@ -32,7 +32,6 @@ export const LatestRuns = () => {
     [updated_by_not_older_than]
   );
 
-
   const data = useNewer(
     data_get_by_mount.data,
     data_get_by_not_older_than_update.data
@@ -50,33 +49,35 @@ export const LatestRuns = () => {
         errors.map((error: string) => (
           <StyledAlert key={error} message={error} type="error" showIcon />
         ))
-      ) : isLoading ?
-          <SpinnerWrapper>
-            <Spinner />
-          </SpinnerWrapper> : (
-            <LatestRunsSection>
-              <CustomDiv display="flex" justifycontent="flex-end" width="auto">
-                <LiveModeButton />
-              </CustomDiv>
-              <LatestRunsTtitle>The latest runs</LatestRunsTtitle>
-              {isLoading ? (
-                <SpinnerWrapper>
-                  <Spinner />
-                </SpinnerWrapper>
-              ) : latest_runs &&
-                latest_runs.length === 0 &&
-                !isLoading &&
-                errors.length === 0 ? (
-                    <NoResultsFound />
-                  ) : (
-                    latest_runs &&
-                    <LatestRunsList
-                      latest_runs={latest_runs}
-                      mode={functions_config.mode}
-                    />
-                  )}
-            </LatestRunsSection>
+      ) : isLoading ? (
+        <SpinnerWrapper>
+          <Spinner />
+        </SpinnerWrapper>
+      ) : (
+        <LatestRunsSection>
+          <CustomDiv display="flex" justifycontent="flex-end" width="auto">
+            <LiveModeButton />
+          </CustomDiv>
+          <LatestRunsTtitle>The latest runs</LatestRunsTtitle>
+          {isLoading ? (
+            <SpinnerWrapper>
+              <Spinner />
+            </SpinnerWrapper>
+          ) : latest_runs &&
+            latest_runs.length === 0 &&
+            !isLoading &&
+            errors.length === 0 ? (
+            <NoResultsFound />
+          ) : (
+            latest_runs && (
+              <LatestRunsList
+                latest_runs={latest_runs}
+                mode={functions_config.mode}
+              />
+            )
           )}
+        </LatestRunsSection>
+      )}
     </>
   );
 };

@@ -15,7 +15,10 @@ import { getDisabledButtonTitle } from '../utils';
 import { store } from '../../../contexts/leftSideContext';
 import { SetRunsModal } from './setRunsModal';
 import { TableOfSelectedRunForOverlay } from './tableOfSelectedRunForOverlay';
-import { changeRouter, getChangedQueryParams } from '../../../containers/display/utils';
+import {
+  changeRouter,
+  getChangedQueryParams,
+} from '../../../containers/display/utils';
 import { addOverlayData } from '../../plots/plot/singlePlot/utils';
 
 interface OverlayRunsProps {
@@ -23,10 +26,7 @@ interface OverlayRunsProps {
   query: QueryProps;
 }
 
-export const OverlayRuns = ({
-  overlaid_runs,
-  query,
-}: OverlayRunsProps) => {
+export const OverlayRuns = ({ overlaid_runs, query }: OverlayRunsProps) => {
   const globalState = useContext(store);
   const {
     runs_set_for_overlay,
@@ -49,25 +49,25 @@ export const OverlayRuns = ({
     setTriples(runs);
   };
 
-
   const remove_runs_to_set_runs_for_overlay = async (id: string) => {
-    const copy = [...triples]
+    const copy = [...triples];
     const index = copy.findIndex((run) => {
       return run.id === id;
-    })
+    });
 
     if (index !== -1) {
       copy.splice(index, 1);
-      changeRouter(getChangedQueryParams(
-        {
-          overlay_data: `${addOverlayData(copy)}`,
-        },
-        query
-      ))
+      changeRouter(
+        getChangedQueryParams(
+          {
+            overlay_data: `${addOverlayData(copy)}`,
+          },
+          query
+        )
+      );
       setTriples(copy);
-    };
-
-  }
+    }
+  };
 
   return (
     <CustomDiv style={{ overflowX: 'auto' }}>
@@ -84,7 +84,9 @@ export const OverlayRuns = ({
         query={query}
         change_run_details={change_run_details}
         setTriples={setTriples}
-        remove_runs_to_set_runs_for_overlay={remove_runs_to_set_runs_for_overlay}
+        remove_runs_to_set_runs_for_overlay={
+          remove_runs_to_set_runs_for_overlay
+        }
       />
       <Row justify="space-between" style={{ height: 48, padding: 8 }}>
         <CustomDiv position="fixed" display="flex">

@@ -1,9 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Col } from 'antd';
 
-import {
-  QueryProps,
-} from '../../../containers/display/interfaces';
+import { QueryProps } from '../../../containers/display/interfaces';
 import {
   StyledDiv,
   CustomCheckbox,
@@ -29,8 +27,8 @@ export const Reference = () => {
   useEffect(() => {
     const normalizeValue = checked ? 'True' : 'False';
     setNormalize(normalizeValue);
-  }, [checked])
-  
+  }, [checked]);
+
   return (
     <StyledDiv>
       <CustomRow>
@@ -54,10 +52,7 @@ export const Reference = () => {
         </CustomCol>
         <Col></Col>
       </CustomRow>
-      <OverlayRuns
-        overlaid_runs={triples}
-        query={query}
-      />
+      <OverlayRuns overlaid_runs={triples} query={query} />
     </StyledDiv>
   );
 };

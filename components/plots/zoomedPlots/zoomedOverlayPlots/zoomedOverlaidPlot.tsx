@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Store } from 'antd/lib/form/interface';
-import {
-  SettingOutlined,
-  FullscreenOutlined,
-} from '@ant-design/icons';
+import { SettingOutlined, FullscreenOutlined } from '@ant-design/icons';
 
 import {
   get_overlaied_plots_urls,
@@ -150,29 +147,29 @@ export const ZoomedOverlaidPlot = ({
         {imageError ? (
           <ErrorMessage />
         ) : (
-            <ImageDiv
-              id={selected_plot.name}
-              width={params_for_api.width}
-              height={params_for_api.height}
-            >
-              {!imageError && (
-                <PlotImage
-                  blink={blink}
-                  params_for_api={params_for_api}
-                  plot={selected_plot}
-                  plotURL={source}
-                  query={query}
-                  setImageLoading={setImageLoading}
-                  updated_by_not_older_than={updated_by_not_older_than}
-                />
-              )}
-              {imageLoading && (
-                <CustomDiv display="flex" justifycontent="center" width="100%">
-                  <Spinner />
-                </CustomDiv>
-              )}
-            </ImageDiv>
-          )}
+          <ImageDiv
+            id={selected_plot.name}
+            width={params_for_api.width}
+            height={params_for_api.height}
+          >
+            {!imageError && (
+              <PlotImage
+                blink={blink}
+                params_for_api={params_for_api}
+                plot={selected_plot}
+                plotURL={source}
+                query={query}
+                setImageLoading={setImageLoading}
+                updated_by_not_older_than={updated_by_not_older_than}
+              />
+            )}
+            {imageLoading && (
+              <CustomDiv display="flex" justifycontent="center" width="100%">
+                <Spinner />
+              </CustomDiv>
+            )}
+          </ImageDiv>
+        )}
       </StyledPlotRow>
     </StyledCol>
   );

@@ -58,7 +58,6 @@ export const Plot = ({
     }
   }, [isPlotSelected, query.selected_plots]);
 
-
   return (
     <div ref={imageRef}>
       <StyledCol space={2}>
@@ -76,12 +75,12 @@ export const Plot = ({
             {isPlotSelected ? (
               <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
             ) : (
-                <PlusIcon
-                  onClick={() => {
-                    addPlotToRightSide(query, plot);
-                  }}
-                />
-              )}
+              <PlusIcon
+                onClick={() => {
+                  addPlotToRightSide(query, plot);
+                }}
+              />
+            )}
           </Column>
           <PlotImage
             blink={blink}

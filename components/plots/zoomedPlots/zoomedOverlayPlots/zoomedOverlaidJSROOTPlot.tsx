@@ -30,7 +30,7 @@ import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;
   params_for_api: ParamsForApiProps;
-  id:string;
+  id: string;
 }
 const drawJSROOT = async (
   histogramParam: string,
@@ -123,7 +123,6 @@ export const ZoomedOverlaidJSROOTPlot = ({
   //on first, second reneder overlaidJSROOTPlot.fHists.arr is [null, null]
   //@ts-ignore
   useEffect(() => {
-
     if (
       cleanDeep(overlaidJSROOTPlot.fHists.arr).length ===
       overlaidJSROOTPlot.fHists.arr.length
@@ -137,7 +136,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
     params_for_api.overlay_plot,
     params_for_api.dataset_name,
     params_for_api.run_number,
-    params_for_api.normalize
+    params_for_api.normalize,
   ]);
   const { blink } = useBlinkOnUpdate();
   return (

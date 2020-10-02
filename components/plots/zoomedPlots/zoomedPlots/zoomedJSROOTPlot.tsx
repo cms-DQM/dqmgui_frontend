@@ -27,7 +27,7 @@ import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;
   params_for_api: ParamsForApiProps;
-  id:string
+  id: string;
 }
 
 const drawJSROOT = async (id: string, data: any) => {
@@ -85,11 +85,11 @@ export const ZoomedJSROOTPlot = ({
             icon={<MinusIcon />}
           />
         </Column>
-          <ImageDiv
-            id={`${id}`}
-            width={params_for_api.width}
-            height={params_for_api.height}
-          />
+        <ImageDiv
+          id={`${id}`}
+          width={params_for_api.width}
+          height={params_for_api.height}
+        />
       </StyledPlotRow>
     </StyledCol>
   );

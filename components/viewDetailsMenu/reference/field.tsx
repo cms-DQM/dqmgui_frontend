@@ -27,7 +27,6 @@ export const Field = ({
   triples,
   change_run_details,
 }: FieldProps) => {
-
   const inputValue = value ? value : defaultValue;
   return (
     <StyledFormItem name={`${id}_${field_name}`}>

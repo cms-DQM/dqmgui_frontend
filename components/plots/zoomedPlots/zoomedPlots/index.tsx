@@ -32,7 +32,7 @@ export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
           true
         );
         if (globalState.JSROOTmode) {
-          const id = makeid() 
+          const id = makeid();
           return (
             <ZoomedJSROOTPlot
               selected_plot={selected_plot}
