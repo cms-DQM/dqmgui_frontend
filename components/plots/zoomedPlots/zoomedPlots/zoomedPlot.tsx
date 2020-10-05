@@ -110,7 +110,6 @@ export const ZoomedPlot = ({
               plot={selected_plot}
               plotURL={zoomed_plot_url}
               query={query}
-              setImageLoading={setImageLoading}
               updated_by_not_older_than={updated_by_not_older_than}
             />
           </ImageDiv>
@@ -148,19 +147,13 @@ export const ZoomedPlot = ({
           display="flex"
         >
           <PlotImage
+            updated_by_not_older_than={updated_by_not_older_than}
             blink={blink}
             params_for_api={params_for_api}
             plot={selected_plot}
             plotURL={plot_url}
             query={query}
-            setImageLoading={setImageLoading}
-            updated_by_not_older_than={updated_by_not_older_than}
           />
-          {imageLoading && (
-            <CustomDiv display="flex" justifycontent="center" width="100%">
-              <Spinner />
-            </CustomDiv>
-          )}
         </ImageDiv>
       </StyledPlotRow>
     </StyledCol>

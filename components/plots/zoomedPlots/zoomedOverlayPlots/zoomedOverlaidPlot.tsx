@@ -115,7 +115,6 @@ export const ZoomedOverlaidPlot = ({
               plot={selected_plot}
               plotURL={zoomed_plot_url}
               query={query}
-              setImageLoading={setImageLoading}
               updated_by_not_older_than={updated_by_not_older_than}
             />
           </ImageDiv>
@@ -144,32 +143,20 @@ export const ZoomedOverlaidPlot = ({
             onClick={() => removePlotFromRightSide(query, selected_plot)}
           />
         </Column>
-        {imageError ? (
-          <ErrorMessage />
-        ) : (
-          <ImageDiv
-            id={selected_plot.name}
-            width={params_for_api.width}
-            height={params_for_api.height}
-          >
-            {!imageError && (
-              <PlotImage
-                blink={blink}
-                params_for_api={params_for_api}
-                plot={selected_plot}
-                plotURL={source}
-                query={query}
-                setImageLoading={setImageLoading}
-                updated_by_not_older_than={updated_by_not_older_than}
-              />
-            )}
-            {imageLoading && (
-              <CustomDiv display="flex" justifycontent="center" width="100%">
-                <Spinner />
-              </CustomDiv>
-            )}
-          </ImageDiv>
-        )}
+        <ImageDiv
+          id={selected_plot.name}
+          width={params_for_api.width}
+          height={params_for_api.height}
+        >
+          <PlotImage
+            blink={blink}
+            params_for_api={params_for_api}
+            plot={selected_plot}
+            plotURL={source}
+            query={query}
+            updated_by_not_older_than={updated_by_not_older_than}
+          />
+        </ImageDiv>
       </StyledPlotRow>
     </StyledCol>
   );

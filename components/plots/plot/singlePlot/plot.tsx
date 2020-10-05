@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 import { functions_config, get_plot_url } from '../../../../config/config';
@@ -22,8 +22,6 @@ import {
   scrollToBottom,
   get_plot_error,
 } from './utils';
-import { Spinner } from '../../../../containers/search/styledComponents';
-import { CustomDiv } from '../../../styledComponents';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 import { PlotImage } from '../plotImage';
 
@@ -42,7 +40,6 @@ export const Plot = ({
 }: PlotProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
-  const [imageLoading, setImageLoading] = useState(true);
 
   const imageRef = useRef(null);
 
@@ -62,6 +59,7 @@ export const Plot = ({
     <div ref={imageRef}>
       <StyledCol space={2}>
         <StyledPlotRow
+        justifycontent="center"
           isLoading={blink.toString()}
           animation={(functions_config.mode === 'ONLINE').toString()}
           minheight={params_for_api.height}
@@ -87,17 +85,11 @@ export const Plot = ({
             params_for_api={params_for_api}
             plot={plot}
             plotURL={url}
-            setImageLoading={setImageLoading}
             updated_by_not_older_than={updated_by_not_older_than}
             imageRef={imageRef}
             isPlotSelected={isPlotSelected}
             query={query}
           />
-          {imageLoading && (
-            <CustomDiv display="flex" justifycontent="center" width="100%">
-              <Spinner />
-            </CustomDiv>
-          )}
         </StyledPlotRow>
       </StyledCol>
     </div>

@@ -1,12 +1,13 @@
 import * as React from 'react';
 
-import { root_url, get_plot_url } from '../../../config/config';
+import { root_url } from '../../../config/config';
 import {
   ParamsForApiProps,
   QueryProps,
 } from '../../../containers/display/interfaces';
-import { Image } from '../../../containers/display/styledComponents';
+import { useUpdateLiveMode } from '../../../hooks/useUpdateInLiveMode';
 import { ErrorMessage } from '../errorMessage';
+import { ImageRetry } from '../imageFallback';
 import {
   addPlotToRightSide,
   removePlotFromRightSide,
@@ -16,7 +17,6 @@ interface PlotImageProps {
   updated_by_not_older_than: number;
   params_for_api: ParamsForApiProps;
   blink: boolean;
-  setImageLoading: any;
   plot: any;
   plotURL: string;
   isPlotSelected?: boolean;
@@ -32,7 +32,6 @@ export const PlotImage = ({
   plotURL,
   updated_by_not_older_than,
   blink,
-  setImageLoading,
   plot,
 }: PlotImageProps) => {
   const [new_image_url, set_new_image_url] = React.useState(
@@ -58,7 +57,6 @@ export const PlotImage = ({
     params_for_api.run_number,
     params_for_api.dataset_name,
     params_for_api.lumi,
-    new_image_url,
     params_for_api.normalize,
   ]);
 
@@ -70,53 +68,48 @@ export const PlotImage = ({
       {imageError ? (
         <ErrorMessage />
       ) : (
-        <div
-          onClick={async () => {
-            if (imageRef) {
-              isPlotSelected
-                ? await removePlotFromRightSide(query, plot)
-                : await addPlotToRightSide(query, plot);
-              scroll(imageRef);
-            }
-          }}
-        >
-          {/* {!imageError && ( */}
-          <>
-            <Image
-              style={{ display: new_image_display }}
-              onLoad={() => {
-                setImageLoading(false);
-                set_old_image_url(new_image_url);
-                set_show_old_img(false);
-              }}
-              alt={plot.name}
-              src={new_image_url}
-              onError={(error) => {
-                setImageError(true);
-                setImageLoading(false);
-              }}
-              width={params_for_api.width}
-              height={params_for_api.height}
-            />
-            {/*When images is updating, we getting blinking effect. 
-                We trying to avoid it with showing old image instead of nothing (when a new image is just requesting)
-                Old image is an image which is 20 sec older then the new requested one.
-                */}
-            <Image
-              style={{ display: old_image_display }}
-              alt={plot.name}
-              src={old_image_url}
-              onError={(error) => {
-                setImageError(true);
-                setImageLoading(false);
-              }}
-              width={params_for_api.width}
-              height={params_for_api.height}
-            />
-          </>
-          {/* )} */}
-        </div>
-      )}
+          <div
+            onClick={async () => {
+              if (imageRef) {
+                isPlotSelected
+                  ? await removePlotFromRightSide(query, plot)
+                  : await addPlotToRightSide(query, plot);
+                scroll(imageRef);
+              }
+            }}
+          >
+            {!imageError && (
+              <>
+                <ImageRetry
+                  retryTimes={3}
+                  style={{ display: new_image_display }}
+                  onLoad={() => {
+                    set_old_image_url(new_image_url);
+                    set_show_old_img(false);
+                  }}
+                  alt={plot.name}
+                  src={new_image_url}
+                  setImageError={setImageError}
+                  width={params_for_api.width}
+                  height={params_for_api.height}
+                />
+                {/*When images is updating, we getting blinking effect. 
+                    We trying to avoid it with showing old image instead of nothing (when a new image is just requesting process)
+                    Old image is an image which is 20 sec older then the new requested one.
+                    */}
+                <ImageRetry
+                  retryTimes={3}
+                  style={{ display: old_image_display }}
+                  alt={plot.name}
+                  src={old_image_url}
+                  setImageError={setImageError}
+                  width={'auto'}
+                  height={'auto'}
+                />
+              </>
+            )}
+          </div>
+        )}
     </>
   );
 };
