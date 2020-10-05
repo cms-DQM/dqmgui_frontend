@@ -27,8 +27,6 @@ import {
   get_plot_error,
 } from '../singlePlot/utils';
 import { store } from '../../../../contexts/leftSideContext';
-import { CustomDiv } from '../../../styledComponents';
-import { Spinner } from '../../../../containers/search/styledComponents';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 import { PlotImage } from '../plotImage';
 
@@ -66,6 +64,7 @@ export const OverlaidPlotImage = ({
     <div ref={imageRef}>
       <StyledCol space={2}>
         <StyledPlotRow
+          justifycontent="center"
           isLoading={blink.toString()}
           animation={(functions_config.mode === 'ONLINE').toString()}
           minheight={params_for_api.height}
@@ -79,14 +78,14 @@ export const OverlaidPlotImage = ({
             {isPlotSelected ? (
               <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
             ) : (
-              <PlusIcon
-                onClick={async () => {
-                  await addPlotToRightSide(query, plot);
-                  scroll(imageRef);
-                  scrollToBottom(imageRefScrollDown);
-                }}
-              />
-            )}
+                <PlusIcon
+                  onClick={async () => {
+                    await addPlotToRightSide(query, plot);
+                    scroll(imageRef);
+                    scrollToBottom(imageRefScrollDown);
+                  }}
+                />
+              )}
           </Column>
           <PlotImage
             blink={blink}

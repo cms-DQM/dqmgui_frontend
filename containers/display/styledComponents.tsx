@@ -86,7 +86,7 @@ export const StyledPlotRow = styled(Row) <{
   justifycontent?: string;
 }>`
   display: flex;
-  justify-content:${props => props.justifycontent ? props.justifycontent : space - between};
+  justify-content:${props => props.justifycontent ? props.justifycontent : 'space-between'};
   width: ${(props) => props?.width && props.width}px;
   min-height: ${(props) => props?.minheight && props.minheight}px;
   background-color: ${(props) => {

@@ -94,6 +94,7 @@ export const ZoomedOverlaidPlot = ({
         title={selected_plot.displayedName}
       >
         <StyledPlotRow
+          justifycontent="center"
           isLoading={blink.toString()}
           animation={(functions_config.mode === 'ONLINE').toString()}
           minheight={copy_of_params.height}
@@ -133,6 +134,7 @@ export const ZoomedOverlaidPlot = ({
         width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}
         nopointer={true.toString()}
+        justifycontent="center"
       >
         <PlotNameCol error={get_plot_error(selected_plot).toString()}>
           {selected_plot.displayedName}

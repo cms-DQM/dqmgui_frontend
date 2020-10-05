@@ -56,6 +56,7 @@ export const OnSideOverlaidPlots = ({
           <div ref={imageRef}>
             <StyledCol space={2} key={url}>
               <StyledPlotRow
+                justifycontent="center"
                 isLoading={blink.toString()}
                 animation={(functions_config.mode === 'ONLINE').toString()}
                 minheight={params_for_api.height}
@@ -71,14 +72,14 @@ export const OnSideOverlaidPlots = ({
                       onClick={() => removePlotFromRightSide(query, plot)}
                     />
                   ) : (
-                    <PlusIcon
-                      onClick={async () => {
-                        await addPlotToRightSide(query, plot);
-                        scroll(imageRef);
-                        scrollToBottom(imageRefScrollDown);
-                      }}
-                    />
-                  )}
+                      <PlusIcon
+                        onClick={async () => {
+                          await addPlotToRightSide(query, plot);
+                          scroll(imageRef);
+                          scrollToBottom(imageRefScrollDown);
+                        }}
+                      />
+                    )}
                 </Column>
                 <PlotImage
                   imageRef={imageRef}

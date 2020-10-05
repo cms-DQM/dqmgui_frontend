@@ -148,8 +148,8 @@ export const ZoomedOverlaidJSROOTPlot = ({
         width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}
         nopointer={true.toString()}
-        // report={selected_plot.properties.report}
-      >
+        justifycontent="center"
+        >
         <PlotNameCol error={get_plot_error(selected_plot).toString()}>
           {selected_plot.displayedName}
         </PlotNameCol>
