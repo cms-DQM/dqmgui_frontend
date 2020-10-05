@@ -46,7 +46,7 @@ export const PlotImage = ({
 
   React.useEffect(() => {
     set_new_image_url(
-      `${root_url}${plotURL};notrOlderThan=${updated_by_not_older_than}`
+      `${root_url}${plotURL};notOlderThan=${updated_by_not_older_than}`
     );
     set_show_old_img(blink);
   }, [
