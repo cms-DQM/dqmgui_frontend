@@ -27,8 +27,6 @@ import {
   get_plot_error,
 } from '../singlePlot/utils';
 import { store } from '../../../../contexts/leftSideContext';
-import { CustomDiv } from '../../../styledComponents';
-import { Spinner } from '../../../../containers/search/styledComponents';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 import { PlotImage } from '../plotImage';
 
@@ -47,7 +45,6 @@ export const OverlaidPlotImage = ({
 }: OverlaidPlotImageProps) => {
   const globalState = useContext(store);
   const { normalize } = globalState;
-  const [imageLoading, setImageLoading] = useState(true);
 
   params_for_api.plot_name = plot.name;
   params_for_api.normalize = normalize;
@@ -67,6 +64,7 @@ export const OverlaidPlotImage = ({
     <div ref={imageRef}>
       <StyledCol space={2}>
         <StyledPlotRow
+          justifycontent="center"
           isLoading={blink.toString()}
           animation={(functions_config.mode === 'ONLINE').toString()}
           minheight={params_for_api.height}
@@ -97,14 +95,8 @@ export const OverlaidPlotImage = ({
             imageRef={imageRef}
             isPlotSelected={isPlotSelected}
             query={query}
-            setImageLoading={setImageLoading}
             updated_by_not_older_than={updated_by_not_older_than}
           />
-          {imageLoading && (
-            <CustomDiv display="flex" justifycontent="center" width="100%">
-              <Spinner />
-            </CustomDiv>
-          )}
         </StyledPlotRow>
       </StyledCol>
     </div>

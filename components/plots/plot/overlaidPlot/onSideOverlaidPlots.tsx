@@ -1,7 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { useRouter } from 'next/router';
 
-import { root_url, functions_config } from '../../../../config/config';
+import { functions_config } from '../../../../config/config';
 import {
   ParamsForApiProps,
   PlotDataProps,
@@ -24,9 +24,6 @@ import {
   scrollToBottom,
   get_plot_error,
 } from '../singlePlot/utils';
-import { ErrorMessage } from '../../errorMessage';
-import { CustomDiv } from '../../../styledComponents';
-import { Spinner } from '../../../../containers/search/styledComponents';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 import { PlotImage } from '../plotImage';
 
@@ -45,8 +42,6 @@ export const OnSideOverlaidPlots = ({
 }: OnSideOverlaidPlotsProps) => {
   params_for_api.plot_name = plot.name;
   const onsidePlotsURLs: string[] = getOnSideOverlaidPlots(params_for_api);
-  const [imageLoading, setImageLoading] = useState(true);
-  const [imageError, setImageError] = useState(false);
 
   const router = useRouter();
   const query: QueryProps = router.query;
@@ -61,6 +56,7 @@ export const OnSideOverlaidPlots = ({
           <div ref={imageRef}>
             <StyledCol space={2} key={url}>
               <StyledPlotRow
+                justifycontent="center"
                 isLoading={blink.toString()}
                 animation={(functions_config.mode === 'ONLINE').toString()}
                 minheight={params_for_api.height}
@@ -93,18 +89,8 @@ export const OnSideOverlaidPlots = ({
                   params_for_api={params_for_api}
                   plot={plot}
                   plotURL={url}
-                  setImageLoading={setImageLoading}
                   updated_by_not_older_than={updated_by_not_older_than}
                 />
-                {imageLoading && (
-                  <CustomDiv
-                    display="flex"
-                    justifycontent="center"
-                    width="100%"
-                  >
-                    <Spinner />
-                  </CustomDiv>
-                )}
               </StyledPlotRow>
             </StyledCol>
           </div>
