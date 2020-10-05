@@ -7,7 +7,7 @@ import {
 } from '../../../containers/display/interfaces';
 import { useUpdateLiveMode } from '../../../hooks/useUpdateInLiveMode';
 import { ErrorMessage } from '../errorMessage';
-import { ImageRetry } from '../imageFallback';
+import { ImageFallback } from '../imageFallback';
 import {
   addPlotToRightSide,
   removePlotFromRightSide,
@@ -80,7 +80,7 @@ export const PlotImage = ({
           >
             {!imageError && (
               <>
-                <ImageRetry
+                <ImageFallback
                   retryTimes={3}
                   style={{ display: new_image_display }}
                   onLoad={() => {
@@ -97,7 +97,7 @@ export const PlotImage = ({
                     We trying to avoid it with showing old image instead of nothing (when a new image is just requesting process)
                     Old image is an image which is 20 sec older then the new requested one.
                     */}
-                <ImageRetry
+                <ImageFallback
                   retryTimes={3}
                   style={{ display: old_image_display }}
                   alt={plot.name}

@@ -3,7 +3,7 @@ import { Image } from '../../containers/display/styledComponents';
 import { Spinner } from '../../containers/search/styledComponents';
 import { CustomDiv } from '../styledComponents';
 
-export const ImageRetry = ({ src, retryTimes, setImageError, ...props }: any) => {
+export const ImageFallback = ({ src, retryTimes, setImageError, ...props }: any) => {
   delete props.onError;
   const [final_src, setSrc] = useState(src);
   const [tries, setTries] = useState(0);
@@ -14,7 +14,7 @@ export const ImageRetry = ({ src, retryTimes, setImageError, ...props }: any) =>
 
   const displayImage = props.style.display
 
-  const onError = (error: any) => {
+  const onError = () => {
     if (tries + 1 < retryTimes) {
       setTries(tries + 1);
       setSrc(`${src}`);

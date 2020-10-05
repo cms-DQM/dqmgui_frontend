@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { useRouter } from 'next/router';
 
 import { functions_config } from '../../../../config/config';
