@@ -78,14 +78,14 @@ export const OverlaidPlotImage = ({
             {isPlotSelected ? (
               <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
             ) : (
-                <PlusIcon
-                  onClick={async () => {
-                    await addPlotToRightSide(query, plot);
-                    scroll(imageRef);
-                    scrollToBottom(imageRefScrollDown);
-                  }}
-                />
-              )}
+              <PlusIcon
+                onClick={async () => {
+                  await addPlotToRightSide(query, plot);
+                  scroll(imageRef);
+                  scrollToBottom(imageRefScrollDown);
+                }}
+              />
+            )}
           </Column>
           <PlotImage
             blink={blink}

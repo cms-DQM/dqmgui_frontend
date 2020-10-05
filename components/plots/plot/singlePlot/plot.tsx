@@ -59,7 +59,7 @@ export const Plot = ({
     <div ref={imageRef}>
       <StyledCol space={2}>
         <StyledPlotRow
-        justifycontent="center"
+          justifycontent="center"
           isLoading={blink.toString()}
           animation={(functions_config.mode === 'ONLINE').toString()}
           minheight={params_for_api.height}

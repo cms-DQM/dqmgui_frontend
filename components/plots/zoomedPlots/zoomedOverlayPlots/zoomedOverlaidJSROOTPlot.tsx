@@ -149,7 +149,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
         is_plot_selected={true.toString()}
         nopointer={true.toString()}
         justifycontent="center"
-        >
+      >
         <PlotNameCol error={get_plot_error(selected_plot).toString()}>
           {selected_plot.displayedName}
         </PlotNameCol>

@@ -31,7 +31,7 @@ const keyframe_for_updates_plots = keyframes`
   }
 `;
 
-export const Icon = styled(FolderFilled) <{
+export const Icon = styled(FolderFilled)<{
   isLoading?: string;
   animation?: string;
 }>`
@@ -54,7 +54,7 @@ export const DirecotryWrapper = styled.div`
 export const StyledA = styled.a`
   word-break: break-all;
 `;
-export const StyledCol = styled(Col) <{ space?: number }>`
+export const StyledCol = styled(Col)<{ space?: number }>`
   padding: ${(props) =>
     props.space ? `calc(${theme.space.spaceBetween}*${props.space})` : ''};
   width: fit-content;
@@ -75,7 +75,7 @@ export const StyledRowImages = styled(Row)`
   justify-content: center;
 `;
 
-export const StyledPlotRow = styled(Row) <{
+export const StyledPlotRow = styled(Row)<{
   width?: string;
   minheight?: number;
   is_plot_selected?: string;
@@ -86,7 +86,8 @@ export const StyledPlotRow = styled(Row) <{
   justifycontent?: string;
 }>`
   display: flex;
-  justify-content:${props => props.justifycontent ? props.justifycontent : 'space-between'};
+  justify-content: ${(props) =>
+    props.justifycontent ? props.justifycontent : 'space-between'};
   width: ${(props) => props?.width && props.width}px;
   min-height: ${(props) => props?.minheight && props.minheight}px;
   background-color: ${(props) => {
@@ -119,7 +120,7 @@ export const StyledPlotRow = styled(Row) <{
   animation-iteration-count: 1;
   animation-duration: 1s;
 `;
-export const PlotNameCol = styled(Col) <{ error?: string }>`
+export const PlotNameCol = styled(Col)<{ error?: string }>`
   width: 70%;
   word-break: break-all;
   color: ${(props) =>
@@ -129,7 +130,7 @@ export const PlotNameCol = styled(Col) <{ error?: string }>`
   font-weight: ${(props) => (props.error === 'true' ? 'bold' : '')};
   padding: ${theme.space.spaceBetween};
 `;
-export const Column = styled(Col) <{ display?: string }>`
+export const Column = styled(Col)<{ display?: string }>`
   padding: ${theme.space.spaceBetween} calc(${theme.space.spaceBetween}*2)
     ${theme.space.spaceBetween} ${theme.space.spaceBetween};
   display: ${(props) => (props.display ? props.display : '')};
@@ -147,10 +148,10 @@ export const Wrapper = styled.div<{
     props?.any_selected_plots && props?.position === viewPositions[1].value
       ? '100%'
       : !props?.any_selected_plots && props?.position === viewPositions[1].value
-        ? '100%'
-        : props?.any_selected_plots && props?.position === viewPositions[0].value
-          ? `${props.proportion}`
-          : 'fit-content'};
+      ? '100%'
+      : props?.any_selected_plots && props?.position === viewPositions[0].value
+      ? `${props.proportion}`
+      : 'fit-content'};
   align-items: center;
   flex-wrap: wrap;
   align-items: start;
@@ -176,7 +177,7 @@ export const ZoomedPlotsWrapper = styled.div<{
     props?.position === viewPositions[1].value
       ? '100%'
       : props?.position === viewPositions[0].value &&
-      `calc(100% - ${props.proportion})`};
+        `calc(100% - ${props.proportion})`};
   flex-wrap: wrap;
   overflow: ${(props) => (props?.any_selected_plots ? 'scroll' : '')};
   align-items: start;
@@ -226,10 +227,15 @@ export const ImageDiv = styled.div<{
   display: ${(props) => (props.display ? props.display : '')};
 `;
 
-export const Image = styled.img<{ display?: string; width?: number; height?: number; src?: any }>`
+export const Image = styled.img<{
+  display?: string;
+  width?: number;
+  height?: number;
+  src?: any;
+}>`
   width: ${(props) => props.width}px;
   height: ${(props) => props.height}px;
-  display:  ${(props) => props.display};
+  display: ${(props) => props.display};
 `;
 
 export const StyledBreadcrumb = styled(Breadcrumb)`
