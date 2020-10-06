@@ -83,9 +83,11 @@ export const StyledPlotRow = styled(Row)<{
   isLoading?: string;
   report?: PlotPropertiesReportProps;
   animation?: string;
+  justifycontent?: string;
 }>`
   display: flex;
-  justify-content: space-between;
+  justify-content: ${(props) =>
+    props.justifycontent ? props.justifycontent : 'space-between'};
   width: ${(props) => props?.width && props.width}px;
   min-height: ${(props) => props?.minheight && props.minheight}px;
   background-color: ${(props) => {
@@ -225,9 +227,15 @@ export const ImageDiv = styled.div<{
   display: ${(props) => (props.display ? props.display : '')};
 `;
 
-export const Image = styled.img<{ width?: number; height?: number; src?: any }>`
+export const Image = styled.img<{
+  display?: string;
+  width?: number;
+  height?: number;
+  src?: any;
+}>`
   width: ${(props) => props.width}px;
   height: ${(props) => props.height}px;
+  display: ${(props) => props.display};
 `;
 
 export const StyledBreadcrumb = styled(Breadcrumb)`
