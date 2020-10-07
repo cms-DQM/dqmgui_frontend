@@ -56,14 +56,15 @@ export const ZoomedJSROOTPlot = ({
 
   const { updated_by_not_older_than } = React.useContext(store);
 
+  const { blink } = useBlinkOnUpdate();
+
   useEffect(() => {
     if (!!document.getElementById(`${id}`)) {
+
       //@ts-ignore
       drawJSROOT(`${id}`, data);
     }
-  }, [data, params_for_api.lumi, updated_by_not_older_than]);
-
-  const { blink } = useBlinkOnUpdate();
+  }, [data, params_for_api.lumi, updated_by_not_older_than, selected_plot.name, blink]);
 
   return (
     <StyledCol space={2}>

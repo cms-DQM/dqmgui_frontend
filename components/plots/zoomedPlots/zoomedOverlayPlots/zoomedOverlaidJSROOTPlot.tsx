@@ -125,9 +125,11 @@ export const ZoomedOverlaidJSROOTPlot = ({
   useEffect(() => {
     if (
       cleanDeep(overlaidJSROOTPlot.fHists.arr).length ===
-      overlaidJSROOTPlot.fHists.arr.length
+      overlaidJSROOTPlot.fHists.arr.length //need fix: the first selected hist is not drewn at at all. Just when the second one is selected- the both of them are drewn.
     ) {
       drawJSROOT(histogramParam, id, overlaidJSROOTPlot);
+      console.log('drew')
+
     }
   }, [
     updated_by_not_older_than,
@@ -137,6 +139,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
     params_for_api.dataset_name,
     params_for_api.run_number,
     params_for_api.normalize,
+    selected_plot.name
   ]);
   const { blink } = useBlinkOnUpdate();
   return (
