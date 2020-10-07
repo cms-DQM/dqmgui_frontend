@@ -22,9 +22,14 @@ export const get_label = (info: InfoProps, data?: any) => {
 
 export const getPathName = () => {
   const isBrowser = () => typeof window !== 'undefined';
-  const pathName = (isBrowser() && window.location.pathname) || '/';
+  let pathName = (isBrowser() && window.location.pathname) || '/';
+  const the_lats_char = pathName.charAt(pathName.length-1);
+  if(the_lats_char !== '/'){
+    pathName = pathName + '/'
+  }
   return pathName;
 };
+
 export const makeid = () => {
   var text = '';
   var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
