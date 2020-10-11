@@ -2,7 +2,7 @@
   "name": "dqmgui_frontend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.tsx",
   "scripts": {
     "dev": "MODE=ONLINE NEW_BACK_END=true LATEST_RUNS=true LAYOUTS=true next",
     "build": "next build",
