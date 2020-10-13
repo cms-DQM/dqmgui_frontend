@@ -5,7 +5,6 @@ import qs from 'qs';
 import { QueryProps } from '../containers/display/interfaces';
 import { ParsedUrlQueryInput } from 'querystring';
 import { getChangedQueryParams } from '../containers/display/utils';
-import { getPathName } from '../components/utils';
 
 export const useChangeRouter = (
   params: ParsedUrlQueryInput,
@@ -21,7 +20,7 @@ export const useChangeRouter = (
   React.useEffect(() => {
     if (condition) {
       Router.push({
-        pathname: getPathName(),
+        pathname: '/',
         query: parameters,
         path: decodeURIComponent(queryString),
       });

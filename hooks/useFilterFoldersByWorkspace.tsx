@@ -20,7 +20,7 @@ export const useFilterFoldersByWorkspaces = (
 
   const filteredInnerFolders: string[] = [];
 
-  const workspace = query.workspace;
+  const workspace = query.workspaces;
   const folderPathFromQuery = query.folder_path;
   const plot_search = query.plot_search;
 

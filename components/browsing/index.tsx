@@ -48,15 +48,19 @@ export const Browser = () => {
     setLumisection(lumi);
   };
 
-  useChangeRouter(
-    {
-      run_number: currentRunNumber,
-      dataset_name: currentDataset,
-    },
-    [currentRunNumber, currentDataset],
-    true
-  );
+  if (currentRunNumber !== query.run_number || currentDataset !== query.dataset_name) {
+    changeRouter(
+      getChangedQueryParams(
+        {
+          run_number: currentRunNumber,
+          dataset_name: currentDataset,
+        },
+        query
+      )
+    );
+  }
 
+  //make changes through context
   return (
     <Form>
       <WrapperDiv>
@@ -92,14 +96,14 @@ export const Browser = () => {
               />
             </WrapperDiv>
           ) : (
-            <WrapperDiv>
-              <DatasetsBuilder
-                currentRunNumber={currentRunNumber}
-                currentDataset={currentDataset}
-                query={query}
-              />
-            </WrapperDiv>
-          )}
+              <WrapperDiv>
+                <DatasetsBuilder
+                  currentRunNumber={currentRunNumber}
+                  currentDataset={currentDataset}
+                  query={query}
+                />
+              </WrapperDiv>
+            )}
         </StyledFormItem>
       </WrapperDiv>
     </Form>

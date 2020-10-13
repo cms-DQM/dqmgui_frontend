@@ -108,7 +108,7 @@ export interface QueryProps {
   selected_plots?: string;
   overlay_data?: string;
   overlay?: string;
-  workspace?: string;
+  workspaces?: string;
   plot_search?: string;
   normalize?: string;
   lumi?: string;

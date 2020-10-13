@@ -1,5 +1,4 @@
 import React, { createContext, useState, ReactElement } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 
 import {
   sizes,
@@ -86,7 +85,7 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
   const [overlayPlots, setOverlay] = useState(initialState.overlayPlots);
   const [imageRefScrollDown, setImageRefScrollDown] = useState(null);
   const [plotSearchFolders, setPlotSearchFolders] = React.useState([]);
-  const [workspaceFolders, setWorkspaceFolders] = React.useState([]);
+  const [workspace, setWorkspace] = React.useState('');
   const [triples, setTriples] = React.useState(initialState.triples);
   const [openOverlayDataMenu, toggleOverlayDataMenu] = React.useState(
     initialState.openOverlayDataMenu
@@ -167,8 +166,7 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         setOverlay,
         imageRefScrollDown,
         setImageRefScrollDown,
-        workspaceFolders,
-        setWorkspaceFolders,
+        workspace, setWorkspace,
         plotSearchFolders,
         setPlotSearchFolders,
         change_value_in_reference_table,

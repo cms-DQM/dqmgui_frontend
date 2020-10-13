@@ -21,8 +21,10 @@ export const PlotSearch = ({ isLoadingFolders }: PlotSearchProps) => {
   );
 
   React.useEffect(() => {
-    const params = getChangedQueryParams({ plot_search: plotName }, query);
-    changeRouter(params);
+    if(query.plot_search !== plotName){
+      const params = getChangedQueryParams({ plot_search: plotName }, query);
+      changeRouter(params);
+    }
   }, [plotName]);
 
   return React.useMemo(() => {

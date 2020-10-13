@@ -9,9 +9,9 @@ import { StyledFormItem, StyledButton } from '../styledComponents';
 import { useRouter } from 'next/router';
 import { setWorkspaceToQuery } from './utils';
 import { QueryProps } from '../../containers/display/interfaces';
-import { useChangeRouter } from '../../hooks/useChangeRouter';
 import { theme } from '../../styles/theme';
 import { functions_config } from '../../config/config';
+import { store } from '../../contexts/leftSideContext';
 
 const { TabPane } = Tabs;
 
@@ -20,19 +20,24 @@ interface WorspaceProps {
   workspaces: any;
 }
 const Workspaces = () => {
+  const { workspace, setWorkspace } = React.useContext(store)
+
   const workspaces =
     functions_config.mode === 'ONLINE' ? onlineWorkspace : offlineWorskpace;
+    
+  const initialWorkspace = functions_config.mode === 'ONLINE' ? workspaces[0].workspaces[1].label : workspaces[0].workspaces[3].label
+
+  React.useEffect(() => {
+    setWorkspace(initialWorkspace)
+    return () => setWorkspace(initialWorkspace)
+  }, [])
+
   const router = useRouter();
   const query: QueryProps = router.query;
-  const workspaceOption = query.workspace
-    ? query.workspace
-    : workspaces[0].workspaces[2].label;
 
   const [openWorkspaces, toggleWorkspaces] = React.useState(false);
-  const [workspace, setWorkspace] = React.useState(workspaceOption);
 
-  useChangeRouter({ workspace: workspaceOption }, [], true);
-
+  // make a workspace set from context
   return (
     <Form>
       <StyledFormItem labelcolor="white" label="Workspace">

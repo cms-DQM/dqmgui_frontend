@@ -58,6 +58,7 @@ export const PlotImage = ({
     params_for_api.dataset_name,
     params_for_api.lumi,
     params_for_api.normalize,
+    params_for_api.overlay_plot,
   ]);
 
   const old_image_display = show_old_img ? '' : 'none';

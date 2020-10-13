@@ -21,7 +21,6 @@ import {
   get_run_list_by_search_old_api,
   get_run_list_by_search_new_api_with_no_older_than,
 } from '../../config/config';
-import { getPathName } from '../../components/utils';
 
 export const getFolderPath = (folders: string[], clickedFolder: string) => {
   const folderIndex = folders.indexOf(clickedFolder);
@@ -158,7 +157,7 @@ export const getChangedQueryParams = (
     ? removeFirstSlash(params.folder_path as string)
     : query.folder_path;
 
-  params.workspace = params.workspace ? params.workspace : query.workspace;
+  params.workspaces = params.workspaces ? params.workspaces : query.workspaces;
 
   params.overlay = params.overlay ? params.overlay : query.overlay;
 
@@ -194,7 +193,7 @@ export const getChangedQueryParams = (
 export const changeRouter = (parameters: ParsedUrlQueryInput) => {
   const queryString = qs.stringify(parameters, {});
   Router.push({
-    pathname: getPathName(),
+    pathname: '/',
     query: parameters,
     path: decodeURIComponent(queryString),
   });

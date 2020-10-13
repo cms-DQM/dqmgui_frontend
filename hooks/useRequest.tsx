@@ -6,6 +6,7 @@ import axios, {
 } from 'axios';
 
 import { root_url } from '../config/config';
+import { getPathName } from '../components/utils';
 
 interface ReturnRequest {
   data: any;

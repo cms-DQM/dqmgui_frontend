@@ -1,3 +1,4 @@
+import { getPathName } from '../components/utils';
 import {
   ParamsForApiProps,
   TripleProps,
@@ -7,11 +8,11 @@ import { get_customize_params, getRunsWithLumisections } from './utils';
 
 const config: any = {
   development: {
-    root_url: 'http://localhost:8081/',
+    root_url: 'http://localhost:8086/',
     title: 'Development',
   },
   production: {
-    root_url: './',
+    root_url: `${getPathName()}`,
     title: 'Offline',
   },
 };

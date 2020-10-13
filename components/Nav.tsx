@@ -10,6 +10,7 @@ interface NavProps {
   setDatasetName?: Dispatch<any>;
   initial_search_run_number?: string;
   initial_search_dataset_name?: string;
+  initial_search_lumisection?: string;
   handler(search_by_run_number: string, search_by_dataset_name: string): void;
   type: string;
   defaultRunNumber?: undefined | string;
@@ -39,7 +40,7 @@ export const Nav = ({
     form.resetFields();
     setFormRunNumber(initial_search_run_number || '');
     setFormDatasetName(initial_search_dataset_name || '');
-  }, [initial_search_run_number, initial_search_dataset_name, form]);
+  }, [initial_search_run_number, initial_search_dataset_name,form]);
 
   const layout = {
     labelCol: { span: 8 },

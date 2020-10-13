@@ -15,11 +15,8 @@ import { getDisabledButtonTitle } from '../utils';
 import { store } from '../../../contexts/leftSideContext';
 import { SetRunsModal } from './setRunsModal';
 import { TableOfSelectedRunForOverlay } from './tableOfSelectedRunForOverlay';
-import {
-  changeRouter,
-  getChangedQueryParams,
-} from '../../../containers/display/utils';
-import { addOverlayData } from '../../plots/plot/singlePlot/utils';
+import { change_run_details } from './overlaidRunsActions/changeRunDetails';
+import { remove_runs_from_a_lst } from './overlaidRunsActions/removeRunFromAList';
 
 interface OverlayRunsProps {
   overlaid_runs: TripleProps[];
@@ -37,38 +34,6 @@ export const OverlayRuns = ({ overlaid_runs, query }: OverlayRunsProps) => {
 
   const [open, toggleModal] = useState(false);
 
-  const change_run_details = async (runs: TripleProps[]) => {
-    await changeRouter(
-      getChangedQueryParams(
-        {
-          overlay_data: `${addOverlayData(runs)}`,
-        },
-        query
-      )
-    );
-    setTriples(runs);
-  };
-
-  const remove_runs_to_set_runs_for_overlay = async (id: string) => {
-    const copy = [...triples];
-    const index = copy.findIndex((run) => {
-      return run.id === id;
-    });
-
-    if (index !== -1) {
-      copy.splice(index, 1);
-      changeRouter(
-        getChangedQueryParams(
-          {
-            overlay_data: `${addOverlayData(copy)}`,
-          },
-          query
-        )
-      );
-      setTriples(copy);
-    }
-  };
-
   return (
     <CustomDiv style={{ overflowX: 'auto' }}>
       <SetRunsModal
@@ -82,11 +47,9 @@ export const OverlayRuns = ({ overlaid_runs, query }: OverlayRunsProps) => {
       <TableOfSelectedRunForOverlay
         triples={triples}
         query={query}
-        change_run_details={change_run_details}
+        change_run_details={(triples: TripleProps[]) => change_run_details(triples)(setTriples, query)}
         setTriples={setTriples}
-        remove_runs_to_set_runs_for_overlay={
-          remove_runs_to_set_runs_for_overlay
-        }
+        remove_runs_to_set_runs_for_overlay={(id: string) => remove_runs_from_a_lst(id)(triples, setTriples, query)}
       />
       <Row justify="space-between" style={{ height: 48, padding: 8 }}>
         <CustomDiv position="fixed" display="flex">

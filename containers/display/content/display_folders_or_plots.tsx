@@ -46,7 +46,7 @@ export const DisplayFordersOrPlots = ({
       position={viewPlotsPosition}
       proportion={proportion}
     >
-      {isLoading ? (
+      {isLoading && filteredFolders.length === 0? (
         <SpinnerWrapper>
           <Spinner />
         </SpinnerWrapper>

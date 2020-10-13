@@ -12,19 +12,20 @@ import {
 } from '../../search/styledComponents';
 import { seperateRunAndLumiInSearch } from '../../../components/utils';
 import { changeRouter, getChangedQueryParams } from '../utils';
-import { workspaces } from '../../../workspaces/offline';
 import { functions_config } from '../../../config/config';
 import { LatestRuns } from '../../../components/initialPage/latestRuns';
 import { useUpdateLiveMode } from '../../../hooks/useUpdateInLiveMode';
+import { store } from '../../../contexts/leftSideContext';
 
 export const ContentSwitching = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
   const { set_update } = useUpdateLiveMode();
+  const { wokrspace } = React.useContext(store)
 
   const { results_grouped, searching, isLoading, errors } = useSearch(
     query.search_run_number,
-    query.search_dataset_name
+    query.search_dataset_name,
   );
   //serchResultsHandler when you selecting run, dataset from search results
   const serchResultsHandler = (run: string, dataset: string) => {
@@ -33,13 +34,15 @@ export const ContentSwitching = () => {
     const { parsedRun, parsedLumi } = seperateRunAndLumiInSearch(
       run.toString()
     );
+
     changeRouter(
       getChangedQueryParams(
         {
           lumi: parsedLumi,
           run_number: parsedRun,
           dataset_name: dataset,
-          workspaces: workspaces[0].workspaces[2].label,
+          workspaces: wokrspace,
+          plot_search: '',
         },
         query
       )

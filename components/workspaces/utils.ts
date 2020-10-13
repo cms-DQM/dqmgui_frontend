@@ -2,15 +2,14 @@ import qs from 'qs';
 
 import { QueryProps } from '../../containers/display/interfaces';
 import Router from 'next/router';
-import { getPathName } from '../utils';
 
 export const setWorkspaceToQuery = (query: QueryProps, workspace: string) => {
   return Router.push({
-    pathname: getPathName(),
+    pathname: '/',
     query: {
       run_number: query.run_number,
       dataset_name: query.dataset_name,
-      workspace: workspace,
+      workspaces: workspace,
     },
   });
 };
