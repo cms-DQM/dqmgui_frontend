@@ -16,4 +16,6 @@ module.exports = {
     MODE: process.env.MODE,
   },
   assetPrefix: './',
+  trailingSlash: true,
+  basePath: '/dqm/online-playback-new',
 };
