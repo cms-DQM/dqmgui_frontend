@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Form from 'antd/lib/form/Form';
 
 import { functions_config } from '../../config/config';
@@ -48,7 +48,8 @@ export const Browser = () => {
     setLumisection(lumi);
   };
 
-  if (currentRunNumber !== query.run_number || currentDataset !== query.dataset_name) {
+  // if (currentRunNumber !== query.run_number || currentDataset !== query.dataset_name) {
+   useEffect(()=>{
     changeRouter(
       getChangedQueryParams(
         {
@@ -58,7 +59,8 @@ export const Browser = () => {
         query
       )
     );
-  }
+   },[currentRunNumber, currentDataset ])
+  // }
 
   //make changes through context
   return (
@@ -88,24 +90,29 @@ export const Browser = () => {
             />
           }
         >
-          {datasetOption === dataSetSelections[0].value ? (
-            <WrapperDiv>
-              <DatasetsBrowser
-                setCurrentDataset={setCurrentDataset}
-                query={query}
-              />
-            </WrapperDiv>
-          ) : (
-              <WrapperDiv>
-                <DatasetsBuilder
-                  currentRunNumber={currentRunNumber}
-                  currentDataset={currentDataset}
-                  query={query}
-                />
-              </WrapperDiv>
-            )}
+          {functions_config.mode !== "ONLINE" && (
+            <>
+              {datasetOption === dataSetSelections[0].value ? (
+                <WrapperDiv>
+                  <DatasetsBrowser
+                    setCurrentDataset={setCurrentDataset}
+                    query={query}
+                  />
+                </WrapperDiv>
+              ) : (
+                  <WrapperDiv>
+                    <DatasetsBuilder
+                      currentRunNumber={currentRunNumber}
+                      currentDataset={dataset_name}
+                      query={query}
+                    />
+                  </WrapperDiv>
+                )}
+            </>
+          )
+          }
         </StyledFormItem>
       </WrapperDiv>
-    </Form>
+    </Form >
   );
 };

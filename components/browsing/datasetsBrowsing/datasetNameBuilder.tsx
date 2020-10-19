@@ -35,10 +35,11 @@ export const DatasetsBuilder = ({
     lastSelectedDatasetPartValue,
     setLastSelectedDatasetPartPosition,
     doesCombinationOfSelectedDatasetPartsExists,
+    setSelectedDatasetParts,
     fullDatasetName,
   } = useAvailbleAndNotAvailableDatasetPartsOptions(
     currentRunNumber,
-    currentDataset
+    currentDataset,
   );
 
   useEffect(() => {
@@ -47,8 +48,8 @@ export const DatasetsBuilder = ({
         getChangedQueryParams({ dataset_name: fullDatasetName }, query)
       );
     }
-  }, [fullDatasetName]);
-
+  }, [doesCombinationOfSelectedDatasetPartsExists, fullDatasetName]);
+  
   return (
     <Row>
       {availableAndNotAvailableDatasetParts.map((part: any) => {

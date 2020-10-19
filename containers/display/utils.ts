@@ -148,7 +148,7 @@ export const getChangedQueryParams = (
   query: QueryProps
 ) => {
   params.dataset_name = params.dataset_name
-    ? params.dataset_name
+    ? decodeURIComponent(params.dataset_name as string)
     : decodeURIComponent(query.dataset_name as string);
 
   params.run_number = params.run_number ? params.run_number : query.run_number;

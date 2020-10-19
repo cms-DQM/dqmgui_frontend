@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useSearch } from './useSearch';
 import { getDatasetParts } from '../components/viewDetailsMenu/utils';
@@ -13,9 +13,10 @@ export const useAvailbleAndNotAvailableDatasetPartsOptions = (
   run_number: string,
   currentDataset: any
 ) => {
-  const selectedDatasetParts = getDatasetNameSplitBySlashIntoObject(
+  const [selectedDatasetParts, setSelectedDatasetParts] = useState(getDatasetNameSplitBySlashIntoObject(
     currentDataset
-  );
+  ))
+
 
   const datasetPartsPositions = Object.keys(selectedDatasetParts).sort();
   const { results_grouped } = useSearch(run_number, '');
@@ -96,5 +97,6 @@ export const useAvailbleAndNotAvailableDatasetPartsOptions = (
     setLastSelectedDatasetPartPosition,
     doesCombinationOfSelectedDatasetPartsExists,
     fullDatasetName,
+    setSelectedDatasetParts
   };
 };

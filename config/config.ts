@@ -12,7 +12,7 @@ const config: any = {
     title: 'Development',
   },
   production: {
-    root_url: `${getPathName()}`,
+    root_url: 'https://dqm-gui.web.cern.ch/api/dqm/offline/',
     title: 'Offline',
   },
 };
