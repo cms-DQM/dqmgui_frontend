@@ -36,7 +36,8 @@ export const RunBrowser = ({
   const dataset_name = current_dataset_name
     ? current_dataset_name
     : query.dataset_name;
-  const { results_grouped, isLoading } = useSearch('', dataset_name);
+
+    const { results_grouped, isLoading } = useSearch('', dataset_name);
 
   const runNumbers = results_grouped[0]
     ? results_grouped[0].runs.map((run: number) => run.toString())

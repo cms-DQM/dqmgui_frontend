@@ -8,11 +8,13 @@ import { get_customize_params, getRunsWithLumisections } from './utils';
 
 const config: any = {
   development: {
-    root_url: 'http://localhost:8086/',
+    root_url: 'http://localhost:8081/',
     title: 'Development',
   },
   production: {
-    root_url: 'https://dqm-gui.web.cern.ch/api/dqm/offline/',
+    root_url: `${getPathName()}`,
+    // root_url: 'https://dqm-gui.web.cern.ch/api/dqm/offline/',
+    // root_url: './',
     title: 'Offline',
   },
 };
@@ -39,27 +41,22 @@ export const service_title =
 
 export const get_folders_and_plots_new_api = (params: ParamsForApiProps) => {
   if (params.plot_search) {
-    return `api/v1/archive/${getRunsWithLumisections(params)}${
-      params.dataset_name
-    }/${params.folders_path}?search=${params.plot_search}`;
+    return `api/v1/archive/${getRunsWithLumisections(params)}${params.dataset_name
+      }/${params.folders_path}?search=${params.plot_search}`;
   }
-  return `api/v1/archive/${getRunsWithLumisections(params)}${
-    params.dataset_name
-  }/${params.folders_path}`;
+  return `api/v1/archive/${getRunsWithLumisections(params)}${params.dataset_name
+    }/${params.folders_path}`;
 };
 export const get_folders_and_plots_new_api_with_live_mode = (
   params: ParamsForApiProps
 ) => {
   if (params.plot_search) {
-    return `api/v1/archive/${getRunsWithLumisections(params)}${
-      params.dataset_name
-    }/${params.folders_path}?search=${params.plot_search}&notOlderThan=${
-      params.notOlderThan
-    }`;
+    return `api/v1/archive/${getRunsWithLumisections(params)}${params.dataset_name
+      }/${params.folders_path}?search=${params.plot_search}&notOlderThan=${params.notOlderThan
+      }`;
   }
-  return `api/v1/archive/${getRunsWithLumisections(params)}${
-    params.dataset_name
-  }/${params.folders_path}?notOlderThan=${params.notOlderThan}`;
+  return `api/v1/archive/${getRunsWithLumisections(params)}${params.dataset_name
+    }/${params.folders_path}?notOlderThan=${params.notOlderThan}`;
 };
 
 export const get_folders_and_plots_old_api = (params: ParamsForApiProps) => {
@@ -81,25 +78,19 @@ export const get_run_list_by_search_new_api_with_no_older_than = (
   return `api/v1/samples?run=${params.run_number}&lumi=${params.lumi}&dataset=${params.dataset_name}&notOlderThan=${params.notOlderThan}`;
 };
 export const get_plot_url = (params: ParamsForApiProps) => {
-  return `plotfairy/archive/${getRunsWithLumisections(params)}${
-    params.dataset_name
-  }${params.folders_path}/${params.plot_name as string}?${get_customize_params(
-    params.customizeProps
-  )}${params.stats ? '' : 'showstats=0;'}${
-    params.errorBars ? 'showerrbars=1;' : ''
-  };w=${params.width};h=${params.height}`;
+  return `plotfairy/archive/${getRunsWithLumisections(params)}${params.dataset_name
+    }${params.folders_path}/${params.plot_name as string}?${get_customize_params(
+      params.customizeProps
+    )}${params.stats ? '' : 'showstats=0;'}${params.errorBars ? 'showerrbars=1;' : ''
+    };w=${params.width};h=${params.height}`;
 };
 
 export const get_plot_with_overlay = (params: ParamsForApiProps) => {
-  return `plotfairy/overlay?${get_customize_params(params.customizeProps)}ref=${
-    params.overlay
-  };obj=archive/${getRunsWithLumisections(params)}${params.dataset_name}${
-    params.folders_path
-  }/${encodeURIComponent(params.plot_name as string)}${
-    params.joined_overlaied_plots_urls
-  };${params.stats ? '' : 'showstats=0;'}${
-    params.errorBars ? 'showerrbars=1;' : ''
-  }norm=${params.normalize};w=${params.width};h=${params.height}`;
+  return `plotfairy/overlay?${get_customize_params(params.customizeProps)}ref=${params.overlay
+    };obj=archive/${getRunsWithLumisections(params)}${params.dataset_name}${params.folders_path
+    }/${encodeURIComponent(params.plot_name as string)}${params.joined_overlaied_plots_urls
+    };${params.stats ? '' : 'showstats=0;'}${params.errorBars ? 'showerrbars=1;' : ''
+    }norm=${params.normalize};w=${params.width};h=${params.height}`;
 };
 
 export const get_overlaied_plots_urls = (params: ParamsForApiProps) => {
@@ -122,19 +113,16 @@ export const get_overlaied_plots_urls = (params: ParamsForApiProps) => {
 };
 
 export const get_jroot_plot = (params: ParamsForApiProps) =>
-  `jsrootfairy/archive/${getRunsWithLumisections(params)}${
-    params.dataset_name
+  `jsrootfairy/archive/${getRunsWithLumisections(params)}${params.dataset_name
   }${params.folders_path}/${encodeURIComponent(
     params.plot_name as string
   )}?jsroot=true;notOlderThan=${params.notOlderThan}`;
 
 export const getLumisections = (params: LumisectionRequestProps) =>
-  `api/v1/samples?run=${params.run_number}&dataset=${
-    params.dataset_name
-  }&lumi=${params.lumi}${
-    functions_config.mode === 'ONLINE' && params.notOlderThan
-      ? `&notOlderThan=${params.notOlderThan}`
-      : ''
+  `api/v1/samples?run=${params.run_number}&dataset=${params.dataset_name
+  }&lumi=${params.lumi}${functions_config.mode === 'ONLINE' && params.notOlderThan
+    ? `&notOlderThan=${params.notOlderThan}`
+    : ''
   }`;
 
 export const get_the_latest_runs = (notOlderThan: number) => {

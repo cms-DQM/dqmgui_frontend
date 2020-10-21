@@ -50,6 +50,7 @@ export const Browser = () => {
 
   // if (currentRunNumber !== query.run_number || currentDataset !== query.dataset_name) {
    useEffect(()=>{
+    if (currentRunNumber !== query.run_number || currentDataset !== query.dataset_name) {
     changeRouter(
       getChangedQueryParams(
         {
@@ -59,15 +60,17 @@ export const Browser = () => {
         query
       )
     );
+  }
    },[currentRunNumber, currentDataset ])
-  // }
+  // 
 
   //make changes through context
   return (
     <Form>
       <WrapperDiv>
         <WrapperDiv>
-          <RunBrowser query={query} setCurrentRunNumber={setCurrentRunNumber} />
+          <RunBrowser query={query} 
+          setCurrentRunNumber={setCurrentRunNumber} />
         </WrapperDiv>
         <WrapperDiv>
           {functions_config.new_back_end.lumisections_on && (
@@ -102,7 +105,7 @@ export const Browser = () => {
               ) : (
                   <WrapperDiv>
                     <DatasetsBuilder
-                      currentRunNumber={currentRunNumber}
+                      currentRunNumber={run_number}
                       currentDataset={dataset_name}
                       query={query}
                     />
