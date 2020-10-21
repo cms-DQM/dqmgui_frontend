@@ -8,7 +8,7 @@ import { get_customize_params, getRunsWithLumisections } from './utils';
 
 const config: any = {
   development: {
-    root_url: 'http://localhost:8086/',
+    root_url: 'http://localhost:8081/',
     title: 'Development',
   },
   production: {

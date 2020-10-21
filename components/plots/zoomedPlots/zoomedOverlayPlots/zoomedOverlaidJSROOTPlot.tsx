@@ -137,6 +137,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
     params_for_api.dataset_name,
     params_for_api.run_number,
     params_for_api.normalize,
+    overlaidJSROOTPlot.fHists.arr
   ]);
   const { blink } = useBlinkOnUpdate();
   return (
