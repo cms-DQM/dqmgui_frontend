@@ -31,7 +31,6 @@ export const PlotsWithLayout = ({
 }: PlotsWithLayoutPorps) => {
   const [shrinkLayouts, setShrinkedLayouts] = React.useState<string[]>([]);
   const layouts_names = Object.keys(plots_grouped_by_layouts);
-
   return (
     <>
       {layouts_names.map((name: string) => {
