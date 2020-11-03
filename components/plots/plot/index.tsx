@@ -29,14 +29,12 @@ export const LeftSidePlots = ({
   const router = useRouter();
   const query: QueryProps = router.query;
   const { imageRefScrollDown } = globalState;
-  const folders = query.folder_path ? query.folder_path?.split('/') : [];
-  const is_user_in_layout_folder = folders.indexOf('Layouts')
 
   if (plots.length > 0) {
     return (
       <>
         {functions_config.new_back_end.layouts &&
-        is_user_in_layout_folder > 0 ? (
+         Object.keys(plots_grouped_by_layouts_checked).length !== 0  ? (
           <PlotsWithLayout
             plots_grouped_by_layouts={plots_grouped_by_layouts_checked}
             selected_plots={selected_plots}

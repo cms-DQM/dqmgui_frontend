@@ -68,9 +68,8 @@ const Content: FC<FolderProps> = ({
     params,
     updated_by_not_older_than
   );
-
-  const plots_grouped_by_layouts = chain(plots).groupBy('layout').value();
-
+const plots_with_layouts = plots.filter((plot)=> plot.hasOwnProperty('layout'))
+  const plots_grouped_by_layouts = chain(plots_with_layouts).groupBy('layout').value();
   const filteredFolders: any[] = foldersByPlotSearch ? foldersByPlotSearch : [];
   const selected_plots: PlotDataProps[] = getSelectedPlots(
     selectedPlots,
