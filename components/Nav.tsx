@@ -4,6 +4,7 @@ import { Form } from 'antd';
 import { StyledFormItem, StyledInput, CustomForm } from './styledComponents';
 import { SearchButton } from './searchButton';
 import { QuestionButton } from './helpButton';
+import { functions_config } from '../config/config';
 
 interface NavProps {
   setRunNumber?: Dispatch<any>;
@@ -40,7 +41,7 @@ export const Nav = ({
     form.resetFields();
     setFormRunNumber(initial_search_run_number || '');
     setFormDatasetName(initial_search_dataset_name || '');
-  }, [initial_search_run_number, initial_search_dataset_name,form]);
+  }, [initial_search_run_number, initial_search_dataset_name, form]);
 
   const layout = {
     labelCol: { span: 8 },
@@ -51,12 +52,11 @@ export const Nav = ({
   };
 
   return (
-    <div>
+    <div style={{justifyContent: 'center'}}> 
       <CustomForm
         form={form}
         layout={'inline'}
         justifycontent="center"
-        width="max-content"
         {...layout}
         name={`search_form${type}`}
         className="fieldLabel"
@@ -84,17 +84,19 @@ export const Nav = ({
             value={defaultRunNumber}
           />
         </StyledFormItem>
-        <StyledFormItem name="dataset_name">
-          <StyledInput
-            id="dataset_name"
-            placeholder="Enter dataset name"
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setFormDatasetName(e.target.value)
-            }
-            type="text"
-            value={defaultDatasetName}
-          />
-        </StyledFormItem>
+        {functions_config.mode !== 'ONLINE' && (
+          <StyledFormItem name="dataset_name">
+            <StyledInput
+              id="dataset_name"
+              placeholder="Enter dataset name"
+              onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                setFormDatasetName(e.target.value)
+              }
+              type="text"
+              value={defaultDatasetName}
+            />
+          </StyledFormItem>
+        )}
         <Form.Item {...tailLayout}>
           <SearchButton
             onClick={() =>

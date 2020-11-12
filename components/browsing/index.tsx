@@ -78,33 +78,35 @@ export const Browser = () => {
             />
           )}
         </WrapperDiv>
-        <StyledFormItem
-          labelcolor="white"
-          label={
-            <DropdownMenu
-              options={dataSetSelections}
-              action={setDatasetOption}
-              defaultValue={dataSetSelections[0]}
-            />
-          }
-        >
-          {datasetOption === dataSetSelections[0].value ? (
-            <WrapperDiv>
-              <DatasetsBrowser
-                setCurrentDataset={setCurrentDataset}
-                query={query}
-              />
-            </WrapperDiv>
-          ) : (
-              <WrapperDiv>
-                <DatasetsBuilder
-                  currentRunNumber={currentRunNumber}
-                  currentDataset={currentDataset}
-                  query={query}
+        {functions_config.mode !== 'ONLINE' && (
+            <StyledFormItem
+              labelcolor="white"
+              label={
+                <DropdownMenu
+                  options={dataSetSelections}
+                  action={setDatasetOption}
+                  defaultValue={dataSetSelections[0]}
                 />
-              </WrapperDiv>
-            )}
-        </StyledFormItem>
+              }
+            >
+              {datasetOption === dataSetSelections[0].value ? (
+                <WrapperDiv>
+                  <DatasetsBrowser
+                    setCurrentDataset={setCurrentDataset}
+                    query={query}
+                  />
+                </WrapperDiv>
+              ) : (
+                  <WrapperDiv>
+                    <DatasetsBuilder
+                      currentRunNumber={currentRunNumber}
+                      currentDataset={currentDataset}
+                      query={query}
+                    />
+                  </WrapperDiv>
+                )}
+            </StyledFormItem>
+          )}
       </WrapperDiv>
     </Form>
   );

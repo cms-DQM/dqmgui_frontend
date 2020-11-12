@@ -22,7 +22,7 @@ interface MeCountProps {
   children: React.ReactElement;
 }
 
-const MeCount = ({ me_count, children }: MeCountProps) => {
+export const MeCount = ({ me_count, children }: MeCountProps) => {
   if (functions_config.new_back_end.new_back_end) {
     return <CutomBadge count={me_count}>{children}</CutomBadge>;
   }

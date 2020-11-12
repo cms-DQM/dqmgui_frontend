@@ -31,8 +31,13 @@ export interface PlotProps extends LumisectionRequestProps {
   stats?: boolean;
   normalize?: string;
   errorBars?: boolean;
+  overlaidSeparately?: PlotoverlaidSeparatelyProps[];
 }
 
+export interface PlotoverlaidSeparatelyProps{
+  folder_path: string;
+  name: string;
+}
 export interface LumisectionRequestProps {
   dataset_name: string;
   run_number: string;

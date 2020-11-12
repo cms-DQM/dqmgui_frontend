@@ -53,16 +53,7 @@ const Workspaces = () => {
           title="Workspaces"
           visible={openWorkspaces}
           onCancel={() => toggleWorkspaces(false)}
-          footer={[
-            <StyledButton
-              color={theme.colors.secondary.main}
-              background="white"
-              key="Close"
-              onClick={() => toggleWorkspaces(false)}
-            >
-              Close
-            </StyledButton>,
-          ]}
+          footer={null}
         >
           <Tabs defaultActiveKey="1" type="card">
             {workspaces.map((workspace: WorspaceProps) => (

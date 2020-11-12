@@ -4,6 +4,7 @@ import { Info } from '../info';
 import { RunInfoModal } from './runInfoModal';
 import { QueryProps } from '../../containers/display/interfaces';
 import { RunInfoIcon } from '../styledComponents';
+import { Col } from 'antd';
 
 interface RunInfoProps {
   query: QueryProps;
@@ -15,11 +16,11 @@ export const RunInfo = ({ query }: RunInfoProps) => {
   return (
     <>
       <RunInfoModal toggleModal={toggleModal} open={open} query={query} />
-      <div onClick={() => toggleModal(!open)}>
+      <Col onClick={() => toggleModal(!open)} style={{width:'min-content'}}>
         <Info content={'Run info'}>
           <RunInfoIcon />
         </Info>
-      </div>
+      </Col>
     </>
   );
 };

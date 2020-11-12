@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Store } from 'antd/lib/form/interface';
-import { SettingOutlined, FullscreenOutlined } from '@ant-design/icons';
+import { SettingOutlined, FullscreenOutlined, BlockOutlined  } from '@ant-design/icons';
 
 import {
   get_overlaied_plots_urls,
-  root_url,
   functions_config,
 } from '../../../../config/config';
 import {
@@ -31,9 +30,6 @@ import {
 import { ZoomedPlotMenu } from '../menu';
 import { Customization } from '../../../customization';
 import { Plot_portal } from '../../../../containers/display/portal';
-import { Spinner } from '../../../../containers/search/styledComponents';
-import { CustomDiv } from '../../../styledComponents';
-import { ErrorMessage } from '../../errorMessage';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 import { PlotImage } from '../../plot/plotImage';
 
@@ -67,6 +63,12 @@ export const ZoomedOverlaidPlot = ({
       value: 'Customize',
       action: () => toggleCustomizationMenu(true),
       icon: <SettingOutlined />,
+    },
+    {
+      label: 'Overlay with another plot',
+      value: 'Customize',
+      action: () => toggleCustomizationMenu(true),
+      icon: <BlockOutlined  />,
     },
   ];
 

@@ -1,5 +1,5 @@
 import React, { FC, useState, useContext } from 'react';
-import { Col } from 'antd';
+import { Col, Row } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
 import { chain } from 'lodash';
@@ -9,7 +9,7 @@ import { ZoomedPlots } from '../../../components/plots/zoomedPlots';
 import { ViewDetailsMenu } from '../../../components/viewDetailsMenu';
 import { DivWrapper, ZoomedPlotsWrapper } from '../styledComponents';
 import { FolderPath } from './folderPath';
-import { getSelectedPlots } from '../utils';
+import { changeRouter, getChangedQueryParams, getSelectedPlots } from '../utils';
 import {
   CustomRow,
   StyledSecondaryButton,
@@ -18,6 +18,8 @@ import { useFilterFolders } from '../../../hooks/useFilterFolders';
 import { SettingsModal } from '../../../components/settings';
 import { store } from '../../../contexts/leftSideContext';
 import { DisplayFordersOrPlots } from './display_folders_or_plots';
+import { UsefulLinks } from '../../../components/usefulLinks';
+import { ParsedUrlQueryInput } from 'querystring';
 
 export interface PlotInterface {
   obj?: string;
@@ -68,7 +70,7 @@ const Content: FC<FolderProps> = ({
     params,
     updated_by_not_older_than
   );
-const plots_with_layouts = plots.filter((plot)=> plot.hasOwnProperty('layout'))
+  const plots_with_layouts = plots.filter((plot) => plot.hasOwnProperty('layout'))
   const plots_grouped_by_layouts = chain(plots_with_layouts).groupBy('layout').value();
   const filteredFolders: any[] = foldersByPlotSearch ? foldersByPlotSearch : [];
   const selected_plots: PlotDataProps[] = getSelectedPlots(
@@ -76,6 +78,9 @@ const plots_with_layouts = plots.filter((plot)=> plot.hasOwnProperty('layout'))
     plots
   );
 
+  const changeFolderPathByBreadcrumb = (parameters: ParsedUrlQueryInput) =>
+  changeRouter(getChangedQueryParams(parameters, query));
+  
   return (
     <>
       <CustomRow space={'2'} width="100%" justifycontent="space-between">
@@ -85,16 +90,21 @@ const plots_with_layouts = plots.filter((plot)=> plot.hasOwnProperty('layout'))
           isAnyPlotSelected={selected_plots.length === 0}
         />
         <Col style={{ padding: 8 }}>
-          <FolderPath folder_path={folder_path} />
+          <FolderPath folder_path={folder_path} changeFolderPathByBreadcrumb={changeFolderPathByBreadcrumb}/>
         </Col>
-        <Col>
-          <StyledSecondaryButton
-            icon={<SettingOutlined />}
-            onClick={() => toggleSettingsModal(true)}
-          >
-            Settings
+        <Row gutter={16}>
+          <Col>
+            <UsefulLinks />
+          </Col>
+          <Col>
+            <StyledSecondaryButton
+              icon={<SettingOutlined />}
+              onClick={() => toggleSettingsModal(true)}
+            >
+              Settings
           </StyledSecondaryButton>
-        </Col>
+          </Col>
+        </Row>
       </CustomRow>
       <CustomRow width="100%">
         <ViewDetailsMenu selected_plots={selected_plots.length > 0} />

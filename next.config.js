@@ -15,7 +15,7 @@ module.exports = {
     LATEST_RUNS: process.env.LATEST_RUNS,
     MODE: process.env.MODE,
   },
-  assetPrefix: './',
-  trailingSlash: true,
-  basePath: '/dqm/online-new',
+  // assetPrefix: './',
+  // trailingSlash: true,
+  // basePath: '/dqm/online-new',
 };

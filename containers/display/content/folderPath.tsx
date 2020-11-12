@@ -1,22 +1,18 @@
 import React from 'react';
 import { Breadcrumb } from 'antd';
-import { useRouter } from 'next/router';
 
-import { getFolderPath, changeRouter, getChangedQueryParams } from '../utils';
+import { getFolderPath } from '../utils';
 import { StyledBreadcrumb } from '../styledComponents';
 import { ParsedUrlQueryInput } from 'querystring';
 
 interface FolderPathProps {
   folder_path: string | undefined;
+  changeFolderPathByBreadcrumb(parameters: ParsedUrlQueryInput): void
 }
 
-export const FolderPath = ({ folder_path }: FolderPathProps) => {
+export const FolderPath = ({ folder_path, changeFolderPathByBreadcrumb }: FolderPathProps) => {
   const folders = folder_path ? folder_path.split('/') : [];
   const filteredFolders = folders.filter((folder: string) => folder !== '');
-  const router = useRouter();
-  const query = router.query;
-  const changeFolderPathByBreadcrumb = (parameters: ParsedUrlQueryInput) =>
-    changeRouter(getChangedQueryParams(parameters, query));
 
   return (
     <>

@@ -32,16 +32,7 @@ export const SettingsModal = ({
       title="Settings"
       visible={openSettings}
       onCancel={() => toggleSettingsModal(false)}
-      footer={[
-        <StyledButton
-          color={theme.colors.secondary.main}
-          background="white"
-          key="Close"
-          onClick={() => toggleSettingsModal(false)}
-        >
-          Close
-        </StyledButton>,
-      ]}
+      footer={null}
     >
       <Form>
         <StyledFormItem

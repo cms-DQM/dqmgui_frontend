@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { FullscreenOutlined, SettingOutlined } from '@ant-design/icons';
+import { FullscreenOutlined, SettingOutlined, BlockOutlined } from '@ant-design/icons';
 import { Store } from 'antd/lib/form/interface';
 
 import {
@@ -29,11 +29,9 @@ import {
 import { Customization } from '../../../customization';
 import { ZoomedPlotMenu } from '../menu';
 import { Plot_portal } from '../../../../containers/display/portal';
-import { ErrorMessage } from '../../errorMessage';
-import { CustomDiv } from '../../../styledComponents';
-import { Spinner } from '../../../../containers/search/styledComponents';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 import { PlotImage } from '../../plot/plotImage';
+import { OverlayWithAnotherPlot } from '../../../overlayWithAnotherPlot';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -48,8 +46,8 @@ export const ZoomedPlot = ({
     Partial<Store> & CustomizeProps
   >();
   const [openCustomization, toggleCustomizationMenu] = useState(false);
-  const [isPortalWindowOpen, setIsPortalWindowOpen] = React.useState(false);
-  const [imageLoading, setImageLoading] = useState(true);
+  const [isPortalWindowOpen, setIsPortalWindowOpen] = useState(false);
+  const [openOverlayPlotMenu, setOpenOverlayPlotMenu] = useState(false)
 
   params_for_api.customizeProps = customizationParams;
   const plot_url = get_plot_url(params_for_api);
@@ -76,12 +74,22 @@ export const ZoomedPlot = ({
       action: () => toggleCustomizationMenu(true),
       icon: <SettingOutlined />,
     },
+    {
+      label: 'Overlay with another plot',
+      value: 'Customize',
+      action: () => setOpenOverlayPlotMenu(true),
+      icon: <BlockOutlined  />,
+    },
   ];
 
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
 
   return (
     <StyledCol space={2}>
+      <OverlayWithAnotherPlot
+        visible={openOverlayPlotMenu}
+        setOpenOverlayWithAnotherPlotModal={setOpenOverlayPlotMenu}
+      />
       {/* Plot opened in a new tab */}
       <Plot_portal
         isPortalWindowOpen={isPortalWindowOpen}

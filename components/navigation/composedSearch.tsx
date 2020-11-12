@@ -19,9 +19,8 @@ export const ComposedSearch = () => {
 
   return (
     <CustomRow
-      width="100%"
-      display="flex"
-      justifycontent="space-between"
+      // display="flex"
+      // justifycontent="space-between"
       alignitems="center"
     >
       {set_on_live_mode ? (
@@ -29,14 +28,7 @@ export const ComposedSearch = () => {
       ) : (
         <ArchiveModeHeader />
       )}
-      <WrapperDiv>
-        <Col>
-          <Workspaces />
-        </Col>
-        <Col>
-          <PlotSearch isLoadingFolders={false} />
-        </Col>
-      </WrapperDiv>
+    
     </CustomRow>
   );
 };

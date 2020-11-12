@@ -9,7 +9,7 @@ export const StyledLayout = styled(Layout)`
 `;
 export const StyledHeader = styled(Header)`
   background-color: ${theme.colors.primary.main};
-  padding: 12px;
+  padding: 12px 12px 12px 0px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -21,8 +21,6 @@ export const StyledDiv = styled.div<{ span?: number }>`
 `;
 
 export const StyledLogoWrapper = styled.div`
-  position: absolute;
-  left: 0;
   height: 55px;
   cursor: pointer;
   transition: 0.5s;
@@ -38,4 +36,6 @@ export const StyledLogo = styled.img`
 export const StyledLogoDiv = styled.div`
   width: 55px;
   height: 55px;
+  // position: absolute;
+  // left: 0;
 `;

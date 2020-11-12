@@ -28,7 +28,7 @@ export const LiveModeHeader = ({ query }: LiveModeHeaderProps) => {
   const globalState = React.useContext(store);
   return (
     <>
-      <CustomForm display="flex">
+      <CustomForm display="flex" style={{ alignItems: 'center',}}>
         {main_run_info.map((info: InfoProps) => {
           const params_for_api = FormatParamsForAPI(
             globalState,
@@ -53,6 +53,7 @@ export const LiveModeHeader = ({ query }: LiveModeHeaderProps) => {
               <Title
                 level={4}
                 style={{
+                  display: 'contents',
                   color: `${
                     update
                       ? theme.colors.notification.success
