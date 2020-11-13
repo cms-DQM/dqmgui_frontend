@@ -2,7 +2,6 @@ import * as React from 'react'
 import Modal from 'antd/lib/modal/Modal'
 import { useRouter } from 'next/router'
 
-import { MeCount } from '../../containers/display/content/directories'
 import { ParamsForApiProps, PlotoverlaidSeparatelyProps, QueryProps } from '../../containers/display/interfaces'
 import { Icon, StyledA } from '../../containers/display/styledComponents'
 import { choose_api } from '../../containers/display/utils'
@@ -51,25 +50,39 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
 
   React.useEffect(() => {
     const copy = [...folderPath]
-    copy.push(currentFolder)
-    setFolderPath(copy)
-    return () => setFolderPath([])
-  }, [currentFolder])
+    const newItemIndexInFolderPath = copy.indexOf(currentFolder)
 
-  React.useEffect(() => {
-    const joinedFoldersForRequest = folderPath.join('/').substr(1)
+    if (newItemIndexInFolderPath > -1) {
+      const howManyItemsNeedToRemove = (copy.length - 1) - newItemIndexInFolderPath
+      console.log(howManyItemsNeedToRemove)
+      copy.splice(newItemIndexInFolderPath, howManyItemsNeedToRemove)
+    }
+    else {
+      copy.push(currentFolder)
+    }
+    setFolderPath(copy)
+
+    const joinedFoldersForRequest = copy.join('/')
     console.log(joinedFoldersForRequest)
     setOverlaidPlots({ name: '', folder_path: joinedFoldersForRequest })
-  }, [folderPath])
+    
+    return () => setFolderPath([])
+  }, [currentFolder, folderPath[folderPath.length - 1]]) // when the last folder in path is changed
+
+  React.useEffect(() => {
+    const joinedFoldersForRequest = folderPath.join('/')
+    console.log(joinedFoldersForRequest)
+    setOverlaidPlots({ name: '', folder_path: joinedFoldersForRequest })
+  }, folderPath)
 
   const changeFolderPathByBreadcrumb = (parameters: ParsedUrlQueryInput) => {
     console.log(parameters)
     if (parameters.folder_path === '/') {
-      setOverlaidPlots({ folder_path: '', name: '' });
       setFolderPath([])
       setCurrentFolder('')
     }
-    setOverlaidPlots(parameters);
+    const folders = overlaidPlots.folder_path.split('/')
+    setFolderPath(folders)
   }
 
 
@@ -100,8 +113,8 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
               )
             })
           }
-          </Row>
-          <Row style={{ width: '100%' }}>
+        </Row>
+        <Row style={{ width: '100%' }}>
           {
             data.map((folder_or_plot: any) => {
               return (

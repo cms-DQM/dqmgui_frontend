@@ -64,12 +64,12 @@ export const ZoomedOverlaidPlot = ({
       action: () => toggleCustomizationMenu(true),
       icon: <SettingOutlined />,
     },
-    {
-      label: 'Overlay with another plot',
-      value: 'Customize',
-      action: () => toggleCustomizationMenu(true),
-      icon: <BlockOutlined  />,
-    },
+    // {
+    //   label: 'Overlay with another plot',
+    //   value: 'Customize',
+    //   action: () => toggleCustomizationMenu(true),
+    //   icon: <BlockOutlined  />,
+    // },
   ];
 
   const router = useRouter();
