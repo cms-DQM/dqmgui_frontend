@@ -13,7 +13,7 @@ const config: any = {
   },
   production: {
     root_url: `${getPathName()}`,
-    title: 'Offline',
+    title: 'Online-playback',
   },
 };
 
@@ -33,6 +33,7 @@ export const functions_config: any = {
 };
 
 export const root_url = config[process.env.NODE_ENV || 'development'].root_url;
+export const mode = config[process.env.NODE_ENV || 'development'].title;
 
 export const service_title =
   config[process.env.NODE_ENV || 'development'].title;

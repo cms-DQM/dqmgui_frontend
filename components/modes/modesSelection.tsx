@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button } from 'antd';
 import { Menu, Dropdown } from 'antd';
-import { functions_config } from '../../config/config';
+import { functions_config, mode } from '../../config/config';
 
 const modes = [{
   name: 'Online',
@@ -39,7 +39,7 @@ export const ModesSelection = () => {
       <Button
         type="link"
         style={{ color: 'white', fontVariant: 'all-small-caps' }}>
-        Online
+        {mode}
     </Button>
     </Dropdown>
   )
