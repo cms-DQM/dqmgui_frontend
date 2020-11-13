@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button } from 'antd';
 import { Menu, Dropdown } from 'antd';
-import { functions_config, mode } from '../../config/config';
+import { mode as setMode } from '../../config/config';
 
 const modes = [{
   name: 'Online',
@@ -12,7 +12,7 @@ const modes = [{
   link: 'https://cmsweb.cern.ch/dqm/online-playback-new/'
 },
 {
-  name: 'offline',
+  name: 'Offline',
   link: 'https://dqm-gui.web.cern.ch/'
 }]
 
@@ -20,10 +20,10 @@ const menu = (
   <Menu>
     {modes.map(mode => (
       <Menu.Item
-        disabled={functions_config.mode.toUpperCase() === mode.name.toUpperCase()}>
+        disabled={setMode === mode.name.toUpperCase()}>
         <Button
           type="link"
-          disabled={functions_config.mode.toUpperCase() === mode.name.toUpperCase()}
+          disabled={setMode === mode.name.toUpperCase()}
           onClick={() => location.href = mode.link} >
           {mode.name}
         </Button>
@@ -40,7 +40,7 @@ export const ModesSelection = () => {
         type="link"
         style={{ color: 'white', fontVariant: 'all-small-caps' }}>
         {mode}
-    </Button>
+      </Button>
     </Dropdown>
   )
 
