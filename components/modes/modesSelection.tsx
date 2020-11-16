@@ -39,7 +39,7 @@ export const ModesSelection = () => {
       <Button
         type="link"
         style={{ color: 'white', fontVariant: 'all-small-caps' }}>
-        {mode}
+        {setMode}
       </Button>
     </Dropdown>
   )
