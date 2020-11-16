@@ -8,7 +8,7 @@ const menu = (
   <Menu>
     <Menu.Item>
       <a target="_blank" rel="noopener noreferrer" href="https://cmsrunregistry.web.cern.ch/online/global?">
-        Run Regestry
+        Run Registry
         </a>
     </Menu.Item>
     <Menu.Item>
