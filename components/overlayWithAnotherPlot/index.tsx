@@ -10,6 +10,8 @@ import { useRequest } from '../../hooks/useRequest'
 import { Button, Col, Row } from 'antd'
 import { FolderPath } from '../../containers/display/content/folderPath'
 import { ParsedUrlQueryInput } from 'querystring'
+import cleanDeep from 'clean-deep'
+import { Spinner } from '../../containers/search/styledComponents'
 
 interface OverlayWithAnotherPlotProps {
   visible: boolean;
@@ -17,11 +19,11 @@ interface OverlayWithAnotherPlotProps {
 }
 
 export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotModal }: OverlayWithAnotherPlotProps) => {
-  const [data, setData] = React.useState<any>([])
   const [overlaidPlots, setOverlaidPlots] = React.useState<PlotoverlaidSeparatelyProps>({ folder_path: '', name: '' })
-  const [folderPath, setFolderPath] = React.useState<string[]>([])
-  const [currentFolder, setCurrentFolder] = React.useState('')
+  const [folders, setFolders] = React.useState<(string | undefined)[]>([])
+  const [currentFolder, setCurrentFolder] = React.useState<string | undefined>('')
   const [plot, setPlot] = React.useState({})
+  const [height, setHeight] = React.useState()
 
   const router = useRouter();
   const query: QueryProps = router.query;
@@ -42,65 +44,62 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
   );
 
   React.useEffect(() => {
-    if (data_get_by_mount && data_get_by_mount.data) {
-      setData(data_get_by_mount.data.data)
-    }
-    console.log()
-  }, [data_get_by_mount.data])
+    const copy = [...folders]
+    const index = folders.indexOf(currentFolder)
 
-  React.useEffect(() => {
-    const copy = [...folderPath]
-    const newItemIndexInFolderPath = copy.indexOf(currentFolder)
-
-    if (newItemIndexInFolderPath > -1) {
-      const howManyItemsNeedToRemove = (copy.length - 1) - newItemIndexInFolderPath
-      console.log(howManyItemsNeedToRemove)
-      copy.splice(newItemIndexInFolderPath, howManyItemsNeedToRemove)
+    if (index >= 0) {
+      const rest = copy.splice(0, index + 1)
+      setFolders(rest)
+      const joinderFolders = rest.join('/')
+      setOverlaidPlots({ folder_path: joinderFolders, name: '' })
     }
     else {
       copy.push(currentFolder)
+      //we're cleaning copy array, because we want to delete empty string. 
+      // We need to remove it because when we're joining array with empty string 
+      // we're getting a string with '/' in the beginning.
+      const cleaned_array = cleanDeep(copy) ? cleanDeep(copy) : []
+      setFolders(cleaned_array)
+      const joinderFolders = copy.join('/')
+      if (cleaned_array.length === 0) {
+        setOverlaidPlots({ folder_path: '', name: '' })
+      }
+      setOverlaidPlots({ folder_path: joinderFolders, name: '' })
     }
-    setFolderPath(copy)
+  }, [currentFolder])
 
-    const joinedFoldersForRequest = copy.join('/')
-    console.log(joinedFoldersForRequest)
-    setOverlaidPlots({ name: '', folder_path: joinedFoldersForRequest })
-    
-    return () => setFolderPath([])
-  }, [currentFolder, folderPath[folderPath.length - 1]]) // when the last folder in path is changed
+  const modalRef = React.useRef(null);
 
-  React.useEffect(() => {
-    const joinedFoldersForRequest = folderPath.join('/')
-    console.log(joinedFoldersForRequest)
-    setOverlaidPlots({ name: '', folder_path: joinedFoldersForRequest })
-  }, folderPath)
-
-  const changeFolderPathByBreadcrumb = (parameters: ParsedUrlQueryInput) => {
-    console.log(parameters)
-    if (parameters.folder_path === '/') {
-      setFolderPath([])
+  const { data } = data_get_by_mount
+  const folders_or_plots = data ? data.data : []
+  const changeFolderPathByBreadcrumb = (item: ParsedUrlQueryInput) => {
+    const folders_from_breadcrumb = item.folder_path.split('/')
+    const cleaned_folders_array = cleanDeep(folders_from_breadcrumb) ? cleanDeep(folders_from_breadcrumb) : []
+    setFolders(cleaned_folders_array)
+    if (cleaned_folders_array.length > 0) {
+      setCurrentFolder(cleaned_folders_array[cleaned_folders_array.length - 1])
+    }
+    else {
       setCurrentFolder('')
     }
-    const folders = overlaidPlots.folder_path.split('/')
-    setFolderPath(folders)
   }
-
 
   return (
     <Modal
       visible={visible}
       onCancel={() => {
         setOpenOverlayWithAnotherPlotModal(false)
-        setFolderPath([])
+        setCurrentFolder('')
       }}
     >
-      <Row gutter={16}>
+      <Row gutter={16} >
         <Col style={{ padding: 8 }}>
           <FolderPath folder_path={overlaidPlots.folder_path} changeFolderPathByBreadcrumb={changeFolderPathByBreadcrumb} />
         </Col>
-        <Row style={{ width: '100%' }}>
-          {
-            data.map((folder_or_plot: any) => {
+        {
+          !data_get_by_mount.isLoading &&
+          <Row style={{ width: '100%', flex: '1 1 auto' }}>
+            {folders_or_plots.map((folder_or_plot: any) => {
               return (
                 <>
                   {folder_or_plot.subdir &&
@@ -111,24 +110,30 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
                   }
                 </>
               )
-            })
-          }
-        </Row>
-        <Row style={{ width: '100%' }}>
-          {
-            data.map((folder_or_plot: any) => {
+            })}
+          </Row>
+        }
+        {data_get_by_mount.isLoading &&
+          <Row style={{ width: '100%', display: 'flex', justifyContent: 'center', height: '100%', alignItems: 'center' }}>
+            <Spinner />
+          </Row>
+        }
+        {
+          <Row>{
+            !data_get_by_mount.isLoading && folders_or_plots.map((folder_or_plot: any) => {
               return (
                 <>
                   {folder_or_plot.name &&
-                    <Col span={8} onClick={() => setPlot(folder_or_plot)}>
-                      <Button >{folder_or_plot.name}</Button>
+                    <Col span={16} onClick={() => setPlot(folder_or_plot)}>
+                      <Button block>{folder_or_plot.name}</Button>
                     </Col>
                   }
                 </>
               )
             })
           }
-        </Row>
+          </Row>
+        }
       </Row>
     </Modal>
   )

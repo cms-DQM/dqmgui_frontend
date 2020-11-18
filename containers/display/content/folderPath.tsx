@@ -4,10 +4,11 @@ import { Breadcrumb } from 'antd';
 import { getFolderPath } from '../utils';
 import { StyledBreadcrumb } from '../styledComponents';
 import { ParsedUrlQueryInput } from 'querystring';
+import { FolderPathByBreadcrumbProps } from './folders_and_plots_content';
 
 interface FolderPathProps {
   folder_path: string | undefined;
-  changeFolderPathByBreadcrumb(parameters: ParsedUrlQueryInput): void
+  changeFolderPathByBreadcrumb(parameters: ParsedUrlQueryInput | FolderPathByBreadcrumbProps): void
 }
 
 export const FolderPath = ({ folder_path, changeFolderPathByBreadcrumb }: FolderPathProps) => {

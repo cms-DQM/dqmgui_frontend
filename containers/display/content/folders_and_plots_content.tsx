@@ -33,6 +33,11 @@ export interface PlotInterface {
   qtstatuses?: [];
 }
 
+export interface FolderPathByBreadcrumbProps {
+  folder_path: string;
+  name: string;
+}
+
 interface FolderProps {
   folder_path?: string;
   run_number: string;

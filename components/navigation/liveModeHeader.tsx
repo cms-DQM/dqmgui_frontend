@@ -24,7 +24,7 @@ interface LiveModeHeaderProps {
 }
 
 export const LiveModeHeader = ({ query }: LiveModeHeaderProps) => {
-  const { update, set_update } = useUpdateLiveMode();
+  const { update, set_update, not_older_than } = useUpdateLiveMode();
   const globalState = React.useContext(store);
   return (
     <>
@@ -40,7 +40,7 @@ export const LiveModeHeader = ({ query }: LiveModeHeaderProps) => {
           const { data, isLoading } = useRequest(
             get_jroot_plot(params_for_api),
             {},
-            [query.dataset_name, query.run_number]
+            [query.dataset_name, query.run_number, ]
           );
           return (
             <CutomFormItem
