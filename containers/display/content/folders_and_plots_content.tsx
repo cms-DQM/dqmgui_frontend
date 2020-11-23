@@ -76,7 +76,7 @@ const Content: FC<FolderProps> = ({
     updated_by_not_older_than
   );
   const plots_with_layouts = plots.filter((plot) => plot.hasOwnProperty('layout'))
-  const plots_grouped_by_layouts = chain(plots_with_layouts).groupBy('layout').value();
+  var plots_grouped_by_layouts = chain(plots_with_layouts).sortBy('layout').groupBy('layout').value()
   const filteredFolders: any[] = foldersByPlotSearch ? foldersByPlotSearch : [];
   const selected_plots: PlotDataProps[] = getSelectedPlots(
     selectedPlots,
@@ -84,8 +84,8 @@ const Content: FC<FolderProps> = ({
   );
 
   const changeFolderPathByBreadcrumb = (parameters: ParsedUrlQueryInput) =>
-  changeRouter(getChangedQueryParams(parameters, query));
-  
+    changeRouter(getChangedQueryParams(parameters, query));
+
   return (
     <>
       <CustomRow space={'2'} width="100%" justifycontent="space-between">
@@ -95,7 +95,7 @@ const Content: FC<FolderProps> = ({
           isAnyPlotSelected={selected_plots.length === 0}
         />
         <Col style={{ padding: 8 }}>
-          <FolderPath folder_path={folder_path} changeFolderPathByBreadcrumb={changeFolderPathByBreadcrumb}/>
+          <FolderPath folder_path={folder_path} changeFolderPathByBreadcrumb={changeFolderPathByBreadcrumb} />
         </Col>
         <Row gutter={16}>
           <Col>
