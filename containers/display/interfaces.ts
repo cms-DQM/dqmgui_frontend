@@ -136,7 +136,7 @@ export interface PlotPropertiesReportProps {
 
 export interface PlotInterface {
   obj?: string;
-  name?: string;
+  name: string;
   path: string;
   content: any;
   properties: any;

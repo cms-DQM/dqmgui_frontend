@@ -9,7 +9,7 @@ import { store } from '../../contexts/leftSideContext'
 import { useRequest } from '../../hooks/useRequest'
 import { Button, Col, Row, Tooltip } from 'antd'
 import { FolderPath } from '../../containers/display/content/folderPath'
-import { ParsedUrlQueryInput } from 'querystring'
+import { PlotInterface, DirectoryInterface } from '../../containers/display/interfaces'
 import cleanDeep from 'clean-deep'
 import { Spinner } from '../../containers/search/styledComponents'
 import { FoldersRow, ModalContent, PlotNameDiv, PlotsRow, SpinnerRow } from './styledComponents'
@@ -78,6 +78,16 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
 
   const { data } = data_get_by_mount
   const folders_or_plots = data ? data.data : []
+  const directories: string[] = []
+  const plots: string[] = []
+
+  folders_or_plots.forEach((folder_or_plot: DirectoryInterface & PlotInterface) => {
+    directories.push(folder_or_plot.subdir)
+    plots.push(folder_or_plot.name)
+  })
+  
+  directories.sort()
+  plots.sort()
 
   return (
     <Modal
@@ -96,13 +106,13 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
           {
             !data_get_by_mount.isLoading &&
             <FoldersRow>
-              {folders_or_plots.map((folder_or_plot: any) => {
+              {directories.map((directory: any) => {
                 return (
                   <>
-                    {folder_or_plot.subdir &&
-                      <Col span={8} onClick={() => setCurrentFolder(folder_or_plot.subdir)}>
+                    {directory &&
+                      <Col span={8} onClick={() => setCurrentFolder(directory)}>
                         <Icon />
-                        <StyledA>{folder_or_plot.subdir}</StyledA>
+                        <StyledA>{directory}</StyledA>
                       </Col>
                     }
                   </>
@@ -117,22 +127,22 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
           }
           {
             <PlotsRow gutter={16}>{
-              !data_get_by_mount.isLoading && folders_or_plots.map((folder_or_plot: any) => {
-                const current_plot = { folder_path: overlaidPlots.folder_path, name: folder_or_plot.name }
+              !data_get_by_mount.isLoading && plots.map((plot: any) => {
+                const current_plot = { folder_path: overlaidPlots.folder_path, name: plot }
                 const disabled = selectedPlots.findIndex((selectedPlot) =>
                   selectedPlot.folder_path === current_plot.folder_path && selectedPlot.name === current_plot.name) > -1
                 return (
                   <>
-                    {folder_or_plot.name &&
-                    <Tooltip title={disabled ? 'This plot is already selected' : ''}>
-                      <Button
-                        type='text'
-                        block
-                        disabled={disabled}
-                        onClick={() => setOverlaidPlots(setPlot(overlaidPlots, folder_or_plot.name))}>
-                        <PlotNameDiv
-                        >{folder_or_plot.name}</PlotNameDiv>
-                      </Button>
+                    {plot &&
+                      <Tooltip title={disabled ? 'This plot is already selected' : ''}>
+                        <Button
+                          type='text'
+                          block
+                          disabled={disabled}
+                          onClick={() => setOverlaidPlots(setPlot(overlaidPlots, plot))}>
+                          <PlotNameDiv
+                          >{plot}</PlotNameDiv>
+                        </Button>
                       </Tooltip>
                     }
                   </>
