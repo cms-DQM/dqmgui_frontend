@@ -55,7 +55,7 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
     }
     else {
       copy.push(currentFolder)
-      //we're cleaning copy array, because we want to delete empty string. 
+      //we're cleaning copy array, because we want to delete empty string as an item from it. 
       // We need to remove it because when we're joining array with empty string 
       // we're getting a string with '/' in the beginning.
       const cleaned_array = cleanDeep(copy) ? cleanDeep(copy) : []
@@ -84,9 +84,9 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
           <FolderPath folder_path={overlaidPlots.folder_path}
             changeFolderPathByBreadcrumb={(items: any) => changeFolderPathByBreadcrumb(items)(setFolders, setCurrentFolder)} />
         </Col>
-        <Row>
+        <FoldersRow>
           <SelectedPlotsTable overlaidPlots={overlaidPlots} setSelectedPlots={setSelectedPlots} />
-        </Row>
+        </FoldersRow>
         <ModalContent>
           {
             !data_get_by_mount.isLoading &&

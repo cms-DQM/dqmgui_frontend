@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Space, Table } from 'antd';
+import { Space } from 'antd';
 
 import { PlotoverlaidSeparatelyProps } from '../../containers/display/interfaces';
+import { StyledSelectedPlotsTable } from './styledComponents'
 
 interface SelectedPlotsTableProps {
   overlaidPlots: PlotoverlaidSeparatelyProps;
-  setSelectedPlots(plots:PlotoverlaidSeparatelyProps[]): void;
+  setSelectedPlots(plots: PlotoverlaidSeparatelyProps[]): void;
 }
 
 const addToSelectedPlots = (item: PlotoverlaidSeparatelyProps, allSelectedPlots: PlotoverlaidSeparatelyProps[]) => {
@@ -58,7 +59,7 @@ export const SelectedPlotsTable = ({ overlaidPlots, setSelectedPlots }: Selected
     }
   }, [overlaidPlots])
 
-  return (selectedPlotsInfo.length > 0 ? <Table
+  return (selectedPlotsInfo.length > 0 ? <StyledSelectedPlotsTable
     pagination={
       {
         defaultPageSize: 1,
