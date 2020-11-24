@@ -26,9 +26,10 @@ interface LiveModeHeaderProps {
 export const LiveModeHeader = ({ query }: LiveModeHeaderProps) => {
   const { update, set_update, not_older_than } = useUpdateLiveMode();
   const globalState = React.useContext(store);
+
   return (
     <>
-      <CustomForm display="flex" style={{ alignItems: 'center',}}>
+      <CustomForm display="flex" style={{ alignItems: 'center', }}>
         {main_run_info.map((info: InfoProps) => {
           const params_for_api = FormatParamsForAPI(
             globalState,
@@ -40,7 +41,7 @@ export const LiveModeHeader = ({ query }: LiveModeHeaderProps) => {
           const { data, isLoading } = useRequest(
             get_jroot_plot(params_for_api),
             {},
-            [query.dataset_name, query.run_number, ]
+            [query.dataset_name, query.run_number, not_older_than]
           );
           return (
             <CutomFormItem
@@ -54,11 +55,10 @@ export const LiveModeHeader = ({ query }: LiveModeHeaderProps) => {
                 level={4}
                 style={{
                   display: 'contents',
-                  color: `${
-                    update
+                  color: `${update
                       ? theme.colors.notification.success
                       : theme.colors.notification.error
-                  }`,
+                    }`,
                 }}
               >
                 {isLoading ? <Spin size="small" /> : get_label(info, data)}

@@ -12,6 +12,9 @@ import { FolderPath } from '../../containers/display/content/folderPath'
 import { ParsedUrlQueryInput } from 'querystring'
 import cleanDeep from 'clean-deep'
 import { Spinner } from '../../containers/search/styledComponents'
+import { FoldersRow, ModalContent, PlotNameDiv, PlotsRow, SpinnerRow } from './styledComponents'
+import { changeFolderPathByBreadcrumb, setPlot } from './utils'
+import { SelectedPlotsTable } from './selectedPlotsTable'
 
 interface OverlayWithAnotherPlotProps {
   visible: boolean;
@@ -22,9 +25,7 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
   const [overlaidPlots, setOverlaidPlots] = React.useState<PlotoverlaidSeparatelyProps>({ folder_path: '', name: '' })
   const [folders, setFolders] = React.useState<(string | undefined)[]>([])
   const [currentFolder, setCurrentFolder] = React.useState<string | undefined>('')
-  const [plot, setPlot] = React.useState({})
-  const [height, setHeight] = React.useState()
-
+  const [selectedPlots, setSelectedPlots] = React.useState<PlotoverlaidSeparatelyProps[]>([])
   const router = useRouter();
   const query: QueryProps = router.query;
   const { updated_by_not_older_than } = React.useContext(store)
@@ -34,7 +35,6 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
     run_number: query.run_number as string,
     notOlderThan: updated_by_not_older_than,
     folders_path: overlaidPlots.folder_path,
-    plot_name: overlaidPlots.name
   }
 
   const api = choose_api(params)
@@ -68,21 +68,8 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
     }
   }, [currentFolder])
 
-  const modalRef = React.useRef(null);
-
   const { data } = data_get_by_mount
   const folders_or_plots = data ? data.data : []
-  const changeFolderPathByBreadcrumb = (item: ParsedUrlQueryInput) => {
-    const folders_from_breadcrumb = item.folder_path.split('/')
-    const cleaned_folders_array = cleanDeep(folders_from_breadcrumb) ? cleanDeep(folders_from_breadcrumb) : []
-    setFolders(cleaned_folders_array)
-    if (cleaned_folders_array.length > 0) {
-      setCurrentFolder(cleaned_folders_array[cleaned_folders_array.length - 1])
-    }
-    else {
-      setCurrentFolder('')
-    }
-  }
 
   return (
     <Modal
@@ -94,46 +81,58 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
     >
       <Row gutter={16} >
         <Col style={{ padding: 8 }}>
-          <FolderPath folder_path={overlaidPlots.folder_path} changeFolderPathByBreadcrumb={changeFolderPathByBreadcrumb} />
+          <FolderPath folder_path={overlaidPlots.folder_path}
+            changeFolderPathByBreadcrumb={(items: any) => changeFolderPathByBreadcrumb(items)(setFolders, setCurrentFolder)} />
         </Col>
-        {
-          !data_get_by_mount.isLoading &&
-          <Row style={{ width: '100%', flex: '1 1 auto' }}>
-            {folders_or_plots.map((folder_or_plot: any) => {
-              return (
-                <>
-                  {folder_or_plot.subdir &&
-                    <Col span={8} onClick={() => setCurrentFolder(folder_or_plot.subdir)}>
-                      <Icon />
-                      <StyledA>{folder_or_plot.subdir}</StyledA>
-                    </Col>
-                  }
-                </>
-              )
-            })}
-          </Row>
-        }
-        {data_get_by_mount.isLoading &&
-          <Row style={{ width: '100%', display: 'flex', justifyContent: 'center', height: '100%', alignItems: 'center' }}>
-            <Spinner />
-          </Row>
-        }
-        {
-          <Row>{
-            !data_get_by_mount.isLoading && folders_or_plots.map((folder_or_plot: any) => {
-              return (
-                <>
-                  {folder_or_plot.name &&
-                    <Col span={16} onClick={() => setPlot(folder_or_plot)}>
-                      <Button block>{folder_or_plot.name}</Button>
-                    </Col>
-                  }
-                </>
-              )
-            })
+        <Row>
+          <SelectedPlotsTable overlaidPlots={overlaidPlots} setSelectedPlots={setSelectedPlots} />
+        </Row>
+        <ModalContent>
+          {
+            !data_get_by_mount.isLoading &&
+            <FoldersRow>
+              {folders_or_plots.map((folder_or_plot: any) => {
+                return (
+                  <>
+                    {folder_or_plot.subdir &&
+                      <Col span={8} onClick={() => setCurrentFolder(folder_or_plot.subdir)}>
+                        <Icon />
+                        <StyledA>{folder_or_plot.subdir}</StyledA>
+                      </Col>
+                    }
+                  </>
+                )
+              })}
+            </FoldersRow>
           }
-          </Row>
-        }
+          {data_get_by_mount.isLoading &&
+            <SpinnerRow>
+              <Spinner />
+            </SpinnerRow>
+          }
+          {
+            <PlotsRow gutter={16}>{
+              !data_get_by_mount.isLoading && folders_or_plots.map((folder_or_plot: any) => {
+                const current_plot = {folder_path : overlaidPlots.folder_path, name: folder_or_plot.name}
+                return (
+                  <>
+                    {folder_or_plot.name &&
+                      <Button
+                        type='text'
+                        block
+                        disabled={selectedPlots.includes(current_plot)}
+                        onClick={() => setOverlaidPlots(setPlot(overlaidPlots, folder_or_plot.name))}>
+                        <PlotNameDiv
+                        >{folder_or_plot.name}</PlotNameDiv>
+                      </Button>
+                    }
+                  </>
+                )
+              })
+            }
+            </PlotsRow>
+          }
+        </ModalContent>
       </Row>
     </Modal>
   )

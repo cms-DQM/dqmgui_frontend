@@ -137,7 +137,7 @@ export const main_run_info = [
   { value: 'iRun', label: 'Run: ' },
   { value: 'iLumiSection', label: 'LS #: ' },
   { value: 'iEvent', label: 'Event #: ' },
-  { value: 'eventTimeStamp', label: 'Event time, UTC time: ', type: 'time' },
+  { value: 'runStartTimeStamp', label: 'Run started, UTC time: ', type: 'time' },
 ];
 
 export const run_info = main_run_info.concat(additional_run_info);

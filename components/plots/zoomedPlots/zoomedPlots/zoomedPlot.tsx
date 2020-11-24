@@ -74,12 +74,12 @@ export const ZoomedPlot = ({
       action: () => toggleCustomizationMenu(true),
       icon: <SettingOutlined />,
     },
-    // {
-    //   label: 'Overlay with another plot',
-    //   value: 'Customize',
-    //   action: () => setOpenOverlayPlotMenu(true),
-    //   icon: <BlockOutlined  />,
-    // },
+    {
+      label: 'Overlay with another plot',
+      value: 'Customize',
+      action: () => setOpenOverlayPlotMenu(true),
+      icon: <BlockOutlined  />,
+    },
   ];
 
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
