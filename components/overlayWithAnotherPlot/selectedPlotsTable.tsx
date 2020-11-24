@@ -37,7 +37,7 @@ export const SelectedPlotsTable = ({ overlaidPlots, setSelectedPlots }: Selected
     {
       title: 'Action',
       key: 'action',
-      render: (plotInfo) => (
+      render: (plotInfo: PlotoverlaidSeparatelyProps) => (
         <Space size="small">
           <a
             onClick={() => {
@@ -56,6 +56,10 @@ export const SelectedPlotsTable = ({ overlaidPlots, setSelectedPlots }: Selected
       const changedPlotInfoArray = addToSelectedPlots(overlaidPlots, copy)
       setSelectedPlotsInfo(changedPlotInfoArray)
       setSelectedPlots(changedPlotInfoArray)
+    }
+    return () =>{
+      setSelectedPlotsInfo([])
+      setSelectedPlots([])
     }
   }, [overlaidPlots])
 

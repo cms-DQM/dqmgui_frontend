@@ -7,7 +7,7 @@ import { Icon, StyledA } from '../../containers/display/styledComponents'
 import { choose_api } from '../../containers/display/utils'
 import { store } from '../../contexts/leftSideContext'
 import { useRequest } from '../../hooks/useRequest'
-import { Button, Col, Row } from 'antd'
+import { Button, Col, Row, Tooltip } from 'antd'
 import { FolderPath } from '../../containers/display/content/folderPath'
 import { ParsedUrlQueryInput } from 'querystring'
 import cleanDeep from 'clean-deep'
@@ -25,6 +25,14 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
   const [overlaidPlots, setOverlaidPlots] = React.useState<PlotoverlaidSeparatelyProps>({ folder_path: '', name: '' })
   const [folders, setFolders] = React.useState<(string | undefined)[]>([])
   const [currentFolder, setCurrentFolder] = React.useState<string | undefined>('')
+
+  const clear = () => {
+    setOpenOverlayWithAnotherPlotModal(false)
+    setCurrentFolder('')
+    setOverlaidPlots({ folder_path: '', name: '' })
+    setFolders([])
+  }
+
   const [selectedPlots, setSelectedPlots] = React.useState<PlotoverlaidSeparatelyProps[]>([])
   const router = useRouter();
   const query: QueryProps = router.query;
@@ -74,10 +82,7 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
   return (
     <Modal
       visible={visible}
-      onCancel={() => {
-        setOpenOverlayWithAnotherPlotModal(false)
-        setCurrentFolder('')
-      }}
+      onCancel={() => clear()}
     >
       <Row gutter={16} >
         <Col style={{ padding: 8 }}>
@@ -113,18 +118,22 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
           {
             <PlotsRow gutter={16}>{
               !data_get_by_mount.isLoading && folders_or_plots.map((folder_or_plot: any) => {
-                const current_plot = {folder_path : overlaidPlots.folder_path, name: folder_or_plot.name}
+                const current_plot = { folder_path: overlaidPlots.folder_path, name: folder_or_plot.name }
+                const disabled = selectedPlots.findIndex((selectedPlot) =>
+                  selectedPlot.folder_path === current_plot.folder_path && selectedPlot.name === current_plot.name) > -1
                 return (
                   <>
                     {folder_or_plot.name &&
+                    <Tooltip title={disabled ? 'This plot is already selected' : ''}>
                       <Button
                         type='text'
                         block
-                        disabled={selectedPlots.includes(current_plot)}
+                        disabled={disabled}
                         onClick={() => setOverlaidPlots(setPlot(overlaidPlots, folder_or_plot.name))}>
                         <PlotNameDiv
                         >{folder_or_plot.name}</PlotNameDiv>
                       </Button>
+                      </Tooltip>
                     }
                   </>
                 )
