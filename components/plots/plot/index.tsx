@@ -8,7 +8,7 @@ import {
   PlotDataProps,
   PlotsGroupedByLayoutsInterface,
 } from '../../../containers/display/interfaces';
-import { PlotsWithLayout } from './plotsWithLayout';
+import { PlotsWithLayout } from './plotsWithLayouts/plotsWithLayout';
 import { PlotsWithoutLayouts } from './plotsWithoutLayouts';
 
 interface LeftSidePlotsProps {

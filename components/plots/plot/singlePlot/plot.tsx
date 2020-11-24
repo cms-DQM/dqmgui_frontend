@@ -73,12 +73,12 @@ export const Plot = ({
             {isPlotSelected ? (
               <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
             ) : (
-              <PlusIcon
-                onClick={() => {
-                  addPlotToRightSide(query, plot);
-                }}
-              />
-            )}
+                <PlusIcon
+                  onClick={() => {
+                    addPlotToRightSide(query, plot);
+                  }}
+                />
+              )}
           </Column>
           <PlotImage
             blink={blink}
