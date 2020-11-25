@@ -21,7 +21,7 @@ interface PlotImageProps {
   plotURL: string;
   isPlotSelected?: boolean;
   query: QueryProps;
-  imageRef?: any;
+  imageRef: any;
 }
 
 export const PlotImage = ({

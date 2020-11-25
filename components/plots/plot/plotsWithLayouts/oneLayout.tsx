@@ -1,13 +1,13 @@
 import * as React from 'react'
+import { Tooltip } from 'antd'
+
 import { get_overlaied_plots_urls, get_plot_url, get_plot_with_overlay } from '../../../../config/config'
 import { isPlotSelected } from '../../../../containers/display/utils'
 import { store } from '../../../../contexts/leftSideContext'
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate'
 import { theme } from '../../../../styles/theme'
-import { OverlaidPlot } from '../overlaidPlot'
 import { PlotImage } from '../plotImage'
-import { Plot } from '../singlePlot/plot'
-import { FormatParamsForAPI } from '../singlePlot/utils'
+import { FormatParamsForAPI, scroll, scrollToBottom } from '../singlePlot/utils'
 
 interface OnePlotInLayout {
   layoutName: string;
@@ -20,10 +20,17 @@ interface OnePlotInLayout {
 
 export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layoutName, query, selected_plots }: OnePlotInLayout) => {
   const { size } = React.useContext(store)
-  // if there are 2, 6, 10... plots in the layout, we need to add 2 pseudo plots
-  // in order to get square divided that in one line should be even amount of plots
-  // then we getting tidy layout
-  const plotsAmount = (plots.length !== 1 && plots.length % 4) > 0 ? plots.length + 2 : plots.length
+  const imageRef = React.useRef(null);
+
+  const plotsAmount =
+    //in order to get tidy layout, has to be x^2 plots in one layout. In the layuts, where the plot number is 
+    //less than x^2, we're adding peseudo plots (empty divs)
+    (Math.ceil(Math.log(2) / Math.log(plots.length)) - (Math.log(2) / Math.log(plots.length)) !== 0) &&
+      plots.length !== 1 // log(2)/log(1)=0, that's we need to avoid to add pseudo plots in layout when is just 1 plot in it
+      //exception: need to plots.length^2, because when there is 2 plots in layout, we want to display it like 4 (2 real in 2 pseudo plots)
+      // otherwise it won't fit in parent div.
+      ? plots.length + Math.ceil(Math.sqrt(plots.length)) : plots.length ** 2 
+
   const layoutArea = size.h * size.w
   const ratio = size.w / size.h
   const onePlotArea = layoutArea / plotsAmount
@@ -39,7 +46,8 @@ export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layout
   }
   return (
     <div style={{
-      width: size.w + 16,
+      width: size.w + 24,
+      justifyContent: 'center',
       margin: 4,
       background: `${theme.colors.primary.light}`,
       display: 'grid',
@@ -47,11 +55,11 @@ export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layout
       padding: 8,
     }
     }>
-      <div style={{paddingBottom: 4}}>{layoutName}</div>
+      <div style={{ paddingBottom: 4 }}>{layoutName}</div>
       <div
         style={{
-          width: size.w,
-          height: size.h + 8,
+          width: size.w + 12,
+          height: size.h + 16,
           background: `${theme.colors.primary.light}`,
           display: 'grid',
           gridTemplateColumns: `${auto.join(' ')}`,
@@ -74,36 +82,57 @@ export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layout
             const joined_overlaid_plots_urls = overlaid_plots_urls.join('');
             params_for_api.joined_overlaied_plots_urls = joined_overlaid_plots_urls;
             const plot_with_overlay = get_plot_with_overlay(params_for_api);
-
-            return (<div
-              style={{
-                background: `${theme.colors.primary.light}`,
-                //we're getting distorted plots, when there are just 2 plots in layout
-                minWidth: onePlotWidth,
-                minHeight: onePlotHeight,
-                border: '1px solid lightGrey'
-              }}
-            >              {query.overlay_data ? (
-              <PlotImage
-                blink={blink}
-                params_for_api={params_for_api}
-                plot={plot}
-                plotURL={plot_with_overlay}
-                updated_by_not_older_than={updated_by_not_older_than}
-                imageRef={imageRefScrollDown}
-                query={query}
-              />)
-              :
-              (<PlotImage
-                blink={blink}
-                params_for_api={params_for_api}
-                plot={plot}
-                plotURL={url}
-                updated_by_not_older_than={updated_by_not_older_than}
-                imageRef={imageRefScrollDown}
-                query={query}
-              />)}
-            </div>
+            const plotSelected = isPlotSelected(
+              selected_plots,
+              plot.name
+            )
+            return (
+              <Tooltip title={plot.name}>
+                <div
+                  onClick={async () => {
+                    await plotSelected
+                    setTimeout(() => {
+                      scroll(imageRef);
+                      scrollToBottom(imageRefScrollDown)
+                    }, 500);
+                  }}
+                  ref={imageRef}
+                  style={{
+                    justifyContent: 'center',
+                    border: plotSelected ? `4px solid ${theme.colors.secondary.light}` : `2px solid ${theme.colors.primary.light}`,
+                    alignItems: 'center',
+                    minWidth: onePlotWidth,
+                    minHeight: onePlotHeight,
+                    cursor: 'pointer',
+                    alignSelf: 'center',
+                    justifySelf: 'baseline',
+                    margin: 2,
+                  }}
+                >
+                  {query.overlay_data ? (
+                    <PlotImage
+                      blink={blink}
+                      params_for_api={params_for_api}
+                      plot={plot}
+                      plotURL={plot_with_overlay}
+                      updated_by_not_older_than={updated_by_not_older_than}
+                      query={query}
+                      imageRef={imageRef}
+                      isPlotSelected={plotSelected}
+                    />)
+                    :
+                    (<PlotImage
+                      blink={blink}
+                      params_for_api={params_for_api}
+                      plot={plot}
+                      plotURL={url}
+                      updated_by_not_older_than={updated_by_not_older_than}
+                      query={query}
+                      imageRef={imageRef}
+                      isPlotSelected={plotSelected}
+                    />)}
+                </div>
+              </Tooltip>
             )
           })}
       </div>
