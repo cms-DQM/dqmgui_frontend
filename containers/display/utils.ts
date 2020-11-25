@@ -25,8 +25,7 @@ import {
 export const getFolderPath = (folders: string[], clickedFolder: string) => {
   const folderIndex = folders.indexOf(clickedFolder);
   const restFolders: string[] = folders.slice(0, folderIndex + 1);
-  // console.log(restFolders)
-  const foldersString = restFolders.join('/');
+   const foldersString = restFolders.join('/');
   return foldersString;
 };
 

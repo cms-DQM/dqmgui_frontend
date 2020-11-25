@@ -54,7 +54,6 @@ export const Plot = ({
       scrollPlot();
     }
   }, [isPlotSelected, query.selected_plots]);
-
   return (
     <div ref={imageRef}>
       <StyledCol space={2}>

@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { Tooltip } from 'antd'
 
-import { get_overlaied_plots_urls, get_plot_url, get_plot_with_overlay } from '../../../../config/config'
+import { functions_config, get_overlaied_plots_urls, get_plot_url, get_plot_with_overlay } from '../../../../config/config'
 import { isPlotSelected } from '../../../../containers/display/utils'
 import { store } from '../../../../contexts/leftSideContext'
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate'
-import { theme } from '../../../../styles/theme'
 import { PlotImage } from '../plotImage'
-import { FormatParamsForAPI, scroll, scrollToBottom } from '../singlePlot/utils'
+import { FormatParamsForAPI, get_plot_error, scroll, scrollToBottom } from '../singlePlot/utils'
+import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from './styledComponents'
 
 interface OnePlotInLayout {
   layoutName: string;
@@ -21,7 +21,6 @@ interface OnePlotInLayout {
 export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layoutName, query, selected_plots }: OnePlotInLayout) => {
   const { size } = React.useContext(store)
   const imageRef = React.useRef(null);
-
   const plotsAmount =
     //in order to get tidy layout, has to be x^2 plots in one layout. In the layuts, where the plot number is 
     //less than x^2, we're adding peseudo plots (empty divs)
@@ -29,7 +28,7 @@ export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layout
       plots.length !== 1 // log(2)/log(1)=0, that's we need to avoid to add pseudo plots in layout when is just 1 plot in it
       //exception: need to plots.length^2, because when there is 2 plots in layout, we want to display it like 4 (2 real in 2 pseudo plots)
       // otherwise it won't fit in parent div.
-      ? plots.length + Math.ceil(Math.sqrt(plots.length)) : plots.length ** 2 
+      ? plots.length + Math.ceil(Math.sqrt(plots.length)) : plots.length ** 2
 
   const layoutArea = size.h * size.w
   const ratio = size.w / size.h
@@ -45,27 +44,15 @@ export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layout
     auto.push('auto')
   }
   return (
-    <div style={{
-      width: size.w + 24,
-      justifyContent: 'center',
-      margin: 4,
-      background: `${theme.colors.primary.light}`,
-      display: 'grid',
-      alignItems: 'end',
-      padding: 8,
-    }
-    }>
-      <div style={{ paddingBottom: 4 }}>{layoutName}</div>
-      <div
-        style={{
-          width: size.w + 12,
-          height: size.h + 16,
-          background: `${theme.colors.primary.light}`,
-          display: 'grid',
-          gridTemplateColumns: `${auto.join(' ')}`,
-        }}
+    <ParentWrapper
+      isLoading={blink.toString()}
+      animation={(functions_config.mode === 'ONLINE').toString()}
+      size={size}>
+      <LayoutName>{layoutName}</LayoutName>
+      <LayoutWrapper
+        size={size}
+        auto={auto.join(' ')}
       >
-
         {
           plots.map((plot) => {
             const params_for_api = FormatParamsForAPI(
@@ -87,8 +74,9 @@ export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layout
               plot.name
             )
             return (
-              <Tooltip title={plot.name}>
-                <div
+              <Tooltip title={plot.name} color={get_plot_error(plot) ? 'red' : ''}>
+                <PlotWrapper
+                  plotSelected={plotSelected}
                   onClick={async () => {
                     await plotSelected
                     setTimeout(() => {
@@ -97,17 +85,6 @@ export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layout
                     }, 500);
                   }}
                   ref={imageRef}
-                  style={{
-                    justifyContent: 'center',
-                    border: plotSelected ? `4px solid ${theme.colors.secondary.light}` : `2px solid ${theme.colors.primary.light}`,
-                    alignItems: 'center',
-                    minWidth: onePlotWidth,
-                    minHeight: onePlotHeight,
-                    cursor: 'pointer',
-                    alignSelf: 'center',
-                    justifySelf: 'baseline',
-                    margin: 2,
-                  }}
                 >
                   {query.overlay_data ? (
                     <PlotImage
@@ -131,11 +108,11 @@ export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layout
                       imageRef={imageRef}
                       isPlotSelected={plotSelected}
                     />)}
-                </div>
+                </PlotWrapper>
               </Tooltip>
             )
           })}
-      </div>
-    </div>
+      </LayoutWrapper>
+    </ParentWrapper>
   )
 } 
