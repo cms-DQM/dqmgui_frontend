@@ -225,6 +225,7 @@ export const ImageDiv = styled.div<{
   height: ${(props) => (props.height ? props.height : '')}px;
   align-items: ${(props) => (props.alignitems ? props.alignitems : '')};
   display: ${(props) => (props.display ? props.display : '')};
+  justify-content: center;
 `;
 
 export const Image = styled.img<{
