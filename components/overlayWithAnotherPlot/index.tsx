@@ -7,9 +7,9 @@ import { Icon, StyledA } from '../../containers/display/styledComponents'
 import { choose_api } from '../../containers/display/utils'
 import { store } from '../../contexts/leftSideContext'
 import { useRequest } from '../../hooks/useRequest'
-import { Button, Col, Row } from 'antd'
+import { Button, Col, Row, Tooltip } from 'antd'
 import { FolderPath } from '../../containers/display/content/folderPath'
-import { ParsedUrlQueryInput } from 'querystring'
+import { PlotInterface, DirectoryInterface } from '../../containers/display/interfaces'
 import cleanDeep from 'clean-deep'
 import { Spinner } from '../../containers/search/styledComponents'
 import { FoldersRow, ModalContent, PlotNameDiv, PlotsRow, SpinnerRow } from './styledComponents'
@@ -25,6 +25,14 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
   const [overlaidPlots, setOverlaidPlots] = React.useState<PlotoverlaidSeparatelyProps>({ folder_path: '', name: '' })
   const [folders, setFolders] = React.useState<(string | undefined)[]>([])
   const [currentFolder, setCurrentFolder] = React.useState<string | undefined>('')
+
+  const clear = () => {
+    setOpenOverlayWithAnotherPlotModal(false)
+    setCurrentFolder('')
+    setOverlaidPlots({ folder_path: '', name: '' })
+    setFolders([])
+  }
+
   const [selectedPlots, setSelectedPlots] = React.useState<PlotoverlaidSeparatelyProps[]>([])
   const router = useRouter();
   const query: QueryProps = router.query;
@@ -55,7 +63,7 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
     }
     else {
       copy.push(currentFolder)
-      //we're cleaning copy array, because we want to delete empty string. 
+      //we're cleaning copy array, because we want to delete empty string as an item from it. 
       // We need to remove it because when we're joining array with empty string 
       // we're getting a string with '/' in the beginning.
       const cleaned_array = cleanDeep(copy) ? cleanDeep(copy) : []
@@ -70,34 +78,41 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
 
   const { data } = data_get_by_mount
   const folders_or_plots = data ? data.data : []
+  const directories: string[] = []
+  const plots: string[] = []
+
+  folders_or_plots.forEach((folder_or_plot: DirectoryInterface & PlotInterface) => {
+    directories.push(folder_or_plot.subdir)
+    plots.push(folder_or_plot.name)
+  })
+  
+  directories.sort()
+  plots.sort()
 
   return (
     <Modal
       visible={visible}
-      onCancel={() => {
-        setOpenOverlayWithAnotherPlotModal(false)
-        setCurrentFolder('')
-      }}
+      onCancel={() => clear()}
     >
       <Row gutter={16} >
         <Col style={{ padding: 8 }}>
           <FolderPath folder_path={overlaidPlots.folder_path}
             changeFolderPathByBreadcrumb={(items: any) => changeFolderPathByBreadcrumb(items)(setFolders, setCurrentFolder)} />
         </Col>
-        <Row>
+        <FoldersRow>
           <SelectedPlotsTable overlaidPlots={overlaidPlots} setSelectedPlots={setSelectedPlots} />
-        </Row>
+        </FoldersRow>
         <ModalContent>
           {
             !data_get_by_mount.isLoading &&
             <FoldersRow>
-              {folders_or_plots.map((folder_or_plot: any) => {
+              {directories.map((directory: any) => {
                 return (
                   <>
-                    {folder_or_plot.subdir &&
-                      <Col span={8} onClick={() => setCurrentFolder(folder_or_plot.subdir)}>
+                    {directory &&
+                      <Col span={8} onClick={() => setCurrentFolder(directory)}>
                         <Icon />
-                        <StyledA>{folder_or_plot.subdir}</StyledA>
+                        <StyledA>{directory}</StyledA>
                       </Col>
                     }
                   </>
@@ -112,19 +127,23 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
           }
           {
             <PlotsRow gutter={16}>{
-              !data_get_by_mount.isLoading && folders_or_plots.map((folder_or_plot: any) => {
-                const current_plot = {folder_path : overlaidPlots.folder_path, name: folder_or_plot.name}
+              !data_get_by_mount.isLoading && plots.map((plot: any) => {
+                const current_plot = { folder_path: overlaidPlots.folder_path, name: plot }
+                const disabled = selectedPlots.findIndex((selectedPlot) =>
+                  selectedPlot.folder_path === current_plot.folder_path && selectedPlot.name === current_plot.name) > -1
                 return (
                   <>
-                    {folder_or_plot.name &&
-                      <Button
-                        type='text'
-                        block
-                        disabled={selectedPlots.includes(current_plot)}
-                        onClick={() => setOverlaidPlots(setPlot(overlaidPlots, folder_or_plot.name))}>
-                        <PlotNameDiv
-                        >{folder_or_plot.name}</PlotNameDiv>
-                      </Button>
+                    {plot &&
+                      <Tooltip title={disabled ? 'This plot is already selected' : ''}>
+                        <Button
+                          type='text'
+                          block
+                          disabled={disabled}
+                          onClick={() => setOverlaidPlots(setPlot(overlaidPlots, plot))}>
+                          <PlotNameDiv
+                          >{plot}</PlotNameDiv>
+                        </Button>
+                      </Tooltip>
                     }
                   </>
                 )

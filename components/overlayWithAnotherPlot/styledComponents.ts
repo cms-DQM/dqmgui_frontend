@@ -1,4 +1,4 @@
-import { Row } from 'antd';
+import { Row, Table } from 'antd';
 import styled from 'styled-components';
 
 
@@ -40,4 +40,14 @@ export const SpinnerRow = styled(Row)`
 export const PlotsRow = styled(Row)`
     display: flex;
     justify-content: center;
+`
+
+export const StyledSelectedPlotsTable = styled(Table)`
+    width: 100% !important;
+    .ant-table-wrapper {
+        width: 100% !important;
+    };
+    .ant-table-tbody {
+        word-break: break-word;
+    }
 `
