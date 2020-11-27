@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.tsx",
   "scripts": {
-    "dev": "NEW_BACK_END=true LATEST_RUNS=true LAYOUTS=true  MODE=ONLINE next",
+    "dev": "NEW_BACK_END=true LATEST_RUNS=true LAYOUTS=true  next",
     "build": "next build",
     "start": "next start",
     "static_export_old_back_end": "next build && next export",

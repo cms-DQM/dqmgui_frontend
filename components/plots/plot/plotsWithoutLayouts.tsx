@@ -45,7 +45,7 @@ export const PlotsWithoutLayouts = ({
                   plot={plot}
                   params_for_api={params_for_api}
                   imageRefScrollDown={imageRefScrollDown}
-                  isPlotSelected={isPlotSelected(selected_plots, plot.name)}
+                 isPlotSelected={isPlotSelected(selected_plots, plot)}
                 />
               ) : (
                 <Plot
@@ -53,7 +53,7 @@ export const PlotsWithoutLayouts = ({
                   imageRefScrollDown={imageRefScrollDown}
                   params_for_api={params_for_api}
                   key={plot.name}
-                  isPlotSelected={isPlotSelected(selected_plots, plot.name)}
+                  isPlotSelected={isPlotSelected(selected_plots, plot)}
                 />
               )}
             </div>

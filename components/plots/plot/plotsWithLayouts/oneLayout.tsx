@@ -71,7 +71,7 @@ export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layout
             const plot_with_overlay = get_plot_with_overlay(params_for_api);
             const plotSelected = isPlotSelected(
               selected_plots,
-              plot.name
+              plot
             )
             return (
               <Tooltip title={plot.name} color={get_plot_error(plot) ? 'red' : ''}>
