@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   PlotDataProps,
   QueryProps,
@@ -17,7 +17,6 @@ export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
   const globalState = useContext(store);
-
   const { setImageRefScrollDown } = globalState;
 
   const rightSideRef = useRef(null);

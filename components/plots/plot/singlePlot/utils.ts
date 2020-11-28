@@ -3,7 +3,6 @@ import {
   TripleProps,
   QueryProps,
   ParamsForApiProps,
-  PlotPropertiesProps,
 } from '../../../../containers/display/interfaces';
 import cleanDeep from 'clean-deep';
 
@@ -13,7 +12,6 @@ import {
   changeRouter,
   getChangedQueryParams,
 } from '../../../../containers/display/utils';
-import { SetStateAction } from 'react';
 import { functions_config } from '../../../../config/config';
 
 export const removePlotFromSelectedPlots = (
@@ -22,10 +20,10 @@ export const removePlotFromSelectedPlots = (
 ) => {
   const plotsWithDirs = plotsQuery ? plotsQuery.split('&') : [];
   const fileterdPlotsAndDirs = plotsWithDirs.map((plotWithDir: string) => {
-    const plotAndDir = plotWithDir.split('/');
-    if (plotAndDir[plotAndDir.length - 1] !== plotName.name) {
+    const plot = [plotName.path, plotName.name].join('/')
+    if (plot !== plotWithDir) {
       return plotWithDir;
-    }
+    } 
   });
   const cleanedFileterdPlotsAndDirs = cleanDeep(fileterdPlotsAndDirs);
   const plotsForQuery = cleanedFileterdPlotsAndDirs.join('&');
@@ -42,8 +40,7 @@ export const addOverlayData = (triples: TripleProps[] | undefined) => {
     triples &&
     triples.map(
       (triple: TripleProps) =>
-        `${triple.run_number}${triple.dataset_name}/${
-          triple.label ? triple.label : triple.run_number
+        `${triple.run_number}${triple.dataset_name}/${triple.label ? triple.label : triple.run_number
         }`
     );
   const query = params?.join('&');
@@ -91,7 +88,7 @@ export const addPlotToRightSide = (query: QueryProps, plot: PlotDataProps) =>
 export const removePlotFromRightSide = (
   query: QueryProps,
   plot: PlotDataProps
-) =>
+) => {
   changeRouter(
     getChangedQueryParams(
       {
@@ -102,7 +99,8 @@ export const removePlotFromRightSide = (
       },
       query
     )
-  );
+  )
+};
 
 export const scroll = (imageRef: any) => {
   if (imageRef) {
