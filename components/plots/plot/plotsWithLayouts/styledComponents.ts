@@ -13,11 +13,11 @@ const keyframe_for_updates_plots = keyframes`
 `;
 
 
-export const ParentWrapper = styled.div<{ size: SizeProps, isLoading: string, animation: string }>`
+export const ParentWrapper = styled.div<{ size: SizeProps, isLoading: string, animation: string, isPlotSelected?: string}>`
     width: ${(props) => (props.size.w + 24)}px;
     justify-content: center;
     margin: 4px;
-    background: ${theme.colors.primary.light};
+    background: ${(props) => props.isPlotSelected === 'true'? theme.colors.secondary.light : theme.colors.primary.light};
     display: grid;
     align-items: end;
     padding: 8px;
@@ -29,14 +29,18 @@ export const ParentWrapper = styled.div<{ size: SizeProps, isLoading: string, an
           : ''};
 `
 
-export const LayoutName = styled.div`
-    padding-bottom: 4
+export const LayoutName = styled.div<{error?: string, isPlotSelected?: string}>`
+    padding-bottom: 4;
+    color: ${props => props.error==='true' ? theme.colors.notification.error : theme.colors.common.black };
+    font-weight: ${props => props.isPlotSelected === 'true' ? 'bold': ''};
+    word-break: break-word;
 `
-export const LayoutWrapper = styled.div<{ size: SizeProps, auto: string}>`
-    width: ${(props) => (props.size.w + 12)}px;
-    height: ${(props) => (props.size.h + 16)}px;
+export const LayoutWrapper = styled.div<{ size: SizeProps & string, auto: string}>`
+    // width: ${(props) => props.size.w ?  `${props.size.w + 12}px` : props.size};
+    // height:${(props) => props.size.h ?  `${props.size.w + 16}px` : props.size};
     display: grid;
     grid-template-columns: ${(props) => (props.auto)};
+    justify-content: center;
 `;
 
 export const PlotWrapper = styled.div<{ plotSelected: boolean }>`
@@ -49,4 +53,5 @@ export const PlotWrapper = styled.div<{ plotSelected: boolean }>`
     align-self:  center ;
     justify-self:  baseline;
     margin: 2px;
+    cursor: ${props => props.plotSelected ? 'zoom-out' : 'zoom-in'};
 `

@@ -48,7 +48,7 @@ export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layout
       isLoading={blink.toString()}
       animation={(functions_config.mode === 'ONLINE').toString()}
       size={size}>
-      <LayoutName>{layoutName}</LayoutName>
+      <LayoutName>{decodeURI(layoutName)}</LayoutName>
       <LayoutWrapper
         size={size}
         auto={auto.join(' ')}

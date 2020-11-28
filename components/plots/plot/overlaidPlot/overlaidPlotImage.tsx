@@ -1,7 +1,7 @@
 import React, { useRef, useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 
-import { root_url, functions_config } from '../../../../config/config';
+import { functions_config } from '../../../../config/config';
 import {
   get_plot_with_overlay,
   get_overlaied_plots_urls,
@@ -12,23 +12,14 @@ import {
   QueryProps,
 } from '../../../../containers/display/interfaces';
 import {
-  StyledCol,
-  PlotNameCol,
-  StyledPlotRow,
-  Column,
-  PlusIcon,
-  MinusIcon,
-} from '../../../../containers/display/styledComponents';
-import {
   scroll,
-  removePlotFromRightSide,
-  addPlotToRightSide,
   scrollToBottom,
   get_plot_error,
 } from '../singlePlot/utils';
 import { store } from '../../../../contexts/leftSideContext';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 import { PlotImage } from '../plotImage';
+import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
 
 interface OverlaidPlotImageProps {
   params_for_api: ParamsForApiProps;
@@ -44,7 +35,7 @@ export const OverlaidPlotImage = ({
   imageRefScrollDown,
 }: OverlaidPlotImageProps) => {
   const globalState = useContext(store);
-  const { normalize } = globalState;
+  const { normalize, size } = globalState;
 
   params_for_api.plot_name = plot.name;
   params_for_api.normalize = normalize;
@@ -61,44 +52,42 @@ export const OverlaidPlotImage = ({
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
 
   return (
-    <div ref={imageRef}>
-      <StyledCol space={2}>
-        <StyledPlotRow
-          justifycontent="center"
-          isLoading={blink.toString()}
-          animation={(functions_config.mode === 'ONLINE').toString()}
-          minheight={params_for_api.height}
-          width={params_for_api.width?.toString()}
-          is_plot_selected={isPlotSelected.toString()}
+    <ParentWrapper
+      isLoading={blink.toString()}
+      animation={(functions_config.mode === 'ONLINE').toString()}
+      size={size}
+      isPlotSelected={isPlotSelected.toString()}>
+      <LayoutName
+        error={get_plot_error(plot).toString()}
+        isPlotSelected={isPlotSelected.toString()}
+      >{decodeURI(params_for_api.plot_name)}</LayoutName>
+      <LayoutWrapper
+        size={size}
+        auto='auto'
+      >
+        <PlotWrapper
+          plotSelected={isPlotSelected}
+          onClick={async () => {
+            await isPlotSelected
+            setTimeout(() => {
+              scroll(imageRef);
+              scrollToBottom(imageRefScrollDown)
+            }, 500);
+          }}
+          ref={imageRef}
         >
-          <PlotNameCol error={get_plot_error(plot).toString()}>
-            {plot.displayedName}
-          </PlotNameCol>
-          <Column>
-            {isPlotSelected ? (
-              <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
-            ) : (
-              <PlusIcon
-                onClick={async () => {
-                  await addPlotToRightSide(query, plot);
-                  scroll(imageRef);
-                  scrollToBottom(imageRefScrollDown);
-                }}
-              />
-            )}
-          </Column>
           <PlotImage
             blink={blink}
             params_for_api={params_for_api}
             plot={plot}
             plotURL={plot_with_overlay}
+            updated_by_not_older_than={updated_by_not_older_than}
+            query={query}
             imageRef={imageRef}
             isPlotSelected={isPlotSelected}
-            query={query}
-            updated_by_not_older_than={updated_by_not_older_than}
           />
-        </StyledPlotRow>
-      </StyledCol>
-    </div>
+        </PlotWrapper>
+      </LayoutWrapper>
+    </ParentWrapper>
   );
 };

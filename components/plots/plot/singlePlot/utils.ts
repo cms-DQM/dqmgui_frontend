@@ -94,7 +94,7 @@ export const removePlotFromRightSide = (
       {
         selected_plots: `${removePlotFromSelectedPlots(
           query.selected_plots,
-          plot
+          plot,
         )}`,
       },
       query

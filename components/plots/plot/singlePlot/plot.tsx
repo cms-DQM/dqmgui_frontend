@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 
 import { functions_config, get_plot_url } from '../../../../config/config';
@@ -8,22 +8,14 @@ import {
   ParamsForApiProps,
 } from '../../../../containers/display/interfaces';
 import {
-  StyledCol,
-  StyledPlotRow,
-  PlotNameCol,
-  Column,
-  PlusIcon,
-  MinusIcon,
-} from '../../../../containers/display/styledComponents';
-import {
-  addPlotToRightSide,
-  removePlotFromRightSide,
   scroll,
   scrollToBottom,
   get_plot_error,
 } from './utils';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 import { PlotImage } from '../plotImage';
+import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
+import { store } from '../../../../contexts/leftSideContext';
 
 interface PlotProps {
   plot: PlotDataProps;
@@ -40,7 +32,7 @@ export const Plot = ({
 }: PlotProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
-
+  const { size } = useContext(store)
   const imageRef = useRef(null);
 
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
@@ -55,42 +47,42 @@ export const Plot = ({
     }
   }, [isPlotSelected, query.selected_plots]);
   return (
-    <div ref={imageRef}>
-      <StyledCol space={2}>
-        <StyledPlotRow
-          justifycontent="center"
-          isLoading={blink.toString()}
-          animation={(functions_config.mode === 'ONLINE').toString()}
-          minheight={params_for_api.height}
-          width={params_for_api.width?.toString()}
-          is_plot_selected={isPlotSelected.toString()}
+    <ParentWrapper
+      isLoading={blink.toString()}
+      animation={(functions_config.mode === 'ONLINE').toString()}
+      size={size}
+      isPlotSelected={isPlotSelected.toString()}>
+      <LayoutName
+        isPlotSelected={isPlotSelected.toString()}
+        error={get_plot_error(plot).toString()}
+      >{decodeURI(params_for_api.plot_name as string)}</LayoutName>
+      <LayoutWrapper
+        size={size}
+        auto='auto'
+      >
+        <PlotWrapper
+          plotSelected={isPlotSelected}
+          onClick={async () => {
+            await isPlotSelected
+            setTimeout(() => {
+              scroll(imageRef);
+              scrollToBottom(imageRefScrollDown)
+            }, 500);
+          }}
+          ref={imageRef}
         >
-          <PlotNameCol error={get_plot_error(plot).toString()}>
-            {plot.displayedName}
-          </PlotNameCol>
-          <Column>
-            {isPlotSelected ? (
-              <MinusIcon onClick={() => removePlotFromRightSide(query, plot)} />
-            ) : (
-                <PlusIcon
-                  onClick={() => {
-                    addPlotToRightSide(query, plot);
-                  }}
-                />
-              )}
-          </Column>
           <PlotImage
             blink={blink}
             params_for_api={params_for_api}
             plot={plot}
             plotURL={url}
             updated_by_not_older_than={updated_by_not_older_than}
+            query={query}
             imageRef={imageRef}
             isPlotSelected={isPlotSelected}
-            query={query}
           />
-        </StyledPlotRow>
-      </StyledCol>
-    </div>
+        </PlotWrapper>
+      </LayoutWrapper>
+    </ParentWrapper>
   );
 };
