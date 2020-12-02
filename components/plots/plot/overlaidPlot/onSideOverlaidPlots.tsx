@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import { useRouter } from 'next/router';
 
 import { functions_config } from '../../../../config/config';
@@ -8,24 +8,18 @@ import {
   QueryProps,
 } from '../../../../containers/display/interfaces';
 import {
-  StyledCol,
-  PlotNameCol,
-  StyledPlotRow,
-  Column,
-  PlusIcon,
-  MinusIcon,
   OnSidePlotsWrapper,
 } from '../../../../containers/display/styledComponents';
 import { getOnSideOverlaidPlots } from './utils';
 import {
-  addPlotToRightSide,
-  removePlotFromRightSide,
   scroll,
   scrollToBottom,
   get_plot_error,
 } from '../singlePlot/utils';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 import { PlotImage } from '../plotImage';
+import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
+import { store } from '../../../../contexts/leftSideContext';
 
 interface OnSideOverlaidPlotsProps {
   params_for_api: ParamsForApiProps;
@@ -42,6 +36,7 @@ export const OnSideOverlaidPlots = ({
 }: OnSideOverlaidPlotsProps) => {
   params_for_api.plot_name = plot.name;
   const onsidePlotsURLs: string[] = getOnSideOverlaidPlots(params_for_api);
+  const { size } = useContext(store)
 
   const router = useRouter();
   const query: QueryProps = router.query;
@@ -53,47 +48,44 @@ export const OnSideOverlaidPlots = ({
     <OnSidePlotsWrapper>
       {onsidePlotsURLs.map((url: string) => {
         return (
-          <div ref={imageRef}>
-            <StyledCol space={2} key={url}>
-              <StyledPlotRow
-                justifycontent="center"
-                isLoading={blink.toString()}
-                animation={(functions_config.mode === 'ONLINE').toString()}
-                minheight={params_for_api.height}
-                width={params_for_api.width?.toString()}
-                is_plot_selected={isPlotSelected.toString()}
+          <ParentWrapper
+            isPlotSelected={isPlotSelected.toString()}
+
+            isLoading={blink.toString()}
+            animation={(functions_config.mode === 'ONLINE').toString()}
+            size={size}>
+            <LayoutName
+              isPlotSelected={isPlotSelected.toString()}
+              error={get_plot_error(plot).toString()}
+            >{decodeURI(params_for_api.plot_name as string)}</LayoutName>
+            <LayoutWrapper
+              size={size}
+              auto='auto'
+            >
+              <PlotWrapper
+                plotSelected={isPlotSelected}
+                onClick={async () => {
+                  await isPlotSelected
+                  setTimeout(() => {
+                    scroll(imageRef);
+                    scrollToBottom(imageRefScrollDown)
+                  }, 500);
+                }}
+                ref={imageRef}
               >
-                <PlotNameCol error={get_plot_error(plot).toString()}>
-                  {plot.displayedName}
-                </PlotNameCol>
-                <Column>
-                  {isPlotSelected ? (
-                    <MinusIcon
-                      onClick={() => removePlotFromRightSide(query, plot)}
-                    />
-                  ) : (
-                    <PlusIcon
-                      onClick={async () => {
-                        await addPlotToRightSide(query, plot);
-                        scroll(imageRef);
-                        scrollToBottom(imageRefScrollDown);
-                      }}
-                    />
-                  )}
-                </Column>
                 <PlotImage
-                  imageRef={imageRef}
-                  isPlotSelected={isPlotSelected}
-                  query={query}
                   blink={blink}
                   params_for_api={params_for_api}
                   plot={plot}
                   plotURL={url}
                   updated_by_not_older_than={updated_by_not_older_than}
+                  query={query}
+                  imageRef={imageRef}
+                  isPlotSelected={isPlotSelected}
                 />
-              </StyledPlotRow>
-            </StyledCol>
-          </div>
+              </PlotWrapper>
+            </LayoutWrapper>
+          </ParentWrapper>
         );
       })}
     </OnSidePlotsWrapper>

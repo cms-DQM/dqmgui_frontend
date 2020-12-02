@@ -25,23 +25,16 @@ import {
 export const getFolderPath = (folders: string[], clickedFolder: string) => {
   const folderIndex = folders.indexOf(clickedFolder);
   const restFolders: string[] = folders.slice(0, folderIndex + 1);
-  // console.log(restFolders)
   const foldersString = restFolders.join('/');
   return foldersString;
 };
 
 export const isPlotSelected = (
   selected_plots: PlotDataProps[],
-  plot_name: string
-) =>
-  selected_plots.some(
-    (selected_plot: PlotDataProps) => selected_plot.name === plot_name
-  );
-
-export const getSelectedPlotsNames = (plotsNames: string | undefined) => {
-  const plots = plotsNames ? plotsNames.split('/') : [];
-
-  return plots;
+  plot: PlotDataProps,
+) => {
+  return selected_plots.find((selected_plot) => selected_plot.name === plot.name && selected_plot.path === plot.path) ?
+    true : false
 };
 
 export const getSelectedPlots = (
@@ -88,14 +81,14 @@ export const getContents = (data: any) => {
   }
   return data
     ? _.sortBy(
-        data.contents
-          ? data.contents
-          : [].filter(
-              (one_item: PlotInterface | DirectoryInterface) =>
-                !one_item.hasOwnProperty('streamerinfo')
-            ),
-        ['subdir']
-      )
+      data.contents
+        ? data.contents
+        : [].filter(
+          (one_item: PlotInterface | DirectoryInterface) =>
+            !one_item.hasOwnProperty('streamerinfo')
+        ),
+      ['subdir']
+    )
     : [];
 };
 
@@ -223,8 +216,8 @@ export const choose_api = (params: ParamsForApiProps) => {
   const current_api = !functions_config.new_back_end.new_back_end
     ? get_folders_and_plots_old_api(params)
     : functions_config.mode === 'ONLINE'
-    ? get_folders_and_plots_new_api_with_live_mode(params)
-    : get_folders_and_plots_new_api(params);
+      ? get_folders_and_plots_new_api_with_live_mode(params)
+      : get_folders_and_plots_new_api(params);
   return current_api;
 };
 
@@ -232,8 +225,8 @@ export const choose_api_for_run_search = (params: ParamsForApiProps) => {
   const current_api = !functions_config.new_back_end.new_back_end
     ? get_run_list_by_search_old_api(params)
     : functions_config.mode === 'ONLINE'
-    ? get_run_list_by_search_new_api_with_no_older_than(params)
-    : get_run_list_by_search_new_api(params);
+      ? get_run_list_by_search_new_api_with_no_older_than(params)
+      : get_run_list_by_search_new_api(params);
 
   return current_api;
 };

@@ -14,7 +14,7 @@ export const useDisplayedName = (contents: any, data: any) => {
   useEffect(() => {
     const plotsData: any = contents.map((content: PlotInterface) => {
       if (content.path) {
-        const { name, directories } = getNameAndDirectoriesFromDir(content);
+        const { name, directories } = getNameAndDirectoriesFromDir(content as any);
         //displayedName is the name which is displayed as label of plot
         //name is a plot name with which need to make a req. to api.
         // displayedName and name could be different, because "Layouts" overwrite the plot name in their own way

@@ -8,7 +8,7 @@ import {
   PlotDataProps,
   PlotsGroupedByLayoutsInterface,
 } from '../../../containers/display/interfaces';
-import { PlotsWithLayout } from './plotsWithLayout';
+import { PlotsWithLayout } from './plotsWithLayouts/plotsWithLayout';
 import { PlotsWithoutLayouts } from './plotsWithoutLayouts';
 
 interface LeftSidePlotsProps {
@@ -29,7 +29,7 @@ export const LeftSidePlots = ({
   const router = useRouter();
   const query: QueryProps = router.query;
   const { imageRefScrollDown } = globalState;
-
+  
   if (plots.length > 0) {
     return (
       <>
