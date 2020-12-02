@@ -40,7 +40,7 @@ export const OnSideOverlaidPlots = ({
 
   const router = useRouter();
   const query: QueryProps = router.query;
-  const imageRef = useRef(null);
+  const imageRef = useRef<HTMLDivElement>(null);
 
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
 
