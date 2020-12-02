@@ -47,8 +47,6 @@ export const ZoomedOverlaidPlot = ({
   >();
   const [openCustomization, toggleCustomizationMenu] = useState(false);
   params_for_api.customizeProps = customizationParams;
-  const [imageLoading, setImageLoading] = useState(true);
-  const [imageError, setImageError] = useState(false);
   const [isPortalWindowOpen, setIsPortalWindowOpen] = React.useState(false);
 
   const zoomedPlotMenuOptions = [
@@ -74,7 +72,7 @@ export const ZoomedOverlaidPlot = ({
 
   const router = useRouter();
   const query: QueryProps = router.query;
-
+  params_for_api.dataset_name = params_for_api.dataset_name + '/' 
   const overlaid_plots_urls = get_overlaied_plots_urls(params_for_api);
   const joined_overlaid_plots_urls = overlaid_plots_urls.join('');
   params_for_api.joined_overlaied_plots_urls = joined_overlaid_plots_urls;
@@ -93,7 +91,7 @@ export const ZoomedOverlaidPlot = ({
       <Plot_portal
         isPortalWindowOpen={isPortalWindowOpen}
         setIsPortalWindowOpen={setIsPortalWindowOpen}
-        title={selected_plot.displayedName}
+        title={selected_plot.name}
       >
         <StyledPlotRow
           justifycontent="center"
@@ -105,7 +103,7 @@ export const ZoomedOverlaidPlot = ({
           nopointer={true.toString()}
         >
           <PlotNameCol error={get_plot_error(selected_plot).toString()}>
-            {selected_plot.displayedName}
+            {selected_plot.name}
           </PlotNameCol>
           <ImageDiv
             id={selected_plot.name}
@@ -139,7 +137,7 @@ export const ZoomedOverlaidPlot = ({
         justifycontent="center"
       >
         <PlotNameCol error={get_plot_error(selected_plot).toString()}>
-          {selected_plot.displayedName}
+          {selected_plot.name}
         </PlotNameCol>
         <Column display="flex">
           <ZoomedPlotMenu options={zoomedPlotMenuOptions} />

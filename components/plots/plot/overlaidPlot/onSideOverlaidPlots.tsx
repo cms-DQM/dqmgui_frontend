@@ -43,14 +43,13 @@ export const OnSideOverlaidPlots = ({
   const imageRef = useRef(null);
 
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
-
   return (
+
     <OnSidePlotsWrapper>
       {onsidePlotsURLs.map((url: string) => {
         return (
           <ParentWrapper
             isPlotSelected={isPlotSelected.toString()}
-
             isLoading={blink.toString()}
             animation={(functions_config.mode === 'ONLINE').toString()}
             size={size}>

@@ -20,10 +20,10 @@ export const removePlotFromSelectedPlots = (
 ) => {
   const plotsWithDirs = plotsQuery ? plotsQuery.split('&') : [];
   const fileterdPlotsAndDirs = plotsWithDirs.map((plotWithDir: string) => {
-    const plot = [plotName.path, plotName.name].join('/')
-    if (plot !== plotWithDir) {
+    const fullPlotObj = [plotName.run_number, plotName.dataset_name + '/', plotName.path, plotName.name].join('/')
+    if (fullPlotObj !== plotWithDir) {
       return plotWithDir;
-    } 
+    }
   });
   const cleanedFileterdPlotsAndDirs = cleanDeep(fileterdPlotsAndDirs);
   const plotsForQuery = cleanedFileterdPlotsAndDirs.join('&');
@@ -33,7 +33,15 @@ export const removePlotFromSelectedPlots = (
 export const addToSelectedPlots = (
   plotsQuery: string | undefined,
   plot: PlotDataProps
-) => `${plotsQuery ? plotsQuery + '&' : ''}${plot.path}/${plot.name}`;
+) => {
+  const run_number = plot.run_number
+  const dataset_name = plot.dataset_name?.substring(1)
+  const folder_path = plot.path
+  const plot_name = plot.name
+
+  const params = [run_number, dataset_name, folder_path, plot_name].join('/')
+  return `${plotsQuery ? plotsQuery + '&' : ''}${params}`;
+}
 
 export const addOverlayData = (triples: TripleProps[] | undefined) => {
   const params =
@@ -75,7 +83,7 @@ export const FormatParamsForAPI = (
   return cleaned_parameters;
 };
 
-export const addPlotToRightSide = (query: QueryProps, plot: PlotDataProps) =>
+export const addPlotToRightSide = (query: QueryProps, plot: PlotDataProps) => {
   changeRouter(
     getChangedQueryParams(
       {
@@ -83,7 +91,8 @@ export const addPlotToRightSide = (query: QueryProps, plot: PlotDataProps) =>
       },
       query
     )
-  );
+  )
+};
 
 export const removePlotFromRightSide = (
   query: QueryProps,

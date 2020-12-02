@@ -50,6 +50,10 @@ export const ZoomedPlot = ({
   const [openOverlayPlotMenu, setOpenOverlayPlotMenu] = useState(false)
 
   params_for_api.customizeProps = customizationParams;
+  params_for_api.dataset_name = '/' + selected_plot.dataset_name
+  params_for_api.run_number =  selected_plot.run_number
+  params_for_api.folders_path = '/' + selected_plot.path
+
   const plot_url = get_plot_url(params_for_api);
 
   const copy_of_params = { ...params_for_api };
@@ -60,7 +64,6 @@ export const ZoomedPlot = ({
 
   const router = useRouter();
   const query: QueryProps = router.query;
-
   const zoomedPlotMenuOptions = [
     {
       label: 'Open in a new tab',
@@ -83,7 +86,6 @@ export const ZoomedPlot = ({
   ];
 
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
-
   return (
     <StyledCol space={2}>
       <OverlayWithAnotherPlot
@@ -94,7 +96,7 @@ export const ZoomedPlot = ({
       <Plot_portal
         isPortalWindowOpen={isPortalWindowOpen}
         setIsPortalWindowOpen={setIsPortalWindowOpen}
-        title={selected_plot.displayedName}
+        title={selected_plot.name}
       >
         <StyledPlotRow
           isLoading={blink.toString()}
@@ -105,7 +107,7 @@ export const ZoomedPlot = ({
           nopointer={true.toString()}
         >
           <PlotNameCol error={get_plot_error(selected_plot).toString()}>
-            {selected_plot.displayedName}
+            {selected_plot.name}
           </PlotNameCol>
           <ImageDiv
             id={selected_plot.name}
@@ -139,7 +141,7 @@ export const ZoomedPlot = ({
         nopointer={true.toString()}
       >
         <PlotNameCol error={get_plot_error(selected_plot).toString()}>
-          {selected_plot.displayedName}
+          {selected_plot.name}
         </PlotNameCol>
         <Column display="flex">
           <ZoomedPlotMenu options={zoomedPlotMenuOptions} />

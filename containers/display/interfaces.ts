@@ -97,6 +97,8 @@ export interface PlotDataProps {
   properties?: PlotPropertiesProps;
   qresults?: any[];
   qtstatuses?: any[];
+  run_number?: string;
+  dataset_name?: string;
 }
 
 export interface NavigationSearchFieldsProps {

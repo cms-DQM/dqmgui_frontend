@@ -43,11 +43,17 @@ export const getSelectedPlots = (
 ) => {
   const plotsWithDirs = plotsQuery ? plotsQuery.split('&') : [];
   return plotsWithDirs.map((plotWithDir: string) => {
-    const plotAndDir = plotWithDir.split('/');
-    const name = plotAndDir.pop();
-    const directories = plotAndDir.join('/');
+
+    const runDatasetFoldersPlot = plotWithDir.split('//');
+
+    const runNumberAndDataset = runDatasetFoldersPlot[0].split('/')
+    const runNumber = runNumberAndDataset[0]
+    const dataset = runNumberAndDataset.splice(1,runNumberAndDataset.length-1).join('/')
+    const foldersAndName = runDatasetFoldersPlot[1].split('/')
+    const name = foldersAndName.pop()
+    const folders = foldersAndName.join('/');
     const plot = plots.filter(
-      (plot) => plot.name === name && plot.path === directories
+      (plot) => plot.name === name && plot.path === folders
     );
     const displayedName =
       plot.length > 0 && plot[0].displayedName ? plot[0].displayedName : '';
@@ -56,7 +62,9 @@ export const getSelectedPlots = (
 
     const plotObject: PlotDataProps = {
       name: name ? name : '',
-      path: directories,
+      run_number: runNumber,
+      dataset_name: dataset,
+      path: folders,
       displayedName: displayedName,
       qresults: qresults,
     };

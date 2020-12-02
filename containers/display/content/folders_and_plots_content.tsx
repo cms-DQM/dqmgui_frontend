@@ -82,7 +82,6 @@ const Content: FC<FolderProps> = ({
     selectedPlots,
     plots
   );
-
   const changeFolderPathByBreadcrumb = (parameters: ParsedUrlQueryInput) =>
     changeRouter(getChangedQueryParams(parameters, query));
 

@@ -5,7 +5,6 @@ import {
   ParamsForApiProps,
   QueryProps,
 } from '../../../containers/display/interfaces';
-import { useUpdateLiveMode } from '../../../hooks/useUpdateInLiveMode';
 import { ErrorMessage } from '../errorMessage';
 import { ImageFallback } from '../imageFallback';
 import {
@@ -60,11 +59,18 @@ export const PlotImage = ({
     params_for_api.normalize,
     params_for_api.overlay_plot,
     params_for_api.plot_name,
-    params_for_api.folders_path
+    params_for_api.folders_path,
+    params_for_api.joined_overlaied_plots_urls
   ]);
 
   const old_image_display = show_old_img ? '' : 'none';
   const new_image_display = show_old_img ? 'none' : '';
+
+  const fullPlotObj = { ...plot }
+  if (!fullPlotObj.dataset_name && !fullPlotObj.run_number) {
+    fullPlotObj.dataset_name = query.dataset_name
+    fullPlotObj.run_number = query.run_number
+  }
 
   return (
     <>
@@ -75,8 +81,8 @@ export const PlotImage = ({
             onClick={async () => {
               if (imageRef) {
                 isPlotSelected
-                  ? await removePlotFromRightSide(query, plot)
-                  : await addPlotToRightSide(query, plot);
+                  ? await removePlotFromRightSide(query, fullPlotObj)
+                  : await addPlotToRightSide(query, fullPlotObj);
                 scroll(imageRef);
               }
             }}
@@ -90,7 +96,7 @@ export const PlotImage = ({
                     set_old_image_url(new_image_url);
                     set_show_old_img(false);
                   }}
-                  alt={plot.name}
+                  alt={fullPlotObj.name}
                   src={new_image_url}
                   setImageError={setImageError}
                   width={params_for_api.width}
@@ -103,7 +109,7 @@ export const PlotImage = ({
                 <ImageFallback
                   retryTimes={3}
                   style={{ display: old_image_display }}
-                  alt={plot.name}
+                  alt={fullPlotObj.name}
                   src={old_image_url}
                   setImageError={setImageError}
                   width={'auto'}
