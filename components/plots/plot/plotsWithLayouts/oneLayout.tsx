@@ -1,13 +1,10 @@
 import * as React from 'react'
-import { Tooltip } from 'antd'
 
-import { functions_config, get_overlaied_plots_urls, get_plot_url, get_plot_with_overlay } from '../../../../config/config'
-import { isPlotSelected } from '../../../../containers/display/utils'
+import { functions_config } from '../../../../config/config'
 import { store } from '../../../../contexts/leftSideContext'
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate'
-import { PlotImage } from '../plotImage'
-import { FormatParamsForAPI, get_plot_error, scroll, scrollToBottom } from '../singlePlot/utils'
 import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from './styledComponents'
+import { Plot } from './plot'
 
 interface OnePlotInLayout {
   layoutName: string;
@@ -20,7 +17,12 @@ interface OnePlotInLayout {
 
 export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layoutName, query, selected_plots }: OnePlotInLayout) => {
   const { size } = React.useContext(store)
+  const [nameOfLayout, setNameOfLayout] = React.useState(layoutName)
   const imageRef = React.useRef(null);
+
+  React.useEffect(() => {
+    setNameOfLayout(layoutName)
+  }, [layoutName])
   const plotsAmount =
     //in order to get tidy layout, has to be x^2 plots in one layout. In the layuts, where the plot number is 
     //less than x^2, we're adding peseudo plots (empty divs)
@@ -48,68 +50,25 @@ export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layout
       isLoading={blink.toString()}
       animation={(functions_config.mode === 'ONLINE').toString()}
       size={size}>
-      <LayoutName>{decodeURI(layoutName)}</LayoutName>
+      <LayoutName>{decodeURI(nameOfLayout)}</LayoutName>
       <LayoutWrapper
         size={size}
         auto={auto.join(' ')}
       >
         {
           plots.map((plot) => {
-            const params_for_api = FormatParamsForAPI(
-              globalState,
-              query,
-              encodeURI(plot.name),
-              plot.path
-            );
-            params_for_api.width = onePlotWidth
-            params_for_api.height = onePlotHeight
-            const url = get_plot_url(params_for_api);
-
-            const overlaid_plots_urls = get_overlaied_plots_urls(params_for_api);
-            const joined_overlaid_plots_urls = overlaid_plots_urls.join('');
-            params_for_api.joined_overlaied_plots_urls = joined_overlaid_plots_urls;
-            const plot_with_overlay = get_plot_with_overlay(params_for_api);
-            const plotSelected = isPlotSelected(
-              selected_plots,
-              plot
-            )
             return (
-              <Tooltip title={plot.name} color={get_plot_error(plot) ? 'red' : ''}>
-                <PlotWrapper
-                  plotSelected={plotSelected}
-                  onClick={async () => {
-                    await plotSelected
-                    setTimeout(() => {
-                      scroll(imageRef);
-                      scrollToBottom(imageRefScrollDown)
-                    }, 500);
-                  }}
-                  ref={imageRef}
-                >
-                  {query.overlay_data ? (
-                    <PlotImage
-                      blink={blink}
-                      params_for_api={params_for_api}
-                      plot={plot}
-                      plotURL={plot_with_overlay}
-                      updated_by_not_older_than={updated_by_not_older_than}
-                      query={query}
-                      imageRef={imageRef}
-                      isPlotSelected={plotSelected}
-                    />)
-                    :
-                    (<PlotImage
-                      blink={blink}
-                      params_for_api={params_for_api}
-                      plot={plot}
-                      plotURL={url}
-                      updated_by_not_older_than={updated_by_not_older_than}
-                      query={query}
-                      imageRef={imageRef}
-                      isPlotSelected={plotSelected}
-                    />)}
-                </PlotWrapper>
-              </Tooltip>
+              <Plot
+                globalState={globalState}
+                query={query}
+                plot={plot}
+                onePlotHeight={onePlotHeight}
+                onePlotWidth={onePlotWidth}
+                selected_plots={selected_plots}
+                imageRef={imageRef}
+                imageRefScrollDown={imageRefScrollDown}
+                blink={blink}
+                updated_by_not_older_than={updated_by_not_older_than} />
             )
           })}
       </LayoutWrapper>

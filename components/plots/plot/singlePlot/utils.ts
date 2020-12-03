@@ -18,12 +18,12 @@ export const removePlotFromSelectedPlots = (
   plotsQuery: string | undefined,
   plotName: PlotDataProps
 ) => {
-  const plotsWithDirs = plotsQuery ? plotsQuery.split('&') : [];
-  const fileterdPlotsAndDirs = plotsWithDirs.map((plotWithDir: string) => {
-    const plot = [plotName.path, plotName.name].join('/')
-    if (plot !== plotWithDir) {
-      return plotWithDir;
-    } 
+  const separatedPlots = plotsQuery ? plotsQuery.split('&') : [];
+  const fileterdPlotsAndDirs = separatedPlots.map((separatedPlot: string) => {
+    const plot = [plotName.run_number, plotName.dataset_name, plotName.path, plotName.name].join('/')
+    if (plot !== separatedPlot) {
+      return separatedPlot;
+    }
   });
   const cleanedFileterdPlotsAndDirs = cleanDeep(fileterdPlotsAndDirs);
   const plotsForQuery = cleanedFileterdPlotsAndDirs.join('&');
@@ -33,7 +33,13 @@ export const removePlotFromSelectedPlots = (
 export const addToSelectedPlots = (
   plotsQuery: string | undefined,
   plot: PlotDataProps
-) => `${plotsQuery ? plotsQuery + '&' : ''}${plot.path}/${plot.name}`;
+) => {
+  const run_number = plot.run_number
+  const dataset_name = plot.dataset_name
+  const path = plot.path
+  const name = plot.name
+  return (`${plotsQuery ? plotsQuery + '&' : ''}${run_number}${dataset_name}/${plot.path}/${plot.name}`)
+};
 
 export const addOverlayData = (triples: TripleProps[] | undefined) => {
   const params =

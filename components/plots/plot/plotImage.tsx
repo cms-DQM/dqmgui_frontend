@@ -60,7 +60,11 @@ export const PlotImage = ({
     params_for_api.normalize,
     params_for_api.overlay_plot,
     params_for_api.plot_name,
-    params_for_api.folders_path
+    params_for_api.folders_path,
+    params_for_api.overlay_plot,
+    params_for_api.joined_overlaied_plots_urls,
+    plotURL,
+    blink
   ]);
 
   const old_image_display = show_old_img ? '' : 'none';

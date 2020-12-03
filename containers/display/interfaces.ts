@@ -34,7 +34,7 @@ export interface PlotProps extends LumisectionRequestProps {
   overlaidSeparately?: PlotoverlaidSeparatelyProps[];
 }
 
-export interface PlotoverlaidSeparatelyProps{
+export interface PlotoverlaidSeparatelyProps {
   folder_path: string;
   name: string;
 }
@@ -91,12 +91,13 @@ export interface QTestResultsProps {
 }
 
 export interface PlotDataProps {
-  displayedName: string;
   name: string;
   path: string;
   properties?: PlotPropertiesProps;
   qresults?: any[];
   qtstatuses?: any[];
+  run_number?: string;
+  dataset_name?: string;
 }
 
 export interface NavigationSearchFieldsProps {

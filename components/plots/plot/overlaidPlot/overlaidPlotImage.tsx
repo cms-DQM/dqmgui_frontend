@@ -20,18 +20,19 @@ import { store } from '../../../../contexts/leftSideContext';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 import { PlotImage } from '../plotImage';
 import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
+import { isPlotSelected } from '../../../../containers/display/utils';
 
 interface OverlaidPlotImageProps {
   params_for_api: ParamsForApiProps;
   plot: PlotDataProps;
-  isPlotSelected: boolean;
+  selected_plots: PlotDataProps[];
   imageRefScrollDown: any;
 }
 
 export const OverlaidPlotImage = ({
   plot,
   params_for_api,
-  isPlotSelected,
+  selected_plots,
   imageRefScrollDown,
 }: OverlaidPlotImageProps) => {
   const globalState = useContext(store);
@@ -51,24 +52,29 @@ export const OverlaidPlotImage = ({
   const imageRef = useRef(null);
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
 
+  plot.dataset_name = query.dataset_name
+  plot.run_number = query.run_number
+  
+  const is_plot_selected = isPlotSelected(selected_plots, plot)
+
   return (
     <ParentWrapper
       isLoading={blink.toString()}
       animation={(functions_config.mode === 'ONLINE').toString()}
       size={size}
-      isPlotSelected={isPlotSelected.toString()}>
+      isPlotSelected={is_plot_selected.toString()}>
       <LayoutName
         error={get_plot_error(plot).toString()}
-        isPlotSelected={isPlotSelected.toString()}
+        isPlotSelected={is_plot_selected.toString()}
       >{decodeURI(params_for_api.plot_name)}</LayoutName>
       <LayoutWrapper
         size={size}
         auto='auto'
       >
         <PlotWrapper
-          plotSelected={isPlotSelected}
+          plotSelected={is_plot_selected}
           onClick={async () => {
-            await isPlotSelected
+            await is_plot_selected
             setTimeout(() => {
               scroll(imageRef);
               scrollToBottom(imageRefScrollDown)
@@ -84,7 +90,7 @@ export const OverlaidPlotImage = ({
             updated_by_not_older_than={updated_by_not_older_than}
             query={query}
             imageRef={imageRef}
-            isPlotSelected={isPlotSelected}
+            isPlotSelected={is_plot_selected}
           />
         </PlotWrapper>
       </LayoutWrapper>

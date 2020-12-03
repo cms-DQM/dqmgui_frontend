@@ -14,7 +14,7 @@ import {
 } from '../containers/display/utils';
 import { useNewer } from './useNewer';
 import { useRequest } from './useRequest';
-import { useDisplayedName } from './useDisplayName';
+import { useConstructFullPlotObject } from './useConstructFullPlotObject';
 import { functions_config } from '../config/config';
 import cleanDeep from 'clean-deep';
 
@@ -65,7 +65,7 @@ export const useFilterFolders = (
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
   const allDirectories = getDirectories(contents);
 
-  const formattedPlotsObject = useDisplayedName(contents, data);
+  const formattedPlotsObject = useConstructFullPlotObject(contents, data);
 
   React.useEffect(() => {
     setDirectories(getDirectories(contents));
