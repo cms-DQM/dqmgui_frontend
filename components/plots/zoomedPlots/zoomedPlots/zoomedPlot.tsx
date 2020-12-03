@@ -94,7 +94,7 @@ export const ZoomedPlot = ({
       <Plot_portal
         isPortalWindowOpen={isPortalWindowOpen}
         setIsPortalWindowOpen={setIsPortalWindowOpen}
-        title={selected_plot.displayedName}
+        title={selected_plot.name}
       >
         <StyledPlotRow
           isLoading={blink.toString()}
@@ -105,7 +105,7 @@ export const ZoomedPlot = ({
           nopointer={true.toString()}
         >
           <PlotNameCol error={get_plot_error(selected_plot).toString()}>
-            {selected_plot.displayedName}
+            {selected_plot.name}
           </PlotNameCol>
           <ImageDiv
             id={selected_plot.name}
@@ -139,7 +139,7 @@ export const ZoomedPlot = ({
         nopointer={true.toString()}
       >
         <PlotNameCol error={get_plot_error(selected_plot).toString()}>
-          {selected_plot.displayedName}
+          {selected_plot.name}
         </PlotNameCol>
         <Column display="flex">
           <ZoomedPlotMenu options={zoomedPlotMenuOptions} />

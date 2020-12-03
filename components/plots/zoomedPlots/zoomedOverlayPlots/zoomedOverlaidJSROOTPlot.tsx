@@ -152,7 +152,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
         justifycontent="center"
       >
         <PlotNameCol error={get_plot_error(selected_plot).toString()}>
-          {selected_plot.displayedName}
+          {selected_plot.name}
         </PlotNameCol>
         <Column>
           <Button

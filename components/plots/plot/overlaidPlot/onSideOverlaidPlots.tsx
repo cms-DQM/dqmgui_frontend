@@ -10,7 +10,7 @@ import {
 import {
   OnSidePlotsWrapper,
 } from '../../../../containers/display/styledComponents';
-import { getOnSideOverlaidPlots } from './utils';
+import { getOnSideOverlaidPlots, getOnSideOverlaidPlotsObjects } from './utils';
 import {
   scroll,
   scrollToBottom,
@@ -20,22 +20,24 @@ import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 import { PlotImage } from '../plotImage';
 import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
 import { store } from '../../../../contexts/leftSideContext';
+import { isPlotSelected } from '../../../../containers/display/utils';
 
 interface OnSideOverlaidPlotsProps {
   params_for_api: ParamsForApiProps;
   plot: PlotDataProps;
-  isPlotSelected: boolean;
   imageRefScrollDown: any;
+  selected_plots: PlotDataProps[];
 }
 
 export const OnSideOverlaidPlots = ({
   plot,
   params_for_api,
-  isPlotSelected,
+  selected_plots,
   imageRefScrollDown,
 }: OnSideOverlaidPlotsProps) => {
   params_for_api.plot_name = plot.name;
   const onsidePlotsURLs: string[] = getOnSideOverlaidPlots(params_for_api);
+  const overlaidPlotsObjs = getOnSideOverlaidPlotsObjects(params_for_api);
   const { size } = useContext(store)
 
   const router = useRouter();
@@ -46,11 +48,11 @@ export const OnSideOverlaidPlots = ({
 
   return (
     <OnSidePlotsWrapper>
-      {onsidePlotsURLs.map((url: string) => {
+      {onsidePlotsURLs.map((url: string, index: number) => {
+        const is_plot_selected = isPlotSelected(selected_plots, overlaidPlotsObjs[index] as any)
         return (
           <ParentWrapper
-            isPlotSelected={isPlotSelected.toString()}
-
+            isPlotSelected={is_plot_selected.toString()}
             isLoading={blink.toString()}
             animation={(functions_config.mode === 'ONLINE').toString()}
             size={size}>
@@ -63,9 +65,9 @@ export const OnSideOverlaidPlots = ({
               auto='auto'
             >
               <PlotWrapper
-                plotSelected={isPlotSelected}
+                plotSelected={is_plot_selected}
                 onClick={async () => {
-                  await isPlotSelected
+                  await is_plot_selected
                   setTimeout(() => {
                     scroll(imageRef);
                     scrollToBottom(imageRefScrollDown)
@@ -76,12 +78,12 @@ export const OnSideOverlaidPlots = ({
                 <PlotImage
                   blink={blink}
                   params_for_api={params_for_api}
-                  plot={plot}
+                  plot={overlaidPlotsObjs[index]}
                   plotURL={url}
                   updated_by_not_older_than={updated_by_not_older_than}
                   query={query}
                   imageRef={imageRef}
-                  isPlotSelected={isPlotSelected}
+                  isPlotSelected={is_plot_selected}
                 />
               </PlotWrapper>
             </LayoutWrapper>

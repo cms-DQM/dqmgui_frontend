@@ -16,17 +16,18 @@ import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 import { PlotImage } from '../plotImage';
 import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
 import { store } from '../../../../contexts/leftSideContext';
+import { isPlotSelected } from '../../../../containers/display/utils';
 
 interface PlotProps {
   plot: PlotDataProps;
-  isPlotSelected: boolean;
+  selected_plots: PlotDataProps[];
   params_for_api: ParamsForApiProps;
   imageRefScrollDown: any;
 }
 
 export const Plot = ({
   plot,
-  isPlotSelected,
+  selected_plots,
   params_for_api,
   imageRefScrollDown,
 }: PlotProps) => {
@@ -37,23 +38,29 @@ export const Plot = ({
 
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
   const url = get_plot_url(params_for_api);
+  const is_plot_selected = isPlotSelected(selected_plots, plot)
+
   useEffect(() => {
     const scrollPlot = () => {
       scroll(imageRef);
       scrollToBottom(imageRefScrollDown);
     };
-    if (isPlotSelected) {
+    if (is_plot_selected) {
       scrollPlot();
     }
-  }, [isPlotSelected, query.selected_plots]);
+  }, [is_plot_selected, query.selected_plots]);
+
+  plot.dataset_name = query.dataset_name
+  plot.run_number = query.run_number
+
   return (
     <ParentWrapper
       isLoading={blink.toString()}
       animation={(functions_config.mode === 'ONLINE').toString()}
       size={size}
-      isPlotSelected={isPlotSelected.toString()}>
+      isPlotSelected={is_plot_selected.toString()}>
       <LayoutName
-        isPlotSelected={isPlotSelected.toString()}
+        isPlotSelected={is_plot_selected.toString()}
         error={get_plot_error(plot).toString()}
       >{decodeURI(params_for_api.plot_name as string)}</LayoutName>
       <LayoutWrapper
@@ -61,9 +68,9 @@ export const Plot = ({
         auto='auto'
       >
         <PlotWrapper
-          plotSelected={isPlotSelected}
+          plotSelected={is_plot_selected}
           onClick={async () => {
-            await isPlotSelected
+            await is_plot_selected
             setTimeout(() => {
               scroll(imageRef);
               scrollToBottom(imageRefScrollDown)
@@ -79,7 +86,7 @@ export const Plot = ({
             updated_by_not_older_than={updated_by_not_older_than}
             query={query}
             imageRef={imageRef}
-            isPlotSelected={isPlotSelected}
+            isPlotSelected={is_plot_selected}
           />
         </PlotWrapper>
       </LayoutWrapper>

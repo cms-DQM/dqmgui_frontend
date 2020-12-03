@@ -46,6 +46,8 @@ export const Plot = ({
   const joined_overlaid_plots_urls = overlaid_plots_urls.join('');
   params_for_api.joined_overlaied_plots_urls = joined_overlaid_plots_urls;
   const plot_with_overlay = get_plot_with_overlay(params_for_api);
+  plot.dataset_name = query.dataset_name
+  plot.run_number= query.run_number
   const plotSelected = isPlotSelected(
     selected_plots,
     plot

@@ -13,7 +13,7 @@ import { OverlaidPlot } from './overlaidPlot';
 
 interface LeftSidePlotsProps {
   plots: PlotDataProps[];
-  selected_plots: any;
+  selected_plots:PlotDataProps[];
   plots_grouped_by_layouts?: PlotsGroupedByLayoutsInterface;
   query: QueryProps;
   imageRefScrollDown: any;
@@ -45,7 +45,7 @@ export const PlotsWithoutLayouts = ({
                   plot={plot}
                   params_for_api={params_for_api}
                   imageRefScrollDown={imageRefScrollDown}
-                  isPlotSelected={isPlotSelected(selected_plots, plot)}
+                  selected_plots={selected_plots}
                 />
               ) : (
                 <Plot
@@ -53,7 +53,7 @@ export const PlotsWithoutLayouts = ({
                   imageRefScrollDown={imageRefScrollDown}
                   params_for_api={params_for_api}
                   key={plot.name}
-                  isPlotSelected={isPlotSelected(selected_plots, plot)}
+                  selected_plots={selected_plots}
                 />
               )}
             </div>
