@@ -52,8 +52,9 @@ export const Plot = ({
     selected_plots,
     plot
   )
+  const fullPlotPath = plot.path + '/' + plot.name
   return (
-    <Tooltip title={plot.name} color={get_plot_error(plot) ? 'red' : ''}>
+    <Tooltip title={fullPlotPath} color={get_plot_error(plot) ? 'red' : ''}>
       <PlotWrapper
         plotSelected={plotSelected}
         onClick={async () => {
