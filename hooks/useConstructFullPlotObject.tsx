@@ -19,6 +19,7 @@ export const useConstructFullPlotObject = (contents: any, data: any) => {
           name: name,
           path: content.path && '/' + directories,
           layout: content.layout,
+          overlay: content.overlay,
           qresults: functions_config.new_back_end.new_back_end
             ? content.qtstatuses
             : content.qresults,

@@ -5,7 +5,6 @@ import { Store } from 'antd/lib/form/interface';
 
 import {
   get_plot_url,
-  root_url,
   functions_config,
 } from '../../../../config/config';
 import {
@@ -48,10 +47,11 @@ export const ZoomedPlot = ({
   const [openCustomization, toggleCustomizationMenu] = useState(false);
   const [isPortalWindowOpen, setIsPortalWindowOpen] = useState(false);
   const [openOverlayPlotMenu, setOpenOverlayPlotMenu] = useState(false)
+  const [overlaid_plot_url, set_overlaid_plot_url] = useState<string>()
 
   params_for_api.customizeProps = customizationParams;
-  const plot_url = get_plot_url(params_for_api);
 
+  const plot_url = get_plot_url(params_for_api);
   const copy_of_params = { ...params_for_api };
   copy_of_params.height = window.innerHeight;
   copy_of_params.width = Math.round(window.innerHeight * 1.33);
@@ -78,7 +78,7 @@ export const ZoomedPlot = ({
       label: 'Overlay with another plot',
       value: 'Customize',
       action: () => setOpenOverlayPlotMenu(true),
-      icon: <BlockOutlined  />,
+      icon: <BlockOutlined />,
     },
   ];
 
@@ -89,6 +89,9 @@ export const ZoomedPlot = ({
       <OverlayWithAnotherPlot
         visible={openOverlayPlotMenu}
         setOpenOverlayWithAnotherPlotModal={setOpenOverlayPlotMenu}
+        default_overlay={selected_plot.overlay}
+        params_for_api={params_for_api}
+        set_overlaid_plot_url={set_overlaid_plot_url}
       />
       {/* Plot opened in a new tab */}
       <Plot_portal
@@ -159,7 +162,7 @@ export const ZoomedPlot = ({
             blink={blink}
             params_for_api={params_for_api}
             plot={selected_plot}
-            plotURL={plot_url}
+            plotURL={overlaid_plot_url ? overlaid_plot_url : plot_url} 
             query={query}
           />
         </ImageDiv>

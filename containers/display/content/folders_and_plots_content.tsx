@@ -31,6 +31,7 @@ export interface PlotInterface {
   report?: any;
   qresults?: [];
   qtstatuses?: [];
+  overlay?: string[];
 }
 
 export interface FolderPathByBreadcrumbProps {

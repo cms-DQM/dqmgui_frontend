@@ -15,17 +15,20 @@ import { Spinner } from '../../containers/search/styledComponents'
 import { FoldersRow, ModalContent, PlotNameDiv, PlotsRow, SpinnerRow } from './styledComponents'
 import { changeFolderPathByBreadcrumb, setPlot } from './utils'
 import { SelectedPlotsTable } from './selectedPlotsTable'
+import { overlay_plots_with_different_name } from '../../config/config'
 
 interface OverlayWithAnotherPlotProps {
   visible: boolean;
-  setOpenOverlayWithAnotherPlotModal: any
+  setOpenOverlayWithAnotherPlotModal: any;
+  default_overlay?: string[];
+  params_for_api: ParamsForApiProps;
+  set_overlaid_plot_url: React.Dispatch<React.SetStateAction<string | undefined>>
 }
 
-export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotModal }: OverlayWithAnotherPlotProps) => {
+export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotModal, default_overlay, params_for_api, set_overlaid_plot_url }: OverlayWithAnotherPlotProps) => {
   const [overlaidPlots, setOverlaidPlots] = React.useState<PlotoverlaidSeparatelyProps>({ folder_path: '', name: '' })
   const [folders, setFolders] = React.useState<(string | undefined)[]>([])
   const [currentFolder, setCurrentFolder] = React.useState<string | undefined>('')
-
   const clear = () => {
     setOpenOverlayWithAnotherPlotModal(false)
     setCurrentFolder('')
@@ -85,14 +88,18 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
     directories.push(folder_or_plot.subdir)
     plots.push(folder_or_plot.name)
   })
-  
+
   directories.sort()
   plots.sort()
-
   return (
     <Modal
       visible={visible}
       onCancel={() => clear()}
+      onOk={async () => {
+        clear()
+        params_for_api.overlaidSeparately = selectedPlots
+        set_overlaid_plot_url(overlay_plots_with_different_name(params_for_api))
+      }}
     >
       <Row gutter={16} >
         <Col style={{ padding: 8 }}>
@@ -100,7 +107,7 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
             changeFolderPathByBreadcrumb={(items: any) => changeFolderPathByBreadcrumb(items)(setFolders, setCurrentFolder)} />
         </Col>
         <FoldersRow>
-          <SelectedPlotsTable overlaidPlots={overlaidPlots} setSelectedPlots={setSelectedPlots} />
+          <SelectedPlotsTable default_overlay={default_overlay} overlaidPlots={overlaidPlots} setSelectedPlots={setSelectedPlots} />
         </FoldersRow>
         <ModalContent>
           {

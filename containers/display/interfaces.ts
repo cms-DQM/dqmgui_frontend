@@ -98,6 +98,7 @@ export interface PlotDataProps {
   qtstatuses?: any[];
   run_number?: string;
   dataset_name?: string;
+  overlay?: string[];
 }
 
 export interface NavigationSearchFieldsProps {

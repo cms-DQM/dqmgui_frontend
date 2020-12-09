@@ -55,16 +55,18 @@ export const getSelectedPlots = (
     const path = '/' + pathAndPlotName.join('/')
 
     const plot = plots.filter(
-      (plot) => plot.name === name && plot.path === path
+      (plot) => plot.name === plot_name && plot.path === path
     );
-    const qresults = plot[0] && plot[0].qresults;
 
+    const qresults = plot[0] && plot[0].qresults;
+    const default_overlay = plot[0] && plot[0].overlay
     const plotObject: PlotDataProps = {
       name: plot_name as string,
       path: path,
       run_number: run_number as string,
       dataset_name: dataset,
       qresults: qresults,
+      overlay : default_overlay,
     };
     return plotObject;
   });
