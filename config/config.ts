@@ -123,7 +123,7 @@ export const overlay_plots_with_different_name = (params: ParamsForApiProps) => 
     })
     const joined_plots = plots_strings.join('&')
     const joined_labels = labels.join('&reflabel=')
-    const norm = params.overlaidSeparately.normalize ? 'True' : 'False'
+    const norm = params.overlaidSeparately.normalize 
     return `api/v1/render_overlay?obj=archive/${params.run_number}${params.dataset_name}${params.folders_path}/${params.plot_name}&${joined_plots}&w=${params.width}&h=${params.height}&stats=${params.stats}&norm=${norm}${joined_labels};ref=${params.overlaidSeparately.ref}`
   }
   else {

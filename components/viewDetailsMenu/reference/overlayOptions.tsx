@@ -19,8 +19,6 @@ interface OverlayOptionsProps {
 }
 
 export const OverlayOptions = ({ setPositionNotGlobally, settedOverlay }: OverlayOptionsProps) => {
-  const router = useRouter();
-
   const globalState = useContext(store);
   const { setOverlaiPosition, overlayPosition } = globalState;
   const set_position = setPositionNotGlobally ? setPositionNotGlobally : setOverlaiPosition

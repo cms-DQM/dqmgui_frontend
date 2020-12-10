@@ -33,7 +33,7 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
   const [overlay, setOverlay] = React.useState<string>('overlay')
   const settedOverlay = overlay ? overlay : overlayOptions[0].value;
 
-  const [normalize, setNormaize] = React.useState<boolean>(true)
+  const [normalize, setNormaize] = React.useState<boolean>()
   const [currentFolder, setCurrentFolder] = React.useState<string | undefined>('')
   const clear = () => {
     setOpenOverlayWithAnotherPlotModal(false)
@@ -97,6 +97,7 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
 
   directories.sort()
   plots.sort()
+
   return (
     <Modal
       visible={visible}

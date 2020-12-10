@@ -29,7 +29,6 @@ const setLabel = (item: PlotoverlaidSeparatelyProps, allSelectedPlots: Plotoverl
   const copy = [...allSelectedPlots]
   const index = copy.indexOf(item)
   copy[index].label = label
-  console.log(index, copy)
   return copy
 }
 
