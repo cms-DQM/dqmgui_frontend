@@ -102,13 +102,13 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
       }}
     >
       <Row gutter={16} >
+        <FoldersRow>
+          <SelectedPlotsTable default_overlay={default_overlay} overlaidPlots={overlaidPlots} setSelectedPlots={setSelectedPlots} />
+        </FoldersRow>
         <Col style={{ padding: 8 }}>
           <FolderPath folder_path={overlaidPlots.folder_path}
             changeFolderPathByBreadcrumb={(items: any) => changeFolderPathByBreadcrumb(items)(setFolders, setCurrentFolder)} />
         </Col>
-        <FoldersRow>
-          <SelectedPlotsTable default_overlay={default_overlay} overlaidPlots={overlaidPlots} setSelectedPlots={setSelectedPlots} />
-        </FoldersRow>
         <ModalContent>
           {
             !data_get_by_mount.isLoading &&

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Space, Tooltip } from 'antd';
+import { Button, Space, Tooltip, Input } from 'antd';
 
 import { PlotoverlaidSeparatelyProps } from '../../containers/display/interfaces';
 import { StyledSelectedPlotsTable } from './styledComponents'
@@ -22,6 +22,14 @@ const removeSelectedPlot = (item: PlotoverlaidSeparatelyProps, allSelectedPlots:
   const copy = [...allSelectedPlots]
   const index = copy.indexOf(item)
   copy.splice(index, 1)
+  return copy
+}
+
+const setLabel = (item: PlotoverlaidSeparatelyProps, allSelectedPlots: PlotoverlaidSeparatelyProps[], label?: string) => {
+  const copy = [...allSelectedPlots]
+  const index = copy.indexOf(item)
+  copy[index].label = label
+  console.log(index, copy)
   return copy
 }
 
@@ -52,18 +60,36 @@ export const SelectedPlotsTable = ({ overlaidPlots, setSelectedPlots, default_ov
       dataIndex: 'name',
     },
     {
+      title: 'Label',
+      render: (plotInfo: PlotoverlaidSeparatelyProps) => {
+        const set_label = ({ target: { value } }) => {
+          setLabel(plotInfo, selectedPlotsInfo, value)
+          setLabelValue(value)
+        }
+
+        const [labelValue, setLabelValue] = React.useState()
+        return <Input
+          id={plotInfo.folder_path + plotInfo.name}
+          name={plotInfo.folder_path + plotInfo.name}
+          placeholder="label"
+          value={plotInfo.label}
+          onChange={set_label}
+        />
+      }
+    },
+    {
       title: 'Action',
       key: 'action',
       render: (plotInfo: PlotoverlaidSeparatelyProps) => {
         const default_overlay_index = default_plots_overlay.findIndex((default_plot_overlay) => default_plot_overlay.name === plotInfo.name && default_plot_overlay.folder_path === plotInfo.folder_path)
-       return( default_overlay_index !== -1 ?
-        <Tooltip title="This plot is added because of layout configuration">
-          <Space size="small">
-            <Button
-              type='link'
-              disabled={true}
-            >Delete</Button>
-          </Space>
+        return (default_overlay_index !== -1 ?
+          <Tooltip title="This plot is added because of layout configuration">
+            <Space size="small">
+              <Button
+                type='link'
+                disabled={true}
+              >Delete</Button>
+            </Space>
           </Tooltip>
           :
           <Space size="small">
@@ -82,22 +108,22 @@ export const SelectedPlotsTable = ({ overlaidPlots, setSelectedPlots, default_ov
   ]
 
   React.useEffect(() => {
-  if (!!overlaidPlots.name) {
-    const copy = [...selectedPlotsInfo]
-    const changedPlotInfoArray = addToSelectedPlots(overlaidPlots, copy)
-    setSelectedPlotsInfo(changedPlotInfoArray)
-    setSelectedPlots(changedPlotInfoArray)
-  }
-}, [overlaidPlots])
+    if (!!overlaidPlots.name) {
+      const copy = [...selectedPlotsInfo]
+      const changedPlotInfoArray = addToSelectedPlots(overlaidPlots, copy)
+      setSelectedPlotsInfo(changedPlotInfoArray)
+      setSelectedPlots(changedPlotInfoArray)
+    }
+  }, [overlaidPlots])
 
-return (selectedPlotsInfo.length > 0 ? <StyledSelectedPlotsTable
-  pagination={
-    {
-      defaultPageSize: 1,
-      pageSizeOptions: ['1', '2', '3', '4', '5'],
-      showSizeChanger: true,
-    }}
-  columns={colums} dataSource={selectedPlotsInfo} />
-  : <></>
-)
+  return (selectedPlotsInfo.length > 0 ? <StyledSelectedPlotsTable
+    pagination={
+      {
+        defaultPageSize: 1,
+        pageSizeOptions: ['1', '2', '3', '4', '5'],
+        showSizeChanger: true,
+      }}
+    columns={colums} dataSource={selectedPlotsInfo} />
+    : <></>
+  )
 }
