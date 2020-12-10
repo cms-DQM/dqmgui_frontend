@@ -116,15 +116,15 @@ export const get_overlaied_plots_urls = (params: ParamsForApiProps) => {
 export const overlay_plots_with_different_name = (params: ParamsForApiProps) => {
   //empty string in order to set &reflabel= in the start of joined_labels string
   const labels: string[] = ['']
-  if (params.overlaidSeparately) {
-    const plots_strings = params.overlaidSeparately.map((plot_for_overlay: PlotoverlaidSeparatelyProps) => {
+  if (params.overlaidSeparately?.plots) {
+    const plots_strings = params.overlaidSeparately.plots.map((plot_for_overlay: PlotoverlaidSeparatelyProps) => {
       labels.push(plot_for_overlay.label ? plot_for_overlay.label : params.run_number)
-
       return (`obj=archive/${params.run_number}${params.dataset_name}/${plot_for_overlay.folder_path}/${plot_for_overlay.name}`)
     })
     const joined_plots = plots_strings.join('&')
     const joined_labels = labels.join('&reflabel=')
-    return `api/v1/render_overlay?obj=archive/${params.run_number}${params.dataset_name}${params.folders_path}/${params.plot_name}&${joined_plots}&w=${params.width}&h=${params.height}&stats=${params.stats}&norm=${params.normalize}${joined_labels}`
+    const norm = params.overlaidSeparately.normalize ? 'True' : 'False'
+    return `api/v1/render_overlay?obj=archive/${params.run_number}${params.dataset_name}${params.folders_path}/${params.plot_name}&${joined_plots}&w=${params.width}&h=${params.height}&stats=${params.stats}&norm=${norm}${joined_labels};ref=${params.overlaidSeparately.ref}`
   }
   else {
     return

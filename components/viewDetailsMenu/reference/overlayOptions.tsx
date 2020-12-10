@@ -13,20 +13,24 @@ import { store } from '../../../contexts/leftSideContext';
 
 const { Option } = Select;
 
-export const OverlayOptions = () => {
+interface OverlayOptionsProps {
+  setPositionNotGlobally?(value: string): void;
+  settedOverlay: string;
+}
+
+export const OverlayOptions = ({ setPositionNotGlobally, settedOverlay }: OverlayOptionsProps) => {
   const router = useRouter();
-  const query: QueryProps = router.query;
-  const settedOverlay = query.overlay ? query.overlay : overlayOptions[0].value;
 
   const globalState = useContext(store);
-  const { setOverlaiPosition } = globalState;
-
+  const { setOverlaiPosition, overlayPosition } = globalState;
+  const set_position = setPositionNotGlobally ? setPositionNotGlobally : setOverlaiPosition
+  
   const [value, setValue] = React.useState(settedOverlay);
-  useChangeRouter({ overlay: value }, [], true);
-  useChangeRouter({ overlay: value }, [value], true);
+  useChangeRouter({ overlay: overlayPosition }, [], true);
+  useChangeRouter({ overlay: overlayPosition }, [overlayPosition], true);
 
   useEffect(() => {
-    setOverlaiPosition(value);
+    set_position(value);
   }, [value]);
 
   return (

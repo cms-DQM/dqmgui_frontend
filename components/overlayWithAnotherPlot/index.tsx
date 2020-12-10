@@ -16,6 +16,8 @@ import { FoldersRow, ModalContent, PlotNameDiv, PlotsRow, SpinnerRow } from './s
 import { changeFolderPathByBreadcrumb, setPlot } from './utils'
 import { SelectedPlotsTable } from './selectedPlotsTable'
 import { overlay_plots_with_different_name } from '../../config/config'
+import { Reference } from '../viewDetailsMenu/reference/reference'
+import { overlayOptions } from '../constants'
 
 interface OverlayWithAnotherPlotProps {
   visible: boolean;
@@ -28,6 +30,10 @@ interface OverlayWithAnotherPlotProps {
 export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotModal, default_overlay, params_for_api, set_overlaid_plot_url }: OverlayWithAnotherPlotProps) => {
   const [overlaidPlots, setOverlaidPlots] = React.useState<PlotoverlaidSeparatelyProps>({ folder_path: '', name: '' })
   const [folders, setFolders] = React.useState<(string | undefined)[]>([])
+  const [overlay, setOverlay] = React.useState<string>('overlay')
+  const settedOverlay = overlay ? overlay : overlayOptions[0].value;
+
+  const [normalize, setNormaize] = React.useState<boolean>(true)
   const [currentFolder, setCurrentFolder] = React.useState<string | undefined>('')
   const clear = () => {
     setOpenOverlayWithAnotherPlotModal(false)
@@ -97,13 +103,20 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
       onCancel={() => clear()}
       onOk={async () => {
         clear()
-        params_for_api.overlaidSeparately = selectedPlots
+        params_for_api.overlaidSeparately = { plots: selectedPlots, normalize: normalize, ref: overlay }
         set_overlaid_plot_url(overlay_plots_with_different_name(params_for_api))
       }}
     >
       <Row gutter={16} >
         <FoldersRow>
           <SelectedPlotsTable default_overlay={default_overlay} overlaidPlots={overlaidPlots} setSelectedPlots={setSelectedPlots} />
+        </FoldersRow>
+        <FoldersRow>
+          <Reference
+            setNormalizeNotGlobally={setNormaize}
+            setPositionNotGlobally={setOverlay}
+            settedOverlay={settedOverlay}
+          />
         </FoldersRow>
         <Col style={{ padding: 8 }}>
           <FolderPath folder_path={overlaidPlots.folder_path}

@@ -3,13 +3,14 @@ import { Form } from 'antd';
 import { useRouter } from 'next/router';
 import { Collapse, Switch } from 'antd';
 
-import { Reference } from './reference/reference';
+import { ReferenceWithOverlaidRuns } from './reference/reference';
 import { SizeChanger } from '../sizeChanger';
 import { QueryProps } from '../../containers/display/interfaces';
 import { formTriples } from './utils';
 import { StyledCollapse } from './styledComponents';
 import { CutomFormItem, CustomDiv } from '../styledComponents';
 import { store } from '../../contexts/leftSideContext';
+import { overlayOptions } from '../constants';
 
 const { Panel } = Collapse;
 
@@ -20,6 +21,7 @@ interface ViewDetailsMenuProps {
 export const ViewDetailsMenu = ({ selected_plots }: ViewDetailsMenuProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
+  const settedOverlay = query.overlay ? query.overlay : overlayOptions[0].value;
 
   const globalState = useContext(store);
   const {
@@ -92,7 +94,7 @@ export const ViewDetailsMenu = ({ selected_plots }: ViewDetailsMenuProps) => {
           </CustomDiv>
           <hr />
           <CutomFormItem name="Reference" label="Reference">
-            <Reference />
+            <ReferenceWithOverlaidRuns settedOverlay={settedOverlay}/>
           </CutomFormItem>
         </Form>
       </Panel>
