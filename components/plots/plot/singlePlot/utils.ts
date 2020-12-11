@@ -16,12 +16,13 @@ import { functions_config } from '../../../../config/config';
 
 export const removePlotFromSelectedPlots = (
   plotsQuery: string | undefined,
-  plotName: PlotDataProps
+  plot: PlotDataProps
 ) => {
   const separatedPlots = plotsQuery ? plotsQuery.split('&') : [];
   const fileterdPlotsAndDirs = separatedPlots.map((separatedPlot: string) => {
-    const plot = [plotName.run_number, plotName.dataset_name, plotName.path, plotName.name].join('/')
-    if (plot !== separatedPlot) {
+    const plotString = [plot.run_number, plot.dataset_name, plot.path, plot.name].join('/')
+
+    if (plotString !== separatedPlot) {
       return separatedPlot;
     }
   });
@@ -36,8 +37,6 @@ export const addToSelectedPlots = (
 ) => {
   const run_number = plot.run_number
   const dataset_name = plot.dataset_name
-  const path = plot.path
-  const name = plot.name
   return (`${plotsQuery ? plotsQuery + '&' : ''}${run_number}${dataset_name}/${plot.path}/${plot.name}`)
 };
 

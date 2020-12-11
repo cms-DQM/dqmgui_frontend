@@ -3,33 +3,12 @@ import { Button, Space, Tooltip, Input } from 'antd';
 
 import { PlotoverlaidSeparatelyProps } from '../../containers/display/interfaces';
 import { StyledSelectedPlotsTable } from './styledComponents'
+import { addToSelectedPlots, removeSelectedPlot, setLabel } from './utils';
 
 interface SelectedPlotsTableProps {
   overlaidPlots: PlotoverlaidSeparatelyProps;
   setSelectedPlots(plots: PlotoverlaidSeparatelyProps[]): void;
   default_overlay?: string[];
-}
-
-const addToSelectedPlots = (item: PlotoverlaidSeparatelyProps, allSelectedPlots: PlotoverlaidSeparatelyProps[]) => {
-  if (allSelectedPlots.findIndex((selected_plot) => selected_plot.name === item.name && selected_plot.folder_path === item.folder_path)) {
-    allSelectedPlots.push(item)
-    return allSelectedPlots.reverse()
-  }
-  return allSelectedPlots
-}
-
-const removeSelectedPlot = (item: PlotoverlaidSeparatelyProps, allSelectedPlots: PlotoverlaidSeparatelyProps[]) => {
-  const copy = [...allSelectedPlots]
-  const index = copy.indexOf(item)
-  copy.splice(index, 1)
-  return copy
-}
-
-const setLabel = (item: PlotoverlaidSeparatelyProps, allSelectedPlots: PlotoverlaidSeparatelyProps[], label?: string) => {
-  const copy = [...allSelectedPlots]
-  const index = copy.indexOf(item)
-  copy[index].label = label
-  return copy
 }
 
 export const SelectedPlotsTable = ({ overlaidPlots, setSelectedPlots, default_overlay }: SelectedPlotsTableProps,) => {

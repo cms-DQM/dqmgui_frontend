@@ -68,19 +68,19 @@ export const get_folders_and_plots_old_api = (params: ParamsForApiProps) => {
 };
 
 export const get_run_list_by_search_old_api = (params: ParamsForApiProps) => {
-  return `data/json/samples?match=${params.dataset_name}&run=${params.run_number}`;
+  return `data/json/samples?match=${params.dataset_name}/&run=${params.run_number}`;
 };
 export const get_run_list_by_search_new_api = (params: ParamsForApiProps) => {
-  return `api/v1/samples?run=${params.run_number}&lumi=${params.lumi}&dataset=${params.dataset_name}`;
+  return `api/v1/samples?run=${params.run_number}&lumi=${params.lumi}&dataset=${params.dataset_name}/`;
 };
 export const get_run_list_by_search_new_api_with_no_older_than = (
   params: ParamsForApiProps
 ) => {
-  return `api/v1/samples?run=${params.run_number}&lumi=${params.lumi}&dataset=${params.dataset_name}&notOlderThan=${params.notOlderThan}`;
+  return `api/v1/samples?run=${params.run_number}&lumi=${params.lumi}&dataset=${params.dataset_name}/&notOlderThan=${params.notOlderThan}`;
 };
 export const get_plot_url = (params: ParamsForApiProps) => {
   return `plotfairy/archive/${getRunsWithLumisections(params)}${params.dataset_name
-    }${params.folders_path}/${params.plot_name as string}?${get_customize_params(
+    }/${params.folders_path}/${params.plot_name as string}?${get_customize_params(
       params.customizeProps
     )}${params.stats ? '' : 'showstats=0;'}${params.errorBars ? 'showerrbars=1;' : ''
     };w=${params.width};h=${params.height}`;
@@ -88,7 +88,7 @@ export const get_plot_url = (params: ParamsForApiProps) => {
 
 export const get_plot_with_overlay = (params: ParamsForApiProps) => {
   return `plotfairy/overlay?${get_customize_params(params.customizeProps)}ref=${params.overlay
-    };obj=archive/${getRunsWithLumisections(params)}${params.dataset_name}${params.folders_path
+    };obj=archive/${getRunsWithLumisections(params)}${params.dataset_name}/${params.folders_path
     }/${encodeURIComponent(params.plot_name as string)}${params.joined_overlaied_plots_urls
     };${params.stats ? '' : 'showstats=0;'}${params.errorBars ? 'showerrbars=1;' : ''
     }norm=${params.normalize};w=${params.width};h=${params.height}`;
@@ -107,7 +107,7 @@ export const get_overlaied_plots_urls = (params: ParamsForApiProps) => {
     const label = overlay.label ? overlay.label : overlay.run_number;
     return `;obj=archive/${getRunsWithLumisections(
       overlay
-    )}${dataset_name_overlay}${params.folders_path}/${encodeURIComponent(
+    )}${dataset_name_overlay}/${params.folders_path}/${encodeURIComponent(
       params.plot_name as string
     )};reflabel=${label}`;
   });
@@ -124,7 +124,7 @@ export const overlay_plots_with_different_name = (params: ParamsForApiProps) => 
     const joined_plots = plots_strings.join('&')
     const joined_labels = labels.join('&reflabel=')
     const norm = params.overlaidSeparately.normalize 
-    return `api/v1/render_overlay?obj=archive/${params.run_number}${params.dataset_name}${params.folders_path}/${params.plot_name}&${joined_plots}&w=${params.width}&h=${params.height}&stats=${params.stats}&norm=${norm}${joined_labels};ref=${params.overlaidSeparately.ref}`
+    return `api/v1/render_overlay?obj=archive/${params.run_number}${params.dataset_name}/${params.folders_path}/${params.plot_name}&${joined_plots}&w=${params.width}&h=${params.height}&stats=${params.stats}&norm=${norm}${joined_labels};ref=${params.overlaidSeparately.ref}`
   }
   else {
     return

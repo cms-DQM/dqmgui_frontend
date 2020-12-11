@@ -84,6 +84,9 @@ export const ZoomedPlot = ({
 
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
 
+  useEffect(()=>{
+
+  },[])
   return (
     <StyledCol space={2}>
       <OverlayWithAnotherPlot

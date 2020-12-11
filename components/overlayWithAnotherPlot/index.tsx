@@ -1,23 +1,24 @@
 import * as React from 'react'
-import Modal from 'antd/lib/modal/Modal'
 import { useRouter } from 'next/router'
+import Modal from 'antd/lib/modal/Modal'
+import { Col, Row } from 'antd'
+import cleanDeep from 'clean-deep'
 
 import { ParamsForApiProps, PlotoverlaidSeparatelyProps, QueryProps } from '../../containers/display/interfaces'
 import { Icon, StyledA } from '../../containers/display/styledComponents'
 import { choose_api } from '../../containers/display/utils'
 import { store } from '../../contexts/leftSideContext'
 import { useRequest } from '../../hooks/useRequest'
-import { Button, Col, Row, Tooltip } from 'antd'
 import { FolderPath } from '../../containers/display/content/folderPath'
 import { PlotInterface, DirectoryInterface } from '../../containers/display/interfaces'
-import cleanDeep from 'clean-deep'
 import { Spinner } from '../../containers/search/styledComponents'
-import { FoldersRow, ModalContent, PlotNameDiv, PlotsRow, SpinnerRow } from './styledComponents'
+import { FoldersRow, ModalContent, PlotsRow, SpinnerRow } from './styledComponents'
 import { changeFolderPathByBreadcrumb, setPlot } from './utils'
 import { SelectedPlotsTable } from './selectedPlotsTable'
 import { overlay_plots_with_different_name } from '../../config/config'
 import { Reference } from '../viewDetailsMenu/reference/reference'
 import { overlayOptions } from '../constants'
+import { PlotButton } from './plotButton'
 
 interface OverlayWithAnotherPlotProps {
   visible: boolean;
@@ -88,15 +89,15 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
   const { data } = data_get_by_mount
   const folders_or_plots = data ? data.data : []
   const directories: string[] = []
-  const plots: string[] = []
+  const plots_names: string[] = []
 
   folders_or_plots.forEach((folder_or_plot: DirectoryInterface & PlotInterface) => {
     directories.push(folder_or_plot.subdir)
-    plots.push(folder_or_plot.name)
+    plots_names.push(folder_or_plot.name)
   })
 
   directories.sort()
-  plots.sort()
+  plots_names.sort()
 
   return (
     <Modal
@@ -110,14 +111,14 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
     >
       <Row gutter={16} >
         <FoldersRow>
-          <SelectedPlotsTable default_overlay={default_overlay} overlaidPlots={overlaidPlots} setSelectedPlots={setSelectedPlots} />
-        </FoldersRow>
-        <FoldersRow>
           <Reference
             setNormalizeNotGlobally={setNormaize}
             setPositionNotGlobally={setOverlay}
             settedOverlay={settedOverlay}
           />
+        </FoldersRow>
+        <FoldersRow>
+          <SelectedPlotsTable default_overlay={default_overlay} overlaidPlots={overlaidPlots} setSelectedPlots={setSelectedPlots} />
         </FoldersRow>
         <Col style={{ padding: 8 }}>
           <FolderPath folder_path={overlaidPlots.folder_path}
@@ -148,23 +149,19 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
           }
           {
             <PlotsRow gutter={16}>{
-              !data_get_by_mount.isLoading && plots.map((plot: any) => {
-                const current_plot = { folder_path: overlaidPlots.folder_path, name: plot }
+              !data_get_by_mount.isLoading && plots_names.map((plot_name: any) => {
+                const current_plot = { folder_path: overlaidPlots.folder_path, name: plot_name }
                 const disabled = selectedPlots.findIndex((selectedPlot) =>
                   selectedPlot.folder_path === current_plot.folder_path && selectedPlot.name === current_plot.name) > -1
                 return (
                   <>
-                    {plot &&
-                      <Tooltip title={disabled ? 'This plot is already selected' : ''}>
-                        <Button
-                          type='text'
-                          block
-                          disabled={disabled}
-                          onClick={() => setOverlaidPlots(setPlot(overlaidPlots, plot))}>
-                          <PlotNameDiv
-                          >{plot}</PlotNameDiv>
-                        </Button>
-                      </Tooltip>
+                    {plot_name &&
+                      <PlotButton
+                        disabled={disabled}
+                        setOverlaidPlots={setOverlaidPlots}
+                        setPlot={setPlot}
+                        overlaidPlots={overlaidPlots}
+                        plot_name={plot_name} />
                     }
                   </>
                 )

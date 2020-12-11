@@ -36,7 +36,7 @@ export const isPlotSelected = (
   return selected_plots.find((selected_plot) => selected_plot.name === plot.name
     && selected_plot.path === plot.path
     && selected_plot.run_number === plot.run_number
-    && '/'+ selected_plot.dataset_name === plot.dataset_name) ?
+    && '/' + selected_plot.dataset_name === plot.dataset_name) ?
     true : false
 };
 
@@ -46,13 +46,14 @@ export const getSelectedPlots = (
 ) => {
   const plotsWithDirs = plotsQuery ? plotsQuery.split('&') : [];
   return plotsWithDirs.map((plotWithDir: string) => {
-    const parts = plotWithDir.split('//')
-    const runNumberAndDataset = parts[0].split('/')
-    const run_number = runNumberAndDataset.shift()
-    const dataset = runNumberAndDataset.join('/')
-    const pathAndPlotName = parts[1].split('/')
-    const plot_name = pathAndPlotName.pop()
-    const path = '/' + pathAndPlotName.join('/')
+    const parts = plotWithDir.split('/')
+
+    const run_number = parts.shift()
+    const pathAndName = parts.splice(3)
+    const dataset = parts.join('/')
+
+    const plot_name = pathAndName.pop()
+    const path = pathAndName.join('/')
 
     const plot = plots.filter(
       (plot) => plot.name === plot_name && plot.path === path
@@ -66,7 +67,7 @@ export const getSelectedPlots = (
       run_number: run_number as string,
       dataset_name: dataset,
       qresults: qresults,
-      overlay : default_overlay,
+      overlay: default_overlay,
     };
     return plotObject;
   });
@@ -188,7 +189,6 @@ export const getChangedQueryParams = (
 
   //cleaning url: if workspace is not set (it means it's empty string), it shouldn't be visible in url
   const cleaned_parameters = cleanDeep(params);
-
   return cleaned_parameters;
 };
 

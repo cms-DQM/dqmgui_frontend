@@ -19,8 +19,6 @@ export const ComposedSearch = () => {
 
   return (
     <CustomRow
-      // display="flex"
-      // justifycontent="space-between"
       alignitems="center"
     >
       {set_on_live_mode ? (

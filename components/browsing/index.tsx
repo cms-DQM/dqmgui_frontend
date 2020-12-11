@@ -12,7 +12,6 @@ import { StyledFormItem } from '../styledComponents';
 import { DropdownMenu } from '../menu';
 import { useRouter } from 'next/router';
 import { QueryProps } from '../../containers/display/interfaces';
-import { useChangeRouter } from '../../hooks/useChangeRouter';
 import { store } from '../../contexts/leftSideContext';
 import {
   changeRouter,
