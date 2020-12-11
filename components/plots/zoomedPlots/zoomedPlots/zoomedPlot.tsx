@@ -95,6 +95,7 @@ export const ZoomedPlot = ({
         default_overlay={selected_plot.overlay}
         params_for_api={params_for_api}
         set_overlaid_plot_url={set_overlaid_plot_url}
+        plot={selected_plot}
       />
       {/* Plot opened in a new tab */}
       <Plot_portal

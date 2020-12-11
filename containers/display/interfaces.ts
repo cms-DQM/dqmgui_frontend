@@ -107,6 +107,7 @@ export interface PlotDataProps {
   run_number?: string;
   dataset_name?: string;
   overlay?: string[];
+  overlaidSeparately?: PlotsoverlaidSeparatelyProps;
 }
 
 export interface NavigationSearchFieldsProps {

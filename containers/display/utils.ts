@@ -8,6 +8,7 @@ import {
   DirectoryInterface,
   QueryProps,
   ParamsForApiProps,
+  PlotsoverlaidSeparatelyProps,
 } from './interfaces';
 import Router from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
@@ -42,34 +43,143 @@ export const isPlotSelected = (
 
 export const getSelectedPlots = (
   plotsQuery: string | undefined,
-  plots: PlotDataProps[]
+  plots?: PlotDataProps[]
 ) => {
   const plotsWithDirs = plotsQuery ? plotsQuery.split('&') : [];
   return plotsWithDirs.map((plotWithDir: string) => {
-    const parts = plotWithDir.split('/')
+    const overlaidSeparately = {
+      plots: [],
+      normalize: '',
+      ref: '',
+    }
+    const selectedPlot = {
+      name: '',
+      path: '',
+      run_number: '',
+      dataset_name: '',
+      overlaidSeparately: {}
+    }
+    const spearatedOverlayed = plotWithDir.split('overlayed=')
+    // if spearatedPlots.length > 1 it means that selected plot was overlaid with another plot separately
+    if (spearatedOverlayed.length > 1) {
+      spearatedOverlayed.map((plots_, index) => {
+        const overlyedPlots = plots_.split('plot=')
+        const cleanedArray = cleanDeep(overlyedPlots)
+        if (index === 0) {
+          const parts = cleanedArray[index]?.split('/') as string[]
+          const run_number = parts.shift()
+          const pathAndName = parts.splice(3)
+          const dataset_name = parts.join('/')
+          const name = pathAndName.pop()
+          const path = pathAndName.join('/')
+          if (!plots) {
+            selectedPlot.run_number = run_number as string
+            selectedPlot.dataset_name = dataset_name
+            selectedPlot.path = path
+            selectedPlot.name = (name as string).slice(0, -1)
+          }
+          else {
+            selectedPlot.run_number = run_number as string
+            selectedPlot.dataset_name = dataset_name
+            selectedPlot.path = path
+            selectedPlot.name = (name as string).slice(0, -1)
+            const plot = plots.filter(
+              (plot) => plot.name === name && plot.path === path
+            );
 
-    const run_number = parts.shift()
-    const pathAndName = parts.splice(3)
-    const dataset = parts.join('/')
+            const qresults = plot[0] && plot[0].qresults;
+            //default_overlays comes from layouts, when plot is overlaid in config already
+            const default_overlays = plot[0] && plot[0].overlay
+            selectedPlot.qresults = qresults
+            if (default_overlays) {
+              default_overlays.forEach((default_overlay) => {
+                overlaidSeparately.plots.push(default_overlay)
+              })
+            }
+          }
+        }
+        //the first one in array is initial, without any overlay
+        if (index !== 0) {
+          const pathSeperatedFromLabel = cleanedArray.map((pathAndLabel, indexOdOverlaidPlots) => {
+            //the last item in array also has ref and normalize props
+            if (indexOdOverlaidPlots !== cleanedArray.length - 1) {
+              const separatedPathAndLabel = pathAndLabel && pathAndLabel.split('lab=') as string[]
+              const pathWithPlotName = separatedPathAndLabel[0].split('/')
+              const plotName = pathWithPlotName.pop()
+              const path = pathWithPlotName.join('/')
+              const onePlot = {
+                folder_path: path,
+                name: plotName.slice(0, -1),
+                label: separatedPathAndLabel[1].slice(0, -1)
+              }
+              overlaidSeparately.plots.push(onePlot)
+              // return separatedPathAndLabel
+            }
+            else {
+              const separatedPathAndLabelNormRef = pathAndLabel && pathAndLabel.split('lab=') as string[]
+              const pathWithPlotName = separatedPathAndLabelNormRef[0].split('/')
+              const plotName = pathWithPlotName.pop()
+              const path = pathWithPlotName.join('/')
+              const labelAndNormRef = separatedPathAndLabelNormRef && separatedPathAndLabelNormRef[1].split('norm=')
+              const label = separatedPathAndLabelNormRef && separatedPathAndLabelNormRef[0]
+              const normAndRef = labelAndNormRef && labelAndNormRef[1].split('ref=')
+              const norm = normAndRef && normAndRef[0]
+              const ref = normAndRef && normAndRef[1]
+              const onePlot = {
+                folder_path: path,
+                name: plotName.slice(0, -1),
+                label: label.slice(0, -1),
+              }
+              overlaidSeparately.plots.push(onePlot)
+              overlaidSeparately.normalize = norm.slice(0, -1)
+              overlaidSeparately.ref = ref.slice(0, -1)
+            }
+          }
+          )
+        }
+      })
+      selectedPlot.overlaidSeparately = overlaidSeparately
+      console.log(selectedPlot)
+      return selectedPlot
+    }
+    else {
+      const parts = plotWithDir.split('/')
 
-    const plot_name = pathAndName.pop()
-    const path = pathAndName.join('/')
+      const run_number = parts.shift()
+      const pathAndName = parts.splice(3)
+      const dataset = parts.join('/')
 
-    const plot = plots.filter(
-      (plot) => plot.name === plot_name && plot.path === path
-    );
+      const plot_name = pathAndName.pop()
+      const path = pathAndName.join('/')
+      //when need additional information which is not saved in url, but has plot object
+      if (plots) {
+        const plot = plots.filter(
+          (plot) => plot.name === plot_name && plot.path === path
+        );
 
-    const qresults = plot[0] && plot[0].qresults;
-    const default_overlay = plot[0] && plot[0].overlay
-    const plotObject: PlotDataProps = {
-      name: plot_name as string,
-      path: path,
-      run_number: run_number as string,
-      dataset_name: dataset,
-      qresults: qresults,
-      overlay: default_overlay,
-    };
-    return plotObject;
+        const qresults = plot[0] && plot[0].qresults;
+        const default_overlay = plot[0] && plot[0].overlay
+        const plotObject: PlotDataProps = {
+          name: plot_name as string,
+          path: path,
+          run_number: run_number as string,
+          dataset_name: dataset,
+          qresults: qresults,
+          overlay: default_overlay,
+        };
+        return plotObject;
+      }
+      //when wee need information just from url
+      else {
+        const plotObject: PlotDataProps = {
+          name: plot_name as string,
+          path: path,
+          run_number: run_number as string,
+          dataset_name: dataset,
+        };
+        return plotObject;
+      }
+    }
   });
 };
 

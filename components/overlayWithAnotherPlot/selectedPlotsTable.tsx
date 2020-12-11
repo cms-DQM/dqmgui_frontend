@@ -42,10 +42,8 @@ export const SelectedPlotsTable = ({ overlaidPlots, setSelectedPlots, default_ov
       render: (plotInfo: PlotoverlaidSeparatelyProps) => {
         const set_label = ({ target: { value } }) => {
           setLabel(plotInfo, selectedPlotsInfo, value)
-          setLabelValue(value)
         }
 
-        const [labelValue, setLabelValue] = React.useState()
         return <Input
           id={plotInfo.folder_path + plotInfo.name}
           name={plotInfo.folder_path + plotInfo.name}

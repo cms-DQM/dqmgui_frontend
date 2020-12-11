@@ -37,7 +37,17 @@ export const addToSelectedPlots = (
 ) => {
   const run_number = plot.run_number
   const dataset_name = plot.dataset_name
-  return (`${plotsQuery ? plotsQuery + '&' : ''}${run_number}${dataset_name}/${plot.path}/${plot.name}`)
+  const overlaid_separately = plot.overlaidSeparately
+  if (overlaid_separately) {
+    const overlaid_separately_string = overlaid_separately?.plots.map(plot => {
+      return `${plot.folder_path}/${plot.name};lab=${plot.label}`
+    })
+    const overlaid_separately_full_string = overlaid_separately_string?.join('/') + `;norm=${overlaid_separately?.normalize};ref=${overlaid_separately?.ref}`
+    return (`${plotsQuery ? plotsQuery + '&' : ''}${run_number}${dataset_name}/${plot.path}/${plot.name};overlayed=${overlaid_separately_full_string}`)
+  }
+  else {
+    return (`${plotsQuery ? plotsQuery + '&' : ''}${run_number}${dataset_name}/${plot.path}/${plot.name}`)
+  }
 };
 
 export const addOverlayData = (triples: TripleProps[] | undefined) => {

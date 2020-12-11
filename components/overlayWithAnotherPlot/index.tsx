@@ -4,7 +4,7 @@ import Modal from 'antd/lib/modal/Modal'
 import { Col, Row } from 'antd'
 import cleanDeep from 'clean-deep'
 
-import { ParamsForApiProps, PlotoverlaidSeparatelyProps, QueryProps } from '../../containers/display/interfaces'
+import { ParamsForApiProps, PlotDataProps, PlotoverlaidSeparatelyProps, QueryProps } from '../../containers/display/interfaces'
 import { Icon, StyledA } from '../../containers/display/styledComponents'
 import { choose_api } from '../../containers/display/utils'
 import { store } from '../../contexts/leftSideContext'
@@ -13,12 +13,13 @@ import { FolderPath } from '../../containers/display/content/folderPath'
 import { PlotInterface, DirectoryInterface } from '../../containers/display/interfaces'
 import { Spinner } from '../../containers/search/styledComponents'
 import { FoldersRow, ModalContent, PlotsRow, SpinnerRow } from './styledComponents'
-import { changeFolderPathByBreadcrumb, setPlot } from './utils'
+import { changeFolderPathByBreadcrumb, makeLinkableOverlay, setPlot } from './utils'
 import { SelectedPlotsTable } from './selectedPlotsTable'
 import { overlay_plots_with_different_name } from '../../config/config'
 import { Reference } from '../viewDetailsMenu/reference/reference'
 import { overlayOptions } from '../constants'
 import { PlotButton } from './plotButton'
+import { useChangeRouter } from '../../hooks/useChangeRouter'
 
 interface OverlayWithAnotherPlotProps {
   visible: boolean;
@@ -26,13 +27,15 @@ interface OverlayWithAnotherPlotProps {
   default_overlay?: string[];
   params_for_api: ParamsForApiProps;
   set_overlaid_plot_url: React.Dispatch<React.SetStateAction<string | undefined>>
+  plot: PlotDataProps;
 }
 
-export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotModal, default_overlay, params_for_api, set_overlaid_plot_url }: OverlayWithAnotherPlotProps) => {
+export const OverlayWithAnotherPlot = ({ visible, plot, setOpenOverlayWithAnotherPlotModal, default_overlay, params_for_api, set_overlaid_plot_url }: OverlayWithAnotherPlotProps) => {
   const [overlaidPlots, setOverlaidPlots] = React.useState<PlotoverlaidSeparatelyProps>({ folder_path: '', name: '' })
   const [folders, setFolders] = React.useState<(string | undefined)[]>([])
   const [overlay, setOverlay] = React.useState<string>('overlay')
   const settedOverlay = overlay ? overlay : overlayOptions[0].value;
+  const [urls, setUrls] = React.useState('')
 
   const [normalize, setNormaize] = React.useState<boolean>()
   const [currentFolder, setCurrentFolder] = React.useState<string | undefined>('')
@@ -99,6 +102,8 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
   directories.sort()
   plots_names.sort()
 
+  useChangeRouter({ selected_plots: urls }, [urls], !!urls)
+
   return (
     <Modal
       visible={visible}
@@ -107,6 +112,7 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
         clear()
         params_for_api.overlaidSeparately = { plots: selectedPlots, normalize: normalize, ref: overlay }
         set_overlaid_plot_url(overlay_plots_with_different_name(params_for_api))
+        setUrls(makeLinkableOverlay(params_for_api.overlaidSeparately, plot, query))
       }}
     >
       <Row gutter={16} >
@@ -118,7 +124,10 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
           />
         </FoldersRow>
         <FoldersRow>
-          <SelectedPlotsTable default_overlay={default_overlay} overlaidPlots={overlaidPlots} setSelectedPlots={setSelectedPlots} />
+          <SelectedPlotsTable
+            default_overlay={default_overlay}
+            overlaidPlots={overlaidPlots}
+            setSelectedPlots={setSelectedPlots} />
         </FoldersRow>
         <Col style={{ padding: 8 }}>
           <FolderPath folder_path={overlaidPlots.folder_path}
