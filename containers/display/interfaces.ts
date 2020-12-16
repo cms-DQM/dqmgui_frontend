@@ -44,7 +44,7 @@ export interface PlotoverlaidSeparatelyProps {
 
 export interface PlotsoverlaidSeparatelyProps{
   plots: PlotoverlaidSeparatelyProps[];
-  normalize: boolean;
+  normalize: string;
   ref: string;
 }
 

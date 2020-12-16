@@ -35,8 +35,7 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
   const [folders, setFolders] = React.useState<(string | undefined)[]>([])
   const [urls, setUrls] = React.useState(null)
 
-  const initial_normalize = params_for_api.overlaidSeparately?.normalize === false ? params_for_api.overlaidSeparately.normalize : true
-  const [normalize, setNormaize] = React.useState<boolean>(initial_normalize)
+  const [normalize, setNormaize] = React.useState<string>(params_for_api.overlaidSeparately?.normalize)
   const initial_overlay = params_for_api.overlaidSeparately?.ref ? params_for_api.overlaidSeparately.ref : overlayOptions[0].value
   const [overlay, setOverlay] = React.useState<string>(initial_overlay)
 
@@ -62,12 +61,6 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
     set_overlaid_plot_url(get_plot_with_overlay_new_api(params_for_api))
   }, [params_for_api.overlaidSeparately, selectedPlots])
 
-  React.useEffect(() => {
-    if (params_for_api.overlaidSeparately) {
-      params_for_api.overlaidSeparately.normalize = normalize
-      params_for_api.overlaidSeparately.ref = overlay
-    }
-  }, [normalize, overlay])
 
   const { updated_by_not_older_than } = React.useContext(store)
 
@@ -150,6 +143,7 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
             setNormalizeNotGlobally={setNormaize}
             setPositionNotGlobally={setOverlay}
             settedOverlay={overlay}
+            normalize_from_query={normalize}
           />
         </FoldersRow>
         <FoldersRow>

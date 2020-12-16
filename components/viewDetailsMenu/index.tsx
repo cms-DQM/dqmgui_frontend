@@ -22,6 +22,7 @@ export const ViewDetailsMenu = ({ selected_plots }: ViewDetailsMenuProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
   const settedOverlay = query.overlay ? query.overlay : overlayOptions[0].value;
+  const normalize_from_query = query.normalize ? query.normalize : 'True'
 
   const globalState = useContext(store);
   const {
@@ -94,7 +95,7 @@ export const ViewDetailsMenu = ({ selected_plots }: ViewDetailsMenuProps) => {
           </CustomDiv>
           <hr />
           <CutomFormItem name="Reference" label="Reference">
-            <ReferenceWithOverlaidRuns settedOverlay={settedOverlay} />
+            <ReferenceWithOverlaidRuns settedOverlay={settedOverlay} normalize_from_query={normalize_from_query} />
           </CutomFormItem>
         </Form>
       </Panel>
