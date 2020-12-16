@@ -1,6 +1,6 @@
-import { QueryProps, TripleProps } from "../../../../containers/display/interfaces";
-import { changeRouter, getChangedQueryParams } from "../../../../containers/display/utils";
-import { addOverlayData } from "../../../plots/plot/singlePlot/utils";
+import { QueryProps, TripleProps } from "../../../../../containers/display/interfaces";
+import { changeRouter, getChangedQueryParams } from "../../../../../containers/display/utils";
+import { addOverlayData } from "../../../../plots/plot/singlePlot/utils";
 
 export const remove_runs_from_a_lst = (id: string) => async (triples: TripleProps[], setTriples: ((runs: TripleProps[]) => void), query: QueryProps) => {
   const copy = [...triples];

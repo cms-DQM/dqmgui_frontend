@@ -5,14 +5,18 @@ import { Row, Tooltip } from 'antd';
 import {
   TripleProps,
   QueryProps,
-} from '../../../containers/display/interfaces';
+} from '../../../../containers/display/interfaces';
 import {
   StyledSecondaryButton,
   CustomCol,
   CustomDiv,
-} from '../../styledComponents';
-import { getDisabledButtonTitle } from '../utils';
-import { store } from '../../../contexts/leftSideContext';
+} from '../../../styledComponents';
+import { getDisabledButtonTitle } from '../../utils';
+import { store } from '../../../../contexts/leftSideContext';
+import {
+  OVERLAY_DIFFERENT_PLOTS_WITH_DIFFERENT_RUN_AND_DATASET_BUT_SAME_NAMES,
+  OVERLAY_DIFFERENT_PLOTS_WITH_SAME_RUN_AND_DATASET_DIFFERENT_NAME
+} from '../../../../contexts/constants';
 import { SetRunsModal } from './setRunsModal';
 import { TableOfSelectedRunForOverlay } from './tableOfSelectedRunForOverlay';
 import { change_run_details } from './overlaidRunsActions/changeRunDetails';
@@ -22,6 +26,13 @@ interface OverlayRunsProps {
   overlaid_runs: TripleProps[];
   query: QueryProps;
 }
+const getButtonTitle = (variantOverlay: string) => {
+  if (variantOverlay === OVERLAY_DIFFERENT_PLOTS_WITH_DIFFERENT_RUN_AND_DATASET_BUT_SAME_NAMES) {
+    return 'SET RUNS'
+  } else if (variantOverlay === OVERLAY_DIFFERENT_PLOTS_WITH_SAME_RUN_AND_DATASET_DIFFERENT_NAME) {
+    return 'SET PLOTS'
+  }
+}
 
 export const OverlayRuns = ({ overlaid_runs, query }: OverlayRunsProps) => {
   const globalState = useContext(store);
@@ -30,6 +41,7 @@ export const OverlayRuns = ({ overlaid_runs, query }: OverlayRunsProps) => {
     set_runs_set_for_overlay,
     setTriples,
     triples,
+    overlaidPlotsVariant
   } = globalState;
 
   const [open, toggleModal] = useState(false);
@@ -68,7 +80,7 @@ export const OverlayRuns = ({ overlaid_runs, query }: OverlayRunsProps) => {
                 }}
                 icon={<PlusOutlined />}
               >
-                SET RUNS
+                {getButtonTitle(overlaidPlotsVariant)}
               </StyledSecondaryButton>
             </Tooltip>
           </CustomCol>

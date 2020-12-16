@@ -47,8 +47,6 @@ export const ZoomedOverlaidPlot = ({
   >();
   const [openCustomization, toggleCustomizationMenu] = useState(false);
   params_for_api.customizeProps = customizationParams;
-  const [imageLoading, setImageLoading] = useState(true);
-  const [imageError, setImageError] = useState(false);
   const [isPortalWindowOpen, setIsPortalWindowOpen] = React.useState(false);
 
   const zoomedPlotMenuOptions = [

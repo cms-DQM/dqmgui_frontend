@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 
 import { functions_config } from '../../../../config/config';
 import {
-  get_plot_with_overlay,
+  get_plot_with_overlay_old_api,
   get_overlaied_plots_urls,
 } from '../../../../config/config';
 import {
@@ -21,6 +21,7 @@ import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 import { PlotImage } from '../plotImage';
 import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
 import { isPlotSelected } from '../../../../containers/display/utils';
+import { chooseApi } from './utils';
 
 interface OverlaidPlotImageProps {
   params_for_api: ParamsForApiProps;
@@ -44,8 +45,10 @@ export const OverlaidPlotImage = ({
   const overlaid_plots_urls = get_overlaied_plots_urls(params_for_api);
   const joined_overlaid_plots_urls = overlaid_plots_urls.join('');
   params_for_api.joined_overlaied_plots_urls = joined_overlaid_plots_urls;
-  const plot_with_overlay = get_plot_with_overlay(params_for_api);
+  const plot_with_overlay = get_plot_with_overlay_old_api(params_for_api);
 
+  const test = chooseApi(params_for_api);
+console.log(test)
   const router = useRouter();
   const query: QueryProps = router.query;
 

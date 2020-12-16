@@ -10,16 +10,17 @@ import {
 } from '../../styledComponents';
 import { useRouter } from 'next/router';
 import { OverlayOptions } from './overlayOptions';
-import { OverlayRuns } from './overlayRuns';
+import { OverlayRuns } from './overlayPlotsWithDifferentRunsAndDatasets/overlayRuns';
 import FormItem from 'antd/lib/form/FormItem';
 import { store } from '../../../contexts/leftSideContext';
+import { OverlaidPlotsVariant } from './overlaidPlotsVariant';
 
 interface ReferenceProps extends ReferenceWithOverlaidRuns {
   setNormalizeNotGlobally?(value: boolean): void;
   setPositionNotGlobally?(value: string): void;
 }
 
-interface ReferenceWithOverlaidRuns{
+interface ReferenceWithOverlaidRuns {
   settedOverlay: string;
 }
 
@@ -41,8 +42,13 @@ export const Reference = ({ setNormalizeNotGlobally, setPositionNotGlobally, set
     <CustomRow>
       <CustomCol space={'2'}></CustomCol>
       <CustomCol space={'2'}>
+        <FormItem name="OverlayVariant" label="Variant:">
+          <OverlaidPlotsVariant />
+        </FormItem>
+      </CustomCol>
+      <CustomCol space={'2'}>
         <FormItem name="OverlayPosition" label="Position:">
-          <OverlayOptions settedOverlay={settedOverlay} setPositionNotGlobally={setPositionNotGlobally}/>
+          <OverlayOptions settedOverlay={settedOverlay} setPositionNotGlobally={setPositionNotGlobally} />
         </FormItem>
       </CustomCol>
       <CustomCol space={'2'}>
@@ -62,14 +68,14 @@ export const Reference = ({ setNormalizeNotGlobally, setPositionNotGlobally, set
   );
 };
 
-export const ReferenceWithOverlaidRuns = ({settedOverlay}: ReferenceWithOverlaidRuns) => {
+export const ReferenceWithOverlaidRuns = ({ settedOverlay }: ReferenceWithOverlaidRuns) => {
   const globalState = useContext(store);
   const { triples } = globalState;
   const router = useRouter();
   const query: QueryProps = router.query;
   return (
     <StyledDiv>
-      <Reference settedOverlay={settedOverlay}/>
+      <Reference settedOverlay={settedOverlay} />
       <OverlayRuns overlaid_runs={triples} query={query} />
     </StyledDiv>
   )

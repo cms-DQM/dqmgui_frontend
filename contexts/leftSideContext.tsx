@@ -12,7 +12,10 @@ import {
   CustomizeProps,
 } from '../containers/display/interfaces';
 import { overlayOptions } from '../components/constants';
-
+import {
+  OVERLAY_DIFFERENT_PLOTS_WITH_DIFFERENT_RUN_AND_DATASET_BUT_SAME_NAMES,
+  OVERLAY_DIFFERENT_PLOTS_WITH_SAME_RUN_AND_DATASET_DIFFERENT_NAME
+} from './constants'
 export interface LeftSideStateProviderProps {
   children: ReactElement;
 }
@@ -64,6 +67,7 @@ export const initialState: any = {
     withref: '',
   },
   updated_by_not_older_than: Math.round(new Date().getTime() / 10000) * 10,
+  overlaidPlotsVariant: OVERLAY_DIFFERENT_PLOTS_WITH_DIFFERENT_RUN_AND_DATASET_BUT_SAME_NAMES,
 };
 
 export interface ActionProps {
@@ -148,6 +152,7 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
   const [updated_by_not_older_than, set_updated_by_not_older_than] = useState(
     initialState.updated_by_not_older_than
   );
+  const [overlaidPlotsVariant, setOverlaidPlotsVariant] = useState<string>(initialState.overlaidPlotsVariant)
 
   return (
     <Provider
@@ -192,6 +197,8 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         set_updated_by_not_older_than,
         update,
         set_update,
+        overlaidPlotsVariant, 
+        setOverlaidPlotsVariant
       }}
     >
       {children}

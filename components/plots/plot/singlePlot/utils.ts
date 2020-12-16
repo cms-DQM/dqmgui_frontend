@@ -21,8 +21,8 @@ export const removePlotFromSelectedPlots = (
   const separatedPlots = plotsQuery ? plotsQuery.split('&') : [];
   const fileterdPlotsAndDirs = separatedPlots.map((separatedPlot: string) => {
     const plotString = [plot.run_number, plot.dataset_name, plot.path, plot.name].join('/')
-
-    if (plotString !== separatedPlot) {
+    const selectedNotOverlaidPlot = separatedPlot.split(';overlayed=')
+    if (plotString !== selectedNotOverlaidPlot[0]) {
       return separatedPlot;
     }
   });

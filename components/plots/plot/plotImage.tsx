@@ -5,7 +5,6 @@ import {
   ParamsForApiProps,
   QueryProps,
 } from '../../../containers/display/interfaces';
-import { useUpdateLiveMode } from '../../../hooks/useUpdateInLiveMode';
 import { ErrorMessage } from '../errorMessage';
 import { ImageFallback } from '../imageFallback';
 import {
@@ -63,10 +62,10 @@ export const PlotImage = ({
     params_for_api.folders_path,
     params_for_api.overlay_plot,
     params_for_api.joined_overlaied_plots_urls,
+    params_for_api.overlaidSeparately,
     plotURL,
     blink
   ]);
-
   const old_image_display = show_old_img ? '' : 'none';
   const new_image_display = show_old_img ? 'none' : '';
 

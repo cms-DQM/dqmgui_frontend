@@ -4,13 +4,13 @@ import { MinusOutlined } from '@ant-design/icons';
 import {
   TripleProps,
   QueryProps,
-} from '../../../containers/display/interfaces';
-import { CustomTd, StyledSecondaryButton } from '../../styledComponents';
+} from '../../../../containers/display/interfaces';
+import { CustomTd, StyledSecondaryButton } from '../../../styledComponents';
 import { Checkbox } from 'antd';
-import { changeRunsForOverlayPropsValues } from '../utils';
-import { RunBrowser } from '../../browsing/runsBrowser';
-import { DatasetsBrowser } from '../../browsing/datasetsBrowsing/datasetsBrowser';
-import { Field } from './field';
+import { changeRunsForOverlayPropsValues } from '../../utils';
+import { RunBrowser } from '../../../browsing/runsBrowser';
+import { DatasetsBrowser } from '../../../browsing/datasetsBrowsing/datasetsBrowser';
+import { Field } from '../field';
 
 interface TableOfSelectedRunForOverlayProps {
   triples: TripleProps[];

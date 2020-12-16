@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, Tooltip } from 'antd';
 
-import { PlotoverlaidSeparatelyProps } from '../../containers/display/interfaces';
+import { PlotoverlaidSeparatelyProps } from '../../../../../containers/display/interfaces';
 import { PlotNameDiv } from './styledComponents';
 
 interface PlotButtonProps {

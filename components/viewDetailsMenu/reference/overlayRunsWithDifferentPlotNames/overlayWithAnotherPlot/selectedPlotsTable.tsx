@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, Space, Tooltip, Input } from 'antd';
 
-import { PlotoverlaidSeparatelyProps } from '../../containers/display/interfaces';
+import { PlotDataProps, PlotoverlaidSeparatelyProps } from '../../../../../containers/display/interfaces';
 import { StyledSelectedPlotsTable } from './styledComponents'
 import { addToSelectedPlots, removeSelectedPlot, setLabel } from './utils';
 
@@ -9,9 +9,10 @@ interface SelectedPlotsTableProps {
   overlaidPlots: PlotoverlaidSeparatelyProps;
   setSelectedPlots(plots: PlotoverlaidSeparatelyProps[]): void;
   default_overlay?: string[];
+  plot: PlotDataProps;
 }
 
-export const SelectedPlotsTable = ({ overlaidPlots, setSelectedPlots, default_overlay }: SelectedPlotsTableProps,) => {
+export const SelectedPlotsTable = ({ overlaidPlots, setSelectedPlots, default_overlay, plot }: SelectedPlotsTableProps,) => {
   const default_plots_overlay = default_overlay ? default_overlay.map((overlay_string: string): PlotoverlaidSeparatelyProps => {
     const parts = overlay_string.split('/')
     const name = parts.pop() as string
@@ -23,9 +24,13 @@ export const SelectedPlotsTable = ({ overlaidPlots, setSelectedPlots, default_ov
 
   React.useEffect(() => {
     const copy = [...selectedPlotsInfo]
-    default_plots_overlay.forEach((overlaid_plot) => {
+    // default_plots_overlay.forEach((overlaid_plot) => {
+    //   setSelectedPlotsInfo(addToSelectedPlots(overlaid_plot, copy))
+    // })
+    plot.overlaidSeparately?.plots.forEach((overlaid_plot) => {
       setSelectedPlotsInfo(addToSelectedPlots(overlaid_plot, copy))
     })
+    setSelectedPlots(selectedPlotsInfo)
   }, [])
 
   const colums = [

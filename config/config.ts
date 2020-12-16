@@ -86,13 +86,37 @@ export const get_plot_url = (params: ParamsForApiProps) => {
     };w=${params.width};h=${params.height}`;
 };
 
-export const get_plot_with_overlay = (params: ParamsForApiProps) => {
+export const get_plot_with_overlay_old_api = (params: ParamsForApiProps) => {
   return `plotfairy/overlay?${get_customize_params(params.customizeProps)}ref=${params.overlay
     };obj=archive/${getRunsWithLumisections(params)}${params.dataset_name}/${params.folders_path
     }/${encodeURIComponent(params.plot_name as string)}${params.joined_overlaied_plots_urls
     };${params.stats ? '' : 'showstats=0;'}${params.errorBars ? 'showerrbars=1;' : ''
     }norm=${params.normalize};w=${params.width};h=${params.height}`;
 };
+
+export const get_plot_with_overlay_new_api = (params: ParamsForApiProps) => {
+  //empty string in order to set &reflabel= in the start of joined_labels string
+  const labels: string[] = ['']
+  if (params.overlaidSeparately?.plots) {
+    const plots_strings = params.overlaidSeparately.plots.map((plot_for_overlay: PlotoverlaidSeparatelyProps) => {
+      labels.push(plot_for_overlay.label ? plot_for_overlay.label : params.run_number)
+      return (`obj=archive/${params.run_number}${params.dataset_name}/${plot_for_overlay.folder_path}/${plot_for_overlay.name}`)
+    })
+    const joined_plots = plots_strings.join('&')
+    const joined_labels = labels.join('&reflabel=')
+    const norm = params.overlaidSeparately.normalize
+    const dataset = params.overlaidSeparately.dataset ? params.overlaidSeparately.dataset : params.dataset_name
+    const run_number = params.overlaidSeparately.run_number ? params.overlaidSeparately.run_number : params.run_number
+ 
+    const customization = get_customize_params(params.customizeProps)
+
+    return `api/v1/render_overlay?obj=archive/${run_number}${dataset}/${params.folders_path}/${params.plot_name}&${joined_plots}&w=${params.width}&h=${params.height}&stats=${params.stats}&norm=${norm}${joined_labels};${customization}ref=${params.overlaidSeparately.ref}`
+  }
+  else {
+    return
+  }
+}
+
 
 export const get_overlaied_plots_urls = (params: ParamsForApiProps) => {
   const overlay_plots =
@@ -113,23 +137,6 @@ export const get_overlaied_plots_urls = (params: ParamsForApiProps) => {
   });
 };
 
-export const overlay_plots_with_different_name = (params: ParamsForApiProps) => {
-  //empty string in order to set &reflabel= in the start of joined_labels string
-  const labels: string[] = ['']
-  if (params.overlaidSeparately?.plots) {
-    const plots_strings = params.overlaidSeparately.plots.map((plot_for_overlay: PlotoverlaidSeparatelyProps) => {
-      labels.push(plot_for_overlay.label ? plot_for_overlay.label : params.run_number)
-      return (`obj=archive/${params.run_number}${params.dataset_name}/${plot_for_overlay.folder_path}/${plot_for_overlay.name}`)
-    })
-    const joined_plots = plots_strings.join('&')
-    const joined_labels = labels.join('&reflabel=')
-    const norm = params.overlaidSeparately.normalize 
-    return `api/v1/render_overlay?obj=archive/${params.run_number}${params.dataset_name}/${params.folders_path}/${params.plot_name}&${joined_plots}&w=${params.width}&h=${params.height}&stats=${params.stats}&norm=${norm}${joined_labels};ref=${params.overlaidSeparately.ref}`
-  }
-  else {
-    return
-  }
-}
 
 export const get_jroot_plot = (params: ParamsForApiProps) =>
   `jsrootfairy/archive/${getRunsWithLumisections(params)}${params.dataset_name

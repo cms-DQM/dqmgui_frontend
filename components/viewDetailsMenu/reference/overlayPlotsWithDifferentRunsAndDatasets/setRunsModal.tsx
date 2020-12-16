@@ -9,23 +9,23 @@ import {
   SelectedRunsTr,
   SelectedRunsTd,
   SelectedRunsTable,
-} from '../styledComponents';
-import { StyledButton, StyledSecondaryButton } from '../../styledComponents';
-import { theme } from '../../../styles/theme';
+} from '../../styledComponents';
+import { StyledButton, StyledSecondaryButton } from '../../../styledComponents';
+import { theme } from '../../../../styles/theme';
 import {
   TripleProps,
   FolderPathQuery,
   QueryProps,
-} from '../../../containers/display/interfaces';
-import Nav from '../../Nav';
-import { useSearch } from '../../../hooks/useSearch';
-import SearchResults from '../../../containers/search/SearchResults';
-import { concatArrays } from '../utils';
+} from '../../../../containers/display/interfaces';
+import Nav from '../../../Nav';
+import { useSearch } from '../../../../hooks/useSearch';
+import SearchResults from '../../../../containers/search/SearchResults';
+import { concatArrays } from '../../utils';
 import {
   changeRouter,
   getChangedQueryParams,
-} from '../../../containers/display/utils';
-import { addOverlayData } from '../../plots/plot/singlePlot/utils';
+} from '../../../../containers/display/utils';
+import { addOverlayData } from '../../../plots/plot/singlePlot/utils';
 import { useRouter } from 'next/router';
 
 interface SetRunsModalProps {

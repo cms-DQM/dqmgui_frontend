@@ -8,7 +8,6 @@ import {
   DirectoryInterface,
   QueryProps,
   ParamsForApiProps,
-  PlotsoverlaidSeparatelyProps,
 } from './interfaces';
 import Router from 'next/router';
 import { ParsedUrlQueryInput } from 'querystring';
@@ -62,10 +61,11 @@ export const getSelectedPlots = (
     const spearatedOverlayed = plotWithDir.split('overlayed=')
     // if spearatedPlots.length > 1 it means that selected plot was overlaid with another plot separately
     if (spearatedOverlayed.length > 1) {
+      console.log(spearatedOverlayed)
       spearatedOverlayed.map((plots_, index) => {
         const overlyedPlots = plots_.split('plot=')
         const cleanedArray = cleanDeep(overlyedPlots)
-        if (index === 0) {
+        if (index === 0 ) {
           const parts = cleanedArray[index]?.split('/') as string[]
           const run_number = parts.shift()
           const pathAndName = parts.splice(3)
@@ -110,7 +110,7 @@ export const getSelectedPlots = (
               const onePlot = {
                 folder_path: path,
                 name: plotName.slice(0, -1),
-                label: separatedPathAndLabel[1].slice(0, -1)
+                label: separatedPathAndLabel[1].slice(0, -1),
               }
               overlaidSeparately.plots.push(onePlot)
               // return separatedPathAndLabel
@@ -121,10 +121,11 @@ export const getSelectedPlots = (
               const plotName = pathWithPlotName.pop()
               const path = pathWithPlotName.join('/')
               const labelAndNormRef = separatedPathAndLabelNormRef && separatedPathAndLabelNormRef[1].split('norm=')
-              const label = separatedPathAndLabelNormRef && separatedPathAndLabelNormRef[0]
-              const normAndRef = labelAndNormRef && labelAndNormRef[1].split('ref=')
+              const label = labelAndNormRef && labelAndNormRef[0]
+              const normAndRef = labelAndNormRef && labelAndNormRef[1].split('overlay=')
               const norm = normAndRef && normAndRef[0]
               const ref = normAndRef && normAndRef[1]
+
               const onePlot = {
                 folder_path: path,
                 name: plotName.slice(0, -1),
@@ -139,7 +140,6 @@ export const getSelectedPlots = (
         }
       })
       selectedPlot.overlaidSeparately = overlaidSeparately
-      console.log(selectedPlot)
       return selectedPlot
     }
     else {
