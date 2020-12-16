@@ -40,12 +40,41 @@ export const isPlotSelected = (
     true : false
 };
 
+const getInitialPlotProps = (overlyedPlots: string[], index: number) => {
+  const parts = overlyedPlots[index]?.split('/') as string[]
+  const run_number = parts.shift()
+  const pathAndName = parts.splice(3)
+  const dataset_name = parts.join('/')
+  const name = pathAndName.pop()
+  const path = pathAndName.join('/')
+
+  return { run_number, dataset_name, path, name }
+}
+
+const getLastPlotFromspearatedOverlayedProps = (pathAndLabel: string) => {
+  const separatedPathAndLabelNormRef = pathAndLabel && pathAndLabel.split('lab=') as string[]
+  const runDatasetPathPlotName = separatedPathAndLabelNormRef[0].split('/')
+
+  const plotName = runDatasetPathPlotName.pop()
+  const run_number = runDatasetPathPlotName.shift()
+  const pathWithPlotName = runDatasetPathPlotName.splice(3)
+  const dataset_name = runDatasetPathPlotName.join('/')
+
+  const path = pathWithPlotName.join('/')
+  const labelAndNormRef = separatedPathAndLabelNormRef && separatedPathAndLabelNormRef[1].split('norm=')
+  const label = labelAndNormRef && labelAndNormRef[0]
+  const normAndRef = labelAndNormRef && labelAndNormRef[1].split('overlay=')
+  const norm = normAndRef && normAndRef[0]
+  const ref = normAndRef && normAndRef[1]
+
+  return { run_number, dataset_name,  path, plotName, label, norm, ref }
+}
 export const getSelectedPlots = (
   query: QueryProps,
   plots?: PlotDataProps[]
 ) => {
   const plotsQuery = query.selected_plots
-  
+
   const plotsWithDirs = plotsQuery ? plotsQuery.split('&') : [];
   return plotsWithDirs.map((plotWithDir: string) => {
     const overlaidSeparately = {
@@ -66,13 +95,8 @@ export const getSelectedPlots = (
       spearatedOverlayed.map((plots_, index) => {
         const overlyedPlots = plots_.split('plot=')
         const cleanedArray = cleanDeep(overlyedPlots)
-        if (index === 0 ) {
-          const parts = cleanedArray[index]?.split('/') as string[]
-          const run_number = parts.shift()
-          const pathAndName = parts.splice(3)
-          const dataset_name = parts.join('/')
-          const name = pathAndName.pop()
-          const path = pathAndName.join('/')
+        if (index === 0) {
+          const { run_number, dataset_name, path, name } = getInitialPlotProps(cleanedArray, index)
           if (!plots) {
             selectedPlot.run_number = run_number as string
             selectedPlot.dataset_name = dataset_name
@@ -105,29 +129,27 @@ export const getSelectedPlots = (
             //the last item in array also has ref and normalize props
             if (indexOdOverlaidPlots !== cleanedArray.length - 1) {
               const separatedPathAndLabel = pathAndLabel && pathAndLabel.split('lab=') as string[]
-              const pathWithPlotName = separatedPathAndLabel[0].split('/')
-              const plotName = pathWithPlotName.pop()
+              const runDatasetPathPlotName = separatedPathAndLabel[0].split('/')
+              const plotName = runDatasetPathPlotName.pop()
+              const run_number = runDatasetPathPlotName.shift()
+              const pathWithPlotName = runDatasetPathPlotName.splice(3)
+              const dataset_name = runDatasetPathPlotName.join('/')
+
               const path = pathWithPlotName.join('/')
               const onePlot = {
+                dataset_name: dataset_name,
+                run_number: run_number,
                 folder_path: path,
                 name: plotName.slice(0, -1),
                 label: separatedPathAndLabel[1].slice(0, -1)
               }
               overlaidSeparately.plots.push(onePlot)
-              // return separatedPathAndLabel
             }
-            else {
-              const separatedPathAndLabelNormRef = pathAndLabel && pathAndLabel.split('lab=') as string[]
-              const pathWithPlotName = separatedPathAndLabelNormRef[0].split('/')
-              const plotName = pathWithPlotName.pop()
-              const path = pathWithPlotName.join('/')
-              const labelAndNormRef = separatedPathAndLabelNormRef && separatedPathAndLabelNormRef[1].split('norm=')
-              const label = labelAndNormRef && labelAndNormRef[0]
-              const normAndRef = labelAndNormRef && labelAndNormRef[1].split('overlay=')
-              const norm = normAndRef && normAndRef[0]
-              const ref = normAndRef && normAndRef[1]
-
+            else if (pathAndLabel) {
+              const { dataset_name, run_number, path, plotName, label, norm, ref } = getLastPlotFromspearatedOverlayedProps(pathAndLabel)
               const onePlot = {
+                run_number: run_number,
+                dataset_name: dataset_name,
                 folder_path: path,
                 name: plotName.slice(0, -1),
                 label: label.slice(0, -1),

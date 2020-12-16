@@ -61,7 +61,7 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
     set_overlaid_plot_url(get_plot_with_overlay_new_api(params_for_api))
   }, [params_for_api.overlaidSeparately, selectedPlots])
 
-
+console.log(params_for_api)
   const { updated_by_not_older_than } = React.useContext(store)
 
   const params: ParamsForApiProps = {

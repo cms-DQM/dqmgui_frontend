@@ -31,6 +31,13 @@ export const SelectedPlotsTable = ({ overlaidPlots, setSelectedPlots, default_ov
   }, [])
 
   const colums = [
+    // {
+    //   title: 'Run number',
+    //   dataIndex: 'run_number',
+    // },{
+    //   title: 'Data set',
+    //   dataIndex: 'data_set',
+    // },
     {
       title: 'Folder Path',
       dataIndex: 'folder_path',

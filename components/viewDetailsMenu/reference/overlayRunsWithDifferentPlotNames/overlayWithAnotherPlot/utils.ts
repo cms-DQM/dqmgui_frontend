@@ -70,7 +70,10 @@ export const makeLinkableOverlay = (separately_overlaid_plots: PlotsoverlaidSepa
     if (overlaid_separately) {
       const overlaid_separately_string = overlaid_separately?.plots.map(overlaid_plot => {
         const label = overlaid_plot.label ? overlaid_plot.label : plot.run_number
-        return `plot=${overlaid_plot.folder_path}/${overlaid_plot.name};lab=${label}`
+        const run_number = overlaid_plot.run_number ? overlaid_plot.run_number : plot.run_number
+        const dataset_name = overlaid_plot.dataset_name ? overlaid_plot.dataset_name : plot.dataset_name
+
+        return `plot=${run_number}/${dataset_name}/${overlaid_plot.folder_path}/${overlaid_plot.name};lab=${label}`
       })
       const overlaid_separately_full_string = overlaid_separately_string?.join(';') + `;norm=${separately_overlaid_plots.normalize};overlay=${separately_overlaid_plots.ref};`
       return (`${plot.run_number}/${plot.dataset_name}/${plot.path}/${plot.name};overlayed=${overlaid_separately_full_string}`)
