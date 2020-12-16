@@ -105,12 +105,10 @@ export const get_plot_with_overlay_new_api = (params: ParamsForApiProps) => {
     const joined_plots = plots_strings.join('&')
     const joined_labels = labels.join('&reflabel=')
     const norm = params.overlaidSeparately.normalize
-    const dataset = params.overlaidSeparately.dataset ? params.overlaidSeparately.dataset : params.dataset_name
-    const run_number = params.overlaidSeparately.run_number ? params.overlaidSeparately.run_number : params.run_number
  
     const customization = get_customize_params(params.customizeProps)
 
-    return `api/v1/render_overlay?obj=archive/${run_number}${dataset}/${params.folders_path}/${params.plot_name}&${joined_plots}&w=${params.width}&h=${params.height}&stats=${params.stats}&norm=${norm}${joined_labels};${customization}ref=${params.overlaidSeparately.ref}`
+    return `api/v1/render_overlay?obj=archive/${params.run_number}${params.dataset_name}/${params.folders_path}/${params.plot_name}&${joined_plots}&w=${params.width}&h=${params.height}&stats=True&norm=${norm}${joined_labels};${customization}ref=${params.overlaidSeparately.ref}`
   }
   else {
     return

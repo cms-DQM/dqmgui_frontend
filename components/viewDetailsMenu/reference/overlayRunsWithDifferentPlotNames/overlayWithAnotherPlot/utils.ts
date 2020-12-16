@@ -47,7 +47,7 @@ export const setLabel = (item: PlotoverlaidSeparatelyProps, allSelectedPlots: Pl
 }
 
 export const makeLinkableOverlay = (separately_overlaid_plots: PlotsoverlaidSeparatelyProps, plot: PlotDataProps, query: QueryProps) => {
-  const selected_plots = getSelectedPlots(query.selected_plots)
+  const selected_plots = getSelectedPlots(query)
 
   const simple_plot_object = {
     name: plot.name,
@@ -61,18 +61,18 @@ export const makeLinkableOverlay = (separately_overlaid_plots: PlotsoverlaidSepa
     && plot.path == simple_plot_object.path
     && plot.name == simple_plot_object.name
   )
+
   if(index > -1){
     selected_plots[index].overlaidSeparately = separately_overlaid_plots
   }
-
   const urls = selected_plots.map((plot) => {
     const overlaid_separately = plot.overlaidSeparately
     if (overlaid_separately) {
       const overlaid_separately_string = overlaid_separately?.plots.map(overlaid_plot => {
         const label = overlaid_plot.label ? overlaid_plot.label : plot.run_number
-        return `plot=${overlaid_plot.folder_path}/${overlaid_plot.name};run=${overlaid_plot.run_number};dataset=${overlaid_plot.dataset_name};lab=${label}`
+        return `plot=${overlaid_plot.folder_path}/${overlaid_plot.name};lab=${label}`
       })
-      const overlaid_separately_full_string = overlaid_separately_string?.join(';') + `;norm=${overlaid_separately?.normalize};overlay=${overlaid_separately?.ref};`
+      const overlaid_separately_full_string = overlaid_separately_string?.join(';') + `;norm=True;overlay=overlay;`
       return (`${plot.run_number}/${plot.dataset_name}/${plot.path}/${plot.name};overlayed=${overlaid_separately_full_string}`)
     }
     else {

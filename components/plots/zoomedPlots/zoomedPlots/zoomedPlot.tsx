@@ -85,7 +85,7 @@ export const ZoomedPlot = ({
   ];
 
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
-  const [currentPlotUrl, setCurrentPlotUrl] = useState(overlaid_plot_url ? overlaid_plot_url: plot_url)
+  const [currentPlotUrl, setCurrentPlotUrl] = useState(overlaid_plot_url ? overlaid_plot_url : plot_url)
 
   useEffect(() => {
     if (overlaid_plot_url) {
@@ -96,12 +96,16 @@ export const ZoomedPlot = ({
   }, [overlaid_plot_url, plot_url])
 
   useEffect(() => {
+    params_for_api.overlaidSeparately = selected_plot.overlaidSeparately
     set_overlaid_plot_url(get_plot_with_overlay_new_api(params_for_api))
-  }, [params_for_api.overlaidSeparately, params_for_api.notOlderThan])
+  }, [selected_plot.overlaidSeparately, params_for_api.notOlderThan])
+
+console.log(params_for_api)
 
   return (
     <StyledCol space={2}>
       <OverlayWithAnotherPlot
+      plot={selected_plot}
         visible={openDialog[OVERLAY_PLOT_MENU]}
         setOpenOverlayWithAnotherPlotModal={(value: boolean) => setOpenDialog(dialogsSwitch(value))}
         default_overlay={selected_plot.overlay}

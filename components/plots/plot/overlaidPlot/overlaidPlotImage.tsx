@@ -48,7 +48,6 @@ export const OverlaidPlotImage = ({
   const plot_with_overlay = get_plot_with_overlay_old_api(params_for_api);
 
   const test = chooseApi(params_for_api);
-console.log(test)
   const router = useRouter();
   const query: QueryProps = router.query;
 

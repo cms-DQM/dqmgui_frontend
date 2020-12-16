@@ -27,9 +27,10 @@ interface OverlayWithAnotherPlotProps {
   default_overlay?: string[];
   params_for_api: ParamsForApiProps;
   set_overlaid_plot_url: React.Dispatch<React.SetStateAction<string | undefined>>
+  plot: any
 }
 
-export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotModal, default_overlay, params_for_api, set_overlaid_plot_url }: OverlayWithAnotherPlotProps) => {
+export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnotherPlotModal, default_overlay, params_for_api, set_overlaid_plot_url }: OverlayWithAnotherPlotProps) => {
   const [overlaidPlots, setOverlaidPlots] = React.useState<PlotoverlaidSeparatelyProps>({ folder_path: '', name: '' })
   const [folders, setFolders] = React.useState<(string | undefined)[]>([])
   const [overlay, setOverlay] = React.useState<string>('overlay')
@@ -48,11 +49,11 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
   const [selectedPlots, setSelectedPlots] = React.useState<PlotoverlaidSeparatelyProps[]>([])
   const router = useRouter();
   const query: QueryProps = router.query;
-  const plot = getSelectedPlots(query.selected_plots)
+  // const plot = getSelectedPlots(query)
 
-  React.useEffect(() => {
-    params_for_api.overlaidSeparately = plot.overlaidSeparately
-  }, [selectedPlots])
+  // React.useEffect(() => {
+  //   params_for_api.overlaidSeparately = plot.overlaidSeparately
+  // }, [selectedPlots])
 
   React.useEffect(() => {
     set_overlaid_plot_url(get_plot_with_overlay_new_api(params_for_api))
@@ -111,9 +112,13 @@ export const OverlayWithAnotherPlot = ({ visible, setOpenOverlayWithAnotherPlotM
   directories.sort()
   plots_names.sort()
 
-  useChangeRouter({ selected_plots: urls }, [urls], urls !== null)
+  useChangeRouter({ selected_plots: urls }, 
+    [params_for_api.overlaidSeparately?.plots.length,
+       params_for_api.overlaidSeparately?.normalize, 
+       params_for_api.overlaidSeparately?.ref],
+     urls !== null)
 
-  return (
+     return (
     <Modal
       visible={visible}
       onCancel={() => clear()}

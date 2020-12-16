@@ -69,7 +69,6 @@ const Content: FC<FolderProps> = ({
 
   const [openSettings, toggleSettingsModal] = useState(false);
 
-  const selectedPlots = query.selected_plots;
   //filtering directories by selected workspace
   const { foldersByPlotSearch, plots, isLoading, errors } = useFilterFolders(
     query,
@@ -80,13 +79,13 @@ const Content: FC<FolderProps> = ({
   var plots_grouped_by_layouts = chain(plots_with_layouts).sortBy('layout').groupBy('layout').value()
   const filteredFolders: any[] = foldersByPlotSearch ? foldersByPlotSearch : [];
   const selected_plots: PlotDataProps[] = getSelectedPlots(
-    selectedPlots,
+    query,
     plots
   );
 
   const changeFolderPathByBreadcrumb = (parameters: ParsedUrlQueryInput) =>
     changeRouter(getChangedQueryParams(parameters, query));
-
+// console.log(query.selected_plots)
   return (
     <>
       <CustomRow space={'2'} width="100%" justifycontent="space-between">

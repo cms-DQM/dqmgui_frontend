@@ -41,9 +41,11 @@ export const isPlotSelected = (
 };
 
 export const getSelectedPlots = (
-  plotsQuery: string | undefined,
+  query: QueryProps,
   plots?: PlotDataProps[]
 ) => {
+  const plotsQuery = query.selected_plots
+  
   const plotsWithDirs = plotsQuery ? plotsQuery.split('&') : [];
   return plotsWithDirs.map((plotWithDir: string) => {
     const overlaidSeparately = {
@@ -61,7 +63,6 @@ export const getSelectedPlots = (
     const spearatedOverlayed = plotWithDir.split('overlayed=')
     // if spearatedPlots.length > 1 it means that selected plot was overlaid with another plot separately
     if (spearatedOverlayed.length > 1) {
-      console.log(spearatedOverlayed)
       spearatedOverlayed.map((plots_, index) => {
         const overlyedPlots = plots_.split('plot=')
         const cleanedArray = cleanDeep(overlyedPlots)
@@ -110,7 +111,7 @@ export const getSelectedPlots = (
               const onePlot = {
                 folder_path: path,
                 name: plotName.slice(0, -1),
-                label: separatedPathAndLabel[1].slice(0, -1),
+                label: separatedPathAndLabel[1].slice(0, -1)
               }
               overlaidSeparately.plots.push(onePlot)
               // return separatedPathAndLabel
