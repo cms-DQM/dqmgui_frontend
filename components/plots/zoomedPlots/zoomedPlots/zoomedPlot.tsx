@@ -100,12 +100,11 @@ export const ZoomedPlot = ({
     set_overlaid_plot_url(get_plot_with_overlay_new_api(params_for_api))
   }, [selected_plot.overlaidSeparately, params_for_api.notOlderThan])
 
-console.log(params_for_api)
 
   return (
     <StyledCol space={2}>
       <OverlayWithAnotherPlot
-      plot={selected_plot}
+        plot={selected_plot}
         visible={openDialog[OVERLAY_PLOT_MENU]}
         setOpenOverlayWithAnotherPlotModal={(value: boolean) => setOpenDialog(dialogsSwitch(value))}
         default_overlay={selected_plot.overlay}

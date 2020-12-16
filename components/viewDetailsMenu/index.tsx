@@ -94,7 +94,7 @@ export const ViewDetailsMenu = ({ selected_plots }: ViewDetailsMenuProps) => {
           </CustomDiv>
           <hr />
           <CutomFormItem name="Reference" label="Reference">
-            <ReferenceWithOverlaidRuns settedOverlay={settedOverlay}/>
+            <ReferenceWithOverlaidRuns settedOverlay={settedOverlay} />
           </CutomFormItem>
         </Form>
       </Panel>

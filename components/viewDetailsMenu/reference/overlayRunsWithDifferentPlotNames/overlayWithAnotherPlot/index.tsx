@@ -4,9 +4,9 @@ import Modal from 'antd/lib/modal/Modal'
 import { Col, Row } from 'antd'
 import cleanDeep from 'clean-deep'
 
-import { ParamsForApiProps, PlotDataProps, PlotoverlaidSeparatelyProps, QueryProps } from '../../../../../containers/display/interfaces'
+import { ParamsForApiProps, PlotoverlaidSeparatelyProps, QueryProps } from '../../../../../containers/display/interfaces'
 import { Icon, StyledA } from '../../../../../containers/display/styledComponents'
-import { choose_api, getSelectedPlots } from '../../../../../containers/display/utils'
+import { choose_api } from '../../../../../containers/display/utils'
 import { store } from '../../../../../contexts/leftSideContext'
 import { useRequest } from '../../../../../hooks/useRequest'
 import { FolderPath } from '../../../../../containers/display/content/folderPath'
@@ -33,11 +33,13 @@ interface OverlayWithAnotherPlotProps {
 export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnotherPlotModal, default_overlay, params_for_api, set_overlaid_plot_url }: OverlayWithAnotherPlotProps) => {
   const [overlaidPlots, setOverlaidPlots] = React.useState<PlotoverlaidSeparatelyProps>({ folder_path: '', name: '' })
   const [folders, setFolders] = React.useState<(string | undefined)[]>([])
-  const [overlay, setOverlay] = React.useState<string>('overlay')
-  const settedOverlay = overlay ? overlay : overlayOptions[0].value;
   const [urls, setUrls] = React.useState(null)
 
-  const [normalize, setNormaize] = React.useState<boolean>()
+  const initial_normalize = params_for_api.overlaidSeparately?.normalize === false ? params_for_api.overlaidSeparately.normalize : true
+  const [normalize, setNormaize] = React.useState<boolean>(initial_normalize)
+  const initial_overlay = params_for_api.overlaidSeparately?.ref ? params_for_api.overlaidSeparately.ref : overlayOptions[0].value
+  const [overlay, setOverlay] = React.useState<string>(initial_overlay)
+
   const [currentFolder, setCurrentFolder] = React.useState<string | undefined>('')
   const clear = () => {
     setOpenOverlayWithAnotherPlotModal(false)
@@ -49,15 +51,23 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
   const [selectedPlots, setSelectedPlots] = React.useState<PlotoverlaidSeparatelyProps[]>([])
   const router = useRouter();
   const query: QueryProps = router.query;
-  // const plot = getSelectedPlots(query)
 
-  // React.useEffect(() => {
-  //   params_for_api.overlaidSeparately = plot.overlaidSeparately
-  // }, [selectedPlots])
+  React.useEffect(() => {
+    if (plot.overlaidSeparately) {
+      setSelectedPlots(plot.overlaidSeparately.plots)
+    }
+  }, [visible])
 
   React.useEffect(() => {
     set_overlaid_plot_url(get_plot_with_overlay_new_api(params_for_api))
   }, [params_for_api.overlaidSeparately, selectedPlots])
+
+  React.useEffect(() => {
+    if (params_for_api.overlaidSeparately) {
+      params_for_api.overlaidSeparately.normalize = normalize
+      params_for_api.overlaidSeparately.ref = overlay
+    }
+  }, [normalize, overlay])
 
   const { updated_by_not_older_than } = React.useContext(store)
 
@@ -112,13 +122,13 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
   directories.sort()
   plots_names.sort()
 
-  useChangeRouter({ selected_plots: urls }, 
+  useChangeRouter({ selected_plots: urls },
     [params_for_api.overlaidSeparately?.plots.length,
-       params_for_api.overlaidSeparately?.normalize, 
-       params_for_api.overlaidSeparately?.ref],
-     urls !== null)
+    params_for_api.overlaidSeparately?.normalize,
+    params_for_api.overlaidSeparately?.ref],
+    urls !== null)
 
-     return (
+  return (
     <Modal
       visible={visible}
       onCancel={() => clear()}
@@ -139,7 +149,7 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
           <Reference
             setNormalizeNotGlobally={setNormaize}
             setPositionNotGlobally={setOverlay}
-            settedOverlay={settedOverlay}
+            settedOverlay={overlay}
           />
         </FoldersRow>
         <FoldersRow>

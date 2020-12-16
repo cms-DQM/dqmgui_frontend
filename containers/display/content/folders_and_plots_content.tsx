@@ -85,8 +85,8 @@ const Content: FC<FolderProps> = ({
 
   const changeFolderPathByBreadcrumb = (parameters: ParsedUrlQueryInput) =>
     changeRouter(getChangedQueryParams(parameters, query));
-// console.log(query.selected_plots)
-  return (
+
+    return (
     <>
       <CustomRow space={'2'} width="100%" justifycontent="space-between">
         <SettingsModal

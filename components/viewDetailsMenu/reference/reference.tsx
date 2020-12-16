@@ -13,7 +13,6 @@ import { OverlayOptions } from './overlayOptions';
 import { OverlayRuns } from './overlayPlotsWithDifferentRunsAndDatasets/overlayRuns';
 import FormItem from 'antd/lib/form/FormItem';
 import { store } from '../../../contexts/leftSideContext';
-import { OverlaidPlotsVariant } from './overlaidPlotsVariant';
 
 interface ReferenceProps extends ReferenceWithOverlaidRuns {
   setNormalizeNotGlobally?(value: boolean): void;
@@ -42,9 +41,6 @@ export const Reference = ({ setNormalizeNotGlobally, setPositionNotGlobally, set
     <CustomRow>
       <CustomCol space={'2'}></CustomCol>
       <CustomCol space={'2'}>
-        <FormItem name="OverlayVariant" label="Variant:">
-          <OverlaidPlotsVariant />
-        </FormItem>
       </CustomCol>
       <CustomCol space={'2'}>
         <FormItem name="OverlayPosition" label="Position:">

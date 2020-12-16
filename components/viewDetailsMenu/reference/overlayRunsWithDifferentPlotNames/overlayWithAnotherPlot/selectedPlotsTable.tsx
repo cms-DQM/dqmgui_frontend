@@ -24,9 +24,6 @@ export const SelectedPlotsTable = ({ overlaidPlots, setSelectedPlots, default_ov
 
   React.useEffect(() => {
     const copy = [...selectedPlotsInfo]
-    // default_plots_overlay.forEach((overlaid_plot) => {
-    //   setSelectedPlotsInfo(addToSelectedPlots(overlaid_plot, copy))
-    // })
     plot.overlaidSeparately?.plots.forEach((overlaid_plot) => {
       setSelectedPlotsInfo(addToSelectedPlots(overlaid_plot, copy))
     })
