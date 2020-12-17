@@ -36,8 +36,13 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
   const [urls, setUrls] = React.useState(null)
 
   const [normalize, setNormaize] = React.useState<string>(params_for_api.overlaidSeparately?.normalize)
+
   const initial_overlay = params_for_api.overlaidSeparately?.ref ? params_for_api.overlaidSeparately.ref : overlayOptions[0].value
-  const [overlay, setOverlay] = React.useState<string>(initial_overlay)
+  const initial_stats = params_for_api.overlaidSeparately?.stats === 'True' ? params_for_api.overlaidSeparately.stats : 'False'
+
+  const [overlayPosition, setOverlayPosition] = React.useState<string>(initial_overlay)
+  const [stats, setStats] = React.useState<string>(initial_stats)
+
 
   const [currentFolder, setCurrentFolder] = React.useState<string | undefined>('')
   const clear = () => {
@@ -61,7 +66,6 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
     set_overlaid_plot_url(get_plot_with_overlay_new_api(params_for_api))
   }, [params_for_api.overlaidSeparately, selectedPlots])
 
-console.log(params_for_api)
   const { updated_by_not_older_than } = React.useContext(store)
 
   const params: ParamsForApiProps = {
@@ -128,7 +132,7 @@ console.log(params_for_api)
       onOk={async () => {
         clear()
         if (selectedPlots.length > 0) {
-          params_for_api.overlaidSeparately = { plots: selectedPlots, normalize: normalize, ref: overlay }
+          params_for_api.overlaidSeparately = { plots: selectedPlots, normalize: normalize, ref: overlayPosition }
         }
         else {
           params_for_api.overlaidSeparately = undefined
@@ -140,10 +144,12 @@ console.log(params_for_api)
       <Row gutter={16} >
         <FoldersRow>
           <Reference
-            setNormalizeNotGlobally={setNormaize}
-            setPositionNotGlobally={setOverlay}
-            settedOverlay={overlay}
-            normalize_from_query={normalize}
+            setNormalize={setNormaize}
+            setPosition={setOverlayPosition}
+            setStats={setStats}
+            normalize={normalize}
+            stats={stats}
+            position={overlayPosition}
           />
         </FoldersRow>
         <FoldersRow>

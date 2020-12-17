@@ -1,32 +1,26 @@
 import * as React from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { MinusOutlined } from '@ant-design/icons';
 
 import {
   StyledModal,
   ResultsWrapper,
-  SelectedRunsTh,
-  SelectedRunsTr,
-  SelectedRunsTd,
-  SelectedRunsTable,
 } from '../../styledComponents';
-import { StyledButton, StyledSecondaryButton } from '../../../styledComponents';
+import { StyledButton } from '../../../styledComponents';
 import { theme } from '../../../../styles/theme';
 import {
   TripleProps,
-  FolderPathQuery,
   QueryProps,
 } from '../../../../containers/display/interfaces';
 import Nav from '../../../Nav';
 import { useSearch } from '../../../../hooks/useSearch';
 import SearchResults from '../../../../containers/search/SearchResults';
-import { concatArrays } from '../../utils';
 import {
   changeRouter,
   getChangedQueryParams,
 } from '../../../../containers/display/utils';
 import { addOverlayData } from '../../../plots/plot/singlePlot/utils';
 import { useRouter } from 'next/router';
+import { Table } from './overlaidRunsActions/table';
 
 interface SetRunsModalProps {
   open: boolean;
@@ -46,7 +40,12 @@ export const SetRunsModal = ({
   const [serachRunNumber, setSearchRunNumber] = React.useState('');
   const [serachDatasetName, setSearchDatasetName] = React.useState('');
 
-  const [selected_runs, set_selected_runs] = React.useState<TripleProps[]>([]);
+  const initialSelectedRuns = triples.length > 0 ? triples : []
+  const [selected_runs, set_selected_runs] = React.useState<TripleProps[]>(initialSelectedRuns);
+
+  React.useEffect(()=>{
+    set_selected_runs(triples)
+  },[triples])
 
   const { results_grouped, searching, isLoading, errors } = useSearch(
     serachRunNumber,
@@ -79,21 +78,19 @@ export const SetRunsModal = ({
     set_selected_runs(copy);
   };
 
-  const deleteRunFromSelectedList = (id: string) => {
-    const copy = [...selected_runs];
-    const index = copy.findIndex((run) => {
-      return run.id === id;
-    });
 
-    if (index !== -1) {
-      copy.splice(index, 1);
-      set_selected_runs(copy);
-    }
-  };
-
-  //overlaid_and_selected_runs combines list of runs which are already overlaid (triples)
-  // with those which are just selected (selected_runs) in "Set Runs" dialog
-  const overlaid_and_selected_runs = concatArrays([selected_runs, triples]);
+  const onOk = () => {
+    changeRouter(
+      getChangedQueryParams(
+        {
+          overlay_data: `${addOverlayData(selected_runs)}`,
+        },
+        query
+      )
+    );
+    setTriples(selected_runs);
+    toggleModal(false);
+  }
 
   const router = useRouter();
   const query: QueryProps = router.query;
@@ -104,7 +101,7 @@ export const SetRunsModal = ({
       visible={open}
       onCancel={() => {
         toggleModal(false);
-        set_selected_runs([]);
+        set_selected_runs(triples);
       }}
       footer={[
         <StyledButton
@@ -120,58 +117,16 @@ export const SetRunsModal = ({
         </StyledButton>,
         <StyledButton
           key="OK"
-          onClick={() => {
-            changeRouter(
-              getChangedQueryParams(
-                {
-                  overlay_data: `${addOverlayData(overlaid_and_selected_runs)}`,
-                },
-                query
-              )
-            );
-            setTriples(overlaid_and_selected_runs);
-            toggleModal(false);
-            set_selected_runs([]);
-          }}
-        >
+          onClick={onOk}>
           OK
-        </StyledButton>,
+        </StyledButton>
       ]}
     >
       <div>
-        {overlaid_and_selected_runs.length > 0 && (
-          <SelectedRunsTable>
-            <thead>
-              <SelectedRunsTr>
-                <SelectedRunsTh>Nr.</SelectedRunsTh>
-                <SelectedRunsTh>Run</SelectedRunsTh>
-                <SelectedRunsTh>Dataset name</SelectedRunsTh>
-                <SelectedRunsTh>Action</SelectedRunsTh>
-              </SelectedRunsTr>
-            </thead>
-            <tbody>
-              {overlaid_and_selected_runs.map(
-                (run: FolderPathQuery, index: number) => {
-                  return (
-                    <SelectedRunsTr>
-                      <SelectedRunsTd>{index + 1}.</SelectedRunsTd>
-                      <SelectedRunsTd>{run.run_number}</SelectedRunsTd>
-                      <SelectedRunsTd>{run.dataset_name}</SelectedRunsTd>
-                      <SelectedRunsTd>
-                        <StyledSecondaryButton
-                          onClick={() => {
-                            deleteRunFromSelectedList(run.id as string);
-                          }}
-                          icon={<MinusOutlined />}
-                        ></StyledSecondaryButton>
-                      </SelectedRunsTd>
-                    </SelectedRunsTr>
-                  );
-                }
-              )}
-            </tbody>
-          </SelectedRunsTable>
-        )}
+        <Table
+        selectedRuns={selected_runs}
+        setSelectedRuns={set_selected_runs}
+        />
         <div style={{ padding: 8 }}>
           <Nav
             handler={navigationHandler}

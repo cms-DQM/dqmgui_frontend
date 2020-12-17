@@ -58,5 +58,5 @@ export const useSearch = (
     })
     .value();
 
-  return { results_grouped, searching, isLoading, errors };
+    return { results_grouped, searching, isLoading, errors };
 };

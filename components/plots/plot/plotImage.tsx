@@ -63,6 +63,7 @@ export const PlotImage = ({
     params_for_api.overlay_plot,
     params_for_api.joined_overlaied_plots_urls,
     params_for_api.overlaidSeparately,
+    params_for_api.stats,
     plotURL,
     blink
   ]);

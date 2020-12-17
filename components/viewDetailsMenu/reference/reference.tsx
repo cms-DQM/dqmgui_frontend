@@ -9,34 +9,54 @@ import {
   CustomCol,
 } from '../../styledComponents';
 import { useRouter } from 'next/router';
-import { OverlayOptions } from './overlayOptions';
+import { OverlayPosition } from './overlayPosition';
 import { OverlayRuns } from './overlayPlotsWithDifferentRunsAndDatasets/overlayRuns';
 import FormItem from 'antd/lib/form/FormItem';
 import { store } from '../../../contexts/leftSideContext';
+import { useChangeRouter } from '../../../hooks/useChangeRouter';
+import { getTriples } from './utils';
 
 interface ReferenceProps extends ReferenceWithOverlaidRuns {
-  setNormalizeNotGlobally?(value: string): void;
-  setPositionNotGlobally?(value: string): void;
+  setNormalize(value: string): void;
+  setPosition(value: string): void;
+  setStats(value: string): void;
 }
 
 interface ReferenceWithOverlaidRuns {
-  settedOverlay: string;
-  normalize_from_query: string;
+  normalize: string;
+  position: string;
+  stats: string;
 }
 
-export const Reference = ({ setNormalizeNotGlobally, setPositionNotGlobally, settedOverlay, normalize_from_query }: ReferenceProps) => {
-  const globalState = useContext(store);
-  const { normalize, setNormalize } = globalState;
-
-  const set_normalize = setNormalizeNotGlobally ? setNormalizeNotGlobally : setNormalize
-
-  const [checked, setChecked] = useState(normalize_from_query === 'True' ? true : false);
-  const [checkedStats, setCheckedStats] = useState(settedOverlay  === 'True' ? true : false);
+export const Reference = ({ setNormalize, setPosition, setStats, normalize, position, stats }: ReferenceProps) => {
+  const [checked, setChecked] = useState(normalize === 'True' ? true : false);
+  const [checkedStats, setCheckedStats] = useState(stats === '0' ? false : true);
 
   useEffect(() => {
-    const normalizeValue = checked ? 'True' : 'False';
-    set_normalize(normalizeValue);
+    const normalize_value = checked ? 'True' : 'False';
+    setChecked(normalize === 'True' ? true : false)
+    setNormalize(normalize_value);
+
+    const stats_value = checkedStats ? '' : '0';
+    setCheckedStats(stats === '0' ? false : true)
+    setStats(stats_value);
+  }, []);
+
+  useEffect(() => {
+
+  }, []);
+
+
+  useEffect(() => {
+    const value = checked ? 'True' : 'False';
+    setNormalize(value);
   }, [checked]);
+
+  useEffect(() => {
+    const value = checkedStats ? '0' : '';
+    setStats(value);
+  }, [checkedStats]);
+
 
   return (
     <CustomRow>
@@ -45,7 +65,7 @@ export const Reference = ({ setNormalizeNotGlobally, setPositionNotGlobally, set
       </CustomCol>
       <CustomCol space={'2'}>
         <FormItem name="OverlayPosition" label="Position:">
-          <OverlayOptions settedOverlay={settedOverlay} setPositionNotGlobally={setPositionNotGlobally} />
+          <OverlayPosition setPosition={setPosition} position={position} />
         </FormItem>
       </CustomCol>
       <CustomCol space={'2'}>
@@ -77,15 +97,37 @@ export const Reference = ({ setNormalizeNotGlobally, setPositionNotGlobally, set
   );
 };
 
-export const ReferenceWithOverlaidRuns = ({ settedOverlay, normalize_from_query }: ReferenceWithOverlaidRuns) => {
+export const ReferenceWithOverlaidRuns = () => {
   const globalState = useContext(store);
-  const { triples } = globalState;
+  const { triples, setNormalize, setStats, setOverlaiPosition, normalize, stats, overlayPosition } = globalState;
   const router = useRouter();
   const query: QueryProps = router.query;
+
+  const normalize_value = query.normalize ? query.normalize : normalize
+  const stats_value = query.stats === '' || query.stats === '0' ? query.stats : stats
+  const position_value = query.overlay ? query.overlay : overlayPosition
+
+
+  useEffect(() => {
+    setOverlaiPosition(position_value)
+    setNormalize(normalize_value)
+    setStats(stats_value)
+  }, [])
+
+  useChangeRouter({ overlay: overlayPosition, normalize: normalize, stats: stats }, [overlayPosition, normalize, stats], true)
+  const overlaidRuns = triples.length > 0 ? triples : getTriples(query.overlay_data as string)
+
   return (
     <StyledDiv>
-      <Reference settedOverlay={settedOverlay} normalize_from_query={normalize_from_query} />
-      <OverlayRuns overlaid_runs={triples} query={query} />
+      <Reference
+        normalize={normalize}
+        stats={stats}
+        position={overlayPosition}
+        setNormalize={setNormalize}
+        setPosition={setOverlaiPosition}
+        setStats={setStats}
+      />
+      <OverlayRuns overlaid_runs={overlaidRuns} query={query} />
     </StyledDiv>
   )
 }

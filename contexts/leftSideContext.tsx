@@ -37,7 +37,7 @@ export interface LeftSideState {
 export const initialState: any = {
   size: sizes.medium.size,
   normalize: 'True',
-  stats: true,
+  stats: '',
   overlayPosition: overlayOptions[0].value,
   overlay: undefined,
   overlayPlots: [],

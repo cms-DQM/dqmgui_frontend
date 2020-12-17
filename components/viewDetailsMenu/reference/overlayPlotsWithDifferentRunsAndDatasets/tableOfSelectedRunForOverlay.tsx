@@ -25,7 +25,17 @@ export const TableOfSelectedRunForOverlay = ({
   query,
   change_run_details,
   remove_runs_to_set_runs_for_overlay,
+  setTriples,
 }: TableOfSelectedRunForOverlayProps) => {
+  
+  const removeTriple = (triple: TripleProps) => {
+    const copy = [...triples]
+    const index = triples.findIndex((one_triple: TripleProps) =>
+      one_triple.run_number === triple.run_number &&
+      one_triple.dataset_name === triple.dataset_name)
+    copy.splice(index, 1)
+    setTriples(copy)
+  }
   return (
     <table>
       {triples.map((overlaid_run: TripleProps, index: number) => {
@@ -101,9 +111,7 @@ export const TableOfSelectedRunForOverlay = ({
             <CustomTd spacing={'4'}>
               <StyledSecondaryButton
                 onClick={() => {
-                  remove_runs_to_set_runs_for_overlay(
-                    overlaid_run.id as string
-                  );
+                  removeTriple(overlaid_run)
                 }}
                 icon={<MinusOutlined />}
               ></StyledSecondaryButton>

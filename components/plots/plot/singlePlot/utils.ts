@@ -78,7 +78,7 @@ export const FormatParamsForAPI = (
     width: zoomed ? globalState.rightSideSize.w : globalState.size.w,
     customizeProps: globalState.customizeProps,
     stats: globalState.stats,
-    overlay: query.overlay,
+    overlay: globalState.overlayPosition ?  globalState.overlayPosition : query.overlay,
     notOlderThan: globalState.updated_by_not_older_than
       ? globalState.updated_by_not_older_than
       : '',

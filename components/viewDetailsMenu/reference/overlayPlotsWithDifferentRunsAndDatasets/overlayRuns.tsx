@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import { Row, Tooltip } from 'antd';
 
@@ -13,10 +13,6 @@ import {
 } from '../../../styledComponents';
 import { getDisabledButtonTitle } from '../../utils';
 import { store } from '../../../../contexts/leftSideContext';
-import {
-  OVERLAY_DIFFERENT_PLOTS_WITH_DIFFERENT_RUN_AND_DATASET_BUT_SAME_NAMES,
-  OVERLAY_DIFFERENT_PLOTS_WITH_SAME_RUN_AND_DATASET_DIFFERENT_NAME
-} from '../../../../contexts/constants';
 import { SetRunsModal } from './setRunsModal';
 import { TableOfSelectedRunForOverlay } from './tableOfSelectedRunForOverlay';
 import { change_run_details } from './overlaidRunsActions/changeRunDetails';
@@ -38,6 +34,7 @@ export const OverlayRuns = ({ overlaid_runs, query }: OverlayRunsProps) => {
 
   const [open, toggleModal] = useState(false);
 
+  
   return (
     <CustomDiv style={{ overflowX: 'auto' }}>
       <SetRunsModal
