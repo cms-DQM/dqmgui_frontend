@@ -51,7 +51,6 @@ export const addToSelectedPlots = (
 };
 
 export const makeURLForOverlayData = (triples: TripleProps[] | undefined) => {
-  console.log(triples)
   const params =
     triples &&
     triples.map(
@@ -78,13 +77,13 @@ export const FormatParamsForAPI = (
     height: zoomed ? globalState.rightSideSize.h : globalState.size.h,
     width: zoomed ? globalState.rightSideSize.w : globalState.size.w,
     customizeProps: globalState.customizeProps,
-    stats: query.stats=== '' || query.stats === '0' ? query.stats : globalState.stats,
-    overlay: globalState.overlayPosition ?  globalState.overlayPosition : query.overlay,
+    stats: globalState.stats,
+    overlay: globalState.overlayPosition,
     notOlderThan: globalState.updated_by_not_older_than
       ? globalState.updated_by_not_older_than
       : '',
     overlay_plot: query.overlay_data ? getTriples(query.overlay_data) : [],
-    normalize: globalState.normalize ? globalState.normalize : 'False',
+    normalize: globalState.normalize,
     lumi: query.lumi,
   });
 

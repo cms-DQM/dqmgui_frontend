@@ -58,13 +58,15 @@ export const Browser = () => {
       )
     );
   }
-
   //make changes through context
   return (
     <Form>
       <WrapperDiv>
         <WrapperDiv>
-          <RunBrowser setCurrentRunNumber={setCurrentRunNumber} />
+          <RunBrowser
+            current_dataset_name={currentDataset}
+            current_run_number={currentRunNumber}
+            setCurrentRunNumber={setCurrentRunNumber} />
         </WrapperDiv>
         <WrapperDiv>
           {functions_config.new_back_end.lumisections_on && (
@@ -78,34 +80,35 @@ export const Browser = () => {
           )}
         </WrapperDiv>
         {functions_config.mode !== 'ONLINE' && (
-            <StyledFormItem
-              labelcolor="white"
-              label={
-                <DropdownMenu
-                  options={dataSetSelections}
-                  action={setDatasetOption}
-                  defaultValue={dataSetSelections[0]}
+          <StyledFormItem
+            labelcolor="white"
+            label={
+              <DropdownMenu
+                options={dataSetSelections}
+                action={setDatasetOption}
+                defaultValue={dataSetSelections[0]}
+              />
+            }
+          >
+            {datasetOption === dataSetSelections[0].value ? (
+              <WrapperDiv>
+                <DatasetsBrowser
+                  setCurrentDataset={setCurrentDataset}
+                  current_run_number={currentRunNumber}
+                  current_dataset_name={currentDataset}
                 />
-              }
-            >
-              {datasetOption === dataSetSelections[0].value ? (
+              </WrapperDiv>
+            ) : (
                 <WrapperDiv>
-                  <DatasetsBrowser
-                    setCurrentDataset={setCurrentDataset}
+                  <DatasetsBuilder
+                    currentRunNumber={currentRunNumber}
+                    currentDataset={currentDataset}
                     query={query}
                   />
                 </WrapperDiv>
-              ) : (
-                  <WrapperDiv>
-                    <DatasetsBuilder
-                      currentRunNumber={currentRunNumber}
-                      currentDataset={currentDataset}
-                      query={query}
-                    />
-                  </WrapperDiv>
-                )}
-            </StyledFormItem>
-          )}
+              )}
+          </StyledFormItem>
+        )}
       </WrapperDiv>
     </Form>
   );

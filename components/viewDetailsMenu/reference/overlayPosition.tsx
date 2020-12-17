@@ -12,9 +12,10 @@ const { Option } = Select;
 interface OverlayPositionProps {
   setPosition(value: string): void;
   position: string;
+  disabled?:boolean;
 }
 
-export const OverlayPosition = ({ setPosition, position }: OverlayPositionProps) => {
+export const OverlayPosition = ({ setPosition, position, disabled }: OverlayPositionProps) => {
   const [value, setValue] = React.useState<string>(position);
 
   useEffect(() => {
@@ -31,6 +32,7 @@ export const OverlayPosition = ({ setPosition, position }: OverlayPositionProps)
         setValue(e);
       }}
       value={value}
+      disabled={disabled}
     >
       {overlayOptions.map((option: OptionProps) => {
         return (

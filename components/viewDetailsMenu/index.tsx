@@ -50,7 +50,17 @@ export const ViewDetailsMenu = ({ selected_plots, query }: ViewDetailsMenuProps)
     setTriples(getTriples(overlay_data))
   }, [])
 
-  useChangeRouter({ overlay: overlayPosition, normalize: normalize, stats: stats, overlay_data: overlay_data }, [overlayPosition, normalize, stats, overlay_data], true)
+
+  useChangeRouter({
+    overlay: overlayPosition, normalize: normalize, stats: stats, overlay_data: makeURLForOverlayData(triples)
+  }, [overlayPosition, normalize, stats, makeURLForOverlayData(triples)], triples.length > 0)
+
+  useChangeRouter({
+    overlay_data: makeURLForOverlayData(triples)
+  }, [makeURLForOverlayData(triples)], true)
+
+
+  const disabledRefNormStats = triples.length === 0
 
   return (
     <StyledCollapse style={{ width: '100%' }}>
@@ -99,7 +109,7 @@ export const ViewDetailsMenu = ({ selected_plots, query }: ViewDetailsMenuProps)
           </CustomDiv>
           <hr />
           <CutomFormItem name="Reference" label="Reference">
-            <ReferenceWithOverlaidRuns />
+            <ReferenceWithOverlaidRuns disabled={disabledRefNormStats} />
           </CutomFormItem>
         </Form>
       </Panel>

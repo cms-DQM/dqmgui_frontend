@@ -43,10 +43,10 @@ export const RunBrowser = ({
     }
   }, [currentRunNumberIndex])
 
-  useEffect(()=>{
+  useEffect(() => {
     setCurrentRunNumberIndex(runNumbers.indexOf(current_run_number))
-  },[])
-  
+  }, [])
+
   return (
     <Col>
       <StyledFormItem
@@ -63,6 +63,7 @@ export const RunBrowser = ({
                 type="link"
                 onClick={() => {
                   setCurrentRunNumber(runNumbers[currentRunNumberIndex - 1]);
+                  setCurrentRunNumberIndex(currentRunNumberIndex - 1)
                 }}
               />
             </Col>
@@ -71,7 +72,7 @@ export const RunBrowser = ({
             <div>
               <StyledSelect
                 onClick={() => setSelect(!openSelect)}
-                defaultValue={current_run_number}
+                value={current_run_number}
                 onChange={(e: any) => {
                   setSelect(!openSelect);
                   setCurrentRunNumberIndex(runNumbers.indexOf(e))
@@ -110,6 +111,7 @@ export const RunBrowser = ({
                 type="link"
                 onClick={() => {
                   setCurrentRunNumber(runNumbers[currentRunNumberIndex + 1]);
+                  setCurrentRunNumberIndex(currentRunNumberIndex + 1)
                 }}
               />
             </Col>

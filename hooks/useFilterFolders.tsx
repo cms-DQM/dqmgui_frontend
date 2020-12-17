@@ -75,6 +75,7 @@ export const useFilterFolders = (
     query.folder_path,
     isLoading,
     query.dataset_name,
+    query.run_number,
     formattedPlotsObject,
   ]);
 

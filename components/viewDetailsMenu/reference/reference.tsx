@@ -18,15 +18,16 @@ interface ReferenceProps extends ReferenceWithOverlaidRuns {
   setNormalize(value: string): void;
   setPosition(value: string): void;
   setStats(value: string): void;
-}
-
-interface ReferenceWithOverlaidRuns {
   normalize: string;
   position: string;
   stats: string;
 }
 
-export const Reference = ({ setNormalize, setPosition, setStats, normalize, position, stats }: ReferenceProps) => {
+interface ReferenceWithOverlaidRuns {
+  disabled?: boolean;
+}
+
+export const Reference = ({ setNormalize, setPosition, setStats, normalize, position, stats, disabled }: ReferenceProps) => {
   const [checked, setChecked] = useState(normalize === 'True' ? true : false);
   const [checkedStats, setCheckedStats] = useState(stats === '0' ? false : true);
 
@@ -58,7 +59,7 @@ export const Reference = ({ setNormalize, setPosition, setStats, normalize, posi
       </CustomCol>
       <CustomCol space={'2'}>
         <FormItem name="OverlayPosition" label="Position:">
-          <OverlayPosition setPosition={setPosition} position={position} />
+          <OverlayPosition disabled={disabled} setPosition={setPosition} position={position} />
         </FormItem>
       </CustomCol>
       <CustomCol space={'2'}>
@@ -68,6 +69,7 @@ export const Reference = ({ setNormalize, setPosition, setStats, normalize, posi
               await setChecked(e.target.checked);
             }}
             checked={checked}
+            disabled={disabled}
           >
             Normalize
             </CustomCheckbox>
@@ -80,6 +82,7 @@ export const Reference = ({ setNormalize, setPosition, setStats, normalize, posi
               await setCheckedStats(e.target.checked);
             }}
             checked={checkedStats}
+            disabled={disabled}
           >
             Stats
             </CustomCheckbox>
@@ -90,7 +93,7 @@ export const Reference = ({ setNormalize, setPosition, setStats, normalize, posi
   );
 };
 
-export const ReferenceWithOverlaidRuns = () => {
+export const ReferenceWithOverlaidRuns = ({ disabled }: ReferenceWithOverlaidRuns) => {
   const globalState = useContext(store);
   const { triples, setNormalize, setStats, setOverlaiPosition, normalize, stats, overlayPosition } = globalState;
   const router = useRouter();
@@ -99,6 +102,7 @@ export const ReferenceWithOverlaidRuns = () => {
   return (
     <StyledDiv>
       <Reference
+        disabled={disabled}
         normalize={normalize}
         stats={stats}
         position={overlayPosition}

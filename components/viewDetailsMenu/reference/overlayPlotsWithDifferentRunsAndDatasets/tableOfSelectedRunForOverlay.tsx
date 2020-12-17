@@ -70,10 +70,7 @@ export const TableOfSelectedRunForOverlay = ({
         <Field
           overlaid_run={overlaid_run}
           changeTriple={changeTriple}
-          id={overlaid_run.id}
-          field_name="label"
           placeholder="label"
-          defaultValue={overlaid_run.label as string}
           value={overlaid_run.label}
         />
       </CustomTd>

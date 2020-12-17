@@ -91,7 +91,7 @@ export const get_plot_with_overlay_old_api = (params: ParamsForApiProps) => {
     };obj=archive/${getRunsWithLumisections(params)}${params.dataset_name}/${params.folders_path
     }/${encodeURIComponent(params.plot_name as string)}${params.joined_overlaied_plots_urls
     };${params.stats ? '' : 'showstats=0;'}${params.errorBars ? 'showerrbars=1;' : ''
-    }norm=${params.normalize};w=${params.width};h=${params.height}`;
+    }${params.normalize ? params.normalize : ''};w=${params.width};h=${params.height}`;
 };
 
 export const get_plot_with_overlay_new_api = (params: ParamsForApiProps) => {

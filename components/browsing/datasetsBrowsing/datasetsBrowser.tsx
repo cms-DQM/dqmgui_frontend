@@ -50,6 +50,7 @@ export const DatasetsBrowser = ({
             icon={<CaretLeftFilled />}
             onClick={() => {
               setCurrentDataset(datasets[currentDatasetNameIndex - 1]);
+              setCurrentDatasetNameIndex(currentDatasetNameIndex - 1);
             }}
           />
         </Col>
@@ -60,7 +61,7 @@ export const DatasetsBrowser = ({
             onChange={(e: any) => {
               setCurrentDataset(e);
             }}
-            value={datasets[currentDatasetNameIndex]}
+            value={current_dataset_name}
             dropdownMatchSelectWidth={false}
             onClick={() => setSelect(!openSelect)}
             open={openSelect}
@@ -94,6 +95,7 @@ export const DatasetsBrowser = ({
             icon={<CaretRightFilled />}
             onClick={() => {
               setCurrentDataset(datasets[currentDatasetNameIndex + 1]);
+              setCurrentDatasetNameIndex(currentDatasetNameIndex + 1);
             }}
           />
         </Col>
