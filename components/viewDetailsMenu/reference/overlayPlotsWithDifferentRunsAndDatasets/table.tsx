@@ -1,7 +1,7 @@
 import { Button, Input, Space } from 'antd';
 import * as React from 'react'
-import { TripleProps } from '../../../../../containers/display/interfaces';
-import { StyledSelectedPlotsTable } from '../../overlayRunsWithDifferentPlotNames/overlayWithAnotherPlot/styledComponents';
+import { TripleProps } from '../../../../containers/display/interfaces';
+import { StyledSelectedPlotsTable } from '../overlayRunsWithDifferentPlotNames/overlayWithAnotherPlot/styledComponents';
 
 interface TableProps {
   selectedRuns: TripleProps[]

@@ -19,7 +19,7 @@ export interface LeftSideStateProviderProps {
 export interface LeftSideState {
   size: SizeProps;
   normalize: boolean;
-  stats: boolean;
+  stats: string;
   overlayPosition: string;
   overlay: PlotProps[];
   triples: TripleProps[];

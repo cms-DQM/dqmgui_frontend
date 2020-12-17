@@ -112,7 +112,9 @@ const Content: FC<FolderProps> = ({
         </Row>
       </CustomRow>
       <CustomRow width="100%">
-        <ViewDetailsMenu selected_plots={selected_plots.length > 0} />
+        <ViewDetailsMenu 
+        query={query}
+        selected_plots={selected_plots.length > 0} />
       </CustomRow>
       <>
         <DivWrapper

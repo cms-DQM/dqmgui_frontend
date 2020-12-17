@@ -20,7 +20,7 @@ import {
 } from '../../../../containers/display/utils';
 import { addOverlayData } from '../../../plots/plot/singlePlot/utils';
 import { useRouter } from 'next/router';
-import { Table } from './overlaidRunsActions/table';
+import { Table } from './table';
 
 interface SetRunsModalProps {
   open: boolean;

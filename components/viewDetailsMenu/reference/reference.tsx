@@ -43,17 +43,12 @@ export const Reference = ({ setNormalize, setPosition, setStats, normalize, posi
   }, []);
 
   useEffect(() => {
-
-  }, []);
-
-
-  useEffect(() => {
     const value = checked ? 'True' : 'False';
     setNormalize(value);
   }, [checked]);
 
   useEffect(() => {
-    const value = checkedStats ? '0' : '';
+    const value = checkedStats ? '' : '0';
     setStats(value);
   }, [checkedStats]);
 
@@ -103,18 +98,6 @@ export const ReferenceWithOverlaidRuns = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
 
-  const normalize_value = query.normalize ? query.normalize : normalize
-  const stats_value = query.stats === '' || query.stats === '0' ? query.stats : stats
-  const position_value = query.overlay ? query.overlay : overlayPosition
-
-
-  useEffect(() => {
-    setOverlaiPosition(position_value)
-    setNormalize(normalize_value)
-    setStats(stats_value)
-  }, [])
-
-  useChangeRouter({ overlay: overlayPosition, normalize: normalize, stats: stats }, [overlayPosition, normalize, stats], true)
   const overlaidRuns = triples.length > 0 ? triples : getTriples(query.overlay_data as string)
 
   return (
