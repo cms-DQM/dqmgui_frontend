@@ -15,8 +15,7 @@ import { getDisabledButtonTitle } from '../../utils';
 import { store } from '../../../../contexts/leftSideContext';
 import { SetRunsModal } from './setRunsModal';
 import { TableOfSelectedRunForOverlay } from './tableOfSelectedRunForOverlay';
-import { change_run_details } from './overlaidRunsActions/changeRunDetails';
-import { remove_runs_from_a_lst } from './overlaidRunsActions/removeRunFromAList';
+
 
 interface OverlayRunsProps {
   overlaid_runs: TripleProps[];
@@ -29,12 +28,26 @@ export const OverlayRuns = ({ overlaid_runs, query }: OverlayRunsProps) => {
     runs_set_for_overlay,
     set_runs_set_for_overlay,
     setTriples,
-    triples,
   } = globalState;
 
-  const [open, toggleModal] = useState(false);
+  const removeTriple = (triple: TripleProps) => {
+    const copy = [...overlaid_runs]
+    const index = overlaid_runs.findIndex((one_triple: TripleProps) =>
+      one_triple.run_number === triple.run_number &&
+      one_triple.dataset_name === triple.dataset_name)
+    copy.splice(index, 1)
+    setTriples(copy)
+  }
 
-  
+  const changeTriple = (triple: TripleProps, value: string, key: string) => {
+    const copy = [...overlaid_runs]
+    const index = overlaid_runs.findIndex((one_triple: TripleProps) =>
+      one_triple.run_number === triple.run_number &&
+      one_triple.dataset_name === triple.dataset_name)
+    copy[index][key] = value
+    setTriples(copy)
+  }
+  const [open, toggleModal] = useState(false);
   return (
     <CustomDiv style={{ overflowX: 'auto' }}>
       <SetRunsModal
@@ -42,16 +55,19 @@ export const OverlayRuns = ({ overlaid_runs, query }: OverlayRunsProps) => {
         toggleModal={toggleModal}
         overlaid_runs={overlaid_runs}
         setTriples={setTriples}
-        triples={triples}
         set_runs_set_for_overlay={set_runs_set_for_overlay}
       />
-      <TableOfSelectedRunForOverlay
-        triples={triples}
-        query={query}
-        change_run_details={(triples: TripleProps[]) => change_run_details(triples)(setTriples, query)}
-        setTriples={setTriples}
-        remove_runs_to_set_runs_for_overlay={(id: string) => remove_runs_from_a_lst(id)(triples, setTriples, query)}
-      />
+      <table>
+        {overlaid_runs.map((overlaid_run: TripleProps, index: number) => {
+          return (
+            <TableOfSelectedRunForOverlay
+              overlaid_run={overlaid_run}
+              changeTriple={changeTriple}
+              index={index}
+              triples={overlaid_runs}
+              removeTriple={removeTriple} />)
+        })}
+      </table>
       <Row justify="space-between" style={{ height: 48, padding: 8 }}>
         <CustomDiv position="fixed" display="flex">
           <CustomCol space="2">

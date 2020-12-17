@@ -8,7 +8,7 @@ export const getTriples = (params: string) => {
       const parts = params.split('/')
       const run_number = parts.shift()
       const label = parts.pop()
-      const dataset_name = parts.join('/')
+      const dataset_name ='/'+ parts.join('/')
       const checked = true
       return {
         id,

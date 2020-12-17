@@ -15,7 +15,8 @@ interface ReturnSearch {
 
 export const useSearch = (
   run_number?: string,
-  dataset_name?: string
+  dataset_name?: string,
+a?: string
 ): ReturnSearch => {
   const searching = !!(run_number || dataset_name);
   const run_number_value = run_number ? run_number : '';
@@ -38,7 +39,6 @@ export const useSearch = (
   );
 
   const data_get_by_api = get_runs_by_search(data);
-
   if (!searching || data === null || data_get_by_api.lenght === 0) {
     return {
       results_grouped: [],
@@ -47,7 +47,6 @@ export const useSearch = (
       errors,
     };
   }
-
   const results_grouped = _.chain(data_get_by_api)
     .sortBy('dataset')
     .groupBy('dataset')

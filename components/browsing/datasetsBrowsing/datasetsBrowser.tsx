@@ -7,11 +7,9 @@ import {
   OptionParagraph,
 } from '../../viewDetailsMenu/styledComponents';
 import { useSearch } from '../../../hooks/useSearch';
-import { QueryProps } from '../../../containers/display/interfaces';
 import { CustomCol } from '../../styledComponents';
 
 interface DatasetsBrowserProps {
-  query: QueryProps;
   setCurrentDataset(currentDataset: string): void;
   withoutArrows?: boolean;
   selectorWidth?: string;
@@ -25,7 +23,6 @@ export const DatasetsBrowser = ({
   withoutArrows,
   setCurrentDataset,
   selectorWidth,
-  query,
   current_dataset_name,
   current_run_number,
 }: DatasetsBrowserProps) => {
@@ -33,18 +30,14 @@ export const DatasetsBrowser = ({
   const [currentDatasetNameIndex, setCurrentDatasetNameIndex] = useState<
     number
   >(0);
-  const run_number = current_run_number ? current_run_number : query.run_number;
-  const { results_grouped, isLoading } = useSearch(run_number, '');
+  const { results_grouped, isLoading } = useSearch(current_run_number, '');
 
   const datasets = results_grouped.map((result) => {
     return result.dataset;
   });
 
   useEffect(() => {
-    const query_dataset = current_dataset_name
-      ? current_dataset_name
-      : query.dataset_name;
-    setCurrentDatasetNameIndex(datasets.indexOf(query_dataset));
+    setCurrentDatasetNameIndex(datasets.indexOf(current_dataset_name));
   }, [isLoading, datasets]);
 
   return (

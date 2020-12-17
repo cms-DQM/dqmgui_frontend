@@ -71,7 +71,7 @@ export const get_run_list_by_search_old_api = (params: ParamsForApiProps) => {
   return `data/json/samples?match=${params.dataset_name}/&run=${params.run_number}`;
 };
 export const get_run_list_by_search_new_api = (params: ParamsForApiProps) => {
-  return `api/v1/samples?run=${params.run_number}&lumi=${params.lumi}&dataset=${params.dataset_name}/`;
+  return `api/v1/samples?run=${params.run_number}&lumi=${params.lumi}&dataset=${params.dataset_name}`;
 };
 export const get_run_list_by_search_new_api_with_no_older_than = (
   params: ParamsForApiProps
@@ -129,7 +129,7 @@ export const get_overlaied_plots_urls = (params: ParamsForApiProps) => {
     const label = overlay.label ? overlay.label : overlay.run_number;
     return `;obj=archive/${getRunsWithLumisections(
       overlay
-    )}${dataset_name_overlay}/${params.folders_path}/${encodeURIComponent(
+    )}/${dataset_name_overlay}/${params.folders_path}/${encodeURIComponent(
       params.plot_name as string
     )};reflabel=${label}`;
   });

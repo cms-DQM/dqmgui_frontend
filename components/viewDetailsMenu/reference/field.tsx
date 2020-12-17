@@ -1,31 +1,28 @@
 import React, { ChangeEvent, useEffect } from 'react';
 
 import { StyledInput, StyledFormItem } from '../../styledComponents';
-import { changeRunsForOverlayPropsValues } from '../utils';
 import { TripleProps } from '../../../containers/display/interfaces';
 
 interface FieldProps {
-  removeRun(id: string | number | boolean): void;
   id: any;
   field_name: string;
   value: any;
   placeholder?: string;
   disabled?: boolean;
   defaultValue?: string;
-  change_run_details: any;
-  triples: TripleProps[];
+  changeTriple: any;
+  overlaid_run: TripleProps;
 }
 
 export const Field = ({
-  removeRun,
   id,
   field_name,
   value,
   placeholder,
   disabled,
   defaultValue,
-  triples,
-  change_run_details,
+  overlaid_run,
+  changeTriple,
 }: FieldProps) => {
   const inputValue = value ? value : defaultValue;
   return (
@@ -33,13 +30,7 @@ export const Field = ({
       <StyledInput
         disabled={disabled}
         onChange={(e: any) => {
-          changeRunsForOverlayPropsValues(
-            e.target.value,
-            'label',
-            id,
-            triples,
-            change_run_details
-          );
+          changeTriple(overlaid_run,  e.target.value, 'label')
         }}
         value={inputValue}
         defaultValue={inputValue}

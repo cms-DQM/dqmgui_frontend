@@ -18,7 +18,7 @@ import {
   changeRouter,
   getChangedQueryParams,
 } from '../../../../containers/display/utils';
-import { addOverlayData } from '../../../plots/plot/singlePlot/utils';
+import { makeURLForOverlayData } from '../../../plots/plot/singlePlot/utils';
 import { useRouter } from 'next/router';
 import { Table } from './table';
 
@@ -27,25 +27,24 @@ interface SetRunsModalProps {
   toggleModal(open: boolean): void;
   overlaid_runs: TripleProps[];
   set_runs_set_for_overlay(runs: TripleProps[]): void;
-  triples: TripleProps[];
   setTriples(selected_runs: TripleProps[]): void;
 }
 
 export const SetRunsModal = ({
   open,
   toggleModal,
-  triples,
+  overlaid_runs,
   setTriples,
 }: SetRunsModalProps) => {
   const [serachRunNumber, setSearchRunNumber] = React.useState('');
   const [serachDatasetName, setSearchDatasetName] = React.useState('');
 
-  const initialSelectedRuns = triples.length > 0 ? triples : []
+  const initialSelectedRuns = overlaid_runs.length > 0 ? overlaid_runs : []
   const [selected_runs, set_selected_runs] = React.useState<TripleProps[]>(initialSelectedRuns);
 
   React.useEffect(()=>{
-    set_selected_runs(triples)
-  },[triples])
+    set_selected_runs(overlaid_runs)
+  },[overlaid_runs])
 
   const { results_grouped, searching, isLoading, errors } = useSearch(
     serachRunNumber,
@@ -83,7 +82,7 @@ export const SetRunsModal = ({
     changeRouter(
       getChangedQueryParams(
         {
-          overlay_data: `${addOverlayData(selected_runs)}`,
+          overlay_data: `${makeURLForOverlayData(selected_runs)}`,
         },
         query
       )
@@ -101,7 +100,7 @@ export const SetRunsModal = ({
       visible={open}
       onCancel={() => {
         toggleModal(false);
-        set_selected_runs(triples);
+        set_selected_runs(overlaid_runs);
       }}
       footer={[
         <StyledButton

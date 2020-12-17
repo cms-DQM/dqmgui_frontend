@@ -13,8 +13,6 @@ import { OverlayPosition } from './overlayPosition';
 import { OverlayRuns } from './overlayPlotsWithDifferentRunsAndDatasets/overlayRuns';
 import FormItem from 'antd/lib/form/FormItem';
 import { store } from '../../../contexts/leftSideContext';
-import { useChangeRouter } from '../../../hooks/useChangeRouter';
-import { getTriples } from './utils';
 
 interface ReferenceProps extends ReferenceWithOverlaidRuns {
   setNormalize(value: string): void;
@@ -98,8 +96,6 @@ export const ReferenceWithOverlaidRuns = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
 
-  const overlaidRuns = triples.length > 0 ? triples : getTriples(query.overlay_data as string)
-
   return (
     <StyledDiv>
       <Reference
@@ -110,7 +106,7 @@ export const ReferenceWithOverlaidRuns = () => {
         setPosition={setOverlaiPosition}
         setStats={setStats}
       />
-      <OverlayRuns overlaid_runs={overlaidRuns} query={query} />
+      <OverlayRuns overlaid_runs={triples} query={query} />
     </StyledDiv>
   )
 }

@@ -7,12 +7,12 @@ import {
 import cleanDeep from 'clean-deep';
 
 import { LeftSideState } from '../../../../contexts/leftSideContext';
-import { formTriples } from '../../../viewDetailsMenu/utils';
 import {
   changeRouter,
   getChangedQueryParams,
 } from '../../../../containers/display/utils';
 import { functions_config } from '../../../../config/config';
+import { getTriples } from '../../../viewDetailsMenu/reference/utils';
 
 export const removePlotFromSelectedPlots = (
   plotsQuery: string | undefined,
@@ -50,7 +50,8 @@ export const addToSelectedPlots = (
   }
 };
 
-export const addOverlayData = (triples: TripleProps[] | undefined) => {
+export const makeURLForOverlayData = (triples: TripleProps[] | undefined) => {
+  console.log(triples)
   const params =
     triples &&
     triples.map(
@@ -82,7 +83,7 @@ export const FormatParamsForAPI = (
     notOlderThan: globalState.updated_by_not_older_than
       ? globalState.updated_by_not_older_than
       : '',
-    overlay_plot: query.overlay_data ? formTriples(query.overlay_data) : [],
+    overlay_plot: query.overlay_data ? getTriples(query.overlay_data) : [],
     normalize: globalState.normalize ? globalState.normalize : 'False',
     lumi: query.lumi,
   });

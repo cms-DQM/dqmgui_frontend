@@ -8,46 +8,45 @@ import {
   OptionParagraph,
 } from '../viewDetailsMenu/styledComponents';
 import { useSearch } from '../../hooks/useSearch';
-import { QueryProps } from '../../containers/display/interfaces';
 
 const { Option } = Select;
 
 interface RunBrowserProps {
-  query: QueryProps;
   setCurrentRunNumber(currentRunNumber: string): void;
   withoutArrows?: boolean;
   withoutLabel?: boolean;
   selectorWidth?: string;
   current_run_number?: string;
   current_dataset_name?: string;
+  a?: string;
 }
 
 export const RunBrowser = ({
-  query,
   setCurrentRunNumber,
   withoutArrows,
   withoutLabel,
-  current_run_number,
   current_dataset_name,
+  current_run_number,
+  a
 }: RunBrowserProps) => {
   const [openSelect, setSelect] = useState(false);
 
   const [currentRunNumberIndex, setCurrentRunNumberIndex] = useState<number>(0);
-  const dataset_name = current_dataset_name
-    ? current_dataset_name
-    : query.dataset_name;
-  const { results_grouped, isLoading } = useSearch('', dataset_name);
+  const { results_grouped, isLoading } = useSearch('', current_dataset_name, a);
   const runNumbers = results_grouped[0]
     ? results_grouped[0].runs.map((run: number) => run.toString())
     : [];
 
   useEffect(() => {
-    const query_run_number = current_run_number
-      ? current_run_number.toString()
-      : query.run_number;
-    setCurrentRunNumberIndex(runNumbers.indexOf(query_run_number));
-  }, [runNumbers, isLoading]);
+    if (currentRunNumberIndex > 0) {
+      setCurrentRunNumber(runNumbers[currentRunNumberIndex])
+    }
+  }, [currentRunNumberIndex])
 
+  useEffect(()=>{
+    setCurrentRunNumberIndex(runNumbers.indexOf(current_run_number))
+  },[])
+  
   return (
     <Col>
       <StyledFormItem
@@ -72,10 +71,10 @@ export const RunBrowser = ({
             <div>
               <StyledSelect
                 onClick={() => setSelect(!openSelect)}
-                value={runNumbers[currentRunNumberIndex]}
+                defaultValue={current_run_number}
                 onChange={(e: any) => {
-                  setCurrentRunNumber(e);
                   setSelect(!openSelect);
+                  setCurrentRunNumberIndex(runNumbers.indexOf(e))
                 }}
                 showSearch={true}
                 open={openSelect}
@@ -95,8 +94,8 @@ export const RunBrowser = ({
                             <Spin />
                           </OptionParagraph>
                         ) : (
-                          <div>{run}</div>
-                        )}
+                            <div>{run}</div>
+                          )}
                       </Option>
                     );
                   })}
