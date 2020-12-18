@@ -17,7 +17,6 @@ import { changeFolderPathByBreadcrumb, makeLinkableOverlay, setPlot } from './ut
 import { SelectedPlotsTable } from './selectedPlotsTable'
 import { get_plot_with_overlay_new_api } from '../../../../../config/config'
 import { Reference } from '../../reference'
-import { overlayOptions } from '../../../../constants'
 import { PlotButton } from './plotButton'
 import { useChangeRouter } from '../../../../../hooks/useChangeRouter'
 
@@ -31,30 +30,39 @@ interface OverlayWithAnotherPlotProps {
 }
 
 export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnotherPlotModal, default_overlay, params_for_api, set_overlaid_plot_url }: OverlayWithAnotherPlotProps) => {
-  const [overlaidPlots, setOverlaidPlots] = React.useState<PlotoverlaidSeparatelyProps>({ folder_path: '', name: '' })
+  const emptyObject: PlotoverlaidSeparatelyProps = { run_number: '', dataset_name: '', folder_path: '', name: '' }
+  const [overlaidPlots, setOverlaidPlots] = React.useState<PlotoverlaidSeparatelyProps>(emptyObject)
   const [folders, setFolders] = React.useState<(string | undefined)[]>([])
-  const [urls, setUrls] = React.useState(null)
+  const [urls, setUrls] = React.useState<string | null>(null)
 
-  const [normalize, setNormaize] = React.useState<string>(params_for_api.overlaidSeparately?.normalize)
+  const initial_normalize_value = params_for_api.normalize ? params_for_api.normalize : 'True'
+  const initial_overlay_value = params_for_api.overlay ? params_for_api.overlay : 'overlay'
+  const initial_stats_value = params_for_api.stats ? params_for_api.stats : ''
 
-  const initial_overlay = params_for_api.overlaidSeparately?.ref ? params_for_api.overlaidSeparately.ref : overlayOptions[0].value
-  const initial_stats = params_for_api.overlaidSeparately?.stats === 'True' ? params_for_api.overlaidSeparately.stats : 'False'
-
-  const [overlayPosition, setOverlayPosition] = React.useState<string>(initial_overlay)
-  const [stats, setStats] = React.useState<string>(initial_stats)
-
+  const [normalize, setNormaize] = React.useState<string>(initial_normalize_value)
+  const [overlayPosition, setOverlayPosition] = React.useState<string>(initial_overlay_value)
+  const [stats, setStats] = React.useState<string>(initial_stats_value)
+  const [disabled, setDisabled] = React.useState<boolean>()
 
   const [currentFolder, setCurrentFolder] = React.useState<string | undefined>('')
   const clear = () => {
     setOpenOverlayWithAnotherPlotModal(false)
     setCurrentFolder('')
-    setOverlaidPlots({ folder_path: '', name: '' })
+    setOverlaidPlots(emptyObject)
     setFolders([])
   }
 
   const [selectedPlots, setSelectedPlots] = React.useState<PlotoverlaidSeparatelyProps[]>([])
   const router = useRouter();
   const query: QueryProps = router.query;
+
+  React.useEffect(() => {
+    if (selectedPlots.length === 0 ) {
+      setDisabled(true)
+    } else {
+      setDisabled(false)
+    }
+  }, [ selectedPlots.length ])
 
   React.useEffect(() => {
     if (plot.overlaidSeparately) {
@@ -89,7 +97,10 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
       const rest = copy.splice(0, index + 1)
       setFolders(rest)
       const joinderFolders = rest.join('/')
-      setOverlaidPlots({ folder_path: joinderFolders, name: '' })
+      setOverlaidPlots(() => {
+        emptyObject.folder_path = joinderFolders
+        return emptyObject
+      })
     }
     else {
       copy.push(currentFolder)
@@ -100,9 +111,15 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
       setFolders(cleaned_array)
       const joinderFolders = copy.join('/')
       if (cleaned_array.length === 0) {
-        setOverlaidPlots({ folder_path: '', name: '' })
+        setOverlaidPlots(() => {
+          emptyObject.folder_path = ''
+          return emptyObject
+        })
       }
-      setOverlaidPlots({ folder_path: joinderFolders, name: '' })
+      setOverlaidPlots(() => {
+        emptyObject.folder_path = joinderFolders
+        return emptyObject
+      })
     }
   }, [currentFolder])
 
@@ -147,6 +164,7 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
             setNormalize={setNormaize}
             setPosition={setOverlayPosition}
             setStats={setStats}
+            disabled={disabled}
             normalize={normalize}
             stats={stats}
             position={overlayPosition}

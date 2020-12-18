@@ -24,7 +24,6 @@ export const Field = ({
     set_input_value(value)
   }, [value])
 
-console.log(input_value)
   return (
       <StyledInput
         disabled={disabled}

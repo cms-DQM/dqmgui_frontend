@@ -28,7 +28,7 @@ export interface PlotProps extends LumisectionRequestProps {
   width?: number;
   height?: number;
   overlay?: string;
-  stats?: boolean;
+  stats?: string;
   normalize?: string;
   errorBars?: boolean;
   overlaidSeparately?: PlotsoverlaidSeparatelyProps;

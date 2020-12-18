@@ -46,7 +46,7 @@ export const setLabel = (item: PlotoverlaidSeparatelyProps, allSelectedPlots: Pl
   return copy
 }
 
-export const makeLinkableOverlay = (separately_overlaid_plots: PlotsoverlaidSeparatelyProps, plot: PlotDataProps, query: QueryProps) => {
+export const makeLinkableOverlay = (separately_overlaid_plots: PlotsoverlaidSeparatelyProps | undefined, plot: PlotDataProps, query: QueryProps) => {
   const selected_plots = getSelectedPlots(query)
 
   const simple_plot_object = {
