@@ -5,20 +5,18 @@ import { Col, Row } from 'antd'
 import cleanDeep from 'clean-deep'
 
 import { ParamsForApiProps, PlotoverlaidSeparatelyProps, QueryProps } from '../../../../../containers/display/interfaces'
-import { Icon, StyledA } from '../../../../../containers/display/styledComponents'
 import { choose_api } from '../../../../../containers/display/utils'
 import { store } from '../../../../../contexts/leftSideContext'
 import { useRequest } from '../../../../../hooks/useRequest'
 import { FolderPath } from '../../../../../containers/display/content/folderPath'
 import { PlotInterface, DirectoryInterface } from '../../../../../containers/display/interfaces'
-import { Spinner } from '../../../../../containers/search/styledComponents'
-import { FoldersRow, ModalContent, PlotsRow, SpinnerRow } from './styledComponents'
-import { changeFolderPathByBreadcrumb, makeLinkableOverlay, setPlot } from './utils'
+import { FoldersRow, ModalContent } from './styledComponents'
+import { changeFolderPathByBreadcrumb, makeLinkableOverlay } from './utils'
 import { SelectedPlotsTable } from './selectedPlotsTable'
 import { get_plot_with_overlay_new_api } from '../../../../../config/config'
-import { Reference } from '../../reference'
-import { PlotButton } from './plotButton'
+import { Reference } from './reference'
 import { useChangeRouter } from '../../../../../hooks/useChangeRouter'
+import { DirectoriesAndPlots } from './directoriesAndPlots'
 
 interface OverlayWithAnotherPlotProps {
   visible: boolean;
@@ -35,14 +33,7 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
   const [folders, setFolders] = React.useState<(string | undefined)[]>([])
   const [urls, setUrls] = React.useState<string | null>(null)
 
-  const initial_normalize_value = params_for_api.normalize ? params_for_api.normalize : 'True'
-  const initial_overlay_value = params_for_api.overlay ? params_for_api.overlay : 'overlay'
-  const initial_stats_value = params_for_api.stats ? params_for_api.stats : ''
-
-  const [normalize, setNormaize] = React.useState<string>(initial_normalize_value)
-  const [overlayPosition, setOverlayPosition] = React.useState<string>(initial_overlay_value)
-  const [stats, setStats] = React.useState<string>(initial_stats_value)
-  const [disabled, setDisabled] = React.useState<boolean>()
+  const [disabled, setDisabled] = React.useState<boolean>(false)
 
   const [currentFolder, setCurrentFolder] = React.useState<string | undefined>('')
   const clear = () => {
@@ -57,12 +48,12 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
   const query: QueryProps = router.query;
 
   React.useEffect(() => {
-    if (selectedPlots.length === 0 ) {
+    if (selectedPlots.length === 0) {
       setDisabled(true)
     } else {
       setDisabled(false)
     }
-  }, [ selectedPlots.length ])
+  }, [selectedPlots.length])
 
   React.useEffect(() => {
     if (plot.overlaidSeparately) {
@@ -161,13 +152,8 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
       <Row gutter={16} >
         <FoldersRow>
           <Reference
-            setNormalize={setNormaize}
-            setPosition={setOverlayPosition}
-            setStats={setStats}
+            params_for_api={params_for_api}
             disabled={disabled}
-            normalize={normalize}
-            stats={stats}
-            position={overlayPosition}
           />
         </FoldersRow>
         <FoldersRow>
@@ -182,50 +168,15 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
             changeFolderPathByBreadcrumb={(items: any) => changeFolderPathByBreadcrumb(items)(setFolders, setCurrentFolder)} />
         </Col>
         <ModalContent>
-          {
-            !data_get_by_mount.isLoading &&
-            <FoldersRow>
-              {directories.map((directory: any) => {
-                return (
-                  <>
-                    {directory &&
-                      <Col span={8} onClick={() => setCurrentFolder(directory)}>
-                        <Icon />
-                        <StyledA>{directory}</StyledA>
-                      </Col>
-                    }
-                  </>
-                )
-              })}
-            </FoldersRow>
-          }
-          {data_get_by_mount.isLoading &&
-            <SpinnerRow>
-              <Spinner />
-            </SpinnerRow>
-          }
-          {
-            <PlotsRow gutter={16}>{
-              !data_get_by_mount.isLoading && plots_names.map((plot_name: any) => {
-                const current_plot = { folder_path: overlaidPlots.folder_path, name: plot_name }
-                const disabled = selectedPlots.findIndex((selectedPlot) =>
-                  selectedPlot.folder_path === current_plot.folder_path && selectedPlot.name === current_plot.name) > -1
-                return (
-                  <>
-                    {plot_name &&
-                      <PlotButton
-                        disabled={disabled}
-                        setOverlaidPlots={setOverlaidPlots}
-                        setPlot={setPlot}
-                        overlaidPlots={overlaidPlots}
-                        plot_name={plot_name} />
-                    }
-                  </>
-                )
-              })
-            }
-            </PlotsRow>
-          }
+          <DirectoriesAndPlots
+            data_get_by_mount={data_get_by_mount}
+            directories={directories}
+            overlaidPlots={overlaidPlots}
+            plots_names={plots_names}
+            selectedPlots={selectedPlots}
+            setCurrentFolder={setCurrentFolder}
+            setOverlaidPlots={setOverlaidPlots}
+          />
         </ModalContent>
       </Row>
     </Modal>

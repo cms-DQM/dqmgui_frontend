@@ -8,7 +8,7 @@ import axios, {
 import { root_url } from '../config/config';
 import { getPathName } from '../components/utils';
 
-interface ReturnRequest {
+export interface ReturnRequest {
   data: any;
   errors: any[];
   isLoading: boolean;
