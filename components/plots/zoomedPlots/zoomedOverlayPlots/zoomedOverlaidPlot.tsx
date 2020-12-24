@@ -111,13 +111,13 @@ export const ZoomedOverlaidPlot = ({
     const name = params_for_api.plot_name
     return {
       run_number,
-      dataset_name,
+      dataset_name: dataset_name.slice(1, dataset_name.length),
       folder_path,
       name,
       label
     } as PlotoverlaidSeparatelyProps
   }) : []
-
+  
   return (
     <StyledCol space={2}>
       <OverlayWithAnotherPlot

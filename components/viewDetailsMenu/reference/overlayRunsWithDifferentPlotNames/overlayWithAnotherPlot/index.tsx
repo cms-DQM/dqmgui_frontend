@@ -11,7 +11,7 @@ import { useRequest } from '../../../../../hooks/useRequest'
 import { FolderPath } from '../../../../../containers/display/content/folderPath'
 import { PlotInterface, DirectoryInterface } from '../../../../../containers/display/interfaces'
 import { FoldersRow, ModalContent, StyledModal } from './styledComponents'
-import { addToSelectedPlots, changeFolderPathByBreadcrumb, makeLinkableOverlay } from './utils'
+import { changeFolderPathByBreadcrumb, makeLinkableOverlay } from './utils'
 import { SelectedPlotsTable } from './selectedPlotsTable'
 import { get_plot_with_overlay_new_api } from '../../../../../config/config'
 import { Reference } from './reference'
@@ -63,18 +63,39 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
   }, [selectedPlotsToTable.length])
 
   React.useEffect(() => {
-    setSelectedPlotsToTable([])
-    setSelectedPlots([])
-    if (params_for_api.overlaidSeparately) {
-      setSelectedPlotsToTable(plot.overlaidSeparately?.plots)
+    if (visible) {
+      if (params_for_api.overlaidSeparately) {
+        const copy = [...globallyOverlaid]
+        const gloabllyOverlaidNotDuplicated: PlotoverlaidSeparatelyProps[] = copy
+        if (gloabllyOverlaidNotDuplicated && gloabllyOverlaidNotDuplicated?.length > 0) {
+          plot.overlaidSeparately?.plots.forEach((one_plot) => {
+            const index = gloabllyOverlaidNotDuplicated.findIndex(globally_overlaid =>
+              globally_overlaid.run_number === one_plot.run_number
+              && globally_overlaid.dataset_name === one_plot.dataset_name
+              && globally_overlaid.folder_path === one_plot.folder_path
+              && globally_overlaid.name === one_plot.name
+            )
+            if (index < 0) {
+              return gloabllyOverlaidNotDuplicated.push(one_plot)
+            }
+            return undefined
+          })
+        }
+        setSelectedPlotsToTable(gloabllyOverlaidNotDuplicated)
+      }
+      else if (!params_for_api.overlaidSeparately && globallyOverlaid && globallyOverlaid?.length > 0) {
+        setSelectedPlotsToTable(globallyOverlaid)
+      } else if (!params_for_api.overlaidSeparately && globallyOverlaid && globallyOverlaid?.length === 0) {
+        setSelectedPlotsToTable([])
+      }
     }
     else {
       setSelectedPlotsToTable([])
     }
-  }, [ visible])
+  }, [visible])
 
   React.useEffect(() => {
-    if(theLastSelectedPlot.name){
+    if (theLastSelectedPlot.name) {
       const copy = [...selectedPlotsToTable]
       copy.push(theLastSelectedPlot)
       setSelectedPlotsToTable(copy)
@@ -195,7 +216,7 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
             setSelectedPlots={setSelectedPlots}
             selectedPlotsToTable={selectedPlotsToTable}
             setSelectedPlotsToTable={setSelectedPlotsToTable}
-            visible={visible} />
+          />
         </FoldersRow>
         <Col style={{ padding: 8 }}>
           <FolderPath folder_path={theLastSelectedPlot.folder_path}
@@ -217,19 +238,3 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
     </StyledModal>
   )
 }
-
-
- // if (globallyOverlaid && globallyOverlaid?.length > 0) {
-    //   const copy = [...selectedPlotsToTable]
-    //   const not_duplicates = copy.filter((one_plot) => {
-    //     const index = globallyOverlaid.findIndex(globally_overlaid =>
-    //       globally_overlaid.run_number === one_plot.run_number
-    //       && globally_overlaid.dataset_name === one_plot.dataset_name
-    //       && globally_overlaid.folder_path === one_plot.folder_path
-    //       && globally_overlaid.name === one_plot.name
-    //     )
-    //     if (index < 0) {
-    //       return one_plot
-    //     }
-    //     return undefined
-    //   })

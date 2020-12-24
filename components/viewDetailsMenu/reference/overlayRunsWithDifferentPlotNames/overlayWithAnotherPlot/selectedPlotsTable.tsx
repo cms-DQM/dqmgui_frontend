@@ -11,7 +11,6 @@ interface SelectedPlotsTableProps {
   default_overlay?: string[];
   plot: PlotDataProps;
   globallyOverlaid?: PlotoverlaidSeparatelyProps[];
-  visible: boolean;
   selectedPlotsToTable: PlotoverlaidSeparatelyProps[],
   setSelectedPlotsToTable: React.Dispatch<React.SetStateAction<PlotoverlaidSeparatelyProps[]>>
 }
@@ -31,7 +30,7 @@ export const SelectedPlotsTable = ({
   globallyOverlaid,
   selectedPlotsToTable,
   setSelectedPlotsToTable,
-  visible }: SelectedPlotsTableProps,) => {
+   }: SelectedPlotsTableProps,) => {
   const default_plots_overlay = default_overlay ? default_overlay.map((overlay_string: string): PlotoverlaidSeparatelyProps => {
     const parts = overlay_string.split('/')
     const name = parts.pop() as string
@@ -39,36 +38,6 @@ export const SelectedPlotsTable = ({
     return { name, folder_path }
   })
     : []
-  // const [selectedPlotsToTable, setSelectedPlotsToTable] = React.useState<PlotoverlaidSeparatelyProps[]>([])
-
-  // React.useEffect(() => {
-  // //   //before opening the modal, we need to clean the array of plots
-  // //   // which were selected but not overlaid (OK button wasn't clicked, but was clicked CANCEL)
-  // //   const copy = [...selectedPlotsToTable]
-  // //   plot.overlaidSeparately?.plots.forEach((overlaid_plot) => {
-  // //     setSelectedPlotsToTable(addToSelectedPlots(overlaid_plot, copy))
-  // //   })
-  // //   console.log(selectedPlotsToTable, plot)
-  //   if (globallyOverlaid && globallyOverlaid?.length > 0) {
-  //     const copy = [...selectedPlotsToTable]
-  //     const not_duplicates = copy.filter((one_plot) => {
-  //       const index = globallyOverlaid.findIndex(globally_overlaid =>
-  //         globally_overlaid.run_number === one_plot.run_number
-  //         && globally_overlaid.dataset_name === one_plot.dataset_name
-  //         && globally_overlaid.folder_path === one_plot.folder_path
-  //         && globally_overlaid.name === one_plot.name
-  //       )
-  //       if (index < 0) {
-  //         return one_plot
-  //       }
-  //       return undefined
-  //     })
-
-  //     const joinedPlots = globallyOverlaid.concat(not_duplicates)
-  //     setSelectedPlotsToTable(joinedPlots)
-  //   }
-  //   setSelectedPlots(selectedPlotsToTable)
-  // }, [visible])
 
   const colums = [
     {
@@ -141,7 +110,7 @@ export const SelectedPlotsTable = ({
       setSelectedPlotsToTable(changedPlotInfoArray)
     }
   }, [theLastSelectedPlot])
-
+  
   return (selectedPlotsToTable.length > 0 ? <StyledSelectedPlotsTable
     pagination={
       {
