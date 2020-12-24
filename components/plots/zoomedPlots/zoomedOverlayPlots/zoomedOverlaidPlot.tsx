@@ -1,17 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Store } from 'antd/lib/form/interface';
-import { SettingOutlined, FullscreenOutlined, BlockOutlined  } from '@ant-design/icons';
+import { SettingOutlined, FullscreenOutlined, BlockOutlined } from '@ant-design/icons';
 
 import {
   get_overlaied_plots_urls,
   functions_config,
+  get_plot_with_overlay_new_api,
 } from '../../../../config/config';
 import {
   ParamsForApiProps,
   PlotDataProps,
   QueryProps,
   CustomizeProps,
+  PlotoverlaidSeparatelyProps,
 } from '../../../../containers/display/interfaces';
 import { get_plot_source } from './utils';
 import {
@@ -32,6 +34,9 @@ import { Customization } from '../../../customization';
 import { Plot_portal } from '../../../../containers/display/portal';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 import { PlotImage } from '../../plot/plotImage';
+import { dialogsSwitch } from '../zoomedPlots/dialogsSwitch';
+import { CUSTOMIZATION_DIALOG, OVERLAY_PLOT_MENU } from '../zoomedPlots/constants';
+import { OverlayWithAnotherPlot } from '../../../viewDetailsMenu/reference/overlayRunsWithDifferentPlotNames/overlayWithAnotherPlot';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -45,9 +50,10 @@ export const ZoomedOverlaidPlot = ({
   const [customizationParams, setCustomizationParams] = useState<
     Partial<Store> & CustomizeProps
   >();
-  const [openCustomization, toggleCustomizationMenu] = useState(false);
   params_for_api.customizeProps = customizationParams;
   const [isPortalWindowOpen, setIsPortalWindowOpen] = React.useState(false);
+  const [openDialog, setOpenDialog] = useState(dialogsSwitch(''))
+  const [overlaid_plot_url, set_overlaid_plot_url] = useState<string>()
 
   const zoomedPlotMenuOptions = [
     {
@@ -59,15 +65,15 @@ export const ZoomedOverlaidPlot = ({
     {
       label: 'Customize',
       value: 'Customize',
-      action: () => toggleCustomizationMenu(true),
+      action: () => setOpenDialog(dialogsSwitch(CUSTOMIZATION_DIALOG)),
       icon: <SettingOutlined />,
     },
-    // {
-    //   label: 'Overlay with another plot',
-    //   value: 'Customize',
-    //   action: () => toggleCustomizationMenu(true),
-    //   icon: <BlockOutlined  />,
-    // },
+    {
+      label: 'Overlay with another plot',
+      value: 'overlay',
+      action: () => setOpenDialog(dialogsSwitch(OVERLAY_PLOT_MENU)),
+      icon: <BlockOutlined />,
+    },
   ];
 
   const router = useRouter();
@@ -85,9 +91,45 @@ export const ZoomedOverlaidPlot = ({
   const zoomed_plot_url = get_plot_source(copy_of_params);
 
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
+  useEffect(() => {
+    params_for_api.overlaidSeparately = selected_plot.overlaidSeparately
+    set_overlaid_plot_url(get_plot_with_overlay_new_api(params_for_api))
+  }, [selected_plot.overlaidSeparately, params_for_api.notOlderThan])
+  const [currentPlotUrl, setCurrentPlotUrl] = useState(overlaid_plot_url ? overlaid_plot_url : source)
+
+  useEffect(() => {
+    if (overlaid_plot_url) {
+      setCurrentPlotUrl(overlaid_plot_url)
+    } else {
+      setCurrentPlotUrl(source)
+    }
+  }, [overlaid_plot_url, source])
+
+  const formatGloballyOverlidPlotsObject: PlotoverlaidSeparatelyProps[] = params_for_api.overlay_plot ? params_for_api.overlay_plot.map((plot) => {
+    const { run_number, dataset_name, label } = plot
+    const folder_path = params_for_api.folders_path
+    const name = params_for_api.plot_name
+    return {
+      run_number,
+      dataset_name,
+      folder_path,
+      name,
+      label
+    } as PlotoverlaidSeparatelyProps
+  }) : []
 
   return (
     <StyledCol space={2}>
+      <OverlayWithAnotherPlot
+        plot={selected_plot}
+        visible={openDialog[OVERLAY_PLOT_MENU]}
+        setOpenOverlayWithAnotherPlotModal={(value: boolean) => setOpenDialog(dialogsSwitch(value))}
+        default_overlay={selected_plot.overlay}
+        globallyOverlaid={formatGloballyOverlidPlotsObject}
+        params_for_api={params_for_api}
+        set_overlaid_plot_url={set_overlaid_plot_url}
+      />
+      {/* Plot opened in a new tab */}
       <Plot_portal
         isPortalWindowOpen={isPortalWindowOpen}
         setIsPortalWindowOpen={setIsPortalWindowOpen}
@@ -123,8 +165,8 @@ export const ZoomedOverlaidPlot = ({
       </Plot_portal>
       <Customization
         plot_name={selected_plot.name}
-        open={openCustomization}
-        onCancel={() => toggleCustomizationMenu(false)}
+        open={openDialog[CUSTOMIZATION_DIALOG]}
+        onCancel={() => setOpenDialog(dialogsSwitch(false))}
         setCustomizationParams={setCustomizationParams}
       />
       <StyledPlotRow
@@ -154,7 +196,7 @@ export const ZoomedOverlaidPlot = ({
             blink={blink}
             params_for_api={params_for_api}
             plot={selected_plot}
-            plotURL={source}
+            plotURL={currentPlotUrl}
             query={query}
             updated_by_not_older_than={updated_by_not_older_than}
           />

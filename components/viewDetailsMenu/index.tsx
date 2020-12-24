@@ -50,7 +50,6 @@ export const ViewDetailsMenu = ({ selected_plots, query }: ViewDetailsMenuProps)
     setTriples(getTriples(overlay_data))
   }, [])
 
-
   useChangeRouter({
     overlay: overlayPosition, normalize: normalize, stats: stats, overlay_data: makeURLForOverlayData(triples)
   }, [overlayPosition, normalize, stats, makeURLForOverlayData(triples)], triples.length > 0)

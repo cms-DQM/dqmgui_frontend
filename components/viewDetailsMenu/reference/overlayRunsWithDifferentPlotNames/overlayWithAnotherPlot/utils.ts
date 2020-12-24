@@ -25,7 +25,7 @@ export const setPlot = (overlaid_plot: PlotoverlaidSeparatelyProps, plot_name: s
 }
 
 export const addToSelectedPlots = (item: PlotoverlaidSeparatelyProps, allSelectedPlots: PlotoverlaidSeparatelyProps[]) => {
-  if (allSelectedPlots.findIndex((selected_plot) => selected_plot.name === item.name && selected_plot.folder_path === item.folder_path)) {
+  if (allSelectedPlots.findIndex((selected_plot) => selected_plot.name !== item.name && selected_plot.folder_path !== item.folder_path)) {
     allSelectedPlots.push(item)
     return allSelectedPlots.reverse()
   }

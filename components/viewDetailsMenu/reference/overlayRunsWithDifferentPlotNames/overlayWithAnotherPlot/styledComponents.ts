@@ -1,4 +1,5 @@
 import { Row, Table } from 'antd';
+import Modal from 'antd/lib/modal/Modal';
 import styled from 'styled-components';
 
 
@@ -20,7 +21,7 @@ export const PlotNameDiv = styled.div`
 export const ModalContent = styled.div`
     overflow: scroll;
     overflow-x: hidden;
-    height: 50vh;
+    height: 40vh;
     width: 100%;
 `
 
@@ -50,4 +51,9 @@ export const StyledSelectedPlotsTable = styled(Table)`
     .ant-table-tbody {
         word-break: break-word;
     }
+`
+
+export const StyledModal = styled(Modal)`
+    width: 70vw !important;
+    height: 100%;
 `

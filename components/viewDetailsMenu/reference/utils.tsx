@@ -5,7 +5,7 @@ export const getTriples = (params: string) => {
     const runs = params.split('&')
     const triples = runs.map((run) => {
       const id = uuidv4();
-      const parts = params.split('/')
+      const parts = run.split('/')
       const run_number = parts.shift()
       const label = parts.pop()
       const dataset_name ='/'+ parts.join('/')

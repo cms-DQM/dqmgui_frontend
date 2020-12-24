@@ -35,10 +35,10 @@ export interface PlotProps extends LumisectionRequestProps {
 }
 
 export interface PlotoverlaidSeparatelyProps {
-  folder_path: string;
-  run_number: string;
-  dataset_name: string;
-  name: string;
+  folder_path?: string;
+  run_number?: string;
+  dataset_name?: string;
+  name?: string;
   label?: string;
 }
 

@@ -10,8 +10,8 @@ import { store } from '../../../../../contexts/leftSideContext'
 import { useRequest } from '../../../../../hooks/useRequest'
 import { FolderPath } from '../../../../../containers/display/content/folderPath'
 import { PlotInterface, DirectoryInterface } from '../../../../../containers/display/interfaces'
-import { FoldersRow, ModalContent } from './styledComponents'
-import { changeFolderPathByBreadcrumb, makeLinkableOverlay } from './utils'
+import { FoldersRow, ModalContent, StyledModal } from './styledComponents'
+import { addToSelectedPlots, changeFolderPathByBreadcrumb, makeLinkableOverlay } from './utils'
 import { SelectedPlotsTable } from './selectedPlotsTable'
 import { get_plot_with_overlay_new_api } from '../../../../../config/config'
 import { Reference } from './reference'
@@ -25,11 +25,15 @@ interface OverlayWithAnotherPlotProps {
   params_for_api: ParamsForApiProps;
   set_overlaid_plot_url: React.Dispatch<React.SetStateAction<string | undefined>>
   plot: any
+  globallyOverlaid?: PlotoverlaidSeparatelyProps[]
 }
 
-export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnotherPlotModal, default_overlay, params_for_api, set_overlaid_plot_url }: OverlayWithAnotherPlotProps) => {
-  const emptyObject: PlotoverlaidSeparatelyProps = { run_number: '', dataset_name: '', folder_path: '', name: '' }
-  const [overlaidPlots, setOverlaidPlots] = React.useState<PlotoverlaidSeparatelyProps>(emptyObject)
+export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnotherPlotModal, default_overlay, params_for_api, set_overlaid_plot_url, globallyOverlaid }: OverlayWithAnotherPlotProps) => {
+  const emptyObject: PlotoverlaidSeparatelyProps = { run_number: plot.run_number, dataset_name: plot.dataset_name, folder_path: '', name: '' }
+  //TheLastSelectedPlot leus to make a request for folders and plots which are visible in modal when folder path is changing
+  //when the last props (plot name) is selected, TheLastSelectedPlot is added to selected plots table which is visible on
+  // the top of modal.
+  const [theLastSelectedPlot, setTheLastSelectedPlot] = React.useState<PlotoverlaidSeparatelyProps>(emptyObject)
   const [folders, setFolders] = React.useState<(string | undefined)[]>([])
   const [urls, setUrls] = React.useState<string | null>(null)
 
@@ -39,11 +43,14 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
   const clear = () => {
     setOpenOverlayWithAnotherPlotModal(false)
     setCurrentFolder('')
-    setOverlaidPlots(emptyObject)
+    setSelectedPlotsToTable([])
+    setTheLastSelectedPlot(emptyObject)
     setFolders([])
   }
 
   const [selectedPlots, setSelectedPlots] = React.useState<PlotoverlaidSeparatelyProps[]>([])
+  const [selectedPlotsToTable, setSelectedPlotsToTable] = React.useState<PlotoverlaidSeparatelyProps[]>([])
+
   const router = useRouter();
   const query: QueryProps = router.query;
 
@@ -56,10 +63,23 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
   }, [selectedPlots.length])
 
   React.useEffect(() => {
-    if (plot.overlaidSeparately) {
-      setSelectedPlots(plot.overlaidSeparately.plots)
+    setSelectedPlotsToTable([])
+    setSelectedPlots([])
+    if (params_for_api.overlaidSeparately) {
+      setSelectedPlotsToTable(plot.overlaidSeparately?.plots)
     }
-  }, [visible])
+    else {
+      setSelectedPlotsToTable([])
+    }
+  }, [ visible])
+
+  React.useEffect(() => {
+    if(theLastSelectedPlot.name){
+      const copy = [...selectedPlotsToTable]
+      copy.push(theLastSelectedPlot)
+      setSelectedPlotsToTable(copy)
+    }
+  }, [theLastSelectedPlot])
 
   React.useEffect(() => {
     set_overlaid_plot_url(get_plot_with_overlay_new_api(params_for_api))
@@ -71,13 +91,13 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
     dataset_name: query.dataset_name as string,
     run_number: query.run_number as string,
     notOlderThan: updated_by_not_older_than,
-    folders_path: overlaidPlots.folder_path,
+    folders_path: theLastSelectedPlot.folder_path,
   }
 
   const api = choose_api(params)
   const data_get_by_mount = useRequest(api,
     {},
-    [overlaidPlots.folder_path]
+    [theLastSelectedPlot.folder_path]
   );
 
   React.useEffect(() => {
@@ -88,7 +108,7 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
       const rest = copy.splice(0, index + 1)
       setFolders(rest)
       const joinderFolders = rest.join('/')
-      setOverlaidPlots(() => {
+      setTheLastSelectedPlot(() => {
         emptyObject.folder_path = joinderFolders
         return emptyObject
       })
@@ -102,12 +122,12 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
       setFolders(cleaned_array)
       const joinderFolders = copy.join('/')
       if (cleaned_array.length === 0) {
-        setOverlaidPlots(() => {
+        setTheLastSelectedPlot(() => {
           emptyObject.folder_path = ''
           return emptyObject
         })
       }
-      setOverlaidPlots(() => {
+      setTheLastSelectedPlot(() => {
         emptyObject.folder_path = joinderFolders
         return emptyObject
       })
@@ -133,14 +153,24 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
     params_for_api.overlaidSeparately?.ref],
     urls !== null)
 
+  const initial_normalize_value = params_for_api.normalize ? params_for_api.normalize : 'True'
+  const initial_overlay_value = params_for_api.overlay ? params_for_api.overlay : 'overlay'
+  const initial_stats_value = params_for_api.stats ? params_for_api.stats : ''
+
   return (
-    <Modal
+    <StyledModal
+      centered={true}
       visible={visible}
       onCancel={() => clear()}
       onOk={async () => {
         clear()
-        if (selectedPlots.length > 0) {
-          params_for_api.overlaidSeparately = { plots: selectedPlots, normalize: normalize, ref: overlayPosition }
+        if (selectedPlotsToTable.length > 0) {
+          params_for_api.overlaidSeparately = {
+            plots: selectedPlotsToTable,
+            normalize: initial_normalize_value,
+            ref: initial_overlay_value,
+            stats: initial_stats_value,
+          }
         }
         else {
           params_for_api.overlaidSeparately = undefined
@@ -159,26 +189,47 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
         <FoldersRow>
           <SelectedPlotsTable
             default_overlay={default_overlay}
-            overlaidPlots={overlaidPlots}
+            globallyOverlaid={globallyOverlaid}
+            theLastSelectedPlot={theLastSelectedPlot}
             plot={plot}
-            setSelectedPlots={setSelectedPlots} />
+            setSelectedPlots={setSelectedPlots}
+            selectedPlotsToTable={selectedPlotsToTable}
+            setSelectedPlotsToTable={setSelectedPlotsToTable}
+            visible={visible} />
         </FoldersRow>
         <Col style={{ padding: 8 }}>
-          <FolderPath folder_path={overlaidPlots.folder_path}
+          <FolderPath folder_path={theLastSelectedPlot.folder_path}
             changeFolderPathByBreadcrumb={(items: any) => changeFolderPathByBreadcrumb(items)(setFolders, setCurrentFolder)} />
         </Col>
         <ModalContent>
           <DirectoriesAndPlots
+            selectedPlotsToTable={selectedPlotsToTable}
             data_get_by_mount={data_get_by_mount}
             directories={directories}
-            overlaidPlots={overlaidPlots}
+            theLastSelectedPlot={theLastSelectedPlot}
             plots_names={plots_names}
             selectedPlots={selectedPlots}
             setCurrentFolder={setCurrentFolder}
-            setOverlaidPlots={setOverlaidPlots}
+            setTheLastSelectedPlot={setTheLastSelectedPlot}
           />
         </ModalContent>
       </Row>
-    </Modal>
+    </StyledModal>
   )
 }
+
+
+ // if (globallyOverlaid && globallyOverlaid?.length > 0) {
+    //   const copy = [...selectedPlotsToTable]
+    //   const not_duplicates = copy.filter((one_plot) => {
+    //     const index = globallyOverlaid.findIndex(globally_overlaid =>
+    //       globally_overlaid.run_number === one_plot.run_number
+    //       && globally_overlaid.dataset_name === one_plot.dataset_name
+    //       && globally_overlaid.folder_path === one_plot.folder_path
+    //       && globally_overlaid.name === one_plot.name
+    //     )
+    //     if (index < 0) {
+    //       return one_plot
+    //     }
+    //     return undefined
+    //   })

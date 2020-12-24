@@ -6,13 +6,32 @@ import { StyledSelectedPlotsTable } from './styledComponents'
 import { addToSelectedPlots, removeSelectedPlot, setLabel } from './utils';
 
 interface SelectedPlotsTableProps {
-  overlaidPlots: PlotoverlaidSeparatelyProps;
+  theLastSelectedPlot: PlotoverlaidSeparatelyProps;
   setSelectedPlots(plots: PlotoverlaidSeparatelyProps[]): void;
   default_overlay?: string[];
   plot: PlotDataProps;
+  globallyOverlaid?: PlotoverlaidSeparatelyProps[];
+  visible: boolean;
+  selectedPlotsToTable: PlotoverlaidSeparatelyProps[],
+  setSelectedPlotsToTable: React.Dispatch<React.SetStateAction<PlotoverlaidSeparatelyProps[]>>
 }
 
-export const SelectedPlotsTable = ({ overlaidPlots, setSelectedPlots, default_overlay, plot }: SelectedPlotsTableProps,) => {
+const getTitle = (default_overlay_index: number, globally_overlay_index: number) => {
+  if (default_overlay_index !== -1) {
+    return ("This plot is added because of layout configuration")
+  } else if (globally_overlay_index !== -1) {
+    return ("This plot is added because of global overlay in 'Options' section")
+  }
+  return ''
+}
+export const SelectedPlotsTable = ({
+  theLastSelectedPlot,
+  setSelectedPlots,
+  default_overlay, plot,
+  globallyOverlaid,
+  selectedPlotsToTable,
+  setSelectedPlotsToTable,
+  visible }: SelectedPlotsTableProps,) => {
   const default_plots_overlay = default_overlay ? default_overlay.map((overlay_string: string): PlotoverlaidSeparatelyProps => {
     const parts = overlay_string.split('/')
     const name = parts.pop() as string
@@ -20,24 +39,45 @@ export const SelectedPlotsTable = ({ overlaidPlots, setSelectedPlots, default_ov
     return { name, folder_path }
   })
     : []
-  const [selectedPlotsInfo, setSelectedPlotsInfo] = React.useState<PlotoverlaidSeparatelyProps[]>([])
+  // const [selectedPlotsToTable, setSelectedPlotsToTable] = React.useState<PlotoverlaidSeparatelyProps[]>([])
 
-  React.useEffect(() => {
-    const copy = [...selectedPlotsInfo]
-    plot.overlaidSeparately?.plots.forEach((overlaid_plot) => {
-      setSelectedPlotsInfo(addToSelectedPlots(overlaid_plot, copy))
-    })
-    setSelectedPlots(selectedPlotsInfo)
-  }, [])
+  // React.useEffect(() => {
+  // //   //before opening the modal, we need to clean the array of plots
+  // //   // which were selected but not overlaid (OK button wasn't clicked, but was clicked CANCEL)
+  // //   const copy = [...selectedPlotsToTable]
+  // //   plot.overlaidSeparately?.plots.forEach((overlaid_plot) => {
+  // //     setSelectedPlotsToTable(addToSelectedPlots(overlaid_plot, copy))
+  // //   })
+  // //   console.log(selectedPlotsToTable, plot)
+  //   if (globallyOverlaid && globallyOverlaid?.length > 0) {
+  //     const copy = [...selectedPlotsToTable]
+  //     const not_duplicates = copy.filter((one_plot) => {
+  //       const index = globallyOverlaid.findIndex(globally_overlaid =>
+  //         globally_overlaid.run_number === one_plot.run_number
+  //         && globally_overlaid.dataset_name === one_plot.dataset_name
+  //         && globally_overlaid.folder_path === one_plot.folder_path
+  //         && globally_overlaid.name === one_plot.name
+  //       )
+  //       if (index < 0) {
+  //         return one_plot
+  //       }
+  //       return undefined
+  //     })
+
+  //     const joinedPlots = globallyOverlaid.concat(not_duplicates)
+  //     setSelectedPlotsToTable(joinedPlots)
+  //   }
+  //   setSelectedPlots(selectedPlotsToTable)
+  // }, [visible])
 
   const colums = [
-    // {
-    //   title: 'Run number',
-    //   dataIndex: 'run_number',
-    // },{
-    //   title: 'Data set',
-    //   dataIndex: 'data_set',
-    // },
+    {
+      title: 'Run number',
+      dataIndex: 'run_number',
+    }, {
+      title: 'Dataset',
+      dataIndex: 'dataset_name',
+    },
     {
       title: 'Folder Path',
       dataIndex: 'folder_path',
@@ -50,7 +90,7 @@ export const SelectedPlotsTable = ({ overlaidPlots, setSelectedPlots, default_ov
       title: 'Label',
       render: (plotInfo: PlotoverlaidSeparatelyProps) => {
         const set_label = ({ target: { value } }) => {
-          setLabel(plotInfo, selectedPlotsInfo, value)
+          setLabel(plotInfo, selectedPlotsToTable, value)
         }
 
         return <Input
@@ -67,8 +107,10 @@ export const SelectedPlotsTable = ({ overlaidPlots, setSelectedPlots, default_ov
       key: 'action',
       render: (plotInfo: PlotoverlaidSeparatelyProps) => {
         const default_overlay_index = default_plots_overlay.findIndex((default_plot_overlay) => default_plot_overlay.name === plotInfo.name && default_plot_overlay.folder_path === plotInfo.folder_path)
-        return (default_overlay_index !== -1 ?
-          <Tooltip title="This plot is added because of layout configuration">
+        const globally_overlay_index = globallyOverlaid ? globallyOverlaid.findIndex((gloablly_plot_overlay) => gloablly_plot_overlay.name === plotInfo.name && gloablly_plot_overlay.folder_path === plotInfo.folder_path) : -1
+        const title = getTitle(default_overlay_index, globally_overlay_index)
+        return (!!title ?
+          <Tooltip title={title}>
             <Space size="small">
               <Button
                 type='link'
@@ -80,10 +122,10 @@ export const SelectedPlotsTable = ({ overlaidPlots, setSelectedPlots, default_ov
           <Space size="small">
             <Button
               type='link'
-              disabled={default_overlay_index !== -1}
+              disabled={!!title}
               onClick={() => {
-                setSelectedPlotsInfo(removeSelectedPlot(plotInfo, selectedPlotsInfo))
-                setSelectedPlots(removeSelectedPlot(plotInfo, selectedPlotsInfo))
+                setSelectedPlotsToTable(removeSelectedPlot(plotInfo, selectedPlotsToTable))
+                setSelectedPlots(removeSelectedPlot(plotInfo, selectedPlotsToTable))
               }}
             >Delete</Button>
           </Space>
@@ -93,22 +135,21 @@ export const SelectedPlotsTable = ({ overlaidPlots, setSelectedPlots, default_ov
   ]
 
   React.useEffect(() => {
-    if (!!overlaidPlots.name) {
-      const copy = [...selectedPlotsInfo]
-      const changedPlotInfoArray = addToSelectedPlots(overlaidPlots, copy)
-      setSelectedPlotsInfo(changedPlotInfoArray)
-      setSelectedPlots(changedPlotInfoArray)
+    if (!!theLastSelectedPlot.name) {
+      const copy = [...selectedPlotsToTable]
+      const changedPlotInfoArray = addToSelectedPlots(theLastSelectedPlot, copy)
+      setSelectedPlotsToTable(changedPlotInfoArray)
     }
-  }, [overlaidPlots])
+  }, [theLastSelectedPlot])
 
-  return (selectedPlotsInfo.length > 0 ? <StyledSelectedPlotsTable
+  return (selectedPlotsToTable.length > 0 ? <StyledSelectedPlotsTable
     pagination={
       {
         defaultPageSize: 1,
         pageSizeOptions: ['1', '2', '3', '4', '5'],
         showSizeChanger: true,
       }}
-    columns={colums} dataSource={selectedPlotsInfo} />
+    columns={colums} dataSource={selectedPlotsToTable} />
     : <></>
   )
 }
