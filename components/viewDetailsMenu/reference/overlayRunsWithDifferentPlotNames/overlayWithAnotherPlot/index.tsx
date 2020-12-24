@@ -55,12 +55,12 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
   const query: QueryProps = router.query;
 
   React.useEffect(() => {
-    if (selectedPlots.length === 0) {
+    if (selectedPlotsToTable.length === 0) {
       setDisabled(true)
     } else {
       setDisabled(false)
     }
-  }, [selectedPlots.length])
+  }, [selectedPlotsToTable.length])
 
   React.useEffect(() => {
     setSelectedPlotsToTable([])
