@@ -37,7 +37,7 @@ import { CUSTOMIZATION_DIALOG, OVERLAY_PLOT_MENU } from './constants';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
-  params_for_api: ParamsForApiProps;k
+  params_for_api: ParamsForApiProps; k
 }
 
 export const ZoomedPlot = ({
@@ -83,7 +83,7 @@ export const ZoomedPlot = ({
         const basePath = router.basePath
         const pathName = router.pathname
         const plotsLocalOverlayURL = basePath + pathName + 'plotsLocalOverlay'
-window.open(plotsLocalOverlayURL)
+        window.open(plotsLocalOverlayURL)
       },
       icon: <BlockOutlined />,
     },
