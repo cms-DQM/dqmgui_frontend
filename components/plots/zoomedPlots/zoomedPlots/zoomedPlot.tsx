@@ -37,7 +37,7 @@ import { CUSTOMIZATION_DIALOG, OVERLAY_PLOT_MENU } from './constants';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
-  params_for_api: ParamsForApiProps;
+  params_for_api: ParamsForApiProps;k
 }
 
 export const ZoomedPlot = ({
@@ -49,7 +49,6 @@ export const ZoomedPlot = ({
   >();
   const [isPortalWindowOpen, setIsPortalWindowOpen] = useState(false);
   const [openDialog, setOpenDialog] = useState(dialogsSwitch(''))
-
   const [overlaid_plot_url, set_overlaid_plot_url] = useState<string>()
   params_for_api.customizeProps = customizationParams;
 
@@ -79,7 +78,13 @@ export const ZoomedPlot = ({
     {
       label: 'Overlay with another plot',
       value: 'overlay',
-      action: () => setOpenDialog(dialogsSwitch(OVERLAY_PLOT_MENU)),
+      // action: () => setOpenDialog(dialogsSwitch(OVERLAY_PLOT_MENU)),
+      action: () => {
+        const basePath = router.basePath
+        const pathName = router.pathname
+        const plotsLocalOverlayURL = basePath + pathName + 'plotsLocalOverlay'
+window.open(plotsLocalOverlayURL)
+      },
       icon: <BlockOutlined />,
     },
   ];

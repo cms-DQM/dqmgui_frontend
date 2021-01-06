@@ -54,6 +54,7 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
     else {
       params_for_api.overlaidSeparately = undefined
     }
+    console.log(makeLinkableOverlay(params_for_api.overlaidSeparately, plot, query))
     setUrls(makeLinkableOverlay(params_for_api.overlaidSeparately, plot, query))
     set_overlaid_plot_url(get_plot_with_overlay_new_api(params_for_api))
   }
@@ -147,11 +148,11 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
   directories.sort()
   plots_names.sort()
 
-  useChangeRouter({ selected_plots: urls },
-    [params_for_api.overlaidSeparately?.plots.length,
-    params_for_api.overlaidSeparately?.normalize,
-    params_for_api.overlaidSeparately?.ref],
-    urls !== null)
+  // useChangeRouter({ selected_plots: urls },
+  //   [params_for_api.overlaidSeparately?.plots.length,
+  //   params_for_api.overlaidSeparately?.normalize,
+  //   params_for_api.overlaidSeparately?.ref],
+  //   urls !== null)
 
   const initial_normalize_value = params_for_api.normalize ? params_for_api.normalize : 'True'
   const initial_overlay_value = params_for_api.overlay ? params_for_api.overlay : 'overlay'
