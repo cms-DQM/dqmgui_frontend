@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { useRouter } from 'next/router'
-import Modal from 'antd/lib/modal/Modal'
 import { Col, Row } from 'antd'
 import cleanDeep from 'clean-deep'
 
@@ -25,10 +24,9 @@ interface OverlayWithAnotherPlotProps {
   params_for_api: ParamsForApiProps;
   set_overlaid_plot_url: React.Dispatch<React.SetStateAction<string | undefined>>
   plot: any
-  globallyOverlaid?: PlotoverlaidSeparatelyProps[]
 }
 
-export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnotherPlotModal, default_overlay, params_for_api, set_overlaid_plot_url, globallyOverlaid }: OverlayWithAnotherPlotProps) => {
+export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnotherPlotModal, default_overlay, params_for_api, set_overlaid_plot_url }: OverlayWithAnotherPlotProps) => {
   const emptyObject: PlotoverlaidSeparatelyProps = { run_number: plot.run_number, dataset_name: plot.dataset_name, folder_path: '', name: '' }
   //TheLastSelectedPlot leus to make a request for folders and plots which are visible in modal when folder path is changing
   //when the last props (plot name) is selected, TheLastSelectedPlot is added to selected plots table which is visible on
@@ -48,6 +46,18 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
     setFolders([])
   }
 
+  const onOk = () => {
+    clear()
+    if (selectedPlotsToTable.length > 0) {
+      params_for_api.overlaidSeparately = overlaid_separately_before_submit
+    }
+    else {
+      params_for_api.overlaidSeparately = undefined
+    }
+    setUrls(makeLinkableOverlay(params_for_api.overlaidSeparately, plot, query))
+    set_overlaid_plot_url(get_plot_with_overlay_new_api(params_for_api))
+  }
+
   const [selectedPlots, setSelectedPlots] = React.useState<PlotoverlaidSeparatelyProps[]>([])
   const [selectedPlotsToTable, setSelectedPlotsToTable] = React.useState<PlotoverlaidSeparatelyProps[]>([])
 
@@ -62,37 +72,6 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
     }
   }, [selectedPlotsToTable.length])
 
-  React.useEffect(() => {
-    if (visible) {
-      if (params_for_api.overlaidSeparately) {
-        const copy = [...globallyOverlaid]
-        const gloabllyOverlaidNotDuplicated: PlotoverlaidSeparatelyProps[] = copy
-        if (gloabllyOverlaidNotDuplicated && gloabllyOverlaidNotDuplicated?.length > 0) {
-          plot.overlaidSeparately?.plots.forEach((one_plot) => {
-            const index = gloabllyOverlaidNotDuplicated.findIndex(globally_overlaid =>
-              globally_overlaid.run_number === one_plot.run_number
-              && globally_overlaid.dataset_name === one_plot.dataset_name
-              && globally_overlaid.folder_path === one_plot.folder_path
-              && globally_overlaid.name === one_plot.name
-            )
-            if (index < 0) {
-              return gloabllyOverlaidNotDuplicated.push(one_plot)
-            }
-            return undefined
-          })
-        }
-        setSelectedPlotsToTable(gloabllyOverlaidNotDuplicated)
-      }
-      else if (!params_for_api.overlaidSeparately && globallyOverlaid && globallyOverlaid?.length > 0) {
-        setSelectedPlotsToTable(globallyOverlaid)
-      } else if (!params_for_api.overlaidSeparately && globallyOverlaid && globallyOverlaid?.length === 0) {
-        setSelectedPlotsToTable([])
-      }
-    }
-    else {
-      setSelectedPlotsToTable([])
-    }
-  }, [visible])
 
   React.useEffect(() => {
     if (theLastSelectedPlot.name) {
@@ -178,39 +157,32 @@ export const OverlayWithAnotherPlot = ({ plot, visible, setOpenOverlayWithAnothe
   const initial_overlay_value = params_for_api.overlay ? params_for_api.overlay : 'overlay'
   const initial_stats_value = params_for_api.stats ? params_for_api.stats : ''
 
+  const overlaid_separately_before_submit = {
+    plots: selectedPlotsToTable,
+    normalize: initial_normalize_value,
+    ref: initial_overlay_value,
+    stats: initial_stats_value,
+  }
+
   return (
     <StyledModal
       centered={true}
       visible={visible}
       onCancel={() => clear()}
-      onOk={async () => {
-        clear()
-        if (selectedPlotsToTable.length > 0) {
-          params_for_api.overlaidSeparately = {
-            plots: selectedPlotsToTable,
-            normalize: initial_normalize_value,
-            ref: initial_overlay_value,
-            stats: initial_stats_value,
-          }
-        }
-        else {
-          params_for_api.overlaidSeparately = undefined
-        }
-        setUrls(makeLinkableOverlay(params_for_api.overlaidSeparately, plot, query))
-        set_overlaid_plot_url(get_plot_with_overlay_new_api(params_for_api))
-      }}
+      onOk={onOk}
     >
       <Row gutter={16} >
         <FoldersRow>
           <Reference
-            params_for_api={params_for_api}
+            overlaid_separately_before_submit={overlaid_separately_before_submit}
             disabled={disabled}
           />
         </FoldersRow>
         <FoldersRow>
           <SelectedPlotsTable
+            visible={visible}
+            params_for_api={params_for_api}
             default_overlay={default_overlay}
-            globallyOverlaid={globallyOverlaid}
             theLastSelectedPlot={theLastSelectedPlot}
             plot={plot}
             setSelectedPlots={setSelectedPlots}

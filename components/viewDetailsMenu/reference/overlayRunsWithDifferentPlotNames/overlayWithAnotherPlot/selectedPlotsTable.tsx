@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button, Space, Tooltip, Input } from 'antd';
 
-import { PlotDataProps, PlotoverlaidSeparatelyProps } from '../../../../../containers/display/interfaces';
+import { ParamsForApiProps, PlotDataProps, PlotoverlaidSeparatelyProps } from '../../../../../containers/display/interfaces';
 import { StyledSelectedPlotsTable } from './styledComponents'
 import { addToSelectedPlots, removeSelectedPlot, setLabel } from './utils';
 
@@ -10,9 +10,10 @@ interface SelectedPlotsTableProps {
   setSelectedPlots(plots: PlotoverlaidSeparatelyProps[]): void;
   default_overlay?: string[];
   plot: PlotDataProps;
-  globallyOverlaid?: PlotoverlaidSeparatelyProps[];
   selectedPlotsToTable: PlotoverlaidSeparatelyProps[],
   setSelectedPlotsToTable: React.Dispatch<React.SetStateAction<PlotoverlaidSeparatelyProps[]>>
+  visible: boolean;
+  params_for_api: ParamsForApiProps;
 }
 
 const getTitle = (default_overlay_index: number, globally_overlay_index: number) => {
@@ -27,10 +28,12 @@ export const SelectedPlotsTable = ({
   theLastSelectedPlot,
   setSelectedPlots,
   default_overlay, plot,
-  globallyOverlaid,
   selectedPlotsToTable,
   setSelectedPlotsToTable,
-   }: SelectedPlotsTableProps,) => {
+  params_for_api,
+  visible
+}: SelectedPlotsTableProps,) => {
+
   const default_plots_overlay = default_overlay ? default_overlay.map((overlay_string: string): PlotoverlaidSeparatelyProps => {
     const parts = overlay_string.split('/')
     const name = parts.pop() as string
@@ -38,6 +41,19 @@ export const SelectedPlotsTable = ({
     return { name, folder_path }
   })
     : []
+
+  const globallyOverlaid: PlotoverlaidSeparatelyProps[] = params_for_api.overlay_plot ? params_for_api.overlay_plot.map((plot) => {
+    const { run_number, dataset_name, label } = plot
+    const folder_path = params_for_api.folders_path
+    const name = params_for_api.plot_name
+    return {
+      run_number,
+      dataset_name: dataset_name.slice(1, dataset_name.length),
+      folder_path,
+      name,
+      label
+    } as PlotoverlaidSeparatelyProps
+  }) : []
 
   const colums = [
     {
@@ -110,7 +126,39 @@ export const SelectedPlotsTable = ({
       setSelectedPlotsToTable(changedPlotInfoArray)
     }
   }, [theLastSelectedPlot])
-  
+
+  React.useEffect(() => {
+    if (visible) {
+      if (params_for_api.overlaidSeparately) {
+        const gloabllyOverlaidNotDuplicated: PlotoverlaidSeparatelyProps[] = globallyOverlaid
+        if (gloabllyOverlaidNotDuplicated && gloabllyOverlaidNotDuplicated?.length > 0) {
+          plot.overlaidSeparately?.plots.forEach((one_plot) => {
+            const index = gloabllyOverlaidNotDuplicated.findIndex(globally_overlaid =>
+              globally_overlaid.run_number === one_plot.run_number
+              && globally_overlaid.dataset_name === one_plot.dataset_name
+              && globally_overlaid.folder_path === one_plot.folder_path
+              && globally_overlaid.name === one_plot.name
+            )
+            if (index < 0) {
+              return gloabllyOverlaidNotDuplicated.push(one_plot)
+            }
+            return undefined
+          })
+        }
+        setSelectedPlotsToTable(gloabllyOverlaidNotDuplicated)
+      }
+      else if (!params_for_api.overlaidSeparately && globallyOverlaid && globallyOverlaid?.length > 0) {
+        setSelectedPlotsToTable(globallyOverlaid)
+      } else if (!params_for_api.overlaidSeparately && globallyOverlaid && globallyOverlaid?.length === 0) {
+        setSelectedPlotsToTable([])
+      }
+    }
+    else {
+      setSelectedPlotsToTable([])
+    }
+  }, [visible])
+
+
   return (selectedPlotsToTable.length > 0 ? <StyledSelectedPlotsTable
     pagination={
       {
