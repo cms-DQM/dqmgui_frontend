@@ -27,6 +27,7 @@ export const removePlotFromSelectedPlots = (
   });
   const cleanedFileterdPlotsAndDirs = cleanDeep(fileterdPlotsAndDirs);
   const plotsForQuery = cleanedFileterdPlotsAndDirs.join('&');
+  
   return plotsForQuery;
 };
 
@@ -35,10 +36,12 @@ export const addToSelectedPlots = (
   plot: PlotDataProps
 ) => {
   const run_number = plot.run_number
-  const dataset_name = plot.dataset_name
+  const dataset_name = plot.dataset_name?.substring(1)
   const path = plot.path
   const name = plot.name
-  return (`${plotsQuery ? plotsQuery + '&' : ''}${run_number}${dataset_name}/${plot.path}/${plot.name}`)
+  const new_plot = [run_number, dataset_name, path, name]. join('/')
+
+  return (`${plotsQuery ? plotsQuery + '&' : ''}${new_plot}`)
 };
 
 export const addOverlayData = (triples: TripleProps[] | undefined) => {

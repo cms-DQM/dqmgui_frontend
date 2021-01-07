@@ -1,6 +1,6 @@
 import cleanDeep from "clean-deep"
 import { ParsedUrlQueryInput } from "querystring"
-import { PlotoverlaidSeparatelyProps } from "../../containers/display/interfaces"
+import { PlotoverlaidSeparatelyProps } from "../containers/display/interfaces"
 
 export const changeFolderPathByBreadcrumb = (item: ParsedUrlQueryInput) =>( setFolders:(cleaned_folders_array: (string | undefined)[])=> void, setCurrentFolder: (folder:string) => void ) => {
     // @ts-ignore
@@ -18,6 +18,13 @@ export const changeFolderPathByBreadcrumb = (item: ParsedUrlQueryInput) =>( setF
 
   export const setPlot = (overlaid_plot: PlotoverlaidSeparatelyProps, plot_name: string) =>{
       const copy = {...overlaid_plot}
-      copy.name = plot_name
+      copy.plot_name = plot_name
        return copy
+  }
+
+  export const setLabel = (item: PlotoverlaidSeparatelyProps, allSelectedPlots: PlotoverlaidSeparatelyProps[], label?: string) => {
+    const copy = [...allSelectedPlots]
+    const index = copy.indexOf(item)
+    copy[index].label = label
+    return copy
   }

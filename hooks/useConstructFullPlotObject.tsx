@@ -17,7 +17,7 @@ export const useConstructFullPlotObject = (contents: any, data: any) => {
         const { name, directories } = getNameAndDirectoriesFromDir(content as any);
         return {
           name: name,
-          path: content.path && '/' + directories,
+          path: content.path && directories,
           layout: content.layout,
           qresults: functions_config.new_back_end.new_back_end
             ? content.qtstatuses

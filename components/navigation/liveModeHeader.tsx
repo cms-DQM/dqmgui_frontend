@@ -35,7 +35,7 @@ export const LiveModeHeader = ({ query }: LiveModeHeaderProps) => {
             globalState,
             query,
             info.value,
-            '/HLT/EventInfo'
+            'HLT/EventInfo'
           );
 
           const { data, isLoading } = useRequest(

@@ -31,7 +31,6 @@ import { ZoomedPlotMenu } from '../menu';
 import { Plot_portal } from '../../../../containers/display/portal';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 import { PlotImage } from '../../plot/plotImage';
-import { OverlayWithAnotherPlot } from '../../../overlayWithAnotherPlot';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -70,15 +69,26 @@ export const ZoomedPlot = ({
     },
     {
       label: 'Customize',
-      value: 'Customize',
+      value: 'customize',
       action: () => toggleCustomizationMenu(true),
       icon: <SettingOutlined />,
     },
     {
       label: 'Overlay with another plot',
-      value: 'Customize',
-      action: () => setOpenOverlayPlotMenu(true),
-      icon: <BlockOutlined  />,
+      value: 'overlay',
+      action: () => {
+        const basePath = router.basePath
+        const page = 'plotsLocalOverlay'
+        const run = 'run_number=' + query.run_number as string
+        const dataset ='dataset_name=' + query.dataset_name  as string
+        const path = 'folder_path=' + selected_plot.path 
+        const plot_name = 'plot_name=' + selected_plot.name
+        const baseURL = [basePath, page].join('/')
+        const queryURL = [ run , dataset, path, plot_name].join('&')
+        const plotsLocalOverlayURL = [baseURL, queryURL].join('?')
+        window.open(plotsLocalOverlayURL)	       
+      },
+       icon: <BlockOutlined  />,
     },
   ];
 
@@ -86,10 +96,6 @@ export const ZoomedPlot = ({
 
   return (
     <StyledCol space={2}>
-      <OverlayWithAnotherPlot
-        visible={openOverlayPlotMenu}
-        setOpenOverlayWithAnotherPlotModal={setOpenOverlayPlotMenu}
-      />
       {/* Plot opened in a new tab */}
       <Plot_portal
         isPortalWindowOpen={isPortalWindowOpen}
