@@ -14,7 +14,7 @@ interface SizeSelectionProps {
 export const SizeSelection = ({ router }: SizeSelectionProps) => {
   const options = Object.keys(sizes)
   const { query } = router
-  const [size, setSize] = React.useState<string>(query.size)
+  const [size, setSize] = React.useState<string>(query.size as string)
 
   React.useEffect(() => {
     Router.push({

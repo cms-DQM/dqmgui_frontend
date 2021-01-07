@@ -81,7 +81,7 @@ export const SearchContent = ({ setPlotUrl, params_for_api }: SearchContentProps
     }
   }, [currentFolder])
 
-  React.useEffect(() => {
+  React.useEffect(() => { //ideti i lentele is url
     params_for_api.overlaidSeparately = {
       plots: selectedPlots,
       ref: 'overlay',
@@ -95,7 +95,7 @@ export const SearchContent = ({ setPlotUrl, params_for_api }: SearchContentProps
     const plotsString = plots.join('&')
 
     if (plotsString.length > 0) {
-      setPlotUrl(get_plot_with_overlay_new_api(params_for_api))
+      setPlotUrl(get_plot_with_overlay_new_api(params_for_api as any) as any)
       Router.push({
         pathname: router.pathname,
         query: {
@@ -105,7 +105,7 @@ export const SearchContent = ({ setPlotUrl, params_for_api }: SearchContentProps
       });
     }
     else {
-      const copy = {...query}
+      const copy: any = {...query}
       delete copy.overlayPlots 
       Router.push({
         pathname: router.pathname,

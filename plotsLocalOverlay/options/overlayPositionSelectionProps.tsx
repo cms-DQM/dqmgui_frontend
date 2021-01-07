@@ -13,7 +13,7 @@ interface OverlayPositionSelectionProps {
 
 export const OverlayPositionSelection = ({ router }: OverlayPositionSelectionProps) => {
   const { query } = router
-  const [overlayPosition, setOverlayPosition] = React.useState<string>(query.overlayPosition)
+  const [overlayPosition, setOverlayPosition] = React.useState<string>(query.overlayPosition as string)
 
   React.useEffect(() => {
     Router.push({

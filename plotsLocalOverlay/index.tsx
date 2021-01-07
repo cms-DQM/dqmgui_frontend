@@ -1,10 +1,8 @@
-import { NextPage } from 'next'
-import { useRouter } from 'next/router';
 import * as React from 'react'
-import { sizes } from '../components/constants';
+
 import { ImageFallback } from '../components/plots/imageFallback';
-import { get_plot_url, root_url } from '../config/config';
-import { ParamsForApiProps, QueryProps } from '../containers/display/interfaces';
+import { root_url } from '../config/config';
+import { ParamsForApiProps } from '../containers/display/interfaces';
 
 interface PlotsLocalOverlayContentProps {
   plotUrl: string;

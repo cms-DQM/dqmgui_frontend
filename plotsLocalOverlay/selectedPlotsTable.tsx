@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Input, Space } from 'antd';
 
-import { PlotoverlaidSeparatelyProps, PlotProps } from '../containers/display/interfaces';
+import { PlotProps } from '../containers/display/interfaces';
 import { StyledSelectedPlotsTable } from './styledComponents'
 import { setLabel } from './utils'
 
