@@ -124,6 +124,7 @@ export const get_overlaied_plots_urls = (params: ParamsForApiProps) => {
   });
 };
 
+
 export const get_plot_with_overlay_new_api = (params: ParamsForApiProps) => {
   //empty string in order to set &reflabel= in the start of joined_labels string
   const labels: string[] = ['']
@@ -138,7 +139,7 @@ export const get_plot_with_overlay_new_api = (params: ParamsForApiProps) => {
  
     const customization = get_customize_params(params.customizeProps)
 
-    return `api/v1/render_overlay?obj=archive/${params.run_number}${params.dataset_name}/${params.folders_path}/${params.plot_name}&${joined_plots}&w=${params.width}&h=${params.height}&stats=true&norm=${norm}${joined_labels};${customization}ref=${params.overlaidSeparately.ref}`
+    return `api/v1/render_overlay?obj=archive/${params.run_number}${params.dataset_name}/${params.folders_path}/${params.plot_name}&${joined_plots}&w=${params.width}&h=${params.height}&stats=True&norm=${norm}${joined_labels};${customization}ref=${params.overlaidSeparately.ref}`
   }
   else {
     return

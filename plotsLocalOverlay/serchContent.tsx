@@ -1,13 +1,13 @@
 import * as React from 'react'
+import Router, { useRouter } from 'next/router';
 import { Button, Col, Row, Tooltip } from 'antd'
 import cleanDeep from 'clean-deep'
-import { useRouter } from 'next/router'
 
 import { SelectedPlotsTable } from './selectedPlotsTable'
 import { FoldersRow, PlotNameDiv, PlotsRow, SpinnerRow } from './styledComponents'
 import { changeFolderPathByBreadcrumb, setPlot } from './utils'
 import { FolderPath } from '../containers/display/content/folderPath'
-import { DirectoryInterface, ParamsForApiProps, PlotInterface, PlotoverlaidSeparatelyProps, QueryProps } from '../containers/display/interfaces'
+import { DirectoryInterface, ParamsForApiProps, PlotInterface, PlotProps, QueryProps } from '../containers/display/interfaces'
 import { StyledA, Icon } from '../containers/display/styledComponents'
 import { choose_api } from '../containers/display/utils'
 import { Spinner } from '../containers/search/styledComponents'
@@ -35,7 +35,7 @@ export const SearchContent = ({ setPlotUrl, params_for_api }: SearchContentProps
   const [lastSelectedPlot, setLastSelectedPlot] = React.useState<any>({ folders_path: '', plot_name: '' })
   const [folders, setFolders] = React.useState<(string | undefined)[]>([])
   const [currentFolder, setCurrentFolder] = React.useState<string | undefined>('')
-  const [selectedPlots, setSelectedPlots] = React.useState<PlotoverlaidSeparatelyProps[]>([])
+  const [selectedPlots, setSelectedPlots] = React.useState<PlotProps[]>([])
 
   const router = useRouter();
   const query: QueryProps = router.query;
@@ -82,20 +82,40 @@ export const SearchContent = ({ setPlotUrl, params_for_api }: SearchContentProps
   }, [currentFolder])
 
   React.useEffect(() => {
-    console.log('selectedx')
-    if (selectedPlots.length > 0) {
-      params_for_api.overlaidSeparately = {
-        plots: selectedPlots,
-        ref: 'overlay',
-        normalize: 'True',
-        stats: '',
-      }
+    params_for_api.overlaidSeparately = {
+      plots: selectedPlots,
+      ref: 'overlay',
+      normalize: 'True',
+      stats: '',
+    }
+    const plots = selectedPlots.map((plot: PlotProps)=>{
+      const onePlotFullPath = [plot.folders_path, plot.plot_name, plot.label].join('/')
+      return onePlotFullPath
+    })
+    const plotsString = plots.join('&')
+
+    if (plotsString.length > 0) {
       setPlotUrl(get_plot_with_overlay_new_api(params_for_api))
+      Router.push({
+        pathname: router.pathname,
+        query: {
+          ...query,
+          overlayPlots: plotsString
+        },
+      });
     }
     else {
+      const copy = {...query}
+      delete copy.overlayPlots 
+      Router.push({
+        pathname: router.pathname,
+        query: {
+          ...copy,
+        },
+      });
       setPlotUrl(get_plot_url(params_for_api))
     }
-  }, [selectedPlots.length, selectedPlots])
+  }, [selectedPlots.length])
 
   const { data } = data_get_by_mount
   const folders_or_plots = data ? data.data : []

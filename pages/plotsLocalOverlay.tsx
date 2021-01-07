@@ -7,7 +7,7 @@ import { SearchContent } from '../plotsLocalOverlay/serchContent'
 import { ParamsForApiProps, QueryProps } from '../containers/display/interfaces';
 import { sizes } from '../components/constants';
 import { get_plot_url } from '../config/config';
-
+import { Reference } from '../plotsLocalOverlay/options/reference'
 
 
 const PlotsLocalOverlay: NextPage<any> = () => {
@@ -25,10 +25,22 @@ const PlotsLocalOverlay: NextPage<any> = () => {
   }
   const [plotUrl, setPlotUrl] = React.useState(get_plot_url(params_for_api))
 
-  return (<>
-    <PlotsLocalOverlayContent params_for_api={params_for_api} plotUrl={plotUrl} />
-    <SearchContent params_for_api={params_for_api} setPlotUrl={setPlotUrl} />
-  </>)
+  if (run_number && dataset_name) {
+    return (<div style={{ display: 'flex' }}>
+      <div style={{ width: '50%' }}>
+        <PlotsLocalOverlayContent params_for_api={params_for_api} plotUrl={plotUrl} />
+      </div>
+      <div style={{ width: '50%' }}>
+        <div>
+          <Reference router={router}/>
+        </div>
+        <div>
+          <SearchContent params_for_api={params_for_api} setPlotUrl={setPlotUrl} />
+        </div>
+      </div>
+    </div>)
+  }
+  return <></>
 }
 
 

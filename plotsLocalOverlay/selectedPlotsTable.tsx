@@ -1,24 +1,24 @@
 import * as React from 'react';
 import { Input, Space } from 'antd';
 
-import { PlotoverlaidSeparatelyProps } from '../containers/display/interfaces';
+import { PlotoverlaidSeparatelyProps, PlotProps } from '../containers/display/interfaces';
 import { StyledSelectedPlotsTable } from './styledComponents'
 import { setLabel } from './utils'
 
 interface SelectedPlotsTableProps {
-  lastSelectedPlot: PlotoverlaidSeparatelyProps;
-  setSelectedPlots(plots: PlotoverlaidSeparatelyProps[]): void;
-  selectedPlots: PlotoverlaidSeparatelyProps[];
+  lastSelectedPlot: PlotProps;
+  setSelectedPlots(plots: PlotProps[]): void;
+  selectedPlots: PlotProps[];
 }
 
-const addToSelectedPlots = (item: PlotoverlaidSeparatelyProps, allSelectedPlots: PlotoverlaidSeparatelyProps[],) => {
+const addToSelectedPlots = (item: PlotProps, allSelectedPlots: PlotProps[],) => {
   if (allSelectedPlots.indexOf(item) === -1) {
     allSelectedPlots.push(item)
   }
   return allSelectedPlots
 }
 
-const removeSelectedPlot = (item: PlotoverlaidSeparatelyProps, allSelectedPlots: PlotoverlaidSeparatelyProps[]) => {
+const removeSelectedPlot = (item: PlotProps, allSelectedPlots: PlotProps[]) => {
   const copy = [...allSelectedPlots]
   const index = copy.indexOf(item)
   copy.splice(index, 1)
@@ -36,42 +36,41 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
       dataIndex: 'plot_name',
     },
     {
+      title: 'Label',
+      render: (plot: PlotProps) => {
+        const set_label = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
+          const plotsWithLabels = setLabel(plot, selectedPlots, value)
+          setSelectedPlots(plotsWithLabels)
+        }
+        if (plot.folders_path && plot.plot_name)
+          return <Input
+            id={plot.folders_path + plot.plot_name}
+            name={plot.folders_path + plot.plot_name}
+            placeholder="label"
+            value={plot.label}
+            onChange={set_label}
+          />
+      }
+    },
+    {
       title: 'Action',
       key: 'action',
-      render: (plotInfo: PlotoverlaidSeparatelyProps) => (
+      render: (plot: PlotProps) => (
         <Space size="small">
           <a
             onClick={() => {
-              setSelectedPlots(removeSelectedPlot(plotInfo, selectedPlots))
+              setSelectedPlots(removeSelectedPlot(plot, selectedPlots))
             }}
           >Delete</a>
         </Space>
       ),
     },
-    {
-      title: 'Label',
-      render: (plot: PlotoverlaidSeparatelyProps) => {
-        const set_label = ({ target: { value } }) => {
-          const plotsWithLabels = setLabel(plot, selectedPlots, value)
-          console.log('ss s', value)
-          setSelectedPlots(plotsWithLabels)
-        }
-        return <Input
-          id={plot.folder_path + plot.name}
-          name={plot.folder_path + plot.name}
-          placeholder="label"
-          value={plot.label}
-          onChange={set_label}
-        />
-      }
-    },
   ]
 
   React.useEffect(() => {
-    if (!!lastSelectedPlot.plot_name) {
+    if (!!lastSelectedPlot && lastSelectedPlot.plot_name) {
       const copy = [...selectedPlots]
       const changedPlotInfoArray = addToSelectedPlots(lastSelectedPlot, copy)
-      console.log(changedPlotInfoArray)
       setSelectedPlots(changedPlotInfoArray)
     }
   }, [lastSelectedPlot])
