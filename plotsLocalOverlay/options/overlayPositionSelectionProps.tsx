@@ -8,26 +8,35 @@ import { overlayOptions } from '../../components/constants';
 const { Option } = Select;
 
 interface OverlayPositionSelectionProps {
-  router: NextRouter
+  setReference: React.Dispatch<React.SetStateAction<{
+    [x: string]: string | boolean | string[];
+    size: string;
+    jsroot: boolean;
+    ref: string | string[];
+  }>>
+  reference: {
+    [x: string]: string | boolean | string[];
+    size: string;
+    jsroot: boolean;
+    ref: string | string[];
+  };
 }
 
-export const OverlayPositionSelection = ({ router }: OverlayPositionSelectionProps) => {
-  const { query } = router
-  const [overlayPosition, setOverlayPosition] = React.useState<string>(query.overlayPosition as string)
+const changeOverlayPosition = (value: string, reference: {
+  [x: string]: string | boolean | string[];
+  size: string;
+  jsroot: boolean;
+  ref: string | string[];
+}) => {
+  const copy = { ...reference }
+  copy.ref = value
+  return copy
+}
 
-  React.useEffect(() => {
-    Router.push({
-      pathname: router.pathname,
-      query: {
-        ...query,
-        overlayPosition: overlayPosition,
-      },
-    });
-  }, [overlayPosition])
-
+export const OverlayPositionSelection = ( { setReference, reference }: OverlayPositionSelectionProps) => {
   return <StyledSelect
-    onChange={(overlay: any) => setOverlayPosition(overlay)}
-    defaultValue={query.overlayPosition}>
+    onChange={(overlay: any) => setReference(changeOverlayPosition(overlay, reference))}
+    defaultValue={reference.ref}>
     {
       overlayOptions.map((option) =>
         <Option

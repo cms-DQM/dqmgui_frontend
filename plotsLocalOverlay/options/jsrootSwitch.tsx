@@ -3,31 +3,40 @@ import Router, { NextRouter } from 'next/router';
 import { Switch } from 'antd';
 
 interface JSROOTSwitchProps {
-  router: NextRouter
+  setReference: React.Dispatch<React.SetStateAction<{
+    [x: string]: string | boolean | string[];
+    size: string;
+    jsroot: boolean;
+    ref: string | string[];
+  }>>
+  reference: {
+    [x: string]: string | boolean | string[];
+    size: string;
+    jsroot: boolean;
+    ref: string | string[];
+  };
 }
 
-export const JSROOTSwitch = ({ router }: JSROOTSwitchProps) => {
-  const { query } = router
-  const [JSROOTmode, setJSROOTmode] = React.useState(query.jsroot === 'true' ? true : false)
+const changeJSROOTValue = (value: boolean, reference: {
+  [x: string]: string | boolean | string[];
+  size: string;
+  jsroot: boolean;
+  ref: string | string[];
+}) => {
+  const copy = { ...reference }
+  copy.jsroot = value
+  return copy
+}
 
-  React.useEffect(() => {
-    Router.push({
-      pathname: router.pathname,
-      query: {
-        ...query,
-        jsroot: JSROOTmode,
-      },
-    });
-  }, [JSROOTmode])
-
+export const JSROOTSwitch = ({ setReference, reference }: JSROOTSwitchProps) => {
   return (
     <Switch
       style={{ width: 'fit-content' }}
       checkedChildren="JSROOT enabled"
       unCheckedChildren="JSROOT disabled"
-      checked={JSROOTmode}
+      checked={reference.jsroot}
       onChange={(e) => {
-        setJSROOTmode(e);
+        setReference(changeJSROOTValue(e, reference));
       }}
     />
   )

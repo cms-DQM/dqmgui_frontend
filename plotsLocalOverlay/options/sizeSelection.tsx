@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { Select } from 'antd'
-import Router, { NextRouter } from 'next/router';
 
 import { StyledSelect } from '../../components/viewDetailsMenu/styledComponents'
 import { sizes } from '../../components/constants';
@@ -8,27 +7,37 @@ import { sizes } from '../../components/constants';
 const { Option } = Select;
 
 interface SizeSelectionProps {
-  router: NextRouter
+   setReference: React.Dispatch<React.SetStateAction<{
+    [x: string]: string | boolean | string[];
+    size: string;
+    jsroot: boolean;
+    ref: string | string[];
+}>>
+  reference: {
+     [x: string]: string | boolean | string[];
+    size: string;
+    jsroot: boolean;
+    ref: string | string[];
+  };
 }
 
-export const SizeSelection = ({ router }: SizeSelectionProps) => {
-  const options = Object.keys(sizes)
-  const { query } = router
-  const [size, setSize] = React.useState<string>(query.size as string)
+const changeSize = (value: string, reference: {
+  [x: string]: string | boolean | string[];
+  size: string;
+  jsroot: boolean;
+  ref: string | string[];
+}) => {
+  const copy = { ...reference }
+  copy.size = value
+  return copy
+}
 
-  React.useEffect(() => {
-    Router.push({
-      pathname: router.pathname,
-      query: {
-        ...query,
-        size,
-      },
-    });
-  }, [size])
+export const SizeSelection = ( { setReference, reference }: SizeSelectionProps) => {
+  const options = Object.keys(sizes)
 
   return <StyledSelect
-    onChange={(value: any) => setSize(value)}
-    defaultValue={query.size}>
+    onChange={(value: any) => setReference(changeSize(value, reference))}
+    defaultValue={reference.size}>
     {
       options.map((option) =>
         <Option

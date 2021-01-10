@@ -4,29 +4,42 @@ import Router, { NextRouter } from 'next/router';
 import { CustomCheckbox } from '../../components/styledComponents';
 
 interface CheckBoxProps {
-  router: NextRouter
+  setReference: React.Dispatch<React.SetStateAction<{
+    [x: string]: string | boolean | string[];
+    size: string;
+    jsroot: boolean;
+    ref: string | string[];
+  }>>
+  reference: {
+    [x: string]: string | boolean | string[];
+    size: string;
+    jsroot: boolean;
+    ref: string | string[];
+  };
   option: {
     label: string;
     value: boolean
   }
 }
 
-export const CheckBox = ({ router, option }: CheckBoxProps) => {
+const changeCheckboxValue = (value: boolean, checkbox: string, reference: {
+  [x: string]: string | boolean | string[];
+  size: string;
+  jsroot: boolean;
+  ref: string | string[];
+}) => {
+  const copy = { ...reference }
+  copy[checkbox] = value
+  return copy
+}
+
+export const CheckBox = ({ setReference, reference, option }: CheckBoxProps) => {
   const [checked, setChecked] = React.useState(option.value)
-  const { query } = router
 
   React.useEffect(() => {
-    if(checked !== option.value){
-      Router.push({
-        pathname: router.pathname,
-        query: {
-          ...query,
-          [option.label.toLowerCase()]: checked,
-        },
-      });
-    }
+    setReference(changeCheckboxValue(checked, option.label.toLocaleLowerCase(), reference))
   }, [checked])
-
+  
   return (
     <CustomCheckbox
       onClick={async (e: any) => {

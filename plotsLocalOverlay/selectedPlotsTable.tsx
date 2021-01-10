@@ -1,24 +1,24 @@
 import * as React from 'react';
 import { Input, Space } from 'antd';
 
-import { PlotProps } from '../containers/display/interfaces';
 import { StyledSelectedPlotsTable } from './styledComponents'
 import { setLabel } from './utils'
+import { PlotProperties } from './interfaces';
 
 interface SelectedPlotsTableProps {
-  lastSelectedPlot: PlotProps;
-  setSelectedPlots(plots: PlotProps[]): void;
-  selectedPlots: PlotProps[];
+  lastSelectedPlot: PlotProperties;
+  setSelectedPlots(plots: PlotProperties[]): void;
+  selectedPlots: PlotProperties[];
 }
 
-const addToSelectedPlots = (item: PlotProps, allSelectedPlots: PlotProps[],) => {
+const addToSelectedPlots = (item: PlotProperties, allSelectedPlots: PlotProperties[],) => {
   if (allSelectedPlots.indexOf(item) === -1) {
     allSelectedPlots.push(item)
   }
   return allSelectedPlots
 }
 
-const removeSelectedPlot = (item: PlotProps, allSelectedPlots: PlotProps[]) => {
+const removeSelectedPlot = (item: PlotProperties, allSelectedPlots: PlotProperties[]) => {
   const copy = [...allSelectedPlots]
   const index = copy.indexOf(item)
   copy.splice(index, 1)
@@ -37,7 +37,7 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
     },
     {
       title: 'Label',
-      render: (plot: PlotProps) => {
+      render: (plot: PlotProperties) => {
         const set_label = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
           const plotsWithLabels = setLabel(plot, selectedPlots, value)
           setSelectedPlots(plotsWithLabels)
@@ -55,7 +55,7 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
     {
       title: 'Action',
       key: 'action',
-      render: (plot: PlotProps) => (
+      render: (plot: PlotProperties) => (
         <Space size="small">
           <a
             onClick={() => {

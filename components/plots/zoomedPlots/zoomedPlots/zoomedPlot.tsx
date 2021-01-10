@@ -81,7 +81,7 @@ export const ZoomedPlot = ({
         const page = 'plotsLocalOverlay'
         const run = 'run_number=' + query.run_number as string
         const dataset ='dataset_name=' + query.dataset_name  as string
-        const path = 'folder_path=' + selected_plot.path 
+        const path = 'folders_path=' + selected_plot.path 
         const plot_name = 'plot_name=' + selected_plot.name
         const baseURL = [basePath, page].join('/')
         const queryURL = [ run , dataset, path, plot_name].join('&')
