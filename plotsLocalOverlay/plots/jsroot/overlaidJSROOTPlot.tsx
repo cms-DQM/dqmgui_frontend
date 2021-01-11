@@ -28,9 +28,11 @@ const drawJSROOT = async (
 };
 
 export const OverlaidJSROOTPlot = ({ params_for_api, id }: JSROOTplotProps) => {
+  //@ts-ignore
   params_for_api.height = sizes[params_for_api.size].size.h
+  //@ts-ignore
   params_for_api.width = sizes[params_for_api.size].size.w
-console.log('overlaid')
+  console.log('overlaid')
   const { data } = useRequest(get_jroot_plot(params_for_api as any), {}, [
     params_for_api.plot_name,
   ]);
@@ -64,6 +66,7 @@ console.log('overlaid')
     }
   }, [
     data,
+    id,
     params_for_api.lumi,
     params_for_api.overlaidSeparately?.plots.length,
     params_for_api.dataset_name,
@@ -80,13 +83,13 @@ console.log('overlaid')
         height={params_for_api.height}
       />
       <ImageDiv
-        style={{ display: params_for_api.overlaidSeparately?.normalize ? '' : 'none' }}
+        style={{ display: params_for_api.normalize ? '' : 'none' }}
         id={`hist${id}`}
         width={params_for_api.width}
         height={params_for_api.height}
       />
       <ImageDiv
-        style={{ display: params_for_api.overlaidSeparately?.normalize ? 'none' : '' }}
+        style={{ display: params_for_api.normalize ? 'none' : '' }}
         id={`nostack${id}`}
         width={params_for_api.width}
         height={params_for_api.height}

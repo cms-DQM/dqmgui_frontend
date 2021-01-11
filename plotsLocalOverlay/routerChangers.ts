@@ -3,8 +3,9 @@ import Router, { NextRouter } from 'next/router';
 import { OverlaidSeparatelyProps, ParametersForApi } from './interfaces';
 
 export const cleanOverlaidPlotsFromURL = async (parameters: any, router: NextRouter, setParameters: React.Dispatch<React.SetStateAction<ParametersForApi | undefined>>) => {
-  await delete parameters.overlayPlots
-  await delete parameters.overlaidSeparately
+  const copy = { ...parameters }
+  await delete copy.overlayPlots
+  await delete copy.overlaidSeparately
   setParameters(parameters)
   Router.push({
     pathname: router.pathname,

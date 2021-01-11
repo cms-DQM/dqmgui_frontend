@@ -1,7 +1,7 @@
 import { CustomizeProps } from "../containers/display/interfaces";
 
 export interface ParametersForApi {
-  overlaidSeparately?: OverlaidSeparatelyProps
+  overlaidSeparately: OverlaidSeparatelyProps
   customizeProps?: CustomizeProps,
   run_number: string;
   dataset_name: string;
@@ -26,9 +26,6 @@ export interface PlotProperties {
 export interface OverlaidSeparatelyProps {
   plots: PlotProperties[],
   ref: string,
-  // normalize: boolean,
-  // stats: boolean,
-  // error: boolean,
 }
 
 export interface QueryProperties {

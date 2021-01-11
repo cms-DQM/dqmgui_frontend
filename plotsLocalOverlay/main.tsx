@@ -21,9 +21,14 @@ export const Main = () => {
         dataset_name: dataset_name as string,
         folders_path: folders_path as string,
         plot_name: plot_name as string,
-        size: query.size? query.size as string: 'large',
-        height : sizes[query.size? query.size as string: 'large'].size.h,
-        width : sizes[query.size? query.size as string: 'large'].size.w
+        size: query.size ? query.size as string : 'large',
+        jsroot: query.jsroot ? (query.jsroot === 'true' ? true : false) : false,
+        stats: query.stats ? (query.stats === 'true' ? true : false) : false,
+        normalize: query.normalize ? (query.normalize === 'true' ? true : false) : true,
+        //@ts-ignore
+        height: sizes[query.size ? query.size as string : 'large'].size.h,
+        //@ts-ignore
+        width: sizes[query.size ? query.size as string : 'large'].size.w
       }
       setParameters(params_for_api)
     }
@@ -31,7 +36,7 @@ export const Main = () => {
   query.dataset_name,
   query.folders_path,
   query.plot_name])
-  
+
   if (parameters) {
     return (<div>
       <div style={{ display: 'flex' }}>

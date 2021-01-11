@@ -98,6 +98,7 @@ export const SearchContent = ({ setParameters, parameters }: SearchContentProps)
       const onePlotFullPath = [plot.folders_path, plot.plot_name].join('/')
       return onePlotFullPath
     })
+
     const plotsString = plots.join('&')
     if (plotsString.length > 0) {
       copy.overlaidSeparately = { ...parameters.overlaidSeparately, plots: selectedPlots }

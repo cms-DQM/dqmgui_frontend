@@ -16,14 +16,15 @@ const drawJSROOT = async (id: string, data: any) => {
     //on mount we're getting error, because there is nothing to clean yet.
     try {
       //@ts-ignore
-      await JSROOT.cleanup(document.querySelector(`#${id}`));
+      await JSROOT.cleanup(id);
+      //@ts-ignore
+      JSROOT.draw(id, JSROOT.parse(JSON.stringify(data)), 'hist');
       //after cleanup we can draw a new plot
     }
     catch {
       //on mount error
     }
-    //@ts-ignore
-    JSROOT.draw(id, JSROOT.parse(JSON.stringify(data)), 'hist');
+
   }
 };
 
@@ -34,11 +35,12 @@ export const SingleJSROOTPlot = ({ params_for_api, id }: JSROOTplotProps) => {
 
   React.useEffect(() => {
     //@ts-ignore
-    if (!!document.getElementById(`${id}`) && JSROOT) {
+    if (!!document.getElementById(`${id}`)) {
       //@ts-ignore
       drawJSROOT(`${id}`, data);
+      console.log('jsjs')
     }
-  }, [data, params_for_api]);
+  }, [data, id, !!document.getElementById(`${id}`)]);
 
   return (
     <div>
