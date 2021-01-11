@@ -5,7 +5,7 @@ import { JSROOTSwitch } from './jsrootSwitch';
 import { OverlayPositionSelection } from './overlayPositionSelectionProps';
 import { SizeSelection } from './sizeSelection';
 import { CheckBox } from './checkBox'
-import { ParametersForApi } from '../interfaces';
+import { OverlaidSeparatelyProps, ParametersForApi } from '../interfaces';
 import { sizes } from '../../components/constants';
 
 
@@ -44,23 +44,35 @@ export const Reference = ({ router, parameters, setParameters }: ReferenceProps)
   })
 
   React.useEffect(() => {
-    parameters.height = sizes[reference.size].size.h
-    parameters.width = sizes[reference.size].size.w
-    const copy = {...parameters}
-    if(copy.overlaidSeparately){
+    const copy = { ...parameters }
+
+    copy.height = sizes[reference.size].size.h
+    copy.width = sizes[reference.size].size.w
+    copy.size = reference.size
+    if (copy.overlaidSeparately) {
       copy.overlaidSeparately.ref = reference.ref as string
       copy.overlaidSeparately.normalize = reference.normalize as boolean
       copy.overlaidSeparately.stats = reference.stats as boolean
       copy.overlaidSeparately.error = reference.error as boolean
     }
-    const addedPropsToParameters = { ...parameters, ...reference }
+    copy.jsroot = reference.jsroot
+    copy.size = reference.size
+    const addedPropsToParameters = { ...copy, overlaidSeparately: { ...copy.overlaidSeparately } }
+    console.log(addedPropsToParameters)
     setParameters(addedPropsToParameters)
+
   }, [reference.size,
   reference.jsroot,
   reference.ref,
   reference[checkBoxes[0].label.toLocaleLowerCase()],
   reference[checkBoxes[1].label.toLocaleLowerCase()],
-  reference[checkBoxes[2].label.toLocaleLowerCase()]])
+  reference[checkBoxes[2].label.toLocaleLowerCase()],
+  query.ref,
+  query.normalize,
+  query.stats,
+  query.error,
+  query.jsroot,
+  query.size])
 
   return <div style={{ display: 'flex', flexDirection: 'column' }}>
     <div style={{ display: 'flex' }}>

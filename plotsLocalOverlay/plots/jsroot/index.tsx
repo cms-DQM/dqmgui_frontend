@@ -10,10 +10,11 @@ interface JSROOTplotProps {
 };
 
 export const JSROOTPlot = ({ params_for_api, id }: JSROOTplotProps) => {
-  if (params_for_api.overlaidSeparately && params_for_api.overlaidSeparately?.plots.length > 0) {
-    return <SingleJSROOTPlot id={id} params_for_api={params_for_api} />
-  } else {
-    return <OverlaidJSROOTPlot id={id} params_for_api={params_for_api} />
+  const isItMoreThanOnePlot =  params_for_api.overlaidSeparately ? params_for_api.overlaidSeparately.hasOwnProperty('plots') : false
 
+  if (isItMoreThanOnePlot) {
+    return <OverlaidJSROOTPlot id={id} params_for_api={params_for_api} />
+  } else {
+    return <SingleJSROOTPlot id={id} params_for_api={params_for_api} />
   }
 }

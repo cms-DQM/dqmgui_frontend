@@ -1,6 +1,4 @@
-import { useRouter } from 'next/router';
 import * as React from 'react'
-import { sizes } from '../components/constants';
 
 import { ImageFallback } from '../components/plots/imageFallback';
 import { makeid } from '../components/utils';
@@ -14,9 +12,8 @@ interface PlotsLocalOverlayContentProps {
 
 export const PlotsLocalOverlayContent = ({ parameters }: PlotsLocalOverlayContentProps) => {
   const id = makeid();
-  const plot_url = parameters.overlaidSeparately ? get_plot_with_overlay_new_api(parameters) : get_plot_url(parameters as any)
-  const router = useRouter();
-  const query = router.query;
+  const isItMoreThanOnePlot =  parameters.overlaidSeparately ? parameters.overlaidSeparately.hasOwnProperty('plots') : false
+  const plot_url = isItMoreThanOnePlot?  get_plot_with_overlay_new_api(parameters) : get_plot_url(parameters as any)
   const [imageError, setImageError] = React.useState(false)
 
   return (

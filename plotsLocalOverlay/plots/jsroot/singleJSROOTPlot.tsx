@@ -11,10 +11,17 @@ interface JSROOTplotProps {
 };
 const drawJSROOT = async (id: string, data: any) => {
   //in order to get new JSROOT plot, first of all we need to clean div with old plot
+  //@ts-ignore
   if (!!document.getElementById(id)) {
-    //@ts-ignore
-    await JSROOT.cleanup(id);
-    //after cleanup we can draw a new plot
+    //on mount we're getting error, because there is nothing to clean yet.
+    try {
+      //@ts-ignore
+      await JSROOT.cleanup(document.querySelector(`#${id}`));
+      //after cleanup we can draw a new plot
+    }
+    catch {
+      //on mount error
+    }
     //@ts-ignore
     JSROOT.draw(id, JSROOT.parse(JSON.stringify(data)), 'hist');
   }
@@ -26,7 +33,8 @@ export const SingleJSROOTPlot = ({ params_for_api, id }: JSROOTplotProps) => {
   ]);
 
   React.useEffect(() => {
-    if (!!document.getElementById(`${id}`)) {
+    //@ts-ignore
+    if (!!document.getElementById(`${id}`) && JSROOT) {
       //@ts-ignore
       drawJSROOT(`${id}`, data);
     }

@@ -86,23 +86,15 @@ export const SearchContent = ({ setParameters, parameters }: SearchContentProps)
   }, [])
 
   React.useEffect(() => {
+    console.log(parameters)
     const copy = { ...parameters }
     const plots_to_parameters = { overlaidSeparately: { plots: selectedPlots } as OverlaidSeparatelyProps }
     const params = { ...copy, ...plots_to_parameters }
     setParameters(params)
-
-    copy.overlaidSeparately = {
-      plots: selectedPlots,
-      ref: query.ref as string,
-      normalize: query.normalize === 'true' ? true : false,
-      stats: query.stats === 'true' ? true : false,
-      error: query.error === 'true' ? true : false,
-    }
     //@ts-ignore
     copy.height = copy.height
     //@ts-ignore
     copy.width = copy.width
-    copy.jsroot = query.jsroot === 'true' ? true : false
 
     const plots = selectedPlots.map((plot: PlotProps) => {
       if (plot.label) {
@@ -114,22 +106,22 @@ export const SearchContent = ({ setParameters, parameters }: SearchContentProps)
     })
     const plotsString = plots.join('&')
     if (plotsString.length > 0) {
+      copy.overlaidSeparately = { ...parameters.overlaidSeparately, plots: selectedPlots }
       setParameters(copy)
       addOverlaidPlotToURL(plotsString, copy, router)
     }
     else {
-      setParameters(copy)
-      cleanOverlaidPlotsFromURL(copy, router)
+      cleanOverlaidPlotsFromURL(copy, router, setParameters)
     }
-    console.log(query)
   }, [
     selectedPlots.length,
-    query.stats,
-    query.ref,
-    query.normalize,
-    query.error,
-    query.size,
-    query.jsroot])
+    parameters.size,
+    parameters.overlaidSeparately && parameters.overlaidSeparately.stats,
+    parameters.overlaidSeparately && parameters.overlaidSeparately.ref,
+    parameters.overlaidSeparately && parameters.overlaidSeparately.normalize,
+    parameters.overlaidSeparately && parameters.overlaidSeparately.error,
+    parameters.jsroot,
+  ])
 
   const { data } = data_get_by_mount
   const folders_or_plots = data ? data.data : []

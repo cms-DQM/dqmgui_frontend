@@ -30,11 +30,10 @@ const drawJSROOT = async (
 export const OverlaidJSROOTPlot = ({ params_for_api, id }: JSROOTplotProps) => {
   params_for_api.height = sizes[params_for_api.size].size.h
   params_for_api.width = sizes[params_for_api.size].size.w
-
+console.log('overlaid')
   const { data } = useRequest(get_jroot_plot(params_for_api as any), {}, [
     params_for_api.plot_name,
   ]);
-
   const parametersForJSROOTOverlaidPlots = params_for_api.overlaidSeparately ? params_for_api.overlaidSeparately?.plots.map((plot) => {
     const { run_number, dataset_name, folders_path } = params_for_api
     const { plot_name } = plot
@@ -51,7 +50,7 @@ export const OverlaidJSROOTPlot = ({ params_for_api, id }: JSROOTplotProps) => {
     null;
   } else if (parametersForJSROOTOverlaidPlots.length > 0) {
     //@ts-ignore
-    overlaidJSROOTPlot = JSROOT.CreateTHStack(parametersForJSROOTOverlaidPlots[0]);
+    overlaidJSROOTPlot = JSROOT.CreateTHStack(...parametersForJSROOTOverlaidPlots);
   }
 
   const histogramParam = params_for_api.overlaidSeparately?.normalize ? 'hist' : 'nostack';
