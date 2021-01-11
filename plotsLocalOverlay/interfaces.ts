@@ -11,6 +11,9 @@ export interface ParametersForApi {
   height: number;
   width: number;
   jsroot: boolean;
+  normalize: boolean,
+  stats: boolean,
+  error: boolean,
   lumi: number
 }
 
@@ -23,9 +26,9 @@ export interface PlotProperties {
 export interface OverlaidSeparatelyProps {
   plots: PlotProperties[],
   ref: string,
-  normalize: boolean,
-  stats: boolean,
-  error: boolean,
+  // normalize: boolean,
+  // stats: boolean,
+  // error: boolean,
 }
 
 export interface QueryProperties {

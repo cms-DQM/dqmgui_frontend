@@ -31,6 +31,7 @@ export const Main = () => {
   query.dataset_name,
   query.folders_path,
   query.plot_name])
+  
   if (parameters) {
     return (<div>
       <div style={{ display: 'flex' }}>

@@ -45,20 +45,18 @@ export const Reference = ({ router, parameters, setParameters }: ReferenceProps)
 
   React.useEffect(() => {
     const copy = { ...parameters }
-
     copy.height = sizes[reference.size].size.h
     copy.width = sizes[reference.size].size.w
     copy.size = reference.size
     if (copy.overlaidSeparately) {
       copy.overlaidSeparately.ref = reference.ref as string
-      copy.overlaidSeparately.normalize = reference.normalize as boolean
-      copy.overlaidSeparately.stats = reference.stats as boolean
-      copy.overlaidSeparately.error = reference.error as boolean
     }
     copy.jsroot = reference.jsroot
-    copy.size = reference.size
+    copy.size = reference.size  
+    copy.stats = reference.stats  as boolean
+    copy.normalize = reference.normalize as boolean
+    copy.error = reference.error as boolean
     const addedPropsToParameters = { ...copy, overlaidSeparately: { ...copy.overlaidSeparately } }
-    console.log(addedPropsToParameters)
     setParameters(addedPropsToParameters)
 
   }, [reference.size,

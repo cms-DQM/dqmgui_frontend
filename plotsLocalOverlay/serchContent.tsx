@@ -86,16 +86,10 @@ export const SearchContent = ({ setParameters, parameters }: SearchContentProps)
   }, [])
 
   React.useEffect(() => {
-    console.log(parameters)
     const copy = { ...parameters }
     const plots_to_parameters = { overlaidSeparately: { plots: selectedPlots } as OverlaidSeparatelyProps }
     const params = { ...copy, ...plots_to_parameters }
     setParameters(params)
-    //@ts-ignore
-    copy.height = copy.height
-    //@ts-ignore
-    copy.width = copy.width
-
     const plots = selectedPlots.map((plot: PlotProps) => {
       if (plot.label) {
         const onePlotFullPath = [plot.folders_path, plot.plot_name, 'reflabel=' + plot.label].join('/')
@@ -111,16 +105,18 @@ export const SearchContent = ({ setParameters, parameters }: SearchContentProps)
       addOverlaidPlotToURL(plotsString, copy, router)
     }
     else {
+      copy.overlaidSeparately = { ...parameters.overlaidSeparately, plots: [] }
       cleanOverlaidPlotsFromURL(copy, router, setParameters)
     }
+    console.log(parameters.overlaidSeparately)
   }, [
     selectedPlots.length,
     parameters.size,
-    parameters.overlaidSeparately && parameters.overlaidSeparately.stats,
     parameters.overlaidSeparately && parameters.overlaidSeparately.ref,
-    parameters.overlaidSeparately && parameters.overlaidSeparately.normalize,
-    parameters.overlaidSeparately && parameters.overlaidSeparately.error,
     parameters.jsroot,
+    parameters.stats,
+    parameters.normalize,
+    parameters.error
   ])
 
   const { data } = data_get_by_mount
