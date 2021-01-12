@@ -4,11 +4,13 @@ import { Input, Space } from 'antd';
 import { StyledSelectedPlotsTable } from './styledComponents'
 import { setLabel } from './utils'
 import { PlotProperties } from './interfaces';
+import { ParsedUrlQuery } from 'querystring';
 
 interface SelectedPlotsTableProps {
   lastSelectedPlot: PlotProperties;
   setSelectedPlots(plots: PlotProperties[]): void;
   selectedPlots: PlotProperties[];
+  query: ParsedUrlQuery
 }
 
 const addToSelectedPlots = (item: PlotProperties, allSelectedPlots: PlotProperties[],) => {
@@ -25,7 +27,7 @@ const removeSelectedPlot = (item: PlotProperties, allSelectedPlots: PlotProperti
   return copy
 }
 
-export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selectedPlots }: SelectedPlotsTableProps,) => {
+export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selectedPlots, query }: SelectedPlotsTableProps,) => {
   const colums = [
     {
       title: 'Folder Path',
@@ -66,6 +68,22 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
       ),
     },
   ]
+
+  React.useEffect(() => {
+    if (query.overlayPlots) {
+      const plots = (query.overlayPlots as string).split('&')
+      const formattedSelectedPlotObjects: PlotProperties[] = plots.map((plot: string) => {
+        const labelAndOtherPart = plot.split('reflabel=')
+        const label = labelAndOtherPart.length === 2 ? labelAndOtherPart[1] : ''
+        const parts = labelAndOtherPart[0].split('/')
+        const plot_name = parts.pop() as string
+        const folders_path = parts.join('/')
+        const finalObject: PlotProperties = { folders_path, plot_name, label }
+        return finalObject
+      })
+      setSelectedPlots(formattedSelectedPlotObjects)
+    }
+  }, [])
 
   React.useEffect(() => {
     if (!!lastSelectedPlot && lastSelectedPlot.plot_name) {

@@ -25,6 +25,7 @@ export const Main = () => {
         jsroot: query.jsroot ? (query.jsroot === 'true' ? true : false) : false,
         stats: query.stats ? (query.stats === 'true' ? true : false) : false,
         normalize: query.normalize ? (query.normalize === 'true' ? true : false) : true,
+        overlaidSeparately:{ plots:[], ref: 'overlay'},
         //@ts-ignore
         height: sizes[query.size ? query.size as string : 'large'].size.h,
         //@ts-ignore
@@ -32,10 +33,7 @@ export const Main = () => {
       }
       setParameters(params_for_api)
     }
-  }, [query.run_number,
-  query.dataset_name,
-  query.folders_path,
-  query.plot_name])
+  }, [query.plot_name])
 
   if (parameters) {
     return (<div>

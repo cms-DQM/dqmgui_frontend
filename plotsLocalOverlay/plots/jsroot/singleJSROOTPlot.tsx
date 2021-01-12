@@ -38,7 +38,6 @@ export const SingleJSROOTPlot = ({ params_for_api, id }: JSROOTplotProps) => {
     if (!!document.getElementById(`${id}`)) {
       //@ts-ignore
       drawJSROOT(`${id}`, data);
-      console.log('jsjs')
     }
   }, [data, id, !!document.getElementById(`${id}`)]);
 

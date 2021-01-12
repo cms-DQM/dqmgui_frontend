@@ -1,4 +1,3 @@
-import cleanDeep from 'clean-deep';
 import * as React from 'react'
 import { sizes } from '../../../components/constants';
 import { get_jroot_plot } from '../../../config/config';
@@ -16,72 +15,59 @@ const drawJSROOT = async (
   id: string,
   overlaidJSROOTPlot: any
 ) => {
-  //@ts-ignore
-  await JSROOT.cleanup(`${histogramParam}${id}`);
-  //@ts-ignore
-  JSROOT.draw(
-    `${histogramParam}${id}`,
+  try {
     //@ts-ignore
-    JSROOT.parse(JSON.stringify(overlaidJSROOTPlot)),
-    `${histogramParam}`
-  );
+    await JSROOT.cleanup(`${histogramParam}${id}`);
+    //@ts-ignore
+    JSROOT.draw(`${histogramParam}${id}`, JSROOT.parse(JSON.stringify(overlaidJSROOTPlot)), `${histogramParam}`);
+  }
+  catch (e) {
+    console.log(e.toString())
+  }
 };
 
 export const OverlaidJSROOTPlot = ({ params_for_api, id }: JSROOTplotProps) => {
+  let overlaidJSROOTPlot: any = {};
   //@ts-ignore
   params_for_api.height = sizes[params_for_api.size].size.h
   //@ts-ignore
   params_for_api.width = sizes[params_for_api.size].size.w
-  console.log('overlaid')
-  const { data } = useRequest(get_jroot_plot(params_for_api as any), {}, [
-    params_for_api.plot_name,
-  ]);
-  const parametersForJSROOTOverlaidPlots = params_for_api.overlaidSeparately ? params_for_api.overlaidSeparately?.plots.map((plot) => {
-    const { run_number, dataset_name, folders_path } = params_for_api
-    const { plot_name } = plot
+  const parametersForJSROOTOverlaidPlots = params_for_api.overlaidSeparately ? params_for_api.overlaidSeparately?.plots.map(async (plot) => {
+    const { run_number, dataset_name } = params_for_api
+    const { folders_path, plot_name } = plot
     const parameters = { run_number, dataset_name, folders_path, plot_name }
-    const { data } = useRequest(get_jroot_plot(parameters), {}, [params_for_api.plot_name,
+    const { data } = await useRequest(get_jroot_plot(parameters), {}, [plot_name,
     ]);
     return data;
   }) : []
 
-  parametersForJSROOTOverlaidPlots.push(data)
-  let overlaidJSROOTPlot: any = {};
+  const { run_number, dataset_name, folders_path, plot_name } = params_for_api
+  const initialPlotParameters = { run_number, dataset_name, folders_path, plot_name }
+  parametersForJSROOTOverlaidPlots.push(initialPlotParameters as any)
 
-  if (parametersForJSROOTOverlaidPlots.length === 0) {
+  if (parametersForJSROOTOverlaidPlots && parametersForJSROOTOverlaidPlots.length === 0) {
     null;
-  } else if (parametersForJSROOTOverlaidPlots.length > 0) {
+  } else if (parametersForJSROOTOverlaidPlots && parametersForJSROOTOverlaidPlots.length > 0) {
     //@ts-ignore
     overlaidJSROOTPlot = JSROOT.CreateTHStack(...parametersForJSROOTOverlaidPlots);
   }
 
-  const histogramParam = params_for_api.overlaidSeparately?.normalize ? 'hist' : 'nostack';
-
+  const histogramParam = params_for_api.normalize ? 'hist' : 'nostack';
+  console.log(histogramParam)
   React.useEffect(() => {
-    if (
-      cleanDeep(overlaidJSROOTPlot.fHists.arr).length ===
-      overlaidJSROOTPlot.fHists.arr.length
-    ) {
+    if(!!document.getElementById(`${id}${histogramParam}`)){
       drawJSROOT(histogramParam, id, overlaidJSROOTPlot);
     }
   }, [
-    data,
     id,
     params_for_api.lumi,
-    params_for_api.overlaidSeparately?.plots.length,
     params_for_api.dataset_name,
     params_for_api.run_number,
-    params_for_api.overlaidSeparately?.normalize,
-    overlaidJSROOTPlot.fHists.arr
+    params_for_api.normalize,
   ]);
 
   return (
     <div>
-      <ImageDiv
-        id={`${id}`}
-        width={params_for_api.width}
-        height={params_for_api.height}
-      />
       <ImageDiv
         style={{ display: params_for_api.normalize ? '' : 'none' }}
         id={`hist${id}`}

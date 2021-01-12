@@ -70,22 +70,6 @@ export const SearchContent = ({ setParameters, parameters }: SearchContentProps)
   }, [currentFolder])
 
   React.useEffect(() => {
-    if (query.overlayPlots) {
-      const plots = (query.overlayPlots as string).split('&')
-      const formattedSelectedPlotObjects: PlotProperties[] = plots.map((plot: string) => {
-        const labelAndOtherPart = plot.split('reflabel=')
-        const label = labelAndOtherPart.length === 2 ? labelAndOtherPart[1] : ''
-        const parts = labelAndOtherPart[0].split('/')
-        const plot_name = parts.pop() as string
-        const folders_path = parts.join('/')
-        const finalObject: PlotProperties = { folders_path, plot_name, label }
-        return finalObject
-      })
-      setSelectedPlots(formattedSelectedPlotObjects)
-    }
-  }, [])
-
-  React.useEffect(() => {
     const copy = { ...parameters }
     const plots_to_parameters = { overlaidSeparately: { plots: selectedPlots } as OverlaidSeparatelyProps }
     const params = { ...copy, ...plots_to_parameters }
@@ -103,22 +87,46 @@ export const SearchContent = ({ setParameters, parameters }: SearchContentProps)
     if (plotsString.length > 0) {
       copy.overlaidSeparately = { ...parameters.overlaidSeparately, plots: selectedPlots }
       setParameters(copy)
-      addOverlaidPlotToURL(plotsString, copy, router)
     }
     else {
       copy.overlaidSeparately = { ...parameters.overlaidSeparately, plots: [] }
-      cleanOverlaidPlotsFromURL(copy, router, setParameters)
+      setParameters(copy)
     }
-    console.log(parameters.overlaidSeparately)
   }, [
     selectedPlots.length,
+  ])
+
+  const labels = parameters.overlaidSeparately.plots.map((plot: PlotProperties) => {
+    return plot.label
+  })
+const labelsString = labels.join(',')
+  React.useEffect(() => {
+    console.log('label')
+    const plots = selectedPlots.map((plot: PlotProps) => {
+      if (plot.label) {
+        const onePlotFullPath = [plot.folders_path, plot.plot_name, 'reflabel=' + plot.label].join('/')
+        return onePlotFullPath
+      }
+      const onePlotFullPath = [plot.folders_path, plot.plot_name].join('/')
+      return onePlotFullPath
+    })
+    const plotsString = plots.join('&')
+
+    if (plotsString.length > 0) {
+      addOverlaidPlotToURL(plotsString, parameters, router)
+    }
+    else {
+      cleanOverlaidPlotsFromURL(parameters, router)
+    }
+  }, [
     parameters.size,
+    labelsString,
+    parameters.overlaidSeparately.plots,
     parameters.overlaidSeparately && parameters.overlaidSeparately.ref,
     parameters.jsroot,
     parameters.stats,
     parameters.normalize,
-    parameters.error
-  ])
+    parameters.error])
 
   const { data } = data_get_by_mount
   const folders_or_plots = data ? data.data : []
@@ -132,6 +140,7 @@ export const SearchContent = ({ setParameters, parameters }: SearchContentProps)
       </Col>
       <FoldersRow>
         <SelectedPlotsTable
+          query={query}
           lastSelectedPlot={lastSelectedPlot}
           selectedPlots={selectedPlots}
           setSelectedPlots={setSelectedPlots} />
