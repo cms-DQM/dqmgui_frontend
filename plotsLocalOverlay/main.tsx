@@ -6,6 +6,11 @@ import { SearchContent } from '../plotsLocalOverlay/serchContent'
 import { sizes } from '../components/constants';
 import { Reference } from '../plotsLocalOverlay/options/reference'
 import { ParametersForApi } from '../plotsLocalOverlay/interfaces';
+import { Side, Wrapper } from './styledComponents';
+import { StyledHeader } from '../styles/styledComponents';
+import { Layout } from 'antd';
+
+const { Footer, Content } = Layout;
 
 export const Main = () => {
   const router = useRouter();
@@ -25,7 +30,7 @@ export const Main = () => {
         jsroot: query.jsroot ? (query.jsroot === 'true' ? true : false) : false,
         stats: query.stats ? (query.stats === 'true' ? true : false) : false,
         normalize: query.normalize ? (query.normalize === 'true' ? true : false) : true,
-        overlaidSeparately:{ plots:[], ref: 'overlay'},
+        overlaidSeparately: { plots: [], ref: 'overlay' },
         //@ts-ignore
         height: sizes[query.size ? query.size as string : 'large'].size.h,
         //@ts-ignore
@@ -36,21 +41,43 @@ export const Main = () => {
   }, [query.plot_name])
 
   if (parameters) {
-    return (<div>
-      <div style={{ display: 'flex' }}>
-        <div style={{ width: '50%', margin: '32px' }}>
-          <PlotsLocalOverlayContent parameters={parameters} />
-        </div>
-        <div style={{ width: '50%', margin: '32px' }}>
-          <div>
-            <Reference parameters={parameters} router={router} setParameters={setParameters} />
+    return (
+      // <StyledLayout>
+      <Layout>
+        <StyledHeader>
+          <div style ={{display:'flex', justifyContent: 'space-between'}}>
+          <p style={{ color: 'white', padding: 4}}>
+            Run: {parameters.run_number}
+            </p>
+            <p style={{ color: 'white', padding: 4}}>
+            Dataset: {parameters.dataset_name}
+            </p>
+            <p style={{ color: 'white', padding: 4}}>
+            Folder path: {parameters.folders_path}
+            </p>
+            <p style={{ color: 'white', padding: 4}}>
+            Plot: {parameters.plot_name}
+            </p>
           </div>
-          <div>
-            <SearchContent parameters={parameters} setParameters={setParameters} />
-          </div>
-        </div>
-      </div>
-    </div>)
+        </StyledHeader>
+        <Content>
+          <Wrapper direction="row">
+            <Side proportion="50%" style={{borderRight: '2px solid'}}>
+              <PlotsLocalOverlayContent parameters={parameters} />
+            </Side>
+            <Side proportion="50%">
+              <div>
+                <Reference parameters={parameters} router={router} setParameters={setParameters} />
+              </div>
+              <div>
+                <SearchContent parameters={parameters} setParameters={setParameters} />
+              </div>
+            </Side>
+          </Wrapper>
+        </Content>
+        <Footer></Footer>
+      </Layout>
+    )
   }
   return <></>
 

@@ -5,6 +5,7 @@ import { StyledSelectedPlotsTable } from './styledComponents'
 import { setLabel } from './utils'
 import { PlotProperties } from './interfaces';
 import { ParsedUrlQuery } from 'querystring';
+import cleanDeep from 'clean-deep';
 
 interface SelectedPlotsTableProps {
   lastSelectedPlot: PlotProperties;
@@ -77,7 +78,7 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
         const label = labelAndOtherPart.length === 2 ? labelAndOtherPart[1] : ''
         const parts = labelAndOtherPart[0].split('/')
         const plot_name = parts.pop() as string
-        const folders_path = parts.join('/')
+        const folders_path = cleanDeep(parts).join('/')
         const finalObject: PlotProperties = { folders_path, plot_name, label }
         return finalObject
       })

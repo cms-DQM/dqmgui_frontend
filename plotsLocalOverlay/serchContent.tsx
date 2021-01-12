@@ -176,8 +176,7 @@ const labelsString = labels.join(',')
               const disabled = selectedPlots.findIndex((selectedPlot) =>
                 selectedPlot.folders_path === current_plot.folders_path && selectedPlot.plot_name === current_plot.plot_name) > -1 ||
                 selectedPlots.length >= 8
-              return (
-                <>
+              return (<>
                   {plot && selectedPlots.length < 8 &&
                     <Tooltip key={index} title={disabled ? 'This plot is already selected' : ''}>
                       <Button
@@ -190,7 +189,7 @@ const labelsString = labels.join(',')
                       </Button>
                     </Tooltip>
                   }
-                </>
+                    </>
               )
             })
           }

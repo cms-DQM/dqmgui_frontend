@@ -7,6 +7,7 @@ import { SizeSelection } from './sizeSelection';
 import { CheckBox } from './checkBox'
 import { OverlaidSeparatelyProps, ParametersForApi } from '../interfaces';
 import { sizes } from '../../components/constants';
+import { Grid, Wrapper } from '../styledComponents';
 
 
 interface ReferenceProps {
@@ -75,34 +76,35 @@ export const Reference = ({ router, parameters, setParameters }: ReferenceProps)
   query.jsroot,
   query.size])
 
-  return <div style={{ display: 'flex', flexDirection: 'column' }}>
-    <div style={{ display: 'flex' }}>
-      <div>
+  return <Wrapper direction="column">
+    <Wrapper direction="row">
+      <Grid space={'2'}>
         <SizeSelection
           setReference={setReference}
           reference={reference}
-        /></div>
-      <div>
+        /></Grid>
+      <Grid space={'2'}>
         <OverlayPositionSelection
           setReference={setReference}
           reference={reference}
         />
-      </div>
-      <div><JSROOTSwitch
+      </Grid>
+      <Grid space={'2'}>
+        <JSROOTSwitch
         setReference={setReference}
         reference={reference}
-      /></div>
-    </div>
-    <div style={{ display: 'flex' }}>
+      /></Grid>
+    </Wrapper>
+    <Wrapper direction="row">
       {
         checkBoxes.map((checkBox) =>
-          <div key={checkBox.label}>
+        <Grid space={'2'} key={checkBox.label}>
             <CheckBox option={checkBox}
               setReference={setReference}
               reference={reference}
-            /></div>
+            /></Grid>
         )
       }
-    </div>
-  </div>
+    </Wrapper>
+  </Wrapper>
 }
