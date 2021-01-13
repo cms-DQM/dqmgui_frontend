@@ -6,12 +6,21 @@ import { Plot } from './regular';
 
 interface PlotsProps {
   parameters: ParametersForApi
+  plotsAreaWidth: number
 }
 
-export const Plots = ({ parameters }: PlotsProps) => {
+export const Plots = ({ parameters, plotsAreaWidth }: PlotsProps) => {
+  if (parameters.size === 'fill') {
+    const ratio = parameters.width / parameters.height
+    const newHeight =  Math.floor(plotsAreaWidth / ratio)
+    const newWidth =plotsAreaWidth
+    parameters.height = newHeight
+    parameters.width = newWidth
+    console.log(parameters.height, newHeight)
+  }
   return (
     parameters.jsroot ?
       <JSROOTPlot params_for_api={parameters} /> :
-        <Plot parameters={parameters} />
+      <Plot parameters={parameters} />
   )
 }

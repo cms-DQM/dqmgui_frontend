@@ -14,12 +14,12 @@ export const OnePlot = ({ parameters }: PlotProps) => {
   const [imageError, setImageError] = React.useState(false)
 
   return (
-    <div style={{ width: parameters.width, height: parameters.height, background: 'black' }}>
+    <div style={{ width: parameters.width, height: parameters.height, background: 'black', alignItems: 'center' }}>
       <ImageFallback
         key={`${root_url}${plot_url}`}
         retryTimes={3}
         setImageError={setImageError}
-        style={{ display: 'display', width: parameters.width, height: parameters.height }}
+        style={{ display: 'flex', width: parameters.width, height: parameters.height, alignItems: 'center' }}
         src={`${root_url}${plot_url}`}
         width={'auto'}
         height={'auto'}

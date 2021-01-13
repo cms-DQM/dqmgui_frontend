@@ -16,14 +16,23 @@ export const Main = () => {
   const query = router.query;
   const { run_number, dataset_name, folders_path, plot_name, size } = query
   const refReference = React.useRef<any>(null)
+  const plotsAreaRef = React.useRef<any>(null)
+
   const [parameters, setParameters] = React.useState<ParametersForApi | undefined>()
   const [referenceHeight, setReferenceHeight] = React.useState(0)
+  const [ plotsAreaWidth, setPlotsAreaWidth] = React.useState(0)
 
   React.useEffect(() => {
     if (refReference.current) {
       setReferenceHeight(refReference.current.clientHeight)
     }
   }, [refReference.current])
+
+  React.useEffect(() => {
+    if (plotsAreaRef.current) {
+      setPlotsAreaWidth(plotsAreaRef.current.clientWidth)
+    }
+  }, [plotsAreaRef.current])
 
   React.useEffect(() => {
     if (Object.keys(query).length > 0) {
@@ -67,8 +76,8 @@ export const Main = () => {
         </StyledHeader>
         <SyledContent>
           <Wrapper direction="row">
-            <Side proportion="50%" style={{ borderRight: '2px solid' }}>
-              <Plots parameters={parameters} />
+            <Side ref={plotsAreaRef} proportion="50%" style={{ borderRight: '2px solid' }}>
+              <Plots plotsAreaWidth={plotsAreaWidth} parameters={parameters} />
             </Side>
             <Side proportion="50%" >
               <div ref={refReference}>
