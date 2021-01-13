@@ -4,7 +4,7 @@ import { Button, Col, Row, Tooltip } from 'antd'
 import cleanDeep from 'clean-deep'
 
 import { SelectedPlotsTable } from './selectedPlotsTable'
-import { FoldersRow, PlotNameDiv, PlotsRow, SpinnerRow } from './styledComponents'
+import { FoldersRow, PlotNameDiv, SearchContentWrapper, SpinnerRow, StyledRow } from './styledComponents'
 import { changeFolderPathByBreadcrumb, setPlot } from './utils'
 import { FolderPath } from '../containers/display/content/folderPath'
 import { ParamsForApiProps, PlotProps } from '../containers/display/interfaces'
@@ -19,13 +19,33 @@ import { addOverlaidPlotToURL, cleanOverlaidPlotsFromURL } from './routerChanger
 interface SearchContentProps {
   setParameters: React.Dispatch<React.SetStateAction<ParametersForApi | undefined>>
   parameters: ParametersForApi
+  referenceHeight: number
 }
 
-export const SearchContent = ({ setParameters, parameters }: SearchContentProps) => {
+export const SearchContent = ({ setParameters, parameters, referenceHeight }: SearchContentProps) => {
   const [lastSelectedPlot, setLastSelectedPlot] = React.useState<any>({ folders_path: '', plot_name: '' })
   const [folders, setFolders] = React.useState<(string | undefined)[]>([])
   const [currentFolder, setCurrentFolder] = React.useState<string | undefined>('')
   const [selectedPlots, setSelectedPlots] = React.useState<PlotProperties[]>([])
+
+  const selectedPlotsTableRef = React.useRef<any>(null)
+  const folderPathRef = React.useRef<any>(null)
+
+  const [folderPathAndSelectedPlotsTbaleHeights, setFolderPathAndSelectedPlotsTbaleHeights] = React.useState(0)
+  React.useEffect(() => {
+    if (folderPathRef.current && selectedPlotsTableRef.current) {
+      setFolderPathAndSelectedPlotsTbaleHeights(
+        folderPathRef.current.clientHeight + selectedPlotsTableRef.current.clientHeight
+      )
+    }
+    else {
+      setFolderPathAndSelectedPlotsTbaleHeights(0)
+    }
+  }, [selectedPlotsTableRef.current && selectedPlotsTableRef.current.clientHeight,
+  folderPathRef.current && folderPathRef.current.clientHeight,
+  folderPathRef.current, referenceHeight])
+
+  console.log(folderPathAndSelectedPlotsTbaleHeights)
 
   const router = useRouter();
   const query = router.query;
@@ -99,9 +119,8 @@ export const SearchContent = ({ setParameters, parameters }: SearchContentProps)
   const labels = parameters.overlaidSeparately.plots.map((plot: PlotProperties) => {
     return plot.label
   })
-const labelsString = labels.join(',')
+  const labelsString = labels.join(',')
   React.useEffect(() => {
-    console.log('label')
     const plots = selectedPlots.map((plot: PlotProps) => {
       if (plot.label) {
         const onePlotFullPath = [plot.folders_path, plot.plot_name, 'reflabel=' + plot.label].join('/')
@@ -133,19 +152,22 @@ const labelsString = labels.join(',')
   const { directories, plots } = getFoldersAndPlots(folders_or_plots)
 
   return (
-    <Row gutter={16} >
-      <Col style={{ padding: 8 }}>
+    <StyledRow 
+    gutter={16}
+     smaller ={referenceHeight.toString()}>
+      <Col style={{ padding: 8 }} ref={folderPathRef}>
         <FolderPath folder_path={lastSelectedPlot.folders_path}
           changeFolderPathByBreadcrumb={(items: any) => changeFolderPathByBreadcrumb(items)(setFolders, setCurrentFolder)} />
       </Col>
-      <FoldersRow>
+      <FoldersRow ref={selectedPlotsTableRef}>
         <SelectedPlotsTable
           query={query}
           lastSelectedPlot={lastSelectedPlot}
           selectedPlots={selectedPlots}
           setSelectedPlots={setSelectedPlots} />
       </FoldersRow>
-      <>
+      <SearchContentWrapper
+        smaller={folderPathAndSelectedPlotsTbaleHeights.toString()}>
         {
           !data_get_by_mount.isLoading &&
           <FoldersRow>
@@ -170,32 +192,32 @@ const labelsString = labels.join(',')
         }
         {selectedPlots.length >= 8 && <p>Cannot be selected more than 8 plots!</p>}
         {
-          <PlotsRow gutter={16}>{
+          <>{
             !data_get_by_mount.isLoading && plots.map((plot: any, index: number) => {
               const current_plot = { folders_path: lastSelectedPlot.folders_path, plot_name: plot }
               const disabled = selectedPlots.findIndex((selectedPlot) =>
                 selectedPlot.folders_path === current_plot.folders_path && selectedPlot.plot_name === current_plot.plot_name) > -1 ||
                 selectedPlots.length >= 8
               return (<>
-                  {plot && selectedPlots.length < 8 &&
-                    <Tooltip key={index} title={disabled ? 'This plot is already selected' : ''}>
-                      <Button
-                        type='text'
-                        block
-                        disabled={disabled}
-                        onClick={() => setLastSelectedPlot(setPlot(lastSelectedPlot, plot))}>
-                        <PlotNameDiv
-                        >{plot}</PlotNameDiv>
-                      </Button>
-                    </Tooltip>
-                  }
-                    </>
+                {plot && selectedPlots.length < 8 &&
+                  <Tooltip key={index} title={disabled ? 'This plot is already selected' : ''}>
+                    <Button
+                      type='text'
+                      block
+                      disabled={disabled}
+                      onClick={() => setLastSelectedPlot(setPlot(lastSelectedPlot, plot))}>
+                      <PlotNameDiv
+                      >{plot}</PlotNameDiv>
+                    </Button>
+                  </Tooltip>
+                }
+              </>
               )
             })
           }
-          </PlotsRow>
+          </>
         }
-      </>
-    </Row>
+      </SearchContentWrapper>
+    </StyledRow>
   )
 }

@@ -1,7 +1,8 @@
 import { Row, Table } from 'antd';
-import { parseInt } from 'lodash';
 import styled from 'styled-components';
+import { Layout } from 'antd';
 
+const {  Content } = Layout;
 
 export const PlotNameDiv = styled.div`
     padding: 4px;
@@ -18,12 +19,6 @@ export const PlotNameDiv = styled.div`
         font-weight: bold;
     }
 `
-export const ModalContent = styled.div`
-    overflow: scroll;
-    overflow-x: hidden;
-    height: 50vh;
-    width: 100%;
-`
 
 export const FoldersRow = styled(Row)`
     width: 100%; 
@@ -38,11 +33,6 @@ export const SpinnerRow = styled(Row)`
     height: 100%;
 `
 
-export const PlotsRow = styled(Row)`
-    display: flex;
-    justify-content: center;
-`
-
 export const StyledSelectedPlotsTable = styled(Table)`
     width: 100% !important;
     .ant-table-wrapper {
@@ -55,6 +45,7 @@ export const StyledSelectedPlotsTable = styled(Table)`
 
 export const Wrapper = styled.div<{ direction: string }>`
     display: flex;
+    height: 100%;
     flex-direction: ${(props) => props.direction};
 `
 
@@ -65,5 +56,16 @@ export const Grid = styled.div<{ space: string }>`
 export const Side = styled.div<{ proportion: string }>`
     width: ${props => props.proportion};
     margin: 32px;
+`
+
+export const SyledContent= styled(Content)`
+    height: calc(100vh - 64px);
+`
+export const SearchContentWrapper = styled.div<{smaller: string}>`
+    height: ${(props) => `calc(100% - ${props.smaller}px)`};
     overflow: scroll;
+`
+
+export const StyledRow = styled(Row)<{smaller: string}>`
+    height: ${(props) => `calc(100% - ${props.smaller}px)`}
 `
