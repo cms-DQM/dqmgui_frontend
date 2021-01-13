@@ -61,18 +61,13 @@ export const PlotsNamesTable = ({ plotNames, setLastSelectedPlot, selectedPlots,
       return(
         <Tooltip title={<img src={`${root_url}${src}`}/>}>
         <Space size="small">
-          <a
-            onMouseEnter={() => {
-              console.log(plot)
-            }}
-          >Show plot</a>
+          <a>Show plot</a>
         </Space>
       </Tooltip>
       )}
   },
   ]
 
-  console.log(plotNames)
   return (
     <StyledSelectedPlotsTable
      columns={columns as ColumnsType<{

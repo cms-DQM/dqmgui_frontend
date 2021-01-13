@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { useRouter } from 'next/router';
 
-import { PlotsLocalOverlayContent } from '../plotsLocalOverlay/plot'
+import { Plots } from './plots'
 import { SearchContent } from '../plotsLocalOverlay/serchContent'
 import { sizes } from '../components/constants';
 import { Reference } from '../plotsLocalOverlay/options/reference'
@@ -10,13 +10,12 @@ import { Side, SyledContent, Wrapper } from './styledComponents';
 import { StyledHeader } from '../styles/styledComponents';
 import { Layout } from 'antd';
 
-const { Content } = Layout;
 
 export const Main = () => {
   const router = useRouter();
   const query = router.query;
   const { run_number, dataset_name, folders_path, plot_name, size } = query
-  const refReference = React.useRef(null)
+  const refReference = React.useRef<any>(null)
   const [parameters, setParameters] = React.useState<ParametersForApi | undefined>()
   const [referenceHeight, setReferenceHeight] = React.useState(0)
 
@@ -28,7 +27,7 @@ export const Main = () => {
 
   React.useEffect(() => {
     if (Object.keys(query).length > 0) {
-      const params_for_api: ParametersForApi = {
+      const params_for_api: any = {
         run_number: run_number as string,
         dataset_name: dataset_name as string,
         folders_path: folders_path as string,
@@ -69,7 +68,7 @@ export const Main = () => {
         <SyledContent>
           <Wrapper direction="row">
             <Side proportion="50%" style={{ borderRight: '2px solid' }}>
-              <PlotsLocalOverlayContent parameters={parameters} />
+              <Plots parameters={parameters} />
             </Side>
             <Side proportion="50%" >
               <div ref={refReference}>

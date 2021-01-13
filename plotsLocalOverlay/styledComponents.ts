@@ -56,6 +56,7 @@ export const Grid = styled.div<{ space: string }>`
 export const Side = styled.div<{ proportion: string }>`
     width: ${props => props.proportion};
     margin: 32px;
+    
 `
 
 export const SyledContent= styled(Content)`

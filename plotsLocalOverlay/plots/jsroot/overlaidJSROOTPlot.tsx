@@ -53,7 +53,6 @@ export const OverlaidJSROOTPlot = ({ params_for_api, id }: JSROOTplotProps) => {
   }
 
   const histogramParam = params_for_api.normalize ? 'hist' : 'nostack';
-  console.log(histogramParam)
   React.useEffect(() => {
     if(!!document.getElementById(`${id}${histogramParam}`)){
       drawJSROOT(histogramParam, id, overlaidJSROOTPlot);

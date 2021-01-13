@@ -28,7 +28,6 @@ export const SearchContent = ({ setParameters, parameters, referenceHeight }: Se
   const [folders, setFolders] = React.useState<(string | undefined)[]>([])
   const [currentFolder, setCurrentFolder] = React.useState<string | undefined>('')
   const [selectedPlots, setSelectedPlots] = React.useState<PlotProperties[]>([])
-console.log(plots)
   const selectedPlotsTableRef = React.useRef<any>(null)
   const folderPathRef = React.useRef<any>(null)
 
