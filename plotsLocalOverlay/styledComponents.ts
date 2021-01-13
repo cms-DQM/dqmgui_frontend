@@ -64,6 +64,8 @@ export const SyledContent= styled(Content)`
 export const SearchContentWrapper = styled.div<{smaller: string}>`
     height: ${(props) => `calc(100% - ${props.smaller}px)`};
     overflow: scroll;
+    overflow-x: hidden;
+    width: 100%;
 `
 
 export const StyledRow = styled(Row)<{smaller: string}>`

@@ -1,3 +1,4 @@
+import cleanDeep from "clean-deep"
 import { DirectoryInterface, PlotInterface } from "../containers/display/interfaces"
 
 export const getFoldersAndPlots = (data: (DirectoryInterface & PlotInterface)[]) => {
@@ -8,6 +9,6 @@ export const getFoldersAndPlots = (data: (DirectoryInterface & PlotInterface)[])
       directories.push(folder_or_plot.subdir)
       plots.push(folder_or_plot.name)
     })
-    return { directories, plots }
+    return { directories: cleanDeep(directories), plots: cleanDeep(plots) }
   }
   

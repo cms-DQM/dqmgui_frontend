@@ -15,6 +15,7 @@ import { useRequest } from '../hooks/useRequest'
 import { getFoldersAndPlots } from './getters';
 import { PlotProperties, ParametersForApi, OverlaidSeparatelyProps } from './interfaces';
 import { addOverlaidPlotToURL, cleanOverlaidPlotsFromURL } from './routerChangers';
+import { PlotsNamesTable } from './plotsNamesTable';
 
 interface SearchContentProps {
   setParameters: React.Dispatch<React.SetStateAction<ParametersForApi | undefined>>
@@ -27,25 +28,11 @@ export const SearchContent = ({ setParameters, parameters, referenceHeight }: Se
   const [folders, setFolders] = React.useState<(string | undefined)[]>([])
   const [currentFolder, setCurrentFolder] = React.useState<string | undefined>('')
   const [selectedPlots, setSelectedPlots] = React.useState<PlotProperties[]>([])
-
+console.log(plots)
   const selectedPlotsTableRef = React.useRef<any>(null)
   const folderPathRef = React.useRef<any>(null)
 
   const [folderPathAndSelectedPlotsTbaleHeights, setFolderPathAndSelectedPlotsTbaleHeights] = React.useState(0)
-  React.useEffect(() => {
-    if (folderPathRef.current && selectedPlotsTableRef.current) {
-      setFolderPathAndSelectedPlotsTbaleHeights(
-        folderPathRef.current.clientHeight + selectedPlotsTableRef.current.clientHeight
-      )
-    }
-    else {
-      setFolderPathAndSelectedPlotsTbaleHeights(0)
-    }
-  }, [selectedPlotsTableRef.current && selectedPlotsTableRef.current.clientHeight,
-  folderPathRef.current && folderPathRef.current.clientHeight,
-  folderPathRef.current, referenceHeight])
-
-  console.log(folderPathAndSelectedPlotsTbaleHeights)
 
   const router = useRouter();
   const query = router.query;
@@ -112,9 +99,7 @@ export const SearchContent = ({ setParameters, parameters, referenceHeight }: Se
       copy.overlaidSeparately = { ...parameters.overlaidSeparately, plots: [] }
       setParameters(copy)
     }
-  }, [
-    selectedPlots.length,
-  ])
+  }, [selectedPlots.length])
 
   const labels = parameters.overlaidSeparately.plots.map((plot: PlotProperties) => {
     return plot.label
@@ -147,14 +132,27 @@ export const SearchContent = ({ setParameters, parameters, referenceHeight }: Se
     parameters.normalize,
     parameters.error])
 
+  React.useEffect(() => {
+    if (folderPathRef.current && selectedPlotsTableRef.current) {
+      setFolderPathAndSelectedPlotsTbaleHeights(
+        folderPathRef.current.clientHeight + selectedPlotsTableRef.current.clientHeight
+      )
+    }
+    else {
+      setFolderPathAndSelectedPlotsTbaleHeights(0)
+    }
+  }, [selectedPlotsTableRef.current && selectedPlotsTableRef.current.clientHeight,
+  folderPathRef.current && folderPathRef.current.clientHeight,
+  folderPathRef.current, referenceHeight])
+
   const { data } = data_get_by_mount
   const folders_or_plots = data ? data.data : []
   const { directories, plots } = getFoldersAndPlots(folders_or_plots)
 
   return (
-    <StyledRow 
-    gutter={16}
-     smaller ={referenceHeight.toString()}>
+    <StyledRow
+      gutter={16}
+      smaller={referenceHeight.toString()}>
       <Col style={{ padding: 8 }} ref={folderPathRef}>
         <FolderPath folder_path={lastSelectedPlot.folders_path}
           changeFolderPathByBreadcrumb={(items: any) => changeFolderPathByBreadcrumb(items)(setFolders, setCurrentFolder)} />
@@ -190,33 +188,16 @@ export const SearchContent = ({ setParameters, parameters, referenceHeight }: Se
             <Spinner />
           </SpinnerRow>
         }
-        {selectedPlots.length >= 8 && <p>Cannot be selected more than 8 plots!</p>}
-        {
-          <>{
-            !data_get_by_mount.isLoading && plots.map((plot: any, index: number) => {
-              const current_plot = { folders_path: lastSelectedPlot.folders_path, plot_name: plot }
-              const disabled = selectedPlots.findIndex((selectedPlot) =>
-                selectedPlot.folders_path === current_plot.folders_path && selectedPlot.plot_name === current_plot.plot_name) > -1 ||
-                selectedPlots.length >= 8
-              return (<>
-                {plot && selectedPlots.length < 8 &&
-                  <Tooltip key={index} title={disabled ? 'This plot is already selected' : ''}>
-                    <Button
-                      type='text'
-                      block
-                      disabled={disabled}
-                      onClick={() => setLastSelectedPlot(setPlot(lastSelectedPlot, plot))}>
-                      <PlotNameDiv
-                      >{plot}</PlotNameDiv>
-                    </Button>
-                  </Tooltip>
-                }
-              </>
-              )
-            })
+          {!data_get_by_mount.isLoading && plots.length > 0 &&
+            <PlotsNamesTable plotNames={plots}
+              setLastSelectedPlot={setLastSelectedPlot}
+              lastSelectedPlot={lastSelectedPlot}
+              selectedPlots={selectedPlots}
+              dataset_name={query.dataset_name as string}
+              run_number={query.run_number as string}
+              />
+            
           }
-          </>
-        }
       </SearchContentWrapper>
     </StyledRow>
   )
