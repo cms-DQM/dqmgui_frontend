@@ -5,6 +5,7 @@ import * as React from 'react'
 import { ImageFallback } from '../../../components/plots/imageFallback';
 import { get_plot_url, root_url } from '../../../config/config';
 import { PlotProps } from '../../../containers/display/interfaces';
+import { theme } from '../../../styles/theme';
 import { ParametersForApi } from '../../interfaces';
 
 interface OnSideProps {
@@ -38,7 +39,7 @@ const OneOnSidePlot = ({ parameters, plot }: OneOnSidePlotProps) => {
   return (
     <Tooltip  title={tooLong ? plot_name : ''}>
       <div  style={{ width: parameters.width + 8, height: parameters.height + 24, margin: 8, display: 'flex', flexDirection: 'column', background: 'white' }}>
-        <div ref={plotNameRef} style={{ paddingBottom: 8, display: 'flex' }}>{tooLong ? plot_name?.substring(0, 30) + '...' : plot_name}</div>
+        <div ref={plotNameRef} style={{ background: theme.colors.primary.light, paddingBottom: 8, display: 'flex' }}>{tooLong ? plot_name?.substring(0, 30) + '...' : plot_name}</div>
         <div>
           <ImageFallback
           ref={plotWrapperRef}
@@ -83,7 +84,7 @@ export const OnSide = ({ parameters }: OnSideProps) => {
     <>
       <Tooltip title={tooLong ? plot_name : ''}>
         <div style={{ width: parameters.width + 8, height: parameters.height + 24, margin: 8, display: 'flex', flexDirection: 'column', background: 'white' }}>
-          <div ref={plotNameRef} style={{ paddingBottom: 8, display: 'flex' }}>{tooLong ? plot_name?.substring(0, 30) + '...' : plot_name}</div>
+          <div ref={plotNameRef} style={{  background: theme.colors.primary.light, paddingBottom: 8, display: 'flex' }}>{tooLong ? plot_name?.substring(0, 30) + '...' : plot_name}</div>
           <div>
             <ImageFallback
               key={url}
