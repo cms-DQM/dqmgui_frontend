@@ -84,7 +84,6 @@ export const Main = () => {
           </TagsWrapper>
           </>
         </StyledHeader>
-
         <SyledContent>
           <Wrapper direction="row">
             <Side ref={plotsAreaRef} proportion="50%" border={true.toString()} >

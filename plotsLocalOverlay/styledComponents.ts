@@ -1,9 +1,18 @@
 import { Row, Table } from 'antd';
-import styled from 'styled-components';
-import { Layout } from 'antd';
+import styled, { keyframes } from 'styled-components';
+import { Layout, Button } from 'antd';
 import { theme } from '../styles/theme';
 
 const {  Content } = Layout;
+
+const keyframe_for_customization_button = keyframes`
+  0% {
+    border: 1px solid ${theme.colors.primary.main};
+  }
+  50% {
+    border: 1px solid ${theme.colors.primary.light};
+  }
+`;
 
 export const PlotNameDiv = styled.div`
     padding: 4px;
@@ -81,4 +90,9 @@ export const TagsWrapper = styled.p`
     display: flex;
     align-items: center;
     justify-content: flex-end;
+`
+export const StyledButton = styled(Button)<{isPlotCustomized? :string}>`
+    border-radius: 5px;
+    animation: ${(props) => props.isPlotCustomized === 'true'? keyframe_for_customization_button : ''} 3s ease infinite;
+
 `

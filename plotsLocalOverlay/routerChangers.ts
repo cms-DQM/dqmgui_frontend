@@ -6,6 +6,7 @@ export const cleanOverlaidPlotsFromURL = async (parameters: any, router: NextRou
   const copy = { ...parameters }
   await delete copy.overlayPlots
   await delete copy.overlaidSeparately
+  console.group(parameters)
 
   Router.push({
     pathname: router.pathname,
@@ -23,6 +24,7 @@ export const addOverlaidPlotToURL = async (plotsString: string,
   const { overlaidSeparately } = parameters
   const { ref } = overlaidSeparately as OverlaidSeparatelyProps
   const reference = { ref }
+  console.group('dd')
   await delete copy.overlaidSeparately //we don't need it in request, insted if that we're using plotsString, where are all overlaid plots joined in one string
   Router.push({
     pathname: router.pathname,

@@ -5,9 +5,11 @@ import { JSROOTSwitch } from './jsrootSwitch';
 import { OverlayPositionSelection } from './overlayPositionSelectionProps';
 import { SizeSelection } from './sizeSelection';
 import { CheckBox } from './checkBox'
-import { OverlaidSeparatelyProps, ParametersForApi } from '../interfaces';
+import { ParametersForApi } from '../interfaces';
 import { sizes } from '../../components/constants';
-import { Grid, Wrapper } from '../styledComponents';
+import { Grid, StyledButton, Wrapper } from '../styledComponents';
+import { Button, Tooltip } from 'antd';
+import { Customization } from '../../components/customization';
 
 
 interface ReferenceProps {
@@ -21,6 +23,9 @@ export const Reference = ({ router, parameters, setParameters }: ReferenceProps)
   const defaultSize = parameters.size
   const defaultOverlayPosition = query.overlayPosition ? query.overlayPosition : 'overlay'
   const defaultJSROOTState = query.jsroot ? query.jsroot === 'true' ? true : false : false
+  const [openCustomization, setOpenCustomization] = React.useState(false)
+  const [customizationParams, setCustomizationParams] = React.useState<any>({})
+const isPlotCustomized = Object.keys(parameters.customizeProps ? parameters.customizeProps : {}).length > 0
 
   const checkBoxes = [{
     label: 'Normalize',
@@ -59,6 +64,7 @@ export const Reference = ({ router, parameters, setParameters }: ReferenceProps)
     copy.stats = reference.stats as boolean
     copy.normalize = reference.normalize as boolean
     copy.error = reference.error as boolean
+    copy.customizeProps = customizationParams
     const addedPropsToParameters = { ...copy, overlaidSeparately: { ...copy.overlaidSeparately } }
     //@ts-ignore
     setParameters(addedPropsToParameters)
@@ -69,14 +75,21 @@ export const Reference = ({ router, parameters, setParameters }: ReferenceProps)
   reference[checkBoxes[0].label.toLocaleLowerCase()],
   reference[checkBoxes[1].label.toLocaleLowerCase()],
   reference[checkBoxes[2].label.toLocaleLowerCase()],
+    customizationParams,
   query.ref,
   query.normalize,
   query.stats,
   query.error,
   query.jsroot,
   query.size])
-
+  console.log(parameters.customizeProps)
   return <Wrapper direction="column">
+    <Customization
+      plot_name={parameters.plot_name}
+      open={openCustomization}
+      onCancel={() => setOpenCustomization(false)}
+      setCustomizationParams={setCustomizationParams}
+    />
     <Wrapper direction="row">
       <Grid space={'2'}>
         <SizeSelection
@@ -91,15 +104,20 @@ export const Reference = ({ router, parameters, setParameters }: ReferenceProps)
       </Grid>
       <Grid space={'2'}>
         <JSROOTSwitch
-        disabled={!!query.overlayPlots}
-        setReference={setReference}
-        reference={reference}
-      /></Grid>
+          disabled={!!query.overlayPlots}
+          setReference={setReference}
+          reference={reference}
+        /></Grid>
+      <Grid space="2">
+        <Tooltip title={ isPlotCustomized ? 'This plot is customized!' : ''}>
+          <StyledButton isPlotCustomized={isPlotCustomized.toString()} onClick={() => setOpenCustomization(!openCustomization)}>Cuztomize</StyledButton>
+        </Tooltip>
+      </Grid>
     </Wrapper>
     <Wrapper direction="row">
       {
         checkBoxes.map((checkBox) =>
-        <Grid space={'2'} key={checkBox.label}>
+          <Grid space={'2'} key={checkBox.label}>
             <CheckBox option={checkBox}
               setReference={setReference}
               reference={reference}
