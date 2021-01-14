@@ -3,6 +3,7 @@ import Router, { NextRouter } from 'next/router';
 import { Switch } from 'antd';
 
 interface JSROOTSwitchProps {
+  disabled: boolean;
   setReference: React.Dispatch<React.SetStateAction<{
     [x: string]: string | boolean | string[];
     size: string;
@@ -28,9 +29,10 @@ const changeJSROOTValue = (value: boolean, reference: {
   return copy
 }
 
-export const JSROOTSwitch = ({ setReference, reference }: JSROOTSwitchProps) => {
+export const JSROOTSwitch = ({ setReference, reference, disabled }: JSROOTSwitchProps) => {
   return (
     <Switch
+      disabled={disabled}
       style={{ width: 'fit-content' }}
       checkedChildren="JSROOT enabled"
       unCheckedChildren="JSROOT disabled"

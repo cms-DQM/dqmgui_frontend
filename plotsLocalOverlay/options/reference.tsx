@@ -73,7 +73,7 @@ export const Reference = ({ router, parameters, setParameters }: ReferenceProps)
   query.normalize,
   query.stats,
   query.error,
-  // query.jsroot,
+  query.jsroot,
   query.size])
 
   return <Wrapper direction="column">
@@ -89,11 +89,12 @@ export const Reference = ({ router, parameters, setParameters }: ReferenceProps)
           reference={reference}
         />
       </Grid>
-      {/* <Grid space={'2'}>
+      <Grid space={'2'}>
         <JSROOTSwitch
+        disabled={!!query.overlayPlots}
         setReference={setReference}
         reference={reference}
-      /></Grid> */}
+      /></Grid>
     </Wrapper>
     <Wrapper direction="row">
       {
