@@ -1,6 +1,7 @@
 import cleanDeep from "clean-deep"
+
 import { ParsedUrlQueryInput } from "querystring"
-import { PlotoverlaidSeparatelyProps, PlotProps } from "../containers/display/interfaces"
+import {  PlotProps } from "../containers/display/interfaces"
 import { PlotProperties } from "./interfaces"
 
 export const changeFolderPathByBreadcrumb = (item: ParsedUrlQueryInput) =>( setFolders:(cleaned_folders_array: (string | undefined)[])=> void, setCurrentFolder: (folder:string) => void ) => {

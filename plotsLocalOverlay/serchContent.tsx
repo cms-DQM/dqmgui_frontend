@@ -1,13 +1,13 @@
 import * as React from 'react'
 import { useRouter } from 'next/router';
-import { Button, Col, Row, Tooltip } from 'antd'
+import {  Col } from 'antd'
 import cleanDeep from 'clean-deep'
 
 import { SelectedPlotsTable } from './selectedPlotsTable'
-import { FoldersRow, PlotNameDiv, SearchContentWrapper, SpinnerRow, StyledRow } from './styledComponents'
-import { changeFolderPathByBreadcrumb, setPlot } from './utils'
+import { FoldersRow, SearchContentWrapper, SpinnerRow, StyledRow } from './styledComponents'
+import { changeFolderPathByBreadcrumb } from './utils'
 import { FolderPath } from '../containers/display/content/folderPath'
-import { ParamsForApiProps, PlotProps } from '../containers/display/interfaces'
+import { PlotProps } from '../containers/display/interfaces'
 import { StyledA, Icon } from '../containers/display/styledComponents'
 import { choose_api } from '../containers/display/utils'
 import { Spinner } from '../containers/search/styledComponents'
@@ -16,6 +16,7 @@ import { getFoldersAndPlots } from './getters';
 import { PlotProperties, ParametersForApi, OverlaidSeparatelyProps } from './interfaces';
 import { addOverlaidPlotToURL, cleanOverlaidPlotsFromURL } from './routerChangers';
 import { PlotsNamesTable } from './plotsNamesTable';
+import { NoResultsFound } from '../containers/search/noResultsFound';
 
 interface SearchContentProps {
   setParameters: React.Dispatch<React.SetStateAction<ParametersForApi | undefined>>
@@ -36,10 +37,11 @@ export const SearchContent = ({ setParameters, parameters, referenceHeight }: Se
   const router = useRouter();
   const query = router.query;
 
-  const params: ParamsForApiProps = {
+  const params: any = {
     dataset_name: query.dataset_name as string,
     run_number: query.run_number as string,
     folders_path: lastSelectedPlot.folders_path,
+    plot_search: query.search,
   }
 
   const api = choose_api(params)
@@ -47,6 +49,8 @@ export const SearchContent = ({ setParameters, parameters, referenceHeight }: Se
     {},
     [lastSelectedPlot.folders_path,
     parameters.run_number,
+    query.search,
+    parameters.plot_search,
     parameters.dataset_name,
     parameters.plot_name]
   );
@@ -168,7 +172,7 @@ export const SearchContent = ({ setParameters, parameters, referenceHeight }: Se
         {
           !data_get_by_mount.isLoading &&
           <FoldersRow>
-            {directories.map((directory: any) => {
+            {directories.length > 0 ?directories.map((directory: any) => {
               return (
                 <>
                   {directory &&
@@ -179,7 +183,10 @@ export const SearchContent = ({ setParameters, parameters, referenceHeight }: Se
                   }
                 </>
               )
-            })}
+            }):
+            <div style={{display: 'flex', justifyContent: 'center', width: '100%'}}>
+            <NoResultsFound/>
+            </div>}
           </FoldersRow>
         }
         {data_get_by_mount.isLoading &&
@@ -187,16 +194,16 @@ export const SearchContent = ({ setParameters, parameters, referenceHeight }: Se
             <Spinner />
           </SpinnerRow>
         }
-          {!data_get_by_mount.isLoading && plots.length > 0 &&
-            <PlotsNamesTable plotNames={plots}
-              setLastSelectedPlot={setLastSelectedPlot}
-              lastSelectedPlot={lastSelectedPlot}
-              selectedPlots={selectedPlots}
-              dataset_name={query.dataset_name as string}
-              run_number={query.run_number as string}
-              />
-            
-          }
+        {!data_get_by_mount.isLoading && plots.length > 0 &&
+          <PlotsNamesTable plotNames={plots as any}
+            setLastSelectedPlot={setLastSelectedPlot}
+            lastSelectedPlot={lastSelectedPlot}
+            selectedPlots={selectedPlots}
+            dataset_name={query.dataset_name as string}
+            run_number={query.run_number as string}
+          />
+
+        }
       </SearchContentWrapper>
     </StyledRow>
   )

@@ -1,14 +1,16 @@
 import * as React from 'react'
 import { useRouter } from 'next/router';
+import { Tag } from 'antd';
 
 import { Plots } from './plots'
 import { SearchContent } from '../plotsLocalOverlay/serchContent'
 import { sizes } from '../components/constants';
 import { Reference } from '../plotsLocalOverlay/options/reference'
 import { ParametersForApi } from '../plotsLocalOverlay/interfaces';
-import { Side, SyledContent, Wrapper } from './styledComponents';
-import { StyledHeader } from '../styles/styledComponents';
+import { Side, SyledContent, TagsWrapper, TagWrapper, Wrapper } from './styledComponents';
+import { StyledHeader, StyledLogo, StyledLogoDiv, StyledLogoWrapper } from '../styles/styledComponents';
 import { Layout } from 'antd';
+import { PlotSearch } from './plotsSearch';
 
 
 export const Main = () => {
@@ -20,7 +22,7 @@ export const Main = () => {
 
   const [parameters, setParameters] = React.useState<ParametersForApi | undefined>()
   const [referenceHeight, setReferenceHeight] = React.useState(0)
-  const [ plotsAreaWidth, setPlotsAreaWidth] = React.useState(0)
+  const [plotsAreaWidth, setPlotsAreaWidth] = React.useState(0)
 
   React.useEffect(() => {
     if (refReference.current) {
@@ -58,34 +60,43 @@ export const Main = () => {
   if (parameters) {
     return (
       <Layout >
-        <StyledHeader>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <p style={{ color: 'white', padding: 4 }}>
-              Run: {parameters.run_number}
-            </p>
-            <p style={{ color: 'white', padding: 4 }}>
-              Dataset: {parameters.dataset_name}
-            </p>
-            <p style={{ color: 'white', padding: 4 }}>
-              Folder path: {parameters.folders_path}
-            </p>
-            <p style={{ color: 'white', padding: 4 }}>
-              Plot: {parameters.plot_name}
-            </p>
-          </div>
+        <StyledHeader justifyContent='space-between'>
+          <>
+          <StyledLogoDiv>
+            <StyledLogoWrapper>
+              <StyledLogo src="../images/CMSlogo_white_red_nolabel_1024_May2014.png" />
+            </StyledLogoWrapper>
+          </StyledLogoDiv>
+          <TagsWrapper>
+            <TagWrapper>
+              <Tag color="geekblue">Run :{parameters.run_number}</Tag>
+            </TagWrapper>
+            <TagWrapper>
+              <Tag color="geekblue">Dataset: {parameters.dataset_name}</Tag>
+            </TagWrapper>
+            <TagWrapper>
+              <Tag color="geekblue"> Folders path: {parameters.folders_path}</Tag>
+            </TagWrapper>
+            <TagWrapper>
+              <Tag color="geekblue">Plot name:  {parameters.plot_name}</Tag>
+            </TagWrapper>
+            <PlotSearch parameters={parameters} setParameters={setParameters} />
+          </TagsWrapper>
+          </>
         </StyledHeader>
+
         <SyledContent>
           <Wrapper direction="row">
-            <Side ref={plotsAreaRef} proportion="50%" style={{ borderRight: '2px solid' }}>
+            <Side ref={plotsAreaRef} proportion="50%" border={true.toString()} >
               <Plots plotsAreaWidth={plotsAreaWidth} parameters={parameters} />
             </Side>
             <Side proportion="50%" >
               <div ref={refReference}>
                 <Reference parameters={parameters} router={router} setParameters={setParameters} />
               </div>
-                <SearchContent
-                  referenceHeight={referenceHeight}
-                  parameters={parameters} setParameters={setParameters} />
+              <SearchContent
+                referenceHeight={referenceHeight}
+                parameters={parameters} setParameters={setParameters} />
             </Side>
           </Wrapper>
         </SyledContent>

@@ -43,6 +43,7 @@ export const service_title =
   config[process.env.NODE_ENV || 'development'].title;
 
 export const get_folders_and_plots_new_api = (params: ParamsForApiProps) => {
+  console.log(params)
   if (params.plot_search) {
     return `api/v1/archive/${getRunsWithLumisections(params)}${params.dataset_name
       }/${params.folders_path}?search=${params.plot_search}`;

@@ -14,7 +14,8 @@ export interface ParametersForApi {
   normalize: boolean,
   stats: boolean,
   error: boolean,
-  lumi: number
+  lumi: number,
+  search?:string
 }
 
 export interface PlotProperties {

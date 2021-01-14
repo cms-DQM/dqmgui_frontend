@@ -1,6 +1,6 @@
-import { Button, Space, Table, Tooltip } from 'antd';
-import { ColumnsType } from 'antd/lib/table';
 import * as React from 'react';
+import { Button, Space, Tooltip } from 'antd';
+
 import { sizes } from '../components/constants';
 import { get_plot_url, root_url } from '../config/config';
 import { PlotProperties } from './interfaces';
@@ -70,10 +70,7 @@ export const PlotsNamesTable = ({ plotNames, setLastSelectedPlot, selectedPlots,
 
   return (
     <StyledSelectedPlotsTable
-     columns={columns as ColumnsType<{
-      key: number;
-      plot_name: string;
-    }>} dataSource={data} />
+     columns={columns as any} dataSource={data} />
   )
 
 }

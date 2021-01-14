@@ -1,6 +1,7 @@
 import { Row, Table } from 'antd';
 import styled from 'styled-components';
 import { Layout } from 'antd';
+import { theme } from '../styles/theme';
 
 const {  Content } = Layout;
 
@@ -53,10 +54,10 @@ export const Grid = styled.div<{ space: string }>`
     padding: ${props => `calc(${props.space}px * 2)`};
 `
 
-export const Side = styled.div<{ proportion: string }>`
+export const Side = styled.div<{ proportion: string, border?:string }>`
     width: ${props => props.proportion};
     margin: 32px;
-    
+    border-right: ${props => props.border === 'true'? `1px solid ${theme.colors.primary.main}` : '' };
 `
 
 export const SyledContent= styled(Content)`
@@ -71,4 +72,13 @@ export const SearchContentWrapper = styled.div<{smaller: string}>`
 
 export const StyledRow = styled(Row)<{smaller: string}>`
     height: ${(props) => `calc(100% - ${props.smaller}px)`}
+`
+
+export const TagWrapper = styled.p`
+    padding: 4;
+`
+export const TagsWrapper = styled.p`
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 `

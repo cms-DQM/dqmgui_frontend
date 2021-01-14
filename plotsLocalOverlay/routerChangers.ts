@@ -33,3 +33,15 @@ export const addOverlaidPlotToURL = async (plotsString: string,
     },
   });
 }
+
+export const SearchPlot = (plots_name: string, router: NextRouter, parameters: ParametersForApi) => {
+  const copy = { ...parameters }
+  Router.push({
+    pathname: router.pathname,
+    //@ts-ignore
+    query: {
+      ...copy,
+      search: plots_name,
+    },
+  });
+}
