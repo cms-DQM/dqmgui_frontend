@@ -1,3 +1,4 @@
+import cleanDeep from 'clean-deep';
 import * as React from 'react'
 import { sizes } from '../../../components/constants';
 import { get_jroot_plot } from '../../../config/config';
@@ -27,39 +28,44 @@ const drawJSROOT = async (
 };
 
 export const OverlaidJSROOTPlot = ({ params_for_api, id }: JSROOTplotProps) => {
-  let overlaidJSROOTPlot: any = {};
+  let overlaidJSROOTPlot: any = {}
   //@ts-ignore
   params_for_api.height = sizes[params_for_api.size].size.h
   //@ts-ignore
   params_for_api.width = sizes[params_for_api.size].size.w
-  const parametersForJSROOTOverlaidPlots = params_for_api.overlaidSeparately ? params_for_api.overlaidSeparately?.plots.map(async (plot) => {
+
+  const parametersForJSROOTOverlaidPlots: any = []
+
+  params_for_api.overlaidSeparately && params_for_api.overlaidSeparately?.plots.forEach(async (plot) => {
     const { run_number, dataset_name } = params_for_api
     const { folders_path, plot_name } = plot
     const parameters = { run_number, dataset_name, folders_path, plot_name }
-    const { data } = await useRequest(get_jroot_plot(parameters), {}, [plot_name,
-    ]);
-    return data;
-  }) : []
+    parametersForJSROOTOverlaidPlots.push(parameters)
+  })
 
   const { run_number, dataset_name, folders_path, plot_name } = params_for_api
   const initialPlotParameters = { run_number, dataset_name, folders_path, plot_name }
   parametersForJSROOTOverlaidPlots.push(initialPlotParameters as any)
 
-  if (parametersForJSROOTOverlaidPlots && parametersForJSROOTOverlaidPlots.length === 0) {
-    null;
-  } else if (parametersForJSROOTOverlaidPlots && parametersForJSROOTOverlaidPlots.length > 0) {
-    //@ts-ignore
-    overlaidJSROOTPlot = JSROOT.CreateTHStack(...parametersForJSROOTOverlaidPlots);
-  }
+  const parametersForCreateTHStack = parametersForJSROOTOverlaidPlots.map((parameter: any) => {
+    const { data } = useRequest(get_jroot_plot(parameter), {}, [parameter.plot_name]);
+    return data;
+  })
 
   const histogramParam = params_for_api.normalize ? 'hist' : 'nostack';
+  if (cleanDeep(parametersForCreateTHStack).length === params_for_api.overlaidSeparately.plots.length + 1) {
+    //@ts-ignore
+    overlaidJSROOTPlot = (JSROOT.CreateTHStack(...cleanDeep(parametersForCreateTHStack)))
+  }
+
   React.useEffect(() => {
-    if(!!document.getElementById(`${id}${histogramParam}`)){
+    console.log(Object.keys(overlaidJSROOTPlot).length)
+    if (!!document.getElementById(`${histogramParam}${id}`) && Object.keys(overlaidJSROOTPlot).length > 0) {
       drawJSROOT(histogramParam, id, overlaidJSROOTPlot);
     }
   }, [
     id,
-    params_for_api.lumi,
+    parametersForCreateTHStack,
     params_for_api.dataset_name,
     params_for_api.run_number,
     params_for_api.normalize,

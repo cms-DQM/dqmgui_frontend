@@ -29,22 +29,24 @@ const drawJSROOT = async (id: string, data: any) => {
 };
 
 export const SingleJSROOTPlot = ({ params_for_api, id }: JSROOTplotProps) => {
+  const imageRef = React.useRef<any>(null)
   const { data } = useRequest(get_jroot_plot(params_for_api as any), {}, [
     params_for_api.plot_name,
   ]);
 
   React.useEffect(() => {
     //@ts-ignore
-    if (!!document.getElementById(`${id}`)) {
+    if (imageRef.current) {
       //@ts-ignore
       drawJSROOT(`${id}`, data);
     }
-  }, [data, id, !!document.getElementById(`${id}`)]);
+  }, [data, id, imageRef.current]);
 
   return (
     <div>
       <ImageDiv
-        id={`${id}`}
+        ref={imageRef}
+        id={id}
         width={params_for_api.width}
         height={params_for_api.height}
       />
