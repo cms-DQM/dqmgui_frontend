@@ -94,5 +94,10 @@ export const TagsWrapper = styled.p`
 export const StyledButton = styled(Button)<{isPlotCustomized? :string}>`
     border-radius: 5px;
     animation: ${(props) => props.isPlotCustomized === 'true'? keyframe_for_customization_button : ''} 3s ease infinite;
+`
 
+export const NotFoundWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    width: 100%;
 `

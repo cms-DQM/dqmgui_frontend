@@ -1,10 +1,10 @@
 import * as React from 'react'
 import { useRouter } from 'next/router';
-import {  Col } from 'antd'
+import { Col } from 'antd'
 import cleanDeep from 'clean-deep'
 
 import { SelectedPlotsTable } from './selectedPlotsTable'
-import { FoldersRow, SearchContentWrapper, SpinnerRow, StyledRow } from './styledComponents'
+import { FoldersRow, NotFoundWrapper, SearchContentWrapper, SpinnerRow, StyledRow } from './styledComponents'
 import { changeFolderPathByBreadcrumb } from './utils'
 import { FolderPath } from '../containers/display/content/folderPath'
 import { PlotProps } from '../containers/display/interfaces'
@@ -172,7 +172,7 @@ export const SearchContent = ({ setParameters, parameters, referenceHeight }: Se
         {
           !data_get_by_mount.isLoading &&
           <FoldersRow>
-            {directories.length > 0 ?directories.map((directory: any) => {
+            {directories.map((directory: any) => {
               return (
                 <>
                   {directory &&
@@ -183,10 +183,7 @@ export const SearchContent = ({ setParameters, parameters, referenceHeight }: Se
                   }
                 </>
               )
-            }):
-            <div style={{display: 'flex', justifyContent: 'center', width: '100%'}}>
-            <NoResultsFound/>
-            </div>}
+            })}
           </FoldersRow>
         }
         {data_get_by_mount.isLoading &&
@@ -203,6 +200,11 @@ export const SearchContent = ({ setParameters, parameters, referenceHeight }: Se
             run_number={query.run_number as string}
           />
 
+        }{
+          directories.length === 0 && plots.length === 0 &&
+          <NotFoundWrapper>
+            <NoResultsFound />
+          </NotFoundWrapper>
         }
       </SearchContentWrapper>
     </StyledRow>
