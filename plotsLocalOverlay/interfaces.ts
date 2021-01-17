@@ -15,7 +15,8 @@ export interface ParametersForApi {
   stats: boolean,
   error: boolean,
   lumi: number,
-  search?:string
+  search?:string,
+  plot_search?:string,
   customizationParams?: CustomizeProps;
 }
 
