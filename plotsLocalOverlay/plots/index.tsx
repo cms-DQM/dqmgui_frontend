@@ -16,7 +16,6 @@ export const Plots = ({ parameters, plotsAreaWidth }: PlotsProps) => {
     const newWidth =plotsAreaWidth
     parameters.height = newHeight
     parameters.width = newWidth
-    console.log(parameters.height, newHeight)
   }
   return (
     parameters.jsroot ?

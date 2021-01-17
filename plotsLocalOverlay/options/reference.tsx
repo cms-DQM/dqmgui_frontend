@@ -8,8 +8,11 @@ import { CheckBox } from './checkBox'
 import { ParametersForApi } from '../interfaces';
 import { sizes } from '../../components/constants';
 import { Grid, StyledButton, Wrapper } from '../styledComponents';
-import { Button, Tooltip } from 'antd';
+import { Tooltip } from 'antd';
 import { Customization } from '../../components/customization';
+import { CustomizeProps } from '../../containers/display/interfaces';
+import { SetCustomizationParams } from '../routerChangers';
+import cleanDeep from 'clean-deep';
 
 
 interface ReferenceProps {
@@ -25,7 +28,7 @@ export const Reference = ({ router, parameters, setParameters }: ReferenceProps)
   const defaultJSROOTState = query.jsroot ? query.jsroot === 'true' ? true : false : false
   const [openCustomization, setOpenCustomization] = React.useState(false)
   const [customizationParams, setCustomizationParams] = React.useState<any>({})
-const isPlotCustomized = Object.keys(parameters.customizeProps ? parameters.customizeProps : {}).length > 0
+  const isPlotCustomized = Object.keys(parameters.customizeProps ? parameters.customizeProps : {}).length > 0
 
   const checkBoxes = [{
     label: 'Normalize',
@@ -75,20 +78,42 @@ const isPlotCustomized = Object.keys(parameters.customizeProps ? parameters.cust
   reference[checkBoxes[0].label.toLocaleLowerCase()],
   reference[checkBoxes[1].label.toLocaleLowerCase()],
   reference[checkBoxes[2].label.toLocaleLowerCase()],
-    customizationParams,
+  customizationParams,
   query.ref,
   query.normalize,
   query.stats,
   query.error,
   query.jsroot,
   query.size])
-  console.log(parameters.customizeProps)
+
+  React.useEffect(()=>{
+    const costumization = {
+      xtype: query.xtype as string,
+      xmin: query.xmin as string,
+      xmax: query.xmax as string,
+      ytype: query.ytype as string,
+      ymin: query.ymin as string,
+      ymax: query.ymax as string,
+      ztype: query.ztype as string,
+      zmin: query.zmin as string,
+      zmax: query.zmax as string,
+      drawopts: query.drawopts as string,
+      withref: query.withref as string,
+    }
+    setCustomizationParams(cleanDeep(costumization))
+  },[])
+
   return <Wrapper direction="column">
     <Customization
       plot_name={parameters.plot_name}
       open={openCustomization}
+      customizationParams={customizationParams}
       onCancel={() => setOpenCustomization(false)}
-      setCustomizationParams={setCustomizationParams}
+      setCustomizationParams={async (params: CustomizeProps) => {
+        setCustomizationParams(params)
+        await SetCustomizationParams(router, params, parameters)
+      }
+      }
     />
     <Wrapper direction="row">
       <Grid space={'2'}>
@@ -109,7 +134,7 @@ const isPlotCustomized = Object.keys(parameters.customizeProps ? parameters.cust
           reference={reference}
         /></Grid>
       <Grid space="2">
-        <Tooltip title={ isPlotCustomized ? 'This plot is customized!' : ''}>
+        <Tooltip title={isPlotCustomized ? 'This plot is customized!' : ''}>
           <StyledButton isPlotCustomized={isPlotCustomized.toString()} onClick={() => setOpenCustomization(!openCustomization)}>Cuztomize</StyledButton>
         </Tooltip>
       </Grid>

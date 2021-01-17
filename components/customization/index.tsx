@@ -12,12 +12,14 @@ interface CustomizationProps {
   open: boolean;
   onCancel(): void;
   setCustomizationParams(custProps: Partial<Store> & CustomizeProps): void;
+  customizationParams?:CustomizeProps;
 }
 
 export const Customization = ({
   plot_name,
   open,
   onCancel,
+  customizationParams,
   setCustomizationParams,
 }: CustomizationProps) => {
   const [form] = Form.useForm();
@@ -47,6 +49,7 @@ export const Customization = ({
     >
       <CostumizeTable
         form={form}
+        customizationParams={customizationParams}
         setCustomizationParams={setCustomizationParams}
       />
     </Modal>

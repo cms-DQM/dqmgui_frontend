@@ -59,7 +59,6 @@ export const OverlaidJSROOTPlot = ({ params_for_api, id }: JSROOTplotProps) => {
   }
 
   React.useEffect(() => {
-    console.log(Object.keys(overlaidJSROOTPlot).length)
     if (!!document.getElementById(`${histogramParam}${id}`) && Object.keys(overlaidJSROOTPlot).length > 0) {
       drawJSROOT(histogramParam, id, overlaidJSROOTPlot);
     }

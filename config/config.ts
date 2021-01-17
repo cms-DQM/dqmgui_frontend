@@ -43,7 +43,6 @@ export const service_title =
   config[process.env.NODE_ENV || 'development'].title;
 
 export const get_folders_and_plots_new_api = (params: ParamsForApiProps) => {
-  console.log(params)
   if (params.plot_search) {
     return `api/v1/archive/${getRunsWithLumisections(params)}${params.dataset_name
       }/${params.folders_path}?search=${params.plot_search}`;
@@ -81,7 +80,7 @@ export const get_run_list_by_search_new_api_with_no_older_than = (
 ) => {
   return `api/v1/samples?run=${params.run_number}&lumi=${params.lumi}&dataset=${params.dataset_name}&notOlderThan=${params.notOlderThan}`;
 };
-export const get_plot_url = (params: ParamsForApiProps & ParametersForApi) => {
+export const get_plot_url = (params: ParamsForApiProps & ParametersForApi & any) => {
   return `plotfairy/archive/${getRunsWithLumisections(params)}${params.dataset_name
     }/${params.folders_path}/${params.plot_name as string}?${get_customize_params(
       params.customizeProps
@@ -90,7 +89,6 @@ export const get_plot_url = (params: ParamsForApiProps & ParametersForApi) => {
 };
 
 export const get_plot_with_overlay = (params: ParamsForApiProps) => {
-  console.log(params)
   return `plotfairy/overlay?${get_customize_params(params.customizeProps)}ref=${params.overlay
     };obj=archive/${getRunsWithLumisections(params)}${params.dataset_name}/${params.folders_path
     }/${encodeURIComponent(params.plot_name as string)}${params.joined_overlaied_plots_urls

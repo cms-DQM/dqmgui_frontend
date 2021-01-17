@@ -16,6 +16,7 @@ export interface ParametersForApi {
   error: boolean,
   lumi: number,
   search?:string
+  customizationParams?: CustomizeProps;
 }
 
 export interface PlotProperties {

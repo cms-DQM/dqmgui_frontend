@@ -128,7 +128,6 @@ export const SearchContent = ({ setParameters, parameters, referenceHeight }: Se
   }, [
     parameters.size,
     labelsString,
-    parameters.customizeProps,
     parameters.overlaidSeparately.plots,
     parameters.overlaidSeparately && parameters.overlaidSeparately.ref,
     parameters.jsroot,

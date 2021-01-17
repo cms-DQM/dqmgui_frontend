@@ -116,7 +116,6 @@ export const ZoomedOverlaidJSROOTPlot = ({
       histogram4
     );
   }
-  console.log(overlaidJSROOTPlot)
   const { updated_by_not_older_than } = React.useContext(store);
 
   const histogramParam = params_for_api.normalize ? 'hist' : 'nostack';

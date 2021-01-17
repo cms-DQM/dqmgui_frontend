@@ -22,7 +22,6 @@ export const OnePlot = ({ parameters }: PlotProps) => {
   React.useEffect(() => {
     setCount(count + 1) //2 because on mount, and when size changes. Without count, we're getting infinity loop
     if (plotNameRef.current && count < 3) {
-      console.log(plotNameRef.current.clientHeight > 24)
       setTooLong(plotNameRef.current.clientHeight > 24)
     }
   }, [plotNameRef.current && plotNameRef.current.clientHeight])
