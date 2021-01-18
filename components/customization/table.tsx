@@ -24,6 +24,7 @@ const { Option } = Select;
 interface CostumizeTableProps {
   form: any;
   setCustomizationParams(custProps: Partial<Store> & CustomizeProps): void;
+  customizationParams?: CustomizeProps;
 }
 
 const layout = {
@@ -34,6 +35,7 @@ const layout = {
 export const CostumizeTable = ({
   form,
   setCustomizationParams,
+  customizationParams
 }: CostumizeTableProps) => {
   const referenceCopy: OptionProps[] = [...withReference];
   const types = ['x', 'y', 'z'];
@@ -45,7 +47,7 @@ export const CostumizeTable = ({
       form={form}
       name="search_form"
       className="fieldLabel"
-      initialValues={{ remember: true }}
+      initialValues={{ remember: true, ...customizationParams }}
       onFinish={(params) => {
         const cleanedParams = cleanDeep(params);
         setCustomizationParams(

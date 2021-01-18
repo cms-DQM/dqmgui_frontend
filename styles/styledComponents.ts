@@ -1,17 +1,18 @@
 import styled from 'styled-components';
-import { theme } from './theme';
 import { Layout } from 'antd';
+
+import { theme } from './theme';
 
 const { Header } = Layout;
 
 export const StyledLayout = styled(Layout)`
   height: 100%;
 `;
-export const StyledHeader = styled(Header)`
+export const StyledHeader = styled(Header)<{justifyContent?: string}>`
   background-color: ${theme.colors.primary.main};
   padding: 12px 12px 12px 0px;
   display: flex;
-  justify-content: center;
+  justify-content: ${props => props.justifyContent ? props.justifyContent : 'center'};
   align-items: center;
 `;
 export const StyledDiv = styled.div<{ span?: number }>`

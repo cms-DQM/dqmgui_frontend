@@ -46,24 +46,23 @@ export const getSelectedPlots = (
 ) => {
   const plotsWithDirs = plotsQuery ? plotsQuery.split('&') : [];
   return plotsWithDirs.map((plotWithDir: string) => {
-    const parts = plotWithDir.split('//')
-    const runNumberAndDataset = parts[0].split('/')
-    const run_number = runNumberAndDataset.shift()
-    const dataset = runNumberAndDataset.join('/')
-    const pathAndPlotName = parts[1].split('/')
-    const plot_name = pathAndPlotName.pop()
-    const path = '/' + pathAndPlotName.join('/')
+    const parts =  plotWithDir.split('/')
+    const run_number = parts.shift()
+    const pathAndName = parts.splice(3)
+    const dataset_name = parts.join('/')
+    const name = pathAndName.pop()
+    const path = pathAndName.join('/')
 
     const plot = plots.filter(
       (plot) => plot.name === name && plot.path === path
     );
-    const qresults = plot[0] && plot[0].qresults;
+    const qresults = plot[0] ?  plot[0].qresults : []
 
     const plotObject: PlotDataProps = {
-      name: plot_name as string,
+      name: name as string,
       path: path,
       run_number: run_number as string,
-      dataset_name: dataset,
+      dataset_name: dataset_name,
       qresults: qresults,
     };
     return plotObject;

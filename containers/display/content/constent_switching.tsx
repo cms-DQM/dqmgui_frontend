@@ -21,7 +21,7 @@ export const ContentSwitching = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
   const { set_update } = useUpdateLiveMode();
-  const { wokrspace } = React.useContext(store)
+  const { workspace } = React.useContext(store)
 
   const { results_grouped, searching, isLoading, errors } = useSearch(
     query.search_run_number,
@@ -41,7 +41,7 @@ export const ContentSwitching = () => {
           lumi: parsedLumi,
           run_number: parsedRun,
           dataset_name: dataset,
-          workspaces: wokrspace,
+          workspaces: workspace,
           plot_search: '',
         },
         query

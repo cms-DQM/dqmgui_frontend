@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Store } from 'antd/lib/form/interface';
-import { SettingOutlined, FullscreenOutlined, BlockOutlined  } from '@ant-design/icons';
+import { SettingOutlined, FullscreenOutlined, BlockOutlined } from '@ant-design/icons';
 
 import {
   get_overlaied_plots_urls,
@@ -47,8 +47,6 @@ export const ZoomedOverlaidPlot = ({
   >();
   const [openCustomization, toggleCustomizationMenu] = useState(false);
   params_for_api.customizeProps = customizationParams;
-  const [imageLoading, setImageLoading] = useState(true);
-  const [imageError, setImageError] = useState(false);
   const [isPortalWindowOpen, setIsPortalWindowOpen] = React.useState(false);
 
   const zoomedPlotMenuOptions = [
@@ -64,12 +62,23 @@ export const ZoomedOverlaidPlot = ({
       action: () => toggleCustomizationMenu(true),
       icon: <SettingOutlined />,
     },
-    // {
-    //   label: 'Overlay with another plot',
-    //   value: 'Customize',
-    //   action: () => toggleCustomizationMenu(true),
-    //   icon: <BlockOutlined  />,
-    // },
+    {
+      label: 'Overlay with another plot',
+      value: 'Customize',
+      action: () => {
+        const basePath = router.basePath
+        const page = 'plotsLocalOverlay'
+        const run = 'run_number=' + query.run_number as string
+        const dataset ='dataset_name=' + query.dataset_name  as string
+        const path = 'folders_path=' + selected_plot.path 
+        const plot_name = 'plot_name=' + selected_plot.name
+        const baseURL = [basePath, page].join('/')
+        const queryURL = [ run , dataset, path, plot_name].join('&')
+        const plotsLocalOverlayURL = [baseURL, queryURL].join('?')
+        window.open(plotsLocalOverlayURL)	       
+      },
+      icon: <BlockOutlined />,
+    },
   ];
 
   const router = useRouter();
