@@ -39,7 +39,6 @@ export const Plot = ({
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
   const url = get_plot_url(params_for_api);
   const is_plot_selected = isPlotSelected(selected_plots, plot)
-
   useEffect(() => {
     const scrollPlot = () => {
       scroll(imageRef);

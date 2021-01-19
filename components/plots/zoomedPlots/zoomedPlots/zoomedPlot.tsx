@@ -46,11 +46,9 @@ export const ZoomedPlot = ({
   >();
   const [openCustomization, toggleCustomizationMenu] = useState(false);
   const [isPortalWindowOpen, setIsPortalWindowOpen] = useState(false);
-  const [openOverlayPlotMenu, setOpenOverlayPlotMenu] = useState(false)
 
   params_for_api.customizeProps = customizationParams;
   const plot_url = get_plot_url(params_for_api);
-
   const copy_of_params = { ...params_for_api };
   copy_of_params.height = window.innerHeight;
   copy_of_params.width = Math.round(window.innerHeight * 1.33);
@@ -91,7 +89,6 @@ export const ZoomedPlot = ({
        icon: <BlockOutlined  />,
     },
   ];
-
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
 
   return (

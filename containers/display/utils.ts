@@ -36,7 +36,7 @@ export const isPlotSelected = (
   return selected_plots.find((selected_plot) => selected_plot.name === plot.name
     && selected_plot.path === plot.path
     && selected_plot.run_number === plot.run_number
-    && '/'+ selected_plot.dataset_name === plot.dataset_name) ?
+    && selected_plot.dataset_name === plot.dataset_name) ?
     true : false
 };
 
@@ -49,7 +49,7 @@ export const getSelectedPlots = (
     const parts =  plotWithDir.split('/')
     const run_number = parts.shift()
     const pathAndName = parts.splice(3)
-    const dataset_name = parts.join('/')
+    const dataset_name = '/'+parts.join('/')
     const name = pathAndName.pop()
     const path = pathAndName.join('/')
 

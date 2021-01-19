@@ -69,13 +69,24 @@ export const ZoomedOverlaidPlot = ({
         const basePath = router.basePath
         const page = 'plotsLocalOverlay'
         const run = 'run_number=' + query.run_number as string
-        const dataset ='dataset_name=' + query.dataset_name  as string
-        const path = 'folders_path=' + selected_plot.path 
+        const dataset = 'dataset_name=' + query.dataset_name as string
+        const path = 'folders_path=' + selected_plot.path
         const plot_name = 'plot_name=' + selected_plot.name
+        const globally_overlaid_plots = query.overlay_data?.split('&').map((plot) => {
+          const parts = plot.split('/')
+          const run_number = parts.shift()
+          const pathAndLabel = parts.splice(3)
+          const dataset_name = parts.join('/')
+          const label = pathAndLabel.pop()
+          const path = pathAndLabel.join('/')
+          const string = [run_number, dataset_name, path, plot_name].join('/')
+          return `${string}/reflabel=${label}`
+        })
+        const global_overlay = 'overlaidGlobally=' + (globally_overlaid_plots as string[]).join('&')
         const baseURL = [basePath, page].join('/')
-        const queryURL = [ run , dataset, path, plot_name].join('&')
+        const queryURL = [run, dataset, path, plot_name, global_overlay].join('&')
         const plotsLocalOverlayURL = [baseURL, queryURL].join('?')
-        window.open(plotsLocalOverlayURL)	       
+        window.open(plotsLocalOverlayURL)
       },
       icon: <BlockOutlined />,
     },

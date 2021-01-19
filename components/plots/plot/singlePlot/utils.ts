@@ -20,14 +20,15 @@ export const removePlotFromSelectedPlots = (
 ) => {
   const separatedPlots = plotsQuery ? plotsQuery.split('&') : [];
   const fileterdPlotsAndDirs = separatedPlots.map((separatedPlot: string) => {
-    const plot = [plotName.run_number, plotName.dataset_name, plotName.path, plotName.name].join('/')
+    const plot = [plotName.run_number as string + plotName.dataset_name as string, plotName.path, plotName.name].join('/')
+
     if (plot !== separatedPlot) {
       return separatedPlot;
     }
   });
   const cleanedFileterdPlotsAndDirs = cleanDeep(fileterdPlotsAndDirs);
   const plotsForQuery = cleanedFileterdPlotsAndDirs.join('&');
-  
+
   return plotsForQuery;
 };
 
@@ -39,8 +40,7 @@ export const addToSelectedPlots = (
   const dataset_name = plot.dataset_name?.substring(1)
   const path = plot.path
   const name = plot.name
-  const new_plot = [run_number, dataset_name, path, name]. join('/')
-
+  const new_plot = [run_number, dataset_name, path, name].join('/')
   return (`${plotsQuery ? plotsQuery + '&' : ''}${new_plot}`)
 };
 
@@ -98,6 +98,7 @@ export const removePlotFromRightSide = (
   query: QueryProps,
   plot: PlotDataProps
 ) => {
+
   changeRouter(
     getChangedQueryParams(
       {
