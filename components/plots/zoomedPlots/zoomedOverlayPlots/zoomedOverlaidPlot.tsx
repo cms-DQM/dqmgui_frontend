@@ -77,10 +77,11 @@ export const ZoomedOverlaidPlot = ({
           const run_number = parts.shift()
           const pathAndLabel = parts.splice(3)
           const dataset_name = parts.join('/')
+          const path =  selected_plot.path
+          const plot_name = selected_plot.name
           const label = pathAndLabel.pop()
-          const path = pathAndLabel.join('/')
-          const string = [run_number, dataset_name, path, plot_name].join('/')
-          return `${string}/reflabel=${label}`
+          const string = [run_number, dataset_name, path, plot_name, label].join('/')
+          return string
         })
         const global_overlay = 'overlaidGlobally=' + (globally_overlaid_plots as string[]).join('&')
         const baseURL = [basePath, page].join('/')

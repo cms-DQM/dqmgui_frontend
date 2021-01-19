@@ -8,13 +8,15 @@ export const cleanOverlaidPlotsFromURL = async (parameters: any, router: NextRou
   await delete copy.overlayPlots
   await delete copy.overlaidSeparately
   await delete copy.customizationParams
-  const customization ={ ...parameters.customizeProps}
+  const customization = { ...parameters.customizeProps }
+  await delete copy.overlaidGlobally
 
   Router.push({
     pathname: router.pathname,
     query: {
-      ...parameters,
+      ...copy,
       ...customization,
+      overlaidGlobally: router.query.overlaidGlobally,
     },
   });
 }
@@ -31,7 +33,9 @@ export const addOverlaidPlotToURL = async (plotsString: string,
   await delete copy.customizeProps
   await delete copy.overlaidSeparately //we don't need it in request, insted if that we're using plotsString, where are all overlaid plots joined in one string
   await delete copy.customizationParams
-  const customization ={ ...parameters.customizeProps}
+  await delete copy.overlaidGlobally
+
+  const customization = { ...parameters.customizeProps }
 
   Router.push({
     pathname: router.pathname,
@@ -39,6 +43,7 @@ export const addOverlaidPlotToURL = async (plotsString: string,
       ...copy,
       ...reference,
       ...customization,
+      overlaidGlobally: router.query.overlaidGlobally,
       overlayPlots: plotsString
     },
   });
@@ -47,26 +52,25 @@ export const addOverlaidPlotToURL = async (plotsString: string,
 export const SearchPlot = async (plots_name: string, router: NextRouter, parameters: ParametersForApi) => {
   const copy = { ...parameters }
   await delete copy.customizationParams
-  const customization ={ ...parameters.customizeProps}
+  const customization = { ...parameters.customizeProps }
 
   Router.push({
     pathname: router.pathname,
     //@ts-ignore
     query: {
-      ...copy,
-      ...customization,
+      ...router.query,
       search: plots_name,
     },
   });
 }
 
-export const SetCustomizationParams = async(router: NextRouter, customizeParams: CustomizeProps, parameters: ParametersForApi) => {
+export const SetCustomizationParams = async (router: NextRouter, customizeParams: CustomizeProps, parameters: ParametersForApi) => {
   const copy = { ...parameters }
   Router.push({
     pathname: router.pathname,
     //@ts-ignore
     query: {
-      ...copy,
+      ...router.query,
       ...customizeParams,
     },
   });
