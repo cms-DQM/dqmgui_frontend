@@ -86,6 +86,15 @@ const Content: FC<FolderProps> = ({
   const changeFolderPathByBreadcrumb = (parameters: ParsedUrlQueryInput) =>
     changeRouter(getChangedQueryParams(parameters, query));
 
+  const plotsAreaRef = React.useRef<any>(null)
+  const [plotsAreaWidth, setPlotsAreaWidth] = React.useState(0)
+
+  React.useEffect(() => {
+    if (plotsAreaRef.current) {
+      setPlotsAreaWidth(plotsAreaRef.current.clientWidth)
+    }
+  }, [plotsAreaRef.current])
+
   return (
     <>
       <CustomRow space={'2'} width="100%" justifycontent="space-between">
@@ -112,7 +121,7 @@ const Content: FC<FolderProps> = ({
         </Row>
       </CustomRow>
       <CustomRow width="100%">
-        <ViewDetailsMenu selected_plots={selected_plots.length > 0} />
+        <ViewDetailsMenu plotsAreaWidth={plotsAreaWidth} selected_plots={selected_plots.length > 0} />
       </CustomRow>
       <>
         <DivWrapper
@@ -120,6 +129,7 @@ const Content: FC<FolderProps> = ({
           position={viewPlotsPosition}
         >
           <DisplayFordersOrPlots
+            plotsAreaRef={plotsAreaRef}
             plots={plots}
             selected_plots={selected_plots}
             plots_grouped_by_layouts={plots_grouped_by_layouts}

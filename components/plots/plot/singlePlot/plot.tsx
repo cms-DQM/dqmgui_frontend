@@ -17,6 +17,7 @@ import { PlotImage } from '../plotImage';
 import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
 import { store } from '../../../../contexts/leftSideContext';
 import { isPlotSelected } from '../../../../containers/display/utils';
+import { Tooltip } from 'antd';
 
 interface PlotProps {
   plot: PlotDataProps;
@@ -36,6 +37,10 @@ export const Plot = ({
   const { size } = useContext(store)
   const imageRef = useRef(null);
 
+  const plotNameRef = React.useRef<any>(null)
+  const [count, setCount] = React.useState(0)
+  const [tooLong, setTooLong] = React.useState(false)
+
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
   const url = get_plot_url(params_for_api);
   const is_plot_selected = isPlotSelected(selected_plots, plot)
@@ -49,19 +54,28 @@ export const Plot = ({
     }
   }, [is_plot_selected, query.selected_plots]);
 
+  React.useEffect(() => {
+    setCount(count + 1) //2 because on mount, and when size changes. Without count, we're getting infinity loop
+    if (plotNameRef.current && count < 3) {
+      setTooLong(plotNameRef.current.clientHeight > 24)
+    }
+  }, [plotNameRef.current && plotNameRef.current.clientHeight])
+
   plot.dataset_name = query.dataset_name
   plot.run_number = query.run_number
 
   return (
+    <Tooltip title={tooLong ? decodeURI(params_for_api.plot_name as string) : ''}>
     <ParentWrapper
       isLoading={blink.toString()}
       animation={(functions_config.mode === 'ONLINE').toString()}
       size={size}
       isPlotSelected={is_plot_selected.toString()}>
       <LayoutName
+        ref={plotNameRef}
         isPlotSelected={is_plot_selected.toString()}
         error={get_plot_error(plot).toString()}
-      >{decodeURI(params_for_api.plot_name as string)}</LayoutName>
+      >{decodeURI(tooLong ? (params_for_api.plot_name?.substring(0, 30)) as string + '...' : params_for_api.plot_name as string)}</LayoutName>
       <LayoutWrapper
         size={size}
         auto='auto'
@@ -90,5 +104,6 @@ export const Plot = ({
         </PlotWrapper>
       </LayoutWrapper>
     </ParentWrapper>
+    </Tooltip>
   );
 };
