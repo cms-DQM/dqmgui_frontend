@@ -71,7 +71,7 @@ export const ZoomedPlot = ({
       action: () => toggleCustomizationMenu(true),
       icon: <SettingOutlined />,
     },
-    {
+    functions_config.new_back_end.new_back_end && {
       label: 'Overlay with another plot',
       value: 'overlay',
       action: () => {

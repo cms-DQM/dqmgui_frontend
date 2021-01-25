@@ -62,9 +62,9 @@ export const ZoomedOverlaidPlot = ({
       action: () => toggleCustomizationMenu(true),
       icon: <SettingOutlined />,
     },
-    {
+    functions_config.new_back_end.new_back_end && {
       label: 'Overlay with another plot',
-      value: 'Customize',
+      value: 'overlay',
       action: () => {
         const basePath = router.basePath
         const page = 'plotsLocalOverlay'
