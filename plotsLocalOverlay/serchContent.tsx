@@ -25,7 +25,7 @@ interface SearchContentProps {
 }
 
 export const SearchContent = ({ setParameters, parameters, referenceHeight }: SearchContentProps) => {
-  const [lastSelectedPlot, setLastSelectedPlot] = React.useState<any>({ folders_path: '', plot_name: '' })
+  const [lastSelectedPlot, setLastSelectedPlot] = React.useState<any>({ dataset_name: '', run_number: '', folders_path: '', plot_name: '' })
   const [folders, setFolders] = React.useState<(string | undefined)[]>([])
   const [currentFolder, setCurrentFolder] = React.useState<string | undefined>('')
   const [selectedPlots, setSelectedPlots] = React.useState<PlotProperties[]>([])
@@ -73,9 +73,9 @@ export const SearchContent = ({ setParameters, parameters, referenceHeight }: Se
       setFolders(cleaned_array)
       const joinderFolders = copy.join('/')
       if (cleaned_array.length === 0) {
-        setLastSelectedPlot({ folders_path: '', plot_name: '' })
+        setLastSelectedPlot({ dataset_name: '', run_number: '', folders_path: '', plot_name: '' })
       }
-      setLastSelectedPlot({ folders_path: joinderFolders, plot_name: '' })
+      setLastSelectedPlot({ dataset_name: query.dataset_name, run_number: query.run_number, folders_path: joinderFolders, plot_name: '' })
     }
   }, [currentFolder])
 
@@ -164,6 +164,7 @@ export const SearchContent = ({ setParameters, parameters, referenceHeight }: Se
         <SelectedPlotsTable
           query={query}
           lastSelectedPlot={lastSelectedPlot}
+          overlaidGlobally={parameters.overlaidGlobally as any[]}
           selectedPlots={selectedPlots}
           setSelectedPlots={setSelectedPlots} />
       </FoldersRow>

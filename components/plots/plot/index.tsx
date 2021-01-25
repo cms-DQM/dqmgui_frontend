@@ -10,6 +10,7 @@ import {
 } from '../../../containers/display/interfaces';
 import { PlotsWithLayout } from './plotsWithLayouts/plotsWithLayout';
 import { PlotsWithoutLayouts } from './plotsWithoutLayouts';
+import { sizes } from '../../constants';
 
 interface LeftSidePlotsProps {
   plots: PlotDataProps[];
@@ -29,7 +30,8 @@ export const LeftSidePlots = ({
   const router = useRouter();
   const query: QueryProps = router.query;
   const { imageRefScrollDown } = globalState;
-  
+
+
   if (plots.length > 0) {
     return (
       <>

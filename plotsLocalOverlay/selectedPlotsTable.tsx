@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Input, Space } from 'antd';
+import { Button, Input, Space, Tooltip } from 'antd';
 
 import { StyledSelectedPlotsTable } from './styledComponents'
 import { setLabel } from './utils'
@@ -11,7 +11,8 @@ interface SelectedPlotsTableProps {
   lastSelectedPlot: PlotProperties;
   setSelectedPlots(plots: PlotProperties[]): void;
   selectedPlots: PlotProperties[];
-  query: ParsedUrlQuery
+  query: ParsedUrlQuery;
+  overlaidGlobally: any[]
 }
 
 const addToSelectedPlots = (item: PlotProperties, allSelectedPlots: PlotProperties[],) => {
@@ -28,10 +29,18 @@ const removeSelectedPlot = (item: PlotProperties, allSelectedPlots: PlotProperti
   return copy
 }
 
-export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selectedPlots, query }: SelectedPlotsTableProps,) => {
+export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selectedPlots, query, overlaidGlobally }: SelectedPlotsTableProps,) => {
   const colums = [
     {
-      title: 'Folder Path',
+      title: 'Run',
+      dataIndex: 'run_number',
+    },
+    {
+      title: 'Dataset name',
+      dataIndex: 'dataset_name',
+    },
+    {
+      title: 'Path',
       dataIndex: 'folders_path',
     },
     {
@@ -40,6 +49,7 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
     },
     {
       title: 'Label',
+      // dataIndex: 'label',
       render: (plot: PlotProperties) => {
         const set_label = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
           const plotsWithLabels = setLabel(plot, selectedPlots, value)
@@ -48,6 +58,7 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
         if (plot.folders_path && plot.plot_name)
           return <Input
             id={plot.folders_path + plot.plot_name}
+            defaultValue={plot.label}
             name={plot.folders_path + plot.plot_name}
             placeholder="label"
             value={plot.label}
@@ -58,15 +69,25 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
     {
       title: 'Action',
       key: 'action',
-      render: (plot: PlotProperties) => (
-        <Space size="small">
-          <a
-            onClick={() => {
-              setSelectedPlots(removeSelectedPlot(plot, selectedPlots))
-            }}
-          >Delete</a>
+      render: (plot: PlotProperties) => {
+        const isGloballyOverlaid = overlaidGlobally.findIndex(globallyOverlaidPlot => globallyOverlaidPlot.plot_name === plot.plot_name &&
+          globallyOverlaidPlot.folders_path === plot.folders_path &&
+          globallyOverlaidPlot.dataset_name === plot.dataset_name &&
+          globallyOverlaidPlot.run_number === plot.run_number
+        )
+        const disabled = isGloballyOverlaid > -1
+        return <Space size="small">
+          <Tooltip title={disabled ? 'Plot overlaid by default' : ''} >
+            <Button
+              type='link'
+              disabled={disabled}
+              onClick={() => {
+                setSelectedPlots(removeSelectedPlot(plot, selectedPlots))
+              }}
+            >Delete</Button>
+          </Tooltip>
         </Space>
-      ),
+      }
     },
   ]
 
@@ -93,6 +114,17 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
       setSelectedPlots(changedPlotInfoArray)
     }
   }, [lastSelectedPlot])
+
+  React.useEffect(() => {
+    const globallyAndLocallyOverlaidPlots = overlaidGlobally.filter(globallyOverlaidPlot => {
+      const alreadyIncludes = selectedPlots.includes(globallyOverlaidPlot)
+      if(!alreadyIncludes){
+        return globallyOverlaidPlot
+      }
+    })
+    const dataSource = globallyAndLocallyOverlaidPlots.concat(selectedPlots)
+    setSelectedPlots(dataSource)
+  }, [query.overlaidGlobally])
 
   return (selectedPlots.length > 0 ? <StyledSelectedPlotsTable
     pagination={

@@ -15,9 +15,10 @@ const { Panel } = Collapse;
 
 interface ViewDetailsMenuProps {
   selected_plots: boolean;
+  plotsAreaWidth: number;
 }
 
-export const ViewDetailsMenu = ({ selected_plots }: ViewDetailsMenuProps) => {
+export const ViewDetailsMenu = ({ selected_plots, plotsAreaWidth }: ViewDetailsMenuProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
 
@@ -55,7 +56,10 @@ export const ViewDetailsMenu = ({ selected_plots }: ViewDetailsMenuProps) => {
               label="Left side size"
               width="50%"
             >
-              <SizeChanger currentValue={size} setSize={setSize} />
+              <SizeChanger
+                plotsAreaWidth={plotsAreaWidth}
+                currentValue={size}
+                setSize={setSize} />
             </CutomFormItem>
             <CutomFormItem
               name="SizeChanger"
@@ -63,6 +67,7 @@ export const ViewDetailsMenu = ({ selected_plots }: ViewDetailsMenuProps) => {
               width="50%"
             >
               <SizeChanger
+                plotsAreaWidth={plotsAreaWidth}
                 currentValue={rightSideSize}
                 setSize={setRightSideSize}
                 disabled={!selected_plots}

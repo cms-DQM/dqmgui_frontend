@@ -15,12 +15,21 @@ export interface ParametersForApi {
   stats: boolean,
   error: boolean,
   lumi: number,
-  search?:string,
-  plot_search?:string,
+  search?: string,
+  plot_search?: string,
   customizationParams?: CustomizeProps;
+  overlaidGlobally?: [{
+    run_number: string;
+    dataset_name: string;
+    folders_path: string;
+    plot_name: string;
+    label: string;
+  }]
 }
 
 export interface PlotProperties {
+  run_number?: string;
+  dataset_name?: string;
   folders_path: string;
   plot_name: string;
   label: string;

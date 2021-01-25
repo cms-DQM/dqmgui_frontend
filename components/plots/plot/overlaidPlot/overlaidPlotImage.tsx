@@ -21,6 +21,7 @@ import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 import { PlotImage } from '../plotImage';
 import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
 import { isPlotSelected } from '../../../../containers/display/utils';
+import { Tooltip } from 'antd';
 
 interface OverlaidPlotImageProps {
   params_for_api: ParamsForApiProps;
@@ -54,46 +55,61 @@ export const OverlaidPlotImage = ({
 
   plot.dataset_name = query.dataset_name
   plot.run_number = query.run_number
-  
+
+  const plotNameRef = React.useRef<any>(null)
+  const [count, setCount] = React.useState(0)
+  const [tooLong, setTooLong] = React.useState(false)
+
+  React.useEffect(() => {
+    setCount(count + 1) //2 because on mount, and when size changes. Without count, we're getting infinity loop
+    if (plotNameRef.current && count < 3) {
+      setTooLong(plotNameRef.current.clientHeight > 24)
+    }
+  }, [plotNameRef.current && plotNameRef.current.clientHeight])
+
   const is_plot_selected = isPlotSelected(selected_plots, plot)
 
   return (
-    <ParentWrapper
-      isLoading={blink.toString()}
-      animation={(functions_config.mode === 'ONLINE').toString()}
-      size={size}
-      isPlotSelected={is_plot_selected.toString()}>
-      <LayoutName
-        error={get_plot_error(plot).toString()}
-        isPlotSelected={is_plot_selected.toString()}
-      >{decodeURI(params_for_api.plot_name)}</LayoutName>
-      <LayoutWrapper
+    <Tooltip title={tooLong ? decodeURI(params_for_api.plot_name as string) : ''}>
+      <ParentWrapper
+        isLoading={blink.toString()}
+        animation={(functions_config.mode === 'ONLINE').toString()}
         size={size}
-        auto='auto'
-      >
-        <PlotWrapper
-          plotSelected={is_plot_selected}
-          onClick={async () => {
-            await is_plot_selected
-            setTimeout(() => {
-              scroll(imageRef);
-              scrollToBottom(imageRefScrollDown)
-            }, 500);
-          }}
-          ref={imageRef}
-        >
-          <PlotImage
-            blink={blink}
-            params_for_api={params_for_api}
-            plot={plot}
-            plotURL={plot_with_overlay}
-            updated_by_not_older_than={updated_by_not_older_than}
-            query={query}
-            imageRef={imageRef}
-            isPlotSelected={is_plot_selected}
-          />
-        </PlotWrapper>
-      </LayoutWrapper>
-    </ParentWrapper>
+        isPlotSelected={is_plot_selected.toString()}>
+        <LayoutName
+          ref={plotNameRef}
+          error={get_plot_error(plot).toString()}
+          isPlotSelected={is_plot_selected.toString()}
+        > {decodeURI(tooLong ? (params_for_api.plot_name?.substring(0, 30)) as string + '...' : params_for_api.plot_name as string)}
+        </LayoutName>
+          <LayoutWrapper
+            size={size}
+            auto='auto'
+          >
+            <PlotWrapper
+              plotSelected={is_plot_selected}
+              onClick={async () => {
+                await is_plot_selected
+                setTimeout(() => {
+                  scroll(imageRef);
+                  scrollToBottom(imageRefScrollDown)
+                }, 500);
+              }}
+              ref={imageRef}
+            >
+              <PlotImage
+                blink={blink}
+                params_for_api={params_for_api}
+                plot={plot}
+                plotURL={plot_with_overlay}
+                updated_by_not_older_than={updated_by_not_older_than}
+                query={query}
+                imageRef={imageRef}
+                isPlotSelected={is_plot_selected}
+              />
+            </PlotWrapper>
+          </LayoutWrapper>
+      </ParentWrapper>
+    </Tooltip>
   );
 };

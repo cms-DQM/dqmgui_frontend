@@ -38,6 +38,16 @@ export const Main = () => {
 
   React.useEffect(() => {
     if (Object.keys(query).length > 0) {
+      const overlaidGloballyPlots = (query.overlaidGlobally as string).split('&')
+      const overlaidGloballyPlotsObjects = overlaidGloballyPlots.map((plot) => {
+        const parts = plot.split('/')
+        const label = parts.pop()
+        const plot_name = parts.pop()
+        const run_number = parts.shift()
+        const folders_path = parts.splice(3).join('/')
+        const dataset_name = '/' + parts.join('/')
+        return { run_number, dataset_name, folders_path, plot_name, label }
+      })
       const params_for_api: any = {
         run_number: run_number as string,
         dataset_name: dataset_name as string,
@@ -48,6 +58,7 @@ export const Main = () => {
         stats: query.stats ? (query.stats === 'true' ? true : false) : false,
         normalize: query.normalize ? (query.normalize === 'true' ? true : false) : true,
         overlaidSeparately: { plots: [], ref: 'overlay' },
+        overlaidGlobally: overlaidGloballyPlotsObjects,
         //@ts-ignore
         height: sizes[query.size ? query.size as string : 'large'].size.h,
         //@ts-ignore
@@ -62,26 +73,26 @@ export const Main = () => {
       <Layout >
         <StyledHeader justifyContent='space-between'>
           <>
-          <StyledLogoDiv>
-            <StyledLogoWrapper>
-              <StyledLogo src="../images/CMSlogo_white_red_nolabel_1024_May2014.png" />
-            </StyledLogoWrapper>
-          </StyledLogoDiv>
-          <TagsWrapper>
-            <TagWrapper>
-              <Tag color="geekblue">Run :{parameters.run_number}</Tag>
-            </TagWrapper>
-            <TagWrapper>
-              <Tag color="geekblue">Dataset: {parameters.dataset_name}</Tag>
-            </TagWrapper>
-            <TagWrapper>
-              <Tag color="geekblue"> Folders path: {parameters.folders_path}</Tag>
-            </TagWrapper>
-            <TagWrapper>
-              <Tag color="geekblue">Plot name:  {parameters.plot_name}</Tag>
-            </TagWrapper>
-            <PlotSearch parameters={parameters} setParameters={setParameters} />
-          </TagsWrapper>
+            <StyledLogoDiv>
+              <StyledLogoWrapper>
+                <StyledLogo src="../images/CMSlogo_white_red_nolabel_1024_May2014.png" />
+              </StyledLogoWrapper>
+            </StyledLogoDiv>
+            <TagsWrapper>
+              <TagWrapper>
+                <Tag color="geekblue">Run :{parameters.run_number}</Tag>
+              </TagWrapper>
+              <TagWrapper>
+                <Tag color="geekblue">Dataset: {parameters.dataset_name}</Tag>
+              </TagWrapper>
+              <TagWrapper>
+                <Tag color="geekblue"> Folders path: {parameters.folders_path}</Tag>
+              </TagWrapper>
+              <TagWrapper>
+                <Tag color="geekblue">Plot name:  {parameters.plot_name}</Tag>
+              </TagWrapper>
+              <PlotSearch parameters={parameters} setParameters={setParameters} />
+            </TagsWrapper>
           </>
         </StyledHeader>
         <SyledContent>
