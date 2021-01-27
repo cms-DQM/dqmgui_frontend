@@ -2,7 +2,7 @@ import { NextPage } from 'next'
 import * as React from 'react'
 
 import Head from 'next/head';
-import { Main } from '../plotsLocalOverlay/main';
+import { Main } from '../../plotsLocalOverlay/main';
 
 
 const PlotsLocalOverlay: NextPage<any> = () => {

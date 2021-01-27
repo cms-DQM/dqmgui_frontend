@@ -38,16 +38,19 @@ export const Main = () => {
 
   React.useEffect(() => {
     if (Object.keys(query).length > 0) {
-      const overlaidGloballyPlots = (query.overlaidGlobally as string).split('&')
+      const overlaidGloballyPlots = query.overlaidGlobally ? (query.overlaidGlobally as string).split('&') : []
       const overlaidGloballyPlotsObjects = overlaidGloballyPlots.map((plot) => {
-        const parts = plot.split('/')
-        const label = parts.pop()
-        const plot_name = parts.pop()
-        const run_number = parts.shift()
-        const folders_path = parts.splice(3).join('/')
-        const dataset_name = '/' + parts.join('/')
-        return { run_number, dataset_name, folders_path, plot_name, label }
+        if (overlaidGloballyPlots) {
+          const parts = plot.split('/')
+          const label = parts.pop()
+          const plot_name = parts.pop()
+          const run_number = parts.shift()
+          const folders_path = parts.splice(3).join('/')
+          const dataset_name = '/' + parts.join('/')
+          return { run_number, dataset_name, folders_path, plot_name, label }
+        }
       })
+
       const params_for_api: any = {
         run_number: run_number as string,
         dataset_name: dataset_name as string,

@@ -44,7 +44,8 @@ export const SizeSelection = ( { setReference, reference }: SizeSelectionProps) 
           value={option}
           key={option}
         >
-          {sizes[option].label}
+          {//@ts-ignore
+          sizes[option].label}
         </Option>)
     }
   </StyledSelect>
