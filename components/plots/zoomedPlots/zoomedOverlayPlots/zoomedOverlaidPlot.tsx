@@ -32,6 +32,7 @@ import { Customization } from '../../../customization';
 import { Plot_portal } from '../../../../containers/display/portal';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 import { PlotImage } from '../../plot/plotImage';
+import { getZoomedOverlaidPlotsUrlForOverlayingPlotsWithDifferentNames } from '../../../utils';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -49,6 +50,10 @@ export const ZoomedOverlaidPlot = ({
   params_for_api.customizeProps = customizationParams;
   const [isPortalWindowOpen, setIsPortalWindowOpen] = React.useState(false);
 
+  const router = useRouter();
+  const query: QueryProps = router.query;
+  const url = getZoomedOverlaidPlotsUrlForOverlayingPlotsWithDifferentNames(router.basePath, query, selected_plot)
+
   const zoomedPlotMenuOptions = [
     {
       label: 'Open in a new tab',
@@ -65,36 +70,10 @@ export const ZoomedOverlaidPlot = ({
     functions_config.new_back_end.new_back_end && {
       label: 'Overlay with another plot',
       value: 'overlay',
-      action: () => {
-        const basePath = router.basePath
-        const page = 'plotsLocalOverlay'
-        const run = 'run_number=' + query.run_number as string
-        const dataset = 'dataset_name=' + query.dataset_name as string
-        const path = 'folders_path=' + selected_plot.path
-        const plot_name = 'plot_name=' + selected_plot.name
-        const globally_overlaid_plots = query.overlay_data?.split('&').map((plot) => {
-          const parts = plot.split('/')
-          const run_number = parts.shift()
-          const pathAndLabel = parts.splice(3)
-          const dataset_name = parts.join('/')
-          const path =  selected_plot.path
-          const plot_name = selected_plot.name
-          const label = pathAndLabel.pop()
-          const string = [run_number, dataset_name, path, plot_name, label].join('/')
-          return string
-        })
-        const global_overlay = 'overlaidGlobally=' + (globally_overlaid_plots as string[]).join('&')
-        const baseURL = [basePath, page].join('/')
-        const queryURL = [run, dataset, path, plot_name, global_overlay].join('&')
-        const plotsLocalOverlayURL = [baseURL, queryURL].join('?')
-        window.open(plotsLocalOverlayURL)
-      },
+      url: url,
       icon: <BlockOutlined />,
     },
   ];
-
-  const router = useRouter();
-  const query: QueryProps = router.query;
 
   const overlaid_plots_urls = get_overlaied_plots_urls(params_for_api);
   const joined_overlaid_plots_urls = overlaid_plots_urls.join('');

@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { FullscreenOutlined, SettingOutlined, BlockOutlined } from '@ant-design/icons';
 import { Store } from 'antd/lib/form/interface';
 
 import {
   get_plot_url,
-  root_url,
   functions_config,
 } from '../../../../config/config';
 import {
@@ -31,6 +30,7 @@ import { ZoomedPlotMenu } from '../menu';
 import { Plot_portal } from '../../../../containers/display/portal';
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
 import { PlotImage } from '../../plot/plotImage';
+import { getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames } from '../../../utils';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -58,6 +58,7 @@ export const ZoomedPlot = ({
   const router = useRouter();
   const query: QueryProps = router.query;
 
+const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames(router.basePath, query, selected_plot)
   const zoomedPlotMenuOptions = [
     {
       label: 'Open in a new tab',
@@ -74,19 +75,8 @@ export const ZoomedPlot = ({
     functions_config.new_back_end.new_back_end && {
       label: 'Overlay with another plot',
       value: 'overlay',
-      action: () => {
-        const basePath = router.basePath
-        const page = 'plotsLocalOverlay'
-        const run = 'run_number=' + query.run_number as string
-        const dataset ='dataset_name=' + query.dataset_name  as string
-        const path = 'folders_path=' + selected_plot.path 
-        const plot_name = 'plot_name=' + selected_plot.name
-        const baseURL = [basePath, page].join('/')
-        const queryURL = [ run , dataset, path, plot_name].join('&')
-        const plotsLocalOverlayURL = [baseURL, queryURL].join('?')
-        window.open(plotsLocalOverlayURL)	       
-      },
-       icon: <BlockOutlined  />,
+      url: url,
+      icon: <BlockOutlined />,
     },
   ];
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();

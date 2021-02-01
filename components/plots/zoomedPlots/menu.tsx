@@ -1,31 +1,43 @@
 import * as React from 'react';
+import Link from 'next/link';
 import { Menu, Dropdown, Row, Col, Button } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 
 import { OptionProps } from '../../../containers/display/interfaces';
-import { CustomDiv } from '../../styledComponents';
 
 export interface MenuProps {
   options: OptionProps[];
 }
 
-export const ZoomedPlotMenu = ({ options }: MenuProps) => {
+export const ZoomedPlotMenu = ({ options, ...props }: MenuProps) => {
   const plotMenu = (options: OptionProps[]) => (
     <Menu>
-      {options.map((option: OptionProps) => (
-        <Menu.Item
-          key={option.value}
-          onClick={() => {
-            option.action && option.action(option.value);
-          }}
-        >
-          <CustomDiv display="flex" justifycontent="space-around">
-            <CustomDiv space="2">{option.icon}</CustomDiv>
-            <CustomDiv space="2">{option.label}</CustomDiv>
-          </CustomDiv>
-        </Menu.Item>
-      ))}
-    </Menu>
+      {options.map((option: OptionProps) => {
+        if (option.value === 'overlay') {
+          return (
+            <Menu.Item
+              icon={option.icon}>
+              <Link href={option.url as string}>
+                <a target="_bank">
+                  {option.label}
+                </a>
+              </Link>
+            </Menu.Item>
+          )
+        } else {
+          return (
+            <Menu.Item
+              icon={option.icon}
+              key={option.value}
+              onClick={() => {
+                option.action && option.action(option.value);
+              }}
+            >{option.label}
+            </Menu.Item>
+          )
+        }
+      })}
+    </Menu >
   );
 
   return (

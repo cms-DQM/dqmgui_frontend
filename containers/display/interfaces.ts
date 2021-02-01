@@ -13,6 +13,7 @@ export interface OptionProps {
   label: string;
   value: any;
   action?(option?: any): void;
+  url?: string;
   icon?: JSX.Element;
 }
 
