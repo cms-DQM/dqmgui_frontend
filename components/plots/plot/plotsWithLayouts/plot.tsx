@@ -46,7 +46,7 @@ export const Plot = ({
   params_for_api.joined_overlaied_plots_urls = joined_overlaid_plots_urls;
   const plot_with_overlay = get_plot_with_overlay(params_for_api);
   plot.dataset_name = query.dataset_name
-  plot.run_number= query.run_number
+  plot.run_number = query.run_number
   const plotSelected = isPlotSelected(
     selected_plots,
     plot
@@ -55,6 +55,8 @@ export const Plot = ({
   return (
     <Tooltip title={fullPlotPath} color={get_plot_error(plot) ? 'red' : ''}>
       <PlotWrapper
+        height={`${onePlotHeight}px`}
+        width={`${onePlotWidth}px`}
         plotSelected={plotSelected}
         onClick={async () => {
           await plotSelected
@@ -63,6 +65,7 @@ export const Plot = ({
             scrollToBottom(imageRefScrollDown)
           }, 500);
         }}
+
         ref={imageRef}
       >
         {query.overlay_data ? (

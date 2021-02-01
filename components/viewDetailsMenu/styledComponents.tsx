@@ -25,7 +25,10 @@ export const NavWrapper = styled.div`
 
 export const StyledModal = styled(Modal)<{ width?: string }>`
   .ant-modal-content {
-    width: ${(props) => (props.width ? props.width : ' fit-content')};
+    width: fit-content;
+  };
+  .ant-modal-body{
+    width: max-content;
   }
 `;
 
@@ -39,7 +42,7 @@ export const StyledSelect = styled(Select)<{
 }>`
   .ant-select-selector {
     border-radius: 12px !important;
-    width: ${(props) => (props.width ? `${props.width}` : '')} !important;
+    width: ${(props) => (props.width ? `${props.width}` : 'fit-content')} !important;
     font-weight: ${(props) =>
       props.selected === 'selected' ? 'bold' : 'inherit'} !important;
   }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Col, Row, Select, Spin, Button } from 'antd';
 import { CaretRightFilled, CaretLeftFilled } from '@ant-design/icons';
 
@@ -31,6 +31,17 @@ export const RunBrowser = ({
   current_dataset_name,
 }: RunBrowserProps) => {
   const [openSelect, setSelect] = useState(false);
+  const styledSelectRef = useRef(null)
+
+  const [styledSelectWidth, setStyledSelect] = useState(0)
+
+  useEffect(() => {
+    //@ts-ignore
+    if (styledSelectRef.current && styledSelectRef.current.clientWidth) {
+      //@ts-ignore
+      setStyledSelect(styledSelectRef.current.clientWidth)
+    }
+  }, [])
 
   const [currentRunNumberIndex, setCurrentRunNumberIndex] = useState<number>(0);
   const dataset_name = current_dataset_name
@@ -70,8 +81,9 @@ export const RunBrowser = ({
             </Col>
           )}
           <Col>
-            <div>
+            <div ref={styledSelectRef}>
               <StyledSelect
+                width={'100px'}
                 onClick={() => setSelect(!openSelect)}
                 value={runNumbers[currentRunNumberIndex]}
                 onChange={(e: any) => {
@@ -96,8 +108,8 @@ export const RunBrowser = ({
                             <Spin />
                           </OptionParagraph>
                         ) : (
-                          <div>{run}</div>
-                        )}
+                            <div>{run}</div>
+                          )}
                       </Option>
                     );
                   })}

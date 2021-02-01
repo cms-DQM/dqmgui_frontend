@@ -13,6 +13,7 @@ export const useUpdateLiveMode = () => {
     update,
     set_update,
   } = React.useContext(store);
+
   const router = useRouter();
   const query: QueryProps = router.query;
 

@@ -1,10 +1,7 @@
 import * as React from 'react';
-import { Button, Tooltip, Spin, Typography } from 'antd';
-import { PauseOutlined, PlayCircleOutlined } from '@ant-design/icons';
+import { Spin, Typography } from 'antd';
 
 import {
-  CustomCol,
-  CustomDiv,
   CustomForm,
   CutomFormItem,
 } from '../styledComponents';
@@ -24,7 +21,7 @@ interface LiveModeHeaderProps {
 }
 
 export const LiveModeHeader = ({ query }: LiveModeHeaderProps) => {
-  const { update, set_update, not_older_than } = useUpdateLiveMode();
+  const { not_older_than } = useUpdateLiveMode();
   const globalState = React.useContext(store);
 
   return (
@@ -37,7 +34,6 @@ export const LiveModeHeader = ({ query }: LiveModeHeaderProps) => {
             info.value,
             'HLT/EventInfo'
           );
-
           const { data, isLoading } = useRequest(
             get_jroot_plot(params_for_api),
             {},
@@ -53,13 +49,7 @@ export const LiveModeHeader = ({ query }: LiveModeHeaderProps) => {
             >
               <Title
                 level={4}
-                style={{
-                  display: 'contents',
-                  color: `${update
-                      ? theme.colors.notification.success
-                      : theme.colors.notification.error
-                    }`,
-                }}
+                style={{ color: 'white', display: 'content' }}
               >
                 {isLoading ? <Spin size="small" /> : get_label(info, data)}
               </Title>
@@ -67,31 +57,6 @@ export const LiveModeHeader = ({ query }: LiveModeHeaderProps) => {
           );
         })}
       </CustomForm>
-      <CustomCol
-        justifycontent="flex-end"
-        display="flex"
-        alignitems="center"
-        texttransform="uppercase"
-        color={
-          update
-            ? theme.colors.notification.success
-            : theme.colors.notification.error
-        }
-      >
-        Live Mode
-        <CustomDiv space="2">
-          <Tooltip title={`Updating mode is ${update ? 'on' : 'off'}`}>
-            <Button
-              type="primary"
-              shape="circle"
-              onClick={() => {
-                set_update(!update);
-              }}
-              icon={update ? <PauseOutlined /> : <PlayCircleOutlined />}
-            ></Button>
-          </Tooltip>
-        </CustomDiv>
-      </CustomCol>
     </>
   );
 };

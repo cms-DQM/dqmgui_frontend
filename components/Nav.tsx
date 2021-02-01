@@ -47,9 +47,6 @@ export const Nav = ({
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
   };
-  const tailLayout = {
-    wrapperCol: { offset: 0, span: 4 },
-  };
 
   return (
     <div style={{justifyContent: 'center'}}> 
@@ -69,7 +66,7 @@ export const Nav = ({
           setDatasetName && setDatasetName(form_search_dataset_name);
         }}
       >
-        <Form.Item {...tailLayout}>
+        <Form.Item>
           <QuestionButton />
         </Form.Item>
         <StyledFormItem name="run_number">
@@ -97,7 +94,7 @@ export const Nav = ({
             />
           </StyledFormItem>
         )}
-        <Form.Item {...tailLayout}>
+        <Form.Item >
           <SearchButton
             onClick={() =>
               handler(form_search_run_number, form_search_dataset_name)

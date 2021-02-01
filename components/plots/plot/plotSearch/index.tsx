@@ -9,11 +9,8 @@ import {
   changeRouter,
 } from '../../../../containers/display/utils';
 
-interface PlotSearchProps {
-  isLoadingFolders: boolean;
-}
 
-export const PlotSearch = ({ isLoadingFolders }: PlotSearchProps) => {
+export const PlotSearch = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
   const [plotName, setPlotName] = React.useState<string | undefined>(
@@ -21,7 +18,7 @@ export const PlotSearch = ({ isLoadingFolders }: PlotSearchProps) => {
   );
 
   React.useEffect(() => {
-    if(query.plot_search !== plotName){
+    if (query.plot_search !== plotName) {
       const params = getChangedQueryParams({ plot_search: plotName }, query);
       changeRouter(params);
     }
@@ -33,7 +30,6 @@ export const PlotSearch = ({ isLoadingFolders }: PlotSearchProps) => {
         <StyledFormItem>
           <StyledSearch
             defaultValue={query.plot_search}
-            loading={isLoadingFolders}
             id="plot_search"
             placeholder="Enter plot name"
           />

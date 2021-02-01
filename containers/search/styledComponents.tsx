@@ -78,6 +78,8 @@ export const StyledTable = styled.table`
 export const RunsRows = styled(Row)`
   padding-left: 32px;
   font-weight: normal !important;
+  display: grid;
+  grid-template-columns: repeat(3, min-content);
 `;
 export const ExpandedRow = styled.div<{ expanded: boolean }>`
   font-weight: ${(props) =>

@@ -18,7 +18,7 @@ const liveModeHandler = (liveModeRun: string, liveModeDataset: string) => {
 export const LiveModeButton = () => {
   const liveModeDataset = '/Global/Online/ALL';
   const liveModeRun = '0';
-  const { set_update, update } = useUpdateLiveMode();
+  const { set_update } = useUpdateLiveMode();
 
   return (
     <LiveButton

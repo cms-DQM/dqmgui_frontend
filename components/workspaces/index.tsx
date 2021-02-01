@@ -40,7 +40,7 @@ const Workspaces = () => {
   // make a workspace set from context
   return (
     <Form>
-      <StyledFormItem labelcolor="white" label="Workspace">
+      <StyledFormItem  label="Workspace">
         <Button
           onClick={() => {
             toggleWorkspaces(!openWorkspaces);

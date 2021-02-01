@@ -20,6 +20,8 @@ import { store } from '../../../contexts/leftSideContext';
 import { DisplayFordersOrPlots } from './display_folders_or_plots';
 import { UsefulLinks } from '../../../components/usefulLinks';
 import { ParsedUrlQueryInput } from 'querystring';
+import Workspaces from '../../../components/workspaces';
+import { PlotSearch } from '../../../components/plots/plot/plotSearch';
 
 export interface PlotInterface {
   obj?: string;
@@ -107,6 +109,12 @@ const Content: FC<FolderProps> = ({
           <FolderPath folder_path={folder_path} changeFolderPathByBreadcrumb={changeFolderPathByBreadcrumb} />
         </Col>
         <Row gutter={16}>
+          <Col>
+            <Workspaces />
+          </Col>
+          <Col>
+            <PlotSearch />
+          </Col>
           <Col>
             <UsefulLinks />
           </Col>

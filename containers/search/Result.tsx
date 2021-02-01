@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import { DownCircleOutlined, UpCircleOutlined } from '@ant-design/icons';
 
 import {
@@ -10,7 +10,7 @@ import {
   RunWrapper,
   StyledA,
 } from './styledComponents';
-import { Button, Row, Col } from 'antd';
+import { Row } from 'antd';
 import {
   StyledSecondaryButton,
   CustomCol,
@@ -31,9 +31,14 @@ const Result: FC<SearchResultsInterface> = ({
 }) => {
   const [expanded, setExpanded] = useState(false);
 
+const tdRef = useRef(null)
+useEffect(()=>{
+
+},[])
+
   return (
     <StyledTableRow expanded={expanded} index={index}>
-      <StyledTableDatasetColumn>
+      <StyledTableDatasetColumn ref={tdRef}>
         <div>
           {dataset}
           {expanded && (

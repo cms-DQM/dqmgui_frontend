@@ -20,6 +20,7 @@ export const LatestRunsList = ({ latest_runs, mode }: LatestRunsListProps) => {
   const { set_update } = useUpdateLiveMode();
   React.useEffect(() => {
     set_update(true);
+    return () => set_update(false);
   }, []);
 
   return (

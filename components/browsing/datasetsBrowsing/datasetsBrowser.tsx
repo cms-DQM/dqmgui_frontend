@@ -86,8 +86,8 @@ export const DatasetsBrowser = ({
                     <Spin />
                   </OptionParagraph>
                 ) : (
-                  <p>{result.dataset}</p>
-                )}
+                    <p>{result.dataset}</p>
+                  )}
               </Option>
             ))}
           </StyledSelect>

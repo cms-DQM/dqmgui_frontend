@@ -31,10 +31,10 @@ export const Header = ({
             <RunInfo query={query} />
             <ComposedSearch />
           </Col>
-           <Col style={{display: 'flex', position: 'absolute', right: 0}}>
+           {/* <Col style={{display: 'flex', position: 'absolute', right: 0}}>
            <Workspaces />
            <PlotSearch isLoadingFolders={false} />
-         </Col>
+         </Col> */}
          </Col>
         ) : (
             <>
