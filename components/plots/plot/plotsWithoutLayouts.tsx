@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
-import { functions_config } from '../../../config/config';
 import {
   QueryProps,
   PlotDataProps,
@@ -38,7 +37,7 @@ export const PlotsWithoutLayouts = ({
         );
         if (plot) {
           return (
-            <div key={plot.name}>
+            <div key={plot.name} >
               {query.overlay_data ? (
                 <OverlaidPlot
                   key={plot.name}

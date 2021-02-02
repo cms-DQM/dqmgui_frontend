@@ -16,11 +16,13 @@ import { functions_config } from '../../../../config/config';
 
 export const removePlotFromSelectedPlots = (
   plotsQuery: string | undefined,
-  plotName: PlotDataProps
+  plot_to_delete: PlotDataProps
 ) => {
   const separatedPlots = plotsQuery ? plotsQuery.split('&') : [];
+
   const fileterdPlotsAndDirs = separatedPlots.map((separatedPlot: string) => {
-    const plot = [plotName.run_number as string + plotName.dataset_name as string, plotName.path, plotName.name].join('/')
+    const name_of_plot = encodeURI(plot_to_delete.name)
+    const plot = [plot_to_delete.run_number as string + plot_to_delete.dataset_name as string, plot_to_delete.path, name_of_plot].join('/')
 
     if (plot !== separatedPlot) {
       return separatedPlot;
@@ -40,7 +42,8 @@ export const addToSelectedPlots = (
   const dataset_name = plot.dataset_name?.substring(1)
   const path = plot.path
   const name = plot.name
-  const new_plot = [run_number, dataset_name, path, name].join('/')
+  const new_plot = [run_number, dataset_name, path, (encodeURI(name))].join('/')
+  console.log(new_plot, plotsQuery)
   return (`${plotsQuery ? plotsQuery + '&' : ''}${new_plot}`)
 };
 

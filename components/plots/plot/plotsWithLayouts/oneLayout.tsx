@@ -5,6 +5,7 @@ import { store } from '../../../../contexts/leftSideContext'
 import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate'
 import { LayoutName, LayoutWrapper, ParentWrapper } from './styledComponents'
 import { Plot } from './plot'
+import { decodePlotName } from '../../../utils'
 
 interface OnePlotInLayout {
   layoutName: string;
@@ -18,6 +19,10 @@ interface OnePlotInLayout {
 export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layoutName, query, selected_plots }: OnePlotInLayout) => {
   const { size } = React.useContext(store)
   const [nameOfLayout, setNameOfLayout] = React.useState(layoutName)
+  const [tooLong, setTooLong] = React.useState(false)
+  const [count, setCount] = React.useState(0)
+  const plotNameRef = React.useRef<any>(null)
+
   const imageRef = React.useRef(null);
 
   React.useEffect(() => {
@@ -46,13 +51,22 @@ export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layout
     auto.push('auto')
   }
 
+  React.useEffect(() => {
+    setCount(count + 1) //2 because on mount, and when size changes. Without count, we're getting infinity loop
+    if (plotNameRef.current && count < 3) {
+      setTooLong(plotNameRef.current.clientHeight > 24)
+    }
+  }, [plotNameRef.current && plotNameRef.current.clientHeight])
+
   return (
     <ParentWrapper
       plotsAmount={plots.length}
       isLoading={blink.toString()}
       animation={(functions_config.mode === 'ONLINE').toString()}
       size={size}>
-      <LayoutName>{decodeURI(nameOfLayout)}</LayoutName>
+      <LayoutName ref={plotNameRef} >
+        {decodePlotName(tooLong, nameOfLayout ? nameOfLayout : '')}
+        </LayoutName>
       <LayoutWrapper
         size={size}
         auto={auto.join(' ')}

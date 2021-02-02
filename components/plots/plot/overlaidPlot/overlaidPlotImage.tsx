@@ -22,6 +22,7 @@ import { PlotImage } from '../plotImage';
 import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
 import { isPlotSelected } from '../../../../containers/display/utils';
 import { Tooltip } from 'antd';
+import { decodePlotName } from '../../../utils';
 
 interface OverlaidPlotImageProps {
   params_for_api: ParamsForApiProps;
@@ -80,7 +81,7 @@ export const OverlaidPlotImage = ({
           ref={plotNameRef}
           error={get_plot_error(plot).toString()}
           isPlotSelected={is_plot_selected.toString()}
-        > {decodeURI(tooLong ? (params_for_api.plot_name?.substring(0, 30)) as string + '...' : params_for_api.plot_name as string)}
+        > {decodePlotName(tooLong, params_for_api.plot_name ? params_for_api.plot_name : '')}
         </LayoutName>
           <LayoutWrapper
             size={size}

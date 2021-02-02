@@ -8,13 +8,14 @@ const keyframe_for_updates_plots = keyframes`
     color:  ${theme.colors.common.white};
   }
   100% {
-    background: ${theme.colors.primary.light};
+    background: ${theme.colors.primary.light};s
   }
 `;
 
 
-export const ParentWrapper = styled.div<{ size: SizeProps, isLoading: string, animation: string, isPlotSelected?: string, plotsAmount: number; }>`
-    width: ${(props) => (props.size.w + 24 + (props.plotsAmount * 4))}px;
+export const ParentWrapper = styled.div<{ size: SizeProps, isLoading: string, animation: string, isPlotSelected?: string, plotsAmount?: number; }>`
+    width: ${(props) => (props.size.w + 30 + (props.plotsAmount ? props.plotsAmount : 4 * 4))}px;
+    height: ${(props) => (props.size.h + 40 + (props.plotsAmount ? props.plotsAmount : 4 * 4))}px;
     justify-content: center;
     margin: 4px;
     background: ${(props) => props.isPlotSelected === 'true' ? theme.colors.secondary.light : theme.colors.primary.light};
@@ -43,7 +44,7 @@ export const LayoutWrapper = styled.div<{ size: SizeProps & string, auto: string
     justify-content: center;
 `;
 
-export const PlotWrapper = styled.div<{ plotSelected: boolean, width: string, height: string }>`
+export const PlotWrapper = styled.div<{ plotSelected: boolean, width?: string, height?: string }>`
     justify-content: center;
     border: ${(props) => props.plotSelected ? `4px solid ${theme.colors.secondary.light}` : `2px solid ${theme.colors.primary.light}`};
     align-items:  center ;

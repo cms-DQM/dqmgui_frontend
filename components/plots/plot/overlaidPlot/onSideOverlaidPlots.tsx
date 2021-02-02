@@ -22,6 +22,7 @@ import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsW
 import { store } from '../../../../contexts/leftSideContext';
 import { isPlotSelected } from '../../../../containers/display/utils';
 import { Tooltip } from 'antd';
+import { decodePlotName } from '../../../utils'
 
 interface OnSideOverlaidPlotsProps {
   params_for_api: ParamsForApiProps;
@@ -76,7 +77,7 @@ export const OnSideOverlaidPlots = ({
                 ref={plotNameRef}
                 isPlotSelected={isPlotSelected.toString()}
                 error={get_plot_error(plot).toString()}
-              > {decodeURI(tooLong ? (params_for_api.plot_name?.substring(0, 30)) as string + '...' : params_for_api.plot_name as string)}
+              >{decodePlotName(tooLong, params_for_api.plot_name ? params_for_api.plot_name : '')}
               </LayoutName>
               <LayoutWrapper
                 size={size}

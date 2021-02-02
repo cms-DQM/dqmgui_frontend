@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+
 import { Image } from '../../containers/display/styledComponents';
 import { Spinner } from '../../containers/search/styledComponents';
 import { CustomDiv } from '../styledComponents';
@@ -33,6 +35,7 @@ export const ImageFallback = ({
   };
 
   useEffect(() => {
+    setKey(new Date())
     setSrc(`${src}`);
   }, [src]);
 
@@ -45,8 +48,7 @@ export const ImageFallback = ({
       >
         <Spinner />
       </CustomDiv>
-      <Image
-        display={displaySpinner(!imageLoading)}
+      <LazyLoadImage
         src={final_src}
         {...props}
         key={key}

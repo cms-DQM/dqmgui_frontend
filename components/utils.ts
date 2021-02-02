@@ -79,3 +79,13 @@ export const getZoomedOverlaidPlotsUrlForOverlayingPlotsWithDifferentNames = (ba
   const plotsLocalOverlayURL = [baseURL, queryURL].join('?')
   return plotsLocalOverlayURL
 }
+
+
+export const decodePlotName = (tooLong: boolean, plot_name: string) => {
+  if (tooLong) {
+    const decode_name = decodeURI(plot_name)
+    return decode_name.substring(0, 25) + '...' //some of names are double encoded 
+  } else {
+    return decodeURI(plot_name)
+  }
+}

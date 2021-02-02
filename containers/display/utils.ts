@@ -50,16 +50,16 @@ export const getSelectedPlots = (
     const run_number = parts.shift()
     const pathAndName = parts.splice(3)
     const dataset_name = '/'+parts.join('/')
-    const name = pathAndName.pop()
+    const name = pathAndName.pop() as string
     const path = pathAndName.join('/')
 
     const plot = plots.filter(
-      (plot) => plot.name === name && plot.path === path
+      (plot) => plot.name === decodeURI(name) && plot.path === path
     );
     const qresults = plot[0] ?  plot[0].qresults : []
 
     const plotObject: PlotDataProps = {
-      name: name as string,
+      name: decodeURI(name) as string,
       path: path,
       run_number: run_number as string,
       dataset_name: dataset_name,
