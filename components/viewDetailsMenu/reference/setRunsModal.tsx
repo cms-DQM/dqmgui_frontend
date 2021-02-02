@@ -172,7 +172,7 @@ export const SetRunsModal = ({
             </tbody>
           </SelectedRunsTable>
         )}
-        <div style={{ padding: 8 }}>
+        <div>
           <Nav
             handler={navigationHandler}
             setRunNumber={setSearchRunNumber}

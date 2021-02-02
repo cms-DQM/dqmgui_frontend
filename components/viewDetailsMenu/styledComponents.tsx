@@ -27,9 +27,6 @@ export const StyledModal = styled(Modal)<{ width?: string }>`
   .ant-modal-content {
     width: fit-content;
   };
-  .ant-modal-body{
-    width: max-content;
-  }
 `;
 
 export const FullWidthRow = styled(Row)`
@@ -63,6 +60,7 @@ export const OptionParagraph = styled.div`
 
 export const SelectedRunsTable = styled.table`
   text-align: center;
+  margin-bottom: 8px; 
 `;
 export const SelectedRunsTr = styled.tr`
   border: 1px solid ${theme.colors.primary.main};
