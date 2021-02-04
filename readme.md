@@ -255,5 +255,5 @@ Online mode is reactable via link https://cmsweb-testbed.cern.ch/dqm/online-new.
 39. ~~Overlay diff plots from the same run and dataset~~
 40. Tiny url 
 41. What to do with layouts from shift_timing_layout.py?
-42. When plot is selected (zoomed), offline GUI starts to crash.
+42. ~~When plot is selected (zoomed), offline GUI starts to crash.~~
 ---
