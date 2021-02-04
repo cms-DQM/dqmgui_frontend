@@ -250,7 +250,7 @@ Online mode is reactable via link https://cmsweb-testbed.cern.ch/dqm/online-new.
 34. Event numbers: check pricessedEvents and iEvent
 35. Notification, when is no current run (0, Global....)
 36. ~~Bug: user can't delete ar run from overlay runs list~~
-37. ~~When position of of page division id  horizontal 25%:%75%, the left side (or upper part) doesn't have scroll!!! ~~
+37. ~~When position of of page division id  horizontal 25%:%75%, the left side (or upper part) doesn't have scroll!!!~~
 38. Alignment workspace for tracker.
 39. ~~Overlay diff plots from the same run and dataset~~
 40. Tiny url 
