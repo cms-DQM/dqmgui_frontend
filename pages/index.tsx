@@ -13,7 +13,7 @@ import {
   StyledLogoDiv,
 } from '../styles/styledComponents';
 import { FolderPathQuery, QueryProps } from '../containers/display/interfaces';
-import { backToMainPage } from '../utils/pages';
+import { backToMainPage } from '../utils';
 import { Header } from '../containers/display/header';
 import { ContentSwitching } from '../containers/display/content/constent_switching';
 import { ModesSelection } from '../components/modes/modesSelection';
@@ -28,33 +28,33 @@ const Index: NextPage<FolderPathQuery> = () => {
   return (
     <StyledDiv>
       <Head>
-        <script
-          crossOrigin="anonymous"
-          type="text/javascript"
-          src="./jsroot-5.8.0/scripts/JSRootCore.js?2d&hist&more2d"
-        ></script>
+          <script
+            crossOrigin="anonymous"
+            type="text/javascript"
+            src="./jsroot-5.8.0/scripts/JSRootCore.js?2d&hist&more2d"
+          ></script>
       </Head>
-      <StyledLayout>
-        <StyledHeader>
-          <Col>
-            <Col style={{ display: 'flex', alignItems: 'center' }}>
-              <Tooltip title="Back to main page" placement="bottomLeft">
-                <StyledLogoDiv>
-                  <StyledLogoWrapper onClick={(e) => backToMainPage(e)}>
-                    <StyledLogo src="./images/CMSlogo_white_red_nolabel_1024_May2014.png" />
-                  </StyledLogoWrapper>
-                </StyledLogoDiv>
-              </Tooltip>
-             <ModesSelection />
+        <StyledLayout>
+          <StyledHeader>
+            <Col>
+              <Col style={{ display: 'flex', alignItems: 'center' }}>
+                <Tooltip title="Back to main page" placement="bottomLeft">
+                  <StyledLogoDiv>
+                    <StyledLogoWrapper onClick={(e) => backToMainPage(e)}>
+                      <StyledLogo src="./images/CMSlogo_white_red_nolabel_1024_May2014.png" />
+                    </StyledLogoWrapper>
+                  </StyledLogoDiv>
+                </Tooltip>
+                <ModesSelection />
+              </Col>
             </Col>
-          </Col>
-          <Header
-            isDatasetAndRunNumberSelected={isDatasetAndRunNumberSelected}
-            query={query}
-          />
-        </StyledHeader>
-        <ContentSwitching />
-      </StyledLayout>
+            <Header
+              isDatasetAndRunNumberSelected={isDatasetAndRunNumberSelected}
+              query={query}
+            />
+          </StyledHeader>
+          <ContentSwitching />
+        </StyledLayout>
     </StyledDiv>
   );
 };

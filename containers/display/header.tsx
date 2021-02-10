@@ -1,14 +1,12 @@
 import * as React from 'react';
 
-import { navigationHandler } from '../../utils/pages';
+import { navigationHandler } from '../../utils';
 import { RunInfo } from '../../components/runInfo';
 import { ComposedSearch } from '../../components/navigation/composedSearch';
 import Nav from '../../components/Nav';
 import { QueryProps } from './interfaces';
 import { Col } from 'antd';
-import { WrapperDiv } from './styledComponents';
-import Workspaces from '../../components/workspaces';
-import { PlotSearch } from '../../components/plots/plot/plotSearch';
+
 
 interface HeaderProps {
   isDatasetAndRunNumberSelected: boolean;
@@ -31,10 +29,6 @@ export const Header = ({
             <RunInfo query={query} />
             <ComposedSearch />
           </Col>
-           {/* <Col style={{display: 'flex', position: 'absolute', right: 0}}>
-           <Workspaces />
-           <PlotSearch isLoadingFolders={false} />
-         </Col> */}
          </Col>
         ) : (
             <>

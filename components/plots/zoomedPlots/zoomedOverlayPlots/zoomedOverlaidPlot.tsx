@@ -52,7 +52,7 @@ export const ZoomedOverlaidPlot = ({
 
   const router = useRouter();
   const query: QueryProps = router.query;
-  const url = getZoomedOverlaidPlotsUrlForOverlayingPlotsWithDifferentNames(router.basePath, query, selected_plot)
+  const url = getZoomedOverlaidPlotsUrlForOverlayingPlotsWithDifferentNames( query, selected_plot)
 
   const zoomedPlotMenuOptions = [
     {
@@ -67,12 +67,12 @@ export const ZoomedOverlaidPlot = ({
       action: () => toggleCustomizationMenu(true),
       icon: <SettingOutlined />,
     },
-    functions_config.new_back_end.new_back_end && {
-      label: 'Overlay with another plot',
-      value: 'overlay',
-      url: url,
-      icon: <BlockOutlined />,
-    },
+    // functions_config.new_back_end.new_back_end && {
+    //   label: 'Overlay with another plot',
+    //   value: 'overlay',
+    //   url: url,
+    //   icon: <BlockOutlined />,
+    // },
   ];
 
   const overlaid_plots_urls = get_overlaied_plots_urls(params_for_api);

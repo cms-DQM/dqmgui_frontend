@@ -8,7 +8,7 @@ const keyframe_for_updates_plots = keyframes`
     color:  ${theme.colors.common.white};
   }
   100% {
-    background: ${theme.colors.primary.light};s
+    background: ${theme.colors.primary.light};
   }
 `;
 

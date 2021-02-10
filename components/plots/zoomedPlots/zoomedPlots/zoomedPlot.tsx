@@ -58,7 +58,7 @@ export const ZoomedPlot = ({
   const router = useRouter();
   const query: QueryProps = router.query;
 
-const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames(router.basePath, query, selected_plot)
+const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, selected_plot)
   const zoomedPlotMenuOptions = [
     {
       label: 'Open in a new tab',
@@ -72,12 +72,12 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames(router.basePat
       action: () => toggleCustomizationMenu(true),
       icon: <SettingOutlined />,
     },
-    functions_config.new_back_end.new_back_end && {
-      label: 'Overlay with another plot',
-      value: 'overlay',
-      url: url,
-      icon: <BlockOutlined />,
-    },
+    // functions_config.new_back_end.new_back_end && {
+    //   label: 'Overlay with another plot',
+    //   value: 'overlay',
+    //   url: url,
+    //   icon: <BlockOutlined />,
+    // },
   ];
   const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
 

@@ -49,7 +49,7 @@ export const Nav = ({
   };
 
   return (
-    <div style={{justifyContent: 'center'}}> 
+    <div style={{justifyContent: 'center', width: 'max-content'}}> 
       <CustomForm
         form={form}
         layout={'inline'}

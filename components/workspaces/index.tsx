@@ -25,7 +25,7 @@ const Workspaces = () => {
   const workspaces =
     functions_config.mode === 'ONLINE' ? onlineWorkspace : offlineWorskpace;
     
-  const initialWorkspace = functions_config.mode === 'ONLINE' ? workspaces[0].workspaces[1].label : workspaces[0].workspaces[3].label
+  const initialWorkspace = functions_config.mode === 'ONLINE' ? workspaces[0].workspaces[0].label : workspaces[0].workspaces[3].label
 
   React.useEffect(() => {
     setWorkspace(initialWorkspace)

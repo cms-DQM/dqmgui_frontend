@@ -21,6 +21,7 @@ import {
   get_run_list_by_search_old_api,
   get_run_list_by_search_new_api_with_no_older_than,
 } from '../../config/config';
+import { getPathName } from '../../components/utils';
 
 export const getFolderPath = (folders: string[], clickedFolder: string) => {
   const folderIndex = folders.indexOf(clickedFolder);

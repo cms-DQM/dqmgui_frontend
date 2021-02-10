@@ -17,5 +17,5 @@ module.exports = {
   },
   // assetPrefix: './',
   // trailingSlash: true,
-  // basePath: '/dqm/online-playback-new',
+  // basePath: '/dqm',
 };

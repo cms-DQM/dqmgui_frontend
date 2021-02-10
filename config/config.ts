@@ -10,14 +10,15 @@ import { get_customize_params, getRunsWithLumisections } from './utils';
 
 const config: any = {
   development: {
-    root_url: 'http://localhost:8081/',
+    root_url: 'http://localhost:8086/',
     title: 'Development',
   },
   production: {
     // root_url: `https://dqm-gui.web.cern.ch/api/dqm/offline/`,
-    root_url: 'http://localhost:8081/',
-    // root_url: `${getPathName()}`,
-    title: 'Online-playback',
+    // root_url: 'http://localhost:8081/',
+    // root_url: `online-playback-new/`,
+    root_url: getPathName(),
+    title: 'Online',
   },
 };
 
