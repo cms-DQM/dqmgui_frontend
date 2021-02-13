@@ -2,6 +2,7 @@
   "name": "dqmgui_frontend",
   "version": "1.0.0",
   "description": "",
+  "homepage": "./",
   "main": "index.tsx",
   "scripts": {
     "dev": "NEW_BACK_END=true LATEST_RUNS=true LAYOUTS=true  next",

@@ -20,6 +20,7 @@ import {
   get_run_list_by_search_new_api,
   get_run_list_by_search_old_api,
   get_run_list_by_search_new_api_with_no_older_than,
+  root_url_,
 } from '../../config/config';
 import { getPathName } from '../../components/utils';
 
@@ -47,17 +48,17 @@ export const getSelectedPlots = (
 ) => {
   const plotsWithDirs = plotsQuery ? plotsQuery.split('&') : [];
   return plotsWithDirs.map((plotWithDir: string) => {
-    const parts =  plotWithDir.split('/')
+    const parts = plotWithDir.split('/')
     const run_number = parts.shift()
     const pathAndName = parts.splice(3)
-    const dataset_name = '/'+parts.join('/')
+    const dataset_name = '/' + parts.join('/')
     const name = pathAndName.pop() as string
     const path = pathAndName.join('/')
 
     const plot = plots.filter(
       (plot) => plot.name === decodeURI(name) && plot.path === path
     );
-    const qresults = plot[0] ?  plot[0].qresults : []
+    const qresults = plot[0] ? plot[0].qresults : []
 
     const plotObject: PlotDataProps = {
       name: decodeURI(name) as string,
@@ -192,8 +193,10 @@ export const getChangedQueryParams = (
 
 export const changeRouter = (parameters: ParsedUrlQueryInput) => {
   const queryString = qs.stringify(parameters, {});
+  console.log(root_url_ === getPathName(), root_url_, getPathName())
   Router.push({
-    pathname: '/',
+    // pathname: root_url_,
+    pathname: '',
     query: parameters,
     path: decodeURIComponent(queryString),
   });

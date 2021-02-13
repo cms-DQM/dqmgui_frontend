@@ -43,7 +43,6 @@ export const addToSelectedPlots = (
   const path = plot.path
   const name = plot.name
   const new_plot = [run_number, dataset_name, path, (encodeURI(name))].join('/')
-  console.log(new_plot, plotsQuery)
   return (`${plotsQuery ? plotsQuery + '&' : ''}${new_plot}`)
 };
 

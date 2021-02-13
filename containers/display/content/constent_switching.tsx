@@ -28,9 +28,9 @@ export const ContentSwitching = () => {
     query.search_dataset_name,
   );
   //serchResultsHandler when you selecting run, dataset from search results
-  const serchResultsHandler = (run: string, dataset: string) => {
+  const serchResultsHandler = ( run: string, dataset: string,e: any) => {
     set_update(false);
-
+    e.preventDefault()
     const { parsedRun, parsedLumi } = seperateRunAndLumiInSearch(
       run.toString()
     );

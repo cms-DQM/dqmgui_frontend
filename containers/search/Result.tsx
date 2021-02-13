@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useState } from 'react';
 import { DownCircleOutlined, UpCircleOutlined } from '@ant-design/icons';
 
 import {
@@ -19,7 +19,7 @@ import {
 interface SearchResultsInterface {
   dataset: string;
   runs: string[];
-  handler(run: string, dataset: string): any;
+  handler(run: string, dataset: string, e: any): any;
   index: number;
 }
 
@@ -31,14 +31,9 @@ const Result: FC<SearchResultsInterface> = ({
 }) => {
   const [expanded, setExpanded] = useState(false);
 
-const tdRef = useRef(null)
-useEffect(()=>{
-
-},[])
-
   return (
     <StyledTableRow expanded={expanded} index={index}>
-      <StyledTableDatasetColumn ref={tdRef}>
+      <StyledTableDatasetColumn>
         <div>
           {dataset}
           {expanded && (
@@ -46,7 +41,7 @@ useEffect(()=>{
               {runs.map((run) => (
                 <StyledCol key={run}>
                   <RunWrapper
-                    onClick={() => handler(run, dataset)}
+                    onClick={(e) => handler(run, dataset, e)}
                     hover="true"
                   >
                     <StyledA>{run}</StyledA>

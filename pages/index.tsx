@@ -25,36 +25,51 @@ const Index: NextPage<FolderPathQuery> = () => {
   const isDatasetAndRunNumberSelected =
     !!query.run_number && !!query.dataset_name;
 
+  if (typeof window !== "undefined") {
+    window.onload = () => {
+      //@ts-ignore
+      document.getElementById("holderStyle").remove();
+    };
+  }
+
   return (
     <StyledDiv>
       <Head>
-          <script
-            crossOrigin="anonymous"
-            type="text/javascript"
-            src="./jsroot-5.8.0/scripts/JSRootCore.js?2d&hist&more2d"
-          ></script>
+        <style
+          id="holderStyle"
+          dangerouslySetInnerHTML={{
+            __html: `
+      *, *::before, *::after {
+        transition: none!important;
+      }` }}
+        />
+        <script
+          crossOrigin="anonymous"
+          type="text/javascript"
+          src="./jsroot-5.8.0/scripts/JSRootCore.js?2d&hist&more2d"
+        ></script>
       </Head>
-        <StyledLayout>
-          <StyledHeader>
-            <Col>
-              <Col style={{ display: 'flex', alignItems: 'center' }}>
-                <Tooltip title="Back to main page" placement="bottomLeft">
-                  <StyledLogoDiv>
-                    <StyledLogoWrapper onClick={(e) => backToMainPage(e)}>
-                      <StyledLogo src="./images/CMSlogo_white_red_nolabel_1024_May2014.png" />
-                    </StyledLogoWrapper>
-                  </StyledLogoDiv>
-                </Tooltip>
-                <ModesSelection />
-              </Col>
+      <StyledLayout>
+        <StyledHeader>
+          <Col>
+            <Col style={{ display: 'flex', alignItems: 'center' }}>
+              <Tooltip title="Back to main page" placement="bottomLeft">
+                <StyledLogoDiv>
+                  <StyledLogoWrapper onClick={(e) => backToMainPage(e)}>
+                    <StyledLogo src="./images/CMSlogo_white_red_nolabel_1024_May2014.png" />
+                  </StyledLogoWrapper>
+                </StyledLogoDiv>
+              </Tooltip>
+              <ModesSelection />
             </Col>
-            <Header
-              isDatasetAndRunNumberSelected={isDatasetAndRunNumberSelected}
-              query={query}
-            />
-          </StyledHeader>
-          <ContentSwitching />
-        </StyledLayout>
+          </Col>
+          <Header
+            isDatasetAndRunNumberSelected={isDatasetAndRunNumberSelected}
+            query={query}
+          />
+        </StyledHeader>
+        <ContentSwitching />
+      </StyledLayout>
     </StyledDiv>
   );
 };
