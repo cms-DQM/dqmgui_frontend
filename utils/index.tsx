@@ -18,7 +18,7 @@ export const navigationHandler = (
     pathname: '',
     query: params,
   },
-    `${root_url_}?${queryString}`);
+    `${root_url_}/?${queryString}`);
 };
 
 
@@ -26,6 +26,6 @@ export const backToMainPage = (e: any) => {
   Router.push({
     pathname: '',
   },
-    `${root_url_}`
+    `${root_url_}/`
   )
 };

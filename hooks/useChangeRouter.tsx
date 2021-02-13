@@ -23,7 +23,7 @@ export const useChangeRouter = (
         pathname: '',
         query: parameters,
       },
-      `${root_url_}?${queryString}`
+      `${root_url_}/?${queryString}`
       );
     }
   }, watchers);

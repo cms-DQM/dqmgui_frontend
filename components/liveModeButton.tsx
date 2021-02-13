@@ -17,7 +17,7 @@ const liveModeHandler = (liveModeRun: string, liveModeDataset: string) => {
   Router.push({
     pathname: '',
     query: parameters,
-  }, `${root_url_}?${stringified}`);
+  }, `${root_url_}/?${stringified}`);
 };
 
 export const LiveModeButton = () => {

@@ -196,7 +196,7 @@ export const changeRouter = (parameters: ParsedUrlQueryInput) => {
     pathname: '',
     query: parameters,
   },
-    `${root_url_}?${stringified}`);
+    `${root_url_}/?${stringified}`);
 };
 
 export const getNameAndDirectoriesFromDir = (content: PlotInterface) => {
