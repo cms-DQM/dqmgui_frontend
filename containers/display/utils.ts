@@ -22,7 +22,6 @@ import {
   get_run_list_by_search_new_api_with_no_older_than,
   root_url_,
 } from '../../config/config';
-import { getPathName } from '../../components/utils';
 
 export const getFolderPath = (folders: string[], clickedFolder: string) => {
   const folderIndex = folders.indexOf(clickedFolder);
@@ -192,14 +191,12 @@ export const getChangedQueryParams = (
 };
 
 export const changeRouter = (parameters: ParsedUrlQueryInput) => {
-  const queryString = qs.stringify(parameters, {});
-  console.log(root_url_ === getPathName(), root_url_, getPathName())
+  const stringified = qs.stringify(parameters, {});
   Router.push({
-    // pathname: root_url_,
     pathname: '',
     query: parameters,
-    path: decodeURIComponent(queryString),
-  });
+  },
+    `${root_url_}?${stringified}`);
 };
 
 export const getNameAndDirectoriesFromDir = (content: PlotInterface) => {

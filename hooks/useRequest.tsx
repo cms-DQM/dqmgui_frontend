@@ -1,12 +1,10 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import axios, {
   AxiosRequestConfig,
   AxiosResponse,
-  CancelTokenSource,
 } from 'axios';
 
 import { root_url } from '../config/config';
-import { getPathName } from '../components/utils';
 
 interface ReturnRequest {
   data: any;

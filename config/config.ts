@@ -5,7 +5,7 @@ import {
   TripleProps,
   LumisectionRequestProps,
 } from '../containers/display/interfaces';
-import { ParametersForApi, PlotProperties } from '../plotsLocalOverlay/interfaces';
+import { ParametersForApi, PlotProperties } from '../plotsLocalOverlayPageComponents/interfaces';
 import { get_customize_params, getRunsWithLumisections } from './utils';
 
 export let root_url_ = ''
@@ -24,7 +24,7 @@ const config: any = {
     // root_url: `online-playback-new/`,
     // root_url: root_url_,
     root_url: root_url_,
-    title: 'Online-playback',
+    title: root_url_.split('/')[2],
   },
 };
 

@@ -57,18 +57,20 @@ export const StyledTableRow = styled.tr<{
       props?.noHover ? '' : `${theme.colors.thirdy.light}`};
     color: ${(props) => (props?.noHover ? '' : `${theme.colors.common.white}`)};
   }
-  font-weight: ${(props) =>
-    props?.expanded && props.expanded === true ? 'bold' : ''};
+  font-style: ${(props) =>
+    props?.expanded && props.expanded === true ? 'italic' : ''};
 `;
 export const StyledTableDatasetColumn = styled.td`
   width: 70%;
   padding: 8px;
+  margin: 8px;
 `;
 export const StyledTableRunColumn = styled.td`
   width: 100%;
   display: flex;
   justify-content: center;
   padding: 8px;
+  margin: 8px;
 `;
 export const StyledTable = styled.table`
   border: 1px solid ${theme.colors.primary.main};
