@@ -4,9 +4,10 @@ import { Menu, Dropdown, Row, Col, Button } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 
 import { OptionProps } from '../../../containers/display/interfaces';
+import { root_url_ } from '../../../config/config';
 
 export interface MenuProps {
-  options: OptionProps[];
+  options: any[];
 }
 
 export const ZoomedPlotMenu = ({ options, ...props }: MenuProps) => {
@@ -17,7 +18,7 @@ export const ZoomedPlotMenu = ({ options, ...props }: MenuProps) => {
           return (
             <Menu.Item
               icon={option.icon}>
-              <Link href={option.url as string}>
+              <Link href={root_url_ + option.url as string}>
                 <a target="_bank">
                   {option.label}
                 </a>

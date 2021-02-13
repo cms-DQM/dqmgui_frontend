@@ -1,18 +1,23 @@
 import * as React from 'react';
+import qs from 'qs';
 
 import { LiveButton } from './styledComponents';
 import Router from 'next/router';
 import { useUpdateLiveMode } from '../hooks/useUpdateInLiveMode';
+import { root_url_ } from '../config/config';
 
 const liveModeHandler = (liveModeRun: string, liveModeDataset: string) => {
+  const parameters = {
+    run_number: liveModeRun,
+    dataset_name: liveModeDataset,
+    folder_path: 'Summary',
+  }
+  const stringified = qs.stringify(parameters, {});
+
   Router.push({
-    pathname: '/',
-    query: {
-      run_number: liveModeRun,
-      dataset_name: liveModeDataset,
-      folder_path: 'Summary',
-    },
-  });
+    pathname: '',
+    query: parameters,
+  }, `${root_url_}?${stringified}`);
 };
 
 export const LiveModeButton = () => {
@@ -27,7 +32,9 @@ export const LiveModeButton = () => {
         set_update(true);
       }}
     >
-      Live Mode
+      <a>
+        Live Mode
+      </a>
     </LiveButton>
   );
 };

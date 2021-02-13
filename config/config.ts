@@ -5,20 +5,26 @@ import {
   TripleProps,
   LumisectionRequestProps,
 } from '../containers/display/interfaces';
-import { ParametersForApi, PlotProperties } from '../plotsLocalOverlay/interfaces';
+import { ParametersForApi, PlotProperties } from '../plotsLocalOverlayPageComponents/interfaces';
 import { get_customize_params, getRunsWithLumisections } from './utils';
 
+export let root_url_ = ''
+
+if(!root_url_){
+  root_url_ = getPathName()
+}
 const config: any = {
   development: {
     root_url: 'http://localhost:8086/',
-    title: 'Development',
+    title: 'Developmentis',
   },
   production: {
     // root_url: `https://dqm-gui.web.cern.ch/api/dqm/offline/`,
     // root_url: 'http://localhost:8081/',
     // root_url: `online-playback-new/`,
-    root_url: getPathName(),
-    title: 'Online',
+    // root_url: root_url_,
+    root_url: root_url_,
+    title: root_url_.split('/')[2],
   },
 };
 

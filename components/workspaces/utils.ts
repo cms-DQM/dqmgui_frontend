@@ -2,16 +2,19 @@ import qs from 'qs';
 
 import { QueryProps } from '../../containers/display/interfaces';
 import Router from 'next/router';
+import { root_url_ } from '../../config/config';
 
 export const setWorkspaceToQuery = (query: QueryProps, workspace: string) => {
+  const parameters = {
+    run_number: query.run_number,
+    dataset_name: query.dataset_name,
+    workspaces: workspace,
+  }
+  const stringified = qs.stringify(parameters, {});
   return Router.push({
-    pathname: '/',
-    query: {
-      run_number: query.run_number,
-      dataset_name: query.dataset_name,
-      workspaces: workspace,
-    },
-  });
+    pathname: '',
+    query: parameters,
+  }, `${root_url_}?${stringified}`);
 };
 
 export const removeFirstSlash = (path: string) => {

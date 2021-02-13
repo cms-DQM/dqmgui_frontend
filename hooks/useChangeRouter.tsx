@@ -5,6 +5,7 @@ import qs from 'qs';
 import { QueryProps } from '../containers/display/interfaces';
 import { ParsedUrlQueryInput } from 'querystring';
 import { getChangedQueryParams } from '../containers/display/utils';
+import { root_url_ } from '../config/config';
 
 export const useChangeRouter = (
   params: ParsedUrlQueryInput,
@@ -13,17 +14,17 @@ export const useChangeRouter = (
 ) => {
   const router = useRouter();
   const query: QueryProps = router.query;
-
   const parameters = getChangedQueryParams(params, query);
   const queryString = qs.stringify(parameters, {});
 
   React.useEffect(() => {
     if (condition) {
       Router.push({
-        pathname: '/',
+        pathname: '',
         query: parameters,
-        path: decodeURIComponent(queryString),
-      });
+      },
+      `${root_url_}?${queryString}`
+      );
     }
   }, watchers);
 };

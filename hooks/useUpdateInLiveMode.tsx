@@ -36,11 +36,11 @@ export const useUpdateLiveMode = () => {
     }
   }, [
     update,
-    query.run_number,
-    query.dataset_name,
-    query.folder_path,
-    query.search_dataset_name,
-    query.search_run_number,
+    // query.run_number,
+    // query.dataset_name,
+    // query.folder_path,
+    // query.search_dataset_name,
+    // query.search_run_number,
   ]);
 
   React.useEffect(() => {
