@@ -23,7 +23,9 @@ export const cleanOverlaidPlotsFromURL = async (parameters: any, router: NextRou
   Router.push({
     pathname: router.pathname,
     query: parameters_for_query,
-  }, `${root_url_}/?${stringified}`);
+  }, 
+  // `${root_url_}/?${stringified}`
+  );
 }
 
 export const addOverlaidPlotToURL = async (plotsString: string,

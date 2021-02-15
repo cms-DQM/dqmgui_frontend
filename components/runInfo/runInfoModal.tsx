@@ -28,10 +28,11 @@ export const RunInfoModal = ({
     globalState,
     query,
     'iRun',
-    '/HLT/EventInfo'
+    'HLT/EventInfo'
   );
 
-  const { data, isLoading } = useRequest(get_jroot_plot(params_for_api), {}, [
+  console.log(get_jroot_plot(params_for_api))
+  const { data } = useRequest(get_jroot_plot(params_for_api), {}, [
     query.dataset_name,
     query.run_number,
   ]);

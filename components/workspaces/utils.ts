@@ -14,7 +14,9 @@ export const setWorkspaceToQuery = (query: QueryProps, workspace: string) => {
   return Router.push({
     pathname: '',
     query: parameters,
-  }, `${root_url_}/?${stringified}`);
+  }, 
+  // `${root_url_}/?${stringified}`
+  );
 };
 
 export const removeFirstSlash = (path: string) => {
