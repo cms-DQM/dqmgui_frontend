@@ -26,23 +26,27 @@ const set_env = () => {
     const ONLINE_MODE = current_mode.split('-').includes('online')
     const RELVAL_MODE = current_mode.split('-').includes('relval')
 
+    const new_backend = current_mode.split('-').includes('new')
+    const noBasePath = root_url_ === '/'
+
     const MODE = () => {
       if (ONLINE_MODE) {
         return 'ONLINE'
       } else if (RELVAL_MODE) {
         return 'RELVAL'
+      } else if (noBasePath) {
+        return 'ONLINE'
       } else {
         return 'OFFLINE'
       }
     }
 
-    const new_backend = current_mode.split('-').includes('new')
     const production_config: any = {
       new_back_end: {
-        new_back_end: new_backend || false,
-        lumisections_on: new_backend || false,
-        layouts: new_backend || false,
-        latest_runs: new_backend || false,
+        new_back_end: new_backend || noBasePath || false,
+        lumisections_on: new_backend || noBasePath || false,
+        layouts: new_backend || noBasePath || false,
+        latest_runs: new_backend || noBasePath || false,
       },
       mode: MODE(),
     };
