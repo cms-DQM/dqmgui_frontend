@@ -4,12 +4,8 @@ export interface WorskapacesProps {
 }
 
 export const summariesWorkspace = [
-  {
-    label: 'Summary',
-    foldersPath: []
-  },
   // {
-  //   label: 'Reports',
+  //   label: 'Summary',
   //   foldersPath: []
   // },
   {
@@ -20,10 +16,6 @@ export const summariesWorkspace = [
     label: 'Info',
     foldersPath: ['Info'],
   },
-  // {
-  //   label: 'Certification',
-  //   foldersPath: []
-  // },
   {
     label: 'Everything',
     foldersPath: [],

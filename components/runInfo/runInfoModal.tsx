@@ -31,7 +31,6 @@ export const RunInfoModal = ({
     'HLT/EventInfo'
   );
 
-  console.log(get_jroot_plot(params_for_api))
   const { data } = useRequest(get_jroot_plot(params_for_api), {}, [
     query.dataset_name,
     query.run_number,

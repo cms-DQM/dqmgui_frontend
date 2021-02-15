@@ -63,6 +63,7 @@ export const initialState: any = {
     drawopts: '',
     withref: '',
   },
+  workspace: 'Everything',
   updated_by_not_older_than: Math.round(new Date().getTime() / 10000) * 10,
 };
 
@@ -85,7 +86,7 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
   const [overlayPlots, setOverlay] = useState(initialState.overlayPlots);
   const [imageRefScrollDown, setImageRefScrollDown] = useState(null);
   const [plotSearchFolders, setPlotSearchFolders] = React.useState([]);
-  const [workspace, setWorkspace] = React.useState('');
+  const [workspace, setWorkspace] = React.useState(initialState.workspace);
   const [triples, setTriples] = React.useState(initialState.triples);
   const [openOverlayDataMenu, toggleOverlayDataMenu] = React.useState(
     initialState.openOverlayDataMenu

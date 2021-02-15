@@ -5,11 +5,10 @@ import { workspaces as offlineWorskpace } from '../../workspaces/offline';
 import { workspaces as onlineWorkspace } from '../../workspaces/online';
 import { StyledModal } from '../viewDetailsMenu/styledComponents';
 import Form from 'antd/lib/form/Form';
-import { StyledFormItem, StyledButton } from '../styledComponents';
+import { StyledFormItem } from '../styledComponents';
 import { useRouter } from 'next/router';
 import { setWorkspaceToQuery } from './utils';
 import { QueryProps } from '../../containers/display/interfaces';
-import { theme } from '../../styles/theme';
 import { functions_config } from '../../config/config';
 import { store } from '../../contexts/leftSideContext';
 
@@ -19,28 +18,28 @@ interface WorspaceProps {
   label: string;
   workspaces: any;
 }
+
 const Workspaces = () => {
+  const router = useRouter();
+  const query: QueryProps = router.query;
   const { workspace, setWorkspace } = React.useContext(store)
 
   const workspaces =
     functions_config.mode === 'ONLINE' ? onlineWorkspace : offlineWorskpace;
-    
-  const initialWorkspace = functions_config.mode === 'ONLINE' ? workspaces[0].workspaces[0].label : workspaces[0].workspaces[3].label
 
   React.useEffect(() => {
+    const initialWorkspace = query.workspaces ? query.workspaces : workspaces[0].workspaces[3].label
+
     setWorkspace(initialWorkspace)
     return () => setWorkspace(initialWorkspace)
   }, [])
-
-  const router = useRouter();
-  const query: QueryProps = router.query;
 
   const [openWorkspaces, toggleWorkspaces] = React.useState(false);
 
   // make a workspace set from context
   return (
     <Form>
-      <StyledFormItem  label="Workspace">
+      <StyledFormItem label="Workspace">
         <Button
           onClick={() => {
             toggleWorkspaces(!openWorkspaces);
@@ -67,7 +66,11 @@ const Workspaces = () => {
                       toggleWorkspaces(!openWorkspaces);
                       //if workspace is selected, folder_path in query is set to ''. Then we can regonize
                       //that workspace is selected, and wee need to filter the forst layer of folders.
-                      await setWorkspaceToQuery(query, subWorkspace.label);
+                      if (subWorkspace.label === workspaces[0].workspaces[0].label) {
+                        await setWorkspaceToQuery(query, subWorkspace.label, 'Summary');
+                      } else {
+                        await setWorkspaceToQuery(query, subWorkspace.label);
+                      }
                     }}
                   >
                     {subWorkspace.label}

@@ -4,6 +4,7 @@ import qs from 'qs';
 import { LiveButton } from './styledComponents';
 import Router from 'next/router';
 import { useUpdateLiveMode } from '../hooks/useUpdateInLiveMode';
+import { workspaces as onlineWorkspace } from '../workspaces/online';
 import { root_url_ } from '../config/config';
 
 const liveModeHandler = (liveModeRun: string, liveModeDataset: string) => {
@@ -11,6 +12,7 @@ const liveModeHandler = (liveModeRun: string, liveModeDataset: string) => {
     run_number: liveModeRun,
     dataset_name: liveModeDataset,
     folder_path: 'Summary',
+    workspaces:  onlineWorkspace[0].workspaces[0].label,
   }
   const stringified = qs.stringify(parameters, {});
 

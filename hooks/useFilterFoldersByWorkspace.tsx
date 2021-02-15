@@ -7,7 +7,6 @@ import {
 } from '../containers/display/interfaces';
 import { removeFirstSlash } from '../components/workspaces/utils';
 import { workspaces } from '../workspaces/offline';
-import { store } from '../contexts/leftSideContext';
 
 export const useFilterFoldersByWorkspaces = (
   query: QueryProps,
