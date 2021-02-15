@@ -30,7 +30,7 @@ import {
 import { Customization } from '../../../customization';
 import { ZoomedPlotMenu } from '../menu';
 import { Plot_portal } from '../../../../containers/display/portal';
-import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
+import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
 import { PlotImage } from '../../plot/plotImage';
 import { getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames } from '../../../utils';
 
@@ -81,7 +81,7 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, select
     //   icon: <BlockOutlined />,
     // },
   ];
-  const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
+  const { blink, not_older_than } = useUpdateLiveMode();
 
   return (
     <StyledCol space={2}>
@@ -113,7 +113,7 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, select
               plot={selected_plot}
               plotURL={zoomed_plot_url}
               query={query}
-              updated_by_not_older_than={updated_by_not_older_than}
+              updated_by_not_older_than={not_older_than}
             />
           </ImageDiv>
         </StyledPlotRow>

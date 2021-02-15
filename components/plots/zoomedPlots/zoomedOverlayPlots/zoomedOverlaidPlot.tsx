@@ -32,7 +32,7 @@ import {
 import { ZoomedPlotMenu } from '../menu';
 import { Customization } from '../../../customization';
 import { Plot_portal } from '../../../../containers/display/portal';
-import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
+import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
 import { PlotImage } from '../../plot/plotImage';
 import { getZoomedOverlaidPlotsUrlForOverlayingPlotsWithDifferentNames } from '../../../utils';
 
@@ -88,7 +88,7 @@ export const ZoomedOverlaidPlot = ({
   copy_of_params.width = Math.round(window.innerHeight * 1.33);
   const zoomed_plot_url = get_plot_source(copy_of_params);
 
-  const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
+  const { blink, not_older_than } = useUpdateLiveMode();
 
   return (
     <StyledCol space={2}>
@@ -120,7 +120,7 @@ export const ZoomedOverlaidPlot = ({
               plot={selected_plot}
               plotURL={zoomed_plot_url}
               query={query}
-              updated_by_not_older_than={updated_by_not_older_than}
+              updated_by_not_older_than={not_older_than}
             />
           </ImageDiv>
         </StyledPlotRow>
@@ -160,7 +160,7 @@ export const ZoomedOverlaidPlot = ({
             plot={selected_plot}
             plotURL={source}
             query={query}
-            updated_by_not_older_than={updated_by_not_older_than}
+            updated_by_not_older_than={not_older_than}
           />
         </ImageDiv>
       </StyledPlotRow>
