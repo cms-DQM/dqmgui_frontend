@@ -20,8 +20,6 @@ const config: any = {
 
 export const root_url = config[process.env.NODE_ENV || 'development'].root_url;
 
-const layout_env_variable = process.env.LAYOUTS === 'true';
-const latest_runs_env_variable = process.env.LATEST_RUNS === 'true';
 const lumis_env_variable = process.env.LUMIS === 'true';
 
 // setting config by ENV
@@ -45,8 +43,8 @@ const set_env = () => {
       new_back_end: {
         new_back_end: current_mode.split('-').includes('new') || false,
         lumisections_on: (lumis_env_variable && new_backend) || false,
-        layouts: (layout_env_variable && new_backend) || false,
-        latest_runs: (latest_runs_env_variable && new_backend) || false,
+        layouts: new_backend || false,
+        latest_runs: new_backend || false,
       },
       mode: MODE(),
     };
