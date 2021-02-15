@@ -16,7 +16,7 @@ export const setWorkspaceToQuery = (query: QueryProps, workspace: string, folder
     pathname: '',
     query: parameters,
   }, 
-  // `${root_url_}/?${stringified}`
+  `${root_url_}/?${stringified}`
   );
 };
 

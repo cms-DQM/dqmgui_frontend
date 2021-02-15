@@ -20,7 +20,7 @@ const liveModeHandler = (liveModeRun: string, liveModeDataset: string) => {
     pathname: '',
     query: parameters,
   }, 
-  // `${root_url_}/?${stringified}`
+  `${root_url_}/?${stringified}`
   );
 };
 

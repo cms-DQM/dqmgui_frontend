@@ -201,7 +201,7 @@ export const changeRouter = (parameters: ParsedUrlQueryInput) => {
     query: parameters,
   },
     
-  // `${root_url_}/?${stringified}`
+  `${root_url_}/?${stringified}`
   );
 };
 
