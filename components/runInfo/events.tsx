@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { useRequest } from '../../hooks/useRequest';
 import { QueryProps } from '../../containers/display/interfaces';
-import { get_jroot_plot } from '../../config/config';
+import { get_jroot_plot } from '../../api/oldApi';
 import { store } from '../../contexts/leftSideContext';
 import { FormatParamsForAPI } from '../plots/plot/singlePlot/utils';
 import { CustomCol, CustomRow } from '../styledComponents';

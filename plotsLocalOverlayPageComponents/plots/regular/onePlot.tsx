@@ -2,8 +2,10 @@ import { Tooltip } from 'antd';
 import * as React from 'react'
 
 import { ImageFallback } from '../../../components/plots/imageFallback';
-import { get_plot_url, get_plot_with_overlay_new_api, root_url } from '../../../config/config';
-import { theme } from '../../../styles/theme';
+import { get_plot_url } from '../../../api/oldApi';
+import { root_url } from '../../../config/config';
+import {get_plot_with_overlay_new_api} from '../../../api/newApi'
+import { theme } from '../../../styles/theme'
 import { ParametersForApi } from '../../interfaces';
 
 interface PlotProps {

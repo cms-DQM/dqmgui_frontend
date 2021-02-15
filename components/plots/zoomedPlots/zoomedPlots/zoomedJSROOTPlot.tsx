@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
-import { get_jroot_plot, functions_config } from '../../../../config/config';
+import { functions_config } from '../../../../config/config';
+import { get_jroot_plot } from '../../../../api/oldApi';
 import {
   ParamsForApiProps,
   PlotDataProps,

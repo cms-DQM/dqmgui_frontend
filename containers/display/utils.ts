@@ -14,14 +14,18 @@ import { ParsedUrlQueryInput } from 'querystring';
 import { removeFirstSlash } from '../../components/workspaces/utils';
 import {
   functions_config,
+  root_url_
+} from '../../config/config';
+import {
   get_folders_and_plots_old_api,
+  get_run_list_by_search_old_api,
+} from '../../api/oldApi';
+import {
   get_folders_and_plots_new_api,
   get_folders_and_plots_new_api_with_live_mode,
   get_run_list_by_search_new_api,
-  get_run_list_by_search_old_api,
   get_run_list_by_search_new_api_with_no_older_than,
-  root_url_,
-} from '../../config/config';
+} from '../../api/newApi'
 
 export const getFolderPath = (folders: string[], clickedFolder: string) => {
   const folderIndex = folders.indexOf(clickedFolder);

@@ -1,7 +1,8 @@
 import React, { useRef, useEffect, useContext, useMemo } from 'react';
 import { useRouter } from 'next/router';
 
-import { functions_config, get_plot_url } from '../../../../config/config';
+import { functions_config } from '../../../../config/config';
+import { get_plot_url } from '../../../../api/oldApi';
 import {
   PlotDataProps,
   QueryProps,

@@ -5,7 +5,7 @@ import { functions_config } from '../../../../config/config';
 import {
   get_plot_with_overlay,
   get_overlaied_plots_urls,
-} from '../../../../config/config';
+} from '../../../../api/oldApi';
 import {
   ParamsForApiProps,
   PlotDataProps,

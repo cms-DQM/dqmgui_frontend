@@ -4,7 +4,9 @@ import { FullscreenOutlined, SettingOutlined, BlockOutlined } from '@ant-design/
 import { Store } from 'antd/lib/form/interface';
 
 import {
-  get_plot_url,
+  get_plot_url
+} from '../../../../api/oldApi';
+import {
   functions_config,
 } from '../../../../config/config';
 import {

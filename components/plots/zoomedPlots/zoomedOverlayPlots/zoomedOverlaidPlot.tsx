@@ -4,9 +4,11 @@ import { Store } from 'antd/lib/form/interface';
 import { SettingOutlined, FullscreenOutlined, BlockOutlined } from '@ant-design/icons';
 
 import {
-  get_overlaied_plots_urls,
   functions_config,
 } from '../../../../config/config';
+import {
+  get_overlaied_plots_urls,
+} from '../../../../api/oldApi';
 import {
   ParamsForApiProps,
   PlotDataProps,

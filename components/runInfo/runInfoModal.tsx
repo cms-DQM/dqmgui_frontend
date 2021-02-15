@@ -9,7 +9,7 @@ import { run_info } from '../constants';
 import { FormatParamsForAPI } from '../plots/plot/singlePlot/utils';
 import { store } from '../../contexts/leftSideContext';
 import { useRequest } from '../../hooks/useRequest';
-import { get_jroot_plot } from '../../config/config';
+import { get_jroot_plot } from '../../api/oldApi';
 import { get_label } from '../utils';
 
 interface RunInfoModalProps {

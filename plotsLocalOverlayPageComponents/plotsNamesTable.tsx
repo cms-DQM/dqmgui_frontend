@@ -2,7 +2,8 @@ import * as React from 'react';
 import { Button, Space, Tooltip } from 'antd';
 
 import { sizes } from '../components/constants';
-import { get_plot_url, root_url } from '../config/config';
+import { get_plot_url } from '../api/oldApi';
+import { root_url } from '../config/config';
 import { PlotProperties } from './interfaces';
 import { StyledSelectedPlotsTable } from './styledComponents';
 import { setPlot } from './utils';

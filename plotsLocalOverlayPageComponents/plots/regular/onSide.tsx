@@ -3,7 +3,8 @@ import { Tooltip } from 'antd';
 import * as React from 'react'
 
 import { ImageFallback } from '../../../components/plots/imageFallback';
-import { get_plot_url, root_url } from '../../../config/config';
+import { root_url } from '../../../config/config';
+import { get_plot_url } from '../../../api/oldApi';
 import { PlotProps } from '../../../containers/display/interfaces';
 import { theme } from '../../../styles/theme';
 import { ParametersForApi } from '../../interfaces';

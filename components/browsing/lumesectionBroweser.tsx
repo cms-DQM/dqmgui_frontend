@@ -3,7 +3,8 @@ import { Col, Select, Spin, Button, Row } from 'antd';
 import { CaretRightFilled, CaretLeftFilled } from '@ant-design/icons';
 
 import { useRequest } from '../../hooks/useRequest';
-import { getLumisections, functions_config } from '../../config/config';
+import { functions_config } from '../../config/config';
+import {getLumisections} from '../../api/newApi'
 import {
   StyledSelect,
   OptionParagraph,
