@@ -20,8 +20,6 @@ const config: any = {
 
 export const root_url = config[process.env.NODE_ENV || 'development'].root_url;
 
-const lumis_env_variable = process.env.LUMIS === 'true';
-
 // setting config by ENV
 const set_env = () => {
   if (process.env.NODE_ENV === 'production' && current_mode) {
@@ -41,8 +39,8 @@ const set_env = () => {
     const new_backend = current_mode.split('-').includes('new')
     const production_config: any = {
       new_back_end: {
-        new_back_end: current_mode.split('-').includes('new') || false,
-        lumisections_on: (lumis_env_variable && new_backend) || false,
+        new_back_end: new_backend || false,
+        lumisections_on: new_backend || false,
         layouts: new_backend || false,
         latest_runs: new_backend || false,
       },
@@ -53,11 +51,11 @@ const set_env = () => {
     const development_config: any = {
       new_back_end: {
         new_back_end: true,
-        lumisections_on: false,
+        lumisections_on: true,
         layouts: true,
         latest_runs: true,
       },
-      mode: 'ONLINE',
+      mode: 'OFFLINE',
     };
     return development_config
   }

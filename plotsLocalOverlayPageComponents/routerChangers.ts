@@ -19,12 +19,13 @@ export const cleanOverlaidPlotsFromURL = async (parameters: any, router: NextRou
     overlaidGlobally: router.query.overlaidGlobally,
   }
   const stringified = qs.stringify(parameters_for_query, {});
+  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}/?${stringified}` : undefined
 
   Router.push({
     pathname: router.pathname,
     query: parameters_for_query,
   }, 
-  `${root_url_}/?${stringified}`
+  url_which_is_visible
   );
 }
 

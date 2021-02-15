@@ -12,15 +12,16 @@ const liveModeHandler = (liveModeRun: string, liveModeDataset: string) => {
     run_number: liveModeRun,
     dataset_name: liveModeDataset,
     folder_path: 'Summary',
-    workspaces:  onlineWorkspace[0].workspaces[0].label,
+    workspaces: onlineWorkspace[0].workspaces[0].label,
   }
   const stringified = qs.stringify(parameters, {});
+  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}/?${stringified}` : undefined
 
   Router.push({
     pathname: '',
     query: parameters,
-  }, 
-  `${root_url_}/?${stringified}`
+  },
+    url_which_is_visible
   );
 };
 
