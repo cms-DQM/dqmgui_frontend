@@ -6,7 +6,7 @@ if (!root_url_) {
   root_url_ = getPathName()
 }
 
-const current_mode = root_url_.split('/')[2]
+export const current_mode = root_url_ ? root_url_.split('/')[2] : ''
 const config: any = {
   development: {
     root_url: 'http://localhost:8081/',
@@ -24,7 +24,7 @@ const lumis_env_variable = process.env.LUMIS === 'true';
 
 // setting config by ENV
 const set_env = () => {
-  if (process.env.NODE_ENV === 'production') {
+  if (process.env.NODE_ENV === 'production' && current_mode) {
     const ONLINE_MODE = current_mode.split('-').includes('online')
     const RELVAL_MODE = current_mode.split('-').includes('relval')
 

@@ -150,7 +150,7 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, select
           display="flex"
         >
           <PlotImage
-            updated_by_not_older_than={updated_by_not_older_than}
+            updated_by_not_older_than={not_older_than}
             blink={blink}
             params_for_api={params_for_api}
             plot={selected_plot}

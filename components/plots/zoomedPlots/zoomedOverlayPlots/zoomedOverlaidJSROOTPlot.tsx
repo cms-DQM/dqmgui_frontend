@@ -130,7 +130,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
       drawJSROOT(histogramParam, id, overlaidJSROOTPlot);
     }
   }, [
-    updated_by_not_older_than,
+    not_older_than,
     data,
     params_for_api.lumi,
     params_for_api.overlay_plot,
