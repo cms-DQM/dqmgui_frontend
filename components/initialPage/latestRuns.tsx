@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { useRequest } from '../../hooks/useRequest';
-import { get_the_latest_runs } from '../../config/config';
+import { get_the_latest_runs } from '../../api/newApi';
 import {
   SpinnerWrapper,
   Spinner,

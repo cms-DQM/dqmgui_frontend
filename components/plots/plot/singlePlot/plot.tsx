@@ -1,7 +1,8 @@
 import React, { useRef, useEffect, useContext, useMemo } from 'react';
 import { useRouter } from 'next/router';
 
-import { functions_config, get_plot_url } from '../../../../config/config';
+import { functions_config } from '../../../../config/config';
+import { get_plot_url } from '../../../../api/oldApi';
 import {
   PlotDataProps,
   QueryProps,
@@ -12,7 +13,7 @@ import {
   scrollToBottom,
   get_plot_error,
 } from './utils';
-import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate';
+import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
 import { PlotImage } from '../plotImage';
 import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
 import { store } from '../../../../contexts/leftSideContext';
@@ -43,7 +44,7 @@ export const Plot = ({
   const [count, setCount] = React.useState(0)
   const [tooLong, setTooLong] = React.useState(false)
 
-  const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
+  const { blink, not_older_than } = useUpdateLiveMode();
   const url = get_plot_url(params_for_api);
   const is_plot_selected = isPlotSelected(selected_plots, plot)
   
@@ -100,7 +101,7 @@ export const Plot = ({
                   params_for_api={params_for_api}
                   plot={plot}
                   plotURL={url}
-                  updated_by_not_older_than={updated_by_not_older_than}
+                  updated_by_not_older_than={not_older_than}
                   query={query}
                   imageRef={imageRef}
                   isPlotSelected={is_plot_selected}

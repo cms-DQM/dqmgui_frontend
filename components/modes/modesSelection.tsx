@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { Button } from 'antd';
 import { Menu, Dropdown } from 'antd';
-import { mode as setMode } from '../../config/config';
+import { functions_config } from '../../config/config';
 
+const setMode = functions_config.mode
 const modes = [{
   name: 'Online',
   link: 'https://cmsweb.cern.ch/dqm/online-new/'

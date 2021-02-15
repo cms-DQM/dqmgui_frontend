@@ -2,7 +2,7 @@ import {
   ParamsForApiProps,
   TripleProps,
 } from '../containers/display/interfaces';
-import { functions_config } from './config';
+import { functions_config } from '../config/config';
 
 export const get_customize_params = (params = {} as any) => {
   const xtype = params.xtype ? `xtype=${params.xtype};` : '';

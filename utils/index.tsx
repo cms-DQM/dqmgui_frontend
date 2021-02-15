@@ -18,7 +18,8 @@ export const navigationHandler = (
     pathname: '',
     query: params,
   },
-    `${root_url_}/?${queryString}`);
+    `${root_url_}/?${queryString}`
+    );
 };
 
 

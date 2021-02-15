@@ -7,7 +7,6 @@ import {
   StyledA,
   StyledCol,
 } from '../../containers/search/styledComponents';
-import { useBlinkOnUpdate } from '../../hooks/useBlinkOnUpdate';
 import { useUpdateLiveMode } from '../../hooks/useUpdateInLiveMode';
 
 interface LatestRunsListProps {
@@ -16,13 +15,12 @@ interface LatestRunsListProps {
 }
 
 export const LatestRunsList = ({ latest_runs, ...props }: LatestRunsListProps) => {
-  const { blink } = useBlinkOnUpdate();
   const router = useRouter()
   const {
     query: { mode },
   } = router
   
-  const { set_update } = useUpdateLiveMode();
+  const { set_update, blink } = useUpdateLiveMode();
   React.useEffect(() => {
     set_update(true);
     return () => set_update(false);

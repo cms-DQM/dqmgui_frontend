@@ -12,7 +12,7 @@ import { store } from '../../contexts/leftSideContext';
 import { QueryProps, InfoProps } from '../../containers/display/interfaces';
 import { main_run_info } from '../constants';
 import { useRequest } from '../../hooks/useRequest';
-import { get_jroot_plot } from '../../config/config';
+import { get_jroot_plot } from '../../api/oldApi';
 import { get_label } from '../utils';
 const { Title } = Typography;
 

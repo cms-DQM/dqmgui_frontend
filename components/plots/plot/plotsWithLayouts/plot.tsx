@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Tooltip } from 'antd';
 
-import { get_overlaied_plots_urls, get_plot_url, get_plot_with_overlay } from '../../../../config/config';
+import { get_overlaied_plots_urls, get_plot_url, get_plot_with_overlay } from '../../../../api/oldApi';
 import { PlotDataProps, QueryProps } from '../../../../containers/display/interfaces';
 import { isPlotSelected } from '../../../../containers/display/utils';
 import { PlotWrapper } from './styledComponents';

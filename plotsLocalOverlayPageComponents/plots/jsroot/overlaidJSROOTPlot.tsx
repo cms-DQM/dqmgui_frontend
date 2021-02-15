@@ -1,7 +1,7 @@
 import cleanDeep from 'clean-deep';
 import * as React from 'react'
 import { sizes } from '../../../components/constants';
-import { get_jroot_plot } from '../../../config/config';
+import { get_jroot_plot } from '../../../api/oldApi';
 
 import { ImageDiv } from '../../../containers/display/styledComponents'
 import { useRequest } from '../../../hooks/useRequest';

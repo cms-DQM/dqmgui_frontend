@@ -8,10 +8,6 @@ export const summariesWorkspace = [
     label: 'Summary',
     foldersPath: ['Summary'],
   },
-  // {
-  //   label: 'Reports',
-  //   foldersPath: []
-  // },
   {
     label: 'Shift',
     foldersPath: ['00 Shift'],
@@ -20,10 +16,6 @@ export const summariesWorkspace = [
     label: 'Info',
     foldersPath: ['Info'],
   },
-  // {
-  //   label: 'Certification',
-  //   foldersPath: []
-  // },
   {
     label: 'Everything',
     foldersPath: [],

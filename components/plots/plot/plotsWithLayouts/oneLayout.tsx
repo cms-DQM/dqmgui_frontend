@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import { functions_config } from '../../../../config/config'
 import { store } from '../../../../contexts/leftSideContext'
-import { useBlinkOnUpdate } from '../../../../hooks/useBlinkOnUpdate'
+import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode'
 import { LayoutName, LayoutWrapper, ParentWrapper } from './styledComponents'
 import { Plot } from './plot'
 import { decodePlotName } from '../../../utils'
@@ -45,7 +45,7 @@ export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layout
   const howMuchInOneLine = Math.floor(size.w / onePlotWidth)
   const auto = []
   var i;
-  const { blink, updated_by_not_older_than } = useBlinkOnUpdate();
+  const { blink, not_older_than } = useUpdateLiveMode();
 
   for (i = 0; i < howMuchInOneLine; i++) {
     auto.push('auto')
@@ -84,7 +84,7 @@ export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layout
                 imageRef={imageRef}
                 imageRefScrollDown={imageRefScrollDown}
                 blink={blink}
-                updated_by_not_older_than={updated_by_not_older_than} />
+                updated_by_not_older_than={not_older_than} />
             )
           })}
       </LayoutWrapper>
