@@ -243,7 +243,7 @@ Online mode is reactable via link https://cmsweb-testbed.cern.ch/dqm/online-new.
 27. ~~Shift folder is empty~~
 28. Change workspaces according mode
 29. ~~Styles file import~~
-30. ~~Ovelay plots with different names, but having same runs and dataset.~~
+30. Ovelay plots with different names, but having same runs and dataset.
 31. There is some plots, where api returns error 500 and root adds warning (_adc_per_OnloineBlock_PXForward_)
 32. ~~When plot is not uploaded GUI doesn't try to upload it again~~
 33. Not to make a new req, when old is not finished yet.
@@ -256,4 +256,7 @@ Online mode is reactable via link https://cmsweb-testbed.cern.ch/dqm/online-new.
 40. Tiny url 
 41. What to do with layouts from shift_timing_layout.py?
 42. ~~When plot is selected (zoomed), offline GUI starts to crash.~~
+43. ~~Dynamic basePath~~
+44. Updating folders, runs list and plots in live mode every 20 sec. Also sec has to be send to backend.
+45. Separate requests for data in online and offline modes.
 ---
