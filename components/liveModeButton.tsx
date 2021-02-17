@@ -3,7 +3,6 @@ import qs from 'qs';
 
 import { LiveButton } from './styledComponents';
 import Router from 'next/router';
-import { useUpdateLiveMode } from '../hooks/useUpdateInLiveMode';
 import { workspaces as onlineWorkspace } from '../workspaces/online';
 import { root_url_ } from '../config/config';
 
@@ -28,13 +27,11 @@ const liveModeHandler = (liveModeRun: string, liveModeDataset: string) => {
 export const LiveModeButton = () => {
   const liveModeDataset = '/Global/Online/ALL';
   const liveModeRun = '0';
-  const { set_update } = useUpdateLiveMode();
 
   return (
     <LiveButton
       onClick={() => {
         liveModeHandler(liveModeRun, liveModeDataset);
-        set_update(true);
       }}
     >
       <a>

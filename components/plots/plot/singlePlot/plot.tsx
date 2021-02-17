@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useContext, useMemo } from 'react';
+import React, { useRef, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 
 import { functions_config } from '../../../../config/config';
@@ -14,6 +14,7 @@ import {
   get_plot_error,
 } from './utils';
 import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
+import { useBlink } from '../../../../hooks/useBlink';
 import { PlotImage } from '../plotImage';
 import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
 import { store } from '../../../../contexts/leftSideContext';
@@ -44,10 +45,11 @@ export const Plot = ({
   const [count, setCount] = React.useState(0)
   const [tooLong, setTooLong] = React.useState(false)
 
-  const { blink, not_older_than } = useUpdateLiveMode();
+  const { not_older_than } = useUpdateLiveMode()
+  const { blink } = useBlink(not_older_than);
   const url = get_plot_url(params_for_api);
   const is_plot_selected = isPlotSelected(selected_plots, plot)
-  
+
   useEffect(() => {
     const scrollPlot = () => {
       scroll(imageRef);
@@ -68,47 +70,47 @@ export const Plot = ({
   plot.dataset_name = query.dataset_name
   plot.run_number = query.run_number
 
-    return(
-        <Tooltip title={tooLong ? decodeURI(params_for_api.plot_name as string) : ''}>
-          <ParentWrapper
-            isLoading={blink.toString()}
-            animation={(functions_config.mode === 'ONLINE').toString()}
-            size={size}
-            isPlotSelected={is_plot_selected.toString()}>
-            <LayoutName
-              ref={plotNameRef}
-              isPlotSelected={is_plot_selected.toString()}
-              error={get_plot_error(plot).toString()}
-            >{decodePlotName(tooLong, params_for_api.plot_name ? params_for_api.plot_name : '')}
-            </LayoutName>
-            <LayoutWrapper
-              size={size}
-              auto='auto'
-            >
-              <PlotWrapper
-                plotSelected={is_plot_selected}
-                onClick={async () => {
-                  await is_plot_selected
-                  setTimeout(() => {
-                    scroll(imageRef);
-                    scrollToBottom(imageRefScrollDown)
-                  }, 500);
-                }}
-                ref={imageRef}
-              >
-                <PlotImage
-                  blink={blink}
-                  params_for_api={params_for_api}
-                  plot={plot}
-                  plotURL={url}
-                  updated_by_not_older_than={not_older_than}
-                  query={query}
-                  imageRef={imageRef}
-                  isPlotSelected={is_plot_selected}
-                />
-              </PlotWrapper>
-            </LayoutWrapper>
-          </ParentWrapper>
-        </Tooltip>
-    )
+  return (
+    <Tooltip title={tooLong ? decodeURI(params_for_api.plot_name as string) : ''}>
+      <ParentWrapper
+        isLoading={blink.toString()}
+        animation={(functions_config.mode === 'ONLINE').toString()}
+        size={size}
+        isPlotSelected={is_plot_selected.toString()}>
+        <LayoutName
+          ref={plotNameRef}
+          isPlotSelected={is_plot_selected.toString()}
+          error={get_plot_error(plot).toString()}
+        >{decodePlotName(tooLong, params_for_api.plot_name ? params_for_api.plot_name : '')}
+        </LayoutName>
+        <LayoutWrapper
+          size={size}
+          auto='auto'
+        >
+          <PlotWrapper
+            plotSelected={is_plot_selected}
+            onClick={async () => {
+              await is_plot_selected
+              setTimeout(() => {
+                scroll(imageRef);
+                scrollToBottom(imageRefScrollDown)
+              }, 500);
+            }}
+            ref={imageRef}
+          >
+            <PlotImage
+              blink={blink}
+              params_for_api={params_for_api}
+              plot={plot}
+              plotURL={url}
+              updated_by_not_older_than={not_older_than}
+              query={query}
+              imageRef={imageRef}
+              isPlotSelected={is_plot_selected}
+            />
+          </PlotWrapper>
+        </LayoutWrapper>
+      </ParentWrapper>
+    </Tooltip>
+  )
 };

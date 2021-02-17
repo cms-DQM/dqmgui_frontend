@@ -17,6 +17,7 @@ import {
   get_plot_error,
 } from '../singlePlot/utils';
 import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
+import { useBlink } from '../../../../hooks/useBlink';
 import { PlotImage } from '../plotImage';
 import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
 import { store } from '../../../../contexts/leftSideContext';
@@ -60,7 +61,8 @@ export const OnSideOverlaidPlots = ({
   plot.dataset_name = query.dataset_name
   plot.run_number = query.run_number
 
-  const { blink, not_older_than } = useUpdateLiveMode();
+  const {not_older_than} = useUpdateLiveMode()
+  const { blink } = useBlink(not_older_than);
 
   return (
     <OnSidePlotsWrapper>

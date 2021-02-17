@@ -22,8 +22,8 @@ import {
   get_plot_error,
 } from '../../plot/singlePlot/utils';
 import { Button } from 'antd';
-import { store } from '../../../../contexts/leftSideContext';
 import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
+import { useBlink } from '../../../../hooks/useBlink';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;
@@ -55,8 +55,9 @@ export const ZoomedJSROOTPlot = ({
     params_for_api.lumi,
   ]);
 
-  const { blink, not_older_than } = useUpdateLiveMode();
-
+  const { not_older_than } = useUpdateLiveMode()
+  const { blink } = useBlink(not_older_than);
+  
   useEffect(() => {
     if (!!document.getElementById(`${id}`)) {
       //@ts-ignore

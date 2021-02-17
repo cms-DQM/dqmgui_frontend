@@ -14,13 +14,10 @@ import { seperateRunAndLumiInSearch } from '../../../components/utils';
 import { changeRouter, getChangedQueryParams } from '../utils';
 import { functions_config } from '../../../config/config';
 import { LatestRuns } from '../../../components/initialPage/latestRuns';
-import { useUpdateLiveMode } from '../../../hooks/useUpdateInLiveMode';
-import { store } from '../../../contexts/leftSideContext';
 
 export const ContentSwitching = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
-  const { set_update } = useUpdateLiveMode();
 
   const { results_grouped, searching, isLoading, errors } = useSearch(
     query.search_run_number,
@@ -28,7 +25,6 @@ export const ContentSwitching = () => {
   );
   //serchResultsHandler when you selecting run, dataset from search results
   const serchResultsHandler = ( run: string, dataset: string,e: any) => {
-    set_update(false);
     e.preventDefault()
     const { parsedRun, parsedLumi } = seperateRunAndLumiInSearch(
       run.toString()

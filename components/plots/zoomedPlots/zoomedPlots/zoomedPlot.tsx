@@ -33,6 +33,7 @@ import { Plot_portal } from '../../../../containers/display/portal';
 import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
 import { PlotImage } from '../../plot/plotImage';
 import { getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames } from '../../../utils';
+import { useBlink } from '../../../../hooks/useBlink';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -81,8 +82,9 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, select
     //   icon: <BlockOutlined />,
     // },
   ];
-  const { blink, not_older_than } = useUpdateLiveMode();
-
+  const { not_older_than } = useUpdateLiveMode()
+  const { blink } = useBlink(not_older_than);
+  
   return (
     <StyledCol space={2}>
       {/* Plot opened in a new tab */}

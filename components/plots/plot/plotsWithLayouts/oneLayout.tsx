@@ -3,6 +3,7 @@ import * as React from 'react'
 import { functions_config } from '../../../../config/config'
 import { store } from '../../../../contexts/leftSideContext'
 import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode'
+import { useBlink } from '../../../../hooks/useBlink'
 import { LayoutName, LayoutWrapper, ParentWrapper } from './styledComponents'
 import { Plot } from './plot'
 import { decodePlotName } from '../../../utils'
@@ -45,7 +46,9 @@ export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layout
   const howMuchInOneLine = Math.floor(size.w / onePlotWidth)
   const auto = []
   var i;
-  const { blink, not_older_than } = useUpdateLiveMode();
+
+  const {not_older_than} = useUpdateLiveMode()
+  const { blink } = useBlink(not_older_than);
 
   for (i = 0; i < howMuchInOneLine; i++) {
     auto.push('auto')

@@ -10,26 +10,25 @@ import {
   StyledAlert,
 } from '../../containers/search/styledComponents';
 import { NoResultsFound } from '../../containers/search/noResultsFound';
-import { store } from '../../contexts/leftSideContext';
 import { useNewer } from '../../hooks/useNewer';
 import { functions_config } from '../../config/config';
 import { LiveModeButton } from '../liveModeButton';
 import { CustomDiv } from '../styledComponents';
 import { LatestRunsList } from './latestRunsList';
+import { useUpdateLiveMode } from '../../hooks/useUpdateInLiveMode';
 
 export const LatestRuns = () => {
-  const { updated_by_not_older_than } = React.useContext(store);
-
+  const { not_older_than } = useUpdateLiveMode()
   const data_get_by_mount = useRequest(
-    get_the_latest_runs(updated_by_not_older_than),
+    get_the_latest_runs(not_older_than),
     {},
     []
   );
 
   const data_get_by_not_older_than_update = useRequest(
-    get_the_latest_runs(updated_by_not_older_than),
+    get_the_latest_runs(not_older_than),
     {},
-    [updated_by_not_older_than]
+    [not_older_than]
   );
 
   const data = useNewer(
@@ -54,30 +53,32 @@ export const LatestRuns = () => {
           <Spinner />
         </SpinnerWrapper>
       ) : (
-        <LatestRunsSection>
-          <CustomDiv display="flex" justifycontent="flex-end" width="auto">
-            <LiveModeButton />
-          </CustomDiv>
-          <LatestRunsTtitle>The latest runs</LatestRunsTtitle>
-          {isLoading ? (
-            <SpinnerWrapper>
-              <Spinner />
-            </SpinnerWrapper>
-          ) : latest_runs &&
-            latest_runs.length === 0 &&
-            !isLoading &&
-            errors.length === 0 ? (
-            <NoResultsFound />
-          ) : (
-            latest_runs && (
-              <LatestRunsList
-                latest_runs={latest_runs}
-                mode={functions_config.mode}
-              />
-            )
+            <LatestRunsSection>
+              <CustomDiv display="flex" justifycontent="flex-end" width="auto">
+                {functions_config.mode === 'ONLINE' &&
+                  <LiveModeButton />
+                }
+              </CustomDiv>
+              <LatestRunsTtitle>The latest runs</LatestRunsTtitle>
+              {isLoading ? (
+                <SpinnerWrapper>
+                  <Spinner />
+                </SpinnerWrapper>
+              ) : latest_runs &&
+                latest_runs.length === 0 &&
+                !isLoading &&
+                errors.length === 0 ? (
+                    <NoResultsFound />
+                  ) : (
+                    latest_runs && (
+                      <LatestRunsList
+                        latest_runs={latest_runs}
+                        mode={functions_config.mode}
+                      />
+                    )
+                  )}
+            </LatestRunsSection>
           )}
-        </LatestRunsSection>
-      )}
     </>
   );
 };
