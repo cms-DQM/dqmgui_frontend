@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Row, Col } from 'antd';
 
 import { functions_config } from '../../config/config';
-import { LumesectionBrowser } from '../browsing/lumesectionBroweser';
+import { LumesectionBrowser } from '../browsing/lumisectionBroweser';
 import Form from 'antd/lib/form/Form';
 import { StyledFormItem, SelectedDataCol } from '../styledComponents';
 import { store } from '../../contexts/leftSideContext';
@@ -77,7 +77,7 @@ export const SelectedData = ({
           <SelectedDataCol>{run_number}</SelectedDataCol>
         </StyledFormItem>
       </Row>
-      {functions_config.new_back_end.lumisections_on && (
+      {functions_config.mode === 'OFFLINE' && functions_config.new_back_end && (
         <Row>
           <Col>
             <LumesectionBrowser
