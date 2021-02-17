@@ -64,7 +64,6 @@ export const initialState: any = {
     withref: '',
   },
   workspace: 'Everything',
-  updated_by_not_older_than: Math.round(new Date().getTime() / 10000) * 10,
 };
 
 export interface ActionProps {
@@ -120,7 +119,6 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
   const [runs_set_for_overlay, set_runs_set_for_overlay] = React.useState<
     TripleProps[]
   >(triples ? triples : []);
-  const [update, set_update] = useState<boolean>(false);
 
   const change_value_in_reference_table = (
     value: string | number,
@@ -145,10 +143,6 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
     copy[index_of_line] = current_line;
     setTriples(copy);
   };
-
-  const [updated_by_not_older_than, set_updated_by_not_older_than] = useState(
-    initialState.updated_by_not_older_than
-  );
 
   return (
     <Provider
@@ -188,11 +182,7 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         customize,
         setCustomize,
         runs_set_for_overlay,
-        set_runs_set_for_overlay,
-        updated_by_not_older_than,
-        set_updated_by_not_older_than,
-        update,
-        set_update,
+        set_runs_set_for_overlay
       }}
     >
       {children}

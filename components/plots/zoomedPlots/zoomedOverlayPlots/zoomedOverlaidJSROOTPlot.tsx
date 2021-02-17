@@ -26,6 +26,7 @@ import {
 } from '../../plot/singlePlot/utils';
 import { Button } from 'antd';
 import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
+import { useBlink } from '../../../../hooks/useBlink';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;
@@ -116,8 +117,9 @@ export const ZoomedOverlaidJSROOTPlot = ({
       histogram4
     );
   }
-  const { blink, not_older_than } = useUpdateLiveMode();
-
+  const { not_older_than } = useUpdateLiveMode()
+  const { blink } = useBlink(not_older_than);
+  
   const histogramParam = params_for_api.normalize ? 'hist' : 'nostack';
   //make sure that no null histograms are passed to draw func.
   //on first, second reneder overlaidJSROOTPlot.fHists.arr is [null, null]

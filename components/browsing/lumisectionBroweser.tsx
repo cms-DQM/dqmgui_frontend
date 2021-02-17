@@ -3,14 +3,13 @@ import { Col, Select, Spin, Button, Row } from 'antd';
 import { CaretRightFilled, CaretLeftFilled } from '@ant-design/icons';
 
 import { useRequest } from '../../hooks/useRequest';
-import { functions_config } from '../../config/config';
-import {getLumisections} from '../../api/newApi'
+import { getLumisections } from '../../api/newApi'
 import {
   StyledSelect,
   OptionParagraph,
 } from '../viewDetailsMenu/styledComponents';
 import { StyledFormItem } from '../styledComponents';
-import { OptionProps, QueryProps } from '../../containers/display/interfaces';
+import { OptionProps } from '../../containers/display/interfaces';
 
 const { Option } = Select;
 
@@ -40,19 +39,15 @@ export const LumesectionBrowser = ({
     { label: 'All', value: 0 },
   ]);
 
-  const current_time = new Date().getTime();
-  const [not_older_than, set_not_older_than] = React.useState(current_time);
-
   //getting all run lumisections
   const { data, isLoading, errors } = useRequest(
     getLumisections({
       run_number: currentRunNumber,
       dataset_name: currentDataset,
       lumi: -1,
-      notOlderThan: not_older_than,
     }),
     {},
-    [currentRunNumber, currentDataset, not_older_than]
+    [currentRunNumber, currentDataset]
   );
   const all_runs_with_lumi = data ? data.data : [];
 
@@ -61,8 +56,8 @@ export const LumesectionBrowser = ({
     const lumisections_from_api: OptionProps[] =
       all_runs_with_lumi.length > 0
         ? all_runs_with_lumi.map((run: AllRunsWithLumiProps) => {
-            return { label: run.lumi.toString(), value: run.lumi };
-          })
+          return { label: run.lumi.toString(), value: run.lumi };
+        })
         : [];
     const copy = [...lumisections];
     const allLumis = copy.concat(lumisections_from_api);
@@ -114,8 +109,8 @@ export const LumesectionBrowser = ({
                           <Spin />
                         </OptionParagraph>
                       ) : (
-                        <p>{current_lumisection.label}</p>
-                      )}
+                          <p>{current_lumisection.label}</p>
+                        )}
                     </Option>
                   );
                 })}

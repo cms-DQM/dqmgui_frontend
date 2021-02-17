@@ -35,6 +35,7 @@ import { Plot_portal } from '../../../../containers/display/portal';
 import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
 import { PlotImage } from '../../plot/plotImage';
 import { getZoomedOverlaidPlotsUrlForOverlayingPlotsWithDifferentNames } from '../../../utils';
+import { useBlink } from '../../../../hooks/useBlink';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -88,8 +89,9 @@ export const ZoomedOverlaidPlot = ({
   copy_of_params.width = Math.round(window.innerHeight * 1.33);
   const zoomed_plot_url = get_plot_source(copy_of_params);
 
-  const { blink, not_older_than } = useUpdateLiveMode();
-
+  const { not_older_than } = useUpdateLiveMode()
+  const { blink } = useBlink(not_older_than);
+  
   return (
     <StyledCol space={2}>
       <Plot_portal

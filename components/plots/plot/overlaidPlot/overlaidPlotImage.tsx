@@ -18,6 +18,7 @@ import {
 } from '../singlePlot/utils';
 import { store } from '../../../../contexts/leftSideContext';
 import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
+import { useBlink } from '../../../../hooks/useBlink';
 import { PlotImage } from '../plotImage';
 import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
 import { isPlotSelected } from '../../../../containers/display/utils';
@@ -52,7 +53,9 @@ export const OverlaidPlotImage = ({
   const query: QueryProps = router.query;
 
   const imageRef = useRef(null);
-  const { blink, not_older_than } = useUpdateLiveMode();
+
+  const {not_older_than} = useUpdateLiveMode()
+  const { blink } = useBlink(not_older_than);
 
   plot.dataset_name = query.dataset_name
   plot.run_number = query.run_number

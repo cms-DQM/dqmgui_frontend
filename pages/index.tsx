@@ -17,14 +17,15 @@ import { backToMainPage } from '../utils';
 import { Header } from '../containers/display/header';
 import { ContentSwitching } from '../containers/display/content/constent_switching';
 import { ModesSelection } from '../components/modes/modesSelection';
+import { useUpdateLiveMode } from '../hooks/useUpdateInLiveMode';
 
 const Index: NextPage<FolderPathQuery> = () => {
+  useUpdateLiveMode()
   // We grab the query from the URL:
   const router = useRouter();
   const query: QueryProps = router.query;
   const isDatasetAndRunNumberSelected =
     !!query.run_number && !!query.dataset_name;
-
   if (typeof window !== "undefined") {
     window.onload = () => {
       //@ts-ignore

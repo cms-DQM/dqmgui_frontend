@@ -11,6 +11,7 @@ import {
 } from '../utils';
 import { CustomDiv, CutomBadge } from '../../../components/styledComponents';
 import { functions_config } from '../../../config/config';
+import { useBlink } from '../../../hooks/useBlink';
 import { useUpdateLiveMode } from '../../../hooks/useUpdateInLiveMode';
 
 interface FoldersFilter {
@@ -32,7 +33,9 @@ export const MeCount = ({ me_count, children }: MeCountProps) => {
 export const Directories = ({ directories }: FoldersFilter) => {
   const router = useRouter();
   const query: QueryProps = router.query;
-  const { blink } = useUpdateLiveMode();
+
+  const { not_older_than } = useUpdateLiveMode();
+  const { blink } = useBlink(not_older_than);
 
   return (
     <>

@@ -7,6 +7,7 @@ import {
   StyledA,
   StyledCol,
 } from '../../containers/search/styledComponents';
+import { useBlink } from '../../hooks/useBlink';
 import { useUpdateLiveMode } from '../../hooks/useUpdateInLiveMode';
 
 interface LatestRunsListProps {
@@ -19,12 +20,9 @@ export const LatestRunsList = ({ latest_runs, ...props }: LatestRunsListProps) =
   const {
     query: { mode },
   } = router
-  
-  const { set_update, blink } = useUpdateLiveMode();
-  React.useEffect(() => {
-    set_update(true);
-    return () => set_update(false);
-  }, []);
+
+  const { not_older_than } = useUpdateLiveMode()
+  const { blink } = useBlink(not_older_than);
 
   return (
     <LatestRunsWrapper>
@@ -35,7 +33,6 @@ export const LatestRunsList = ({ latest_runs, ...props }: LatestRunsListProps) =
             animation={(props.mode === 'ONLINE').toString()}
             hover="true"
             onClick={() => {
-              set_update(false);
               changeRouter({ search_run_number: run, mode });
             }}
           >
