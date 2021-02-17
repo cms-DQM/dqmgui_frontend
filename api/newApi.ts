@@ -62,11 +62,7 @@ export const get_plot_with_overlay_new_api = (params: ParametersForApi) => {
 
 export const getLumisections = (params: LumisectionRequestProps) =>
   `api/v1/samples?run=${params.run_number}&dataset=${params.dataset_name
-  }&lumi=${params.lumi}${params.run_number === '0' && params.dataset_name === "/Global/Online/ALL"
-    && params.notOlderThan
-    ? `&notOlderThan=${params.notOlderThan}`
-    : ''
-  }`;
+  }&lumi=${params.lumi}`;
 
 export const get_the_latest_runs = (notOlderThan: number) => {
   return `api/v1/latest_runs?notOlderThan=${notOlderThan}`;

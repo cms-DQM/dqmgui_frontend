@@ -10,7 +10,6 @@ import {
 } from '../viewDetailsMenu/styledComponents';
 import { StyledFormItem } from '../styledComponents';
 import { OptionProps } from '../../containers/display/interfaces';
-import { useUpdateLiveMode } from '../../hooks/useUpdateInLiveMode';
 
 const { Option } = Select;
 
@@ -34,7 +33,6 @@ export const LumesectionBrowser = ({
   currentRunNumber,
   currentDataset,
 }: LumesectionBrowserProps) => {
-  const { not_older_than } = useUpdateLiveMode()
   //0 - it represents ALL lumisections. If none lumisection is selected, then plots which are displaid
   //consist of ALL lumisections.
   const [lumisections, setLumisections] = React.useState([
@@ -47,10 +45,9 @@ export const LumesectionBrowser = ({
       run_number: currentRunNumber,
       dataset_name: currentDataset,
       lumi: -1,
-      notOlderThan: not_older_than,
     }),
     {},
-    [currentRunNumber, currentDataset, not_older_than]
+    [currentRunNumber, currentDataset]
   );
   const all_runs_with_lumi = data ? data.data : [];
 
