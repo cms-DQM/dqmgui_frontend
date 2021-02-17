@@ -1,4 +1,3 @@
-import { functions_config } from "../config/config";
 import { getRunsWithLumisections, get_customize_params } from "./utils";
 import { LumisectionRequestProps, ParamsForApiProps } from "../containers/display/interfaces";
 import { ParametersForApi, PlotProperties } from "../plotsLocalOverlayPageComponents/interfaces";

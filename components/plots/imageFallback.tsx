@@ -14,7 +14,7 @@ export const ImageFallback = ({
   delete props.onError;
   const [final_src, setSrc] = useState(src);
   const [tries, setTries] = useState(0);
-  const [key, setKey] = useState(new Date());
+  const [key, setKey] = useState(new Date().getTime());
 
   const [imageLoading, setImageLoading] = useState(true);
   const displaySpinner = (imageLoading: boolean) =>
@@ -26,7 +26,7 @@ export const ImageFallback = ({
     if (tries + 1 < retryTimes) {
       setTries(tries + 1);
       setSrc(`${src}`);
-      setKey(new Date());
+      setKey(new Date().getTime());
     } else {
       setImageLoading(false);
       setImageError(true);
@@ -35,7 +35,7 @@ export const ImageFallback = ({
   };
 
   useEffect(() => {
-    setKey(new Date())
+    setKey(new Date().getTime())
     setSrc(`${src}`);
   }, [src]);
 

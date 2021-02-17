@@ -46,12 +46,12 @@ export const LayoutWrapper = styled.div<{ size: SizeProps & string, auto: string
 
 export const PlotWrapper = styled.div<{ plotSelected: boolean, width?: string, height?: string }>`
     justify-content: center;
-    border: ${(props) => props.plotSelected ? `4px solid ${theme.colors.secondary.light}` : `2px solid ${theme.colors.primary.light}`};
+    border: ${(props) => props.plotSelected ? `4px solid ${theme.colors.secondary.light}` : ''};
     align-items:  center ;
     width: ${(props) => props.width ? `calc(${props.width}+8px)` : 'fit-content'};
     height: ${(props) => props.height ? `calc(${props.height}+8px)` : 'fit-content'};;
     cursor:  pointer ;
-    padding: 4px;
+    padding: ${(props) => props.plotSelected ? '4px' : '2px'};
     align-self:  center ;
     justify-self:  baseline;
     cursor: ${props => props.plotSelected ? 'zoom-out' : 'zoom-in'};
