@@ -39,7 +39,7 @@ export const ImageFallback = ({
   }, [src]);
 
   return (
-    <div style={{border: '2px solid #AC3B61'}}>
+    <>
       <CustomDiv
         display={displaySpinner(imageLoading)}
         justifycontent="center"
@@ -47,13 +47,15 @@ export const ImageFallback = ({
       >
         <Spinner />
       </CustomDiv>
-      <LazyLoadImage
-        src={final_src}
-        {...props}
-        key={key}
-        onError={onError}
-        onLoad={() => setImageLoading(false)}
-      />
-    </div>
+      <div style={{ border: '2px solid #AC3B61' }}>
+        <LazyLoadImage
+          src={final_src}
+          {...props}
+          key={key}
+          onError={onError}
+          onLoad={() => setImageLoading(false)}
+        />
+      </div>
+    </>
   );
 };
