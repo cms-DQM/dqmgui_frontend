@@ -237,8 +237,8 @@ export const choose_api = (params: ParamsForApiProps) => {
 export const choose_api_for_run_search = (params: ParamsForApiProps) => {
   const current_api = !functions_config.new_back_end.new_back_end
     ? get_run_list_by_search_old_api(params)
-    : params.run_number === '0' && params.dataset_name === "/Global/Online/ALL"
-      ? get_run_list_by_search_new_api_with_no_older_than(params)
+    // : params.run_number === '0' && params.dataset_name === "/Global/Online/ALL"
+    //   ? get_run_list_by_search_new_api_with_no_older_than(params)
       : get_run_list_by_search_new_api(params);
 
   return current_api;
