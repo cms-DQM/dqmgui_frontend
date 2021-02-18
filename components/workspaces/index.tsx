@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 import { setWorkspaceToQuery } from './utils';
 import { QueryProps } from '../../containers/display/interfaces';
 import { functions_config } from '../../config/config';
-import { store } from '../../contexts/leftSideContext';
+import { store } from '../../contexts/globalStateContext';
 
 const { TabPane } = Tabs;
 

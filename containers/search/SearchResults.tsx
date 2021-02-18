@@ -1,4 +1,4 @@
-import React, { FC, useContext, useEffect } from 'react';
+import React, { FC } from 'react';
 
 import Result from './Result';
 

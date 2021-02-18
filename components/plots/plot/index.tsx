@@ -1,8 +1,7 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
 
 import { functions_config } from '../../../config/config';
-import { store } from '../../../contexts/leftSideContext';
 import {
   QueryProps,
   PlotDataProps,
@@ -10,7 +9,6 @@ import {
 } from '../../../containers/display/interfaces';
 import { PlotsWithLayout } from './plotsWithLayouts/plotsWithLayout';
 import { PlotsWithoutLayouts } from './plotsWithoutLayouts';
-import { sizes } from '../../constants';
 
 interface LeftSidePlotsProps {
   plots: PlotDataProps[];
@@ -26,12 +24,8 @@ export const LeftSidePlots = ({
   const plots_grouped_by_layouts_checked = plots_grouped_by_layouts
     ? plots_grouped_by_layouts
     : {};
-  const globalState = useContext(store);
   const router = useRouter();
   const query: QueryProps = router.query;
-  const { imageRefScrollDown } = globalState;
-
-
   if (plots.length > 0) {
     return (
       <>
@@ -41,16 +35,12 @@ export const LeftSidePlots = ({
             plots_grouped_by_layouts={plots_grouped_by_layouts_checked}
             selected_plots={selected_plots}
             query={query}
-            imageRefScrollDown={imageRefScrollDown}
-            globalState={globalState}
           />
         ) : (
           <PlotsWithoutLayouts
             plots={plots}
             selected_plots={selected_plots}
             query={query}
-            imageRefScrollDown={imageRefScrollDown}
-            globalState={globalState}
           />
         )}
       </>

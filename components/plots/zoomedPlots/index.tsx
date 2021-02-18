@@ -7,7 +7,7 @@ import {
 import { ZoomedPlots as ZoomedOverlaidPlots } from './zoomedOverlayPlots';
 import { ZoomedPlots as ZoomedPlotsWithoutOverlay } from './zoomedPlots';
 import { useRouter } from 'next/router';
-import { store } from '../../../contexts/leftSideContext';
+import { store } from '../../../contexts/globalStateContext';
 
 interface ZoomedPlotsProps {
   selected_plots: PlotDataProps[];
@@ -16,8 +16,7 @@ interface ZoomedPlotsProps {
 export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
-  const globalState = useContext(store);
-  const { setImageRefScrollDown } = globalState;
+  const { setImageRefScrollDown } = useContext(store);
 
   const rightSideRef = useRef(null);
   useEffect(() => {
@@ -33,8 +32,8 @@ export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
       {overlay_plot ? (
         <ZoomedOverlaidPlots selected_plots={selected_plots} />
       ) : (
-        <ZoomedPlotsWithoutOverlay selected_plots={selected_plots} />
-      )}
+          <ZoomedPlotsWithoutOverlay selected_plots={selected_plots} />
+        )}
     </div>
   );
 };

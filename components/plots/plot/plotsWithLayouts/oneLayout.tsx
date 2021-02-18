@@ -12,12 +12,10 @@ interface OnePlotInLayout {
   layoutName: string;
   plots: any[];
   selected_plots: any,
-  globalState: any,
-  imageRefScrollDown: any,
   query: any,
 }
 
-export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layoutName, query, selected_plots }: OnePlotInLayout) => {
+export const OnePlotInLayout = ({ plots, layoutName, query, selected_plots }: OnePlotInLayout) => {
   const { size } = React.useContext(store)
   const [nameOfLayout, setNameOfLayout] = React.useState(layoutName)
   const [tooLong, setTooLong] = React.useState(false)
@@ -71,21 +69,18 @@ export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layout
         {decodePlotName(tooLong, nameOfLayout ? nameOfLayout : '')}
         </LayoutName>
       <LayoutWrapper
-        size={size}
         auto={auto.join(' ')}
       >
         {
           plots.map((plot) => {
             return (
               <Plot
-                globalState={globalState}
                 query={query}
                 plot={plot}
                 onePlotHeight={onePlotHeight}
                 onePlotWidth={onePlotWidth}
                 selected_plots={selected_plots}
                 imageRef={imageRef}
-                imageRefScrollDown={imageRefScrollDown}
                 blink={blink}
                 updated_by_not_older_than={not_older_than} />
             )

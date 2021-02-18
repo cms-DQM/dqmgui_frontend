@@ -10,15 +10,11 @@ interface PlotsWithLayoutPorps {
   plots_grouped_by_layouts: PlotsGroupedByLayoutsInterface;
   selected_plots: any;
   query: QueryProps;
-  imageRefScrollDown: any;
-  globalState: any;
 }
 
 export const PlotsWithLayout = ({
   plots_grouped_by_layouts,
   selected_plots,
-  globalState,
-  imageRefScrollDown,
   query,
 }: PlotsWithLayoutPorps) => {
   const layouts_names = Object.keys(plots_grouped_by_layouts);
@@ -31,9 +27,7 @@ export const PlotsWithLayout = ({
             layoutName={name}
             plots={plots}
             selected_plots={selected_plots}
-            imageRefScrollDown={imageRefScrollDown}
             query={query}
-            globalState={globalState}
           />
         );
       })}

@@ -8,33 +8,20 @@ import {
   QueryProps,
 } from '../../../containers/display/interfaces';
 import { StyledSelect } from '../styledComponents';
-import { useChangeRouter } from '../../../hooks/useChangeRouter';
-import { store } from '../../../contexts/leftSideContext';
 
 const { Option } = Select;
 
 export const OverlayOptions = () => {
   const router = useRouter();
   const query: QueryProps = router.query;
-  const settedOverlay = query.overlay ? query.overlay : overlayOptions[0].value;
-
-  const globalState = useContext(store);
-  const { setOverlaiPosition } = globalState;
-
-  const [value, setValue] = React.useState(settedOverlay);
-  useChangeRouter({ overlay: value }, [], true);
-  useChangeRouter({ overlay: value }, [value], true);
-
-  useEffect(() => {
-    setOverlaiPosition(value);
-  }, [value]);
+  const [value, setValue] = React.useState(query.overlay);
 
   return (
     <StyledSelect
       onChange={(e: any) => {
         setValue(e);
       }}
-      value={settedOverlay}
+      value={query.overlay}
     >
       {overlayOptions.map((option: OptionProps) => {
         return (

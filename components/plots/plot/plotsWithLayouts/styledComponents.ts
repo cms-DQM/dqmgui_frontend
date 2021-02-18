@@ -36,9 +36,7 @@ export const LayoutName = styled.div<{ error?: string, isPlotSelected?: string }
     font-weight: ${props => props.isPlotSelected === 'true' ? 'bold' : ''};
     word-break: break-word;
 `
-export const LayoutWrapper = styled.div<{ size: SizeProps & string, auto: string }>`
-    // width: ${(props) => props.size.w ? `${props.size.w + 12}px` : props.size};
-    // height:${(props) => props.size.h ? `${props.size.w + 16}px` : props.size};
+export const LayoutWrapper = styled.div<{ auto: string }>`
     display: grid;
     grid-template-columns: ${(props) => (props.auto)};
     justify-content: center;

@@ -6,7 +6,6 @@ import {
 } from '../../../../containers/display/interfaces';
 import cleanDeep from 'clean-deep';
 
-import { LeftSideState } from '../../../../contexts/leftSideContext';
 import { formTriples } from '../../../viewDetailsMenu/utils';
 import {
   changeRouter,
@@ -59,7 +58,7 @@ export const addOverlayData = (triples: TripleProps[] | undefined) => {
 };
 
 export const FormatParamsForAPI = (
-  globalState: LeftSideState,
+  globalState: any,
   query: QueryProps,
   plotName: string,
   path?: string,

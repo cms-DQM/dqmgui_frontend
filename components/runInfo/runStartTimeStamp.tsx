@@ -4,8 +4,6 @@ import { Spin } from 'antd';
 import { useRequest } from '../../hooks/useRequest';
 import { QueryProps } from '../../containers/display/interfaces';
 import { get_jroot_plot } from '../../api/oldApi';
-import { store } from '../../contexts/leftSideContext';
-import { FormatParamsForAPI } from '../plots/plot/singlePlot/utils';
 import { CustomCol, CustomRow } from '../styledComponents';
 
 interface InfoProps {
@@ -20,15 +18,15 @@ interface RunInfoProps {
 }
 
 export const RunInfoItem = ({ query, info }: RunInfoProps) => {
-  const globalState = React.useContext(store);
 
-  const params_for_api = FormatParamsForAPI(
-    globalState,
-    query,
-    info.value,
-    'HLT/EventInfo'
-  );
-
+  const params_for_api = {
+    run_number: query.run_number,
+    dataset_name: query.dataset_name,
+    lumi: query.lumi,
+    folders_path: 'HLT/EventInfo',
+    plot_name: info.value,
+    notOlderThan: undefined
+  }
   const { data, isLoading } = useRequest(get_jroot_plot(params_for_api), {}, [
     query.dataset_name,
     query.run_number,

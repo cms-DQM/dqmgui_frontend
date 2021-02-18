@@ -20,15 +20,14 @@ import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
 import { useBlink } from '../../../../hooks/useBlink';
 import { PlotImage } from '../plotImage';
 import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
-import { store } from '../../../../contexts/leftSideContext';
 import { isPlotSelected } from '../../../../containers/display/utils';
 import { Tooltip } from 'antd';
 import { decodePlotName } from '../../../utils'
+import { store } from '../../../../contexts/globalStateContext';
 
 interface OnSideOverlaidPlotsProps {
   params_for_api: ParamsForApiProps;
   plot: PlotDataProps;
-  imageRefScrollDown: any;
   selected_plots: PlotDataProps[];
 }
 
@@ -36,12 +35,12 @@ export const OnSideOverlaidPlots = ({
   plot,
   params_for_api,
   selected_plots,
-  imageRefScrollDown,
 }: OnSideOverlaidPlotsProps) => {
   params_for_api.plot_name = plot.name;
   const onsidePlotsURLs: string[] = getOnSideOverlaidPlots(params_for_api);
   const overlaidPlotsObjs = getOnSideOverlaidPlotsObjects(params_for_api);
-  const { size } = useContext(store)
+  const size = { w: params_for_api.width, h: params_for_api.height }
+  const { imageRefScrollDown } = useContext(store)
 
   const router = useRouter();
   const query: QueryProps = router.query;
@@ -61,7 +60,7 @@ export const OnSideOverlaidPlots = ({
   plot.dataset_name = query.dataset_name
   plot.run_number = query.run_number
 
-  const {not_older_than} = useUpdateLiveMode()
+  const { not_older_than } = useUpdateLiveMode()
   const { blink } = useBlink(not_older_than);
 
   return (
@@ -82,7 +81,6 @@ export const OnSideOverlaidPlots = ({
               >{decodePlotName(tooLong, params_for_api.plot_name ? params_for_api.plot_name : '')}
               </LayoutName>
               <LayoutWrapper
-                size={size}
                 auto='auto'
               >
                 <PlotWrapper

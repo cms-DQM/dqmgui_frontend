@@ -16,7 +16,7 @@ import {
 } from '../../../components/styledComponents';
 import { useFilterFolders } from '../../../hooks/useFilterFolders';
 import { SettingsModal } from '../../../components/settings';
-import { store } from '../../../contexts/leftSideContext';
+import { store } from '../../../contexts/globalStateContext';
 import { DisplayFordersOrPlots } from './display_folders_or_plots';
 import { UsefulLinks } from '../../../components/usefulLinks';
 import { ParsedUrlQueryInput } from 'querystring';
@@ -54,7 +54,6 @@ const Content: FC<FolderProps> = ({
   const {
     viewPlotsPosition,
     proportion,
-    updated_by_not_older_than,
   } = useContext(store);
 
   const router = useRouter();
@@ -64,7 +63,7 @@ const Content: FC<FolderProps> = ({
     run_number: run_number,
     dataset_name: dataset_name,
     folders_path: folder_path,
-    notOlderThan: updated_by_not_older_than,
+    // notOlderThan: updated_by_not_older_than,
     plot_search: query.plot_search,
   };
 
@@ -75,7 +74,8 @@ const Content: FC<FolderProps> = ({
   const { foldersByPlotSearch, plots, isLoading, errors } = useFilterFolders(
     query,
     params,
-    updated_by_not_older_than
+    undefined
+    // updated_by_not_older_than
   );
   const plots_with_layouts = plots.filter((plot) => plot.hasOwnProperty('layout'))
   var plots_grouped_by_layouts = chain(plots_with_layouts).sortBy('layout').groupBy('layout').value()

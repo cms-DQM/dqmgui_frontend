@@ -16,14 +16,16 @@ const drawJSROOT = async (
   id: string,
   overlaidJSROOTPlot: any
 ) => {
-  try {
-    //@ts-ignore
-    await JSROOT.cleanup(`${histogramParam}${id}`);
-    //@ts-ignore
-    JSROOT.draw(`${histogramParam}${id}`, JSROOT.parse(JSON.stringify(overlaidJSROOTPlot)), `${histogramParam}`);
-  }
-  catch (e) {
-    console.log(e.toString())
+  if (!!document.getElementById(id)) {
+    try {
+      //@ts-ignore
+      await JSROOT.cleanup(`${histogramParam}${id}`);
+      //@ts-ignore
+      JSROOT.draw(`${histogramParam}${id}`, JSROOT.parse(JSON.stringify(overlaidJSROOTPlot)), `${histogramParam}`);
+    }
+    catch (e) {
+      console.log(e.toString())
+    }
   }
 };
 

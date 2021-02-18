@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useState } from 'react';
+import React, { useRef, useContext } from 'react';
 import { useRouter } from 'next/router';
 
 import { functions_config } from '../../../../config/config';
@@ -16,7 +16,7 @@ import {
   scrollToBottom,
   get_plot_error,
 } from '../singlePlot/utils';
-import { store } from '../../../../contexts/leftSideContext';
+import { store } from '../../../../contexts/globalStateContext';
 import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
 import { useBlink } from '../../../../hooks/useBlink';
 import { PlotImage } from '../plotImage';
@@ -29,20 +29,16 @@ interface OverlaidPlotImageProps {
   params_for_api: ParamsForApiProps;
   plot: PlotDataProps;
   selected_plots: PlotDataProps[];
-  imageRefScrollDown: any;
 }
 
 export const OverlaidPlotImage = ({
   plot,
   params_for_api,
   selected_plots,
-  imageRefScrollDown,
 }: OverlaidPlotImageProps) => {
-  const globalState = useContext(store);
-  const { normalize, size } = globalState;
-
   params_for_api.plot_name = plot.name;
-  params_for_api.normalize = normalize;
+  const size = { w: params_for_api.width, h: params_for_api.height }
+  const { imageRefScrollDown } = useContext(store)
 
   const overlaid_plots_urls = get_overlaied_plots_urls(params_for_api);
   const joined_overlaid_plots_urls = overlaid_plots_urls.join('');
@@ -54,7 +50,7 @@ export const OverlaidPlotImage = ({
 
   const imageRef = useRef(null);
 
-  const {not_older_than} = useUpdateLiveMode()
+  const { not_older_than } = useUpdateLiveMode()
   const { blink } = useBlink(not_older_than);
 
   plot.dataset_name = query.dataset_name
@@ -86,33 +82,32 @@ export const OverlaidPlotImage = ({
           isPlotSelected={is_plot_selected.toString()}
         > {decodePlotName(tooLong, params_for_api.plot_name ? params_for_api.plot_name : '')}
         </LayoutName>
-          <LayoutWrapper
-            size={size}
-            auto='auto'
+        <LayoutWrapper
+          auto='auto'
+        >
+          <PlotWrapper
+            plotSelected={is_plot_selected}
+            onClick={async () => {
+              await is_plot_selected
+              setTimeout(() => {
+                scroll(imageRef);
+                scrollToBottom(imageRefScrollDown)
+              }, 500);
+            }}
+            ref={imageRef}
           >
-            <PlotWrapper
-              plotSelected={is_plot_selected}
-              onClick={async () => {
-                await is_plot_selected
-                setTimeout(() => {
-                  scroll(imageRef);
-                  scrollToBottom(imageRefScrollDown)
-                }, 500);
-              }}
-              ref={imageRef}
-            >
-              <PlotImage
-                blink={blink}
-                params_for_api={params_for_api}
-                plot={plot}
-                plotURL={plot_with_overlay}
-                updated_by_not_older_than={not_older_than}
-                query={query}
-                imageRef={imageRef}
-                isPlotSelected={is_plot_selected}
-              />
-            </PlotWrapper>
-          </LayoutWrapper>
+            <PlotImage
+              blink={blink}
+              params_for_api={params_for_api}
+              plot={plot}
+              plotURL={plot_with_overlay}
+              updated_by_not_older_than={not_older_than}
+              query={query}
+              imageRef={imageRef}
+              isPlotSelected={is_plot_selected}
+            />
+          </PlotWrapper>
+        </LayoutWrapper>
       </ParentWrapper>
     </Tooltip>
   );

@@ -6,6 +6,9 @@ import { Reset } from 'styled-reset';
 
 import { theme } from '../styles/theme';
 import { LeftSideStateProvider } from '../contexts/leftSideContext';
+import { GlobalStateProvider } from '../contexts/globalStateContext';
+import { RightSideStateProvider } from '../contexts/rightSideContext';
+
 
 const GlobalStyles = createGlobalStyle`
   html {
@@ -52,15 +55,19 @@ export default class MyApp extends App {
   public render() {
     const { Component, pageProps } = this.props;
     return (
-      <LeftSideStateProvider>
-        <ThemeProvider theme={theme}>
-          <>
-            <Reset />
-            <GlobalStyles />
-            <Component {...pageProps} />
-          </>
-        </ThemeProvider>
-      </LeftSideStateProvider>
+      <GlobalStateProvider>
+        <LeftSideStateProvider>
+          <RightSideStateProvider>
+            <ThemeProvider theme={theme}>
+              <>
+                <Reset />
+                <GlobalStyles />
+                <Component {...pageProps} />
+              </>
+            </ThemeProvider>
+          </RightSideStateProvider>
+        </LeftSideStateProvider>
+      </GlobalStateProvider>
     );
   }
 }
