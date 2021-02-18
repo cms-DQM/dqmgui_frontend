@@ -16,7 +16,6 @@ import {
   scrollToBottom,
   get_plot_error,
 } from '../singlePlot/utils';
-import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
 import { useBlink } from '../../../../hooks/useBlink';
 import { PlotImage } from '../plotImage';
 import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
@@ -41,7 +40,7 @@ export const OnSideOverlaidPlots = ({
   params_for_api.plot_name = plot.name;
   const onsidePlotsURLs: string[] = getOnSideOverlaidPlots(params_for_api);
   const overlaidPlotsObjs = getOnSideOverlaidPlotsObjects(params_for_api);
-  const { size } = useContext(store)
+  const { size, notOlderThan } = useContext(store)
 
   const router = useRouter();
   const query: QueryProps = router.query;
@@ -61,8 +60,7 @@ export const OnSideOverlaidPlots = ({
   plot.dataset_name = query.dataset_name
   plot.run_number = query.run_number
 
-  const {not_older_than} = useUpdateLiveMode()
-  const { blink } = useBlink(not_older_than);
+  const { blink } = useBlink(notOlderThan);
 
   return (
     <OnSidePlotsWrapper>
@@ -101,7 +99,7 @@ export const OnSideOverlaidPlots = ({
                     params_for_api={params_for_api}
                     plot={overlaidPlotsObjs[index]}
                     plotURL={url}
-                    updated_by_not_older_than={not_older_than}
+                    updated_by_not_older_than={notOlderThan}
                     query={query}
                     imageRef={imageRef}
                     isPlotSelected={is_plot_selected}

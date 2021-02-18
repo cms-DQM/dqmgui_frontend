@@ -30,10 +30,10 @@ import {
 import { Customization } from '../../../customization';
 import { ZoomedPlotMenu } from '../menu';
 import { Plot_portal } from '../../../../containers/display/portal';
-import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
 import { PlotImage } from '../../plot/plotImage';
 import { getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames } from '../../../utils';
 import { useBlink } from '../../../../hooks/useBlink';
+import { store } from '../../../../contexts/leftSideContext';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -82,8 +82,8 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, select
     //   icon: <BlockOutlined />,
     // },
   ];
-  const { not_older_than } = useUpdateLiveMode()
-  const { blink } = useBlink(not_older_than);
+  const { notOlderThan } = React.useContext(store)
+  const { blink } = useBlink(notOlderThan);
   
   return (
     <StyledCol space={2}>
@@ -115,7 +115,7 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, select
               plot={selected_plot}
               plotURL={zoomed_plot_url}
               query={query}
-              updated_by_not_older_than={not_older_than}
+              updated_by_not_older_than={notOlderThan}
             />
           </ImageDiv>
         </StyledPlotRow>
@@ -152,7 +152,7 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, select
           display="flex"
         >
           <PlotImage
-            updated_by_not_older_than={not_older_than}
+            updated_by_not_older_than={notOlderThan}
             blink={blink}
             params_for_api={params_for_api}
             plot={selected_plot}

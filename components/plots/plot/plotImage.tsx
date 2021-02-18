@@ -33,11 +33,15 @@ export const PlotImage = ({
   blink,
   plot,
 }: PlotImageProps) => {
+  const { run_number, dataset_name } = params_for_api
+  const live_mode = run_number.toString() === '0' && dataset_name === '/Global/Online/ALL' 
+  const notOlderThanParam = live_mode ? `;notOlderThan=${updated_by_not_older_than}` : ''
+console.log(live_mode)
   const [new_image_url, set_new_image_url] = React.useState(
-    `${root_url}${plotURL};notOlderThan=${updated_by_not_older_than}`
+    `${root_url}${plotURL}${notOlderThanParam}`
   );
   const [old_image_url, set_old_image_url] = React.useState(
-    `${root_url}${plotURL};notOlderThan=${updated_by_not_older_than}`
+    `${root_url}${plotURL}${notOlderThanParam}`
   );
 
   const [show_old_img, set_show_old_img] = React.useState(true);
@@ -45,11 +49,11 @@ export const PlotImage = ({
 
   React.useEffect(() => {
     set_new_image_url(
-      `${root_url}${plotURL};notOlderThan=${updated_by_not_older_than}`
+      `${root_url}${plotURL}${notOlderThanParam}`
     );
     set_show_old_img(blink);
   }, [
-    updated_by_not_older_than,
+    notOlderThanParam,
     params_for_api.customizeProps,
     params_for_api.height,
     params_for_api.width,
@@ -85,32 +89,32 @@ export const PlotImage = ({
           >
             {!imageError && (
               <>
-                  <ImageFallback
-                    retryTimes={3}
-                    style={{ display: new_image_display }}
-                    onLoad={() => {
-                      set_old_image_url(new_image_url);
-                      set_show_old_img(false);
-                    }}
-                    alt={plot.name}
-                    src={new_image_url}
-                    setImageError={setImageError}
-                    width={params_for_api.width}
-                    height={params_for_api.height}
-                  />
+                <ImageFallback
+                  retryTimes={3}
+                  style={{ display: new_image_display }}
+                  onLoad={() => {
+                    set_old_image_url(new_image_url);
+                    set_show_old_img(false);
+                  }}
+                  alt={plot.name}
+                  src={new_image_url}
+                  setImageError={setImageError}
+                  width={params_for_api.width}
+                  height={params_for_api.height}
+                />
                 {/*When images is updating, we getting blinking effect. 
                     We trying to avoid it with showing old image instead of nothing (when a new image is just requesting process)
                     Old image is an image which is 20 sec older then the new requested one.
                     */}
-                  <ImageFallback
-                    retryTimes={3}
-                    style={{ display: old_image_display }}
-                    alt={plot.name}
-                    src={old_image_url}
-                    setImageError={setImageError}
-                    width={'auto'}
-                    height={'auto'}
-                  />
+                <ImageFallback
+                  retryTimes={3}
+                  style={{ display: old_image_display }}
+                  alt={plot.name}
+                  src={old_image_url}
+                  setImageError={setImageError}
+                  width={'auto'}
+                  height={'auto'}
+                />
               </>
             )}
           </div>

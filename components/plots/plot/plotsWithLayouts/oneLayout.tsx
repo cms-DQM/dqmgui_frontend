@@ -2,7 +2,6 @@ import * as React from 'react'
 
 import { functions_config } from '../../../../config/config'
 import { store } from '../../../../contexts/leftSideContext'
-import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode'
 import { useBlink } from '../../../../hooks/useBlink'
 import { LayoutName, LayoutWrapper, ParentWrapper } from './styledComponents'
 import { Plot } from './plot'
@@ -18,7 +17,7 @@ interface OnePlotInLayout {
 }
 
 export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layoutName, query, selected_plots }: OnePlotInLayout) => {
-  const { size } = React.useContext(store)
+  const { size, notOlderThan } = React.useContext(store)
   const [nameOfLayout, setNameOfLayout] = React.useState(layoutName)
   const [tooLong, setTooLong] = React.useState(false)
   const [count, setCount] = React.useState(0)
@@ -47,8 +46,7 @@ export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layout
   const auto = []
   var i;
 
-  const {not_older_than} = useUpdateLiveMode()
-  const { blink } = useBlink(not_older_than);
+  const { blink } = useBlink(notOlderThan);
 
   for (i = 0; i < howMuchInOneLine; i++) {
     auto.push('auto')
@@ -87,7 +85,7 @@ export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layout
                 imageRef={imageRef}
                 imageRefScrollDown={imageRefScrollDown}
                 blink={blink}
-                updated_by_not_older_than={not_older_than} />
+                updated_by_not_older_than={notOlderThan} />
             )
           })}
       </LayoutWrapper>

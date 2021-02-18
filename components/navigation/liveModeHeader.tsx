@@ -6,7 +6,6 @@ import {
   CutomFormItem,
 } from '../styledComponents';
 import { theme } from '../../styles/theme';
-import { useUpdateLiveMode } from '../../hooks/useUpdateInLiveMode';
 import { FormatParamsForAPI } from '../plots/plot/singlePlot/utils';
 import { store } from '../../contexts/leftSideContext';
 import { QueryProps, InfoProps } from '../../containers/display/interfaces';
@@ -21,7 +20,6 @@ interface LiveModeHeaderProps {
 }
 
 export const LiveModeHeader = ({ query }: LiveModeHeaderProps) => {
-  const { not_older_than } = useUpdateLiveMode();
   const globalState = React.useContext(store);
 
   return (
@@ -37,7 +35,7 @@ export const LiveModeHeader = ({ query }: LiveModeHeaderProps) => {
           const { data, isLoading } = useRequest(
             get_jroot_plot(params_for_api),
             {},
-            [query.dataset_name, query.run_number, not_older_than]
+            [query.dataset_name, query.run_number, globalState.notOlderThan]
           );
           return (
             <CutomFormItem

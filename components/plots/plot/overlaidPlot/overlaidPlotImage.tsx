@@ -17,7 +17,6 @@ import {
   get_plot_error,
 } from '../singlePlot/utils';
 import { store } from '../../../../contexts/leftSideContext';
-import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
 import { useBlink } from '../../../../hooks/useBlink';
 import { PlotImage } from '../plotImage';
 import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
@@ -39,7 +38,7 @@ export const OverlaidPlotImage = ({
   imageRefScrollDown,
 }: OverlaidPlotImageProps) => {
   const globalState = useContext(store);
-  const { normalize, size } = globalState;
+  const { normalize, size, notOlderThan } = globalState;
 
   params_for_api.plot_name = plot.name;
   params_for_api.normalize = normalize;
@@ -54,8 +53,7 @@ export const OverlaidPlotImage = ({
 
   const imageRef = useRef(null);
 
-  const {not_older_than} = useUpdateLiveMode()
-  const { blink } = useBlink(not_older_than);
+  const { blink } = useBlink(notOlderThan);
 
   plot.dataset_name = query.dataset_name
   plot.run_number = query.run_number
@@ -106,7 +104,7 @@ export const OverlaidPlotImage = ({
                 params_for_api={params_for_api}
                 plot={plot}
                 plotURL={plot_with_overlay}
-                updated_by_not_older_than={not_older_than}
+                updated_by_not_older_than={notOlderThan}
                 query={query}
                 imageRef={imageRef}
                 isPlotSelected={is_plot_selected}

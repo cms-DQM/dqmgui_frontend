@@ -13,7 +13,6 @@ import {
   scrollToBottom,
   get_plot_error,
 } from './utils';
-import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
 import { useBlink } from '../../../../hooks/useBlink';
 import { PlotImage } from '../plotImage';
 import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
@@ -38,15 +37,14 @@ export const Plot = ({
 
   const router = useRouter();
   const query: QueryProps = router.query;
-  const { size } = useContext(store)
+  const { size, notOlderThan } = useContext(store)
   const imageRef = useRef(null);
 
   const plotNameRef = React.useRef<any>(null)
   const [count, setCount] = React.useState(0)
   const [tooLong, setTooLong] = React.useState(false)
 
-  const { not_older_than } = useUpdateLiveMode()
-  const { blink } = useBlink(not_older_than);
+  const { blink } = useBlink(notOlderThan);
   const url = get_plot_url(params_for_api);
   const is_plot_selected = isPlotSelected(selected_plots, plot)
 
@@ -103,7 +101,7 @@ export const Plot = ({
               params_for_api={params_for_api}
               plot={plot}
               plotURL={url}
-              updated_by_not_older_than={not_older_than}
+              updated_by_not_older_than={notOlderThan}
               query={query}
               imageRef={imageRef}
               isPlotSelected={is_plot_selected}

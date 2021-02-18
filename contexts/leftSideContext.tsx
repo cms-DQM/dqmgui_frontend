@@ -102,6 +102,7 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
     initialState.rightSideSize
   );
   const [JSROOTmode, setJSROOTmode] = useState<boolean>(false);
+  const [notOlderThan, setNotOlderThan] = useState<number>(Math.floor(new Date().getTime() / 1000));
   const [customize, setCustomize] = useState<CustomizeProps>({
     xtype: '',
     xmin: NaN,
@@ -182,7 +183,8 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         customize,
         setCustomize,
         runs_set_for_overlay,
-        set_runs_set_for_overlay
+        set_runs_set_for_overlay,
+        notOlderThan, setNotOlderThan
       }}
     >
       {children}

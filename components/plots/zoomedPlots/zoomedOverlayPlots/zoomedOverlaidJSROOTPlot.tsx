@@ -25,8 +25,8 @@ import {
   get_plot_error,
 } from '../../plot/singlePlot/utils';
 import { Button } from 'antd';
-import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
 import { useBlink } from '../../../../hooks/useBlink';
+import { store } from '../../../../contexts/leftSideContext';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;
@@ -117,8 +117,8 @@ export const ZoomedOverlaidJSROOTPlot = ({
       histogram4
     );
   }
-  const { not_older_than } = useUpdateLiveMode()
-  const { blink } = useBlink(not_older_than);
+  const { notOlderThan } = React.useContext(store)
+  const { blink } = useBlink(notOlderThan);
   
   const histogramParam = params_for_api.normalize ? 'hist' : 'nostack';
   //make sure that no null histograms are passed to draw func.
@@ -132,7 +132,7 @@ export const ZoomedOverlaidJSROOTPlot = ({
       drawJSROOT(histogramParam, id, overlaidJSROOTPlot);
     }
   }, [
-    not_older_than,
+    notOlderThan,
     data,
     params_for_api.lumi,
     params_for_api.overlay_plot,

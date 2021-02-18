@@ -15,20 +15,20 @@ import { functions_config } from '../../config/config';
 import { LiveModeButton } from '../liveModeButton';
 import { CustomDiv } from '../styledComponents';
 import { LatestRunsList } from './latestRunsList';
-import { useUpdateLiveMode } from '../../hooks/useUpdateInLiveMode';
+import { store } from '../../contexts/leftSideContext';
 
 export const LatestRuns = () => {
-  const { not_older_than } = useUpdateLiveMode()
+  const { notOlderThan } = React.useContext(store)
   const data_get_by_mount = useRequest(
-    get_the_latest_runs(not_older_than),
+    get_the_latest_runs(notOlderThan),
     {},
     []
   );
 
   const data_get_by_not_older_than_update = useRequest(
-    get_the_latest_runs(not_older_than),
+    get_the_latest_runs(notOlderThan),
     {},
-    [not_older_than]
+    [notOlderThan]
   );
 
   const data = useNewer(

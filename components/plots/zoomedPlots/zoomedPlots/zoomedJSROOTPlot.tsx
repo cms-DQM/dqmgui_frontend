@@ -22,8 +22,8 @@ import {
   get_plot_error,
 } from '../../plot/singlePlot/utils';
 import { Button } from 'antd';
-import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
 import { useBlink } from '../../../../hooks/useBlink';
+import { store } from '../../../../contexts/leftSideContext';
 
 interface ZoomedJSROOTPlotsProps {
   selected_plot: PlotDataProps;
@@ -55,15 +55,15 @@ export const ZoomedJSROOTPlot = ({
     params_for_api.lumi,
   ]);
 
-  const { not_older_than } = useUpdateLiveMode()
-  const { blink } = useBlink(not_older_than);
+  const { notOlderThan } = React.useContext(store)
+  const { blink } = useBlink(notOlderThan);
   
   useEffect(() => {
     if (!!document.getElementById(`${id}`)) {
       //@ts-ignore
       drawJSROOT(`${id}`, data);
     }
-  }, [data, params_for_api.lumi, not_older_than]);
+  }, [data, params_for_api.lumi, notOlderThan]);
 
   return (
     <StyledCol space={2}>

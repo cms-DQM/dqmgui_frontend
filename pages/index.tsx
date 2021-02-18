@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -18,9 +18,16 @@ import { Header } from '../containers/display/header';
 import { ContentSwitching } from '../containers/display/content/constent_switching';
 import { ModesSelection } from '../components/modes/modesSelection';
 import { useUpdateLiveMode } from '../hooks/useUpdateInLiveMode';
+import { store } from '../contexts/leftSideContext';
 
 const Index: NextPage<FolderPathQuery> = () => {
-  useUpdateLiveMode()
+  const { not_older_than } = useUpdateLiveMode()
+  const { setNotOlderThan } = useContext(store)
+
+  useEffect(() => {
+    setNotOlderThan(not_older_than)
+  }, [not_older_than])
+
   // We grab the query from the URL:
   const router = useRouter();
   const query: QueryProps = router.query;

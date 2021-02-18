@@ -7,8 +7,8 @@ import {
   StyledA,
   StyledCol,
 } from '../../containers/search/styledComponents';
+import { store } from '../../contexts/leftSideContext';
 import { useBlink } from '../../hooks/useBlink';
-import { useUpdateLiveMode } from '../../hooks/useUpdateInLiveMode';
 
 interface LatestRunsListProps {
   latest_runs: number[];
@@ -21,8 +21,8 @@ export const LatestRunsList = ({ latest_runs, ...props }: LatestRunsListProps) =
     query: { mode },
   } = router
 
-  const { not_older_than } = useUpdateLiveMode()
-  const { blink } = useBlink(not_older_than);
+  const { notOlderThan } = React.useContext(store)
+  const { blink } = useBlink(notOlderThan);
 
   return (
     <LatestRunsWrapper>
