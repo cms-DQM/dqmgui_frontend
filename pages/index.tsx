@@ -20,7 +20,7 @@ import { ModesSelection } from '../components/modes/modesSelection';
 import { useUpdateLiveMode } from '../hooks/useUpdateInLiveMode';
 
 const Index: NextPage<FolderPathQuery> = () => {
-  useUpdateLiveMode()
+  // useUpdateLiveMode()
   // We grab the query from the URL:
   const router = useRouter();
   const query: QueryProps = router.query;
@@ -32,7 +32,6 @@ const Index: NextPage<FolderPathQuery> = () => {
       document.getElementById("holderStyle").remove();
     };
   }
-
   return (
     <StyledDiv>
       <Head>

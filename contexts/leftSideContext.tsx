@@ -6,8 +6,6 @@ import {
   plotsProportionsOptions,
 } from '../components/constants';
 import {
-  SizeProps,
-  PlotProps,
   TripleProps,
   CustomizeProps,
 } from '../containers/display/interfaces';
@@ -17,31 +15,14 @@ export interface LeftSideStateProviderProps {
   children: ReactElement;
 }
 
-export interface LeftSideState {
-  size: SizeProps;
-  normalize: boolean;
-  stats: boolean;
-  overlayPosition: string;
-  overlay: PlotProps[];
-  triples: TripleProps[];
-  overlayPlots: TripleProps[];
-  workspaceFolders: string[];
-  openOverlayDataMenu: boolean;
-  viewPlotsPosition: boolean;
-  lumisection: string | number;
-  rightSideSize: SizeProps;
-  JSROOTmode: boolean;
-  customizeProps: CustomizeProps;
-  updated_by_not_older_than: number;
-}
 
 export const initialState: any = {
   size: sizes.medium.size,
-  normalize: 'True',
+  normalize: true,
   stats: true,
   overlayPosition: overlayOptions[0].value,
-  overlay: undefined,
-  overlayPlots: [],
+  imageRefScrollDown: null,
+  workspace: 'Everything',
   triples: [],
   openOverlayDataMenu: false,
   viewPlotsPosition: viewPositions[1].value,
@@ -49,8 +30,7 @@ export const initialState: any = {
   lumisection: -1,
   rightSideSize: sizes.fill.size,
   JSROOTmode: false,
-  shortcuts: [],
-  customizeProps: {
+  customize: {
     xtype: '',
     xmin: NaN,
     xmax: NaN,
@@ -63,7 +43,7 @@ export const initialState: any = {
     drawopts: '',
     withref: '',
   },
-  workspace: 'Everything',
+  runs_set_for_overlay: []
 };
 
 export interface ActionProps {
@@ -78,47 +58,18 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
   const [size, setSize] = useState<number>(initialState.size);
   const [normalize, setNormalize] = useState<boolean>(initialState.normalize);
   const [stats, setStats] = useState<boolean>(initialState.stats);
-  const [plotsWhichAreOverlaid, setPlotsWhichAreOverlaid] = useState({});
-  const [overlayPosition, setOverlaiPosition] = useState(
-    initialState.overlayPosition
-  );
-  const [overlayPlots, setOverlay] = useState(initialState.overlayPlots);
-  const [imageRefScrollDown, setImageRefScrollDown] = useState(null);
-  const [plotSearchFolders, setPlotSearchFolders] = React.useState([]);
+  const [overlayPosition, setOverlaiPosition] = useState(initialState.overlayPosition);
+  const [imageRefScrollDown, setImageRefScrollDown] = useState(initialState.imageRefScrollDown);
   const [workspace, setWorkspace] = React.useState(initialState.workspace);
   const [triples, setTriples] = React.useState(initialState.triples);
-  const [openOverlayDataMenu, toggleOverlayDataMenu] = React.useState(
-    initialState.openOverlayDataMenu
-  );
-  const [viewPlotsPosition, setViewPlotsPosition] = React.useState(
-    initialState.viewPlotsPosition
-  );
+  const [openOverlayDataMenu, toggleOverlayDataMenu] = React.useState(initialState.openOverlayDataMenu);
+  const [viewPlotsPosition, setViewPlotsPosition] = React.useState(initialState.viewPlotsPosition);
   const [proportion, setProportion] = React.useState(initialState.proportion);
-  const [lumisection, setLumisection] = React.useState(
-    initialState.lumisection
-  );
-
-  const [rightSideSize, setRightSideSize] = useState<number>(
-    initialState.rightSideSize
-  );
-  const [JSROOTmode, setJSROOTmode] = useState<boolean>(false);
-  const [customize, setCustomize] = useState<CustomizeProps>({
-    xtype: '',
-    xmin: NaN,
-    xmax: NaN,
-    ytype: '',
-    ymin: NaN,
-    ymax: NaN,
-    ztype: '',
-    zmin: NaN,
-    zmax: NaN,
-    drawopts: '',
-    withref: '',
-  });
-
-  const [runs_set_for_overlay, set_runs_set_for_overlay] = React.useState<
-    TripleProps[]
-  >(triples ? triples : []);
+  const [lumisection, setLumisection] = React.useState(initialState.lumisection);
+  const [rightSideSize, setRightSideSize] = useState<number>(initialState.rightSideSize);
+  const [JSROOTmode, setJSROOTmode] = useState<boolean>(initialState.JSROOTmode);
+  const [customize, setCustomize] = useState<CustomizeProps>(initialState.customize);
+  const [runs_set_for_overlay, set_runs_set_for_overlay] = React.useState(initialState.runs_set_for_overlay)
 
   const change_value_in_reference_table = (
     value: string | number,
@@ -153,17 +104,11 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         setNormalize,
         stats,
         setStats,
-        plotsWhichAreOverlaid,
-        setPlotsWhichAreOverlaid,
         overlayPosition,
         setOverlaiPosition,
-        overlayPlots,
-        setOverlay,
         imageRefScrollDown,
         setImageRefScrollDown,
         workspace, setWorkspace,
-        plotSearchFolders,
-        setPlotSearchFolders,
         change_value_in_reference_table,
         triples,
         setTriples,
