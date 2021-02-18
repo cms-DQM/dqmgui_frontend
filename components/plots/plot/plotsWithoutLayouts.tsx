@@ -32,7 +32,7 @@ export const PlotsWithoutLayouts = ({
         const params_for_api = FormatParamsForAPI(
           globalState,
           query,
-          encodeURI(plot.name),
+          encodeURIComponent(plot.name),
           plot.path
         );
         if (plot) {

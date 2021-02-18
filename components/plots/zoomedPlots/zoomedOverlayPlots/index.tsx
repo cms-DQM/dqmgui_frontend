@@ -25,7 +25,7 @@ export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
         const params_for_api = FormatParamsForAPI(
           globalState,
           query,
-          selected_plot.name,
+          encodeURIComponent(selected_plot.name),
           selected_plot.path,
           true
         );

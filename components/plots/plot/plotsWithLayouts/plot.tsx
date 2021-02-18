@@ -35,7 +35,7 @@ export const Plot = ({
   const params_for_api = FormatParamsForAPI(
     globalState,
     query,
-    encodeURI(plot.name),
+    encodeURIComponent(plot.name),
     plot.path
   );
   params_for_api.width = onePlotWidth
