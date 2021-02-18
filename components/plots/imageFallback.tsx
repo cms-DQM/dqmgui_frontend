@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
-import { Image } from '../../containers/display/styledComponents';
 import { Spinner } from '../../containers/search/styledComponents';
 import { CustomDiv } from '../styledComponents';
 
@@ -40,7 +39,7 @@ export const ImageFallback = ({
   }, [src]);
 
   return (
-    <>
+    <div style={{border: '2px solid #AC3B61'}}>
       <CustomDiv
         display={displaySpinner(imageLoading)}
         justifycontent="center"
@@ -55,6 +54,6 @@ export const ImageFallback = ({
         onError={onError}
         onLoad={() => setImageLoading(false)}
       />
-    </>
+    </div>
   );
 };

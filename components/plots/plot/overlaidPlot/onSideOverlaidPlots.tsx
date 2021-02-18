@@ -16,8 +16,6 @@ import {
   scrollToBottom,
   get_plot_error,
 } from '../singlePlot/utils';
-import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
-import { useBlink } from '../../../../hooks/useBlink';
 import { PlotImage } from '../plotImages';
 import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
 import { isPlotSelected } from '../../../../containers/display/utils';
@@ -60,9 +58,6 @@ export const OnSideOverlaidPlots = ({
   plot.dataset_name = query.dataset_name
   plot.run_number = query.run_number
 
-  const { not_older_than } = useUpdateLiveMode()
-  const { blink } = useBlink(not_older_than);
-
   return (
     <OnSidePlotsWrapper>
       {onsidePlotsURLs.map((url: string, index: number) => {
@@ -71,7 +66,6 @@ export const OnSideOverlaidPlots = ({
           <Tooltip title={tooLong ? decodeURI(params_for_api.plot_name as string) : ''}>
             <ParentWrapper
               isPlotSelected={is_plot_selected.toString()}
-              isLoading={blink.toString()}
               animation={(functions_config.mode === 'ONLINE').toString()}
               size={size}>
               <LayoutName

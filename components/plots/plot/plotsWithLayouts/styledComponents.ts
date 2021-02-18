@@ -13,7 +13,7 @@ const keyframe_for_updates_plots = keyframes`
 `;
 
 
-export const ParentWrapper = styled.div<{ size: SizeProps, isLoading: string, animation: string, isPlotSelected?: string, plotsAmount?: number; }>`
+export const ParentWrapper = styled.div<{ size: SizeProps, isLoading?: string, animation?: string, isPlotSelected?: string, plotsAmount?: number; }>`
     width: ${(props) => (props.size.w + 30 + (props.plotsAmount ? props.plotsAmount : 4 * 4))}px;
     height: ${(props) => (props.size.h + 40 + (props.plotsAmount ? props.plotsAmount : 4 * 4))}px;
     justify-content: center;
@@ -22,13 +22,14 @@ export const ParentWrapper = styled.div<{ size: SizeProps, isLoading: string, an
     display: grid;
     align-items: end;
     padding: 8px;
-    animation-iteration-count: 1;
-    animation-duration: 1s;
-    animation-name: ${(props) =>
-    props.isLoading === 'true' && props.animation === 'true'
-      ? keyframe_for_updates_plots
-      : ''};
 `
+ // animation-iteration-count: 1;
+    // animation-duration: 1s;
+    // animation-name: ${(props) =>
+    // props.isLoading === 'true' && props.animation === 'true'
+    //   ? keyframe_for_updates_plots
+    //   : ''}
+    //   ;
 
 export const LayoutName = styled.div<{ error?: string, isPlotSelected?: string }>`
     padding-bottom: 4;

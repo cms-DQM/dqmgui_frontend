@@ -13,8 +13,6 @@ import {
   scrollToBottom,
   get_plot_error,
 } from './utils';
-import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
-import { useBlink } from '../../../../hooks/useBlink';
 import { PlotImage } from '../plotImages';
 import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
 import { isPlotSelected } from '../../../../containers/display/utils';
@@ -43,8 +41,6 @@ export const Plot = ({
   const [count, setCount] = React.useState(0)
   const [tooLong, setTooLong] = React.useState(false)
 
-  const { not_older_than } = useUpdateLiveMode()
-  const { blink } = useBlink(not_older_than);
   const url = get_plot_url(params_for_api);
   const is_plot_selected = isPlotSelected(selected_plots, plot)
   const { imageRefScrollDown } = useContext(store)
@@ -72,8 +68,6 @@ export const Plot = ({
   return (
     <Tooltip title={tooLong ? decodeURI(params_for_api.plot_name as string) : ''}>
       <ParentWrapper
-        isLoading={blink.toString()}
-        animation={(functions_config.mode === 'ONLINE').toString()}
         size={size}
         isPlotSelected={is_plot_selected.toString()}>
         <LayoutName
@@ -97,11 +91,9 @@ export const Plot = ({
             ref={imageRef}
           >
             <PlotImage
-              blink={blink}
               params_for_api={params_for_api}
               plot={plot}
               plotURL={url}
-              updated_by_not_older_than={not_older_than}
               query={query}
               imageRef={imageRef}
               isPlotSelected={is_plot_selected}

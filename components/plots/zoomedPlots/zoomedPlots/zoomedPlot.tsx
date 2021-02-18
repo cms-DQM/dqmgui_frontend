@@ -30,10 +30,8 @@ import {
 import { Customization } from '../../../customization';
 import { ZoomedPlotMenu } from '../menu';
 import { Plot_portal } from '../../../../containers/display/portal';
-import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
 import { PlotImage } from '../../plot/plotImages';
 import { getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames } from '../../../utils';
-import { useBlink } from '../../../../hooks/useBlink';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -82,8 +80,6 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, select
     //   icon: <BlockOutlined />,
     // },
   ];
-  const { not_older_than } = useUpdateLiveMode()
-  const { blink } = useBlink(not_older_than);
   
   return (
     <StyledCol space={2}>
@@ -94,8 +90,6 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, select
         title={selected_plot.name}
       >
         <StyledPlotRow
-          isLoading={blink.toString()}
-          animation={(functions_config.mode === 'ONLINE').toString()}
           minheight={copy_of_params.height}
           width={copy_of_params.width?.toString()}
           is_plot_selected={true.toString()}
@@ -126,8 +120,6 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, select
         setCustomizationParams={setCustomizationParams}
       />
       <StyledPlotRow
-        isLoading={blink.toString()}
-        animation={(functions_config.mode === 'ONLINE').toString()}
         minheight={params_for_api.height}
         width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}

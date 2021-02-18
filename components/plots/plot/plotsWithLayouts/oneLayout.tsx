@@ -2,8 +2,6 @@ import * as React from 'react'
 
 import { functions_config } from '../../../../config/config'
 import { store } from '../../../../contexts/leftSideContext'
-import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode'
-import { useBlink } from '../../../../hooks/useBlink'
 import { LayoutName, LayoutWrapper, ParentWrapper } from './styledComponents'
 import { Plot } from './plot'
 import { decodePlotName } from '../../../utils'
@@ -45,9 +43,6 @@ export const OnePlotInLayout = ({ plots, layoutName, query, selected_plots }: On
   const auto = []
   var i;
 
-  const {not_older_than} = useUpdateLiveMode()
-  const { blink } = useBlink(not_older_than);
-
   for (i = 0; i < howMuchInOneLine; i++) {
     auto.push('auto')
   }
@@ -62,8 +57,6 @@ export const OnePlotInLayout = ({ plots, layoutName, query, selected_plots }: On
   return (
     <ParentWrapper
       plotsAmount={plots.length}
-      isLoading={blink.toString()}
-      animation={(functions_config.mode === 'ONLINE').toString()}
       size={size}>
       <LayoutName ref={plotNameRef} >
         {decodePlotName(tooLong, nameOfLayout ? nameOfLayout : '')}

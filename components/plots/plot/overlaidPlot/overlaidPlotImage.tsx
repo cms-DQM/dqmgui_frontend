@@ -17,8 +17,6 @@ import {
   get_plot_error,
 } from '../singlePlot/utils';
 import { store } from '../../../../contexts/globalStateContext';
-import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
-import { useBlink } from '../../../../hooks/useBlink';
 import { PlotImage } from '../plotImages';
 import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
 import { isPlotSelected } from '../../../../containers/display/utils';
@@ -50,9 +48,6 @@ export const OverlaidPlotImage = ({
 
   const imageRef = useRef(null);
 
-  const { not_older_than } = useUpdateLiveMode()
-  const { blink } = useBlink(not_older_than);
-
   plot.dataset_name = query.dataset_name
   plot.run_number = query.run_number
 
@@ -72,8 +67,6 @@ export const OverlaidPlotImage = ({
   return (
     <Tooltip title={tooLong ? decodeURI(params_for_api.plot_name as string) : ''}>
       <ParentWrapper
-        isLoading={blink.toString()}
-        animation={(functions_config.mode === 'ONLINE').toString()}
         size={size}
         isPlotSelected={is_plot_selected.toString()}>
         <LayoutName
