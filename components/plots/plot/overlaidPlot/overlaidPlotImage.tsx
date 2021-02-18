@@ -19,7 +19,7 @@ import {
 import { store } from '../../../../contexts/globalStateContext';
 import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
 import { useBlink } from '../../../../hooks/useBlink';
-import { PlotImage } from '../plotImage';
+import { PlotImage } from '../plotImages';
 import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
 import { isPlotSelected } from '../../../../containers/display/utils';
 import { Tooltip } from 'antd';

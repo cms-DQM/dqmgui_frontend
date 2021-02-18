@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Store } from 'antd/lib/form/interface';
-import { SettingOutlined, FullscreenOutlined, BlockOutlined } from '@ant-design/icons';
+import { SettingOutlined, FullscreenOutlined } from '@ant-design/icons';
 
 import {
   functions_config,
@@ -33,7 +33,7 @@ import { ZoomedPlotMenu } from '../menu';
 import { Customization } from '../../../customization';
 import { Plot_portal } from '../../../../containers/display/portal';
 import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
-import { PlotImage } from '../../plot/plotImage';
+import { PlotImage } from '../../plot/plotImages';
 import { getZoomedOverlaidPlotsUrlForOverlayingPlotsWithDifferentNames } from '../../../utils';
 import { useBlink } from '../../../../hooks/useBlink';
 

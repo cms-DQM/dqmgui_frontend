@@ -6,7 +6,7 @@ import { PlotDataProps, QueryProps } from '../../../../containers/display/interf
 import { isPlotSelected } from '../../../../containers/display/utils';
 import { PlotWrapper } from './styledComponents';
 import { FormatParamsForAPI, get_plot_error, scroll, scrollToBottom } from '../singlePlot/utils'
-import { PlotImage } from '../plotImage';
+import { PlotImage } from '../plotImages';
 import { store as globalContext } from '../../../../contexts/globalStateContext';
 import { store as leftSideContext } from '../../../../contexts/leftSideContext';
 

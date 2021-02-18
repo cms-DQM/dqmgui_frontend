@@ -18,7 +18,7 @@ import {
 } from '../singlePlot/utils';
 import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
 import { useBlink } from '../../../../hooks/useBlink';
-import { PlotImage } from '../plotImage';
+import { PlotImage } from '../plotImages';
 import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
 import { isPlotSelected } from '../../../../containers/display/utils';
 import { Tooltip } from 'antd';
@@ -95,11 +95,9 @@ export const OnSideOverlaidPlots = ({
                   ref={imageRef}
                 >
                   <PlotImage
-                    blink={blink}
                     params_for_api={params_for_api}
                     plot={overlaidPlotsObjs[index]}
                     plotURL={url}
-                    updated_by_not_older_than={not_older_than}
                     query={query}
                     imageRef={imageRef}
                     isPlotSelected={is_plot_selected}
