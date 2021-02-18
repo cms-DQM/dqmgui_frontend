@@ -18,8 +18,6 @@ interface PlotProps {
   onePlotHeight: number;
   selected_plots: PlotDataProps[];
   imageRef: React.RefObject<HTMLDivElement>;
-  blink: boolean;
-  updated_by_not_older_than: number;
 }
 
 export const Plot = ({
@@ -29,8 +27,7 @@ export const Plot = ({
   onePlotWidth,
   selected_plots,
   imageRef,
-  blink,
-  updated_by_not_older_than }: PlotProps) => {
+   }: PlotProps) => {
   const { imageRefScrollDown } = React.useContext(globalContext)
   const fullState = React.useContext(leftSideContext)
   const params_for_api = FormatParamsForAPI(
@@ -71,22 +68,18 @@ export const Plot = ({
       >
         {query.overlay_data ? (
           <PlotImage
-            blink={blink}
             params_for_api={params_for_api}
             plot={plot}
             plotURL={plot_with_overlay}
-            updated_by_not_older_than={updated_by_not_older_than}
             query={query}
             imageRef={imageRef}
             isPlotSelected={plotSelected}
           />)
           :
           (<PlotImage
-            blink={blink}
             params_for_api={params_for_api}
             plot={plot}
             plotURL={url}
-            updated_by_not_older_than={updated_by_not_older_than}
             query={query}
             imageRef={imageRef}
             isPlotSelected={plotSelected}

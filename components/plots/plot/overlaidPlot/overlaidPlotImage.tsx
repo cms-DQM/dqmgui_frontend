@@ -97,11 +97,9 @@ export const OverlaidPlotImage = ({
             ref={imageRef}
           >
             <PlotImage
-              blink={blink}
               params_for_api={params_for_api}
               plot={plot}
               plotURL={plot_with_overlay}
-              updated_by_not_older_than={not_older_than}
               query={query}
               imageRef={imageRef}
               isPlotSelected={is_plot_selected}

@@ -110,12 +110,10 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, select
             height={copy_of_params.height}
           >
             <PlotImage
-              blink={blink}
               params_for_api={copy_of_params}
               plot={selected_plot}
               plotURL={zoomed_plot_url}
               query={query}
-              updated_by_not_older_than={not_older_than}
             />
           </ImageDiv>
         </StyledPlotRow>
@@ -152,8 +150,6 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, select
           display="flex"
         >
           <PlotImage
-            updated_by_not_older_than={not_older_than}
-            blink={blink}
             params_for_api={params_for_api}
             plot={selected_plot}
             plotURL={plot_url}

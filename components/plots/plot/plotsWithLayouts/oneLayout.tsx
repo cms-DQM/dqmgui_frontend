@@ -80,9 +80,7 @@ export const OnePlotInLayout = ({ plots, layoutName, query, selected_plots }: On
                 onePlotHeight={onePlotHeight}
                 onePlotWidth={onePlotWidth}
                 selected_plots={selected_plots}
-                imageRef={imageRef}
-                blink={blink}
-                updated_by_not_older_than={not_older_than} />
+                imageRef={imageRef} />
             )
           })}
       </LayoutWrapper>

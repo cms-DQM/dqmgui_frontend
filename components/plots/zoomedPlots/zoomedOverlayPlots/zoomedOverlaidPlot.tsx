@@ -117,12 +117,10 @@ export const ZoomedOverlaidPlot = ({
             height={copy_of_params.height}
           >
             <PlotImage
-              blink={blink}
               params_for_api={copy_of_params}
               plot={selected_plot}
               plotURL={zoomed_plot_url}
               query={query}
-              updated_by_not_older_than={not_older_than}
             />
           </ImageDiv>
         </StyledPlotRow>
@@ -157,12 +155,10 @@ export const ZoomedOverlaidPlot = ({
           height={params_for_api.height}
         >
           <PlotImage
-            blink={blink}
             params_for_api={params_for_api}
             plot={selected_plot}
             plotURL={source}
             query={query}
-            updated_by_not_older_than={not_older_than}
           />
         </ImageDiv>
       </StyledPlotRow>
