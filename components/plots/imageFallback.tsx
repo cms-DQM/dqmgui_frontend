@@ -47,7 +47,7 @@ export const ImageFallback = ({
       >
         <Spinner />
       </CustomDiv>
-      <div style={{ border: '2px solid #AC3B61' }}>
+      <div style={{ border: imageLoading ? '' : '2px solid #AC3B61' }}>
         <LazyLoadImage
           src={final_src}
           {...props}

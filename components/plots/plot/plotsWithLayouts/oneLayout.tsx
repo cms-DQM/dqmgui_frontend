@@ -1,6 +1,5 @@
 import * as React from 'react'
 
-import { functions_config } from '../../../../config/config'
 import { store } from '../../../../contexts/leftSideContext'
 import { LayoutName, LayoutWrapper, ParentWrapper } from './styledComponents'
 import { Plot } from './plot'

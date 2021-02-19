@@ -48,6 +48,8 @@ const Index: NextPage<FolderPathQuery> = () => {
           type="text/javascript"
           src="./jsroot-5.8.0/scripts/JSRootCore.js?2d&hist&more2d"
         ></script>
+        <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+        <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
       </Head>
       <StyledLayout>
         <StyledHeader>

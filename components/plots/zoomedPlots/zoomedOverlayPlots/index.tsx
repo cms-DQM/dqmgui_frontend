@@ -27,7 +27,7 @@ export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
           run_number: query.run_number,
           dataset_name: query.dataset_name,
           lumi: query.lumi,
-          folders_path: query.folder_path,
+          folders_path: selected_plot.path,
           overlay: query.overlay,
           overlay_plot: formTriples(query.overlay_data),
           height: rightSideSize.h,
