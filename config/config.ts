@@ -59,7 +59,7 @@ const set_env = () => {
         layouts: true,
         latest_runs: true,
       },
-      mode: 'OFFLINE',
+      mode: 'ONLINE',
     };
     return development_config
   }

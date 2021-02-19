@@ -2,17 +2,16 @@ import * as React from 'react';
 import { PlotImageProps } from '.';
 
 import { root_url } from '../../../../config/config';
-import {
-  ParamsForApiProps,
-  QueryProps,
-} from '../../../../containers/display/interfaces';
 import { useBlink } from '../../../../hooks/useBlink';
+import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
+import { makeid } from '../../../utils';
 import { ErrorMessage } from '../../errorMessage';
 import { ImageFallback } from '../../imageFallback';
 import {
   addPlotToRightSide,
   removePlotFromRightSide,
 } from '../singlePlot/utils';
+
 
 
 export const LiveModePlotImage = ({
@@ -23,13 +22,16 @@ export const LiveModePlotImage = ({
   plotURL,
   plot,
 }: PlotImageProps) => {
-  const updated_by_not_older_than = Math.floor(new Date().getTime() / 1000)
-  const { blink } = useBlink(updated_by_not_older_than)
+  const { not_older_than, addLoader } = useUpdateLiveMode()
+  const { blink } = useBlink(not_older_than)
+  const [loader, setLoader] = React.useState(true)
+  const [id, setId] = React.useState<string>()
+
   const [new_image_url, set_new_image_url] = React.useState(
-    `${root_url}${plotURL};notOlderThan=${updated_by_not_older_than}`
+    `${root_url}${plotURL};notOlderThan=${not_older_than}`
   );
   const [old_image_url, set_old_image_url] = React.useState(
-    `${root_url}${plotURL};notOlderThan=${updated_by_not_older_than}`
+    `${root_url}${plotURL};notOlderThan=${not_older_than}`
   );
 
   const [show_old_img, set_show_old_img] = React.useState(true);
@@ -37,11 +39,11 @@ export const LiveModePlotImage = ({
 
   React.useEffect(() => {
     set_new_image_url(
-      `${root_url}${plotURL};notOlderThan=${updated_by_not_older_than}`
+      `${root_url}${plotURL};notOlderThan=${not_older_than}`
     );
     set_show_old_img(blink);
   }, [
-    updated_by_not_older_than,
+    not_older_than,
     params_for_api.customizeProps,
     params_for_api.height,
     params_for_api.width,
@@ -58,6 +60,15 @@ export const LiveModePlotImage = ({
     blink
   ]);
 
+  React.useEffect(() => {
+    const id_ = makeid()
+    setId(id_)
+  }, [])
+
+  React.useEffect(() => {
+    addLoader({ value: loader, id })
+  }, [loader])
+  
   const old_image_display = show_old_img ? '' : 'none';
   const new_image_display = show_old_img ? 'none' : '';
   return (
@@ -81,6 +92,7 @@ export const LiveModePlotImage = ({
                   retryTimes={3}
                   style={{ display: new_image_display }}
                   onLoad={() => {
+                    setLoader(false)
                     set_old_image_url(new_image_url);
                     set_show_old_img(false);
                   }}
