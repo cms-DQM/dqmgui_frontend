@@ -7,6 +7,7 @@ import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
 import { makeid } from '../../../utils';
 import { ErrorMessage } from '../../errorMessage';
 import { ImageFallback } from '../../imageFallback';
+import { PlotUpdateIdicator } from '../plotsWithLayouts/styledComponents';
 import {
   addPlotToRightSide,
   removePlotFromRightSide,
@@ -68,7 +69,7 @@ export const LiveModePlotImage = ({
   React.useEffect(() => {
     addLoader({ value: loader, id })
   }, [loader])
-  
+
   const old_image_display = show_old_img ? '' : 'none';
   const new_image_display = show_old_img ? 'none' : '';
   return (
@@ -87,7 +88,8 @@ export const LiveModePlotImage = ({
             }}
           >
             {!imageError && (
-              <>
+              <PlotUpdateIdicator
+                update={blink.toString()}>
                 <ImageFallback
                   retryTimes={3}
                   style={{ display: new_image_display }}
@@ -115,7 +117,7 @@ export const LiveModePlotImage = ({
                   width={'auto'}
                   height={'auto'}
                 />
-              </>
+              </PlotUpdateIdicator>
             )}
           </div>
         )}

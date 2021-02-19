@@ -3,33 +3,49 @@ import { SizeProps } from '../../../../containers/display/interfaces';
 import { theme } from '../../../../styles/theme';
 
 const keyframe_for_updates_plots = keyframes`
-  0% {
-    background: ${theme.colors.secondary.main};
-    color:  ${theme.colors.common.white};
-  }
-  100% {
-    background: ${theme.colors.primary.light};
-  }
+    0% {
+      border: 2px solid ${theme.colors.primary.light};
+    }
+    50% {
+      border: 2px solid ${theme.colors.primary.main};
+    }
+    100% {
+      border: 2px solid ${theme.colors.primary.light};
+    }
 `;
+
+const uploadedPlot = keyframes`
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+`;
+
 
 
 export const ParentWrapper = styled.div<{ size: SizeProps, isLoading?: string, animation?: string, isPlotSelected?: string, plotsAmount?: number; }>`
     width: ${(props) => (props.size.w + 30 + (props.plotsAmount ? props.plotsAmount : 4 * 4))}px;
     height: ${(props) => (props.size.h + 40 + (props.plotsAmount ? props.plotsAmount : 4 * 4))}px;
     justify-content: center;
+    align-items flex-start !important; 
     margin: 4px;
     background: ${(props) => props.isPlotSelected === 'true' ? theme.colors.secondary.light : theme.colors.primary.light};
     display: grid;
     align-items: end;
     padding: 8px;
 `
- // animation-iteration-count: 1;
-    // animation-duration: 1s;
-    // animation-name: ${(props) =>
-    // props.isLoading === 'true' && props.animation === 'true'
-    //   ? keyframe_for_updates_plots
-    //   : ''}
-    //   ;
+export const PlotUpdateIdicator = styled.div<{ update?: string }>`
+    animation-iteration-count: 1;
+    animation-duration: 1.5s;
+    animation-name: ${keyframe_for_updates_plots};
+`
+export const PlotUploadIdicator = styled.div<{ uploaded?: string }>`
+    animation-iteration-count: 1;
+    animation-duration: 0.5s;
+    animation-name: ${uploadedPlot};
+`
 
 export const LayoutName = styled.div<{ error?: string, isPlotSelected?: string }>`
     padding-bottom: 4;
