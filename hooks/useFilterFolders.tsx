@@ -17,11 +17,12 @@ import { useRequest } from './useRequest';
 import { useConstructFullPlotObject } from './useConstructFullPlotObject';
 import { functions_config } from '../config/config';
 import cleanDeep from 'clean-deep';
+import { makeid } from '../components/utils';
+import { useUpdateLiveMode } from './useUpdateInLiveMode';
 
 export const useFilterFolders = (
   query: QueryProps,
   params: any,
-  updated_by_not_older_than: any
 ) => {
   const [foldersByPlotSearch, setFoldersByPlotSearch] = React.useState<
     string[]
@@ -30,18 +31,20 @@ export const useFilterFolders = (
     folders_found_by_dataset_or_run,
     set_folders_found_by_dataset_or_run,
   ] = React.useState<DirectoryInterface[]>([]);
+  const { not_older_than, addLoader } = useUpdateLiveMode()
   const [directories, setDirectories] = React.useState<DirectoryInterface[]>(
     []
   );
   const [plots, setPlots] = React.useState<any[]>([]);
   const [isLoading, setLoading] = React.useState(false);
+  const [id, setId] = React.useState<string>()
 
   const current_api = choose_api(params);
 
   const data_get_by_not_older_than_update = useRequest(
     current_api,
     {},
-    [updated_by_not_older_than],
+    [not_older_than],
     functions_config.mode.onlineode
   );
 
@@ -61,6 +64,16 @@ export const useFilterFolders = (
     data_get_by_folder_run_dataset_update.errors,
     data_get_by_not_older_than_update.errors
   );
+
+
+  React.useEffect(() => {
+    const id_ = makeid()
+    setId(id_)
+  }, [])
+
+  React.useEffect(() => {
+    addLoader({ value: isLoading, id })
+  }, [isLoading])
 
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
   const allDirectories = getDirectories(contents);

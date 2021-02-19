@@ -74,8 +74,6 @@ const Content: FC<FolderProps> = ({
   const { foldersByPlotSearch, plots, isLoading, errors } = useFilterFolders(
     query,
     params,
-    undefined
-    // updated_by_not_older_than
   );
   const plots_with_layouts = plots.filter((plot) => plot.hasOwnProperty('layout'))
   var plots_grouped_by_layouts = chain(plots_with_layouts).sortBy('layout').groupBy('layout').value()
