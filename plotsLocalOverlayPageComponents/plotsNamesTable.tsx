@@ -57,7 +57,7 @@ export const PlotsNamesTable = ({ plotNames, setLastSelectedPlot, selectedPlots,
     dataIndex: 'plot_name',
     key: 'plot_name',
     render: (plot: string) => {
-      const params ={run_number, dataset_name, folders_path: lastSelectedPlot.folders_path, plot_name: plot, height: sizes.small.size.h, width: sizes.small.size.w}
+      const params ={run_number, dataset_name, folders_path: lastSelectedPlot.folders_path,  plot_name: encodeURIComponent(plot), height: sizes.small.size.h, width: sizes.small.size.w}
       const src = get_plot_url(params as any)
       return(
         <Tooltip title={<img src={`${root_url}${src}`}/>}>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { FullscreenOutlined, SettingOutlined } from '@ant-design/icons';
 import { Store } from 'antd/lib/form/interface';
+import { BlockOutlined } from '@ant-design/icons';
 
 import {
   get_plot_url
@@ -73,12 +74,12 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, select
       action: () => toggleCustomizationMenu(true),
       icon: <SettingOutlined />,
     },
-    // functions_config.new_back_end.new_back_end && {
-    //   label: 'Overlay with another plot',
-    //   value: 'overlay',
-    //   url: url,
-    //   icon: <BlockOutlined />,
-    // },
+    functions_config.new_back_end.new_back_end && {
+      label: 'Overlay with another plot',
+      value: 'overlay',
+      url: url,
+      icon: <BlockOutlined />,
+    },
   ];
   
   return (

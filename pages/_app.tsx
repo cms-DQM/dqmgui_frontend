@@ -8,6 +8,7 @@ import { theme } from '../styles/theme';
 import { LeftSideStateProvider } from '../contexts/leftSideContext';
 import { GlobalStateProvider } from '../contexts/globalStateContext';
 import { RightSideStateProvider } from '../contexts/rightSideContext';
+import { UpdateStateProvider } from '../contexts/updateContext';
 
 
 const GlobalStyles = createGlobalStyle`
@@ -58,13 +59,15 @@ export default class MyApp extends App {
       <GlobalStateProvider>
         <LeftSideStateProvider>
           <RightSideStateProvider>
-            <ThemeProvider theme={theme}>
-              <>
-                <Reset />
-                <GlobalStyles />
-                <Component {...pageProps} />
-              </>
-            </ThemeProvider>
+            <UpdateStateProvider>
+              <ThemeProvider theme={theme}>
+                <>
+                  <Reset />
+                  <GlobalStyles />
+                  <Component {...pageProps} />
+                </>
+              </ThemeProvider>
+            </UpdateStateProvider>
           </RightSideStateProvider>
         </LeftSideStateProvider>
       </GlobalStateProvider>

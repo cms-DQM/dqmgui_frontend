@@ -1,6 +1,7 @@
 import { getRunsWithLumisections, get_customize_params } from "./utils";
 import { LumisectionRequestProps, ParamsForApiProps } from "../containers/display/interfaces";
 import { ParametersForApi, PlotProperties } from "../plotsLocalOverlayPageComponents/interfaces";
+import { sizes } from "../components/constants";
 
 export const get_folders_and_plots_new_api = (params: ParamsForApiProps) => {
   if (params.plot_search) {

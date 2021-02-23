@@ -4,6 +4,7 @@ import { PlotImageProps } from '.';
 import { root_url } from '../../../../config/config';
 import { ErrorMessage } from '../../errorMessage';
 import { ImageFallback } from '../../imageFallback';
+import { PlotUpdateIdicator } from '../plotsWithLayouts/styledComponents';
 import {
   addPlotToRightSide,
   removePlotFromRightSide,
@@ -22,6 +23,7 @@ export const RegularModePlotImage = ({
   );
 
   const [imageError, setImageError] = React.useState(false);
+  const [loader, setLoader] = React.useState(true)
 
   React.useEffect(() => {
     set_image_url(
@@ -45,9 +47,13 @@ export const RegularModePlotImage = ({
             }}
           >
             {!imageError && (
-              <>
+               <PlotUpdateIdicator
+               update={loader.toString()}>
                 <ImageFallback
                   style={{ display: '' }}
+                  onLoad={ () => {
+                    setLoader(false)
+                  }}
                   retryTimes={3}
                   alt={plot.name}
                   src={image_url}
@@ -55,7 +61,7 @@ export const RegularModePlotImage = ({
                   width={params_for_api.width}
                   height={params_for_api.height}
                 />
-              </>
+              </PlotUpdateIdicator>
             )}
           </div>
         )}

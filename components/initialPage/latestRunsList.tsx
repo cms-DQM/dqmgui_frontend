@@ -8,7 +8,6 @@ import {
   StyledCol,
 } from '../../containers/search/styledComponents';
 import { useBlink } from '../../hooks/useBlink';
-import { useUpdateLiveMode } from '../../hooks/useUpdateInLiveMode';
 
 interface LatestRunsListProps {
   latest_runs: number[];

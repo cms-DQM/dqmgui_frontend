@@ -42,23 +42,22 @@ export const ImageFallback = ({
 
   return (
     <>
-      <CustomDiv
-        display={displaySpinner(imageLoading)}
-        justifycontent="center"
-        width="100%"
-      >
-        <Spinner />
-      </CustomDiv>
       <PlotUploadIdicator
         uploaded={imageLoading.toString()}>
-        <LazyLoadImage
+      <div>
+        <img
           src={final_src}
           {...props}
           key={key}
           onError={onError}
-          onLoad={() => setImageLoading(false)}
+          onLoad={
+            () => {
+              props.onLoad()
+              setImageLoading(false)
+            }}
         />
-      </PlotUploadIdicator>
+      </div>
+    </PlotUploadIdicator>
     </>
   );
 };

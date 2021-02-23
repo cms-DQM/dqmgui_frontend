@@ -6,12 +6,12 @@ import {
   CutomFormItem,
 } from '../styledComponents';
 import { theme } from '../../styles/theme';
-import { useUpdateLiveMode } from '../../hooks/useUpdateInLiveMode';
 import { QueryProps, InfoProps } from '../../containers/display/interfaces';
 import { main_run_info } from '../constants';
 import { useRequest } from '../../hooks/useRequest';
 import { get_jroot_plot } from '../../api/oldApi';
 import { get_label, makeid } from '../utils';
+import { store } from '../../contexts/updateContext';
 
 const { Title } = Typography;
 
@@ -20,7 +20,7 @@ interface LiveModeHeaderProps {
 }
 
 export const LiveModeHeader = ({ query }: LiveModeHeaderProps) => {
-  const { not_older_than, addLoader } = useUpdateLiveMode()
+  const {not_older_than, addLoader } = React.useContext(store)
 
   return (
     <>

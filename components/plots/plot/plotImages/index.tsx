@@ -24,5 +24,4 @@ export const PlotImage = ({
     } else {
         return <RegularModePlotImage {...props} />
     }
-
 }

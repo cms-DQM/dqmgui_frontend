@@ -4,13 +4,14 @@ import { theme } from '../../../../styles/theme';
 
 const keyframe_for_updates_plots = keyframes`
     0% {
-      border: 2px solid ${theme.colors.primary.light};
+      background:  ${theme.colors.primary.light};
     }
     50% {
-      border: 2px solid ${theme.colors.primary.main};
+      background:  ${theme.colors.primary.main};
+      opacity: 0.5;
     }
     100% {
-      border: 2px solid ${theme.colors.primary.light};
+      background:  ${theme.colors.primary.light};
     }
 `;
 
@@ -36,10 +37,12 @@ export const ParentWrapper = styled.div<{ size: SizeProps, isLoading?: string, a
     align-items: end;
     padding: 8px;
 `
-export const PlotUpdateIdicator = styled.div<{ update?: string }>`
-    animation-iteration-count: 1;
-    animation-duration: 1.5s;
-    animation-name: ${keyframe_for_updates_plots};
+export const PlotUpdateIdicator = styled.div<{ update?: string}>`
+    padding: 1px;
+    animation-iteration-count: ${props => props.update === 'true'? 'infinite' : '0' };;
+    animation-timing-function:ease-in-out;
+    animation-duration: 1s;
+    animation-name: ${keyframe_for_updates_plots };
 `
 export const PlotUploadIdicator = styled.div<{ uploaded?: string }>`
     animation-iteration-count: 1;

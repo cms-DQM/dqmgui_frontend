@@ -228,8 +228,8 @@ export const is_run_selected_already = (
 export const choose_api = (params: ParamsForApiProps) => {
   const current_api = !functions_config.new_back_end.new_back_end
     ? get_folders_and_plots_old_api(params)
-    : params.run_number === '0' && params.dataset_name === "/Global/Online/ALL"
-      ? get_folders_and_plots_new_api_with_live_mode(params)
+    // : params.run_number === '0' && params.dataset_name === "/Global/Online/ALL" 
+      // ? get_folders_and_plots_new_api_with_live_mode(params)
       : get_folders_and_plots_new_api(params);
   return current_api;
 };

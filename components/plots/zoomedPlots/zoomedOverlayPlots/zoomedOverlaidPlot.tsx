@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Store } from 'antd/lib/form/interface';
-import { SettingOutlined, FullscreenOutlined } from '@ant-design/icons';
+import { SettingOutlined, FullscreenOutlined, BlockOutlined } from '@ant-design/icons';
+import {  } from '@ant-design/icons';
 
 import {
   functions_config,
@@ -68,12 +69,12 @@ export const ZoomedOverlaidPlot = ({
       action: () => toggleCustomizationMenu(true),
       icon: <SettingOutlined />,
     },
-    // functions_config.new_back_end.new_back_end && {
-    //   label: 'Overlay with another plot',
-    //   value: 'overlay',
-    //   url: url,
-    //   icon: <BlockOutlined />,
-    // },
+    functions_config.new_back_end.new_back_end && {
+      label: 'Overlay with another plot',
+      value: 'overlay',
+      url: url,
+      icon: <BlockOutlined />,
+    },
   ];
 
   const overlaid_plots_urls = get_overlaied_plots_urls(params_for_api);

@@ -18,7 +18,7 @@ import { useConstructFullPlotObject } from './useConstructFullPlotObject';
 import { functions_config } from '../config/config';
 import cleanDeep from 'clean-deep';
 import { makeid } from '../components/utils';
-import { useUpdateLiveMode } from './useUpdateInLiveMode';
+import { store } from '../contexts/updateContext';
 
 export const useFilterFolders = (
   query: QueryProps,
@@ -31,7 +31,7 @@ export const useFilterFolders = (
     folders_found_by_dataset_or_run,
     set_folders_found_by_dataset_or_run,
   ] = React.useState<DirectoryInterface[]>([]);
-  const { not_older_than, addLoader } = useUpdateLiveMode()
+  const { not_older_than, addLoader } = React.useContext(store)
   const [directories, setDirectories] = React.useState<DirectoryInterface[]>(
     []
   );
@@ -44,7 +44,7 @@ export const useFilterFolders = (
   const data_get_by_not_older_than_update = useRequest(
     current_api,
     {},
-    [not_older_than],
+    [],
     functions_config.mode.onlineode
   );
 
@@ -72,7 +72,7 @@ export const useFilterFolders = (
   }, [])
 
   React.useEffect(() => {
-    addLoader({ value: isLoading, id })
+    // addLoader({ value: isLoading, id })
   }, [isLoading])
 
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);

@@ -2,8 +2,8 @@ import * as React from 'react';
 import { PlotImageProps } from '.';
 
 import { root_url } from '../../../../config/config';
+import { store } from '../../../../contexts/updateContext';
 import { useBlink } from '../../../../hooks/useBlink';
-import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
 import { makeid } from '../../../utils';
 import { ErrorMessage } from '../../errorMessage';
 import { ImageFallback } from '../../imageFallback';
@@ -13,8 +13,6 @@ import {
   removePlotFromRightSide,
 } from '../singlePlot/utils';
 
-
-
 export const LiveModePlotImage = ({
   imageRef,
   query,
@@ -23,7 +21,7 @@ export const LiveModePlotImage = ({
   plotURL,
   plot,
 }: PlotImageProps) => {
-  const { not_older_than, addLoader } = useUpdateLiveMode()
+  const { not_older_than, addLoader } = React.useContext(store)
   const { blink } = useBlink(not_older_than)
   const [loader, setLoader] = React.useState(true)
   const [id, setId] = React.useState<string>()
@@ -35,14 +33,12 @@ export const LiveModePlotImage = ({
     `${root_url}${plotURL};notOlderThan=${not_older_than}`
   );
 
-  const [show_old_img, set_show_old_img] = React.useState(true);
   const [imageError, setImageError] = React.useState(false);
 
   React.useEffect(() => {
     set_new_image_url(
       `${root_url}${plotURL};notOlderThan=${not_older_than}`
     );
-    set_show_old_img(blink);
   }, [
     not_older_than,
     params_for_api.customizeProps,
@@ -57,8 +53,7 @@ export const LiveModePlotImage = ({
     params_for_api.folders_path,
     params_for_api.overlay_plot,
     params_for_api.joined_overlaied_plots_urls,
-    plotURL,
-    blink
+    plotURL
   ]);
 
   React.useEffect(() => {
@@ -70,8 +65,9 @@ export const LiveModePlotImage = ({
     addLoader({ value: loader, id })
   }, [loader])
 
-  const old_image_display = show_old_img ? '' : 'none';
-  const new_image_display = show_old_img ? 'none' : '';
+  const old_image_display = !loader ? '' : 'none';
+  const new_image_display = !loader ? 'none' : '';
+
   return (
     <>
       {imageError ? (
@@ -89,14 +85,13 @@ export const LiveModePlotImage = ({
           >
             {!imageError && (
               <PlotUpdateIdicator
-                update={blink.toString()}>
+                update={blink.toString() || loader.toString()}>
                 <ImageFallback
                   retryTimes={3}
                   style={{ display: new_image_display }}
-                  onLoad={() => {
+                  onLoad={async () => {
                     setLoader(false)
-                    set_old_image_url(new_image_url);
-                    set_show_old_img(false);
+                    await set_old_image_url(new_image_url);
                   }}
                   alt={plot.name}
                   src={new_image_url}
@@ -112,6 +107,7 @@ export const LiveModePlotImage = ({
                   retryTimes={3}
                   style={{ display: old_image_display }}
                   alt={plot.name}
+                  onLoad={ () => {}}
                   src={old_image_url}
                   setImageError={setImageError}
                   width={'auto'}

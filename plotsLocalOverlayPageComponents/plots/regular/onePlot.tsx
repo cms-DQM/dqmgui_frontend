@@ -36,6 +36,7 @@ export const OnePlot = ({ parameters }: PlotProps) => {
           <ImageFallback
             ref={plotWrapperRef}
             key={`${root_url}${plot_url}`}
+            onLoad={ () => {}}
             retryTimes={3}
             setImageError={setImageError}
             style={{ display: 'display', width: parameters.width, height: parameters.height }}

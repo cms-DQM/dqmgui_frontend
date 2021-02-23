@@ -15,11 +15,11 @@ import { functions_config } from '../../config/config';
 import { LiveModeButton } from '../liveModeButton';
 import { CustomDiv } from '../styledComponents';
 import { LatestRunsList } from './latestRunsList';
-import { useUpdateLiveMode } from '../../hooks/useUpdateInLiveMode';
 import { makeid } from '../utils';
+import { store } from '../../contexts/updateContext';
 
 export const LatestRuns = () => {
-  const { not_older_than, addLoader } = useUpdateLiveMode()
+  const {not_older_than, addLoader } = React.useContext(store)
   const [id, setId] = React.useState<string>()
 
   const data_get_by_mount = useRequest(

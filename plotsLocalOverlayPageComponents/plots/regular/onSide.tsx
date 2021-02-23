@@ -42,8 +42,9 @@ const OneOnSidePlot = ({ parameters, plot }: OneOnSidePlotProps) => {
         <div ref={plotNameRef} style={{ background: theme.colors.primary.light, paddingBottom: 8, display: 'flex' }}>{tooLong ? plot_name?.substring(0, 30) + '...' : plot_name}</div>
         <div>
           <ImageFallback
-          ref={plotWrapperRef}
+            ref={plotWrapperRef}
             key={`${root_url}${plot_url}`}
+            onLoad={ () => {}}
             retryTimes={3}
             setImageError={setImageError}
             style={{ display: 'display', width: parameters.width, height: parameters.height }}
