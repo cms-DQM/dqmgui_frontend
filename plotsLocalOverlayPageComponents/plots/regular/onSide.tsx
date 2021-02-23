@@ -36,6 +36,11 @@ const OneOnSidePlot = ({ parameters, plot }: OneOnSidePlotProps) => {
     }
   }, [plotNameRef.current && plotNameRef.current.clientHeight ])
 
+  const parts = root_url.split('/')
+  const index = parts.indexOf('plotsLocalOverlay')
+  parts.splice(index, 1)
+  const root = parts.join('/')
+
   return (
     <Tooltip  title={tooLong ? plot_name : ''}>
       <div  style={{ width: parameters.width + 8, height: parameters.height + 24, margin: 8, display: 'flex', flexDirection: 'column', background: 'white' }}>
@@ -43,12 +48,12 @@ const OneOnSidePlot = ({ parameters, plot }: OneOnSidePlotProps) => {
         <div>
           <ImageFallback
             ref={plotWrapperRef}
-            key={`${root_url}${plot_url}`}
+            key={`${root}${plot_url}`}
             onLoad={ () => {}}
             retryTimes={3}
             setImageError={setImageError}
             style={{ display: 'display', width: parameters.width, height: parameters.height }}
-            src={`${root_url}${plot_url}`}
+            src={`${root}${plot_url}`}
             width={'auto'}
             height={'auto'}
           />

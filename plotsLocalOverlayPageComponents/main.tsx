@@ -78,7 +78,7 @@ export const Main = () => {
           <>
             <StyledLogoDiv>
               <StyledLogoWrapper>
-                <StyledLogo src="../images/CMSlogo_white_red_nolabel_1024_May2014.png" />
+                <StyledLogo src="./images/CMSlogo_white_red_nolabel_1024_May2014.png" />
               </StyledLogoWrapper>
             </StyledLogoDiv>
             <TagsWrapper>
