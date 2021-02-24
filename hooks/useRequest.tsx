@@ -41,12 +41,12 @@ export const useRequest = (
       try {
         //@ts-ignore
         setTimeout(cancelSource.current?.cancel, 180000);
-        const parts = root_url.split('/')
-        const index = parts.indexOf('plotsLocalOverlay')
-        parts.splice(index, 1)
-        const root = parts.join('/') + index >= 0 ? '' : '/'
+        // const parts = root_url.split('/')
+        // const index = parts.indexOf('plotsLocalOverlay')
+        // parts.splice(index, 1)
+        // const root = parts.join('/') + index >= 0 ? '' : '/'
         const response: AxiosResponse = await axios.request({
-          url: `${root}${url}`,
+          url: `${root_url}${url}`,
           method: options.method || 'get',
           cancelToken: cancelSource.current?.token,
           ...options,

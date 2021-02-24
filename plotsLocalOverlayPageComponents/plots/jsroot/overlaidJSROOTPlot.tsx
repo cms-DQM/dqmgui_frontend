@@ -4,8 +4,9 @@ import { sizes } from '../../../components/constants';
 import { get_jroot_plot } from '../../../api/oldApi';
 
 import { ImageDiv } from '../../../containers/display/styledComponents'
-import { useRequest } from '../../../hooks/useRequest';
+import { useRequest } from '../../../hooks/useRequestForPlotsLocalOverlay';
 import { ParametersForApi } from '../../interfaces'
+import { root_url } from '../../../config/config';
 
 interface JSROOTplotProps {
   params_for_api: ParametersForApi;
@@ -50,7 +51,7 @@ export const OverlaidJSROOTPlot = ({ params_for_api, id }: JSROOTplotProps) => {
   parametersForJSROOTOverlaidPlots.push(initialPlotParameters as any)
 
   const parametersForCreateTHStack = parametersForJSROOTOverlaidPlots.map((parameter: any) => {
-    const { data } = useRequest(get_jroot_plot(parameter), {}, [parameter.plot_name]);
+    const { data } = useRequest(get_jroot_plot(parameter), {}, [parameter.plot_name, root_url]);
     return data;
   })
 

@@ -46,7 +46,7 @@ const UpdateStateProvider = ({ children }: UpdateStateProviderProps) => {
     const val = loader.value
     return val
   })
-console.log(values)
+
   React.useEffect(() => {
     const iseThereAnyTrue = values.includes(true)
     setIsThereAnyLoadingData(iseThereAnyTrue)

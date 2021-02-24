@@ -32,7 +32,7 @@ export const OnePlot = ({ parameters }: PlotProps) => {
   const index = parts.indexOf('plotsLocalOverlay')
   parts.splice(index, 1)
   const root = parts.join('/')
- console.log(parts)
+
   return (
     <Tooltip title={tooLong ? parameters.plot_name : ''}>
       <div style={{ width: parameters.width + 8, height: parameters.height + 24, margin: 8, display: 'flex', flexDirection: 'column', background: 'white' }}>

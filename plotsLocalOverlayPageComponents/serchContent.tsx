@@ -11,12 +11,13 @@ import { PlotProps } from '../containers/display/interfaces'
 import { StyledA, Icon } from '../containers/display/styledComponents'
 import { choose_api } from '../containers/display/utils'
 import { Spinner } from '../containers/search/styledComponents'
-import { useRequest } from '../hooks/useRequest'
+import { useRequest } from '../hooks/useRequestForPlotsLocalOverlay'
 import { getFoldersAndPlots } from './getters';
 import { PlotProperties, ParametersForApi, OverlaidSeparatelyProps } from './interfaces';
 import { addOverlaidPlotToURL, cleanOverlaidPlotsFromURL } from './routerChangers';
 import { PlotsNamesTable } from './plotsNamesTable';
 import { NoResultsFound } from '../containers/search/noResultsFound';
+import { root_url} from '../config/config';
 
 interface SearchContentProps {
   setParameters: React.Dispatch<React.SetStateAction<ParametersForApi | undefined>>
@@ -47,12 +48,13 @@ export const SearchContent = ({ setParameters, parameters, referenceHeight }: Se
   const api = choose_api(params)
   const data_get_by_mount = useRequest(api,
     {},
-    [lastSelectedPlot.folders_path,
-    parameters.run_number,
-    query.search,
-    parameters.plot_search,
-    parameters.dataset_name,
-    parameters.plot_name]
+    [root_url,
+      lastSelectedPlot.folders_path,
+      parameters.run_number,
+      query.search,
+      parameters.plot_search,
+      parameters.dataset_name,
+      parameters.plot_name]
   );
 
   React.useEffect(() => {
