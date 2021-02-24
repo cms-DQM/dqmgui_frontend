@@ -260,4 +260,8 @@ Online mode is reactable via link https://cmsweb-testbed.cern.ch/dqm/online-new.
 44. Updating folders, runs list and plots in live mode every 20 sec. Also sec has to be send to backend.
 45. Separate requests for data in online and offline modes.
 46. In production on the first load style files are not found (404).
+47. Run 338586 shows 404 not found, when it indeed exists (overlay with another plot). Fake Beam Monitor plot for example, is always in ME not found state
+48. When trying to change label with special chars (\_) of additional plot, it crashes  (overlay with another plot)
+49. Cuztmize -> Customize  (overlay with another plot)
+50. Plots in the summary workspace is not alphabetical 
 ---
