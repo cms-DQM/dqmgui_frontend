@@ -19,7 +19,7 @@ export const cleanOverlaidPlotsFromURL = async (parameters: any, router: NextRou
     overlaidGlobally: router.query.overlaidGlobally,
   }
   const stringified = qs.stringify(parameters_for_query, {});
-  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}/?${stringified}` : undefined
+  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}?${stringified}` : undefined
 
   Router.push({
     pathname: router.pathname,
@@ -53,7 +53,7 @@ export const addOverlaidPlotToURL = async (plotsString: string,
     overlayPlots: plotsString
   }
   const stringified = qs.stringify(parameters_for_query, {});
-  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}/?${stringified}` : undefined
+  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}?${stringified}` : undefined
 
   Router.push({
     pathname: router.pathname,
@@ -70,7 +70,7 @@ export const SearchPlot = async (plots_name: string, router: NextRouter, paramet
       search: plots_name,
   }
   const stringified = qs.stringify(parameters_for_query, {});
-  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}/?${stringified}` : undefined
+  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}?${stringified}` : undefined
 
   Router.push({
     pathname: router.pathname,
@@ -85,7 +85,7 @@ export const SetCustomizationParams = async (router: NextRouter, customizeParams
     ...customizeParams,
   }
   const stringified = qs.stringify(parameters_for_query, {});
-  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}/?${stringified}` : undefined
+  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}?${stringified}` : undefined
 
   Router.push({
     pathname: router.pathname,

@@ -12,7 +12,7 @@ export const setWorkspaceToQuery = (query: QueryProps, workspace: string, folder
     folder_path: folder_path
   }
   const stringified = qs.stringify(parameters, {});
-  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}/?${stringified}` : undefined
+  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}?${stringified}` : undefined
 
   return Router.push({
     pathname: '',

@@ -42,7 +42,7 @@ export const get_folders_and_plots_old_api = (params: ParamsForApiProps) => {
       const label = overlay.label ? overlay.label : overlay.run_number;
       return `;obj=archive/${getRunsWithLumisections(
         overlay
-      )}${dataset_name_overlay}${params.folders_path}/${
+      )}${dataset_name_overlay}/${params.folders_path}/${
         params.plot_name};reflabel=${label}`;
     });
   };

@@ -13,7 +13,7 @@ export const navigationHandler = (
     search_dataset_name: search_by_dataset_name,
   })
   const queryString = qs.stringify(params, {});
-  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}/?${queryString}` : undefined
+  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}?${queryString}` : undefined
 
   Router.push({
     pathname: '',
@@ -25,7 +25,7 @@ export const navigationHandler = (
 
 
 export const backToMainPage = (e: any) => {
-  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}/` : undefined
+  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}` : undefined
 
   Router.push({
     pathname: '',

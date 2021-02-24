@@ -16,7 +16,7 @@ export const useChangeRouter = (
   const query: QueryProps = router.query;
   const parameters = getChangedQueryParams(params, query);
   const queryString = qs.stringify(parameters, {});
-  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}/?${queryString}` : undefined
+  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}?${queryString}` : undefined
 
   React.useEffect(() => {
     if (condition) {

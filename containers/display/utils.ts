@@ -196,7 +196,7 @@ export const getChangedQueryParams = (
 
 export const changeRouter = (parameters: ParsedUrlQueryInput) => {
   const stringified = qs.stringify(parameters, {});
-  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}/?${stringified}` : undefined
+  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}?${stringified}` : undefined
 
   Router.push({
     pathname: '',
