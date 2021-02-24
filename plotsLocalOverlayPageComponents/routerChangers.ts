@@ -24,8 +24,8 @@ export const cleanOverlaidPlotsFromURL = async (parameters: any, router: NextRou
   Router.push({
     pathname: router.pathname,
     query: parameters_for_query,
-  }, 
-  url_which_is_visible
+  },
+    url_which_is_visible
   );
 }
 
@@ -45,39 +45,51 @@ export const addOverlaidPlotToURL = async (plotsString: string,
 
   const customization = { ...parameters.customizeProps }
 
+  const parameters_for_query = {
+    ...copy,
+    ...reference,
+    ...customization,
+    overlaidGlobally: router.query.overlaidGlobally,
+    overlayPlots: plotsString
+  }
+  const stringified = qs.stringify(parameters_for_query, {});
+  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}/?${stringified}` : undefined
+
   Router.push({
     pathname: router.pathname,
-    query: {
-      ...copy,
-      ...reference,
-      ...customization,
-      overlaidGlobally: router.query.overlaidGlobally,
-      overlayPlots: plotsString
-    },
-  });
+    query: parameters_for_query
+  }, url_which_is_visible);
 }
 
 export const SearchPlot = async (plots_name: string, router: NextRouter, parameters: ParametersForApi) => {
   const copy = { ...parameters }
   await delete copy.customizationParams
 
+  const parameters_for_query = {
+    ...router.query,
+      search: plots_name,
+  }
+  const stringified = qs.stringify(parameters_for_query, {});
+  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}/?${stringified}` : undefined
+
   Router.push({
     pathname: router.pathname,
     //@ts-ignore
-    query: {
-      ...router.query,
-      search: plots_name,
-    },
-  });
+    query: parameters_for_query
+  },url_which_is_visible);
 }
 
 export const SetCustomizationParams = async (router: NextRouter, customizeParams: CustomizeProps, parameters: ParametersForApi) => {
+  const parameters_for_query = {
+    ...router.query,
+    ...customizeParams,
+  }
+  const stringified = qs.stringify(parameters_for_query, {});
+  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}/?${stringified}` : undefined
+
   Router.push({
     pathname: router.pathname,
     //@ts-ignore
-    query: {
-      ...router.query,
-      ...customizeParams,
-    },
-  });
+    query: parameters_for_query
+  }, url_which_is_visible);
 }

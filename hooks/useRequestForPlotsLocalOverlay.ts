@@ -33,14 +33,6 @@ export const useRequest = (
   }, []);
 
   useEffect(() => {
-    const parts = root_url.split('/')
-    const index = parts.indexOf('plotsLocalOverlay')
-    parts.splice(index, 1)
-    parts.push('')
-    const root = parts.join('/')
-  }, [root_url])
-
-  useEffect(() => {
     const CancelToken = axios.CancelToken;
     cancelSource.current = CancelToken.source();
 

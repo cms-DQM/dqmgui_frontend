@@ -44,7 +44,7 @@ export const makeid = () => {
 
 
 export const getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames = (query: QueryProps, selected_plot: PlotDataProps) => {
-  const page =  'plotsLocalOverlay'
+  const page =  'plotsLocalOverlay/'
   const run = 'run_number=' + query.run_number as string
   const dataset = 'dataset_name=' + query.dataset_name as string
   const path = 'folders_path=' + selected_plot.path
@@ -55,7 +55,7 @@ export const getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames = (query: Que
 }
 
 export const getZoomedOverlaidPlotsUrlForOverlayingPlotsWithDifferentNames = (query: QueryProps, selected_plot: PlotDataProps) => {
-  const page = 'plotsLocalOverlay'
+  const page = 'plotsLocalOverlay/'
   const run = 'run_number=' + query.run_number as string
   const dataset = 'dataset_name=' + query.dataset_name as string
   const path = 'folders_path=' + selected_plot.path
