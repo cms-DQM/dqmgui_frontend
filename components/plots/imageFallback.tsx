@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
-import { Spinner } from '../../containers/search/styledComponents';
-import { CustomDiv } from '../styledComponents';
 import { PlotUploadIdicator } from './plot/plotsWithLayouts/styledComponents';
 
 export const ImageFallback = ({
@@ -17,11 +15,6 @@ export const ImageFallback = ({
   const [key, setKey] = useState(new Date().getTime());
 
   const [imageLoading, setImageLoading] = useState(true);
-  const displaySpinner = (imageLoading: boolean) =>
-    imageLoading && displayImage !== 'none' ? 'flex' : 'none';
-
-
-  const displayImage = props.style.display;
 
   const onError = () => {
     if (tries + 1 < retryTimes) {
@@ -45,7 +38,7 @@ export const ImageFallback = ({
       <PlotUploadIdicator
         uploaded={imageLoading.toString()}>
       <div>
-        <img
+        <LazyLoadImage
           src={final_src}
           {...props}
           key={key}

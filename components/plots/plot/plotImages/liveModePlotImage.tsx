@@ -6,7 +6,7 @@ import { store } from '../../../../contexts/updateContext';
 import { useBlink } from '../../../../hooks/useBlink';
 import { makeid } from '../../../utils';
 import { ErrorMessage } from '../../errorMessage';
-import { ImageFallback } from '../../imageFallback';
+import { ImageFallbackLive } from '../../imageFallbackLive';
 import { PlotUpdateIdicator } from '../plotsWithLayouts/styledComponents';
 import {
   addPlotToRightSide,
@@ -86,7 +86,7 @@ export const LiveModePlotImage = ({
             {!imageError && (
               <PlotUpdateIdicator
                 update={blink.toString() || loader.toString()}>
-                <ImageFallback
+                <ImageFallbackLive
                   retryTimes={3}
                   style={{ display: new_image_display }}
                   onLoad={async () => {
@@ -103,7 +103,7 @@ export const LiveModePlotImage = ({
                     We trying to avoid it with showing old image instead of nothing (when a new image is just requesting process)
                     Old image is an image which is 20 sec older then the new requested one.
                     */}
-                <ImageFallback
+                <ImageFallbackLive
                   retryTimes={3}
                   style={{ display: old_image_display }}
                   alt={plot.name}
