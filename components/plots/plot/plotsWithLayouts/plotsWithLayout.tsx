@@ -21,11 +21,14 @@ export const PlotsWithLayout = ({
   return (
     <>
       {layouts_names.map((name: string) => {
-        const plots = plots_grouped_by_layouts[name].sort();
+        const plots = plots_grouped_by_layouts[name]
+        const sorted_plots = plots.sort((a, b) => {
+          return a.path.localeCompare(b.path);
+        })
         return (
           <OnePlotInLayout
             layoutName={name}
-            plots={plots}
+            plots={sorted_plots}
             selected_plots={selected_plots}
             query={query}
           />
