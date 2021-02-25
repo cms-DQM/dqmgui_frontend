@@ -21,7 +21,7 @@ export const PlotsWithLayout = ({
   return (
     <>
       {layouts_names.map((name: string) => {
-        const plots = plots_grouped_by_layouts[name];
+        const plots = plots_grouped_by_layouts[name].sort();
         return (
           <OnePlotInLayout
             layoutName={name}
