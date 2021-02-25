@@ -17,7 +17,7 @@ export const PlotsWithLayout = ({
   selected_plots,
   query,
 }: PlotsWithLayoutPorps) => {
-  const layouts_names = Object.keys(plots_grouped_by_layouts);
+  const layouts_names = Object.keys(plots_grouped_by_layouts).sort();
   return (
     <>
       {layouts_names.map((name: string) => {
