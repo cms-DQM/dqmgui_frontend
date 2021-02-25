@@ -1,69 +1,22 @@
 import React, { createContext, useState, ReactElement } from 'react';
 
-import {
-  sizes,
-  viewPositions,
-  plotsProportionsOptions,
-} from '../components/constants';
-import {
-  SizeProps,
-  PlotProps,
-  TripleProps,
-  CustomizeProps,
-} from '../containers/display/interfaces';
+import { sizes } from '../components/constants';
+import { TripleProps } from '../containers/display/interfaces';
 import { overlayOptions } from '../components/constants';
 
 export interface LeftSideStateProviderProps {
   children: ReactElement;
 }
 
-export interface LeftSideState {
-  size: SizeProps;
-  normalize: boolean;
-  stats: boolean;
-  overlayPosition: string;
-  overlay: PlotProps[];
-  triples: TripleProps[];
-  overlayPlots: TripleProps[];
-  workspaceFolders: string[];
-  openOverlayDataMenu: boolean;
-  viewPlotsPosition: boolean;
-  lumisection: string | number;
-  rightSideSize: SizeProps;
-  JSROOTmode: boolean;
-  customizeProps: CustomizeProps;
-  updated_by_not_older_than: number;
-}
 
 export const initialState: any = {
   size: sizes.medium.size,
   normalize: 'True',
   stats: true,
   overlayPosition: overlayOptions[0].value,
-  overlay: undefined,
-  overlayPlots: [],
   triples: [],
-  openOverlayDataMenu: false,
-  viewPlotsPosition: viewPositions[1].value,
-  proportion: plotsProportionsOptions[0].value,
+  runs_set_for_overlay: [],
   lumisection: -1,
-  rightSideSize: sizes.fill.size,
-  JSROOTmode: false,
-  shortcuts: [],
-  customizeProps: {
-    xtype: '',
-    xmin: NaN,
-    xmax: NaN,
-    ytype: '',
-    ymin: NaN,
-    ymax: NaN,
-    ztype: '',
-    zmin: NaN,
-    zmax: NaN,
-    drawopts: '',
-    withref: '',
-  },
-  workspace: 'Everything',
 };
 
 export interface ActionProps {
@@ -78,47 +31,10 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
   const [size, setSize] = useState<number>(initialState.size);
   const [normalize, setNormalize] = useState<boolean>(initialState.normalize);
   const [stats, setStats] = useState<boolean>(initialState.stats);
-  const [plotsWhichAreOverlaid, setPlotsWhichAreOverlaid] = useState({});
-  const [overlayPosition, setOverlaiPosition] = useState(
-    initialState.overlayPosition
-  );
-  const [overlayPlots, setOverlay] = useState(initialState.overlayPlots);
-  const [imageRefScrollDown, setImageRefScrollDown] = useState(null);
-  const [plotSearchFolders, setPlotSearchFolders] = React.useState([]);
-  const [workspace, setWorkspace] = React.useState(initialState.workspace);
+  const [overlayPosition, setOverlaiPosition] = useState(initialState.overlayPosition);
   const [triples, setTriples] = React.useState(initialState.triples);
-  const [openOverlayDataMenu, toggleOverlayDataMenu] = React.useState(
-    initialState.openOverlayDataMenu
-  );
-  const [viewPlotsPosition, setViewPlotsPosition] = React.useState(
-    initialState.viewPlotsPosition
-  );
-  const [proportion, setProportion] = React.useState(initialState.proportion);
-  const [lumisection, setLumisection] = React.useState(
-    initialState.lumisection
-  );
-
-  const [rightSideSize, setRightSideSize] = useState<number>(
-    initialState.rightSideSize
-  );
-  const [JSROOTmode, setJSROOTmode] = useState<boolean>(false);
-  const [customize, setCustomize] = useState<CustomizeProps>({
-    xtype: '',
-    xmin: NaN,
-    xmax: NaN,
-    ytype: '',
-    ymin: NaN,
-    ymax: NaN,
-    ztype: '',
-    zmin: NaN,
-    zmax: NaN,
-    drawopts: '',
-    withref: '',
-  });
-
-  const [runs_set_for_overlay, set_runs_set_for_overlay] = React.useState<
-    TripleProps[]
-  >(triples ? triples : []);
+  const [runs_set_for_overlay, set_runs_set_for_overlay] = React.useState(initialState.runs_set_for_overlay)
+  const [lumisection, setLumisection] = React.useState(initialState.lumisection);
 
   const change_value_in_reference_table = (
     value: string | number,
@@ -153,36 +69,14 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         setNormalize,
         stats,
         setStats,
-        plotsWhichAreOverlaid,
-        setPlotsWhichAreOverlaid,
         overlayPosition,
         setOverlaiPosition,
-        overlayPlots,
-        setOverlay,
-        imageRefScrollDown,
-        setImageRefScrollDown,
-        workspace, setWorkspace,
-        plotSearchFolders,
-        setPlotSearchFolders,
         change_value_in_reference_table,
         triples,
         setTriples,
-        openOverlayDataMenu,
-        toggleOverlayDataMenu,
-        viewPlotsPosition,
-        setViewPlotsPosition,
-        proportion,
-        setProportion,
-        lumisection,
-        setLumisection,
-        rightSideSize,
-        setRightSideSize,
-        JSROOTmode,
-        setJSROOTmode,
-        customize,
-        setCustomize,
         runs_set_for_overlay,
-        set_runs_set_for_overlay
+        set_runs_set_for_overlay,
+        lumisection, setLumisection
       }}
     >
       {children}

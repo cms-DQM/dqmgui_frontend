@@ -4,7 +4,8 @@ import Nav from '../../Nav';
 import { useSearch } from '../../../hooks/useSearch';
 import SearchResults from '../../../containers/search/SearchResults';
 import { ResultsWrapper, StyledModal } from '../styledComponents';
-import { store } from '../../../contexts/leftSideContext';
+import { store as leftSideContext } from '../../../contexts/leftSideContext';
+import { store as globalStateContext } from '../../../contexts/globalStateContext';
 import { StyledButton } from '../../styledComponents';
 import { theme } from '../../../styles/theme';
 
@@ -15,12 +16,9 @@ interface CustomModalProps {
 export const CustomModal = ({ id }: CustomModalProps) => {
   const [search_run_number, setSearchRunNumber] = useState('');
   const [search_dataset_name, setSearchDatasetName] = useState('');
-  const {
-    change_value_in_reference_table,
-    toggleOverlayDataMenu,
-    openOverlayDataMenu,
-  } = useContext(store);
+  const { change_value_in_reference_table } = useContext(leftSideContext);
 
+  const { toggleOverlayDataMenu, openOverlayDataMenu, } = useContext(globalStateContext)
   const navigationHandler = (
     search_by_run_number: string,
     search_by_dataset_name: string
@@ -86,8 +84,8 @@ export const CustomModal = ({ id }: CustomModalProps) => {
               />
             </ResultsWrapper>
           ) : (
-            <ResultsWrapper />
-          )}
+              <ResultsWrapper />
+            )}
         </>
       )}
     </StyledModal>

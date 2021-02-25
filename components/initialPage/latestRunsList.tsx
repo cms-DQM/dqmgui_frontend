@@ -8,20 +8,19 @@ import {
   StyledCol,
 } from '../../containers/search/styledComponents';
 import { useBlink } from '../../hooks/useBlink';
-import { useUpdateLiveMode } from '../../hooks/useUpdateInLiveMode';
 
 interface LatestRunsListProps {
   latest_runs: number[];
   mode: string;
+  not_older_than: number;
 }
 
-export const LatestRunsList = ({ latest_runs, ...props }: LatestRunsListProps) => {
+export const LatestRunsList = ({ latest_runs, not_older_than, ...props }: LatestRunsListProps) => {
   const router = useRouter()
   const {
     query: { mode },
   } = router
 
-  const { not_older_than } = useUpdateLiveMode()
   const { blink } = useBlink(not_older_than);
 
   return (

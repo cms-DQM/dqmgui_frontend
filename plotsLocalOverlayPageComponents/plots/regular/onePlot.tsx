@@ -4,7 +4,7 @@ import * as React from 'react'
 import { ImageFallback } from '../../../components/plots/imageFallback';
 import { get_plot_url } from '../../../api/oldApi';
 import { root_url } from '../../../config/config';
-import {get_plot_with_overlay_new_api} from '../../../api/newApi'
+import { get_plot_with_overlay_new_api } from '../../../api/newApi'
 import { theme } from '../../../styles/theme'
 import { ParametersForApi } from '../../interfaces';
 
@@ -27,6 +27,11 @@ export const OnePlot = ({ parameters }: PlotProps) => {
       setTooLong(plotNameRef.current.clientHeight > 24)
     }
   }, [plotNameRef.current && plotNameRef.current.clientHeight])
+  
+  const parts = root_url.split('/')
+  const index = parts.indexOf('plotsLocalOverlay')
+  parts.splice(index, 1)
+  const root = parts.join('/')
 
   return (
     <Tooltip title={tooLong ? parameters.plot_name : ''}>
@@ -35,11 +40,12 @@ export const OnePlot = ({ parameters }: PlotProps) => {
         <div>
           <ImageFallback
             ref={plotWrapperRef}
-            key={`${root_url}${plot_url}`}
+            key={`${root}${plot_url}`}
+            onLoad={() => { }}
             retryTimes={3}
             setImageError={setImageError}
             style={{ display: 'display', width: parameters.width, height: parameters.height }}
-            src={`${root_url}${plot_url}`}
+            src={`${root}${plot_url}`}
             width={'auto'}
             height={'auto'}
           />

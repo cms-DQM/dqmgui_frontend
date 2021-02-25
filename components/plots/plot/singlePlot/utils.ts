@@ -6,7 +6,6 @@ import {
 } from '../../../../containers/display/interfaces';
 import cleanDeep from 'clean-deep';
 
-import { LeftSideState } from '../../../../contexts/leftSideContext';
 import { formTriples } from '../../../viewDetailsMenu/utils';
 import {
   changeRouter,
@@ -43,6 +42,7 @@ export const addToSelectedPlots = (
   const path = plot.path
   const name = plot.name
   const new_plot = [run_number, dataset_name, path, (encodeURI(name))].join('/')
+
   return (`${plotsQuery ? plotsQuery + '&' : ''}${new_plot}`)
 };
 
@@ -59,7 +59,7 @@ export const addOverlayData = (triples: TripleProps[] | undefined) => {
 };
 
 export const FormatParamsForAPI = (
-  globalState: LeftSideState,
+  globalState: any,
   query: QueryProps,
   plotName: string,
   path?: string,

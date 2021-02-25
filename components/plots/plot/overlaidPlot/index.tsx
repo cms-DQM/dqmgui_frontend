@@ -9,14 +9,12 @@ interface OverlaidPlotProps {
   plot: PlotDataProps;
   selected_plots:PlotDataProps[] ;
   params_for_api: ParamsForApiProps;
-  imageRefScrollDown: any;
 }
 
 export const OverlaidPlot = ({
   plot,
   selected_plots,
   params_for_api,
-  imageRefScrollDown,
 }: OverlaidPlotProps) => {
   return (
     <>
@@ -25,14 +23,12 @@ export const OverlaidPlot = ({
           params_for_api={params_for_api}
           plot={plot}
           selected_plots={selected_plots}
-          imageRefScrollDown={imageRefScrollDown}
         />
       ) : (
         <OverlaidPlotImage
           plot={plot}
           params_for_api={params_for_api}
           selected_plots={selected_plots}
-          imageRefScrollDown={imageRefScrollDown}
         />
       )}
     </>

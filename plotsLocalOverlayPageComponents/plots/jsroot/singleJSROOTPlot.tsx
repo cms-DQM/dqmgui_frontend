@@ -2,8 +2,9 @@ import { Tooltip } from 'antd';
 import * as React from 'react'
 import { get_jroot_plot } from '../../../api/oldApi';
 
+import { root_url } from '../../../config/config';
 import { ImageDiv } from '../../../containers/display/styledComponents'
-import { useRequest } from '../../../hooks/useRequest';
+import { useRequest } from '../../../hooks/useRequestForPlotsLocalOverlay';
 import { theme } from '../../../styles/theme';
 import { ParametersForApi } from '../../interfaces'
 
@@ -34,6 +35,7 @@ export const SingleJSROOTPlot = ({ params_for_api, id }: JSROOTplotProps) => {
   const imageRef = React.useRef<any>(null)
   const { data } = useRequest(get_jroot_plot(params_for_api as any), {}, [
     params_for_api.plot_name,
+    root_url
   ]);
   const [count, setCount] = React.useState(0)
   const [tooLong, setTooLong] = React.useState(false)

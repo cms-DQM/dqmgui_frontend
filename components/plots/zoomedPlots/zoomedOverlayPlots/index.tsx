@@ -6,30 +6,37 @@ import {
 import { ZoomedOverlaidPlot } from './zoomedOverlaidPlot';
 import { ZoomedOverlaidJSROOTPlot } from './zoomedOverlaidJSROOTPlot';
 import { ZoomedPlotsWrapper } from '../../../styledComponents';
-import { FormatParamsForAPI } from '../../plot/singlePlot/utils';
-import { store } from '../../../../contexts/leftSideContext';
+import { store } from '../../../../contexts/rightSideContext';
 import { useRouter } from 'next/router';
 import { makeid } from '../../../utils';
+import { formTriples } from '../../../viewDetailsMenu/utils';
 
 interface ZoomedPlotsProps {
   selected_plots: PlotDataProps[];
 }
 
 export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
-  const globalState = useContext(store);
   const router = useRouter();
   const query: QueryProps = router.query;
+  const { rightSideSize, customize, JSROOTmode } = useContext(store)
+
   return (
     <ZoomedPlotsWrapper>
       {selected_plots.map((selected_plot: PlotDataProps) => {
-        const params_for_api = FormatParamsForAPI(
-          globalState,
-          query,
-          selected_plot.name,
-          selected_plot.path,
-          true
-        );
-        if (globalState.JSROOTmode) {
+        const params_for_api = {
+          run_number: query.run_number,
+          dataset_name: query.dataset_name,
+          lumi: query.lumi,
+          folders_path: selected_plot.path,
+          overlay: query.overlay,
+          overlay_plot: formTriples(query.overlay_data),
+          height: rightSideSize.h,
+          width: rightSideSize.w,
+          customizeProps: customize,
+          plot_name: selected_plot.name,
+          normalize: query.normalize
+        }
+        if (JSROOTmode) {
           const id = makeid();
           return (
             <ZoomedOverlaidJSROOTPlot

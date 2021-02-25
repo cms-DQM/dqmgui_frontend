@@ -6,6 +6,10 @@ import { Reset } from 'styled-reset';
 
 import { theme } from '../styles/theme';
 import { LeftSideStateProvider } from '../contexts/leftSideContext';
+import { GlobalStateProvider } from '../contexts/globalStateContext';
+import { RightSideStateProvider } from '../contexts/rightSideContext';
+import { UpdateStateProvider } from '../contexts/updateContext';
+
 
 const GlobalStyles = createGlobalStyle`
   html {
@@ -52,15 +56,21 @@ export default class MyApp extends App {
   public render() {
     const { Component, pageProps } = this.props;
     return (
-      <LeftSideStateProvider>
-        <ThemeProvider theme={theme}>
-          <>
-            <Reset />
-            <GlobalStyles />
-            <Component {...pageProps} />
-          </>
-        </ThemeProvider>
-      </LeftSideStateProvider>
+      <GlobalStateProvider>
+        <LeftSideStateProvider>
+          <RightSideStateProvider>
+            <UpdateStateProvider>
+              <ThemeProvider theme={theme}>
+                <>
+                  <Reset />
+                  <GlobalStyles />
+                  <Component {...pageProps} />
+                </>
+              </ThemeProvider>
+            </UpdateStateProvider>
+          </RightSideStateProvider>
+        </LeftSideStateProvider>
+      </GlobalStateProvider>
     );
   }
 }

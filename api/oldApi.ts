@@ -24,7 +24,7 @@ export const get_folders_and_plots_old_api = (params: ParamsForApiProps) => {
   export const get_plot_with_overlay = (params: ParamsForApiProps) => {
     return `plotfairy/overlay?${get_customize_params(params.customizeProps)}ref=${params.overlay
       };obj=archive/${getRunsWithLumisections(params)}${params.dataset_name}/${params.folders_path
-      }/${encodeURIComponent(params.plot_name as string)}${params.joined_overlaied_plots_urls
+      }/${params.plot_name}${params.joined_overlaied_plots_urls
       };${params.stats ? '' : 'showstats=0;'}${params.errorBars ? 'showerrbars=1;' : ''
       }norm=${params.normalize};w=${params.width};h=${params.height}`;
   };
@@ -42,16 +42,15 @@ export const get_folders_and_plots_old_api = (params: ParamsForApiProps) => {
       const label = overlay.label ? overlay.label : overlay.run_number;
       return `;obj=archive/${getRunsWithLumisections(
         overlay
-      )}${dataset_name_overlay}${params.folders_path}/${encodeURIComponent(
-        params.plot_name as string
-      )};reflabel=${label}`;
+      )}${dataset_name_overlay}/${params.folders_path}/${
+        params.plot_name};reflabel=${label}`;
     });
   };
   
   export const get_jroot_plot = (params: ParamsForApiProps) =>
     `jsrootfairy/archive/${getRunsWithLumisections(params)}${params.dataset_name
-    }/${params.folders_path}/${encodeURIComponent(
+    }/${params.folders_path}/${
       params.plot_name as string
-    )}?jsroot=true;${params.notOlderThan ? `notOlderThan=${params.notOlderThan}` : ''}`;
+    }?jsroot=true;${params.notOlderThan ? `notOlderThan=${params.notOlderThan}` : ''}`;
   
   

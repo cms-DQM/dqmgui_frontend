@@ -9,7 +9,7 @@ if (!root_url_) {
 export const current_mode = root_url_ ? root_url_.split('/')[2] : ''
 const config: any = {
   development: {
-    root_url: 'http://localhost:8086/',
+    root_url: 'http://localhost:8081/',
     title: 'Development',
   },
   production: {
@@ -59,7 +59,7 @@ const set_env = () => {
         layouts: true,
         latest_runs: true,
       },
-      mode: 'OFFLINE',
+      mode: 'ONLINE',
     };
     return development_config
   }

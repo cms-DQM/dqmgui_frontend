@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { FullscreenOutlined, SettingOutlined, BlockOutlined } from '@ant-design/icons';
+import { FullscreenOutlined, SettingOutlined } from '@ant-design/icons';
 import { Store } from 'antd/lib/form/interface';
+import { BlockOutlined } from '@ant-design/icons';
 
 import {
   get_plot_url
@@ -30,10 +31,8 @@ import {
 import { Customization } from '../../../customization';
 import { ZoomedPlotMenu } from '../menu';
 import { Plot_portal } from '../../../../containers/display/portal';
-import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
-import { PlotImage } from '../../plot/plotImage';
+import { PlotImage } from '../../plot/plotImages';
 import { getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames } from '../../../utils';
-import { useBlink } from '../../../../hooks/useBlink';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -75,15 +74,13 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, select
       action: () => toggleCustomizationMenu(true),
       icon: <SettingOutlined />,
     },
-    // functions_config.new_back_end.new_back_end && {
-    //   label: 'Overlay with another plot',
-    //   value: 'overlay',
-    //   url: url,
-    //   icon: <BlockOutlined />,
-    // },
+    functions_config.new_back_end.new_back_end && {
+      label: 'Overlay with another plot',
+      value: 'overlay',
+      url: url,
+      icon: <BlockOutlined />,
+    },
   ];
-  const { not_older_than } = useUpdateLiveMode()
-  const { blink } = useBlink(not_older_than);
   
   return (
     <StyledCol space={2}>
@@ -94,8 +91,6 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, select
         title={selected_plot.name}
       >
         <StyledPlotRow
-          isLoading={blink.toString()}
-          animation={(functions_config.mode === 'ONLINE').toString()}
           minheight={copy_of_params.height}
           width={copy_of_params.width?.toString()}
           is_plot_selected={true.toString()}
@@ -110,12 +105,10 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, select
             height={copy_of_params.height}
           >
             <PlotImage
-              blink={blink}
               params_for_api={copy_of_params}
               plot={selected_plot}
               plotURL={zoomed_plot_url}
               query={query}
-              updated_by_not_older_than={not_older_than}
             />
           </ImageDiv>
         </StyledPlotRow>
@@ -128,8 +121,6 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, select
         setCustomizationParams={setCustomizationParams}
       />
       <StyledPlotRow
-        isLoading={blink.toString()}
-        animation={(functions_config.mode === 'ONLINE').toString()}
         minheight={params_for_api.height}
         width={params_for_api.width?.toString()}
         is_plot_selected={true.toString()}
@@ -152,8 +143,6 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, select
           display="flex"
         >
           <PlotImage
-            updated_by_not_older_than={not_older_than}
-            blink={blink}
             params_for_api={params_for_api}
             plot={selected_plot}
             plotURL={plot_url}

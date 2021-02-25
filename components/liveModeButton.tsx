@@ -14,7 +14,7 @@ const liveModeHandler = (liveModeRun: string, liveModeDataset: string) => {
     workspaces: onlineWorkspace[0].workspaces[0].label,
   }
   const stringified = qs.stringify(parameters, {});
-  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}/?${stringified}` : undefined
+  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}?${stringified}` : undefined
 
   Router.push({
     pathname: '',

@@ -1,6 +1,7 @@
 import { getRunsWithLumisections, get_customize_params } from "./utils";
 import { LumisectionRequestProps, ParamsForApiProps } from "../containers/display/interfaces";
 import { ParametersForApi, PlotProperties } from "../plotsLocalOverlayPageComponents/interfaces";
+import { sizes } from "../components/constants";
 
 export const get_folders_and_plots_new_api = (params: ParamsForApiProps) => {
   if (params.plot_search) {
@@ -38,7 +39,7 @@ export const get_plot_with_overlay_new_api = (params: ParametersForApi) => {
   if (params.overlaidSeparately?.plots) {
     const plots_strings = params.overlaidSeparately.plots.map((plot_for_overlay: PlotProperties) => {
       labels.push(plot_for_overlay.label ? plot_for_overlay.label : params.run_number)
-      return (`obj=archive/${params.run_number}${params.dataset_name}/${plot_for_overlay.folders_path}/${(encodeURI(plot_for_overlay.plot_name))}`)
+      return (`obj=archive/${params.run_number}${params.dataset_name}/${plot_for_overlay.folders_path}/${plot_for_overlay.plot_name}`)
     })
     const joined_plots = plots_strings.join('&')
     const joined_labels = labels.join('&reflabel=')
@@ -52,7 +53,7 @@ export const get_plot_with_overlay_new_api = (params: ParametersForApi) => {
     //@ts-ignore
     const width = sizes[params.size].size.w
 
-    return `api/v1/render_overlay?obj=archive/${params.run_number}${params.dataset_name}/${params.folders_path}/${(encodeURI(params.plot_name))}&${joined_plots}&w=${width}&h=${height}&norm=${norm}&${stats}${joined_labels}${error}&${customization}ref=${ref}`
+    return `api/v1/render_overlay?obj=archive/${params.run_number}${params.dataset_name}/${params.folders_path}/${params.plot_name}&${joined_plots}&w=${width}&h=${height}&norm=${norm}&${stats}${joined_labels}${error}&${customization}ref=${ref}`
   }
   else {
     return

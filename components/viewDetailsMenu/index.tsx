@@ -9,7 +9,10 @@ import { QueryProps } from '../../containers/display/interfaces';
 import { formTriples } from './utils';
 import { StyledCollapse } from './styledComponents';
 import { CutomFormItem, CustomDiv } from '../styledComponents';
-import { store } from '../../contexts/leftSideContext';
+import { store as rightSideStore } from '../../contexts/rightSideContext';
+import { store as leftSideStore } from '../../contexts/leftSideContext';
+import { useChangeRouter } from '../../hooks/useChangeRouter';
+
 
 const { Panel } = Collapse;
 
@@ -22,16 +25,11 @@ export const ViewDetailsMenu = ({ selected_plots, plotsAreaWidth }: ViewDetailsM
   const router = useRouter();
   const query: QueryProps = router.query;
 
-  const globalState = useContext(store);
-  const {
-    size,
-    setSize,
-    setJSROOTmode,
-    JSROOTmode,
-    rightSideSize,
-    setRightSideSize,
-    setTriples,
-  } = globalState;
+  const rightSideState = useContext(rightSideStore);
+  const leftSideState = useContext(leftSideStore);
+
+  const { size, setSize, setTriples, normalize, setNormalize, triples, overlayPosition } = leftSideState;
+  const { setJSROOTmode, JSROOTmode, rightSideSize, setRightSideSize, } = rightSideState
 
   useEffect(() => {
     if (query) {
@@ -45,6 +43,14 @@ export const ViewDetailsMenu = ({ selected_plots, plotsAreaWidth }: ViewDetailsM
       setJSROOTmode(false);
     };
   }, []);
+
+  useChangeRouter(
+    {
+      overlay: overlayPosition,
+      normalize: normalize
+    },
+    [overlayPosition, normalize], true);
+  // useChangeRouter({ overlay: value }, [value], true);
 
   return (
     <StyledCollapse style={{ width: '100%' }}>
@@ -97,7 +103,11 @@ export const ViewDetailsMenu = ({ selected_plots, plotsAreaWidth }: ViewDetailsM
           </CustomDiv>
           <hr />
           <CutomFormItem name="Reference" label="Reference">
-            <Reference />
+            <Reference
+              normalize={normalize}
+              setNormalize={setNormalize}
+              triples={triples}
+            />
           </CutomFormItem>
         </Form>
       </Panel>

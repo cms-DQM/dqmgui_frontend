@@ -8,8 +8,7 @@ import {
 import { ZoomedPlot } from './zoomedPlot';
 import { ZoomedJSROOTPlot } from './zoomedJSROOTPlot';
 import { ZoomedPlotsWrapper } from '../../../styledComponents';
-import { store } from '../../../../contexts/leftSideContext';
-import { FormatParamsForAPI } from '../../plot/singlePlot/utils';
+import { store } from '../../../../contexts/rightSideContext';
 import { makeid } from '../../../utils';
 
 interface ZoomedPlotsProps {
@@ -17,21 +16,24 @@ interface ZoomedPlotsProps {
 }
 
 export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
-  const globalState = useContext(store);
+  const { rightSideSize, customize, JSROOTmode } = useContext(store)
   const router = useRouter();
   const query: QueryProps = router.query;
 
   return (
     <ZoomedPlotsWrapper>
       {selected_plots.map((selected_plot: any) => {
-        const params_for_api = FormatParamsForAPI(
-          globalState,
-          query,
-          selected_plot.name,
-          selected_plot.path,
-          true
-        );
-        if (globalState.JSROOTmode) {
+        const params_for_api = {
+          run_number: query.run_number,
+          dataset_name: query.dataset_name,
+          lumi: query.lumi,
+          folders_path: selected_plot.path,
+          height: rightSideSize.h,
+          width: rightSideSize.w,
+          customizeProps: customize,
+          plot_name: selected_plot.name,
+        }
+        if (JSROOTmode) {
           const id = makeid();
           return (
             <ZoomedJSROOTPlot

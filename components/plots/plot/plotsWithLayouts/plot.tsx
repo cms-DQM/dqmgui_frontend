@@ -6,36 +6,34 @@ import { PlotDataProps, QueryProps } from '../../../../containers/display/interf
 import { isPlotSelected } from '../../../../containers/display/utils';
 import { PlotWrapper } from './styledComponents';
 import { FormatParamsForAPI, get_plot_error, scroll, scrollToBottom } from '../singlePlot/utils'
-import { PlotImage } from '../plotImage';
+import { PlotImage } from '../plotImages';
+import { store as globalContext } from '../../../../contexts/globalStateContext';
+import { store as leftSideContext } from '../../../../contexts/leftSideContext';
+
 
 interface PlotProps {
-  globalState: any;
   query: QueryProps;
   plot: PlotDataProps;
   onePlotWidth: number;
   onePlotHeight: number;
   selected_plots: PlotDataProps[];
   imageRef: React.RefObject<HTMLDivElement>;
-  imageRefScrollDown: React.RefObject<HTMLDivElement>;
-  blink: boolean;
-  updated_by_not_older_than: number;
 }
 
 export const Plot = ({
-  globalState,
   query,
   plot,
   onePlotHeight,
   onePlotWidth,
   selected_plots,
   imageRef,
-  imageRefScrollDown,
-  blink,
-  updated_by_not_older_than }: PlotProps) => {
+   }: PlotProps) => {
+  const { imageRefScrollDown } = React.useContext(globalContext)
+  const fullState = React.useContext(leftSideContext)
   const params_for_api = FormatParamsForAPI(
-    globalState,
+    fullState,
     query,
-    encodeURI(plot.name),
+    encodeURIComponent(plot.name),
     plot.path
   );
   params_for_api.width = onePlotWidth
@@ -70,22 +68,18 @@ export const Plot = ({
       >
         {query.overlay_data ? (
           <PlotImage
-            blink={blink}
             params_for_api={params_for_api}
             plot={plot}
             plotURL={plot_with_overlay}
-            updated_by_not_older_than={updated_by_not_older_than}
             query={query}
             imageRef={imageRef}
             isPlotSelected={plotSelected}
           />)
           :
           (<PlotImage
-            blink={blink}
             params_for_api={params_for_api}
             plot={plot}
             plotURL={url}
-            updated_by_not_older_than={updated_by_not_older_than}
             query={query}
             imageRef={imageRef}
             isPlotSelected={plotSelected}

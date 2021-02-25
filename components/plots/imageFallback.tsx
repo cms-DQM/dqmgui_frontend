@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 
-import { Image } from '../../containers/display/styledComponents';
 import { Spinner } from '../../containers/search/styledComponents';
 import { CustomDiv } from '../styledComponents';
+import { PlotUploadIdicator } from './plot/plotsWithLayouts/styledComponents';
 
 export const ImageFallback = ({
   src,
@@ -19,6 +19,7 @@ export const ImageFallback = ({
   const [imageLoading, setImageLoading] = useState(true);
   const displaySpinner = (imageLoading: boolean) =>
     imageLoading && displayImage !== 'none' ? 'flex' : 'none';
+
 
   const displayImage = props.style.display;
 
@@ -41,20 +42,22 @@ export const ImageFallback = ({
 
   return (
     <>
-      <CustomDiv
-        display={displaySpinner(imageLoading)}
-        justifycontent="center"
-        width="100%"
-      >
-        <Spinner />
-      </CustomDiv>
-      <LazyLoadImage
-        src={final_src}
-        {...props}
-        key={key}
-        onError={onError}
-        onLoad={() => setImageLoading(false)}
-      />
+      <PlotUploadIdicator
+        uploaded={imageLoading.toString()}>
+      <div>
+        <img
+          src={final_src}
+          {...props}
+          key={key}
+          onError={onError}
+          onLoad={
+            () => {
+              props.onLoad()
+              setImageLoading(false)
+            }}
+        />
+      </div>
+    </PlotUploadIdicator>
     </>
   );
 };

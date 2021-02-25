@@ -1,9 +1,6 @@
 import * as React from 'react'
 
-import { functions_config } from '../../../../config/config'
 import { store } from '../../../../contexts/leftSideContext'
-import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode'
-import { useBlink } from '../../../../hooks/useBlink'
 import { LayoutName, LayoutWrapper, ParentWrapper } from './styledComponents'
 import { Plot } from './plot'
 import { decodePlotName } from '../../../utils'
@@ -12,12 +9,10 @@ interface OnePlotInLayout {
   layoutName: string;
   plots: any[];
   selected_plots: any,
-  globalState: any,
-  imageRefScrollDown: any,
   query: any,
 }
 
-export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layoutName, query, selected_plots }: OnePlotInLayout) => {
+export const OnePlotInLayout = ({ plots, layoutName, query, selected_plots }: OnePlotInLayout) => {
   const { size } = React.useContext(store)
   const [nameOfLayout, setNameOfLayout] = React.useState(layoutName)
   const [tooLong, setTooLong] = React.useState(false)
@@ -47,9 +42,6 @@ export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layout
   const auto = []
   var i;
 
-  const {not_older_than} = useUpdateLiveMode()
-  const { blink } = useBlink(not_older_than);
-
   for (i = 0; i < howMuchInOneLine; i++) {
     auto.push('auto')
   }
@@ -64,30 +56,23 @@ export const OnePlotInLayout = ({ plots, globalState, imageRefScrollDown, layout
   return (
     <ParentWrapper
       plotsAmount={plots.length}
-      isLoading={blink.toString()}
-      animation={(functions_config.mode === 'ONLINE').toString()}
       size={size}>
       <LayoutName ref={plotNameRef} >
         {decodePlotName(tooLong, nameOfLayout ? nameOfLayout : '')}
         </LayoutName>
       <LayoutWrapper
-        size={size}
         auto={auto.join(' ')}
       >
         {
           plots.map((plot) => {
             return (
               <Plot
-                globalState={globalState}
                 query={query}
                 plot={plot}
                 onePlotHeight={onePlotHeight}
                 onePlotWidth={onePlotWidth}
                 selected_plots={selected_plots}
-                imageRef={imageRef}
-                imageRefScrollDown={imageRefScrollDown}
-                blink={blink}
-                updated_by_not_older_than={not_older_than} />
+                imageRef={imageRef} />
             )
           })}
       </LayoutWrapper>

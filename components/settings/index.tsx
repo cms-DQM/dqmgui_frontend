@@ -5,9 +5,8 @@ import Form from 'antd/lib/form/Form';
 import { ViewPosition } from './viewPosition';
 import { StyledModal } from '../viewDetailsMenu/styledComponents';
 import { StyledFormItem, CustomRow, StyledButton } from '../styledComponents';
-import { store } from '../../contexts/leftSideContext';
+import { store } from '../../contexts/globalStateContext';
 import { PlotsProportion } from './plotsRatio';
-import { theme } from '../../styles/theme';
 import { info } from '../notifications/infoMessages';
 
 interface SettingsModalProps {
@@ -27,6 +26,7 @@ export const SettingsModal = ({
     proportion,
     setProportion,
   } = React.useContext(store);
+  
   return (
     <StyledModal
       title="Settings"

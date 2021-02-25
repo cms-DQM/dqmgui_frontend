@@ -17,10 +17,8 @@ import { backToMainPage } from '../utils';
 import { Header } from '../containers/display/header';
 import { ContentSwitching } from '../containers/display/content/constent_switching';
 import { ModesSelection } from '../components/modes/modesSelection';
-import { useUpdateLiveMode } from '../hooks/useUpdateInLiveMode';
 
 const Index: NextPage<FolderPathQuery> = () => {
-  useUpdateLiveMode()
   // We grab the query from the URL:
   const router = useRouter();
   const query: QueryProps = router.query;
@@ -32,7 +30,6 @@ const Index: NextPage<FolderPathQuery> = () => {
       document.getElementById("holderStyle").remove();
     };
   }
-
   return (
     <StyledDiv>
       <Head>
@@ -49,6 +46,8 @@ const Index: NextPage<FolderPathQuery> = () => {
           type="text/javascript"
           src="./jsroot-5.8.0/scripts/JSRootCore.js?2d&hist&more2d"
         ></script>
+        <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+        <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
       </Head>
       <StyledLayout>
         <StyledHeader>

@@ -13,42 +13,37 @@ import {
   scrollToBottom,
   get_plot_error,
 } from './utils';
-import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
-import { useBlink } from '../../../../hooks/useBlink';
-import { PlotImage } from '../plotImage';
+import { PlotImage } from '../plotImages';
 import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
-import { store } from '../../../../contexts/leftSideContext';
 import { isPlotSelected } from '../../../../containers/display/utils';
 import { Tooltip } from 'antd';
 import { decodePlotName } from '../../../utils';
+import { store } from '../../../../contexts/globalStateContext';
 
 interface PlotProps {
   plot: PlotDataProps;
   selected_plots: PlotDataProps[];
   params_for_api: ParamsForApiProps;
-  imageRefScrollDown: any;
 }
 
 export const Plot = ({
   plot,
   selected_plots,
   params_for_api,
-  imageRefScrollDown,
 }: PlotProps) => {
 
   const router = useRouter();
   const query: QueryProps = router.query;
-  const { size } = useContext(store)
   const imageRef = useRef(null);
+  const size = { w: params_for_api.width, h: params_for_api.height }
 
   const plotNameRef = React.useRef<any>(null)
   const [count, setCount] = React.useState(0)
   const [tooLong, setTooLong] = React.useState(false)
 
-  const { not_older_than } = useUpdateLiveMode()
-  const { blink } = useBlink(not_older_than);
   const url = get_plot_url(params_for_api);
   const is_plot_selected = isPlotSelected(selected_plots, plot)
+  const { imageRefScrollDown } = useContext(store)
 
   useEffect(() => {
     const scrollPlot = () => {
@@ -73,8 +68,6 @@ export const Plot = ({
   return (
     <Tooltip title={tooLong ? decodeURI(params_for_api.plot_name as string) : ''}>
       <ParentWrapper
-        isLoading={blink.toString()}
-        animation={(functions_config.mode === 'ONLINE').toString()}
         size={size}
         isPlotSelected={is_plot_selected.toString()}>
         <LayoutName
@@ -84,7 +77,6 @@ export const Plot = ({
         >{decodePlotName(tooLong, params_for_api.plot_name ? params_for_api.plot_name : '')}
         </LayoutName>
         <LayoutWrapper
-          size={size}
           auto='auto'
         >
           <PlotWrapper
@@ -99,11 +91,9 @@ export const Plot = ({
             ref={imageRef}
           >
             <PlotImage
-              blink={blink}
               params_for_api={params_for_api}
               plot={plot}
               plotURL={url}
-              updated_by_not_older_than={not_older_than}
               query={query}
               imageRef={imageRef}
               isPlotSelected={is_plot_selected}

@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import { choose_api_for_run_search } from '../containers/display/utils';
 import { get_runs_by_search } from './selector';
-import { useUpdateLiveMode } from './useUpdateInLiveMode';
+// import { useUpdateLiveMode } from './useUpdateInLiveMode';
 
 interface ReturnSearch {
   results_grouped: any[];
@@ -19,18 +19,20 @@ export const useSearch = (
   const searching = !!(run_number || dataset_name);
   const run_number_value = run_number ? run_number : '';
   const dataset_name_value = dataset_name ? dataset_name : '';
-  const { not_older_than } = useUpdateLiveMode()
+  // const { not_older_than } = useUpdateLiveMode()
   const current_api = choose_api_for_run_search({
     dataset_name: dataset_name_value,
     run_number: run_number_value,
-    notOlderThan: not_older_than,
+    // notOlderThan: not_older_than,
     lumi: '',
   });
 
   const { data, isLoading, errors } = useRequest(
     current_api,
     {},
-    [run_number, dataset_name, not_older_than],
+    [run_number, dataset_name, 
+      // not_older_than
+    ],
     searching
   );
 

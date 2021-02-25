@@ -1,7 +1,7 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Col } from 'antd';
 
-import { QueryProps } from '../../../containers/display/interfaces';
+import { QueryProps, TripleProps } from '../../../containers/display/interfaces';
 import {
   StyledDiv,
   CustomCheckbox,
@@ -12,11 +12,14 @@ import { useRouter } from 'next/router';
 import { OverlayOptions } from './overlayOptions';
 import { OverlayRuns } from './overlayRuns';
 import FormItem from 'antd/lib/form/FormItem';
-import { store } from '../../../contexts/leftSideContext';
 
-export const Reference = () => {
-  const globalState = useContext(store);
-  const { normalize, setNormalize, triples } = globalState;
+interface ReferenceProps {
+  normalize: string;
+  setNormalize(normalize: string): void;
+  triples: TripleProps[]
+}
+
+export const Reference = ({ normalize, setNormalize, triples }: ReferenceProps) => {
 
   const checkedValue = normalize === 'True' ? true : false;
   const [checked, setChecked] = useState(checkedValue);
@@ -44,8 +47,7 @@ export const Reference = () => {
               onClick={async (e: any) => {
                 await setChecked(e.target.checked);
               }}
-              checked={checked}
-            >
+              checked={checked} >
               Normalize
             </CustomCheckbox>
           </FormItem>

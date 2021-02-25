@@ -16,19 +16,16 @@ import {
   scrollToBottom,
   get_plot_error,
 } from '../singlePlot/utils';
-import { useUpdateLiveMode } from '../../../../hooks/useUpdateInLiveMode';
-import { useBlink } from '../../../../hooks/useBlink';
-import { PlotImage } from '../plotImage';
+import { PlotImage } from '../plotImages';
 import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsWithLayouts/styledComponents';
-import { store } from '../../../../contexts/leftSideContext';
 import { isPlotSelected } from '../../../../containers/display/utils';
 import { Tooltip } from 'antd';
 import { decodePlotName } from '../../../utils'
+import { store } from '../../../../contexts/globalStateContext';
 
 interface OnSideOverlaidPlotsProps {
   params_for_api: ParamsForApiProps;
   plot: PlotDataProps;
-  imageRefScrollDown: any;
   selected_plots: PlotDataProps[];
 }
 
@@ -36,12 +33,12 @@ export const OnSideOverlaidPlots = ({
   plot,
   params_for_api,
   selected_plots,
-  imageRefScrollDown,
 }: OnSideOverlaidPlotsProps) => {
   params_for_api.plot_name = plot.name;
   const onsidePlotsURLs: string[] = getOnSideOverlaidPlots(params_for_api);
   const overlaidPlotsObjs = getOnSideOverlaidPlotsObjects(params_for_api);
-  const { size } = useContext(store)
+  const size = { w: params_for_api.width, h: params_for_api.height }
+  const { imageRefScrollDown } = useContext(store)
 
   const router = useRouter();
   const query: QueryProps = router.query;
@@ -61,9 +58,6 @@ export const OnSideOverlaidPlots = ({
   plot.dataset_name = query.dataset_name
   plot.run_number = query.run_number
 
-  const {not_older_than} = useUpdateLiveMode()
-  const { blink } = useBlink(not_older_than);
-
   return (
     <OnSidePlotsWrapper>
       {onsidePlotsURLs.map((url: string, index: number) => {
@@ -72,7 +66,6 @@ export const OnSideOverlaidPlots = ({
           <Tooltip title={tooLong ? decodeURI(params_for_api.plot_name as string) : ''}>
             <ParentWrapper
               isPlotSelected={is_plot_selected.toString()}
-              isLoading={blink.toString()}
               animation={(functions_config.mode === 'ONLINE').toString()}
               size={size}>
               <LayoutName
@@ -82,7 +75,6 @@ export const OnSideOverlaidPlots = ({
               >{decodePlotName(tooLong, params_for_api.plot_name ? params_for_api.plot_name : '')}
               </LayoutName>
               <LayoutWrapper
-                size={size}
                 auto='auto'
               >
                 <PlotWrapper
@@ -97,11 +89,9 @@ export const OnSideOverlaidPlots = ({
                   ref={imageRef}
                 >
                   <PlotImage
-                    blink={blink}
                     params_for_api={params_for_api}
                     plot={overlaidPlotsObjs[index]}
                     plotURL={url}
-                    updated_by_not_older_than={not_older_than}
                     query={query}
                     imageRef={imageRef}
                     isPlotSelected={is_plot_selected}

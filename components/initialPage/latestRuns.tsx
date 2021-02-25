@@ -15,10 +15,13 @@ import { functions_config } from '../../config/config';
 import { LiveModeButton } from '../liveModeButton';
 import { CustomDiv } from '../styledComponents';
 import { LatestRunsList } from './latestRunsList';
-import { useUpdateLiveMode } from '../../hooks/useUpdateInLiveMode';
+import { makeid } from '../utils';
+import { store } from '../../contexts/updateContext';
 
 export const LatestRuns = () => {
-  const { not_older_than } = useUpdateLiveMode()
+  const {not_older_than, addLoader } = React.useContext(store)
+  const [id, setId] = React.useState<string>()
+
   const data_get_by_mount = useRequest(
     get_the_latest_runs(not_older_than),
     {},
@@ -35,12 +38,28 @@ export const LatestRuns = () => {
     data_get_by_mount.data,
     data_get_by_not_older_than_update.data
   );
+
   const errors = useNewer(
     data_get_by_mount.errors,
     data_get_by_not_older_than_update.errors
   );
+
+  const loader = useNewer(
+    data_get_by_mount.isLoading,
+    data_get_by_not_older_than_update.isLoading
+  );
+
   const isLoading = data_get_by_mount.isLoading;
   const latest_runs = data && data.runs.sort((a: number, b: number) => a - b);
+
+  React.useEffect(() => {
+    const id_ = makeid()
+    setId(id_)
+  }, [])
+
+  React.useEffect(() => {
+    addLoader({ value: loader, id })
+  }, [loader])
 
   return (
     <>
@@ -74,6 +93,7 @@ export const LatestRuns = () => {
                       <LatestRunsList
                         latest_runs={latest_runs}
                         mode={functions_config.mode}
+                        not_older_than={not_older_than}
                       />
                     )
                   )}
