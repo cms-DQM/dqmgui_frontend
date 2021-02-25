@@ -33,3 +33,7 @@ export const backToMainPage = (e: any) => {
     url_which_is_visible
   )
 };
+
+export const isItLiveMode = (parameters: {run_number: string, dataset_name: string})=>{
+  return parameters.run_number === '0' && parameters.dataset_name === "/Global/Online/ALL" 
+}
