@@ -15,6 +15,7 @@ import { functions_config } from '../../../config/config';
 
 interface FoldersFilter {
   directories: DirectoryInterface[];
+  isLoading?: boolean;
 }
 
 interface MeCountProps {
@@ -29,7 +30,7 @@ export const MeCount = ({ me_count, children }: MeCountProps) => {
   return children;
 };
 
-export const Directories = ({ directories }: FoldersFilter) => {
+export const Directories = ({ directories, isLoading }: FoldersFilter) => {
   const router = useRouter();
   const query: QueryProps = router.query;
 
@@ -44,7 +45,7 @@ export const Directories = ({ directories }: FoldersFilter) => {
               space="1"
               alignitems="center"
               onClick={() =>
-                changeRouter(
+                !isLoading && changeRouter(
                   getChangedQueryParams(
                     {
                       folder_path: getFolderPathToQuery(
@@ -58,7 +59,7 @@ export const Directories = ({ directories }: FoldersFilter) => {
               }
             >
               <MeCount me_count={directory.me_count ? directory.me_count : 0}>
-                <Icon/>
+                <Icon isLoading={isLoading.toString()}/>
               </MeCount>
               <StyledA>{directory.subdir}</StyledA>
             </CustomDiv>
