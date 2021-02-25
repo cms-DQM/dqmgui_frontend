@@ -135,7 +135,7 @@ export const Reference = ({ router, parameters, setParameters }: ReferenceProps)
         /></Grid>
       <Grid space="2">
         <Tooltip title={isPlotCustomized ? 'This plot is customized!' : ''}>
-          <StyledButton isPlotCustomized={isPlotCustomized.toString()} onClick={() => setOpenCustomization(!openCustomization)}>Cuztomize</StyledButton>
+          <StyledButton isPlotCustomized={isPlotCustomized.toString()} onClick={() => setOpenCustomization(!openCustomization)}>Customize</StyledButton>
         </Tooltip>
       </Grid>
     </Wrapper>
