@@ -38,12 +38,9 @@ export const Icon = styled(FolderFilled)<{
   font-size: 2rem;
   cursor: pointer;
   padding-right: calc(${theme.space.spaceBetween}*2);
-  animation-name: ${(props) =>
-    props.isLoading === 'true' && props.animation === 'true'
-      ? keyframe_for_updates_folder
-      : ''};
-  animation-iteration-count: 1;
-  animation-duration: 1s;
+  animation-iteration-count: ${props => props.isLoading === 'true'? 'infinite' : '0' };;
+  animation-duration: 2s;
+  animation-name: ${keyframe_for_updates_folder };
 `;
 export const DirecotryWrapper = styled.div`
   padding: ${theme.space.spaceBetween};

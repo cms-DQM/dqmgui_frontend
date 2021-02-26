@@ -1,6 +1,7 @@
 import { getRunsWithLumisections, get_customize_params } from "./utils";
 import { ParamsForApiProps, TripleProps } from "../containers/display/interfaces";
 import { ParametersForApi } from "../plotsLocalOverlayPageComponents/interfaces";
+import { oldApi } from "./paramtersParser";
 
 export const get_folders_and_plots_old_api = (params: ParamsForApiProps) => {
     if (params.plot_search) {
@@ -14,19 +15,21 @@ export const get_folders_and_plots_old_api = (params: ParamsForApiProps) => {
   };
   
   export const get_plot_url = (params: ParamsForApiProps & ParametersForApi & any) => {
+    const { errorBars, height, norm, stats, width} = oldApi(params)
+
     return `plotfairy/archive/${getRunsWithLumisections(params)}${params.dataset_name
       }/${params.folders_path}/${params.plot_name as string}?${get_customize_params(
         params.customizeProps
-      )}${params.stats ? '' : 'showstats=0'}${params.errorBars ? 'showerrbars=1' : ''
-      };w=${params.width};h=${params.height}`;
+      )}${stats};${errorBars};${width};${height}`;
   };
   
   export const get_plot_with_overlay = (params: ParamsForApiProps) => {
+    const { errorBars, height, norm, stats, width} = oldApi(params as any)
+
     return `plotfairy/overlay?${get_customize_params(params.customizeProps)}ref=${params.overlay
       };obj=archive/${getRunsWithLumisections(params)}${params.dataset_name}/${params.folders_path
       }/${params.plot_name}${params.joined_overlaied_plots_urls
-      };${params.stats ? '' : 'showstats=0;'}${params.errorBars ? 'showerrbars=1;' : ''
-      }norm=${params.normalize};w=${params.width};h=${params.height}`;
+      };${stats};${errorBars};${norm};${width}};${height}`;
   };
   
   export const get_overlaied_plots_urls = (params: ParamsForApiProps) => {

@@ -17,6 +17,7 @@ import {
   OptionProps,
   QueryProps,
 } from '../interfaces';
+import { isItLiveMode } from '../../../utils';
 
 interface ContentProps {
   plots: PlotDataProps[];
@@ -39,6 +40,7 @@ export const DisplayFordersOrPlots = ({
   viewPlotsPosition,
   proportion,
   errors,
+  query,
   filteredFolders,
   plotsAreaRef
 }: ContentProps) => {
@@ -50,11 +52,12 @@ export const DisplayFordersOrPlots = ({
       position={viewPlotsPosition}
       proportion={proportion}
     >
-      {isLoading && filteredFolders.length === 0 ? (
-        <SpinnerWrapper>
-          <Spinner />
-        </SpinnerWrapper>
-      ) : (
+      {isItLiveMode({ run_number: query.run_number, dataset_name: query.dataset_name }) && isLoading && filteredFolders.length === 0
+        || !isItLiveMode({ run_number: query.run_number, dataset_name: query.dataset_name }) && isLoading ? (
+          <SpinnerWrapper>
+            <Spinner />
+          </SpinnerWrapper>
+        ) : (
           <>
             {!isLoading &&
               filteredFolders.length === 0 &&
@@ -64,7 +67,9 @@ export const DisplayFordersOrPlots = ({
               ) : errors.length === 0 ? (
                 <>
                   <CustomRow width="100%" space={'2'}>
-                    <Directories directories={filteredFolders} />
+                    <Directories
+                      isLoading={isLoading}
+                      directories={filteredFolders} />
                   </CustomRow>
                   <Row>
                     <LeftSidePlots
@@ -77,9 +82,12 @@ export const DisplayFordersOrPlots = ({
               ) : (
                   !isLoading &&
                   errors.length > 0 &&
-                  errors.map((error) => (
-                    <StyledAlert key={error} message={error} type="error" showIcon />
-                  ))
+                  errors.map((error) => {
+                    if (isItLiveMode) {
+                      return <StyledAlert type="info" message={"Informational Notes"}  description="No data to show" showIcon/>
+                    }
+                    return <StyledAlert key={error} message={error} type="error" showIcon />
+                  })
                 )}
           </>
         )}

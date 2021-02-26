@@ -80,7 +80,7 @@ export const changeRunsForOverlayPropsValues = (
 export const getDisabledButtonTitle = (
   overlaidPlotsLimisIsReached: boolean
 ) => {
-  const title = 'Maximum 4 plots could be overlaid!';
+  const title = 'Maximum 8 plots could be overlaid';
   if (overlaidPlotsLimisIsReached) {
     return title;
   }

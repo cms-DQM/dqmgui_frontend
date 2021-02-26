@@ -33,7 +33,6 @@ export const addOverlaidPlotToURL = async (plotsString: string,
   parameters: ParametersForApi,
   router: NextRouter,
 ) => {
-
   const copy: any = { ...parameters }
   const { overlaidSeparately } = parameters
   const { ref } = overlaidSeparately as OverlaidSeparatelyProps
@@ -53,7 +52,7 @@ export const addOverlaidPlotToURL = async (plotsString: string,
     overlayPlots: plotsString
   }
   const stringified = qs.stringify(parameters_for_query, {});
-  const url_which_is_visible = root_url_ !== '/' ? `${root_url_}?${stringified}` : undefined
+  const url_which_is_visible = root_url_ !== '' ? `${root_url_}?${stringified}` : undefined
 
   Router.push({
     pathname: router.pathname,
@@ -86,7 +85,6 @@ export const SetCustomizationParams = async (router: NextRouter, customizeParams
   }
   const stringified = qs.stringify(parameters_for_query, {});
   const url_which_is_visible = root_url_ !== '/' ? `${root_url_}?${stringified}` : undefined
-
   Router.push({
     pathname: router.pathname,
     //@ts-ignore

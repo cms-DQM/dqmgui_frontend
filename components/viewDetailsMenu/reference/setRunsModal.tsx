@@ -73,7 +73,7 @@ export const SetRunsModal = ({
       label: '',
     };
     const copy = [...selected_runs];
-    if (copy.length <= 4) {
+    if (copy.length < 8) {
       copy.push(full_run);
     }
     set_selected_runs(copy);
@@ -181,11 +181,13 @@ export const SetRunsModal = ({
           />
           {open && searching ? (
             <ResultsWrapper>
+              ss
               <SearchResults
                 handler={searchHandler}
                 isLoading={isLoading}
                 results_grouped={results_grouped}
                 errors={errors}
+                alreadySeletected={selected_runs}
               />
             </ResultsWrapper>
           ) : (

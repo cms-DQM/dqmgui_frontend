@@ -1,7 +1,7 @@
-import React, { FC } from 'react';
+import React, { FC, useEffect } from 'react';
+import {message} from 'antd'
 
 import Result from './Result';
-
 import {
   StyledWrapper,
   Spinner,
@@ -21,16 +21,30 @@ interface SearchResultsInterface {
   isLoading: boolean;
   handler(run: string, dataset: string, e: any): any;
   errors?: string[];
+  alreadySeletected?: any[];
 }
+const warning = () => {
+  message.warning('Maximum can be overlaid 8 plots in total');
+};
 
 const SearchResults: FC<SearchResultsInterface> = ({
   handler,
   results_grouped,
   isLoading,
   errors,
+  alreadySeletected
 }) => {
-  const errorsList = errors && errors.length > 0 ? errors : [];
 
+  const selectedMaximum = alreadySeletected.length >= 8
+  useEffect(()=>{
+    if(selectedMaximum){
+      warning()
+    }
+  },[selectedMaximum])
+  const errorsList = errors && errors.length > 0 ? errors : [];
+  const justRunsAndDataset = alreadySeletected.map(selected => {
+    return { run_number: selected.run_number, dataset_name: selected.dataset_name }
+  })
   return (
     <StyledWrapper overflowx="hidden">
       {isLoading ? (
@@ -54,6 +68,7 @@ const SearchResults: FC<SearchResultsInterface> = ({
                   <TableBody>
                     {results_grouped.map(({ dataset, runs }, index) => (
                       <Result
+                        alreadySeletected={justRunsAndDataset}
                         key={dataset}
                         index={index}
                         handler={handler}

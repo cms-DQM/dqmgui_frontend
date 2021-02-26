@@ -52,18 +52,19 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
       // dataIndex: 'label',
       render: (plot: PlotProperties) => {
         const set_label = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
-          const plotsWithLabels = setLabel(plot, selectedPlots, value)
+          const plotsWithLabels = setLabel(plot, selectedPlots, encodeURI(value))
           setSelectedPlots(plotsWithLabels)
         }
         if (plot.folders_path && plot.plot_name)
-          return <Input
-            id={plot.folders_path + plot.plot_name}
-            defaultValue={plot.label}
-            name={plot.folders_path + plot.plot_name}
-            placeholder="label"
-            value={plot.label}
-            onChange={set_label}
-          />
+          return
+        <Input
+          id={plot.folders_path + plot.plot_name}
+          defaultValue={plot.label}
+          name={plot.folders_path + plot.plot_name}
+          placeholder="label"
+          value={plot.label}
+          onChange={set_label}
+        />
       }
     },
     {
@@ -100,7 +101,9 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
         const parts = labelAndOtherPart[0].split('/')
         const plot_name = parts.pop() as string
         const folders_path = cleanDeep(parts).join('/')
-        const finalObject: PlotProperties = { folders_path, plot_name, label }
+        const run_number = query.run_number as string
+        const dataset_name = query.dataset_name as string
+        const finalObject: PlotProperties = { folders_path, plot_name, label, run_number, dataset_name }
         return finalObject
       })
       setSelectedPlots(formattedSelectedPlotObjects)
@@ -118,12 +121,14 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
   React.useEffect(() => {
     const globallyAndLocallyOverlaidPlots = overlaidGlobally.filter(globallyOverlaidPlot => {
       const alreadyIncludes = selectedPlots.includes(globallyOverlaidPlot)
-      if(!alreadyIncludes){
+      if (!alreadyIncludes) {
         return globallyOverlaidPlot
       }
     })
     const dataSource = globallyAndLocallyOverlaidPlots.concat(selectedPlots)
-    setSelectedPlots(dataSource)
+    if (dataSource.length > 0) {
+      setSelectedPlots(dataSource)
+    }
   }, [query.overlaidGlobally])
 
   return (selectedPlots.length > 0 ? <StyledSelectedPlotsTable
@@ -133,7 +138,9 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
         pageSizeOptions: ['1', '2', '3', '4', '5'],
         showSizeChanger: true,
       }}
-    columns={colums} dataSource={selectedPlots} />
+      //@ts-ignore
+    columns={colums}
+    dataSource={selectedPlots.reverse()} />
     : <></>
   )
 }

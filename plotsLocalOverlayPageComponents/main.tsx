@@ -51,6 +51,20 @@ export const Main = () => {
         }
       })
 
+      const overlaidSeparatelyPlots = query.overlayPlots ? (query.overlayPlots as string).split('&') : []
+      const overlaidSeparately = overlaidSeparatelyPlots.map((plot) => {
+        if (overlaidGloballyPlots) {
+          const parts = plot.split('/')
+          const label = parts.pop()
+          const plot_name = parts.pop()
+          const run_number = parts.shift()
+          const folders_path = parts.splice(3).join('/')
+          const dataset_name = '/' + parts.join('/')
+          return { run_number, dataset_name, folders_path, plot_name, label }
+        }
+      })
+      
+      const ref = query.ref ? query.ref : 'overlay'
       const params_for_api: any = {
         run_number: run_number as string,
         dataset_name: dataset_name as string,
@@ -60,7 +74,7 @@ export const Main = () => {
         jsroot: query.jsroot ? (query.jsroot === 'true' ? true : false) : false,
         stats: query.stats ? (query.stats === 'true' ? true : false) : false,
         normalize: query.normalize ? (query.normalize === 'true' ? true : false) : true,
-        overlaidSeparately: { plots: [], ref: 'overlay' },
+        overlaidSeparately: { plots: [], ref: ref },
         overlaidGlobally: overlaidGloballyPlotsObjects,
         //@ts-ignore
         height: sizes[query.size ? query.size as string : 'large'].size.h,
