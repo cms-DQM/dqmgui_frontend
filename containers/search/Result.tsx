@@ -33,7 +33,7 @@ const Result: FC<SearchResultsInterface> = ({
   alreadySeletected,
 }) => {
   const [expanded, setExpanded] = useState(false);
-  const selectedMaximum = alreadySeletected.length >= 8
+  const selectedMaximum = alreadySeletected ?  alreadySeletected.length >= 8 : false
     return (
       <StyledTableRow expanded={expanded} index={index}>
         <StyledTableDatasetColumn>
@@ -43,10 +43,12 @@ const Result: FC<SearchResultsInterface> = ({
               <RunsRows>
                 {runs.map((run) => {
                   const current = { run_number: run, dataset_name: dataset }
-                  const isAlreadySelected = alreadySeletected.findIndex(selected => (
-                    selected.dataset_name === current.dataset_name && selected.run_number === current.run_number
-                  ))
-                  const disabled = selectedMaximum ? true : isAlreadySelected > -1
+                  const isAlreadySelected = alreadySeletected && alreadySeletected.length > 0 ? alreadySeletected.findIndex(selected => (
+                    selected.dataset_name === current.dataset_name &&  selected.run_number === current.run_number
+                  )) : -1
+                  const disabled = selectedMaximum ? true : isAlreadySelected >=0
+                  console.log(selectedMaximum, isAlreadySelected)
+
                   return <StyledCol key={run}>
                     <RunWrapper
                       onClick={(e) => !disabled && handler(run, dataset, e)}

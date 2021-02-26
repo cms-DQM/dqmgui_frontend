@@ -35,16 +35,16 @@ const SearchResults: FC<SearchResultsInterface> = ({
   alreadySeletected
 }) => {
 
-  const selectedMaximum = alreadySeletected.length >= 8
+  const selectedMaximum = alreadySeletected ?  alreadySeletected.length >= 8 : false
   useEffect(()=>{
     if(selectedMaximum){
       warning()
     }
   },[selectedMaximum])
   const errorsList = errors && errors.length > 0 ? errors : [];
-  const justRunsAndDataset = alreadySeletected.map(selected => {
+  const justRunsAndDataset = alreadySeletected ? alreadySeletected.map(selected => {
     return { run_number: selected.run_number, dataset_name: selected.dataset_name }
-  })
+  }) : []
   return (
     <StyledWrapper overflowx="hidden">
       {isLoading ? (

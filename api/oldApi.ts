@@ -29,7 +29,7 @@ export const get_folders_and_plots_old_api = (params: ParamsForApiProps) => {
     return `plotfairy/overlay?${get_customize_params(params.customizeProps)}ref=${params.overlay
       };obj=archive/${getRunsWithLumisections(params)}${params.dataset_name}/${params.folders_path
       }/${params.plot_name}${params.joined_overlaied_plots_urls
-      };${stats};${errorBars};${norm};${width}};${height}`;
+      };${stats};${errorBars};${norm};${width};${height}`;
   };
   
   export const get_overlaied_plots_urls = (params: ParamsForApiProps) => {

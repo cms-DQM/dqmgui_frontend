@@ -181,7 +181,6 @@ export const SetRunsModal = ({
           />
           {open && searching ? (
             <ResultsWrapper>
-              ss
               <SearchResults
                 handler={searchHandler}
                 isLoading={isLoading}
