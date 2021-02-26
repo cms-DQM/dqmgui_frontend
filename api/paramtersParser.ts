@@ -22,7 +22,7 @@ export const newApi = (parameters: ParametersForApi) => {
   const height = parameters.width ? `h=${sizes[parameters.size].size.h}` : ''
   const norm = parameters.normalize ? `norm=true` : `norm=false`
   const stats = parameters.stats ? `stats=true` : `stats=false`
-  const errorBars = parameters.error ? `showerrbars=true` : `showerrbars=false`
+  const errorBars = parameters.error ? `errors=true` : `errors=false`
 
   return { width, height, norm, stats, errorBars }
 } 

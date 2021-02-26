@@ -28,6 +28,6 @@ export const changeFolderPathByBreadcrumb = (item: ParsedUrlQueryInput) =>( setF
     const copy = [...allSelectedPlots]
     const index = copy.indexOf(item)
     //@ts-ignore
-    copy[index].label =  encodeURI(label.replace("_", "%5f"))
+    copy[index].label = encodeURI(label)
     return copy
   }

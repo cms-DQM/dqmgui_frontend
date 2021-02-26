@@ -52,11 +52,12 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
       // dataIndex: 'label',
       render: (plot: PlotProperties) => {
         const set_label = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
-          const plotsWithLabels = setLabel(plot, selectedPlots, encodeURI(value.replace("_", "%5f")))
+          const plotsWithLabels = setLabel(plot, selectedPlots, encodeURI(value))
           setSelectedPlots(plotsWithLabels)
         }
         if (plot.folders_path && plot.plot_name)
-          return <Input
+          return
+           <Input
             id={plot.folders_path + plot.plot_name}
             defaultValue={plot.label}
             name={plot.folders_path + plot.plot_name}
