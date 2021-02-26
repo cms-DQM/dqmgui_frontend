@@ -57,14 +57,14 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
         }
         if (plot.folders_path && plot.plot_name)
           return
-           <Input
-            id={plot.folders_path + plot.plot_name}
-            defaultValue={plot.label}
-            name={plot.folders_path + plot.plot_name}
-            placeholder="label"
-            value={plot.label}
-            onChange={set_label}
-          />
+        <Input
+          id={plot.folders_path + plot.plot_name}
+          defaultValue={plot.label}
+          name={plot.folders_path + plot.plot_name}
+          placeholder="label"
+          value={plot.label}
+          onChange={set_label}
+        />
       }
     },
     {
@@ -121,12 +121,12 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
   React.useEffect(() => {
     const globallyAndLocallyOverlaidPlots = overlaidGlobally.filter(globallyOverlaidPlot => {
       const alreadyIncludes = selectedPlots.includes(globallyOverlaidPlot)
-      if(!alreadyIncludes){
+      if (!alreadyIncludes) {
         return globallyOverlaidPlot
       }
     })
     const dataSource = globallyAndLocallyOverlaidPlots.concat(selectedPlots)
-    if(dataSource.length > 0){
+    if (dataSource.length > 0) {
       setSelectedPlots(dataSource)
     }
   }, [query.overlaidGlobally])
@@ -138,7 +138,9 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
         pageSizeOptions: ['1', '2', '3', '4', '5'],
         showSizeChanger: true,
       }}
-    columns={colums} dataSource={selectedPlots.reverse()} />
+      //@ts-ignore
+    columns={colums}
+    dataSource={selectedPlots.reverse()} />
     : <></>
   )
 }
