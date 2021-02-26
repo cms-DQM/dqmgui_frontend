@@ -1,5 +1,6 @@
 import * as React from 'react';
-import Router, { NextRouter } from 'next/router';
+import { NextRouter } from 'next/router';
+import { message } from 'antd';
 
 import { JSROOTSwitch } from './jsrootSwitch';
 import { OverlayPositionSelection } from './overlayPositionSelectionProps';
@@ -20,6 +21,10 @@ interface ReferenceProps {
   parameters: ParametersForApi;
   setParameters: React.Dispatch<React.SetStateAction<ParametersForApi | undefined>>
 }
+
+const info = () => {
+  message.info('Plot is already customized');
+};
 
 export const Reference = ({ router, parameters, setParameters }: ReferenceProps) => {
   const { query } = router
@@ -103,6 +108,12 @@ export const Reference = ({ router, parameters, setParameters }: ReferenceProps)
     setCustomizationParams(cleanDeep(costumization))
   },[])
 
+  React.useEffect(()=>{
+    if(isPlotCustomized){
+      info()
+    }
+  },[isPlotCustomized])
+
   return <Wrapper direction="column">
     <Customization
       plot_name={parameters.plot_name}
@@ -135,7 +146,8 @@ export const Reference = ({ router, parameters, setParameters }: ReferenceProps)
         /></Grid>
       <Grid space="2">
         <Tooltip title={isPlotCustomized ? 'This plot is customized!' : ''}>
-          <StyledButton isPlotCustomized={isPlotCustomized.toString()} onClick={() => setOpenCustomization(!openCustomization)}>Customize</StyledButton>
+          <StyledButton isPlotCustomized={isPlotCustomized.toString()} onClick={() => 
+            setOpenCustomization(!openCustomization)}>Customize</StyledButton>
         </Tooltip>
       </Grid>
     </Wrapper>
