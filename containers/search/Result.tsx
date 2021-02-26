@@ -9,8 +9,9 @@ import {
   StyledCol,
   RunWrapper,
   StyledA,
+  StyledAlert,
 } from './styledComponents';
-import { Row } from 'antd';
+import { Button, Row } from 'antd';
 import {
   StyledSecondaryButton,
   CustomCol,
@@ -21,6 +22,7 @@ interface SearchResultsInterface {
   runs: string[];
   handler(run: string, dataset: string, e: any): any;
   index: number;
+  alreadySeletected?: any[]
 }
 
 const Result: FC<SearchResultsInterface> = ({
@@ -28,41 +30,48 @@ const Result: FC<SearchResultsInterface> = ({
   dataset,
   runs,
   handler,
+  alreadySeletected,
 }) => {
   const [expanded, setExpanded] = useState(false);
-
-  return (
-    <StyledTableRow expanded={expanded} index={index}>
-      <StyledTableDatasetColumn>
-        <div>
-          {dataset}
-          {expanded && (
-            <RunsRows>
-              {runs.map((run) => (
-                <StyledCol key={run}>
-                  <RunWrapper
-                    onClick={(e) => handler(run, dataset, e)}
-                    hover="true"
-                  >
-                    <StyledA>{run}</StyledA>
-                  </RunWrapper>
-                </StyledCol>
-              ))}
-            </RunsRows>
-          )}
-        </div>
-      </StyledTableDatasetColumn>
-      <StyledTableRunColumn>
-        <StyledSecondaryButton onClick={() => setExpanded(!expanded)}>
-          <Row>
-            <CustomCol space="1">{runs.length}</CustomCol>
-            <CustomCol space="1">
-              {expanded ? <UpCircleOutlined /> : <DownCircleOutlined />}
-            </CustomCol>
-          </Row>
-        </StyledSecondaryButton>
-      </StyledTableRunColumn>
-    </StyledTableRow>
-  );
+  const selectedMaximum = alreadySeletected.length >= 8
+    return (
+      <StyledTableRow expanded={expanded} index={index}>
+        <StyledTableDatasetColumn>
+          <div>
+            {dataset}
+            {expanded && (
+              <RunsRows>
+                {runs.map((run) => {
+                  const current = { run_number: run, dataset_name: dataset }
+                  const isAlreadySelected = alreadySeletected.findIndex(selected => (
+                    selected.dataset_name === current.dataset_name && selected.run_number === current.run_number
+                  ))
+                  const disabled = selectedMaximum ? true : isAlreadySelected > -1
+                  return <StyledCol key={run}>
+                    <RunWrapper
+                      onClick={(e) => !disabled && handler(run, dataset, e)}
+                      hover="true"
+                      disabled={disabled.toString()}
+                    >
+                      <StyledA aria-disabled={disabled}>{run}</StyledA>
+                    </RunWrapper>
+                  </StyledCol>
+                })}
+              </RunsRows>
+            )}
+          </div>
+        </StyledTableDatasetColumn>
+        <StyledTableRunColumn>
+          <StyledSecondaryButton onClick={() => setExpanded(!expanded)}>
+            <Row>
+              <CustomCol space="1">{runs.length}</CustomCol>
+              <CustomCol space="1">
+                {expanded ? <UpCircleOutlined /> : <DownCircleOutlined />}
+              </CustomCol>
+            </Row>
+          </StyledSecondaryButton>
+        </StyledTableRunColumn>
+      </StyledTableRow>
+    );
 };
-export default Result;
+  export default Result;

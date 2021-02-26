@@ -124,8 +124,13 @@ export const RunWrapper = styled.div<{
   hover?: string;
   isLoading?: string;
   animation?: string;
+  disabled?:string;
 }>`
   background: ${theme.colors.secondary.main};
+  opacity: ${(props) =>
+    props.disabled === 'true'
+      ? 0.5
+      : 1};
   border-radius: 5px;
   padding: ${theme.space.padding};
   align-items: cernter;
@@ -139,7 +144,7 @@ export const RunWrapper = styled.div<{
   animation-duration: 1s;
   &:hover {
     background-color: ${(props) =>
-      props?.hover && `${theme.colors.secondary.dark}`};
+      props?.hover && !props.disabled && `${theme.colors.secondary.dark}`};
   }
 `;
 

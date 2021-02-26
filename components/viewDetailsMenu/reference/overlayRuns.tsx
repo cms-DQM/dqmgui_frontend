@@ -61,7 +61,7 @@ export const OverlayRuns = ({ overlaid_runs, query }: OverlayRunsProps) => {
             >
               <StyledSecondaryButton
                 disabled={
-                  overlaid_runs.length >= 4 || runs_set_for_overlay.length >= 4
+                  overlaid_runs.length >= 8 || runs_set_for_overlay.length >= 8
                 }
                 onClick={() => {
                   toggleModal(true);
