@@ -6,6 +6,8 @@ const nextConfig = {
   distDir: 'build',
 };
 
+const isProd = process.env.NODE_ENV === 'production'
+
 module.exports = withPlugins([[bundleAnalyzer]], nextConfig);
 module.exports = {
   env: {
@@ -16,5 +18,5 @@ module.exports = {
     MODE: process.env.MODE,
   },
   assetPrefix: './',
-  trailingSlash: true,
+  trailingSlash: isProd ? true : false,
 };

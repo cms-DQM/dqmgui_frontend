@@ -52,7 +52,7 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
       // dataIndex: 'label',
       render: (plot: PlotProperties) => {
         const set_label = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
-          const plotsWithLabels = setLabel(plot, selectedPlots, encodeURI(value))
+          const plotsWithLabels = setLabel(plot, selectedPlots, encodeURI(value.replace("_", "%5f")))
           setSelectedPlots(plotsWithLabels)
         }
         if (plot.folders_path && plot.plot_name)
@@ -100,7 +100,9 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
         const parts = labelAndOtherPart[0].split('/')
         const plot_name = parts.pop() as string
         const folders_path = cleanDeep(parts).join('/')
-        const finalObject: PlotProperties = { folders_path, plot_name, label }
+        const run_number = query.run_number as string
+        const dataset_name = query.dataset_name as string
+        const finalObject: PlotProperties = { folders_path, plot_name, label, run_number, dataset_name }
         return finalObject
       })
       setSelectedPlots(formattedSelectedPlotObjects)
@@ -123,7 +125,9 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
       }
     })
     const dataSource = globallyAndLocallyOverlaidPlots.concat(selectedPlots)
-    setSelectedPlots(dataSource)
+    if(dataSource.length > 0){
+      setSelectedPlots(dataSource)
+    }
   }, [query.overlaidGlobally])
 
   return (selectedPlots.length > 0 ? <StyledSelectedPlotsTable

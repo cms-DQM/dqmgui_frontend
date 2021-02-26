@@ -40,6 +40,7 @@ const OneOnSidePlot = ({ parameters, plot }: OneOnSidePlotProps) => {
   const index = parts.indexOf('plotsLocalOverlay')
   parts.splice(index, 1)
   const root = parts.join('/')
+  const isProd = process.env.NODE_ENV === 'production'
 
   return (
     <Tooltip  title={tooLong ? plot_name : ''}>
@@ -53,7 +54,7 @@ const OneOnSidePlot = ({ parameters, plot }: OneOnSidePlotProps) => {
             retryTimes={3}
             setImageError={setImageError}
             style={{ display: 'display', width: parameters.width, height: parameters.height }}
-            src={`${root}${plot_url}`}
+            src={`${root}${isProd ? '' : '/'}${plot_url}`}
             width={'auto'}
             height={'auto'}
           />

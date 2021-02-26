@@ -110,6 +110,7 @@ export const SearchContent = ({ setParameters, parameters, referenceHeight }: Se
     return plot.label
   })
   const labelsString = labels.join(',')
+  
   React.useEffect(() => {
     const plots = selectedPlots.map((plot: PlotProps) => {
       if (plot.label) {
@@ -121,7 +122,7 @@ export const SearchContent = ({ setParameters, parameters, referenceHeight }: Se
     })
     const plotsString = plots.join('&')
 
-    if (plotsString.length > 0) {
+    if (plotsString.length > 0 )  {
       addOverlaidPlotToURL(plotsString, parameters, router)
     }
     else {

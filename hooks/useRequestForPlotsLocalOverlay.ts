@@ -35,6 +35,7 @@ export const useRequest = (
   useEffect(() => {
     const CancelToken = axios.CancelToken;
     cancelSource.current = CancelToken.source();
+    const isProd = process.env.NODE_ENV === 'production'
 
     const fetchData = async () => {
       await setIsLoading(true);
@@ -46,7 +47,7 @@ export const useRequest = (
         parts.splice(index, 1)
         const root = parts.join('/')
         const response: AxiosResponse = await axios.request({
-          url: `${root}${url}`,
+          url: `${root}${isProd ? '' : '/'}${url}`,
           method: options.method || 'get',
           cancelToken: cancelSource.current?.token,
           ...options,
