@@ -67,9 +67,9 @@ export const DisplayFordersOrPlots = ({
               ) : errors.length === 0 ? (
                 <>
                   <CustomRow width="100%" space={'2'}>
-                    <Directories 
-                    isLoading={isLoading}
-                    directories={filteredFolders} />
+                    <Directories
+                      isLoading={isLoading}
+                      directories={filteredFolders} />
                   </CustomRow>
                   <Row>
                     <LeftSidePlots
@@ -82,9 +82,12 @@ export const DisplayFordersOrPlots = ({
               ) : (
                   !isLoading &&
                   errors.length > 0 &&
-                  errors.map((error) => (
-                    <StyledAlert key={error} message={error} type="error" showIcon />
-                  ))
+                  errors.map((error) => {
+                    if (isItLiveMode) {
+                      return <StyledAlert type="info" message={"Informational Notes"}  description="No data to show" showIcon/>
+                    }
+                    return <StyledAlert key={error} message={error} type="error" showIcon />
+                  })
                 )}
           </>
         )}
