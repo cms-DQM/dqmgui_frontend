@@ -264,4 +264,9 @@ Online mode is reactable via link https://cmsweb-testbed.cern.ch/dqm/online-new.
 48. When trying to change label with special chars (\_) of additional plot, it crashes  (overlay with another plot)
 49. Cuztmize -> Customize  (overlay with another plot)
 50. Plots in the summary workspace is not alphabetical 
+51. Workspace has to have their own plots!
+52. "Show error bars" and "show statistics" checkboxes
+53. Adapt layouts converter for hcal-layouts, hcalcalib-layouts, hlt-layouts, info-layouts, info_T0_layouts (these layouts are not visible in new GUI yet). They are slightly different from others layouts.
+54. Fix code for new offline GUI (layouts, layouts converted and overlay plots with different names is not supported there).
+
 ---
