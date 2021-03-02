@@ -47,8 +47,6 @@ const Result: FC<SearchResultsInterface> = ({
                     selected.dataset_name === current.dataset_name &&  selected.run_number === current.run_number
                   )) : -1
                   const disabled = selectedMaximum ? true : isAlreadySelected >=0
-                  console.log(selectedMaximum, isAlreadySelected)
-
                   return <StyledCol key={run}>
                     <RunWrapper
                       onClick={(e) => !disabled && handler(run, dataset, e)}
