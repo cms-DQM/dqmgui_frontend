@@ -1,8 +1,6 @@
 import React, { useRef, useEffect, useContext } from 'react';
 import { useRouter } from 'next/router';
 
-import { functions_config } from '../../../../config/config';
-import { get_plot_url } from '../../../../api/oldApi';
 import {
   PlotDataProps,
   QueryProps,
@@ -19,6 +17,7 @@ import { isPlotSelected } from '../../../../containers/display/utils';
 import { Tooltip } from 'antd';
 import { decodePlotName } from '../../../utils';
 import { store } from '../../../../contexts/globalStateContext';
+import { chooseApiForGettingPlotUrl } from '../../../../api/utils';
 
 interface PlotProps {
   plot: PlotDataProps;
@@ -41,7 +40,7 @@ export const Plot = ({
   const [count, setCount] = React.useState(0)
   const [tooLong, setTooLong] = React.useState(false)
 
-  const url = get_plot_url(params_for_api);
+  const url = chooseApiForGettingPlotUrl(params_for_api);
   const is_plot_selected = isPlotSelected(selected_plots, plot)
   const { imageRefScrollDown } = useContext(store)
 

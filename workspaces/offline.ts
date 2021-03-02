@@ -50,6 +50,10 @@ const trackerWorkspace = [
     label: 'SiStrip',
     foldersPath: ['SiStrip'],
   },
+  {
+    label: 'Alignment',
+    foldersPath: []
+  }
 ];
 
 const calorimetersWorkspace = [

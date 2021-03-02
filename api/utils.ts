@@ -3,6 +3,9 @@ import {
   TripleProps,
 } from '../containers/display/interfaces';
 import { functions_config } from '../config/config';
+import { ParametersForApi } from '../plotsLocalOverlayPageComponents/interfaces';
+import { get_plot_url_new_api } from './newApi';
+import { get_plot_url } from './oldApi';
 
 export const get_customize_params = (params = {} as any) => {
   const xtype = params.xtype ? `xtype=${params.xtype};` : '';
@@ -48,3 +51,10 @@ export const getRunsWithLumisectionsForOverlaidPlots = (
 
   return lumisectionParameter;
 };
+
+
+export const chooseApiForGettingPlotUrl = (parameters: ParametersForApi | ParamsForApiProps) => (
+  functions_config.new_back_end.new_back_end ?
+    get_plot_url_new_api(parameters) :
+    get_plot_url(parameters)
+)

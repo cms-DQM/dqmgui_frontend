@@ -4,10 +4,10 @@ import * as React from 'react'
 
 import { ImageFallback } from '../../../components/plots/imageFallback';
 import { root_url } from '../../../config/config';
-import { get_plot_url } from '../../../api/oldApi';
 import { PlotProps } from '../../../containers/display/interfaces';
 import { theme } from '../../../styles/theme';
 import { ParametersForApi } from '../../interfaces';
+import { chooseApiForGettingPlotUrl } from '../../../api/utils';
 
 interface OnSideProps {
   parameters: ParametersForApi;
@@ -27,7 +27,7 @@ const OneOnSidePlot = ({ parameters, plot }: OneOnSidePlotProps) => {
   const { run_number, dataset_name, height, width, stats, error } = parameters
   const { folders_path, plot_name } = plot
   const params = { run_number, dataset_name, folders_path, plot_name, height, width, error, stats }
-  const plot_url = get_plot_url(params as any)
+  const plot_url = chooseApiForGettingPlotUrl(params as any)
 
   React.useEffect(() => {
     setCount(count+1) //2 because on mount, and when size changes. Without count, we're getting infinity loop
@@ -73,7 +73,7 @@ export const OnSide = ({ parameters }: OnSideProps) => {
   const plots = copy.overlaidSeparately ? copy.overlaidSeparately.plots : []
   const { run_number, dataset_name, folders_path, plot_name, height, width, stats, error } = copy
   const params = ({ run_number, dataset_name, folders_path, plot_name, height, width, stats, error } as any)
-  const plot_url = get_plot_url(params as any)
+  const plot_url = chooseApiForGettingPlotUrl(params as any)
   const url = `${root_url}${plot_url}`
   const plotNameRef = React.useRef<any>(null)
 

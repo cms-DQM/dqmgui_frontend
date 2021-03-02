@@ -11,7 +11,16 @@ export const get_folders_and_plots_new_api = (params: ParamsForApiProps) => {
   return `api/v1/archive/${getRunsWithLumisections(params)}${params.dataset_name
     }/${params.folders_path}`;
 };
-//
+
+export const get_plot_url_new_api = (params: ParamsForApiProps & ParametersForApi & any) => {
+  const { errorBars, height, norm, stats, width} = newApi(params)
+
+  return `plotfairy/archive/${getRunsWithLumisections(params)}${params.dataset_name
+    }/${params.folders_path}/${params.plot_name as string}?${get_customize_params(
+      params.customizeProps
+    )}${stats};${errorBars};${width};${height}`;
+};
+
 export const get_folders_and_plots_new_api_with_live_mode = (
   params: ParamsForApiProps
 ) => {

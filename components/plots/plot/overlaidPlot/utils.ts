@@ -2,14 +2,14 @@ import {
   ParamsForApiProps,
   TripleProps,
 } from '../../../../containers/display/interfaces';
-import { get_plot_url } from '../../../../api/oldApi';
+import { chooseApiForGettingPlotUrl } from '../../../../api/utils';
 
 export const getOnSideOverlaidPlots = (params_for_api: ParamsForApiProps) => {
   const onsidePlotsURLs = [];
 
   let copy = { ...params_for_api };
 
-  onsidePlotsURLs.push(get_plot_url(copy));
+  onsidePlotsURLs.push(chooseApiForGettingPlotUrl(copy));
 
   copy.overlay_plot &&
     copy.overlay_plot.map((plot: TripleProps) => {
@@ -17,7 +17,7 @@ export const getOnSideOverlaidPlots = (params_for_api: ParamsForApiProps) => {
         ? (plot.dataset_name as string)
         : params_for_api.dataset_name;
       copy.run_number = plot.run_number as string;
-      onsidePlotsURLs.push(get_plot_url(copy));
+      onsidePlotsURLs.push(chooseApiForGettingPlotUrl(copy));
     });
 
   return onsidePlotsURLs;

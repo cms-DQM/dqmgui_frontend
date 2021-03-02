@@ -18,8 +18,8 @@ export const oldApi = (parameters: ParametersForApi) => {
 
 
 export const newApi = (parameters: ParametersForApi) => {
-  const width = parameters.width ? `w=${sizes[parameters.size].size.w}` : ''
-  const height = parameters.width ? `h=${sizes[parameters.size].size.h}` : ''
+  const width = parameters.size ? `w=${sizes[parameters.size].size.w}` : `w=${parameters.width}`
+  const height = parameters.size ? `h=${sizes[parameters.size].size.h}` : `h=${parameters.height}`
   const norm = parameters.normalize ? `norm=true` : `norm=false`
   const stats = parameters.stats ? `stats=true` : `stats=false`
   const errorBars = parameters.error ? `errors=true` : `errors=false`

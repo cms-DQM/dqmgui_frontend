@@ -5,9 +5,6 @@ import { Store } from 'antd/lib/form/interface';
 import { BlockOutlined } from '@ant-design/icons';
 
 import {
-  get_plot_url
-} from '../../../../api/oldApi';
-import {
   functions_config,
 } from '../../../../config/config';
 import {
@@ -33,6 +30,7 @@ import { ZoomedPlotMenu } from '../menu';
 import { Plot_portal } from '../../../../containers/display/portal';
 import { PlotImage } from '../../plot/plotImages';
 import { getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames } from '../../../utils';
+import { chooseApiForGettingPlotUrl } from '../../../../api/utils';
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -50,12 +48,12 @@ export const ZoomedPlot = ({
   const [isPortalWindowOpen, setIsPortalWindowOpen] = useState(false);
 
   params_for_api.customizeProps = customizationParams;
-  const plot_url = get_plot_url(params_for_api);
+  const plot_url = chooseApiForGettingPlotUrl(params_for_api);
   const copy_of_params = { ...params_for_api };
   copy_of_params.height = window.innerHeight;
   copy_of_params.width = Math.round(window.innerHeight * 1.33);
 
-  const zoomed_plot_url = get_plot_url(copy_of_params);
+  const zoomed_plot_url = chooseApiForGettingPlotUrl(copy_of_params);
 
   const router = useRouter();
   const query: QueryProps = router.query;

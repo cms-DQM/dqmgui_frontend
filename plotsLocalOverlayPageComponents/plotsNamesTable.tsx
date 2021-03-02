@@ -2,11 +2,11 @@ import * as React from 'react';
 import { Button, Space, Tooltip } from 'antd';
 
 import { sizes } from '../components/constants';
-import { get_plot_url } from '../api/oldApi';
 import { root_url } from '../config/config';
 import { PlotProperties } from './interfaces';
 import { StyledSelectedPlotsTable } from './styledComponents';
 import { setPlot } from './utils';
+import { chooseApiForGettingPlotUrl } from '../api/utils';
 
 interface PlotsNamesTableProps {
   plotNames: string[];
@@ -63,7 +63,7 @@ export const PlotsNamesTable = ({ plotNames, setLastSelectedPlot, selectedPlots,
     key: 'plot_name',
     render: (plot: string) => {
       const params ={run_number, dataset_name, folders_path: lastSelectedPlot.folders_path,  plot_name: encodeURIComponent(plot), height: sizes.small.size.h, width: sizes.small.size.w}
-      const src = get_plot_url(params as any)
+      const src = chooseApiForGettingPlotUrl(params as any)
       return(
         <Tooltip title={<img src={`${root}${src}`}/>}>
         <Space size="small">

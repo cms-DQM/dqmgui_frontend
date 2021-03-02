@@ -2,11 +2,11 @@ import { Tooltip } from 'antd';
 import * as React from 'react'
 
 import { ImageFallback } from '../../../components/plots/imageFallback';
-import { get_plot_url } from '../../../api/oldApi';
 import { root_url } from '../../../config/config';
 import { get_plot_with_overlay_new_api } from '../../../api/newApi'
 import { theme } from '../../../styles/theme'
 import { ParametersForApi } from '../../interfaces';
+import { chooseApiForGettingPlotUrl } from '../../../api/utils';
 
 interface PlotProps {
   parameters: ParametersForApi
@@ -14,7 +14,7 @@ interface PlotProps {
 
 export const OnePlot = ({ parameters }: PlotProps) => {
   const isItMoreThanOnePlot = parameters.overlaidSeparately ? parameters.overlaidSeparately.plots.length > 0 : false
-  const plot_url = isItMoreThanOnePlot ? get_plot_with_overlay_new_api(parameters) : get_plot_url(parameters as any)
+  const plot_url = isItMoreThanOnePlot ? get_plot_with_overlay_new_api(parameters) : chooseApiForGettingPlotUrl(parameters as any)
   const [imageError, setImageError] = React.useState(false)
   const [count, setCount] = React.useState(0)
   const [tooLong, setTooLong] = React.useState(false)
