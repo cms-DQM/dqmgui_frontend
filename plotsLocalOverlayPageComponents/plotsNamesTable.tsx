@@ -21,6 +21,7 @@ export const PlotsNamesTable = ({ plotNames, setLastSelectedPlot, selectedPlots,
   const data = plotNames.map((name, index) => {
     return { key: index, plot_name: name }
   })
+  const isProd = process.env.NODE_ENV === 'production'
   const parts = root_url.split('/')
   const index = parts.indexOf('plotsLocalOverlay')
   parts.splice(index, 1)
@@ -65,7 +66,7 @@ export const PlotsNamesTable = ({ plotNames, setLastSelectedPlot, selectedPlots,
       const params ={run_number, dataset_name, folders_path: lastSelectedPlot.folders_path,  plot_name: encodeURIComponent(plot), height: sizes.small.size.h, width: sizes.small.size.w}
       const src = chooseApiForGettingPlotUrl(params as any)
       return(
-        <Tooltip title={<img src={`${root}${src}`}/>}>
+        <Tooltip title={<img src={`${root}${isProd ? '' : '/'}${src}`}/>}>
         <Space size="small">
           <a>Show plot</a>
         </Space>

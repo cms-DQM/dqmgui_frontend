@@ -154,7 +154,6 @@ export const SearchContent = ({ setParameters, parameters, referenceHeight }: Se
   const { data } = data_get_by_mount
   const folders_or_plots = data ? data.data : []
   const { directories, plots } = getFoldersAndPlots(folders_or_plots)
-
   return (
     <StyledRow
       gutter={16}

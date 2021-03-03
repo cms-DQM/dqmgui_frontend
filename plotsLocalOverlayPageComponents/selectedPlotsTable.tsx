@@ -49,22 +49,20 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
     },
     {
       title: 'Label',
-      // dataIndex: 'label',
       render: (plot: PlotProperties) => {
         const set_label = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
           const plotsWithLabels = setLabel(plot, selectedPlots, encodeURI(value))
           setSelectedPlots(plotsWithLabels)
         }
         if (plot.folders_path && plot.plot_name)
-          return
-        <Input
-          id={plot.folders_path + plot.plot_name}
-          defaultValue={plot.label}
-          name={plot.folders_path + plot.plot_name}
-          placeholder="label"
-          value={plot.label}
-          onChange={set_label}
-        />
+          return <Input
+            id={plot.folders_path + plot.plot_name}
+            defaultValue={plot.label}
+            name={plot.folders_path + plot.plot_name}
+            placeholder="label"
+            value={plot.label}
+            onChange={set_label}
+          />
       }
     },
     {
@@ -130,7 +128,6 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
       setSelectedPlots(dataSource)
     }
   }, [query.overlaidGlobally])
-
   return (selectedPlots.length > 0 ? <StyledSelectedPlotsTable
     pagination={
       {
@@ -138,7 +135,7 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
         pageSizeOptions: ['1', '2', '3', '4', '5'],
         showSizeChanger: true,
       }}
-      //@ts-ignore
+    //@ts-ignore
     columns={colums}
     dataSource={selectedPlots.reverse()} />
     : <></>

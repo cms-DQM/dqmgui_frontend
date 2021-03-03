@@ -186,7 +186,7 @@ export const SetRunsModal = ({
                 isLoading={isLoading}
                 results_grouped={results_grouped}
                 errors={errors}
-                alreadySeletected={selected_runs}
+                alreadySeletected={overlaid_and_selected_runs}
               />
             </ResultsWrapper>
           ) : (
