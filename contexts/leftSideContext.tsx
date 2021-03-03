@@ -11,8 +11,9 @@ export interface LeftSideStateProviderProps {
 
 export const initialState: any = {
   size: sizes.medium.size,
-  normalize: 'True',
+  normalize: true,
   stats: true,
+  error: false,
   overlayPosition: overlayOptions[0].value,
   triples: [],
   runs_set_for_overlay: [],
@@ -30,6 +31,7 @@ const { Provider } = store;
 const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
   const [size, setSize] = useState<number>(initialState.size);
   const [normalize, setNormalize] = useState<boolean>(initialState.normalize);
+  const [error, setError] = useState<boolean>(initialState.error);
   const [stats, setStats] = useState<boolean>(initialState.stats);
   const [overlayPosition, setOverlaiPosition] = useState(initialState.overlayPosition);
   const [triples, setTriples] = React.useState(initialState.triples);
@@ -69,6 +71,8 @@ const LeftSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         setNormalize,
         stats,
         setStats,
+        error,
+        setError,
         overlayPosition,
         setOverlaiPosition,
         change_value_in_reference_table,
