@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Col } from 'antd';
 
 import { QueryProps, TripleProps } from '../../../containers/display/interfaces';
@@ -13,7 +13,6 @@ import { OverlayRuns } from './overlayRuns';
 import FormItem from 'antd/lib/form/FormItem';
 import { Grid } from '../../../plotsLocalOverlayPageComponents/styledComponents';
 import { CheckBox } from '../../../plotsLocalOverlayPageComponents/options/checkBox';
-import { useChangeRouter } from '../../../hooks/useChangeRouter';
 
 interface ReferenceProps {
   normalize: boolean;
@@ -67,15 +66,6 @@ export const Reference = ({
   }, [reference[checkBoxes[0].label.toLocaleLowerCase()],
   reference[checkBoxes[1].label.toLocaleLowerCase()],
   reference[checkBoxes[2].label.toLocaleLowerCase()]])
-
-  useChangeRouter(
-    {
-      overlay: overlayPosition,
-      error: error,
-      stats: stats,
-      normalize: normalize
-    },
-    [normalize, stats, error, overlayPosition], true);
 
   return (
     <StyledDiv>

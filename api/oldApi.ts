@@ -20,7 +20,7 @@ export const get_folders_and_plots_old_api = (params: ParamsForApiProps) => {
     return `plotfairy/archive/${getRunsWithLumisections(params)}${params.dataset_name
       }/${params.folders_path}/${params.plot_name as string}?${get_customize_params(
         params.customizeProps
-      )}${stats};${errorBars};${width};${height}`;
+      )}${norm};${stats};${errorBars};${width};${height}`;
   };
   
   export const get_plot_with_overlay = (params: ParamsForApiProps) => {

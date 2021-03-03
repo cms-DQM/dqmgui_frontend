@@ -15,10 +15,6 @@ export const initialState: any = {
   proportion: plotsProportionsOptions[0].value,
 };
 
-export interface ActionProps {
-  type: string;
-  payload: any;
-}
 
 const store = createContext(initialState);
 const { Provider } = store;

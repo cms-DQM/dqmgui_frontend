@@ -125,6 +125,8 @@ export interface QueryProps {
   plot_search?: string;
   normalize?: string;
   lumi?: string;
+  error?: string;
+  stats?: string;
 }
 
 export interface PlotPropertiesProps {

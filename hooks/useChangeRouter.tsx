@@ -9,7 +9,7 @@ import { root_url_ } from '../config/config';
 
 export const useChangeRouter = (
   params: ParsedUrlQueryInput,
-  watchers: (string | number | undefined)[] = [],
+  watchers: (string | number | boolean |undefined)[] = [],
   condition: boolean
 ) => {
   const router = useRouter();

@@ -28,7 +28,18 @@ export const ViewDetailsMenu = ({ selected_plots, plotsAreaWidth }: ViewDetailsM
   const rightSideState = useContext(rightSideStore);
   const leftSideState = useContext(leftSideStore);
 
-  const { size, setSize, setTriples, normalize, setNormalize, triples, overlayPosition } = leftSideState;
+  const { size,
+    setSize,
+    setTriples,
+    normalize,
+    setNormalize,
+    stats,
+    setStats,
+    error,
+    setError,
+    overlayPosition,
+    setOverlaiPosition,
+    triples } = leftSideState;
   const { setJSROOTmode, JSROOTmode, rightSideSize, setRightSideSize, } = rightSideState
 
   useEffect(() => {
@@ -47,10 +58,11 @@ export const ViewDetailsMenu = ({ selected_plots, plotsAreaWidth }: ViewDetailsM
   useChangeRouter(
     {
       overlay: overlayPosition,
+      error: error,
+      stats: stats,
       normalize: normalize
     },
-    [overlayPosition, normalize], true);
-  // useChangeRouter({ overlay: value }, [value], true);
+    [normalize, stats, error, overlayPosition], true);
 
   return (
     <StyledCollapse style={{ width: '100%' }}>
@@ -106,6 +118,12 @@ export const ViewDetailsMenu = ({ selected_plots, plotsAreaWidth }: ViewDetailsM
             <Reference
               normalize={normalize}
               setNormalize={setNormalize}
+              stats={stats}
+              setStats={setStats}
+              error={error}
+              setError={setError}
+              overlayPosition={overlayPosition}
+              setOverlaiPosition={setOverlaiPosition}
               triples={triples}
             />
           </CutomFormItem>
