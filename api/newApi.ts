@@ -42,7 +42,7 @@ export const get_run_list_by_search_new_api_with_no_older_than = (
   return `api/v1/samples?run=${params.run_number}&lumi=${params.lumi}&dataset=${params.dataset_name}&notOlderThan=${params.notOlderThan}`;
 };
 
-export const get_plot_with_overlay_new_api = (params: ParametersForApi) => {
+export const get_plots_with_overlay_new_api = (params: ParametersForApi) => {
   //empty string in order to set &reflabel= in the start of joined_labels string
   const labels: string[] = ['']
   if (params.overlaidSeparately?.plots) {
@@ -62,6 +62,14 @@ export const get_plot_with_overlay_new_api = (params: ParametersForApi) => {
     return
   }
 }
+
+export const get_plot_with_overlay_new_api = (params: ParamsForApiProps) => {
+  const { errorBars, height, norm, stats, width} = newApi(params as any)
+  return `plotfairy/overlay?${get_customize_params(params.customizeProps)}ref=${params.overlay
+    };obj=archive/${getRunsWithLumisections(params)}${params.dataset_name}/${params.folders_path
+    }/${params.plot_name}${params.joined_overlaied_plots_urls
+    };${stats};${errorBars};${norm};${width};${height}`;
+};
 
 export const getLumisections = (params: LumisectionRequestProps) =>
   `api/v1/samples?run=${params.run_number}&dataset=${params.dataset_name

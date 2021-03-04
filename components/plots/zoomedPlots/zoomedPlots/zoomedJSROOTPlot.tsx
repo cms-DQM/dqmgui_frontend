@@ -34,9 +34,15 @@ interface ZoomedJSROOTPlotsProps {
 const drawJSROOT = async (id: string, data: any) => {
   //in order to get new JSROOT plot, first of all we need to clean div with old plot
   if (!!document.getElementById(id)) {
-    //@ts-ignore
-    await JSROOT.cleanup(id);
+    const cleanUpPreviousJSROOTPlot = () => {
+      //@ts-ignore
+      if (JSROOT.cleanup) {
+        //@ts-ignore
+        JSROOT.cleanup(id);
+      }
+    }
     //after cleanup we can draw a new plot
+    await cleanUpPreviousJSROOTPlot
     //@ts-ignore
     JSROOT.draw(id, JSROOT.parse(JSON.stringify(data)), 'hist');
   }
@@ -55,9 +61,9 @@ export const ZoomedJSROOTPlot = ({
     params_for_api.lumi,
   ]);
 
-  const {not_older_than } = React.useContext(store)
+  const { not_older_than } = React.useContext(store)
   const { blink } = useBlink(not_older_than);
-  
+
   useEffect(() => {
     if (!!document.getElementById(`${id}`)) {
       //@ts-ignore

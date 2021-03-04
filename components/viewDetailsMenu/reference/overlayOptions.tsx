@@ -11,10 +11,19 @@ import { StyledSelect } from '../styledComponents';
 
 const { Option } = Select;
 
-export const OverlayOptions = () => {
+interface OvelrayOptions {
+  setOverlaiPosition(overlayPosition: string): void;
+  overlayPosition: string
+}
+
+export const OverlayOptions = ({ overlayPosition, setOverlaiPosition }: OvelrayOptions) => {
   const router = useRouter();
   const query: QueryProps = router.query;
-  const [value, setValue] = React.useState(query.overlay);
+  const [value, setValue] = React.useState(overlayPosition);
+
+  useEffect(() => {
+    setOverlaiPosition(value)
+  }, [value])
 
   return (
     <StyledSelect

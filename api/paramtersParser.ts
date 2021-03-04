@@ -9,7 +9,7 @@ export interface ParametersParserProsp {
 export const oldApi = (parameters: ParametersForApi) => {
   const width = parameters.width ? `w=${parameters.width}` : ''
   const height = parameters.width ? `h=${parameters.height}` : ''
-  const norm = parameters.normalize 
+  const norm = parameters.normalize ? 'norm=True': 'norm=False'
   const stats = parameters.stats ? `showstats=1` : `showstats=0`
   const errorBars = parameters.error ? `showerrbars=1` : `showerrbars=0`
 
@@ -20,7 +20,7 @@ export const oldApi = (parameters: ParametersForApi) => {
 export const newApi = (parameters: ParametersForApi) => {
   const width = parameters.size ? `w=${sizes[parameters.size].size.w}` : `w=${parameters.width}`
   const height = parameters.size ? `h=${sizes[parameters.size].size.h}` : `h=${parameters.height}`
-  const norm = parameters.normalize ? `norm=true` : `norm=false`
+  const norm = `norm=${parameters.normalize}`
   const stats = parameters.stats ? `stats=true` : `stats=false`
   const errorBars = parameters.error ? `errors=true` : `errors=false`
 

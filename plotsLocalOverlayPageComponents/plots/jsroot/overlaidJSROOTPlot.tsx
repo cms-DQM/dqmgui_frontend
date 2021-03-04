@@ -18,15 +18,17 @@ const drawJSROOT = async (
   overlaidJSROOTPlot: any
 ) => {
   if (!!document.getElementById(id)) {
-    try {
-      //@ts-ignore
-      await JSROOT.cleanup(`${histogramParam}${id}`);
+      const cleanUpPreviousJSROOTPlot = () => {
+        //@ts-ignore
+        if (JSROOT.cleanup) {
+          //@ts-ignore
+          JSROOT.cleanup(id);
+        }
+      }
+      //after cleanup we can draw a new plot
+      await cleanUpPreviousJSROOTPlot
       //@ts-ignore
       JSROOT.draw(`${histogramParam}${id}`, JSROOT.parse(JSON.stringify(overlaidJSROOTPlot)), `${histogramParam}`);
-    }
-    catch (e) {
-      console.log(e.toString())
-    }
   }
 };
 
@@ -62,11 +64,10 @@ export const OverlaidJSROOTPlot = ({ params_for_api, id }: JSROOTplotProps) => {
   }
 
   React.useEffect(() => {
-    if (!!document.getElementById(`${histogramParam}${id}`) && Object.keys(overlaidJSROOTPlot).length > 0) {
       drawJSROOT(histogramParam, id, overlaidJSROOTPlot);
-    }
   }, [
     id,
+    params_for_api.jsroot,
     parametersForCreateTHStack,
     params_for_api.dataset_name,
     params_for_api.run_number,
@@ -76,14 +77,14 @@ export const OverlaidJSROOTPlot = ({ params_for_api, id }: JSROOTplotProps) => {
   return (
     <div>
       <ImageDiv
-        style={{ display: params_for_api.normalize ? '' : 'none' }}
-        id={`hist${id}`}
+        // style={{ display: params_for_api.normalize ? '' : 'none' }}
+        id={`${histogramParam}${id}`}
         width={params_for_api.width}
         height={params_for_api.height}
       />
       <ImageDiv
-        style={{ display: params_for_api.normalize ? 'none' : '' }}
-        id={`nostack${id}`}
+        // style={{ display: params_for_api.normalize ? 'none' : '' }}
+        id={`${histogramParam}${id}`}
         width={params_for_api.width}
         height={params_for_api.height}
       />

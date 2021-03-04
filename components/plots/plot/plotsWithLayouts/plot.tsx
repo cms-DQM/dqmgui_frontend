@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Tooltip } from 'antd';
 
-import { get_overlaied_plots_urls, get_plot_with_overlay } from '../../../../api/oldApi';
+import { get_overlaied_plots_urls } from '../../../../api/oldApi';
 import { PlotDataProps, QueryProps } from '../../../../containers/display/interfaces';
 import { isPlotSelected } from '../../../../containers/display/utils';
 import { PlotWrapper } from './styledComponents';
@@ -9,7 +9,7 @@ import { FormatParamsForAPI, get_plot_error, scroll, scrollToBottom } from '../s
 import { PlotImage } from '../plotImages';
 import { store as globalContext } from '../../../../contexts/globalStateContext';
 import { store as leftSideContext } from '../../../../contexts/leftSideContext';
-import { chooseApiForGettingPlotUrl } from '../../../../api/utils';
+import { chooseApiForGettingOverlaidPlotsUrl, chooseApiForGettingPlotUrl } from '../../../../api/utils';
 
 
 interface PlotProps {
@@ -43,7 +43,7 @@ export const Plot = ({
   const overlaid_plots_urls = get_overlaied_plots_urls(params_for_api);
   const joined_overlaid_plots_urls = overlaid_plots_urls.join('');
   params_for_api.joined_overlaied_plots_urls = joined_overlaid_plots_urls;
-  const plot_with_overlay = get_plot_with_overlay(params_for_api);
+  const plot_with_overlay = chooseApiForGettingOverlaidPlotsUrl(params_for_api);
   plot.dataset_name = query.dataset_name
   plot.run_number = query.run_number
   const plotSelected = isPlotSelected(

@@ -1,9 +1,7 @@
 import React, { useRef, useContext } from 'react';
 import { useRouter } from 'next/router';
 
-import { functions_config } from '../../../../config/config';
 import {
-  get_plot_with_overlay,
   get_overlaied_plots_urls,
 } from '../../../../api/oldApi';
 import {
@@ -22,6 +20,7 @@ import { LayoutName, LayoutWrapper, ParentWrapper, PlotWrapper } from '../plotsW
 import { isPlotSelected } from '../../../../containers/display/utils';
 import { Tooltip } from 'antd';
 import { decodePlotName } from '../../../utils';
+import { chooseApiForGettingOverlaidPlotsUrl } from '../../../../api/utils';
 
 interface OverlaidPlotImageProps {
   params_for_api: ParamsForApiProps;
@@ -41,7 +40,8 @@ export const OverlaidPlotImage = ({
   const overlaid_plots_urls = get_overlaied_plots_urls(params_for_api);
   const joined_overlaid_plots_urls = overlaid_plots_urls.join('');
   params_for_api.joined_overlaied_plots_urls = joined_overlaid_plots_urls;
-  const plot_with_overlay = get_plot_with_overlay(params_for_api);
+  
+  const plot_with_overlay = chooseApiForGettingOverlaidPlotsUrl(params_for_api);
 
   const router = useRouter();
   const query: QueryProps = router.query;

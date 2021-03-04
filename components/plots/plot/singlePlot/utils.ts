@@ -73,14 +73,15 @@ export const FormatParamsForAPI = (
     height: zoomed ? globalState.rightSideSize.h : globalState.size.h,
     width: zoomed ? globalState.rightSideSize.w : globalState.size.w,
     customizeProps: globalState.customizeProps,
-    stats: globalState.stats,
-    overlay: query.overlay,
+    overlay: globalState.overlayPosition,
     notOlderThan: globalState.updated_by_not_older_than
       ? globalState.updated_by_not_older_than
       : '',
     overlay_plot: query.overlay_data ? formTriples(query.overlay_data) : [],
-    normalize: globalState.normalize ? globalState.normalize : 'False',
-    lumi: query.lumi,
+    normalize: globalState.normalize,
+    stats: globalState.stats,
+    error: globalState.error,
+    lumi: globalState.lumisection,
   });
 
   return cleaned_parameters;
