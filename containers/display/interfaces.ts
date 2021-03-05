@@ -106,7 +106,7 @@ export interface PlotDataProps {s
   run_number?: string;
   dataset_name?: string;
   description: string,
-  draw?: { withref: string, drawopts: string },
+  draw?: CustomizeProps,
   layout: string,
   overlays?: string[]; //overlays from layout config
 }

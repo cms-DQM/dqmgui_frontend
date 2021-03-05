@@ -61,14 +61,13 @@ export const getSelectedPlots = (
     const plot = plots.filter(
       (plot) => plot.name === decodeURI(name) && plot.path === path
     );
-    const qteststatuses = plot[0] ? plot[0].qteststatuses : []
 
     const plotObject: PlotDataProps = {
+      ...plot[0],
       name: decodeURI(name) as string,
       path: path,
       run_number: run_number as string,
       dataset_name: dataset_name,
-      qteststatuses: qteststatuses,
     };
     return plotObject;
   });

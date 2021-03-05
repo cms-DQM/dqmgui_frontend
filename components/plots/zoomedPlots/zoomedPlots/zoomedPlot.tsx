@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { FullscreenOutlined, SettingOutlined } from '@ant-design/icons';
 import { Store } from 'antd/lib/form/interface';
@@ -44,6 +44,13 @@ export const ZoomedPlot = ({
   const [customizationParams, setCustomisationParams] = useState<
     Partial<Store> & CustomizeProps
   >();
+
+  useEffect(() => {
+    if(selected_plot.draw){
+      setCustomisationParams(selected_plot.draw)
+    }
+  }, [])
+
   const [openCustomisation, toggleCustomisationMenu] = useState(false);
   const [isPortalWindowOpen, setIsPortalWindowOpen] = useState(false);
 
@@ -58,7 +65,7 @@ export const ZoomedPlot = ({
   const router = useRouter();
   const query: QueryProps = router.query;
 
-const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, selected_plot)
+  const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames(query, selected_plot)
   const zoomedPlotMenuOptions = [
     {
       label: 'Open in a new tab',
@@ -79,7 +86,7 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, select
       icon: <BlockOutlined />,
     },
   ];
-  
+
   return (
     <StyledCol space={2}>
       {/* Plot opened in a new tab */}
@@ -114,6 +121,7 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, select
       {/* Plot opened in a new tab */}
       <Customisation
         plot_name={selected_plot.name}
+        customizationParams={customizationParams}
         open={openCustomisation}
         onCancel={() => toggleCustomisationMenu(false)}
         setCustomisationParams={setCustomisationParams}

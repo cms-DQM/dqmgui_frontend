@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { Store } from 'antd/lib/form/interface';
 import { SettingOutlined, FullscreenOutlined, BlockOutlined } from '@ant-design/icons';
-import {  } from '@ant-design/icons';
+import { } from '@ant-design/icons';
 
 import {
   functions_config,
@@ -48,13 +48,20 @@ export const ZoomedOverlaidPlot = ({
   const [customizationParams, setCustomisationParams] = useState<
     Partial<Store> & CustomizeProps
   >();
-  const [openCustomisation, toggleCustomisationMenu] = useState(false);
+
+  useEffect(() => {
+    if(selected_plot.draw){
+      setCustomisationParams(selected_plot.draw)
+    }
+  }, [])
+  
+const [openCustomisation, toggleCustomisationMenu] = useState(false);
   params_for_api.customiseProps = customizationParams;
   const [isPortalWindowOpen, setIsPortalWindowOpen] = React.useState(false);
 
   const router = useRouter();
   const query: QueryProps = router.query;
-  const url = getZoomedOverlaidPlotsUrlForOverlayingPlotsWithDifferentNames( query, selected_plot)
+  const url = getZoomedOverlaidPlotsUrlForOverlayingPlotsWithDifferentNames(query, selected_plot)
 
   const zoomedPlotMenuOptions = [
     {
@@ -78,8 +85,8 @@ export const ZoomedOverlaidPlot = ({
   ];
 
   const overlaid_plots_urls = get_overlaied_plots_urls(params_for_api);
-  const allOverlaidPlotsUrls = params_for_api.overlaidWithLayoutsConfig ? 
-  [params_for_api.overlaidWithLayoutsConfig].concat(overlaid_plots_urls) : overlaid_plots_urls
+  const allOverlaidPlotsUrls = params_for_api.overlaidWithLayoutsConfig ?
+    [params_for_api.overlaidWithLayoutsConfig].concat(overlaid_plots_urls) : overlaid_plots_urls
 
   const joined_overlaid_plots_urls = allOverlaidPlotsUrls.join('');
   params_for_api.joined_overlaied_plots_urls = joined_overlaid_plots_urls;
@@ -90,7 +97,7 @@ export const ZoomedOverlaidPlot = ({
   copy_of_params.height = window.innerHeight;
   copy_of_params.width = Math.round(window.innerHeight * 1.33);
   const zoomed_plot_url = get_plot_source(copy_of_params);
-  
+console.log(selected_plot)
   return (
     <StyledCol space={2}>
       <Plot_portal
