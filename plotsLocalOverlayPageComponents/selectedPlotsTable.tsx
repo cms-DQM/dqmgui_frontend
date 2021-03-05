@@ -76,7 +76,7 @@ export const SelectedPlotsTable = ({ lastSelectedPlot, setSelectedPlots, selecte
         )
         const disabled = isGloballyOverlaid > -1
         return <Space size="small">
-          <Tooltip title={disabled ? 'Plot overlaid by default' : ''} >
+          <Tooltip title={disabled ? 'Plot was overlaid before (globally or by layout configuration) selecting the plot.' : ''} >
             <Button
               type='link'
               disabled={disabled}
