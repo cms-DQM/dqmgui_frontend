@@ -141,3 +141,24 @@ export const main_run_info = [
 ];
 
 export const run_info = main_run_info.concat(additional_run_info);
+
+
+const OTHER = `< Anything but 'ok','warning' or 'error'.`
+const DISABLED = `< Test has been disabled.`
+const INVALID = `< Problem preventing test from running.`
+const INSUF_STAT = `< Insufficient statistics.`
+const DID_NOT_RUN = `< Algorithm did not run.`
+const STATUS_OK = `< Test was successful.`
+const WARNING = `< Test had some problems.`
+const ERROR = `< Test has failed.`
+
+export const qualityTestStatus = {
+  30: OTHER,  //< Anything but 'ok','warning' or 'error'.
+  50: DISABLED, //< Test has been disabled.
+  60: INVALID, //< Problem preventing test from running.
+  70: INSUF_STAT, //< Insufficient statistics.
+  90: DID_NOT_RUN,  //< Algorithm did not run.
+  100: STATUS_OK, //< Test was successful.
+  200: WARNING, //< Test had some problems.
+  300: ERROR, //< Test has failed.
+}

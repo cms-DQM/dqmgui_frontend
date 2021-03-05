@@ -31,7 +31,7 @@ import {
   get_plot_error,
 } from '../../plot/singlePlot/utils';
 import { ZoomedPlotMenu } from '../menu';
-import { Customization } from '../../../customization';
+import { Customisation } from '../../../customisation';
 import { Plot_portal } from '../../../../containers/display/portal';
 import { PlotImage } from '../../plot/plotImages';
 import { getZoomedOverlaidPlotsUrlForOverlayingPlotsWithDifferentNames } from '../../../utils';
@@ -45,11 +45,11 @@ export const ZoomedOverlaidPlot = ({
   selected_plot,
   params_for_api,
 }: ZoomedPlotsProps) => {
-  const [customizationParams, setCustomizationParams] = useState<
+  const [customizationParams, setCustomisationParams] = useState<
     Partial<Store> & CustomizeProps
   >();
-  const [openCustomization, toggleCustomizationMenu] = useState(false);
-  params_for_api.customizeProps = customizationParams;
+  const [openCustomisation, toggleCustomisationMenu] = useState(false);
+  params_for_api.customiseProps = customizationParams;
   const [isPortalWindowOpen, setIsPortalWindowOpen] = React.useState(false);
 
   const router = useRouter();
@@ -66,7 +66,7 @@ export const ZoomedOverlaidPlot = ({
     {
       label: 'Customize',
       value: 'Customize',
-      action: () => toggleCustomizationMenu(true),
+      action: () => toggleCustomisationMenu(true),
       icon: <SettingOutlined />,
     },
     functions_config.new_back_end.new_back_end && {
@@ -78,7 +78,10 @@ export const ZoomedOverlaidPlot = ({
   ];
 
   const overlaid_plots_urls = get_overlaied_plots_urls(params_for_api);
-  const joined_overlaid_plots_urls = overlaid_plots_urls.join('');
+  const allOverlaidPlotsUrls = params_for_api.overlaidWithLayoutsConfig ? 
+  [params_for_api.overlaidWithLayoutsConfig].concat(overlaid_plots_urls) : overlaid_plots_urls
+
+  const joined_overlaid_plots_urls = allOverlaidPlotsUrls.join('');
   params_for_api.joined_overlaied_plots_urls = joined_overlaid_plots_urls;
 
   const source = get_plot_source(params_for_api);
@@ -119,11 +122,11 @@ export const ZoomedOverlaidPlot = ({
           </ImageDiv>
         </StyledPlotRow>
       </Plot_portal>
-      <Customization
+      <Customisation
         plot_name={selected_plot.name}
-        open={openCustomization}
-        onCancel={() => toggleCustomizationMenu(false)}
-        setCustomizationParams={setCustomizationParams}
+        open={openCustomisation}
+        onCancel={() => toggleCustomisationMenu(false)}
+        setCustomisationParams={setCustomisationParams}
       />
       <StyledPlotRow
         minheight={params_for_api.height}

@@ -10,9 +10,9 @@ import { ParametersForApi } from '../interfaces';
 import { sizes } from '../../components/constants';
 import { Grid, StyledButton, Wrapper } from '../styledComponents';
 import { Tooltip } from 'antd';
-import { Customization } from '../../components/customization';
+import { Customisation } from '../../components/customisation';
 import { CustomizeProps } from '../../containers/display/interfaces';
-import { SetCustomizationParams } from '../routerChangers';
+import { SetCustomisationParams } from '../routerChangers';
 import cleanDeep from 'clean-deep';
 
 
@@ -23,7 +23,7 @@ interface ReferenceProps {
 }
 
 const info = () => {
-  message.info('Plot is already customized');
+  message.info('Plot is already customised');
 };
 
 export const Reference = ({ router, parameters, setParameters }: ReferenceProps) => {
@@ -31,9 +31,9 @@ export const Reference = ({ router, parameters, setParameters }: ReferenceProps)
   const defaultSize = parameters.size
   const defaultOverlayPosition = query.overlayPosition ? query.overlayPosition : 'overlay'
   const defaultJSROOTState = query.jsroot ? query.jsroot === 'true' ? true : false : false
-  const [openCustomization, setOpenCustomization] = React.useState(false)
-  const [customizationParams, setCustomizationParams] = React.useState<any>({})
-  const isPlotCustomized = Object.keys(parameters.customizeProps ? parameters.customizeProps : {}).length > 0
+  const [openCustomisation, setOpenCustomisation] = React.useState(false)
+  const [customizationParams, setCustomisationParams] = React.useState<any>({})
+  const isPlotCustomized = Object.keys(parameters.customiseProps ? parameters.customiseProps : {}).length > 0
 
   const checkBoxes = [{
     label: 'Normalize',
@@ -72,7 +72,7 @@ export const Reference = ({ router, parameters, setParameters }: ReferenceProps)
     copy.stats = reference.stats as boolean
     copy.normalize = reference.normalize as boolean
     copy.error = reference.error as boolean
-    copy.customizeProps = customizationParams
+    copy.customiseProps = customizationParams
     const addedPropsToParameters = { ...copy, overlaidSeparately: { ...copy.overlaidSeparately } }
     //@ts-ignore
     setParameters(addedPropsToParameters)
@@ -105,7 +105,7 @@ export const Reference = ({ router, parameters, setParameters }: ReferenceProps)
       drawopts: query.drawopts as string,
       withref: query.withref as string,
     }
-    setCustomizationParams(cleanDeep(costumization))
+    setCustomisationParams(cleanDeep(costumization))
   },[])
 
   React.useEffect(()=>{
@@ -115,14 +115,14 @@ export const Reference = ({ router, parameters, setParameters }: ReferenceProps)
   },[isPlotCustomized])
 
   return <Wrapper direction="column">
-    <Customization
+    <Customisation
       plot_name={parameters.plot_name}
-      open={openCustomization}
+      open={openCustomisation}
       customizationParams={customizationParams}
-      onCancel={() => setOpenCustomization(false)}
-      setCustomizationParams={async (params: CustomizeProps) => {
-        setCustomizationParams(params)
-        await SetCustomizationParams(router, params, parameters)
+      onCancel={() => setOpenCustomisation(false)}
+      setCustomisationParams={async (params: CustomizeProps) => {
+        setCustomisationParams(params)
+        await SetCustomisationParams(router, params, parameters)
       }
       }
     />
@@ -145,9 +145,9 @@ export const Reference = ({ router, parameters, setParameters }: ReferenceProps)
           reference={reference}
         /></Grid>
       <Grid space="2">
-        <Tooltip title={isPlotCustomized ? 'This plot is customized!' : ''}>
+        <Tooltip title={isPlotCustomized ? 'This plot is customised!' : ''}>
           <StyledButton isPlotCustomized={isPlotCustomized.toString()} onClick={() => 
-            setOpenCustomization(!openCustomization)}>Customize</StyledButton>
+            setOpenCustomisation(!openCustomisation)}>Customize</StyledButton>
         </Tooltip>
       </Grid>
     </Wrapper>

@@ -16,7 +16,7 @@ interface ZoomedPlotsProps {
 }
 
 export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
-  const { rightSideSize, customize, JSROOTmode } = useContext(store)
+  const { rightSideSize, customise, JSROOTmode } = useContext(store)
   const router = useRouter();
   const query: QueryProps = router.query;
 
@@ -30,7 +30,7 @@ export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
           folders_path: selected_plot.path,
           height: rightSideSize.h,
           width: rightSideSize.w,
-          customizeProps: customize,
+          customiseProps: customise,
           plot_name: selected_plot.name,
         }
         if (JSROOTmode) {

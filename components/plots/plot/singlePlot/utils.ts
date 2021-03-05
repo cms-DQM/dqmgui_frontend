@@ -72,7 +72,7 @@ export const FormatParamsForAPI = (
     plot_name: plotName,
     height: zoomed ? globalState.rightSideSize.h : globalState.size.h,
     width: zoomed ? globalState.rightSideSize.w : globalState.size.w,
-    customizeProps: globalState.customizeProps,
+    customiseProps: globalState.customiseProps,
     overlay: globalState.overlayPosition,
     notOlderThan: globalState.updated_by_not_older_than
       ? globalState.updated_by_not_older_than
@@ -148,12 +148,12 @@ export const shrink_or_expand = (name: string, layouts_sections: string[]) => {
 export const get_plot_error = (plot: PlotDataProps) => {
   let found = false;
   if (functions_config.new_back_end.new_back_end) {
-    return plot.qresults && plot.qresults.find((status) => status === 300)
+    return plot.qteststatuses && plot.qteststatuses.find((status) => status === 300)
       ? true
       : false;
   }
-  plot.qresults &&
-    plot.qresults.forEach((qtest) => {
+  plot.qteststatuses &&
+    plot.qteststatuses.forEach((qtest) => {
       if (qtest.hasOwnProperty('status')) {
         const status = qtest.status;
         if (status === 300) {

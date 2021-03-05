@@ -7,7 +7,7 @@ import { ParametersForApi } from '../plotsLocalOverlayPageComponents/interfaces'
 import { get_plot_url_new_api, get_plot_with_overlay_new_api } from './newApi';
 import { get_plot_url, get_plot_with_overlay } from './oldApi';
 
-export const get_customize_params = (params = {} as any) => {
+export const get_customise_params = (params = {} as any) => {
   const xtype = params.xtype ? `xtype=${params.xtype};` : '';
   const xmin = params.xmin ? `xmin=${params.xmin};` : '';
   const xmax = params.xmax ? `xmax=${params.xmax};` : '';

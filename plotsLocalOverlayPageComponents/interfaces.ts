@@ -2,7 +2,7 @@ import { CustomizeProps } from "../containers/display/interfaces";
 
 export interface ParametersForApi {
   overlaidSeparately: OverlaidSeparatelyProps
-  customizeProps?: CustomizeProps,
+  customiseProps?: CustomizeProps,
   run_number: string;
   dataset_name: string;
   folders_path: string;

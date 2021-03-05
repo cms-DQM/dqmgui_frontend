@@ -30,7 +30,6 @@ export const Plot = ({
   selected_plots,
   params_for_api,
 }: PlotProps) => {
-
   const router = useRouter();
   const query: QueryProps = router.query;
   const imageRef = useRef(null);

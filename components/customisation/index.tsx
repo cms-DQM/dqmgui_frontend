@@ -7,21 +7,21 @@ import { StyledButton } from '../styledComponents';
 import { CustomizeProps } from '../../containers/display/interfaces';
 import { theme } from '../../styles/theme';
 
-interface CustomizationProps {
+interface CustomisationProps {
   plot_name: string;
   open: boolean;
   onCancel(): void;
-  setCustomizationParams(custProps: Partial<Store> & CustomizeProps): void;
+  setCustomisationParams(custProps: Partial<Store> & CustomizeProps): void;
   customizationParams?:CustomizeProps;
 }
 
-export const Customization = ({
+export const Customisation = ({
   plot_name,
   open,
   onCancel,
   customizationParams,
-  setCustomizationParams,
-}: CustomizationProps) => {
+  setCustomisationParams,
+}: CustomisationProps) => {
   const [form] = Form.useForm();
   const onOk = async () => {
     await form.submit();
@@ -50,7 +50,7 @@ export const Customization = ({
       <CostumizeTable
         form={form}
         customizationParams={customizationParams}
-        setCustomizationParams={setCustomizationParams}
+        setCustomisationParams={setCustomisationParams}
       />
     </Modal>
   );

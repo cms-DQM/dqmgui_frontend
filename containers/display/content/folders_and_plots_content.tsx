@@ -31,7 +31,7 @@ export interface PlotInterface {
   properties: any;
   layout?: string;
   report?: any;
-  qresults?: [];
+  qteststatuses?: [];
   qtstatuses?: [];
 }
 

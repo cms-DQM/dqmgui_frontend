@@ -18,7 +18,6 @@ export const OnePlotInLayout = ({ plots, layoutName, query, selected_plots }: On
   const [tooLong, setTooLong] = React.useState(false)
   const [count, setCount] = React.useState(0)
   const plotNameRef = React.useRef<any>(null)
-
   const imageRef = React.useRef(null);
 
   React.useEffect(() => {

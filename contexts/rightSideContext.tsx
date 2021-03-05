@@ -14,7 +14,7 @@ export interface LeftSideStateProviderProps {
 export const initialState: any = {
   rightSideSize: sizes.fill.size,
   JSROOTmode: false,
-  customize: {
+  customise: {
     xtype: '',
     xmin: NaN,
     xmax: NaN,
@@ -34,7 +34,7 @@ const { Provider } = store;
 
 const RightSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
   const [rightSideSize, setRightSideSize] = useState<number>(initialState.rightSideSize);
-  const [customize, setCustomize] = useState<CustomizeProps>(initialState.customize);
+  const [customise, setCustomize] = useState<CustomizeProps>(initialState.customise);
   const [JSROOTmode, setJSROOTmode] = useState<boolean>(initialState.JSROOTmode);
 
   return (
@@ -44,7 +44,7 @@ const RightSideStateProvider = ({ children }: LeftSideStateProviderProps) => {
         setRightSideSize,
         JSROOTmode,
         setJSROOTmode,
-        customize,
+        customise,
         setCustomize,
       }}
     >

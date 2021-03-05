@@ -18,7 +18,7 @@ interface ZoomedPlotsProps {
 export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
-  const { rightSideSize, customize, JSROOTmode } = useContext(store)
+  const { rightSideSize, customise, JSROOTmode } = useContext(store)
 
   return (
     <ZoomedPlotsWrapper>
@@ -32,7 +32,7 @@ export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
           overlay_plot: formTriples(query.overlay_data),
           height: rightSideSize.h,
           width: rightSideSize.w,
-          customizeProps: customize,
+          customiseProps: customise,
           plot_name: selected_plot.name,
           normalize: query.normalize
         }

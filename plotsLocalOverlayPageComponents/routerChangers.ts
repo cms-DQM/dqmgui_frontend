@@ -10,7 +10,7 @@ export const cleanOverlaidPlotsFromURL = async (parameters: any, router: NextRou
   await delete copy.overlayPlots
   await delete copy.overlaidSeparately
   await delete copy.customizationParams
-  const customization = { ...parameters.customizeProps }
+  const customization = { ...parameters.customiseProps }
   await delete copy.overlaidGlobally
 
   const parameters_for_query = {
@@ -37,12 +37,12 @@ export const addOverlaidPlotToURL = async (plotsString: string,
   const { overlaidSeparately } = parameters
   const { ref } = overlaidSeparately as OverlaidSeparatelyProps
   const reference = { ref }
-  await delete copy.customizeProps
+  await delete copy.customiseProps
   await delete copy.overlaidSeparately //we don't need it in request, insted if that we're using plotsString, where are all overlaid plots joined in one string
   await delete copy.customizationParams
   await delete copy.overlaidGlobally
 
-  const customization = { ...parameters.customizeProps }
+  const customization = { ...parameters.customiseProps }
 
   const parameters_for_query = {
     ...copy,
@@ -78,10 +78,10 @@ export const SearchPlot = async (plots_name: string, router: NextRouter, paramet
   },url_which_is_visible);
 }
 
-export const SetCustomizationParams = async (router: NextRouter, customizeParams: CustomizeProps, parameters: ParametersForApi) => {
+export const SetCustomisationParams = async (router: NextRouter, customiseParams: CustomizeProps, parameters: ParametersForApi) => {
   const parameters_for_query = {
     ...router.query,
-    ...customizeParams,
+    ...customiseParams,
   }
   const stringified = qs.stringify(parameters_for_query, {});
   const url_which_is_visible = root_url_ !== '/' ? `${root_url_}?${stringified}` : undefined

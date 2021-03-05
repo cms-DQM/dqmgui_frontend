@@ -1,5 +1,4 @@
 import { sizes } from "../components/constants";
-import { ParamsForApiProps } from "../containers/display/interfaces";
 import { ParametersForApi } from "../plotsLocalOverlayPageComponents/interfaces";
 
 export interface ParametersParserProsp {
