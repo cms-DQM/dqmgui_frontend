@@ -73,6 +73,7 @@ export const ZoomedPlot = ({
   const query: QueryProps = router.query;
 
   const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames(query, selected_plot)
+
   const zoomedPlotMenuOptions = [
     {
       label: 'Open in a new tab',
