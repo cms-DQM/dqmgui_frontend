@@ -54,7 +54,7 @@ export interface LumisectionRequestProps {
 export interface ParamsForApiProps extends PlotProps {
   joined_overlaied_plots_urls?: string;
   overlay?: string;
-  customiseProps?: CustomizeProps;
+  customise?: CustomizeProps;
   plot_search?: string;
   overlaidWithLayoutsConfig?: string[]
 }
@@ -68,7 +68,7 @@ export interface DisplayFolderOrPlotComponentProps {
   stats: boolean;
   jsroot_mode: boolean;
   zoomedPlotSize: SizeProps;
-  customiseProps?: CustomizeProps;
+  customise?: CustomizeProps;
 }
 
 export interface CustomizeProps {

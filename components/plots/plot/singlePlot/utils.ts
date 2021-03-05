@@ -72,7 +72,7 @@ export const FormatParamsForAPI = (
     plot_name: plotName,
     height: zoomed ? globalState.rightSideSize.h : globalState.size.h,
     width: zoomed ? globalState.rightSideSize.w : globalState.size.w,
-    customiseProps: globalState.customiseProps,
+    customise: globalState.customise,
     overlay: globalState.overlayPosition,
     notOlderThan: globalState.updated_by_not_older_than
       ? globalState.updated_by_not_older_than

@@ -65,7 +65,6 @@ export const Plot = ({
     selected_plots,
     plot
   )
-  console.log( params_for_api)
 
   const fullPlotPath = plot.path + '/' + plot.name
   return (

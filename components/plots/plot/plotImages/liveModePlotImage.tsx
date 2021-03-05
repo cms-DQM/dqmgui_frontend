@@ -41,7 +41,7 @@ export const LiveModePlotImage = ({
     );
   }, [
     not_older_than,
-    params_for_api.customiseProps,
+    params_for_api.customise,
     params_for_api.height,
     params_for_api.width,
     params_for_api.run_number,

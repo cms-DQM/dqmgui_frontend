@@ -30,7 +30,7 @@ export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
           folders_path: selected_plot.path,
           height: rightSideSize.h,
           width: rightSideSize.w,
-          customiseProps: customise,
+          customise: customise,
           plot_name: selected_plot.name,
         }
         if (JSROOTmode) {

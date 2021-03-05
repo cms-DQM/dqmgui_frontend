@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { FullscreenOutlined, SettingOutlined } from '@ant-design/icons';
 import { Store } from 'antd/lib/form/interface';
 import { BlockOutlined } from '@ant-design/icons';
+import { message } from 'antd';
 
 import {
   functions_config,
@@ -32,6 +33,11 @@ import { PlotImage } from '../../plot/plotImages';
 import { getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames } from '../../../utils';
 import { chooseApiForGettingPlotUrl } from '../../../../api/utils';
 
+const info = () => {
+  message.info('Plot is already customised');
+};
+
+
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
   params_for_api: ParamsForApiProps;
@@ -48,13 +54,14 @@ export const ZoomedPlot = ({
   useEffect(() => {
     if(selected_plot.draw){
       setCustomisationParams(selected_plot.draw)
+      info()
     }
   }, [])
 
   const [openCustomisation, toggleCustomisationMenu] = useState(false);
   const [isPortalWindowOpen, setIsPortalWindowOpen] = useState(false);
 
-  params_for_api.customiseProps = customizationParams;
+  params_for_api.customise = customizationParams;
   const plot_url = chooseApiForGettingPlotUrl(params_for_api);
   const copy_of_params = { ...params_for_api };
   copy_of_params.height = window.innerHeight;
@@ -89,6 +96,7 @@ export const ZoomedPlot = ({
 
   return (
     <StyledCol space={2}>
+      
       {/* Plot opened in a new tab */}
       <Plot_portal
         isPortalWindowOpen={isPortalWindowOpen}

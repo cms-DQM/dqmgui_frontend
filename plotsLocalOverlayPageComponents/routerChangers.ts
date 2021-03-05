@@ -10,7 +10,7 @@ export const cleanOverlaidPlotsFromURL = async (parameters: any, router: NextRou
   await delete copy.overlayPlots
   await delete copy.overlaidSeparately
   await delete copy.customizationParams
-  const customization = { ...parameters.customiseProps }
+  const customization = { ...parameters.customise }
   await delete copy.overlaidGlobally
 
   const parameters_for_query = {
@@ -37,12 +37,12 @@ export const addOverlaidPlotToURL = async (plotsString: string,
   const { overlaidSeparately } = parameters
   const { ref } = overlaidSeparately as OverlaidSeparatelyProps
   const reference = { ref }
-  await delete copy.customiseProps
+  await delete copy.customise
   await delete copy.overlaidSeparately //we don't need it in request, insted if that we're using plotsString, where are all overlaid plots joined in one string
   await delete copy.customizationParams
   await delete copy.overlaidGlobally
 
-  const customization = { ...parameters.customiseProps }
+  const customization = { ...parameters.customise }
 
   const parameters_for_query = {
     ...copy,

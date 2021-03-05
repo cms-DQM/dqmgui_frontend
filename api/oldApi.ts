@@ -19,14 +19,14 @@ export const get_folders_and_plots_old_api = (params: ParamsForApiProps) => {
 
     return `plotfairy/archive/${getRunsWithLumisections(params)}${params.dataset_name
       }/${params.folders_path}/${params.plot_name as string}?${get_customise_params(
-        params.customiseProps
+        params.customise
       )}${norm};${stats};${errorBars};${width};${height}`;
   };
   
   export const get_plot_with_overlay = (params: ParamsForApiProps) => {
     const { errorBars, height, norm, stats, width} = oldApi(params as any)
 
-    return `plotfairy/overlay?${get_customise_params(params.customiseProps)}ref=${params.overlay
+    return `plotfairy/overlay?${get_customise_params(params.customise)}ref=${params.overlay
       };obj=archive/${getRunsWithLumisections(params)}${params.dataset_name}/${params.folders_path
       }/${params.plot_name}${params.joined_overlaied_plots_urls
       };${stats};${errorBars};${norm};${width};${height}`;

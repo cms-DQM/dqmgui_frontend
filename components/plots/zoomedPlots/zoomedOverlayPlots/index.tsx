@@ -32,7 +32,7 @@ export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
           overlay_plot: formTriples(query.overlay_data),
           height: rightSideSize.h,
           width: rightSideSize.w,
-          customiseProps: customise,
+          customise: customise,
           plot_name: selected_plot.name,
           normalize: query.normalize
         }

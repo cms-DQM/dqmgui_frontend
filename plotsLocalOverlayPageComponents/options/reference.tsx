@@ -33,7 +33,7 @@ export const Reference = ({ router, parameters, setParameters }: ReferenceProps)
   const defaultJSROOTState = query.jsroot ? query.jsroot === 'true' ? true : false : false
   const [openCustomisation, setOpenCustomisation] = React.useState(false)
   const [customizationParams, setCustomisationParams] = React.useState<any>({})
-  const isPlotCustomized = Object.keys(parameters.customiseProps ? parameters.customiseProps : {}).length > 0
+  const isPlotCustomized = Object.keys(parameters.customise ? parameters.customise : {}).length > 0
 
   const checkBoxes = [{
     label: 'Normalize',
@@ -72,7 +72,7 @@ export const Reference = ({ router, parameters, setParameters }: ReferenceProps)
     copy.stats = reference.stats as boolean
     copy.normalize = reference.normalize as boolean
     copy.error = reference.error as boolean
-    copy.customiseProps = customizationParams
+    copy.customise = customizationParams
     const addedPropsToParameters = { ...copy, overlaidSeparately: { ...copy.overlaidSeparately } }
     //@ts-ignore
     setParameters(addedPropsToParameters)

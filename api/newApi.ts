@@ -17,7 +17,7 @@ export const get_plot_url_new_api = (params: ParamsForApiProps & ParametersForAp
 
   return `plotfairy/archive/${getRunsWithLumisections(params)}${params.dataset_name
     }/${params.folders_path}/${params.plot_name as string}?${get_customise_params(
-      params.customiseProps
+      params.customise
     )}${stats};${errorBars};${width};${height}`;
 };
 
@@ -54,7 +54,7 @@ export const get_plots_with_overlay_new_api = (params: ParametersForApi) => {
     const joined_plots = plots_strings.join('&')
     const joined_labels = labels.join('&reflabel=')
     const ref = params.overlaidSeparately.ref ? params.overlaidSeparately.ref : 'overlay'
-    const customization = get_customise_params(params.customiseProps)
+    const customization = get_customise_params(params.customise)
 
     return `api/v1/render_overlay?obj=archive/${params.run_number}${params.dataset_name}/${params.folders_path}/${params.plot_name}&${joined_plots}&${width}&${height}&${norm}&${stats}${joined_labels}&${errorBars}&${customization}ref=${ref}`
   }
@@ -65,7 +65,7 @@ export const get_plots_with_overlay_new_api = (params: ParametersForApi) => {
 
 export const get_plot_with_overlay_new_api = (params: ParamsForApiProps) => {
   const { errorBars, height, norm, stats, width} = newApi(params as any)
-  return `plotfairy/overlay?${get_customise_params(params.customiseProps)}ref=${params.overlay
+  return `plotfairy/overlay?${get_customise_params(params.customise)}ref=${params.overlay
     };obj=archive/${getRunsWithLumisections(params)}${params.dataset_name}/${params.folders_path
     }/${params.plot_name}${params.joined_overlaied_plots_urls
     };${stats};${errorBars};${norm};${width};${height}`;
