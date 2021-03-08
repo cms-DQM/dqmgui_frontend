@@ -23,7 +23,7 @@ const { Option } = Select;
 
 interface CostumizeTableProps {
   form: any;
-  setCustomizationParams(custProps: Partial<Store> & CustomizeProps): void;
+  setCustomisationParams(custProps: Partial<Store> & CustomizeProps): void;
   customizationParams?: CustomizeProps;
 }
 
@@ -34,7 +34,7 @@ const layout = {
 
 export const CostumizeTable = ({
   form,
-  setCustomizationParams,
+  setCustomisationParams,
   customizationParams
 }: CostumizeTableProps) => {
   const referenceCopy: OptionProps[] = [...withReference];
@@ -50,7 +50,7 @@ export const CostumizeTable = ({
       initialValues={{ remember: true, ...customizationParams }}
       onFinish={(params) => {
         const cleanedParams = cleanDeep(params);
-        setCustomizationParams(
+        setCustomisationParams(
           cleanedParams as Partial<Store> & CustomizeProps
         );
       }}

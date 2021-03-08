@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { FullscreenOutlined, SettingOutlined } from '@ant-design/icons';
 import { Store } from 'antd/lib/form/interface';
 import { BlockOutlined } from '@ant-design/icons';
+import { message } from 'antd';
 
 import {
   functions_config,
@@ -25,12 +26,17 @@ import {
   removePlotFromRightSide,
   get_plot_error,
 } from '../../plot/singlePlot/utils';
-import { Customization } from '../../../customization';
+import { Customisation } from '../../../customisation';
 import { ZoomedPlotMenu } from '../menu';
 import { Plot_portal } from '../../../../containers/display/portal';
 import { PlotImage } from '../../plot/plotImages';
 import { getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames } from '../../../utils';
 import { chooseApiForGettingPlotUrl } from '../../../../api/utils';
+
+const info = () => {
+  message.info('Plot is already customised');
+};
+
 
 interface ZoomedPlotsProps {
   selected_plot: PlotDataProps;
@@ -41,13 +47,21 @@ export const ZoomedPlot = ({
   selected_plot,
   params_for_api,
 }: ZoomedPlotsProps) => {
-  const [customizationParams, setCustomizationParams] = useState<
+  const [customizationParams, setCustomisationParams] = useState<
     Partial<Store> & CustomizeProps
   >();
-  const [openCustomization, toggleCustomizationMenu] = useState(false);
+
+  useEffect(() => {
+    if(selected_plot.draw){
+      setCustomisationParams(selected_plot.draw)
+      info()
+    }
+  }, [])
+
+  const [openCustomisation, toggleCustomisationMenu] = useState(false);
   const [isPortalWindowOpen, setIsPortalWindowOpen] = useState(false);
 
-  params_for_api.customizeProps = customizationParams;
+  params_for_api.customise = customizationParams;
   const plot_url = chooseApiForGettingPlotUrl(params_for_api);
   const copy_of_params = { ...params_for_api };
   copy_of_params.height = window.innerHeight;
@@ -58,7 +72,8 @@ export const ZoomedPlot = ({
   const router = useRouter();
   const query: QueryProps = router.query;
 
-const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, selected_plot)
+  const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames(query, selected_plot)
+
   const zoomedPlotMenuOptions = [
     {
       label: 'Open in a new tab',
@@ -68,8 +83,8 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, select
     },
     {
       label: 'Customize',
-      value: 'customize',
-      action: () => toggleCustomizationMenu(true),
+      value: 'customise',
+      action: () => toggleCustomisationMenu(true),
       icon: <SettingOutlined />,
     },
     functions_config.new_back_end.new_back_end && {
@@ -79,9 +94,10 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, select
       icon: <BlockOutlined />,
     },
   ];
-  
+
   return (
     <StyledCol space={2}>
+      
       {/* Plot opened in a new tab */}
       <Plot_portal
         isPortalWindowOpen={isPortalWindowOpen}
@@ -112,11 +128,12 @@ const url = getZoomedPlotsUrlForOverlayingPlotsWithDifferentNames( query, select
         </StyledPlotRow>
       </Plot_portal>
       {/* Plot opened in a new tab */}
-      <Customization
+      <Customisation
         plot_name={selected_plot.name}
-        open={openCustomization}
-        onCancel={() => toggleCustomizationMenu(false)}
-        setCustomizationParams={setCustomizationParams}
+        customizationParams={customizationParams}
+        open={openCustomisation}
+        onCancel={() => toggleCustomisationMenu(false)}
+        setCustomisationParams={setCustomisationParams}
       />
       <StyledPlotRow
         minheight={params_for_api.height}

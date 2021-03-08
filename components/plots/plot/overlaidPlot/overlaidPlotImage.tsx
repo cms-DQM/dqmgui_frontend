@@ -38,7 +38,9 @@ export const OverlaidPlotImage = ({
   const { imageRefScrollDown } = useContext(store)
 
   const overlaid_plots_urls = get_overlaied_plots_urls(params_for_api);
-  const joined_overlaid_plots_urls = overlaid_plots_urls.join('');
+  const allOverlaidPlotsUrls = params_for_api.overlaidWithLayoutsConfig ? 
+  [params_for_api.overlaidWithLayoutsConfig].concat(overlaid_plots_urls) : overlaid_plots_urls
+  const joined_overlaid_plots_urls = allOverlaidPlotsUrls.join('');
   params_for_api.joined_overlaied_plots_urls = joined_overlaid_plots_urls;
   
   const plot_with_overlay = chooseApiForGettingOverlaidPlotsUrl(params_for_api);

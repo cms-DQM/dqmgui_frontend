@@ -143,13 +143,13 @@ Every selected run in _Reference_ section has _Change_ button. Click on it and i
 
 Also, some options in _Options_ sections will be unlocked: _Right side size_ modification and _JSROOT_ mode. These options change is available when at least one plot selected because it affects just plots that are on the right side.
 
-When plots is selected (visible on the right side of a window) and JSROOT mode is disabled, plots on the right side could be customized. Plots customization is done following these actions:
+When plots is selected (visible on the right side of a window) and JSROOT mode is disabled, plots on the right side could be customised. Plots customization is done following these actions:
 
 1. Hover _More_ on the right side of a plot and from drop down select _Customize_.
 2. Change wnated options.
 3. Click _OK_.
 
-![plot_customization](public/images/plotCustomization.png).
+![plot_customization](public/images/plotCustomisation.png).
 
 If you want to change position (to horizontal or vertical) of displayed plots (when at least one plot is selected), you could click _Settings_ button, which is in the right side of a window. Then you could change _Plots View Position_ and _Plots View Proportions_. In proportions the first number represents left side of a window, the second - the right side.
 
@@ -201,7 +201,7 @@ Online mode is reactable via link https://cmsweb-testbed.cern.ch/dqm/online-new.
 
 6. ~~Plots are not sorted by an alphabet.~~
 
-7. **Customization of a plot should work with auto-submit.**
+7. **Customisation of a plot should work with auto-submit.**
 
 8. ~~**When plots are overlaid on side, them have to be display in a row, not in column**~~
 
@@ -228,12 +228,12 @@ Online mode is reactable via link https://cmsweb-testbed.cern.ch/dqm/online-new.
 12. ~~Change style: need to save some space~~.(22/05/2020)
 13. ~~Add clickability on arrows of run number and dataset name browser fields.~~
 14. ~~Data search for overlay could be done in one window for all 4 runs.~~
-15. Add the most popular options explanation to customize.
+15. Add the most popular options explanation to customise.
 16. ~~Make sure that options, which could be change on a right and left side (when at least one plot is selected), would be around the same.~~ (10/06/2020)
 17. ~~Layouts~~
 18. ~~Plots per Lumi~~(18/06/2020)
 19. ~~Horizontal an Vertical plot display~~ (11/06/2020)
-20. ~~Customization for ONE plot~~ (09/06/2020)
+20. ~~Customisation for ONE plot~~ (09/06/2020)
 21. ~~Free and combined search~~ (11/06/2020)
 22. ~~Display run information~~
 23. ~~Plots loading indication~~

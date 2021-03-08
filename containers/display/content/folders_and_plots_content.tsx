@@ -31,8 +31,8 @@ export interface PlotInterface {
   properties: any;
   layout?: string;
   report?: any;
-  qresults?: [];
-  qtstatuses?: [];
+  qteststatuses?: []; //in new backend
+  qresults?: []; //in old backend
 }
 
 export interface FolderPathByBreadcrumbProps {

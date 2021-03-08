@@ -4,6 +4,7 @@ import { store } from '../../../../contexts/leftSideContext'
 import { LayoutName, LayoutWrapper, ParentWrapper } from './styledComponents'
 import { Plot } from './plot'
 import { decodePlotName } from '../../../utils'
+import { Tooltip } from 'antd'
 
 interface OnePlotInLayout {
   layoutName: string;
@@ -18,7 +19,6 @@ export const OnePlotInLayout = ({ plots, layoutName, query, selected_plots }: On
   const [tooLong, setTooLong] = React.useState(false)
   const [count, setCount] = React.useState(0)
   const plotNameRef = React.useRef<any>(null)
-
   const imageRef = React.useRef(null);
 
   React.useEffect(() => {
@@ -57,9 +57,11 @@ export const OnePlotInLayout = ({ plots, layoutName, query, selected_plots }: On
     <ParentWrapper
       plotsAmount={plots.length}
       size={size}>
-      <LayoutName ref={plotNameRef} >
-        {decodePlotName(tooLong, nameOfLayout ? nameOfLayout : '')}
+      <Tooltip title={nameOfLayout}>
+        <LayoutName ref={plotNameRef} >
+          {decodePlotName(tooLong, nameOfLayout ? nameOfLayout : '')}
         </LayoutName>
+      </Tooltip>
       <LayoutWrapper
         auto={auto.join(' ')}
       >
@@ -78,4 +80,4 @@ export const OnePlotInLayout = ({ plots, layoutName, query, selected_plots }: On
       </LayoutWrapper>
     </ParentWrapper>
   )
-} 
+}

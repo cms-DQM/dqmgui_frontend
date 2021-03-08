@@ -111,7 +111,7 @@ export const StyledSearch = styled(Search)<{ fullWidth?: boolean }>`
 `;
 
 export const StyledAutocomplete = styled(AutoComplete)`
-  .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+  .ant-select-single:not(.ant-select-customise-input) .ant-select-selector {
     border-radius: 12px;
     width: fit-content;
   }

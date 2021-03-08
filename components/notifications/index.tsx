@@ -5,14 +5,14 @@ import { theme } from '../../styles/theme';
 import { CustomParagraph } from '../styledComponents';
 
 export const message = (message: string, type?: string) => {
-  const customizeMessage = () => (
+  const customiseMessage = () => (
     <CustomParagraph color={theme.colors.common.white}>
       {message}
     </CustomParagraph>
   );
 
   return notification.open({
-    message: customizeMessage(),
+    message: customiseMessage(),
     key: '1',
     onClose: close,
     duration: 6,

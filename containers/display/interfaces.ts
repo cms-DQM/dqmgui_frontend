@@ -54,8 +54,9 @@ export interface LumisectionRequestProps {
 export interface ParamsForApiProps extends PlotProps {
   joined_overlaied_plots_urls?: string;
   overlay?: string;
-  customizeProps?: CustomizeProps;
+  customise?: CustomizeProps;
   plot_search?: string;
+  overlaidWithLayoutsConfig?: string[]
 }
 
 export interface DisplayFolderOrPlotComponentProps {
@@ -67,7 +68,7 @@ export interface DisplayFolderOrPlotComponentProps {
   stats: boolean;
   jsroot_mode: boolean;
   zoomedPlotSize: SizeProps;
-  customizeProps?: CustomizeProps;
+  customise?: CustomizeProps;
 }
 
 export interface CustomizeProps {
@@ -96,14 +97,18 @@ export interface QTestResultsProps {
   other: number;
 }
 
-export interface PlotDataProps {
+export interface PlotDataProps {s
   name: string;
   path: string;
   properties?: PlotPropertiesProps;
-  qresults?: any[];
+  qteststatuses?: any[];
   qtstatuses?: any[];
   run_number?: string;
   dataset_name?: string;
+  description: string,
+  draw?: CustomizeProps,
+  layout: string,
+  overlays?: string[]; //overlays from layout config
 }
 
 export interface NavigationSearchFieldsProps {
