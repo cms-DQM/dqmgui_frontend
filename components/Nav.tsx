@@ -62,8 +62,8 @@ export const Nav = ({
           dataset_name: initial_search_dataset_name,
         }}
         onFinish={() => {
-          setRunNumber && setRunNumber(form_search_run_number);
-          setDatasetName && setDatasetName(form_search_dataset_name);
+          form_search_run_number && setRunNumber(form_search_run_number);
+          form_search_dataset_name && setDatasetName(form_search_dataset_name);
         }}
       >
         <Form.Item>

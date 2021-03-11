@@ -42,7 +42,7 @@ export const get_folders_and_plots_old_api = (params: ParamsForApiProps) => {
       const dataset_name_overlay = overlay.dataset_name
         ? overlay.dataset_name
         : params.dataset_name;
-        const folders_path = overlay.dataset_name
+        const folders_path = overlay.folders_path
         ? overlay.folders_path
         : params.folders_path;
         const plot_name = overlay.plot_name

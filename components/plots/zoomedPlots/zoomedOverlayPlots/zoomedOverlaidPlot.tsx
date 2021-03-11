@@ -64,12 +64,12 @@ const [openCustomisation, toggleCustomisationMenu] = useState(false);
   const url = getZoomedOverlaidPlotsUrlForOverlayingPlotsWithDifferentNames(query, selected_plot)
 
   const zoomedPlotMenuOptions = [
-    {
-      label: 'Open in a new tab',
-      value: 'open_in_a_new_tab',
-      action: () => setIsPortalWindowOpen(true),
-      icon: <FullscreenOutlined />,
-    },
+    // {
+    //   label: 'Open in a new tab',
+    //   value: 'open_in_a_new_tab',
+    //   action: () => setIsPortalWindowOpen(true),
+    //   icon: <FullscreenOutlined />,
+    // },
     {
       label: 'Customize',
       value: 'Customize',

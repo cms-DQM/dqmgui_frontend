@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Form from 'antd/lib/form/Form';
 
 import { functions_config } from '../../config/config';
@@ -47,7 +47,8 @@ export const Browser = () => {
     setLumisection(lumi);
   };
 
-  if (currentRunNumber !== query.run_number || currentDataset !== query.dataset_name) {
+
+  useEffect(() => {
     changeRouter(
       getChangedQueryParams(
         {
@@ -55,10 +56,8 @@ export const Browser = () => {
           dataset_name: currentDataset,
         },
         query
-      )
-    );
-  }
-
+      ))
+  }, [currentRunNumber, currentDataset])
   //make changes through context
   return (
     <Form>
@@ -96,14 +95,14 @@ export const Browser = () => {
                 />
               </WrapperDiv>
             ) : (
-                <WrapperDiv>
-                  <DatasetsBuilder
-                    currentRunNumber={currentRunNumber}
-                    currentDataset={currentDataset}
-                    query={query}
-                  />
-                </WrapperDiv>
-              )}
+              <WrapperDiv>
+                <DatasetsBuilder
+                  currentRunNumber={currentRunNumber}
+                  currentDataset={currentDataset}
+                  query={query}
+                />
+              </WrapperDiv>
+            )}
           </StyledFormItem>
         )}
       </WrapperDiv>

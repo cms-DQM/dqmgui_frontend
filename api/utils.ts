@@ -24,7 +24,7 @@ export const get_customise_params = (params = {} as any) => {
   const withref = params.withref ? `withref=${params.withref};` : '';
   const parameters = `${xtype}${xmin}${xmax}${ytype}${ymin}${ymax}${ztype}${zmin}${zmax}${drawopts}${withref}`;
 
-  return parameters;
+  return parameters ? parameters : '';
 };
 
 export const getRunsWithLumisections = (
