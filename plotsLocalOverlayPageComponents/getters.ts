@@ -18,6 +18,6 @@ export const getFoldersAndPlots = (data: (DirectoryInterface & PlotInterface)[])
     }
     return 0
   }
-const sortedDorectories = cleanDeep(directories).sort(sorter)
-  return { directories:sortedDorectories, plots: cleanDeep(plots) }
+  const sortedDorectories = cleanDeep(directories).sort(sorter)
+  return { directories: sortedDorectories, plots: cleanDeep(plots) }
 }
