@@ -77,7 +77,7 @@ Note: there is no search field by *dataset*, because all data has the same datas
    1. By clicking on the run from *The latest runs* list.
    2. By entering run number (full or part of it).
    3. By entering dataset name (full or part of it). **Available just in offline mode**.
-   4. By entering dataset name ((full or part of it)) and run number (full or part of it). **Available just in offlin mode**.
+   4. By entering dataset name (full or part of it) and run number (full or part of it). **Available just in offline mode**.
 
 2. If data submitted to search...:
    * has no matches, you will see "Results not found message".
