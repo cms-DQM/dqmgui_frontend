@@ -8,7 +8,7 @@ import { FoldersRow, NotFoundWrapper, SearchContentWrapper, SpinnerRow, StyledRo
 import { changeFolderPathByBreadcrumb } from './utils'
 import { FolderPath } from '../containers/display/content/folderPath'
 import { PlotProps } from '../containers/display/interfaces'
-import { StyledA, Icon } from '../containers/display/styledComponents'
+import { StyledA, Icon, DirecotryWrapper } from '../containers/display/styledComponents'
 import { choose_api } from '../containers/display/utils'
 import { Spinner } from '../containers/search/styledComponents'
 import { useRequest } from '../hooks/useRequestForPlotsLocalOverlay'
@@ -17,7 +17,9 @@ import { PlotProperties, ParametersForApi, OverlaidSeparatelyProps } from './int
 import { addOverlaidPlotToURL, cleanOverlaidPlotsFromURL } from './routerChangers';
 import { PlotsNamesTable } from './plotsNamesTable';
 import { NoResultsFound } from '../containers/search/noResultsFound';
-import { root_url} from '../config/config';
+import { root_url } from '../config/config';
+import { CustomDiv, CutomBadge } from '../components/styledComponents';
+import { MeCountProps } from '../containers/display/content/directories';
 
 interface SearchContentProps {
   setParameters: React.Dispatch<React.SetStateAction<ParametersForApi | undefined>>
@@ -25,6 +27,10 @@ interface SearchContentProps {
   referenceHeight: number
 }
 
+
+export const MeCount = ({ me_count, children }: MeCountProps) => {
+  return <CutomBadge count={me_count}>{children}</CutomBadge>;
+};
 export const SearchContent = ({ setParameters, parameters, referenceHeight }: SearchContentProps) => {
   const [lastSelectedPlot, setLastSelectedPlot] = React.useState<any>({ dataset_name: '', run_number: '', folders_path: '', plot_name: '' })
   const [folders, setFolders] = React.useState<(string | undefined)[]>([])
@@ -110,7 +116,7 @@ export const SearchContent = ({ setParameters, parameters, referenceHeight }: Se
     return plot.label
   })
   const labelsString = labels.join(',')
-  
+
   React.useEffect(() => {
     const plots = selectedPlots.map((plot: PlotProps) => {
       if (plot.label) {
@@ -122,7 +128,7 @@ export const SearchContent = ({ setParameters, parameters, referenceHeight }: Se
     })
     const plotsString = plots.join('&')
 
-    if (plotsString.length > 0 )  {
+    if (plotsString.length > 0) {
       addOverlaidPlotToURL(plotsString, parameters, router)
     }
     else {
@@ -175,16 +181,24 @@ export const SearchContent = ({ setParameters, parameters, referenceHeight }: Se
         {
           !data_get_by_mount.isLoading &&
           <FoldersRow>
-            {directories.map((directory: any) => {
+            {directories.sort().map((directory: any) => {
               return (
-                <>
-                  {directory &&
-                    <Col key={directory} span={8} onClick={() => setCurrentFolder(directory)}>
-                      <Icon />
-                      <StyledA>{directory}</StyledA>
-                    </Col>
-                  }
-                </>
+                <Col span={4} key={directory.subdir}>
+                <DirecotryWrapper>
+                  <CustomDiv
+                    hover="true"
+                    display="flex"
+                    space="1"
+                    alignitems="center"
+                    onClick={() => setCurrentFolder(directory.subdir)}
+                  >
+                    <MeCount me_count={directory.me_count ? directory.me_count : 0}>
+                      <Icon/>
+                    </MeCount>
+                    <StyledA>{directory.subdir}</StyledA>
+                  </CustomDiv>
+                </DirecotryWrapper>
+              </Col>
               )
             })}
           </FoldersRow>

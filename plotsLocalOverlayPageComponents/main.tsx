@@ -50,19 +50,6 @@ export const Main = () => {
           return { run_number, dataset_name, folders_path, plot_name, label }
         }
       })
-
-      const overlaidSeparatelyPlots = query.overlayPlots ? (query.overlayPlots as string).split('&') : []
-      const overlaidSeparately = overlaidSeparatelyPlots.map((plot) => {
-        if (overlaidGloballyPlots) {
-          const parts = plot.split('/')
-          const label = parts.pop()
-          const plot_name = parts.pop()
-          const run_number = parts.shift()
-          const folders_path = parts.splice(3).join('/')
-          const dataset_name = '/' + parts.join('/')
-          return { run_number, dataset_name, folders_path, plot_name, label }
-        }
-      })
       
       const ref = query.ref ? query.ref : 'overlay'
       const params_for_api: any = {

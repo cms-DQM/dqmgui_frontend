@@ -18,7 +18,7 @@ interface FoldersFilter {
   isLoading?: boolean;
 }
 
-interface MeCountProps {
+export interface MeCountProps {
   me_count: number;
   children: React.ReactElement;
 }
