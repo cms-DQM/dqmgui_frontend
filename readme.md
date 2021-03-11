@@ -36,6 +36,11 @@ npm install
 ```
 npm run dev
 ```
+## DQM GUI backend project
+
+All information you can find on the link below:
+
+[https://github.com/cms-DQM/dqmgui](https://github.com/cms-DQM/dqmgui)
 
 # Get static files of the project
 
@@ -44,12 +49,6 @@ In order to get static files of your loacl project:
 npm run static_export
 ```
  Static exported files will be stored in `out/` directory. 
-
-# DQM GUI backend project
-
-All information you can find on the link below:
-
-`https://github.com/cms-DQM/dqmgui`
 
 # How to use DQM GUI?
 
