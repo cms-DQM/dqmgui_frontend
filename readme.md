@@ -247,12 +247,12 @@ It means, that just plots, which are visible in current window is requested from
 3. Already overlaid plots on "overlay plots with different names" crashes, when we want to overlay it with another plot.
 4. In the offline test site, when we're trying to make free search, site crashes
 5. There is some plots, where api returns error 500 and root adds warning (_adc_per_OnloineBlock_PXForward_)
-
+6. In production on the first load style files are not found (404).
+7. Run 338586 shows 404 not found, when it indeed exists (overlay with another plot). Fake Beam Monitor plot for example, is always in ME not found state
+8. When trying to change label with special chars (\_) of additional plot, it crashes  (overlay with another plot)
 ---
 
----
-
-## Need to be done
+## Next steps
 
 1. Downloading of ROOT files
 2. Display server name
@@ -261,10 +261,7 @@ It means, that just plots, which are visible in current window is requested from
 5. Alignment workspace for tracker.
 6. Tiny url 
 7. Updating folders, runs list and plots in live mode every 20 sec. Also sec has to be send to backend.
-8. In production on the first load style files are not found (404).
-9. Run 338586 shows 404 not found, when it indeed exists (overlay with another plot). Fake Beam Monitor plot for example, is always in ME not found state
-10. When trying to change label with special chars (\_) of additional plot, it crashes  (overlay with another plot)
-11. Workspace has to have their own plots!
-12. Fix code for new offline GUI (layouts, layouts converted and overlay plots with different names is not supported there).
+8. Workspace has to have their own plots!
+9. Fix code for new offline GUI (layouts, layouts converted and overlay plots with different names is not supported there).
 
 ---
