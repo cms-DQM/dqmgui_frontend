@@ -104,8 +104,8 @@ When full required set (dataset and run number) is selected, DQM GUI returns dir
 ![ME count](public/images/me_amount.png)
 ---
 
-## Change run and datesat
- ### Change run
+## Change a run and a datesat
+ ### Change a run
 1. Runs select field:
    1. Select a new run number from the **dropdown list**, which is open when you click on a run number's field. Options in dropdown list depend on slected dataset name. It means that all runs in this list have **selected dataset**.
 
@@ -114,7 +114,7 @@ When full required set (dataset and run number) is selected, DQM GUI returns dir
    ![ME count](public/images/runs_select_field.png)
 
 
- ### Change dataset
+ ### Change a dataset
 
 1. Select a new dataset name from the **dropdown list**, which is open when you click on a dataset field. Options in dropdown list depend on slected run number. It means that all datasets in this list have **selected run number**.
 2. Use **blue arrows**. They let browsing through prev/next dataset names. If a left arrow is grey it means that the current dataset name is the first in the list of available dataset, so you cannot go further. The same with a right arrow- it becomes grey when a current run number is the last in the list of available datasets.
@@ -136,7 +136,7 @@ If at least one part is red, it means that combined dataset doesn't exist.
 
 ---
 
-### Change run and dataset with free search
+### Change a run and a dataset with free search
 By using select fields mentioned above, users are limited by available options: 
    * All runs listed in dropdown is available just with selected dataset in datasets select field
    * All datasets listed in dropdown is available just with selected run in runs select field
@@ -185,15 +185,15 @@ If you want to change workspaces, click on blue word (in this case _"Everything"
 In offline and online archive modes plots are uploaded using lazy loading.
 It means, that just plots, which are visible in current window is requested from server.
 
-  ![Plots](public/images/plots_list.png).
+  ![Plots](public/images/plots_list.png)
 
-### Zoom plot
+### Zoom a plot
    Click on desired plot.
    Window will be divided in two parts: left and right.
    * Left side has all plots from current directory.
    * Right side has zoomed plots.
 
-   ![Zoomed plot](public/images/Zoomed_plot.png).
+   ![Zoomed plot](public/images/Zoomed_plot.png)
 
 
 ### Options
@@ -208,9 +208,9 @@ It means, that just plots, which are visible in current window is requested from
       4. _Large_ .
       5. _Fill_ (default on the right side)
 
-   ![Plots](public/images/change_size.png).
+   ![Plots](public/images/change_size.png)
 
-   2. **Overlay plot**
+   2. **Overlay a plot**
       * Overlay plots with the same name, but from different datasets and runs:
       In order to overlay plots:
          1. Click the button "+ Set runs"
@@ -223,6 +223,8 @@ It means, that just plots, which are visible in current window is requested from
          Maximum 8 plots can be overlaid because of backend reasons.
          In this way all plots will be overlaid.
 
+      ![Plots](public/images/overlaid_run.png)
+
       * Overlay plots with different names, but from the same dataset and run.
       In this way just one specific plot can be overlaid.
       In order to overlay plots:
@@ -230,14 +232,15 @@ It means, that just plots, which are visible in current window is requested from
       2. Click "More", on the right side of a plot
       3. Click "Overlay with different plot"
       4. New page will be opened. 
-   ![Plots](public/images/overlaid_with_different_name.png).
+
+   ![Plots](public/images/overlaid_with_different_name.png)
 
    3. **Plots customisation**
       1. Zoom a plot.
       2. Click "More", on the right side of a plot
       3. Click "Customize"
       4. Dialog for plot customization will be opened 
-   ![Plots](public/images/cuztomization.png).
+   ![Plots](public/images/cuztomization.png)
 
 
 # Known bugs list
