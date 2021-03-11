@@ -71,13 +71,13 @@ Note: there is no search field by *dataset*, because all data has the same datas
 
    ![](public/images/home_page_online.png)
 
-## How to make data search?
+## How to do data search?
 
 1. Data search can be done in 4 ways:
    1. By clicking on the run from *The latest runs* list.
    2. By entering run number (full or part of it).
    3. By entering dataset name (full or part of it). **Available just in offline mode**.
-   4. By entering dataset name ((full or part of it)) and run number (full or part of it). **Available just in offlin modee**.
+   4. By entering dataset name ((full or part of it)) and run number (full or part of it). **Available just in offlin mode**.
 
 2. If data submitted to search...:
    * has no matches, you will see "Results not found message".
@@ -190,8 +190,8 @@ It means, that just plots, which are visible in current window is requested from
 ### Zoom plot
    Click on desired plot.
    Window will be divided in two parts: left and right.
-      * Left side has all plots from current directory.
-      * Right side has zoomed plots.
+   * Left side has all plots from current directory.
+   * Right side has zoomed plots.
 
    ![Zoomed plot](public/images/Zoomed_plot.png).
 
