@@ -6,7 +6,6 @@ export const getFoldersAndPlots = (data: (DirectoryInterface & PlotInterface)[])
   const plots: string[] = []
 
   data.forEach((folder_or_plot: DirectoryInterface & PlotInterface) => {
-    console.log(folder_or_plot)
     directories.push({ subdir: folder_or_plot.subdir, me_count: folder_or_plot.me_count })
     plots.push(folder_or_plot.name)
   })

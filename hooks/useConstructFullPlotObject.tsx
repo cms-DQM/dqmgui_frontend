@@ -13,7 +13,6 @@ export const useConstructFullPlotObject = (contents: any, data: any) => {
 
   useEffect(() => {
     const plotsData: any = contents.map((content: PlotInterface) => {
-      console.log(content)
       if (content.path) {
         const { name, directories } = getNameAndDirectoriesFromDir(content as any);
         return {
