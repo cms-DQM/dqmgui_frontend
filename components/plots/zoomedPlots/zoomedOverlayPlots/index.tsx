@@ -7,6 +7,7 @@ import { ZoomedOverlaidPlot } from './zoomedOverlaidPlot';
 import { ZoomedOverlaidJSROOTPlot } from './zoomedOverlaidJSROOTPlot';
 import { ZoomedPlotsWrapper } from '../../../styledComponents';
 import { store } from '../../../../contexts/rightSideContext';
+import { store as leftSideContext } from '../../../../contexts/leftSideContext';
 import { useRouter } from 'next/router';
 import { makeid } from '../../../utils';
 import { formTriples } from '../../../viewDetailsMenu/utils';
@@ -19,6 +20,7 @@ export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
   const { rightSideSize, customise, JSROOTmode } = useContext(store)
+  const { normalize, stats, error } = useContext(leftSideContext)
 
   return (
     <ZoomedPlotsWrapper>
@@ -34,8 +36,12 @@ export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
           width: rightSideSize.w,
           customise: customise,
           plot_name: selected_plot.name,
-          normalize: query.normalize
+          normalize: normalize,
+          stats: stats,
+          error: error
         }
+        console.log(params_for_api, query)
+
         if (JSROOTmode) {
           const id = makeid();
           return (
