@@ -64,23 +64,11 @@ const [openCustomisation, toggleCustomisationMenu] = useState(false);
   const url = getZoomedOverlaidPlotsUrlForOverlayingPlotsWithDifferentNames(query, selected_plot)
 
   const zoomedPlotMenuOptions = [
-    // {
-    //   label: 'Open in a new tab',
-    //   value: 'open_in_a_new_tab',
-    //   action: () => setIsPortalWindowOpen(true),
-    //   icon: <FullscreenOutlined />,
-    // },
     {
       label: 'Customize',
       value: 'Customize',
       action: () => toggleCustomisationMenu(true),
       icon: <SettingOutlined />,
-    },
-    functions_config.new_back_end.new_back_end && {
-      label: 'Overlay with another plot',
-      value: 'overlay',
-      url: url,
-      icon: <BlockOutlined />,
     },
   ];
 
@@ -93,42 +81,8 @@ const [openCustomisation, toggleCustomisationMenu] = useState(false);
 
   const source = get_plot_source(params_for_api);
 
-  const copy_of_params = { ...params_for_api };
-  copy_of_params.height = window.innerHeight;
-  copy_of_params.width = Math.round(window.innerHeight * 1.33);
-  const zoomed_plot_url = get_plot_source(copy_of_params);
-
   return (
     <StyledCol space={2}>
-      <Plot_portal
-        isPortalWindowOpen={isPortalWindowOpen}
-        setIsPortalWindowOpen={setIsPortalWindowOpen}
-        title={selected_plot.name}
-      >
-        <StyledPlotRow
-          justifycontent="center"
-          minheight={copy_of_params.height}
-          width={copy_of_params.width?.toString()}
-          is_plot_selected={true.toString()}
-          nopointer={true.toString()}
-        >
-          <PlotNameCol error={get_plot_error(selected_plot).toString()}>
-            {selected_plot.name}
-          </PlotNameCol>
-          <ImageDiv
-            id={selected_plot.name}
-            width={copy_of_params.width}
-            height={copy_of_params.height}
-          >
-            <PlotImage
-              params_for_api={copy_of_params}
-              plot={selected_plot}
-              plotURL={zoomed_plot_url}
-              query={query}
-            />
-          </ImageDiv>
-        </StyledPlotRow>
-      </Plot_portal>
       <Customisation
         plot_name={selected_plot.name}
         open={openCustomisation}

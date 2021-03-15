@@ -114,6 +114,7 @@ export const getZoomedOverlaidPlotsUrlForOverlayingPlotsWithDifferentNames = (qu
   const params = customisation.concat([run, dataset, path, plot_name, global_overlay])
   const queryURL = params.join('&')
   const plotsLocalOverlayURL = [page, queryURL].join('?')
+
   return plotsLocalOverlayURL
 }
 
