@@ -36,6 +36,11 @@ npm install
 ```
 npm run dev
 ```
+## DQM GUI backend project
+
+All information you can find on the link below:
+
+[https://github.com/cms-DQM/dqmgui](https://github.com/cms-DQM/dqmgui)
 
 # Get static files of the project
 
