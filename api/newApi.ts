@@ -65,7 +65,7 @@ export const get_plots_with_overlay_new_api = (params: ParametersForApi) => {
 
 export const get_plot_with_overlay_new_api = (params: ParamsForApiProps) => {
   const { errorBars, height, norm, stats, width} = newApi(params as any)
-  return `plotfairy/overlay?${get_customise_params(params.customise)}ref=${params.overlay
+  return `api/v1/render_overlay?${get_customise_params(params.customise)}ref=${params.overlay
     };obj=archive/${getRunsWithLumisections(params)}${params.dataset_name}/${params.folders_path
     }/${params.plot_name}${params.joined_overlaied_plots_urls
     };${stats};${errorBars};${norm};${width};${height}`;
@@ -75,6 +75,9 @@ export const getLumisections = (params: LumisectionRequestProps) =>
   `api/v1/samples?run=${params.run_number}&dataset=${params.dataset_name
   }&lumi=${params.lumi}`;
 
-export const get_the_latest_runs = (notOlderThan: number) => {
+export const get_the_latest_runs_live_mode = (notOlderThan: number) => {
   return `api/v1/latest_runs?notOlderThan=${notOlderThan}`;
+};
+export const get_the_latest_runs = () => {
+  return `api/v1/latest_runs`;
 };

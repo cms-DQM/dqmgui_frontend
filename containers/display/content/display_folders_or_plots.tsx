@@ -18,6 +18,7 @@ import {
   QueryProps,
 } from '../interfaces';
 import { isItLiveMode } from '../../../utils';
+import { functions_config } from '../../../config/config';
 
 interface ContentProps {
   plots: PlotDataProps[];
@@ -30,7 +31,9 @@ interface ContentProps {
   filteredFolders: any[];
   query: QueryProps;
   plotsAreaRef: any;
+  blink: boolean
 }
+
 
 export const DisplayFordersOrPlots = ({
   plots,
@@ -42,9 +45,11 @@ export const DisplayFordersOrPlots = ({
   errors,
   query,
   filteredFolders,
-  plotsAreaRef
+  plotsAreaRef,
+  blink
 }: ContentProps) => {
 
+  const live_mode_is_on = isItLiveMode({ run_number: query.run_number, dataset_name: query.dataset_name })
   return (
     <Wrapper
       ref={plotsAreaRef}
@@ -52,45 +57,46 @@ export const DisplayFordersOrPlots = ({
       position={viewPlotsPosition}
       proportion={proportion}
     >
-      {isItLiveMode({ run_number: query.run_number, dataset_name: query.dataset_name }) && isLoading && filteredFolders.length === 0
-        || !isItLiveMode({ run_number: query.run_number, dataset_name: query.dataset_name }) && isLoading ? (
-          <SpinnerWrapper>
-            <Spinner />
-          </SpinnerWrapper>
-        ) : (
-          <>
-            {!isLoading &&
-              filteredFolders.length === 0 &&
-              plots.length === 0 &&
-              errors.length === 0 ? (
-                <NoResultsFound />
-              ) : errors.length === 0 ? (
-                <>
-                  <CustomRow width="100%" space={'2'}>
-                    <Directories
-                      isLoading={isLoading}
-                      directories={filteredFolders} />
-                  </CustomRow>
-                  <Row>
-                    <LeftSidePlots
-                      plots={plots}
-                      selected_plots={selected_plots}
-                      plots_grouped_by_layouts={plots_grouped_by_layouts}
-                    />
-                  </Row>
-                </>
-              ) : (
-                  !isLoading &&
-                  errors.length > 0 &&
-                  errors.map((error) => {
-                    if (isItLiveMode) {
-                      return <StyledAlert type="info" message={"Informational Notes"}  description="No data to show" showIcon/>
-                    }
-                    return <StyledAlert key={error} message={error} type="error" showIcon />
-                  })
-                )}
-          </>
-        )}
+      { live_mode_is_on && isLoading && filteredFolders.length === 0
+        || !live_mode_is_on && isLoading ? (
+        <SpinnerWrapper>
+          <Spinner />
+        </SpinnerWrapper>
+      ) : (
+        <>
+          {!isLoading &&
+            filteredFolders.length === 0 &&
+            plots.length === 0 &&
+            errors.length === 0 ? (
+            <NoResultsFound />
+          ) : errors.length === 0 ? (
+            <>
+              <CustomRow width="100%" space={'2'}>
+                <Directories
+                  blink={blink}
+                  isLoading={isLoading}
+                  directories={filteredFolders} />
+              </CustomRow>
+              <Row>
+                <LeftSidePlots
+                  plots={plots}
+                  selected_plots={selected_plots}
+                  plots_grouped_by_layouts={plots_grouped_by_layouts}
+                />
+              </Row>
+            </>
+          ) : (
+            !isLoading &&
+            errors.length > 0 &&
+            errors.map((error) => {
+              if (isItLiveMode) {
+                return <StyledAlert type="info" message={"Informational Notes"} description="No data to show" showIcon />
+              }
+              return <StyledAlert key={error} message={error} type="error" showIcon />
+            })
+          )}
+        </>
+      )}
     </Wrapper>
   );
 };

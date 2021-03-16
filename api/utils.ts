@@ -4,7 +4,7 @@ import {
 } from '../containers/display/interfaces';
 import { functions_config } from '../config/config';
 import { ParametersForApi } from '../plotsLocalOverlayPageComponents/interfaces';
-import { get_plot_url_new_api, get_plot_with_overlay_new_api } from './newApi';
+import { get_plot_url_new_api, get_plot_with_overlay_new_api, get_the_latest_runs, get_the_latest_runs_live_mode } from './newApi';
 import { get_plot_url, get_plot_with_overlay } from './oldApi';
 
 export const get_customise_params = (params = {} as any) => {
@@ -63,4 +63,9 @@ export const chooseApiForGettingOverlaidPlotsUrl = (parameters: any) => (
   functions_config.new_back_end.new_back_end ?
     get_plot_with_overlay_new_api(parameters) :
     get_plot_with_overlay(parameters)
+)
+export const chooseApiForGettingTheLatestRuns = (parameters: any) => (
+  functions_config.mode === 'ONLINE' ?
+    get_the_latest_runs_live_mode(parameters) :
+    get_the_latest_runs()
 )

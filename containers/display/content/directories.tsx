@@ -16,6 +16,7 @@ import { functions_config } from '../../../config/config';
 interface FoldersFilter {
   directories: DirectoryInterface[];
   isLoading?: boolean;
+  blink?: boolean
 }
 
 export interface MeCountProps {
@@ -30,7 +31,7 @@ export const MeCount = ({ me_count, children }: MeCountProps) => {
   return children;
 };
 
-export const Directories = ({ directories, isLoading }: FoldersFilter) => {
+export const Directories = ({ directories, isLoading, blink }: FoldersFilter) => {
   const router = useRouter();
   const query: QueryProps = router.query;
 
@@ -59,7 +60,9 @@ export const Directories = ({ directories, isLoading }: FoldersFilter) => {
               }
             >
               <MeCount me_count={directory.me_count ? directory.me_count : 0}>
-                <Icon isLoading={isLoading.toString()}/>
+                <Icon
+                  animation={blink.toString()}
+                  isLoading={isLoading.toString()} />
               </MeCount>
               <StyledA>{directory.subdir}</StyledA>
             </CustomDiv>

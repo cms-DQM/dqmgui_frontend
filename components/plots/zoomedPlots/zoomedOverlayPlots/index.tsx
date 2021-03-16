@@ -40,8 +40,6 @@ export const ZoomedPlots = ({ selected_plots }: ZoomedPlotsProps) => {
           stats: stats,
           error: error
         }
-        console.log(params_for_api, query)
-
         if (JSROOTmode) {
           const id = makeid();
           return (

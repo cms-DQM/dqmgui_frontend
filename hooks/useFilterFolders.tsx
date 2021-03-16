@@ -12,12 +12,11 @@ import {
   choose_api,
   getContents,
 } from '../containers/display/utils';
-import { useNewer } from './useNewer';
 import { useRequest } from './useRequest';
 import { useConstructFullPlotObject } from './useConstructFullPlotObject';
-import { functions_config } from '../config/config';
 import cleanDeep from 'clean-deep';
 import { makeid } from '../components/utils';
+import { useBlink } from './useBlink';
 import { store } from '../contexts/updateContext';
 
 export const useFilterFolders = (
@@ -31,40 +30,24 @@ export const useFilterFolders = (
     folders_found_by_dataset_or_run,
     set_folders_found_by_dataset_or_run,
   ] = React.useState<DirectoryInterface[]>([]);
-  const { not_older_than, addLoader } = React.useContext(store)
   const [directories, setDirectories] = React.useState<DirectoryInterface[]>(
     []
   );
   const [plots, setPlots] = React.useState<any[]>([]);
-  const [isLoading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
   const [id, setId] = React.useState<string>()
-
+  const { not_older_than, addLoader } = React.useContext(store)
+  const { blink } = useBlink(not_older_than)
+  params.notOlderThan = not_older_than
   const current_api = choose_api(params);
 
-  const data_get_by_not_older_than_update = useRequest(
-    current_api,
-    {},
-    [],
-    functions_config.mode.onlineode
-  );
-
-  const data_get_by_folder_run_dataset_update = useRequest(current_api, {}, [
+  const { data, isLoading, errors } = useRequest(current_api, {}, [
     query.folder_path,
     query.run_number,
     query.dataset_name,
     query.plot_search,
+    not_older_than
   ]);
-  // with useNewer hook we distinguish witch data is newer: got by
-  // notOlderThan param change or by dataset, run number, folder path change.
-  const data = useNewer(
-    data_get_by_folder_run_dataset_update.data,
-    data_get_by_not_older_than_update.data
-  );
-  const errors = useNewer(
-    data_get_by_folder_run_dataset_update.errors,
-    data_get_by_not_older_than_update.errors
-  );
-
 
   React.useEffect(() => {
     const id_ = makeid()
@@ -72,8 +55,8 @@ export const useFilterFolders = (
   }, [])
 
   React.useEffect(() => {
-    // addLoader({ value: isLoading, id })
-  }, [isLoading])
+    addLoader({ value: loading, id })
+  }, [loading])
 
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
   const allDirectories = getDirectories(contents);
@@ -86,7 +69,7 @@ export const useFilterFolders = (
   }, [
     data,
     query.folder_path,
-    isLoading,
+    loading,
     query.dataset_name,
     formattedPlotsObject,
   ]);
@@ -114,7 +97,7 @@ export const useFilterFolders = (
     //isLoading got by dataset name, run and folder path change calls spinner.
     // we don't want to have a spinner when data is updating on notOlderThan
     //param change (i.e. every 10 sec.)
-    const isLoading = data_get_by_folder_run_dataset_update.isLoading;
+    // const isLoading = data_get_by_folder_run_dataset_update.isLoading;
 
     //need to setLoading in this useEffect, because we want to see spinner
     // until all folders and plots will be filtered accroding to a plot search or workspace.
@@ -128,5 +111,5 @@ export const useFilterFolders = (
     setFoldersByPlotSearch(folders as any);
   }, [directories, filteredFolders, folders_found_by_dataset_or_run, errors]);
 
-  return { foldersByPlotSearch, plots, isLoading, errors };
+  return { foldersByPlotSearch, plots, isLoading, errors, blink };
 };

@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import { useRequest } from '../../hooks/useRequest';
-import { get_the_latest_runs } from '../../api/newApi';
 import {
   SpinnerWrapper,
   Spinner,
@@ -10,46 +9,24 @@ import {
   StyledAlert,
 } from '../../containers/search/styledComponents';
 import { NoResultsFound } from '../../containers/search/noResultsFound';
-import { useNewer } from '../../hooks/useNewer';
 import { functions_config } from '../../config/config';
 import { LiveModeButton } from '../liveModeButton';
 import { CustomDiv } from '../styledComponents';
 import { LatestRunsList } from './latestRunsList';
 import { makeid } from '../utils';
 import { store } from '../../contexts/updateContext';
+import { chooseApiForGettingTheLatestRuns } from '../../api/utils';
 
 export const LatestRuns = () => {
   const {not_older_than, addLoader } = React.useContext(store)
   const [id, setId] = React.useState<string>()
-
-  const data_get_by_mount = useRequest(
-    get_the_latest_runs(not_older_than),
-    {},
-    []
-  );
-
-  const data_get_by_not_older_than_update = useRequest(
-    get_the_latest_runs(not_older_than),
+  
+  const {data, errors, isLoading} = useRequest(
+    chooseApiForGettingTheLatestRuns(not_older_than),
     {},
     [not_older_than]
   );
 
-  const data = useNewer(
-    data_get_by_mount.data,
-    data_get_by_not_older_than_update.data
-  );
-
-  const errors = useNewer(
-    data_get_by_mount.errors,
-    data_get_by_not_older_than_update.errors
-  );
-
-  const loader = useNewer(
-    data_get_by_mount.isLoading,
-    data_get_by_not_older_than_update.isLoading
-  );
-
-  const isLoading = data_get_by_mount.isLoading;
   const latest_runs = data && data.runs.sort((a: number, b: number) => a - b);
 
   React.useEffect(() => {
@@ -58,8 +35,8 @@ export const LatestRuns = () => {
   }, [])
 
   React.useEffect(() => {
-    addLoader({ value: loader, id })
-  }, [loader])
+    addLoader({ value: isLoading, id })
+  }, [isLoading])
 
   return (
     <>
