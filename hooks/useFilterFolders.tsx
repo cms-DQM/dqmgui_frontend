@@ -18,6 +18,7 @@ import cleanDeep from 'clean-deep';
 import { makeid } from '../components/utils';
 import { useBlink } from './useBlink';
 import { store } from '../contexts/updateContext';
+import { isItLiveMode } from '../utils';
 
 export const useFilterFolders = (
   query: QueryProps,
@@ -41,13 +42,22 @@ export const useFilterFolders = (
   params.notOlderThan = not_older_than
   const current_api = choose_api(params);
 
-  const { data, isLoading, errors } = useRequest(current_api, {}, [
+  const { data, isLoading, errors } = 
+  isItLiveMode(params) ?
+  useRequest(current_api, {}, [
     query.folder_path,
     query.run_number,
     query.dataset_name,
     query.plot_search,
     not_older_than
-  ]);
+  ]):
+  useRequest(current_api, {}, [
+    query.folder_path,
+    query.run_number,
+    query.dataset_name,
+    query.plot_search,
+  ])
+
 
   React.useEffect(() => {
     const id_ = makeid()
