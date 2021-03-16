@@ -15,7 +15,7 @@ export const get_folders_and_plots_new_api = (params: ParamsForApiProps) => {
 export const get_plot_url_new_api = (params: ParamsForApiProps & ParametersForApi & any) => {
   const { errorBars, height, norm, stats, width} = newApi(params)
 
-  return `plotfairy/archive/${getRunsWithLumisections(params)}${params.dataset_name
+  return `api/v1/render/${getRunsWithLumisections(params)}${params.dataset_name
     }/${params.folders_path}/${params.plot_name as string}?${get_customise_params(
       params.customise
     )}${stats};${errorBars};${width};${height}`;
