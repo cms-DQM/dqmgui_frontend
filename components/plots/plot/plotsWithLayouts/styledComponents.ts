@@ -55,6 +55,8 @@ export const LayoutName = styled.div<{ error?: string, isPlotSelected?: string }
     color: ${props => props.error === 'true' ? theme.colors.notification.error : theme.colors.common.black};
     font-weight: ${props => props.isPlotSelected === 'true' ? 'bold' : ''};
     word-break: break-word;
+    display: flex;
+    justify-content: space-between;
 `
 export const LayoutWrapper = styled.div<{ auto: string }>`
     display: grid;

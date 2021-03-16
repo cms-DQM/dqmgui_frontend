@@ -1,3 +1,5 @@
+import { theme } from "../styles/theme";
+
 export const sizes = {
   tiny: {
     label: 'Tiny',
@@ -153,12 +155,36 @@ const WARNING = `< Test had some problems.`
 const ERROR = `< Test has failed.`
 
 export const qualityTestStatus = {
-  30: OTHER,  //< Anything but 'ok','warning' or 'error'.
-  50: DISABLED, //< Test has been disabled.
-  60: INVALID, //< Problem preventing test from running.
-  70: INSUF_STAT, //< Insufficient statistics.
-  90: DID_NOT_RUN,  //< Algorithm did not run.
-  100: STATUS_OK, //< Test was successful.
-  200: WARNING, //< Test had some problems.
-  300: ERROR, //< Test has failed.
+  30: {
+    description: OTHER,
+    color: '#000000'	
+  },  //< Anything but 'ok','warning' or 'error'.
+  50: {
+    description: DISABLED,
+    color: '#808080'	
+  }, //< Test has been disabled.
+  60:  {
+    description: INVALID,
+    color: '#c63939'	
+  }, //< Problem preventing test from running. 	
+  70: {
+    description: INSUF_STAT,
+    color: '#f96706'	
+  }, //< Insufficient statistics.
+  90:  {
+    description: DID_NOT_RUN,
+    color: '#3838fa'	
+  },  //< Algorithm did not run.
+  100:  {
+    description: STATUS_OK,
+    color: theme.colors.notification.success	
+  }, //< Test was successful.
+  200: {
+    description: WARNING,
+    color: theme.colors.notification.warning	
+  }, //< Test had some problems.
+  300:{
+    description: ERROR,
+    color: theme.colors.notification.error	
+  }, //< Test has failed.
 }

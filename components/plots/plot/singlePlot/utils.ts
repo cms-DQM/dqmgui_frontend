@@ -162,6 +162,7 @@ export const get_plot_error = (plot: PlotDataProps) => {
         }
       }
     });
+
   if (!found) {
     return found;
   }
