@@ -36,10 +36,10 @@ export const useFilterFolders = (
   );
   const [plots, setPlots] = React.useState<any[]>([]);
   const [loading, setLoading] = React.useState(false);
-  const [id, setId] = React.useState<string>()
-  const { not_older_than, addLoader } = React.useContext(store)
-  const { blink } = useBlink(not_older_than)
-  params.notOlderThan = not_older_than
+  // const [id, setId] = React.useState<string>()
+  // const { not_older_than, addLoader } = React.useContext(store)
+  // const { blink } = useBlink(not_older_than)
+  // params.notOlderThan = not_older_than
   const current_api = choose_api(params);
 
   const { data, isLoading, errors } = 
@@ -49,7 +49,7 @@ export const useFilterFolders = (
     query.run_number,
     query.dataset_name,
     query.plot_search,
-    not_older_than
+    // not_older_than
   ]):
   useRequest(current_api, {}, [
     query.folder_path,
@@ -59,14 +59,14 @@ export const useFilterFolders = (
   ])
 
 
-  React.useEffect(() => {
-    const id_ = makeid()
-    setId(id_)
-  }, [])
+  // React.useEffect(() => {
+  //   const id_ = makeid()
+  //   setId(id_)
+  // }, [])
 
-  React.useEffect(() => {
-    addLoader({ value: loading, id })
-  }, [loading])
+  // React.useEffect(() => {
+  //   addLoader({ value: loading, id })
+  // }, [loading])
 
   const contents: (PlotInterface & DirectoryInterface)[] = getContents(data);
   const allDirectories = getDirectories(contents);
@@ -121,5 +121,5 @@ export const useFilterFolders = (
     setFoldersByPlotSearch(folders as any);
   }, [directories, filteredFolders, folders_found_by_dataset_or_run, errors]);
 
-  return { foldersByPlotSearch, plots, isLoading, errors, blink };
+  return { foldersByPlotSearch, plots, isLoading, errors };
 };

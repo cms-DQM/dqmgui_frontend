@@ -71,7 +71,7 @@ const Content: FC<FolderProps> = ({
 
   const selectedPlots = query.selected_plots;
   //filtering directories by selected workspace
-  const { foldersByPlotSearch, plots, isLoading, errors, blink } = useFilterFolders(
+  const { foldersByPlotSearch, plots, isLoading, errors } = useFilterFolders(
     query,
     params,
   );
@@ -135,7 +135,7 @@ const Content: FC<FolderProps> = ({
           position={viewPlotsPosition}
         >
           <DisplayFordersOrPlots
-            blink={blink}
+            // blink={blink}
             plotsAreaRef={plotsAreaRef}
             plots={plots}
             selected_plots={selected_plots}
