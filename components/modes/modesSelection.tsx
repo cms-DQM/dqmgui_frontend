@@ -12,8 +12,8 @@ const modes = [{
   link: 'https://cmsweb.cern.ch/dqm/online-playback-new/'
 },
 {
-  name: 'Offline',
-  link: 'https://dqm-gui.web.cern.ch/'
+  name: 'Offline-test-new',
+  link: 'https://cmsweb-testbed.cern.ch/dqm/offline-test-new/'
 }]
 
 const menu = (
