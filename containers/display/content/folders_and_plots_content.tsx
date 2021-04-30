@@ -56,6 +56,10 @@ const Content: FC<FolderProps> = ({
     proportion,
   } = useContext(store);
 
+  const [openSettings, toggleSettingsModal] = useState(false);
+  const plotsAreaRef = React.useRef<any>(null)
+  const [plotsAreaWidth, setPlotsAreaWidth] = React.useState(0)
+
   const router = useRouter();
   const query: QueryProps = router.query;
 
@@ -67,7 +71,6 @@ const Content: FC<FolderProps> = ({
     plot_search: query.plot_search,
   };
 
-  const [openSettings, toggleSettingsModal] = useState(false);
 
   const selectedPlots = query.selected_plots;
   //filtering directories by selected workspace
@@ -86,8 +89,7 @@ const Content: FC<FolderProps> = ({
   const changeFolderPathByBreadcrumb = (parameters: ParsedUrlQueryInput) =>
     changeRouter(getChangedQueryParams(parameters, query));
 
-  const plotsAreaRef = React.useRef<any>(null)
-  const [plotsAreaWidth, setPlotsAreaWidth] = React.useState(0)
+
 
   React.useEffect(() => {
     if (plotsAreaRef.current) {
@@ -100,7 +102,7 @@ const Content: FC<FolderProps> = ({
       <CustomRow space={'2'} width="100%" justifycontent="space-between">
         <SettingsModal
           openSettings={openSettings}
-          toggleSettingsModal={toggleSettingsModal}
+          onClose={() => toggleSettingsModal(false)}
           isAnyPlotSelected={selected_plots.length === 0}
         />
         <Col style={{ padding: 8 }}>

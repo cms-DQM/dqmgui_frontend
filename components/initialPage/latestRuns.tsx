@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import { pathOr } from 'ramda'
 import { useRequest } from '../../hooks/useRequest';
 import { get_the_latest_runs, get_the_latest_runs_live_mode } from '../../api/newApi';
 import {
@@ -19,7 +19,7 @@ import { makeid } from '../utils';
 import { store } from '../../contexts/updateContext';
 
 export const LatestRuns = () => {
-  const {not_older_than, addLoader } = React.useContext(store)
+  const { not_older_than, addLoader } = React.useContext(store)
   const [id, setId] = React.useState<string>()
 
   const data_get_by_mount = useRequest(
@@ -50,7 +50,8 @@ export const LatestRuns = () => {
   );
 
   const isLoading = data_get_by_mount.isLoading;
-  const latest_runs = data && data.runs.sort((a: number, b: number) => a - b);
+  const latest_runs = pathOr([], ['runs'], data)
+  const latest_runs_sorted = latest_runs.sort((a: number, b: number) => b - a);
 
   React.useEffect(() => {
     const id_ = makeid()
@@ -72,33 +73,32 @@ export const LatestRuns = () => {
           <Spinner />
         </SpinnerWrapper>
       ) : (
-            <LatestRunsSection>
-              <CustomDiv display="flex" justifycontent="flex-end" width="auto">
-                {functions_config.mode === 'ONLINE' &&
-                  <LiveModeButton />
-                }
-              </CustomDiv>
-              <LatestRunsTtitle>The latest runs</LatestRunsTtitle>
-              {isLoading ? (
-                <SpinnerWrapper>
-                  <Spinner />
-                </SpinnerWrapper>
-              ) : latest_runs &&
-                latest_runs.length === 0 &&
-                !isLoading &&
-                errors.length === 0 ? (
-                    <NoResultsFound />
-                  ) : (
-                    latest_runs && (
-                      <LatestRunsList
-                        latest_runs={latest_runs}
-                        mode={functions_config.mode}
-                        not_older_than={not_older_than}
-                      />
-                    )
-                  )}
-            </LatestRunsSection>
+        <LatestRunsSection>
+          <CustomDiv display="flex" justifycontent="flex-end" width="auto">
+            {functions_config.mode === 'ONLINE' &&
+              <LiveModeButton />
+            }
+          </CustomDiv>
+          <LatestRunsTtitle>The latest runs</LatestRunsTtitle>
+          {isLoading ? (
+            <SpinnerWrapper>
+              <Spinner />
+            </SpinnerWrapper>
+          ) : latest_runs_sorted.length === 0 &&
+            !isLoading &&
+            errors.length === 0 ? (
+            <NoResultsFound />
+          ) : (
+            latest_runs && (
+              <LatestRunsList
+                latest_runs={latest_runs_sorted}
+                mode={functions_config.mode}
+                not_older_than={not_older_than}
+              />
+            )
           )}
+        </LatestRunsSection>
+      )}
     </>
   );
 };
