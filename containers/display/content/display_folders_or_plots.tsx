@@ -27,7 +27,7 @@ interface ContentProps {
   isLoading: boolean;
   viewPlotsPosition: OptionProps;
   proportion: OptionProps;
-  errors: string[];
+  errors: string;
   filteredFolders: any[];
   query: QueryProps;
   plotsAreaRef: any;
@@ -90,12 +90,7 @@ export const DisplayFordersOrPlots = ({
           ) : (
             !isLoading &&
             errors.length > 0 &&
-            errors.map((error) => {
-              if (isItLiveMode) {
-                return <StyledAlert type="info" message={"Informational Notes"} description="No data to show" showIcon />
-              }
-              return <StyledAlert key={error} message={error} type="error" showIcon />
-            })
+            <StyledAlert key={errors} message={errors} type="error" showIcon />
           )}
         </>
       )}

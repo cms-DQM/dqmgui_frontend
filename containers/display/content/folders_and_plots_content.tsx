@@ -20,7 +20,7 @@ import { UsefulLinks } from '../../../components/usefulLinks';
 import { ParsedUrlQueryInput } from 'querystring';
 import Workspaces from '../../../components/workspaces';
 import { PlotSearch } from '../../../components/plots/plot/plotSearch';
-import { use_get_folders_and_plots } from './quickCollectionHandling/use_get_folders_and_plots';
+import { use_get_folders_and_plots } from './quickCollectionPlotsAndFoldersHandling/use_get_folders_and_plots';
 
 export interface PlotInterface {
   obj?: string;
@@ -65,7 +65,7 @@ const Content: FC<FolderProps> = ({
 
   const selectedPlots = query.selected_plots;
 
-  const {folders, plots, isLoading, errors} =  use_get_folders_and_plots([workspace, query.folder_path])
+  const {folders, plots, isLoading, errors} =  use_get_folders_and_plots([workspace, query.folder_path, query.plot_search])
   var plots_grouped_by_layouts = get_plots_grouped_by_layouts(plots)
   const selected_plots: PlotDataProps[] = getSelectedPlots(
     selectedPlots,

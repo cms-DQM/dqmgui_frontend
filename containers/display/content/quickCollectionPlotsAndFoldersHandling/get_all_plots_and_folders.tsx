@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { choose_api } from '../../../display/utils'
+import { choose_api } from '../../utils'
 import { root_url } from '../../../../config/config';
 import { formParamters } from '../../../../utils/constructors/constructParameters';
 import { extract_folders_and_plots } from '../../../../utils/extractors/extract_folders_and_plots';

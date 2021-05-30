@@ -3,7 +3,6 @@ import { uniq } from 'ramda';
 import { workspaces as online_workspaces } from '../../../../workspaces/online'
 import { workspaces as offline_workspaces } from '../../../../workspaces/offline'
 import { functions_config } from '../../../../config/config'
-import cleanDeep from 'clean-deep';
 
 const all_workspaces = functions_config.mode === 'ONLINE' ? online_workspaces : offline_workspaces
 
