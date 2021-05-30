@@ -30,7 +30,12 @@ export const get_plots_and_folders_from_workspace = (selected_workspace, current
       else {
         folders = null
       }
-      quickCollections = workspace_info[0].quickCollections
+      // quickCollections should be shown just on the top level of folders' structure
+      if (layers >= 1) {
+        quickCollections = []
+      } else {
+        quickCollections = workspace_info[0].quickCollections
+      }
       break;
     }
   }

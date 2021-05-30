@@ -65,7 +65,7 @@ const Content: FC<FolderProps> = ({
 
   const selectedPlots = query.selected_plots;
 
-  const {folders, plots, isLoading, errors} =  use_get_folders_and_plots([workspace, query.folder_path, query.plot_search])
+  const {folders, plots, isLoading, errors} =  use_get_folders_and_plots()
   var plots_grouped_by_layouts = get_plots_grouped_by_layouts(plots)
   const selected_plots: PlotDataProps[] = getSelectedPlots(
     selectedPlots,
