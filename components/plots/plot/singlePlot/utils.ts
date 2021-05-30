@@ -131,20 +131,6 @@ export const scrollToBottom = (imageRef: any) => {
   }
 };
 
-export const shrink_or_expand = (name: string, layouts_sections: string[]) => {
-  const copy = [...layouts_sections];
-
-  if (layouts_sections.includes(name)) {
-    const filtered_names = copy.filter(
-      (name_form_names: string) => name !== name_form_names
-    );
-    return filtered_names;
-  } else {
-    copy.push(name);
-    return copy;
-  }
-};
-
 export const get_plot_error = (plot: PlotDataProps) => {
   let found = false;
   if (functions_config.new_back_end.new_back_end) {

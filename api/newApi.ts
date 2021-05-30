@@ -13,7 +13,7 @@ export const get_folders_and_plots_new_api = (params: ParamsForApiProps) => {
 };
 
 export const get_plot_url_new_api = (params: ParamsForApiProps & ParametersForApi & any) => {
-  const { errorBars, height, norm, stats, width} = newApi(params)
+  const { errorBars, height, norm, stats, width } = newApi(params)
 
   return `api/v1/render/${getRunsWithLumisections(params)}${params.dataset_name
     }/${params.folders_path}/${params.plot_name as string}?${get_customise_params(
@@ -50,7 +50,7 @@ export const get_plots_with_overlay_new_api = (params: ParametersForApi) => {
       labels.push(plot_for_overlay.label ? plot_for_overlay.label : params.run_number)
       return (`obj=archive/${params.run_number}${params.dataset_name}/${plot_for_overlay.folders_path}/${plot_for_overlay.plot_name}`)
     })
-    const { errorBars, height, norm, stats, width} = newApi(params)
+    const { errorBars, height, norm, stats, width } = newApi(params)
     const joined_plots = plots_strings.join('&')
     const joined_labels = labels.join('&reflabel=')
     const ref = params.overlaidSeparately.ref ? params.overlaidSeparately.ref : 'overlay'
@@ -64,7 +64,7 @@ export const get_plots_with_overlay_new_api = (params: ParametersForApi) => {
 }
 
 export const get_plot_with_overlay_new_api = (params: ParamsForApiProps) => {
-  const { errorBars, height, norm, stats, width} = newApi(params as any)
+  const { errorBars, height, norm, stats, width } = newApi(params as any)
   return `api/v1/render_overlay?${get_customise_params(params.customise)}ref=${params.overlay
     };obj=archive/${getRunsWithLumisections(params)}${params.dataset_name}/${params.folders_path
     }/${params.plot_name}${params.joined_overlaied_plots_urls
@@ -78,6 +78,11 @@ export const getLumisections = (params: LumisectionRequestProps) =>
 export const get_the_latest_runs_live_mode = (notOlderThan: number) => {
   return `api/v1/latest_runs?notOlderThan=${notOlderThan}`;
 };
+
 export const get_the_latest_runs = () => {
   return `api/v1/latest_runs`;
 };
+
+export const get_source_and_destination_of_layout = (layout_name: string) => {
+  return `api/v1/layouts?name=${layout_name}`
+}

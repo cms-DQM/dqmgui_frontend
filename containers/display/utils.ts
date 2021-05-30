@@ -248,3 +248,8 @@ export const choose_api_for_run_search = (params: ParamsForApiProps) => {
 
   return current_api;
 };
+
+export var get_plots_grouped_by_layouts = (plots) => {
+  const plots_with_layouts = plots.filter((plot) => plot.hasOwnProperty('layout'))
+  return _.chain(plots_with_layouts).sortBy('layout').groupBy('layout').value()
+}

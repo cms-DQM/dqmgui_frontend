@@ -57,6 +57,7 @@ export const DisplayFordersOrPlots = ({
       position={viewPlotsPosition}
       proportion={proportion}
     >
+
       { live_mode_is_on && isLoading && filteredFolders.length === 0
         || !live_mode_is_on && isLoading ? (
         <SpinnerWrapper>
@@ -64,7 +65,8 @@ export const DisplayFordersOrPlots = ({
         </SpinnerWrapper>
       ) : (
         <>
-          {!isLoading &&
+          {
+          !isLoading &&
             filteredFolders.length === 0 &&
             plots.length === 0 &&
             errors.length === 0 ? (
