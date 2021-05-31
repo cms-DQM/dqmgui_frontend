@@ -61,7 +61,7 @@ export const Directories = ({ directories, isLoading, blink }: FoldersFilter) =>
             >
               <MeCount me_count={directory.me_count ? directory.me_count : 0}>
                 <Icon
-                  // animation={blink.toString()}
+                  animation={blink.toString()}
                   isLoading={isLoading.toString()} />
               </MeCount>
               <StyledA>{directory.subdir}</StyledA>

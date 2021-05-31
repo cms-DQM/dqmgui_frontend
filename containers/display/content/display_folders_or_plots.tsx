@@ -18,7 +18,6 @@ import {
   QueryProps,
 } from '../interfaces';
 import { isItLiveMode } from '../../../utils';
-import { functions_config } from '../../../config/config';
 
 interface ContentProps {
   plots: PlotDataProps[];
@@ -31,7 +30,7 @@ interface ContentProps {
   filteredFolders: any[];
   query: QueryProps;
   plotsAreaRef: any;
-  // blink: boolean
+  blink: boolean
 }
 
 
@@ -46,7 +45,7 @@ export const DisplayFordersOrPlots = ({
   query,
   filteredFolders,
   plotsAreaRef,
-  // blink
+  blink
 }: ContentProps) => {
 
   const live_mode_is_on = isItLiveMode({ run_number: query.run_number, dataset_name: query.dataset_name })
@@ -66,16 +65,16 @@ export const DisplayFordersOrPlots = ({
       ) : (
         <>
           {
-          !isLoading &&
-            filteredFolders.length === 0 &&
-            plots.length === 0 &&
-            errors.length === 0 ? (
-            <NoResultsFound />
-          ) : errors.length === 0 ? (
+            !isLoading &&
+              filteredFolders.length === 0 &&
+              plots.length === 0 &&
+              errors.length === 0 ? (
+              <NoResultsFound />
+            ) : errors.length === 0 ? (
             <>
               <CustomRow width="100%" space={'2'}>
                 <Directories
-                  // blink={blink}
+                  blink={blink}
                   isLoading={isLoading}
                   directories={filteredFolders} />
               </CustomRow>

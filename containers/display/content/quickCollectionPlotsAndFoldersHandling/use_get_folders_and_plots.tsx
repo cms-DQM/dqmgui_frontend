@@ -1,10 +1,11 @@
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { makeid } from '../../../../components/utils';
-import { functions_config } from '../../../../config/config';
 
 import { store } from '../../../../contexts/globalStateContext';
 import { store as updateStore } from '../../../../contexts/updateContext';
+import { useBlink } from '../../../../hooks/useBlink';
+import { isItLiveMode } from '../../../../utils';
 import { get_filtered_folders_and_plots } from './get_filtered_folders_and_plots';
 
 export const use_get_folders_and_plots = () => {
@@ -14,12 +15,14 @@ export const use_get_folders_and_plots = () => {
   const [error, set_error] = React.useState('')
   const id_ = makeid()
 
-
   const router = useRouter();
   const { query } = router
   const { workspace } = React.useContext(store)
   const { not_older_than, addLoader } = React.useContext(updateStore)
-  const watchers = functions_config.mode === "ONLINE" ? [workspace, query.folder_path, query.plot_search, not_older_than] : [workspace, query.folder_path, query.plot_search]
+
+  const live_mode_is_on = isItLiveMode({ run_number: query.run_number as string, dataset_name: query.dataset_name as string})
+  const watchers = live_mode_is_on ? [workspace, query.folder_path, query.plot_search, not_older_than] : [workspace, query.folder_path, query.plot_search]
+  const { blink } = useBlink(not_older_than)
 
   const fetch_folders_and_plots = () => {
     set_loading(true)
@@ -38,7 +41,7 @@ export const use_get_folders_and_plots = () => {
   }
 
   React.useEffect(() => {
-    if (functions_config.mode === "ONLINE")
+    if (live_mode_is_on)
       addLoader({ value: loading, id: id_ })
   }, [loading])
 
@@ -46,5 +49,5 @@ export const use_get_folders_and_plots = () => {
     fetch_folders_and_plots()
   }, watchers)
 
-  return { folders: folders_, plots: plots_, isLoading: loading, errors: error }
+  return { folders: folders_, plots: plots_, isLoading: loading, errors: error, blink: blink }
 }
