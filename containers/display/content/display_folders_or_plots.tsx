@@ -68,6 +68,7 @@ export const DisplayFordersOrPlots = ({
             !isLoading &&
               filteredFolders.length === 0 &&
               plots.length === 0 &&
+              !plots_grouped_by_layouts &&
               errors.length === 0 ? (
               <NoResultsFound />
             ) : errors.length === 0 ? (

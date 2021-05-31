@@ -65,8 +65,9 @@ const Content: FC<FolderProps> = ({
 
   const selectedPlots = query.selected_plots;
 
-  const {folders, plots, isLoading, errors, blink} =  use_get_folders_and_plots()
-  var plots_grouped_by_layouts = get_plots_grouped_by_layouts(plots)
+  const { folders, plots, isLoading, errors, blink } = use_get_folders_and_plots()
+
+  var  { plots_with_layouts_, plots_without_layouts_ } = get_plots_grouped_by_layouts(plots)
   const selected_plots: PlotDataProps[] = getSelectedPlots(
     selectedPlots,
     plots
@@ -122,9 +123,9 @@ const Content: FC<FolderProps> = ({
           <DisplayFordersOrPlots
             blink={blink}
             plotsAreaRef={plotsAreaRef}
-            plots={plots}
+            plots={plots_without_layouts_}
             selected_plots={selected_plots}
-            plots_grouped_by_layouts={plots_grouped_by_layouts}
+            plots_grouped_by_layouts={plots_with_layouts_}
             isLoading={isLoading}
             viewPlotsPosition={viewPlotsPosition}
             proportion={proportion}

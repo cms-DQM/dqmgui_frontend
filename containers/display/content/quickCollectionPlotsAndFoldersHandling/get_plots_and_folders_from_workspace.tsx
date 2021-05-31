@@ -16,6 +16,7 @@ export const get_plots_and_folders_from_workspace = (selected_workspace, current
     if (workspace_info.length > 0) {
       const all_folders_path = workspace_info[0].foldersPath;
       const layers = current_path ? current_path.split('/').length : 0
+
       //all_folders_path can be null, when it has no folders in workspace
       if (all_folders_path) {
         folders = all_folders_path.map(folders_path => {
@@ -34,7 +35,13 @@ export const get_plots_and_folders_from_workspace = (selected_workspace, current
       if (layers >= 1) {
         quickCollections = []
       } else {
-        quickCollections = workspace_info[0].quickCollections
+        const quickCollections_with_full_path = workspace_info[0].quickCollections
+        quickCollections = quickCollections_with_full_path.map(quick_collection => {
+          const parts = quick_collection.split('/')
+          const name = parts.pop()
+          const path = parts.join('/')
+          return { name, path }
+        })
       }
       break;
     }

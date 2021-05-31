@@ -14,7 +14,6 @@ const construct_layout_plot_object = (one_layout, layout_name) => {
 }
 
 export const construct_layout_plot_objects = (datas_and_layout_name) => {
-  // console.log(datas_and_layout_name)
   const formatted_data =  datas_and_layout_name.map((one_layout) => construct_layout_plot_object(one_layout.datas, one_layout.layout_name)) 
   const plots = unnest(formatted_data)
     return plots
