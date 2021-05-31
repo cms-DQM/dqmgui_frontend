@@ -1,7 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 
-import { functions_config } from '../../../config/config';
 import {
   QueryProps,
   PlotDataProps,
@@ -21,30 +20,23 @@ export const LeftSidePlots = ({
   selected_plots,
   plots_grouped_by_layouts,
 }: LeftSidePlotsProps) => {
-  const plots_grouped_by_layouts_checked = plots_grouped_by_layouts
-    ? plots_grouped_by_layouts
-    : {};
   const router = useRouter();
   const query: QueryProps = router.query;
-  if (plots.length > 0) {
+  // if (plots.length > 0 || plots_grouped_by_layouts) {
     return (
       <>
-        {functions_config.new_back_end.layouts &&
-         Object.keys(plots_grouped_by_layouts_checked).length !== 0  ? (
           <PlotsWithLayout
-            plots_grouped_by_layouts={plots_grouped_by_layouts_checked}
+            plots_grouped_by_layouts={plots_grouped_by_layouts}
             selected_plots={selected_plots}
             query={query}
           />
-        ) : (
           <PlotsWithoutLayouts
             plots={plots}
             selected_plots={selected_plots}
             query={query}
           />
-        )}
       </>
     );
-  }
-  return <></>;
+  // }
+  // return <></>;
 };

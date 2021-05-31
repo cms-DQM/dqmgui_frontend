@@ -18,7 +18,6 @@ import {
   QueryProps,
 } from '../interfaces';
 import { isItLiveMode } from '../../../utils';
-import { functions_config } from '../../../config/config';
 
 interface ContentProps {
   plots: PlotDataProps[];
@@ -27,11 +26,11 @@ interface ContentProps {
   isLoading: boolean;
   viewPlotsPosition: OptionProps;
   proportion: OptionProps;
-  errors: string[];
+  errors: string;
   filteredFolders: any[];
   query: QueryProps;
   plotsAreaRef: any;
-  // blink: boolean
+  blink: boolean
 }
 
 
@@ -46,7 +45,7 @@ export const DisplayFordersOrPlots = ({
   query,
   filteredFolders,
   plotsAreaRef,
-  // blink
+  blink
 }: ContentProps) => {
 
   const live_mode_is_on = isItLiveMode({ run_number: query.run_number, dataset_name: query.dataset_name })
@@ -57,6 +56,7 @@ export const DisplayFordersOrPlots = ({
       position={viewPlotsPosition}
       proportion={proportion}
     >
+
       { live_mode_is_on && isLoading && filteredFolders.length === 0
         || !live_mode_is_on && isLoading ? (
         <SpinnerWrapper>
@@ -64,16 +64,18 @@ export const DisplayFordersOrPlots = ({
         </SpinnerWrapper>
       ) : (
         <>
-          {!isLoading &&
-            filteredFolders.length === 0 &&
-            plots.length === 0 &&
-            errors.length === 0 ? (
-            <NoResultsFound />
-          ) : errors.length === 0 ? (
+          {
+            !isLoading &&
+              filteredFolders.length === 0 &&
+              plots.length === 0 &&
+              !plots_grouped_by_layouts &&
+              errors.length === 0 ? (
+              <NoResultsFound />
+            ) : errors.length === 0 ? (
             <>
               <CustomRow width="100%" space={'2'}>
                 <Directories
-                  // blink={blink}
+                  blink={blink}
                   isLoading={isLoading}
                   directories={filteredFolders} />
               </CustomRow>
@@ -88,12 +90,7 @@ export const DisplayFordersOrPlots = ({
           ) : (
             !isLoading &&
             errors.length > 0 &&
-            errors.map((error) => {
-              if (isItLiveMode) {
-                return <StyledAlert type="info" message={"Informational Notes"} description="No data to show" showIcon />
-              }
-              return <StyledAlert key={error} message={error} type="error" showIcon />
-            })
+            <StyledAlert key={errors} message={errors} type="error" showIcon />
           )}
         </>
       )}

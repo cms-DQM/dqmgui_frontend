@@ -2,19 +2,17 @@ import React, { FC, useState, useContext } from 'react';
 import { Col, Row } from 'antd';
 import { SettingOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/router';
-import { chain } from 'lodash';
 
 import { PlotDataProps, QueryProps } from '../interfaces';
 import { ZoomedPlots } from '../../../components/plots/zoomedPlots';
 import { ViewDetailsMenu } from '../../../components/viewDetailsMenu';
 import { DivWrapper, ZoomedPlotsWrapper } from '../styledComponents';
 import { FolderPath } from './folderPath';
-import { changeRouter, getChangedQueryParams, getSelectedPlots } from '../utils';
+import { changeRouter, getChangedQueryParams, getSelectedPlots, get_plots_grouped_by_layouts } from '../utils';
 import {
   CustomRow,
   StyledSecondaryButton,
 } from '../../../components/styledComponents';
-import { useFilterFolders } from '../../../hooks/useFilterFolders';
 import { SettingsModal } from '../../../components/settings';
 import { store } from '../../../contexts/globalStateContext';
 import { DisplayFordersOrPlots } from './display_folders_or_plots';
@@ -22,6 +20,7 @@ import { UsefulLinks } from '../../../components/usefulLinks';
 import { ParsedUrlQueryInput } from 'querystring';
 import Workspaces from '../../../components/workspaces';
 import { PlotSearch } from '../../../components/plots/plot/plotSearch';
+import { use_get_folders_and_plots } from './quickCollectionPlotsAndFoldersHandling/use_get_folders_and_plots';
 
 export interface PlotInterface {
   obj?: string;
@@ -54,30 +53,21 @@ const Content: FC<FolderProps> = ({
   const {
     viewPlotsPosition,
     proportion,
+    workspace
   } = useContext(store);
+
+  const [openSettings, toggleSettingsModal] = useState(false);
+  const plotsAreaRef = React.useRef<any>(null)
+  const [plotsAreaWidth, setPlotsAreaWidth] = React.useState(0)
 
   const router = useRouter();
   const query: QueryProps = router.query;
 
-  const params = {
-    run_number: run_number,
-    dataset_name: dataset_name,
-    folders_path: folder_path,
-    // notOlderThan: updated_by_not_older_than,
-    plot_search: query.plot_search,
-  };
-
-  const [openSettings, toggleSettingsModal] = useState(false);
-
   const selectedPlots = query.selected_plots;
-  //filtering directories by selected workspace
-  const { foldersByPlotSearch, plots, isLoading, errors } = useFilterFolders(
-    query,
-    params,
-  );
-  const plots_with_layouts = plots.filter((plot) => plot.hasOwnProperty('layout'))
-  var plots_grouped_by_layouts = chain(plots_with_layouts).sortBy('layout').groupBy('layout').value()
-  const filteredFolders: any[] = foldersByPlotSearch ? foldersByPlotSearch : [];
+
+  const { folders, plots, isLoading, errors, blink } = use_get_folders_and_plots()
+
+  var  { plots_with_layouts_, plots_without_layouts_ } = get_plots_grouped_by_layouts(plots)
   const selected_plots: PlotDataProps[] = getSelectedPlots(
     selectedPlots,
     plots
@@ -86,21 +76,17 @@ const Content: FC<FolderProps> = ({
   const changeFolderPathByBreadcrumb = (parameters: ParsedUrlQueryInput) =>
     changeRouter(getChangedQueryParams(parameters, query));
 
-  const plotsAreaRef = React.useRef<any>(null)
-  const [plotsAreaWidth, setPlotsAreaWidth] = React.useState(0)
-
   React.useEffect(() => {
     if (plotsAreaRef.current) {
       setPlotsAreaWidth(plotsAreaRef.current.clientWidth)
     }
   }, [plotsAreaRef.current])
-
   return (
     <>
       <CustomRow space={'2'} width="100%" justifycontent="space-between">
         <SettingsModal
           openSettings={openSettings}
-          toggleSettingsModal={toggleSettingsModal}
+          onClose={() => toggleSettingsModal(false)}
           isAnyPlotSelected={selected_plots.length === 0}
         />
         <Col style={{ padding: 8 }}>
@@ -135,16 +121,16 @@ const Content: FC<FolderProps> = ({
           position={viewPlotsPosition}
         >
           <DisplayFordersOrPlots
-            // blink={blink}
+            blink={blink}
             plotsAreaRef={plotsAreaRef}
-            plots={plots}
+            plots={plots_without_layouts_}
             selected_plots={selected_plots}
-            plots_grouped_by_layouts={plots_grouped_by_layouts}
+            plots_grouped_by_layouts={plots_with_layouts_}
             isLoading={isLoading}
             viewPlotsPosition={viewPlotsPosition}
             proportion={proportion}
             errors={errors}
-            filteredFolders={filteredFolders}
+            filteredFolders={folders}
             query={query}
           />
           {selected_plots.length > 0 && errors.length === 0 && (

@@ -11,13 +11,13 @@ import { info } from '../notifications/infoMessages';
 
 interface SettingsModalProps {
   openSettings: boolean;
-  toggleSettingsModal(value: boolean): void;
+  onClose(): void;
   isAnyPlotSelected: boolean;
 }
 
 export const SettingsModal = ({
   openSettings,
-  toggleSettingsModal,
+  onClose,
   isAnyPlotSelected,
 }: SettingsModalProps) => {
   const {
@@ -26,12 +26,12 @@ export const SettingsModal = ({
     proportion,
     setProportion,
   } = React.useContext(store);
-  
+
   return (
     <StyledModal
       title="Settings"
       visible={openSettings}
-      onCancel={() => toggleSettingsModal(false)}
+      onCancel={onClose}
       footer={null}
     >
       <Form>
