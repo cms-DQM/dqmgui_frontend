@@ -24,7 +24,8 @@ export interface ParametersForApi {
     folders_path: string;
     plot_name: string;
     label: string;
-  }]
+  }],
+  notOlderThan?: number;
 }
 
 export interface PlotProperties {

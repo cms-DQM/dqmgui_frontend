@@ -15,9 +15,10 @@ interface InfoProps {
 interface RunInfoProps {
   query: QueryProps;
   info: InfoProps;
+  not_older_than: number;
 }
 
-export const RunInfoItem = ({ query, info }: RunInfoProps) => {
+export const RunInfoItem = ({ query, info, not_older_than }: RunInfoProps) => {
 
   const params_for_api = {
     run_number: query.run_number,
@@ -25,7 +26,7 @@ export const RunInfoItem = ({ query, info }: RunInfoProps) => {
     lumi: query.lumi,
     folders_path: 'HLT/EventInfo',
     plot_name: info.value,
-    notOlderThan: undefined
+    notOlderThan: not_older_than
   }
   const { data, isLoading } = useRequest(get_jroot_plot(params_for_api), {}, [
     query.dataset_name,

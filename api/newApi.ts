@@ -63,12 +63,32 @@ export const get_plots_with_overlay_new_api = (params: ParametersForApi) => {
   }
 }
 
+export const get_plots_with_overlay_new_api_live_mode = (params: ParametersForApi) => {
+  //empty string in order to set &reflabel= in the start of joined_labels string
+  const labels: string[] = ['']
+  if (params.overlaidSeparately?.plots) {
+    const plots_strings = params.overlaidSeparately.plots.map((plot_for_overlay: PlotProperties) => {
+      labels.push(plot_for_overlay.label ? plot_for_overlay.label : params.run_number)
+      return (`obj=archive/${params.run_number}${params.dataset_name}/${plot_for_overlay.folders_path}/${plot_for_overlay.plot_name}`)
+    })
+    const { errorBars, height, norm, stats, width, notOlderThan } = newApi(params)
+    const joined_plots = plots_strings.join('&')
+    const joined_labels = labels.join('&reflabel=')
+    const ref = params.overlaidSeparately.ref ? params.overlaidSeparately.ref : 'overlay'
+    const customization = get_customise_params(params.customise)
+    return `api/v1/render_overlay?obj=archive/${params.run_number}${params.dataset_name}/${params.folders_path}/${params.plot_name}&${joined_plots}&${width}&${height}&${norm}&${stats}${joined_labels}&${errorBars}&${customization}ref=${ref}&${notOlderThan}`
+  }
+  else {
+    return
+  }
+}
+
 export const get_plot_with_overlay_new_api = (params: ParamsForApiProps) => {
-  const { errorBars, height, norm, stats, width } = newApi(params as any)
+  const { errorBars, height, norm, stats, width, notOlderThan } = newApi(params as any)
   return `api/v1/render_overlay?${get_customise_params(params.customise)}ref=${params.overlay
     };obj=archive/${getRunsWithLumisections(params)}${params.dataset_name}/${params.folders_path
     }/${params.plot_name}${params.joined_overlaied_plots_urls
-    };${stats};${errorBars};${norm};${width};${height}`;
+    };${stats};${errorBars};${norm};${width};${height};${notOlderThan}`;
 };
 
 export const getLumisections = (params: LumisectionRequestProps) =>

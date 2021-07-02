@@ -6,6 +6,7 @@ export const formParamters = (query) => {
   const dataset_name = pathOr('', ['dataset_name'], query)
   const folders_path = pathOr('', ['folder_path'], query)
   const plot_search = pathOr('', ['plot_search'], query)
+  const notOlderThan = pathOr('', ['notOlderThan'], query)
 
   const parameters = {
     run_number,
@@ -13,6 +14,7 @@ export const formParamters = (query) => {
     dataset_name,
     folders_path,
     plot_search,
+    notOlderThan
   };
   return parameters
 }

@@ -31,7 +31,7 @@ export const LiveModeHeader = ({ query }: LiveModeHeaderProps) => {
             dataset_name: query.dataset_name,
             folders_path: 'HLT/EventInfo',
             lumi: -1,
-            notOlderThan: undefined,
+            notOlderThan: not_older_than,
             plot_name: info.value
           }
 

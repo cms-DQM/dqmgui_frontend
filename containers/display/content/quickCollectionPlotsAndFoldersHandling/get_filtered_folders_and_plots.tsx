@@ -5,13 +5,14 @@ import { get_filter_folders_and_plots } from './get_filter_folders_and_plots';
 import { get_plots_and_folders_from_workspace } from './get_plots_and_folders_from_workspace';
 import { get_plots_from_quick_collection } from './get_plots_friom_quick_collection';
 
-export const get_filtered_folders_and_plots = async (query, workspace) => {
-    
-    const all_folders_and_plots = await get_all_plots_and_folders(query).then(resp => resp)
+export const get_filtered_folders_and_plots = async (query,not_older_than, workspace) => {
+    const parameters = query
+    parameters.notOlderThan = not_older_than
+    const all_folders_and_plots = await get_all_plots_and_folders(parameters).then(resp => resp)
     const all_folders = pathOr(null, ['folders'], all_folders_and_plots)
     const all_plots = pathOr('', ['plots'], all_folders_and_plots)
 
-    const all_folders_and_plots_form_workspace = await get_plots_and_folders_from_workspace(workspace, query.folder_path)
+    const all_folders_and_plots_form_workspace = await get_plots_and_folders_from_workspace(workspace, parameters.folder_path)
     const quickCollections = pathOr('', ['quickCollections'], all_folders_and_plots_form_workspace) //if all_folders_and_plots_form_workspace.quickCollections is undef/null - it will return empty string
     const folders_from_workspace = pathOr(null, ['folders'], all_folders_and_plots_form_workspace)
 

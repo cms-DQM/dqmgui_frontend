@@ -233,7 +233,7 @@ export const choose_api = (params: ParamsForApiProps) => {
 
 const chooseNewApiForGettingFolders = (params: ParamsForApiProps) => {
   if (isItLiveMode(params as any)) {
-    return get_folders_and_plots_new_api(params)
+    return get_folders_and_plots_new_api_with_live_mode(params)
   } else {
     return get_folders_and_plots_new_api(params);
   }

@@ -26,7 +26,7 @@ export const use_get_folders_and_plots = () => {
 
   const fetch_folders_and_plots = () => {
     set_loading(true)
-    get_filtered_folders_and_plots(query, workspace)
+    get_filtered_folders_and_plots(query, not_older_than, workspace)
       .then(async (response) => {
         set_loading(false)
         const { folders, plots } = response
