@@ -22,7 +22,6 @@ export const LeftSidePlots = ({
 }: LeftSidePlotsProps) => {
   const router = useRouter();
   const query: QueryProps = router.query;
-  // if (plots.length > 0 || plots_grouped_by_layouts) {
     return (
       <>
           <PlotsWithLayout
@@ -37,6 +36,4 @@ export const LeftSidePlots = ({
           />
       </>
     );
-  // }
-  // return <></>;
 };

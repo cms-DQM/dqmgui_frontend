@@ -5,6 +5,7 @@ import {
   QueryProps,
 } from '../../../../containers/display/interfaces';
 import { OnePlotInLayout } from './oneLayout';
+import { SummaryPlots } from './summaryPlots';
 
 interface PlotsWithLayoutPorps {
   plots_grouped_by_layouts: PlotsGroupedByLayoutsInterface;
@@ -18,6 +19,7 @@ export const PlotsWithLayout = ({
   query,
 }: PlotsWithLayoutPorps) => {
   const layouts_names = Object.keys(plots_grouped_by_layouts).sort();
+  
   return (
     <>
       {layouts_names.map((name: string) => {
@@ -25,6 +27,14 @@ export const PlotsWithLayout = ({
         // const sorted_plots = plots.sort((a, b) => {
         //   return a.path.localeCompare(b.path);
         // })
+        if (name === 'Summaries') {
+          return (
+            <SummaryPlots
+              plots_grouped_by_layouts={plots_grouped_by_layouts}
+              selected_plots={selected_plots}
+              query={query} />
+          )
+        }
         return (
           <OnePlotInLayout
             layoutName={name}
