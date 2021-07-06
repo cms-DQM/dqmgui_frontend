@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { store } from '../../../../contexts/updateContext';
 import { useBlink } from '../../../../hooks/useBlink';
-import { getSummaryPlotHeader } from './api/getSummaryPlotHeader';
+import { getSummaryPlotHeader } from './summaryPlots/api/getSummaryPlotHeader';
 
 
 interface SummaryPlotProps {

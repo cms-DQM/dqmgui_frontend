@@ -41,19 +41,14 @@ export interface FolderPathByBreadcrumbProps {
 
 interface FolderProps {
   folder_path?: string;
-  run_number: string;
-  dataset_name: string;
 }
 
 const Content: FC<FolderProps> = ({
   folder_path,
-  run_number,
-  dataset_name,
 }) => {
   const {
     viewPlotsPosition,
     proportion,
-    workspace
   } = useContext(store);
 
   const [openSettings, toggleSettingsModal] = useState(false);

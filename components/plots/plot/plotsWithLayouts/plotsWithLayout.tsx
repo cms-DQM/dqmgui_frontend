@@ -5,7 +5,7 @@ import {
   QueryProps,
 } from '../../../../containers/display/interfaces';
 import { OnePlotInLayout } from './oneLayout';
-import { SummaryPlots } from './summaryPlots';
+import { SummaryPlots } from './summaryPlots/summaryPlots';
 
 interface PlotsWithLayoutPorps {
   plots_grouped_by_layouts: PlotsGroupedByLayoutsInterface;

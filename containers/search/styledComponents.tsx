@@ -34,6 +34,15 @@ export const SpinnerWrapper = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+export const FillSpinnerWrapper = styled.div`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
 export const StyledTableHead = styled.thead`
   height: calc(${theme.space.spaceBetween} * 12);
   font-size: 1.125rem;
