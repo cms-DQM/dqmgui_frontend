@@ -19,7 +19,7 @@ export const SummaryPlots = ({ plots_grouped_by_layouts, selected_plots, query }
   // the firts dir is indication of subsystem
   // I need to go to that subsystem folder, /info/reportSummary is that procetnage
   // so subsystems has reportSummaryContent, from which we can create report (on click will be shown?)
-  const [report_info, set_report_info] = React.useState([])
+  const [report_info, set_report_info] = React.useState({})
   const [open, toggle_modal] = React.useState(false)
   const [modal_id, set_modal_id] = React.useState('')
   const [loading, setLoading] = React.useState(false)
