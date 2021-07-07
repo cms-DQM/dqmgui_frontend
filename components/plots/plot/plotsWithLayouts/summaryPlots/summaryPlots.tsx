@@ -1,5 +1,4 @@
 import * as React from 'react'
-import axios from 'axios'
 import { unnest } from 'ramda';
 
 import { SummaryPlot } from './summaryPlot'
@@ -7,6 +6,7 @@ import { isItLiveMode } from '../../../../../utils';
 import { PlotsGroupedByLayoutsInterface, QueryProps } from '../../../../../containers/display/interfaces';
 import { ReportsTable } from './reportsTable'
 import { getReportsData } from './getReportsData';
+import { SummaryPlotLiveMode } from './summaryPlotLiveMode'
 
 interface PlotsWithLayoutPorps {
   plots_grouped_by_layouts: PlotsGroupedByLayoutsInterface;
@@ -15,10 +15,6 @@ interface PlotsWithLayoutPorps {
 }
 
 export const SummaryPlots = ({ plots_grouped_by_layouts, selected_plots, query }: PlotsWithLayoutPorps) => {
-  // I need to get all plots paths
-  // the firts dir is indication of subsystem
-  // I need to go to that subsystem folder, /info/reportSummary is that procetnage
-  // so subsystems has reportSummaryContent, from which we can create report (on click will be shown?)
   const [report_info, set_report_info] = React.useState({})
   const [open, toggle_modal] = React.useState(false)
   const [modal_id, set_modal_id] = React.useState('')
@@ -54,25 +50,40 @@ export const SummaryPlots = ({ plots_grouped_by_layouts, selected_plots, query }
         const parts = path.split('/')
         const subsystem = parts.shift()
         const live = isItLiveMode({ run_number: query.run_number, dataset_name: query.dataset_name })
-        //reportds data bus and live and ne live moeplotu. tai siusim not older than tik su live
-        //  
-        // if(live){
-        //   <>
-        // }
-        return <SummaryPlot
-          plot={plot}
-          set_report_info={set_report_info}
-          toggle_modal={toggle_modal}
-          open={open}
-          set_modal_id={set_modal_id}
-          modal_id={modal_id}
-          selected_plots={selected_plots}
-          query={query}
-          key={subsystem}
-          subsystem={subsystem}
-          lumi={query.lumi}
-          run_number={query.run_number}
-          dataset_name={query.dataset_name}
-        />
+
+        if (live) {
+          return <SummaryPlotLiveMode
+            plot={plot}
+            set_report_info={set_report_info}
+            toggle_modal={toggle_modal}
+            open={open}
+            set_modal_id={set_modal_id}
+            modal_id={modal_id}
+            selected_plots={selected_plots}
+            query={query}
+            key={subsystem}
+            subsystem={subsystem}
+            lumi={query.lumi}
+            run_number={query.run_number}
+            dataset_name={query.dataset_name}
+          />
+        } else {
+          return <SummaryPlot
+            plot={plot}
+            set_report_info={set_report_info}
+            toggle_modal={toggle_modal}
+            open={open}
+            set_modal_id={set_modal_id}
+            modal_id={modal_id}
+            selected_plots={selected_plots}
+            query={query}
+            key={subsystem}
+            subsystem={subsystem}
+            lumi={query.lumi}
+            run_number={query.run_number}
+            dataset_name={query.dataset_name}
+          />
+        }
+
       })}</>
 }

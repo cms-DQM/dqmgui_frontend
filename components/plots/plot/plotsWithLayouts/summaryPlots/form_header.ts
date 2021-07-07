@@ -1,7 +1,7 @@
 import { pathOr, unnest } from 'ramda'
 
 interface FormHeaderProps {
-  header_data: any[]
+  header_data: any
   subsystem: string
 }
 
@@ -25,7 +25,7 @@ export const form_header = (props: FormHeaderProps) => {
       const date_ = milisec.toDateString();
       // const milisec = parseInt(data[key]) * 1000;
       // const time = typeof (milisec) === 'number' ? milisec.toUTCString() : '-';
-      data['processTimeStamp'] = `${hours}:${minutes}:${seconds}  ${date_}`
+      data['processTimeStamp'] = `${date_}  ${hours}:${minutes}:${seconds}`
     } else {
       data[key] = data[key]
     }

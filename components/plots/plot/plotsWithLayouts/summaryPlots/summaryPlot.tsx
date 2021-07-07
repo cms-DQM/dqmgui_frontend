@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button } from 'antd';
+import { Typography } from 'antd';
 import { Plot } from '../plot';
 import { Progress } from 'antd';
 
@@ -9,6 +9,8 @@ import { form_header } from './form_header';
 import { QueryProps } from '../../../../../containers/display/interfaces';
 import { ParentWrapper, LayoutName, LayoutWrapper } from '../styledComponents'
 import { Report_summary_button } from './styledComponents'
+
+const { Text } = Typography;
 
 interface SummaryPlotProps {
   plot: any
@@ -26,7 +28,7 @@ interface SummaryPlotProps {
 }
 
 export const SummaryPlot = ({ subsystem, dataset_name, run_number, lumi, plot, query, selected_plots, set_report_info, toggle_modal, open, modal_id, set_modal_id }: SummaryPlotProps) => {
-  const [header, setHeader] = React.useState([])
+  const [header, setHeader] = React.useState<any>({})
 
   const imageRef = React.useRef(null);
   const plots_names = ['reportSummary', 'processTimeStamp']
@@ -48,7 +50,7 @@ export const SummaryPlot = ({ subsystem, dataset_name, run_number, lumi, plot, q
       plotsAmount={1}>
       <LayoutName style={{display: 'block'}} >
         <div>
-         {`${header.subsystem}  ${header.processTimeStamp}`}
+         <Text strong>{header.subsystem}</Text>  <Text>{header.processTimeStamp}</Text>
         </div>
           <Progress
            percent={parseFloat(header.reportSummary)}
