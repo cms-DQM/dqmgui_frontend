@@ -46,8 +46,6 @@ export const ContentSwitching = () => {
   if (query.dataset_name && query.run_number) {
     return (
       <FoldersAndPlots
-        run_number={query.run_number || ''}
-        dataset_name={query.dataset_name || ''}
         folder_path={query.folder_path || ''}
       />
     );

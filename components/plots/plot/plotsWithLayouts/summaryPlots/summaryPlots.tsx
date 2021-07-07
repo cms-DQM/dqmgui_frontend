@@ -39,7 +39,7 @@ export const SummaryPlots = ({ plots_grouped_by_layouts, selected_plots, query }
   return <>
     <ReportsTable
       loading={loading}
-      dataSource={report_info}
+      dataSource={report_info as any}
       open={open}
       modal_id={modal_id}
       toggleModal={toggle_modal}
