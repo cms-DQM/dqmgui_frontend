@@ -38,12 +38,12 @@ export const ModesSelection = ({ host }) => {
     <Dropdown overlay={menu} placement="bottomCenter" arrow>
       <Button
         type="link"
-        style={{ color: 'white', fontVariant: 'all-small-caps', height: 'fit-content' }}>
+        style={{ color: 'white', fontVariant: 'all-small-caps', height: 'max-content' }}>
         <div style={{ display: 'block' }}>
           <div>
             {current_mode ? current_mode : functions_config.mode + ' (development)'}
           </div>
-          <div>{host}</div>
+          <div style={{fontSize: 'smaller'}}>{host}</div>
         </div>
       </Button>
     </Dropdown>
