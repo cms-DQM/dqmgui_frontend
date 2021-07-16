@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -17,15 +17,23 @@ import { backToMainPage } from '../utils';
 import { Header } from '../containers/display/header';
 import { ContentSwitching } from '../containers/display/content/constent_switching';
 import { ModesSelection } from '../components/modes/modesSelection';
+import { store } from '../contexts/globalStateContext';
+import { get_host_ } from '../api/getHost';
 
 const Index: NextPage<FolderPathQuery> = () => {
   // We grab the query from the URL:
   const router = useRouter();
   const query: QueryProps = router.query;
+  const { setHost, host } = useContext(store)
+
+  useEffect(() => {
+    get_host_(setHost)
+  }, [])
+
   const isDatasetAndRunNumberSelected =
     !!query.run_number && !!query.dataset_name;
   if (typeof window !== "undefined") {
-    window.onload = () => {
+    window.onload = async () => {
       //@ts-ignore
       document.getElementById("holderStyle").remove();
     };
@@ -60,7 +68,7 @@ const Index: NextPage<FolderPathQuery> = () => {
                   </StyledLogoWrapper>
                 </StyledLogoDiv>
               </Tooltip>
-              <ModesSelection />
+              <ModesSelection host={host}/>
             </Col>
           </Col>
           <Header

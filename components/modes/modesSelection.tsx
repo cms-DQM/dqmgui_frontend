@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Button } from 'antd';
 import { Menu, Dropdown } from 'antd';
-import { current_mode } from '../../config/config';
+import { current_mode, functions_config } from '../../config/config';
 
 const modes = [{
   name: 'Online-new',
@@ -33,13 +33,18 @@ const menu = (
 );
 
 
-export const ModesSelection = () => {
+export const ModesSelection = ({ host }) => {
   return (
     <Dropdown overlay={menu} placement="bottomCenter" arrow>
       <Button
         type="link"
-        style={{ color: 'white', fontVariant: 'all-small-caps' }}>
-        {current_mode}
+        style={{ color: 'white', fontVariant: 'all-small-caps', height: 'fit-content' }}>
+        <div style={{ display: 'block' }}>
+          <div>
+            {current_mode ? current_mode : functions_config.mode + ' (development)'}
+          </div>
+          <div>{host}</div>
+        </div>
       </Button>
     </Dropdown>
   )

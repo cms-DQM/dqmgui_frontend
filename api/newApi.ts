@@ -106,3 +106,8 @@ export const get_the_latest_runs = () => {
 export const get_source_and_destination_of_layout = (layout_name: string) => {
   return `api/v1/layouts?name=${layout_name}`
 }
+
+export const get_host = () => {
+  return `api/v1/host`
+}
+

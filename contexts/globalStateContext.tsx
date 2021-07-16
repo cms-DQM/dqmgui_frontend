@@ -13,6 +13,7 @@ export const initialState: any = {
   openOverlayDataMenu: false,
   viewPlotsPosition: viewPositions[1].value,
   proportion: plotsProportionsOptions[0].value,
+  host: '',
 };
 
 
@@ -25,6 +26,7 @@ const GlobalStateProvider = ({ children }: LeftSideStateProviderProps) => {
   const [workspace, setWorkspace] = React.useState(initialState.workspace);
   const [viewPlotsPosition, setViewPlotsPosition] = React.useState(initialState.viewPlotsPosition);
   const [proportion, setProportion] = React.useState(initialState.proportion);
+  const [host, setHost] = React.useState(initialState.host);
 
   return (
     <Provider
@@ -37,7 +39,9 @@ const GlobalStateProvider = ({ children }: LeftSideStateProviderProps) => {
         viewPlotsPosition,
         setViewPlotsPosition,
         proportion,
-        setProportion
+        setProportion,
+        host,
+        setHost
       }}
     >
       {children}
