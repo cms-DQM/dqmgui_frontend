@@ -263,15 +263,8 @@ It means, that just plots, which are visible in current window is requested from
 ## Next steps
 
 1. Downloading of ROOT files
-2. Display server name
-3. Integrate P5 alarm manager
-4. Change workspaces according mode
-5. Alignment workspace for tracker.
-6. Tiny url 
-7. Updating folders, runs list and plots in live mode every 20 sec. Also sec has to be send to backend.
-8. Workspace has to have their own plots!
-9. Fix code for new offline GUI (layouts, layouts converted and overlay plots with different names is not supported there).
-10. Quick collection
-11. Header summerizing the run (slide 6: https://indico.cern.ch/event/997168/contributions/4260423/attachments/2213871/3747535/MuonDPG_report_Aruta.pdf)
+2. Integrate P5 alarm manager
+3. Tiny url 
+4. Fix code for new offline GUI (layouts, layouts converted and overlay plots with different names is not supported there).
 
 ---
