@@ -19,7 +19,7 @@ export const PlotsWithLayout = ({
   query,
 }: PlotsWithLayoutPorps) => {
   const layouts_names = Object.keys(plots_grouped_by_layouts).sort();
-  
+
   return (
     <>
       {layouts_names.map((name: string) => {
@@ -30,6 +30,7 @@ export const PlotsWithLayout = ({
         if (name === 'Summaries') {
           return (
             <SummaryPlots
+              key={name}
               plots_grouped_by_layouts={plots_grouped_by_layouts}
               selected_plots={selected_plots}
               query={query} />
@@ -37,6 +38,7 @@ export const PlotsWithLayout = ({
         }
         return (
           <OnePlotInLayout
+            key={name}
             layoutName={name}
             plots={plots}
             selected_plots={selected_plots}

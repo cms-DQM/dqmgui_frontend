@@ -1,5 +1,7 @@
 import cleanDeep from 'clean-deep';
-import { root_url_ } from '../config/config';
+import { pathOr } from 'ramda';
+
+import { machines_config, root_url_ } from '../config/config';
 import { InfoProps, PlotDataProps, QueryProps } from '../containers/display/interfaces';
 
 export const seperateRunAndLumiInSearch = (runAndLumi: string) => {
@@ -21,17 +23,6 @@ export const get_label = (info: InfoProps, data?: any) => {
     return value ? value : 'No information';
   }
 }
-
-export const getPathName = () => {
-  const isBrowser = () => typeof window !== 'undefined';
-  let pathName = (isBrowser() && window.location.pathname) || '/';
-  const the_lats_char = pathName.charAt(pathName.length - 1);
-  if (the_lats_char !== '/') {
-    pathName = pathName + '/'
-  }
-  return pathName;
-}
-
 
 export const makeid = () => {
   var text = '';

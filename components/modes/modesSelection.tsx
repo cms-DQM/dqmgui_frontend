@@ -20,6 +20,7 @@ const menu = (
   <Menu>
     {modes.map(mode => (
       <Menu.Item
+        key={mode.name}
         disabled={current_mode && current_mode.toUpperCase() === mode.name.toUpperCase()}>
         <Button
           type="link"
@@ -43,7 +44,7 @@ export const ModesSelection = ({ host }) => {
           <div>
             {current_mode ? current_mode : functions_config.mode + ' (development)'}
           </div>
-          <div style={{fontSize: 'smaller'}}>{host}</div>
+          <div style={{ fontSize: 'smaller' }}>{host}</div>
         </div>
       </Button>
     </Dropdown>

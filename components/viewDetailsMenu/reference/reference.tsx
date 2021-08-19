@@ -80,7 +80,9 @@ export const Reference = ({
           </FormItem>
         </CustomCol>
         {checkBoxes.map((checkBox) =>
-          <CustomCol space={'2'}>
+          <CustomCol 
+          key={checkBox.label}
+          space={'2'}>
             <Grid space={'2'} key={checkBox.label}>
               <CheckBox option={checkBox}
                 setReference={setReference}

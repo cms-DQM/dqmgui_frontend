@@ -48,11 +48,13 @@ const UpdateStateProvider = ({ children }: UpdateStateProviderProps) => {
   })
 
   React.useEffect(() => {
-    const iseThereAnyTrue = values.includes(true)
-    setIsThereAnyLoadingData(iseThereAnyTrue)
-  }, values)
+    // checking is there is any data which is not loaded yet
+    const isThereAnyTrue = values.includes(true)
+    setIsThereAnyLoadingData(isThereAnyTrue)
+  }, [values.join('')])
 
   const update_timer = () => {
+    // if all data is loaded, timer for updating data will be updated
     const iseThereAnyTrue = values.includes(true)
     if (!iseThereAnyTrue) {
       return setTimeout(async () => {

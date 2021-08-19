@@ -29,7 +29,7 @@ const Index: NextPage<FolderPathQuery> = () => {
   useEffect(() => {
     get_host_(setHost)
   }, [])
-
+  
   const isDatasetAndRunNumberSelected =
     !!query.run_number && !!query.dataset_name;
   if (typeof window !== "undefined") {
