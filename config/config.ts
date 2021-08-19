@@ -61,7 +61,7 @@ export const root_url = config[process.env.NODE_ENV || 'development'].root_url;
 const set_env = () => {
   if (process.env.NODE_ENV === 'production' && current_mode) {
     const MODE = () => {
-      const mode = current_mode.split('-')[1]
+      const mode = current_mode.split('-')[0]// has to be 0 because it shows thats is online!!!
       return mode ? mode.toUpperCase() : 'ONLINE'//if you running gui on lxplus in production, before exporting change to mode you want to see
     }
 
