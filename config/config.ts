@@ -41,6 +41,8 @@ export const machines_config = {
 
 if (!current_mode_) {
   current_mode = getHostName()
+} else {
+  current_mode = current_mode_
 }
 
 const config: any = {
