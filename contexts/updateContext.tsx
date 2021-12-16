@@ -16,6 +16,8 @@ export const initialState: any = {
   not_older_than: Math.floor(new Date().getTime() / 1000),
 };
 
+const updateInterval = 20; // seconds
+
 
 const store = createContext(initialState);
 const { Provider } = store;
@@ -23,8 +25,14 @@ const { Provider } = store;
 const UpdateStateProvider = ({ children }: UpdateStateProviderProps) => {
   const [loaders, setLoaders] = React.useState<LoaderObject[]>(initialState.loaders)
   const [not_older_than, set_not_older_than] = React.useState(initialState.not_older_than);
-  const [isThereAnyLoadingData, setIsThereAnyLoadingData] = React.useState(false)
 
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      const time = Math.floor(new Date().getTime() / 1000)
+      set_not_older_than(time)
+    }, updateInterval * 1000);
+    return () => clearInterval(interval);
+  }, []);
 
   const addLoader = (newLoader: LoaderObject) => {
     const copy = [...loaders]
@@ -41,32 +49,6 @@ const UpdateStateProvider = ({ children }: UpdateStateProviderProps) => {
       [newLoader]
     setLoaders(filtered)
   }
-
-  const values = loaders.map((loader) => {
-    const val = loader.value
-    return val
-  })
-
-  React.useEffect(() => {
-    // checking is there is any data which is not loaded yet
-    const isThereAnyTrue = values.includes(true)
-    setIsThereAnyLoadingData(isThereAnyTrue)
-  }, [values.join('')])
-
-  const update_timer = () => {
-    // if all data is loaded, timer for updating data will be updated
-    const iseThereAnyTrue = values.includes(true)
-    if (!iseThereAnyTrue) {
-      return setTimeout(async () => {
-        const time = await Math.floor(new Date().getTime() / 1000)
-        set_not_older_than(time)
-      }, 20000)
-    }
-  }
-
-  React.useEffect(() => {
-    update_timer()
-  }, [not_older_than, isThereAnyLoadingData]);
 
   return (
     <Provider
