@@ -5,9 +5,9 @@ var router = jsonServer.router('mocks/db.json')
 var serverPort = process.argv[2];
 
 server.use(jsonServer.rewriter(routeData))
-// TODO: fix static file path
-server.use(jsonServer.defaults([]))
-// server.use(jsonServer.defaults(['./mocks/static'])) //for static files
+server.use(jsonServer.defaults({
+    static: './mocks/static'
+}))
 server.use(router)
 
 server.listen(serverPort, () => {
