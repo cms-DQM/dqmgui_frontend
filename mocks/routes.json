@@ -1,0 +1,13 @@
+{
+    "/api/v1/*": "/$1",
+    "/host": "/host",
+    "/latest_runs*": "/latest_runs",
+    "/archive/0/Global/Online/ALL/Summary*": "/summary",
+    "/jsrootfairy/archive/0/Global/Online/ALL/HLT/EventInfo/iRun*": "/irun",
+    "/jsrootfairy/archive/0/Global/Online/ALL/HLT/EventInfo/iLumiSection*": "/ilumi",
+    "/jsrootfairy/archive/0/Global/Online/ALL/HLT/EventInfo/iEvent*": "/ievent",
+    "/jsrootfairy/archive/0/Global/Online/ALL/HLT/EventInfo/runStartTimeStamp*": "/run_start_timestamp",
+    "/render/0/Global/Online/ALL/*/EventInfo/reportSummaryMap*": "/images/mock_plot.png",
+    "/jsrootfairy/archive/0/Global/Online/ALL/*/EventInfo/reportSummary*": "/report_summary",
+    "/jsrootfairy/archive/0/Global/Online/ALL/*/EventInfo/processTimeStamp*": "/process_timestamp"
+}

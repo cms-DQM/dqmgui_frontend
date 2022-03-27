@@ -6,6 +6,7 @@
   "main": "index.tsx",
   "scripts": {
     "dev": "NEW_BACK_END=true LATEST_RUNS=true LAYOUTS=true  next",
+    "dev-mock": "node mocks/server.js 8080 & NEW_BACK_END=true LATEST_RUNS=true LAYOUTS=true  next",
     "build": "next build",
     "start": "next start",
     "build-static-repair-plotsLocalOverlay": "replace-in-files --string \"./\" --replacement \"../\" out/plotsLocalOverlay/index.html",
@@ -68,6 +69,7 @@
     "eslint-plugin-react": "^7.20.6",
     "eslint-plugin-react-hooks": "^3.0.0",
     "eslint-plugin-standard": "^4.0.1",
+    "json-server": "^0.17.0",
     "prettier": "^2.1.2"
   }
 }
