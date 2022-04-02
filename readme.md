@@ -4,15 +4,13 @@ DQM GUI is data quality monitoring graphical user interface. It is a web applica
 
 ## new DQM GUI modes
 * Online: https://cmsweb.cern.ch/dqm/online-new/ 
-
 * Online-playback: https://cmsweb.cern.ch/dqm/online-playback-new/
-
 * Offline-test: https://cmsweb-testbed.cern.ch/dqm/offline-test-new/
 
 # Development
 
 ## Used technologies
-New DQM GUI uses technlogy stack listed bellow:
+New DQM GUI uses technology stack listed bellow:
 1. [Next.js](https://nextjs.org/) - React framework
 2. [AntDesign](https://nextjs.org/) - Components library
 3. [Styled-components](https://styled-components.com/) - for overwriting components style
@@ -21,20 +19,21 @@ New DQM GUI uses technlogy stack listed bellow:
 
 It is a **statically generated** site, which accesses the backend by using ajax http requests.  In this way we get a deployment advantage- it could be deployed anywhere because it is just js, css and html files.
 
-The same static export is used for all modes (online, offline, in the future for RelVal). Functionalities for offline and online modes are selected by the location where the fontend is stored and by the first request for sample. It means that no need to configure something in addition in order to adapt an export for mode.
+The same static export is used for all modes (online, offline, in the future for RelVal). Functionalities for offline and online modes are selected by the location where the frontend is stored and by the first request for sample. It means that no need to configure something in addition in order to adapt an export for mode.
 
 
 ## Develop project locally
 
-1. Install Node.js 10.13
-2. Clone this project
-3. Install all used dependencies: 
+1. Install Node.js >= 10.13
+2. Install `yarn`
+3. Clone this project
+4. Install all used dependencies: 
 ```
-npm install
+yarn install
 ```
-4. Run project:
+5. Run project:
 ```
-npm run dev
+yarn dev
 ```
 ## DQM GUI backend project
 
@@ -42,9 +41,39 @@ All information you can find on the link below:
 
 [https://github.com/cms-DQM/dqmgui](https://github.com/cms-DQM/dqmgui)
 
+## Running locally with mock data
+
+The frontend project can start locally without setting up the backend project by using a mock server instead. To start the project with mock data, use the following command:
+```
+yarn dev-mock
+```
+This command will spawn a local mock server using **JSON-server** on port 8080 and it will serve the mock response to the frontend.
+
+## Adding new mock data
+
+All the files related to mock data and the server are located in `mocks/`. The main components are:
+* `mocks/server.js`: the main file that will spawn the mock server.
+* `mocks/static/`: this is the directory of the static file that can be served by the mock server.
+* `mocks/db.json`: the file contains the response data mapped to the string key. Note that this key is not the actual endpoint route.
+* `mocks/routes.json`: this file contains the route mapping to the data in the `db.json` file. It also serves the static file by specifying the path of the file located in `static/` folder. The routes supports wildcard matching `*`.
+
+For example, if we want to mock the response to return `{message: 'ok'}` on the endpoint `/test`, we can do as follows:
+1. Add response data in `db.json`
+```
+...,
+"test_response": { "message": "ok" }
+```
+2. Setup the route in `routes.json`
+```
+...,
+"/test": "/test_response"
+```
+
+For more information on the mock server, please follow this documentation: [JSON Server Documentation](https://github.com/typicode/json-server).
+
 # Get static files of the project
 
-In order to get static files of your loacl project:
+In order to get static files of your local project:
 ```
 npm run static_export
 ```
@@ -103,16 +132,16 @@ When full required set (dataset and run number) is selected, DQM GUI returns dir
 ![Directories list](public/images/Directories.png)
 
 1. Every **directory** represents a specific subsystem. In order to see its content, need just click on wanted folder.
-2. Current directory is showed on the left side. Every element in the path is inetractive. By electing one of them useer can get back 1, 2 and etc levels back.
+2. Current directory is showed on the left side. Every element in the path is interactive. By electing one of them user can get back 1, 2 and etc levels back.
 ![Current directory](public/images/current_directory.png)
 3. The number, on the right corner of the folder shows how many monitor elements are in specific folder.
 ![ME count](public/images/me_amount.png)
 ---
 
-## Change a run and a datesat
+## Change a run and a dateset
  ### Change a run
 1. Runs select field:
-   1. Select a new run number from the **dropdown list**, which is open when you click on a run number's field. Options in dropdown list depend on slected dataset name. It means that all runs in this list have **selected dataset**.
+   1. Select a new run number from the **dropdown list**, which is open when you click on a run number's field. Options in dropdown list depend on selected dataset name. It means that all runs in this list have **selected dataset**.
 
    2. Use **blue arrows**. They let browsing through prev/next run numbers. If a left arrow is grey it means that the current run number is the first in the list of available run numbers, so you cannot go further. The same with a right arrow- it becomes grey when a current run number is the last in the list of available run numbers.
 
@@ -121,7 +150,7 @@ When full required set (dataset and run number) is selected, DQM GUI returns dir
 
  ### Change a dataset
 
-1. Select a new dataset name from the **dropdown list**, which is open when you click on a dataset field. Options in dropdown list depend on slected run number. It means that all datasets in this list have **selected run number**.
+1. Select a new dataset name from the **dropdown list**, which is open when you click on a dataset field. Options in dropdown list depend on selected run number. It means that all datasets in this list have **selected run number**.
 2. Use **blue arrows**. They let browsing through prev/next dataset names. If a left arrow is grey it means that the current dataset name is the first in the list of available dataset, so you cannot go further. The same with a right arrow- it becomes grey when a current run number is the last in the list of available datasets.
 ![ME count](public/images/dataset_select_fields.png)
 
@@ -129,8 +158,8 @@ When full required set (dataset and run number) is selected, DQM GUI returns dir
 
    To turn on dataset builder mode,  need to change the _dataset select mode_ to _dataset builder mode_.
    ![Possible_datasets](public/images/dataset_builder_opened_options.png)
-   Dataset builder gives an ability to change 3 parts of dataset. Click on the part you want to change and select an option listed in a droptdown. Options is displayed in two colors: red and/or green:
-      * If option is red, it is not compatible with the last selected part. The last selected part is writtent in bold and always green. Even thought the option is red, it doesn't mean that it couldn't be selected.
+   Dataset builder gives an ability to change 3 parts of dataset. Click on the part you want to change and select an option listed in a dropdown. Options is displayed in two colors: red and/or green:
+      * If option is red, it is not compatible with the last selected part. The last selected part is written in bold and always green. Even thought the option is red, it doesn't mean that it couldn't be selected.
       * If option is green it means that is compatible with the last selected part.
 
 The goal is to get green dataset, combined from 3 parts. 
@@ -254,7 +283,7 @@ It means, that just plots, which are visible in current window is requested from
 2. Normalize, show error bars, show stats - doesn't affect zoomed plots
 3. Already overlaid plots on "overlay plots with different names" crashes, when we want to overlay it with another plot.
 4. In the offline test site, when we're trying to make free search, site crashes
-5. There is some plots, where api returns error 500 and root adds warning (_adc_per_OnloineBlock_PXForward_)
+5. There is some plots, where api returns error 500 and root adds warning (_adc_per_OnlineBlock_PXForward_)
 6. In production on the first load style files are not found (404).
 7. Run 338586 shows 404 not found, when it indeed exists (overlay with another plot). Fake Beam Monitor plot for example, is always in ME not found state
 8. When trying to change label with special chars (\_) of additional plot, it crashes  (overlay with another plot)
