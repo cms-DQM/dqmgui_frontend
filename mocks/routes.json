@@ -1,0 +1,17 @@
+{
+    "/api/v1/*": "/$1",
+    "/host": "/host",
+    "/latest_runs*": "/latest_runs",
+    "/archive/0/Global/Online/ALL/Summary*": "/summary",
+    "/jsrootfairy/archive/*/Global/Online/ALL/*/*/iRun*": "/irun",
+    "/jsrootfairy/archive/0/Global/Online/ALL/HLT/EventInfo/iLumiSection*": "/ilumi",
+    "/jsrootfairy/archive/0/Global/Online/ALL/HLT/EventInfo/iEvent*": "/ievent",
+    "/jsrootfairy/archive/0/Global/Online/ALL/HLT/EventInfo/runStartTimeStamp*": "/run_start_timestamp",
+    "/render/*/Global/Online/ALL/*/EventInfo/reportSummaryMap*": "/images/mock_plot.png",
+    "/jsrootfairy/archive/*/Global/Online/ALL/*/EventInfo/reportSummary*": "/report_summary",
+    "/jsrootfairy/archive/*/Global/Online/ALL/*/EventInfo/processTimeStamp*": "/process_timestamp",
+    "/samples*": "/samples",
+    "/archive/*/Global/Online/ALL/": "/all",
+    "/archive/*/Global/Online/ALL/*/*": "/summary",
+    "/archive/*/Global/Online/ALL/:id": "/all_subdir/:id"
+}

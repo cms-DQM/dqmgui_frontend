@@ -15,7 +15,7 @@ import {
 } from '../../../components/styledComponents';
 import { SettingsModal } from '../../../components/settings';
 import { store } from '../../../contexts/globalStateContext';
-import { DisplayFordersOrPlots } from './display_folders_or_plots';
+import { DisplayFoldersOrPlots } from './display_folders_or_plots';
 import { UsefulLinks } from '../../../components/usefulLinks';
 import { ParsedUrlQueryInput } from 'querystring';
 import Workspaces from '../../../components/workspaces';
@@ -115,7 +115,7 @@ const Content: FC<FolderProps> = ({
           selectedPlots={selected_plots.length > 0}
           position={viewPlotsPosition}
         >
-          <DisplayFordersOrPlots
+          <DisplayFoldersOrPlots
             blink={blink}
             plotsAreaRef={plotsAreaRef}
             plots={plots_without_layouts_}
