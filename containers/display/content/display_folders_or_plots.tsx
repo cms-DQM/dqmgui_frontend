@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { Row } from 'antd';
 
 import { Wrapper } from '../styledComponents';
@@ -17,7 +17,7 @@ import {
   OptionProps,
   QueryProps,
 } from '../interfaces';
-import { isItLiveMode } from '../../../utils';
+import { usePrevious } from '../../../hooks/usePrevious';
 
 interface ContentProps {
   plots: PlotDataProps[];
@@ -34,7 +34,7 @@ interface ContentProps {
 }
 
 
-export const DisplayFordersOrPlots = ({
+export const DisplayFoldersOrPlots = ({
   plots,
   selected_plots,
   plots_grouped_by_layouts,
@@ -42,13 +42,54 @@ export const DisplayFordersOrPlots = ({
   viewPlotsPosition,
   proportion,
   errors,
-  query,
   filteredFolders,
   plotsAreaRef,
   blink
 }: ContentProps) => {
+  const [isInitialLoad, setIsInitialLoad] = React.useState<boolean>(true);
+  const previousIsLoading = usePrevious<boolean>(isLoading);
 
-  const live_mode_is_on = isItLiveMode({ run_number: query.run_number, dataset_name: query.dataset_name })
+  React.useEffect(() => {
+    console.log({ isLoading, previousIsLoading })
+    if (!isLoading && previousIsLoading && isInitialLoad) {
+      setIsInitialLoad(false);
+    }
+  }, [isLoading]);
+
+  const shouldShowSpinner = React.useMemo(() => (
+    isInitialLoad && isLoading && filteredFolders.length === 0
+  ), [isInitialLoad, isLoading, filteredFolders]);
+  
+  const shouldShowNotfound = React.useMemo(() => (
+    filteredFolders.length === 0 && plots.length === 0 && !plots_grouped_by_layouts && errors.length === 0
+  ), [filteredFolders, plots, errors]);
+    
+  const shouldShowError = React.useMemo(() => (
+    !shouldShowNotfound && errors.length > 0
+  ), [shouldShowNotfound, errors]);
+      
+  const shouldShowFolderOrPlots = React.useMemo(() => (
+    !shouldShowNotfound && errors.length === 0
+  ), [shouldShowNotfound]);
+
+  const renderFolderOrPlots = () => (
+    <>
+      <CustomRow width="100%" space={'2'}>
+        <Directories
+          blink={blink}
+          isLoading={isLoading}
+          directories={filteredFolders} />
+      </CustomRow>
+      <Row>
+        <LeftSidePlots
+          plots={plots}
+          selected_plots={selected_plots}
+          plots_grouped_by_layouts={plots_grouped_by_layouts}
+        />
+      </Row>
+    </>
+  );
+        
   return (
     <Wrapper
       ref={plotsAreaRef}
@@ -56,44 +97,14 @@ export const DisplayFordersOrPlots = ({
       position={viewPlotsPosition}
       proportion={proportion}
     >
-
-      { live_mode_is_on && isLoading && filteredFolders.length === 0
-        || !live_mode_is_on && isLoading ? (
+      {shouldShowSpinner && (
         <SpinnerWrapper>
           <Spinner />
         </SpinnerWrapper>
-      ) : (
-        <>
-          {
-            !isLoading &&
-              filteredFolders.length === 0 &&
-              plots.length === 0 &&
-              !plots_grouped_by_layouts &&
-              errors.length === 0 ? (
-              <NoResultsFound />
-            ) : errors.length === 0 ? (
-            <>
-              <CustomRow width="100%" space={'2'}>
-                <Directories
-                  blink={blink}
-                  isLoading={isLoading}
-                  directories={filteredFolders} />
-              </CustomRow>
-              <Row>
-                <LeftSidePlots
-                  plots={plots}
-                  selected_plots={selected_plots}
-                  plots_grouped_by_layouts={plots_grouped_by_layouts}
-                />
-              </Row>
-            </>
-          ) : (
-            !isLoading &&
-            errors.length > 0 &&
-            <StyledAlert key={errors} message={errors} type="error" showIcon />
-          )}
-        </>
       )}
+      {shouldShowNotfound && <NoResultsFound />}
+      {shouldShowFolderOrPlots && renderFolderOrPlots()}
+      {shouldShowError && <StyledAlert key={errors} message={errors} type="error" showIcon />}
     </Wrapper>
   );
 };
