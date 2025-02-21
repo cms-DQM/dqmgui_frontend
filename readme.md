@@ -1,5 +1,8 @@
 # What is DQM GUI?
 
+> [!WARNING]
+> This project is no longer maintained and is, therefore, archived.
+
 DQM GUI is data quality monitoring graphical user interface. It is a web application visualising plots produced by DQM modules. These monitoring elements are important for checking the detector status and quality of data recognition.
 
 ## new DQM GUI modes
